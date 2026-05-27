@@ -19,6 +19,8 @@ For any multi-byte numeric width, the byte order must be explicitly defined. For
 
 Output samples are raw homogeneous arrays of numeric values. The sample content must contain only the numeric value bytes, with no header, delimiter, timestamp, label, metadata block, compression wrapper, or bundled side data. Multi-byte values should be encoded little-endian. No specific file extension is required.
 
+Processing may use any documented transformation needed to convert resources into numeric series, including unpacking archives, parsing formats such as CSV, Parquet, JSON, or database exports, selecting relevant fields, decoding values, converting numeric types, changing byte order, filtering irrelevant records, and splitting outputs into series. Processing must preserve the real upstream data content. It must not fabricate numeric values, synthesize data, augment the dataset with generated values, or mix a small amount of real data with synthetic data to create a series.
+
 To be eligible, a dataset must be:
 - Public, with a clearly identified permissive license. Each dataset entry must document the origin URL, license name, SPDX identifier when available, license URL or bundled license text, and any required citation or attribution. Datasets with missing, ambiguous, non-commercial, no-derivatives, or otherwise restrictive licenses are not eligible unless explicitly approved.
 - Safe to redistribute and use for training. Datasets must not contain sensitive personal data, private user data, credentials, secrets, or data whose provenance is unclear. Public availability alone is not sufficient: datasets from mirrors, leaks, scraped personal content, or legally ambiguous sources are not eligible unless explicitly approved.

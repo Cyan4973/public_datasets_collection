@@ -16,5 +16,5 @@ To be eligible, a dataset must be :
 - Accessible, with a script to download it locally
 - Contain one or several numeric series. It's allowed to process the input to reach and generate these numeric streams.
 - Each source corresponds to some homogenous stream of the same data. If a dataset contains multiple columns of different nature, each column will be its own stream.
-- To be accepted, a source must contain at least 5 samples, or alternatively at least 250 KB of data
+- Avoid trivially small sources. As general guidance, a source should provide at least 5 samples, or contain enough data to be split into useful smaller streams. A single large file is acceptable when it can be sharded during processing. The current guidance threshold for "large enough to shard" is about 250 KB, but this is not meant to be a strict pass/fail rule.
 - No source should be larger than 1 GB. Find ways to only download about ~1 GB of data. It's not allowed to blow up local storage

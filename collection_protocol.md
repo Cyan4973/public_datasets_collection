@@ -11,6 +11,14 @@ Repository layout:
 - The local data directory should separate downloads, extracted data, filtered data, and generated samples, for example `.data/downloads/<dataset_id>/`, `.data/extracted/<dataset_id>/`, `.data/filtered/<dataset_id>/`, and `.data/samples/<dataset_id>/<series_id>/`.
 - Generated samples should not be placed inside committed dataset recipe directories.
 
+Manifest format:
+- Each dataset recipe must include `manifest.toml`.
+- The manifest must document `manifest_version`, `dataset_id`, dataset name, origin metadata, resource metadata, license metadata, safety/provenance notes, processing scripts, and generated series metadata.
+- Each resource entry should include a stable URL or access description, origin reference, type, version when available, expected size when known, and checksum when stable.
+- Each generated series entry must document semantic meaning, filtering/conversion summary, numeric kind, bit width, byte order, sample count, total size in bytes, and output path.
+- Manifest paths for downloads, extracted data, filtered data, and samples should be relative to `${DATA_DIR:-.data}`.
+- The manifest should stay concise and reviewable. Large generated inventories should be produced by scripts or `verify.sh`, not committed into the manifest.
+
 Vocabulary:
 - Origin: the upstream public access point from which data is obtained, such as a website, API, bucket, repository, or data portal.
 - Resource: a bounded upstream unit selected for acquisition from an origin, such as a file, archive, table export, API query result, or shard.

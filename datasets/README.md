@@ -3,7 +3,7 @@
 Each subdirectory under `datasets/` describes how to collect one public dataset.
 
 Expected per-dataset files:
-- `manifest.toml`: origin, resources, license metadata, generated series, and validation metadata.
+- `manifest.toml`: origin, resources, license metadata, generated series, and validation metadata. Start from `datasets/manifest.template.toml`.
 - `README.md`: human-readable notes about the dataset and processing choices.
 - `download.sh`: download selected resources into `${DATA_DIR:-.data}`.
 - `build.sh`: extract, filter, convert, and generate samples from local resources.

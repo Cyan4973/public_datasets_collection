@@ -1,0 +1,53 @@
+# Copy this file to datasets/<dataset_id>/manifest.toml and fill it in.
+
+manifest_version = 1
+dataset_id = "example_dataset"
+name = "Example Dataset"
+description = "Short description of what is collected."
+homepage = "https://example.org/dataset"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Required citation text or URL, if any."
+notes = "Attribution, redistribution, or usage notes."
+
+[safety]
+contains_sensitive_data = false
+provenance_notes = "Official provider download; no mirrors, leaks, or scraped personal content."
+
+[[origins]]
+id = "official"
+url = "https://example.org/dataset"
+type = "website"
+notes = "Official dataset page."
+
+[[resources]]
+id = "main_archive"
+origin = "official"
+url = "https://example.org/files/data.zip"
+type = "archive"
+version = "2026-01-15"
+sha256 = ""
+size_bytes = 0
+local_path = "downloads/example_dataset/data.zip"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+summary = "Unpack archive, parse source files, filter relevant numeric content, and emit little-endian raw numeric samples."
+
+[[series]]
+id = "example_f32"
+description = "Example numeric measurements."
+source_resources = ["main_archive"]
+filtering = "Document the files, columns, records, fields, ranges, or criteria kept for this series."
+conversion = "Document parsing, numeric conversion, byte order, and output generation."
+numeric_kind = "float" # int, uint, or float
+bit_width = 32
+endianness = "little"
+sample_count = 0
+total_size_bytes = 0
+sample_path = "samples/example_dataset/example_f32/"

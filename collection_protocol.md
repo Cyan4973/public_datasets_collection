@@ -4,6 +4,8 @@ The current priority is numeric series. A stream may contain any homogeneous fix
 
 For any multi-byte element width, the byte order must be explicitly defined. For now, generated streams should use little-endian encoding. If the source data uses another byte order, the conversion script should either convert it to little-endian or clearly document the retained byte order.
 
+Output streams are raw homogeneous arrays of numeric elements. The stream content must contain only the numeric element bytes, with no header, delimiter, timestamp, label, metadata block, compression wrapper, or bundled side data. Multi-byte elements should be encoded little-endian. No specific file extension is required.
+
 To be eligible, a dataset must be :
 - Public, with a clearly identified permissive license. Each dataset entry must document the source URL, license name, SPDX identifier when available, license URL or bundled license text, and any required citation or attribution. Datasets with missing, ambiguous, non-commercial, no-derivatives, or otherwise restrictive licenses are not eligible unless explicitly approved.
 - Accessible, with a script to download it locally

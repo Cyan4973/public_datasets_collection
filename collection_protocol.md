@@ -10,6 +10,7 @@ Output streams are raw homogeneous arrays of numeric elements. The stream conten
 
 To be eligible, a dataset must be :
 - Public, with a clearly identified permissive license. Each dataset entry must document the source URL, license name, SPDX identifier when available, license URL or bundled license text, and any required citation or attribution. Datasets with missing, ambiguous, non-commercial, no-derivatives, or otherwise restrictive licenses are not eligible unless explicitly approved.
+- Safe to redistribute and use for training. Datasets must not contain sensitive personal data, private user data, credentials, secrets, or data whose provenance is unclear. Public availability alone is not sufficient: datasets from mirrors, leaks, scraped personal content, or legally ambiguous sources are not eligible unless explicitly approved.
 - Accessible, with a script to download it locally
 - Contain one or several numeric series. It's allowed to process the input to reach and generate these numeric streams.
 - Each source corresponds to some homogenous stream of the same data. If a dataset contains multiple columns of different nature, each column will be its own stream.

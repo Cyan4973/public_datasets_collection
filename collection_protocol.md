@@ -4,6 +4,13 @@ The repository publishes scripts and metadata, not the dataset payloads themselv
 
 Dataset payloads must not be committed to the repository. Downloads, extracted data, filtered data, and generated samples should be stored under a gitignored local data directory. Scripts may create and reuse that directory, but the committed repository should contain only scripts, metadata, documentation, and small test fixtures when explicitly approved.
 
+Repository layout:
+- Dataset recipes should live under `datasets/<dataset_id>/`.
+- Each dataset recipe should include `manifest.toml`, `README.md`, `download.sh`, `build.sh`, and `verify.sh` when applicable. Extra helper scripts should live under `datasets/<dataset_id>/scripts/`.
+- Local payloads should live under `.data/` by default, with scripts allowing `DATA_DIR` to override that location.
+- The local data directory should separate downloads, extracted data, filtered data, and generated samples, for example `.data/downloads/<dataset_id>/`, `.data/extracted/<dataset_id>/`, `.data/filtered/<dataset_id>/`, and `.data/samples/<dataset_id>/<series_id>/`.
+- Generated samples should not be placed inside committed dataset recipe directories.
+
 Vocabulary:
 - Origin: the upstream public access point from which data is obtained, such as a website, API, bucket, repository, or data portal.
 - Resource: a bounded upstream unit selected for acquisition from an origin, such as a file, archive, table export, API query result, or shard.

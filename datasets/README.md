@@ -32,6 +32,7 @@ Recommended local data layout under `${DATA_DIR:-.data}`:
   downloads/<dataset_id>/
   extracted/<dataset_id>/
   filtered/<dataset_id>/
+  index/<dataset_id>/
   samples/<dataset_id>/<series_id>/
 ```
 
@@ -40,6 +41,7 @@ Script contract:
 - `build.sh` works only from local files already present under `${DATA_DIR:-.data}`. It should not fetch from the network.
 - `build.sh` may populate `${DATA_DIR:-.data}/extracted/<dataset_id>/` and `${DATA_DIR:-.data}/filtered/<dataset_id>/` when intermediate stages are useful for reproducibility or verification.
 - `build.sh` emits final raw numeric samples under `${DATA_DIR:-.data}/samples/<dataset_id>/<series_id>/`.
+- `build.sh` also emits a machine-readable sample index under `${DATA_DIR:-.data}/index/<dataset_id>/`.
 - `verify.sh` validates pinned resource properties where stable and checks generated sample counts, sizes, and encoding assumptions.
 - All scripts should support `DATA_DIR` overrides and be safe to rerun.
 
@@ -62,6 +64,7 @@ Review checklist for a dataset recipe:
 - `build.sh` rebuilds generated samples from local downloads without fabricating, synthesizing, or augmenting data.
 - `download.sh`, `build.sh`, and `verify.sh` are deterministic where possible and document any unavoidable upstream mutability.
 - `verify.sh` checks expected resource checksums/sizes where stable and validates generated sample counts, series byte sizes, and output format.
+- A generated sample index exists under `${DATA_DIR:-.data}/index/<dataset_id>/` and includes one row per sample with numeric kind, bit width, endianness, element size, sample size, and value count.
 - Each generated series has documented semantic meaning, filtering/conversion summary, numeric kind, bit width, byte order, sample count, total size, and output path.
 - Samples are raw homogeneous numeric arrays with no headers, delimiters, metadata blocks, compression wrappers, or bundled side data.
 - Multi-byte samples are little-endian, or retained byte order is explicitly documented.

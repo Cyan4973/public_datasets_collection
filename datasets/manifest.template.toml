@@ -46,14 +46,16 @@ notes = "Pin exact file/version/checksum where possible."
 downloads = "downloads/example_dataset/"
 extracted = "extracted/example_dataset/"
 filtered = "filtered/example_dataset/"
+index = "index/example_dataset/"
 samples = "samples/example_dataset/"
 
 [processing]
 download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
+sample_index_path = "index/example_dataset/samples.jsonl"
 summary = "Download pinned upstream resources, extract or decode local files, filter to numeric content, and emit raw little-endian numeric samples."
-deterministic_notes = "Document pinned URLs, fixed parameters, sort order, shard policy, and any checksum or size validations."
+deterministic_notes = "Document pinned URLs, fixed parameters, sort order, shard policy, generated sample index fields, and any checksum or size validations."
 
 [[series]]
 id = "example_f32"

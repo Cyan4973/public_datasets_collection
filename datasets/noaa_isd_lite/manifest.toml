@@ -1,0 +1,287 @@
+manifest_version = 1
+dataset_id = "noaa_isd_lite"
+name = "NOAA ISD-Lite"
+description = "Curated multi-station hourly weather observations from NOAA NCEI ISD-Lite for 2021-2023."
+homepage = "https://www.ncei.noaa.gov/pub/data/noaa/isd-lite/"
+
+[license]
+name = "U.S. Government Public Domain"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database"
+citation = "NOAA National Centers for Environmental Information, Integrated Surface Database Lite."
+notes = "NOAA/NCEI data products are public U.S. government works. Users should preserve source attribution and dataset provenance."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NOAA NCEI distribution only; no mirrors, leaks, or scraped personal content."
+usage_notes = "Public-domain environmental observations suitable for numeric dataset collection."
+
+[[origins]]
+id = "ncei_isd_lite"
+name = "NOAA NCEI ISD-Lite"
+url = "https://www.ncei.noaa.gov/pub/data/noaa/isd-lite/"
+type = "data_portal"
+notes = "Official yearly ISD-Lite directory listing."
+
+[[origins]]
+id = "ncei_station_history"
+name = "NOAA NCEI ISD History"
+url = "https://www.ncei.noaa.gov/pub/data/noaa/isd-history.csv"
+type = "file"
+notes = "Station metadata reference used to document the selected station set."
+
+[[resources]]
+id = "isd_history_csv"
+origin = "ncei_station_history"
+url = "https://www.ncei.noaa.gov/pub/data/noaa/isd-history.csv"
+type = "file"
+version = "accessed_by_user"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/noaa_isd_lite/history/isd-history.csv"
+notes = "Station metadata reference."
+
+[[resources]]
+id = "isd_lite_2021"
+origin = "ncei_isd_lite"
+url = "https://www.ncei.noaa.gov/pub/data/noaa/isd-lite/2021/"
+type = "shard"
+version = "2021"
+access = "Selected files matching <station_id>-2021.gz from the curated station list in README.md."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/noaa_isd_lite/isd-lite/2021/"
+notes = "Hourly ISD-Lite gzip files for the selected stations."
+
+[[resources]]
+id = "isd_lite_2022"
+origin = "ncei_isd_lite"
+url = "https://www.ncei.noaa.gov/pub/data/noaa/isd-lite/2022/"
+type = "shard"
+version = "2022"
+access = "Selected files matching <station_id>-2022.gz from the curated station list in README.md."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/noaa_isd_lite/isd-lite/2022/"
+notes = "Hourly ISD-Lite gzip files for the selected stations."
+
+[[resources]]
+id = "isd_lite_2023"
+origin = "ncei_isd_lite"
+url = "https://www.ncei.noaa.gov/pub/data/noaa/isd-lite/2023/"
+type = "shard"
+version = "2023"
+access = "Selected files matching <station_id>-2023.gz from the curated station list in README.md."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/noaa_isd_lite/isd-lite/2023/"
+notes = "Hourly ISD-Lite gzip files for the selected stations."
+
+[local_paths]
+downloads = "downloads/noaa_isd_lite/"
+extracted = "extracted/noaa_isd_lite/"
+filtered = "filtered/noaa_isd_lite/"
+index = "index/noaa_isd_lite/"
+samples = "samples/noaa_isd_lite/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_isd_lite/samples.jsonl"
+summary = "Download the selected NOAA ISD-Lite station-year gzip files, parse hourly integer rows, preserve meteorological sentinel values, and emit one little-endian numeric sample per station for each retained field."
+deterministic_notes = "Fixed station list, fixed years 2021-2023, year-ordered concatenation, preserved row order within each source file, no network access during build, durable script logs under logs/noaa_isd_lite/, generated sample index at index/noaa_isd_lite/samples.jsonl, and the original Riyadh candidate was replaced with Abu Dhabi after NOAA returned 404 for the 2023 Riyadh shard."
+
+[[series]]
+id = "isd_year"
+description = "Observation year for each retained hourly row."
+semantic_meaning = "Unsigned 16-bit calendar year sequence for each station."
+source_resources = ["isd_lite_2021", "isd_lite_2022", "isd_lite_2023"]
+filtered_input_path = "filtered/noaa_isd_lite/station_row_counts.tsv"
+filtering = "Keep all parseable hourly rows from the selected stations and years; drop rows with wrong field count, non-integer values, or invalid month/day/hour fields."
+conversion = "Read ISD-Lite rows from gzip files, concatenate by station in year order, and write little-endian uint16 values."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 46
+total_size_bytes = 2196622
+output_path = "samples/noaa_isd_lite/isd_year/"
+
+[[series]]
+id = "isd_month"
+description = "Observation month for each retained hourly row."
+semantic_meaning = "Unsigned 8-bit calendar month sequence for each station."
+source_resources = ["isd_lite_2021", "isd_lite_2022", "isd_lite_2023"]
+filtered_input_path = "filtered/noaa_isd_lite/station_row_counts.tsv"
+filtering = "Keep all parseable hourly rows from the selected stations and years; drop rows with wrong field count, non-integer values, or invalid month/day/hour fields."
+conversion = "Read ISD-Lite rows from gzip files, concatenate by station in year order, and write uint8 values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 46
+total_size_bytes = 1098311
+output_path = "samples/noaa_isd_lite/isd_month/"
+
+[[series]]
+id = "isd_day"
+description = "Observation day-of-month for each retained hourly row."
+semantic_meaning = "Unsigned 8-bit calendar day sequence for each station."
+source_resources = ["isd_lite_2021", "isd_lite_2022", "isd_lite_2023"]
+filtered_input_path = "filtered/noaa_isd_lite/station_row_counts.tsv"
+filtering = "Keep all parseable hourly rows from the selected stations and years; drop rows with wrong field count, non-integer values, or invalid month/day/hour fields."
+conversion = "Read ISD-Lite rows from gzip files, concatenate by station in year order, and write uint8 values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 46
+total_size_bytes = 1098311
+output_path = "samples/noaa_isd_lite/isd_day/"
+
+[[series]]
+id = "isd_hour"
+description = "Observation hour for each retained hourly row."
+semantic_meaning = "Unsigned 8-bit hour-of-day sequence for each station."
+source_resources = ["isd_lite_2021", "isd_lite_2022", "isd_lite_2023"]
+filtered_input_path = "filtered/noaa_isd_lite/station_row_counts.tsv"
+filtering = "Keep all parseable hourly rows from the selected stations and years; drop rows with wrong field count, non-integer values, or invalid month/day/hour fields."
+conversion = "Read ISD-Lite rows from gzip files, concatenate by station in year order, and write uint8 values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 46
+total_size_bytes = 1098311
+output_path = "samples/noaa_isd_lite/isd_hour/"
+
+[[series]]
+id = "isd_temp"
+description = "Air temperature in ISD-Lite native integer encoding."
+semantic_meaning = "Signed 16-bit temperature sequence preserving native NOAA sentinel codes."
+source_resources = ["isd_lite_2021", "isd_lite_2022", "isd_lite_2023"]
+filtered_input_path = "filtered/noaa_isd_lite/station_row_counts.tsv"
+filtering = "Keep all parseable hourly rows from the selected stations and years; drop rows with wrong field count, non-integer values, or invalid month/day/hour fields."
+conversion = "Read ISD-Lite rows from gzip files, preserve native integer values including -9999 sentinels, concatenate by station in year order, and write little-endian int16 values."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 46
+total_size_bytes = 2196622
+output_path = "samples/noaa_isd_lite/isd_temp/"
+
+[[series]]
+id = "isd_dewp"
+description = "Dew point in ISD-Lite native integer encoding."
+semantic_meaning = "Signed 16-bit dew point sequence preserving native NOAA sentinel codes."
+source_resources = ["isd_lite_2021", "isd_lite_2022", "isd_lite_2023"]
+filtered_input_path = "filtered/noaa_isd_lite/station_row_counts.tsv"
+filtering = "Keep all parseable hourly rows from the selected stations and years; drop rows with wrong field count, non-integer values, or invalid month/day/hour fields."
+conversion = "Read ISD-Lite rows from gzip files, preserve native integer values including -9999 sentinels, concatenate by station in year order, and write little-endian int16 values."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 46
+total_size_bytes = 2196622
+output_path = "samples/noaa_isd_lite/isd_dewp/"
+
+[[series]]
+id = "isd_slp"
+description = "Sea-level pressure in ISD-Lite native integer encoding."
+semantic_meaning = "Signed 16-bit pressure sequence preserving native NOAA sentinel codes."
+source_resources = ["isd_lite_2021", "isd_lite_2022", "isd_lite_2023"]
+filtered_input_path = "filtered/noaa_isd_lite/station_row_counts.tsv"
+filtering = "Keep all parseable hourly rows from the selected stations and years; drop rows with wrong field count, non-integer values, or invalid month/day/hour fields."
+conversion = "Read ISD-Lite rows from gzip files, preserve native integer values including -9999 sentinels, concatenate by station in year order, and write little-endian int16 values."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 46
+total_size_bytes = 2196622
+output_path = "samples/noaa_isd_lite/isd_slp/"
+
+[[series]]
+id = "isd_wdir"
+description = "Wind direction in ISD-Lite native integer encoding."
+semantic_meaning = "Signed 16-bit wind-direction sequence preserving native NOAA sentinel codes."
+source_resources = ["isd_lite_2021", "isd_lite_2022", "isd_lite_2023"]
+filtered_input_path = "filtered/noaa_isd_lite/station_row_counts.tsv"
+filtering = "Keep all parseable hourly rows from the selected stations and years; drop rows with wrong field count, non-integer values, or invalid month/day/hour fields."
+conversion = "Read ISD-Lite rows from gzip files, preserve native integer values including -9999 sentinels, concatenate by station in year order, and write little-endian int16 values."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 46
+total_size_bytes = 2196622
+output_path = "samples/noaa_isd_lite/isd_wdir/"
+
+[[series]]
+id = "isd_wspd"
+description = "Wind speed in ISD-Lite native integer encoding."
+semantic_meaning = "Signed 16-bit wind-speed sequence preserving native NOAA sentinel codes."
+source_resources = ["isd_lite_2021", "isd_lite_2022", "isd_lite_2023"]
+filtered_input_path = "filtered/noaa_isd_lite/station_row_counts.tsv"
+filtering = "Keep all parseable hourly rows from the selected stations and years; drop rows with wrong field count, non-integer values, or invalid month/day/hour fields."
+conversion = "Read ISD-Lite rows from gzip files, preserve native integer values including -9999 sentinels, concatenate by station in year order, and write little-endian int16 values."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 46
+total_size_bytes = 2196622
+output_path = "samples/noaa_isd_lite/isd_wspd/"
+
+[[series]]
+id = "isd_sky"
+description = "Sky cover in ISD-Lite native integer encoding."
+semantic_meaning = "Signed 16-bit sky-cover sequence preserving native NOAA sentinel codes."
+source_resources = ["isd_lite_2021", "isd_lite_2022", "isd_lite_2023"]
+filtered_input_path = "filtered/noaa_isd_lite/station_row_counts.tsv"
+filtering = "Keep all parseable hourly rows from the selected stations and years; drop rows with wrong field count, non-integer values, or invalid month/day/hour fields."
+conversion = "Read ISD-Lite rows from gzip files, preserve native integer values including -9999 sentinels, concatenate by station in year order, and write little-endian int16 values."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 46
+total_size_bytes = 2196622
+output_path = "samples/noaa_isd_lite/isd_sky/"
+
+[[series]]
+id = "isd_precip1h"
+description = "One-hour precipitation in ISD-Lite native integer encoding."
+semantic_meaning = "Signed 16-bit one-hour precipitation sequence preserving native NOAA sentinel codes."
+source_resources = ["isd_lite_2021", "isd_lite_2022", "isd_lite_2023"]
+filtered_input_path = "filtered/noaa_isd_lite/station_row_counts.tsv"
+filtering = "Keep all parseable hourly rows from the selected stations and years; drop rows with wrong field count, non-integer values, or invalid month/day/hour fields."
+conversion = "Read ISD-Lite rows from gzip files, preserve native integer values including -9999 sentinels, concatenate by station in year order, and write little-endian int16 values."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 46
+total_size_bytes = 2196622
+output_path = "samples/noaa_isd_lite/isd_precip1h/"
+
+[[series]]
+id = "isd_precip6h"
+description = "Six-hour precipitation in ISD-Lite native integer encoding."
+semantic_meaning = "Signed 16-bit six-hour precipitation sequence preserving native NOAA sentinel codes."
+source_resources = ["isd_lite_2021", "isd_lite_2022", "isd_lite_2023"]
+filtered_input_path = "filtered/noaa_isd_lite/station_row_counts.tsv"
+filtering = "Keep all parseable hourly rows from the selected stations and years; drop rows with wrong field count, non-integer values, or invalid month/day/hour fields."
+conversion = "Read ISD-Lite rows from gzip files, preserve native integer values including -9999 sentinels, concatenate by station in year order, and write little-endian int16 values."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 46
+total_size_bytes = 2196622
+output_path = "samples/noaa_isd_lite/isd_precip6h/"

@@ -17,7 +17,7 @@ Repository layout:
 - Dataset recipes should live under `datasets/<dataset_id>/`.
 - Each dataset recipe should include `manifest.toml`, `README.md`, `download.sh`, `build.sh`, and `verify.sh` when applicable. Extra helper scripts should live under `datasets/<dataset_id>/scripts/`.
 - Local payloads should live under `.data/` by default, with scripts allowing `DATA_DIR` to override that location.
-- The local data directory should separate downloads, extracted data, filtered data, and generated samples, for example `.data/downloads/<dataset_id>/`, `.data/extracted/<dataset_id>/`, `.data/filtered/<dataset_id>/`, and `.data/samples/<dataset_id>/<series_id>/`.
+- The local data directory should separate downloads, extracted data, filtered data, generated sample indexes, and generated samples, for example `.data/downloads/<dataset_id>/`, `.data/extracted/<dataset_id>/`, `.data/filtered/<dataset_id>/`, `.data/index/<dataset_id>/`, and `.data/samples/<dataset_id>/<series_id>/`.
 - Generated samples should not be placed inside committed dataset recipe directories.
 
 Manifest format:
@@ -27,6 +27,7 @@ Manifest format:
 - Each resource entry should include a stable URL or access description, origin reference, type, version when available, expected size when known, and checksum when stable.
 - Each generated series entry must document semantic meaning, filtering/conversion summary, numeric kind, bit width, byte order, sample count, total size in bytes, and output path.
 - Manifest paths for downloads, extracted data, filtered data, and samples should be relative to `${DATA_DIR:-.data}`.
+- Each dataset recipe should generate a machine-readable sample index under `${DATA_DIR:-.data}/index/<dataset_id>/samples.jsonl` or an equivalent documented path. The index must include one row per sample file with `dataset_id`, `series_id`, `sample_path`, `numeric_kind`, `bit_width`, `endianness`, `element_size_bytes`, `sample_size_bytes`, and `value_count`.
 - The manifest should stay concise and reviewable. Large generated inventories should be produced by scripts or `verify.sh`, not committed into the manifest.
 
 The current priority is numeric series. Samples in a series may contain any homogeneous fixed-width numeric type: signed integer, unsigned integer, or floating point, with each value encoded as 8-bit, 16-bit, 32-bit, or 64-bit.

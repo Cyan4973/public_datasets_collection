@@ -5,7 +5,13 @@ accepted recipe.
 
 Use one markdown file per attempt, named:
 
-- `YYYYMMDD_<dataset_id>.md`
+- `YYYYMMDD_<status>_<dataset_id>.md`
+
+Allowed status values:
+- `rejected`
+- `blocked`
+- `transient_failure`
+- `needs_tooling`
 
 Record an attempt here when any of the following happens:
 - the source is no longer reachable
@@ -18,6 +24,7 @@ Record an attempt here when any of the following happens:
 Each attempt record should include:
 - candidate dataset id and title
 - date attempted
+- status
 - source URLs
 - expected value of the dataset
 - concrete reason the attempt failed or was rejected

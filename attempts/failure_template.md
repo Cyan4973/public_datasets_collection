@@ -1,6 +1,7 @@
 # <dataset_id>
 
 - Date:
+- Status:
 - Candidate dataset:
 - Source:
 - Why it looked promising:

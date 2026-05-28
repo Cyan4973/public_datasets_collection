@@ -1,0 +1,132 @@
+manifest_version = 1
+dataset_id = "noaa_ndbc_stdmet_historical"
+name = "NOAA NDBC Historical Stdmet"
+description = "NOAA NDBC historical standard meteorological archives for four fixed stations, 2019-2023."
+homepage = "https://www.ndbc.noaa.gov/"
+
+[license]
+name = "U.S. Government Public Domain"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://www.ndbc.noaa.gov/"
+citation = "NOAA National Data Buoy Center historical standard meteorological archives."
+notes = "NOAA NDBC data are public U.S. government works. Preserve attribution and source provenance."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NOAA NDBC historical archive only; no mirrors, leaks, or scraped personal content."
+usage_notes = "Public-domain ocean and weather observations suitable for reproducible numeric dataset collection."
+
+[[origins]]
+id = "noaa_ndbc_stdmet"
+name = "NOAA NDBC Historical Stdmet"
+url = "https://www.ndbc.noaa.gov/data/historical/stdmet/"
+type = "archive"
+notes = "Public historical standard meteorological text archives by station and year."
+
+[[resources]]
+id = "ndbc_stdmet_station_subset"
+origin = "noaa_ndbc_stdmet"
+url = "https://www.ndbc.noaa.gov/data/historical/stdmet/"
+type = "archive_subset"
+version = "2019-2023-four-stations-seven-elements"
+access = "Fixed station-year .txt.gz downloads from the NDBC historical stdmet archive."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/noaa_ndbc_stdmet_historical/"
+notes = "One gzip-compressed whitespace-delimited text file per selected station-year."
+
+[local_paths]
+downloads = "downloads/noaa_ndbc_stdmet_historical/"
+extracted = "extracted/noaa_ndbc_stdmet_historical/"
+filtered = "filtered/noaa_ndbc_stdmet_historical/"
+index = "index/noaa_ndbc_stdmet_historical/"
+samples = "samples/noaa_ndbc_stdmet_historical/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_ndbc_stdmet_historical/samples.jsonl"
+summary = "Download selected NDBC historical standard meteorological archives, parse retained element columns from whitespace-delimited text files, and emit raw numeric arrays plus a machine-readable sample index."
+deterministic_notes = "Fixed station list, fixed year window 2019-2023, fixed element list, retained only rows with parseable selected element values and parseable date fields, skipped MM-marked missing values, preserved source row order within each station-year file, durable script logs under logs/noaa_ndbc_stdmet_historical/, and generated sample index at index/noaa_ndbc_stdmet_historical/samples.jsonl."
+
+[[series]]
+id = "ndbc_value_f64"
+description = "NDBC standard meteorological element values."
+semantic_meaning = "Float64 values for retained NDBC element observations; semantic units depend on element id encoded in the sample path and sample index."
+source_resources = ["ndbc_stdmet_station_subset"]
+filtered_input_path = "filtered/noaa_ndbc_stdmet_historical/station_element_year_stats.tsv"
+filtering = "Keep rows from selected station-year files whose selected element value is parseable, not MM, and whose date fields parse cleanly."
+conversion = "Parse retained element values as Python float and write IEEE-754 little-endian float64 arrays preserving source row order within each station-element sample."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/noaa_ndbc_stdmet_historical/ndbc_value_f64/"
+
+[[series]]
+id = "obs_year_u16"
+description = "Observation year values aligned to retained NDBC rows."
+semantic_meaning = "Unsigned 16-bit years derived from retained NDBC row dates; alignment to value samples is 1:1 within each station-element sample."
+source_resources = ["ndbc_stdmet_station_subset"]
+filtered_input_path = "filtered/noaa_ndbc_stdmet_historical/station_element_year_stats.tsv"
+filtering = "Keep rows accepted for ndbc_value_f64."
+conversion = "Parse the date year component as integer and write little-endian uint16 arrays aligned to retained value rows."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/noaa_ndbc_stdmet_historical/obs_year_u16/"
+
+[[series]]
+id = "obs_month_u8"
+description = "Observation month values aligned to retained NDBC rows."
+semantic_meaning = "Unsigned 8-bit months derived from retained NDBC row dates; alignment to value samples is 1:1 within each station-element sample."
+source_resources = ["ndbc_stdmet_station_subset"]
+filtered_input_path = "filtered/noaa_ndbc_stdmet_historical/station_element_year_stats.tsv"
+filtering = "Keep rows accepted for ndbc_value_f64."
+conversion = "Parse the date month component as integer and write uint8 arrays aligned to retained value rows."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/noaa_ndbc_stdmet_historical/obs_month_u8/"
+
+[[series]]
+id = "obs_day_u8"
+description = "Observation day values aligned to retained NDBC rows."
+semantic_meaning = "Unsigned 8-bit day-of-month values derived from retained NDBC row dates; alignment to value samples is 1:1 within each station-element sample."
+source_resources = ["ndbc_stdmet_station_subset"]
+filtered_input_path = "filtered/noaa_ndbc_stdmet_historical/station_element_year_stats.tsv"
+filtering = "Keep rows accepted for ndbc_value_f64."
+conversion = "Parse the date day component as integer and write uint8 arrays aligned to retained value rows."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/noaa_ndbc_stdmet_historical/obs_day_u8/"
+
+[[series]]
+id = "obs_hour_u8"
+description = "Observation hour values aligned to retained NDBC rows."
+semantic_meaning = "Unsigned 8-bit hours derived from retained NDBC row dates; alignment to value samples is 1:1 within each station-element sample."
+source_resources = ["ndbc_stdmet_station_subset"]
+filtered_input_path = "filtered/noaa_ndbc_stdmet_historical/station_element_year_stats.tsv"
+filtering = "Keep rows accepted for ndbc_value_f64."
+conversion = "Parse the date hour component as integer and write uint8 arrays aligned to retained value rows."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/noaa_ndbc_stdmet_historical/obs_hour_u8/"

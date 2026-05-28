@@ -1,0 +1,129 @@
+manifest_version = 1
+dataset_id = "noaa_coops_water_level"
+name = "NOAA CO-OPS Water Level"
+description = "Verified 6-minute NOAA CO-OPS water-level observations for five selected stations during 2022-2023."
+homepage = "https://tidesandcurrents.noaa.gov/"
+
+[license]
+name = "U.S. Government Public Domain"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://tidesandcurrents.noaa.gov/"
+citation = "NOAA Tides and Currents, NOAA CO-OPS verified water-level observations."
+notes = "NOAA CO-OPS data are public U.S. government works. Preserve attribution and source provenance."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NOAA CO-OPS API only; no mirrors, leaks, or scraped personal content."
+usage_notes = "Public-domain environmental time-series observations suitable for reproducible numeric dataset collection."
+
+[[origins]]
+id = "noaa_coops"
+name = "NOAA Tides and Currents"
+url = "https://tidesandcurrents.noaa.gov/"
+type = "data_portal"
+notes = "NOAA CO-OPS data provider and documentation site."
+
+[[origins]]
+id = "noaa_coops_api"
+name = "NOAA CO-OPS Datagetter API"
+url = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter"
+type = "api"
+notes = "Public JSON API used for chunked water-level downloads."
+
+[[resources]]
+id = "san_francisco_2022_2023"
+origin = "noaa_coops_api"
+url = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter"
+type = "api_query_result"
+version = "2022-2023-water_level-mllw-metric-gmt-6min"
+access = "Chunked 30-day datagetter queries for station 9414290 with fixed product, datum, units, time_zone, interval, and format parameters."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/noaa_coops_water_level/noaa_coops_9414290_san_francisco/"
+notes = "Verified water-level JSON responses for San Francisco, CA."
+
+[[resources]]
+id = "seattle_2022_2023"
+origin = "noaa_coops_api"
+url = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter"
+type = "api_query_result"
+version = "2022-2023-water_level-mllw-metric-gmt-6min"
+access = "Chunked 30-day datagetter queries for station 9447130 with fixed product, datum, units, time_zone, interval, and format parameters."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/noaa_coops_water_level/noaa_coops_9447130_seattle/"
+notes = "Verified water-level JSON responses for Seattle, WA."
+
+[[resources]]
+id = "the_battery_2022_2023"
+origin = "noaa_coops_api"
+url = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter"
+type = "api_query_result"
+version = "2022-2023-water_level-mllw-metric-gmt-6min"
+access = "Chunked 30-day datagetter queries for station 8518750 with fixed product, datum, units, time_zone, interval, and format parameters."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/noaa_coops_water_level/noaa_coops_8518750_the_battery/"
+notes = "Verified water-level JSON responses for The Battery, NY."
+
+[[resources]]
+id = "boston_2022_2023"
+origin = "noaa_coops_api"
+url = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter"
+type = "api_query_result"
+version = "2022-2023-water_level-mllw-metric-gmt-6min"
+access = "Chunked 30-day datagetter queries for station 8443970 with fixed product, datum, units, time_zone, interval, and format parameters."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/noaa_coops_water_level/noaa_coops_8443970_boston/"
+notes = "Verified water-level JSON responses for Boston, MA."
+
+[[resources]]
+id = "key_west_2022_2023"
+origin = "noaa_coops_api"
+url = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter"
+type = "api_query_result"
+version = "2022-2023-water_level-mllw-metric-gmt-6min"
+access = "Chunked 30-day datagetter queries for station 8724580 with fixed product, datum, units, time_zone, interval, and format parameters."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/noaa_coops_water_level/noaa_coops_8724580_key_west/"
+notes = "Verified water-level JSON responses for Key West, FL."
+
+[local_paths]
+downloads = "downloads/noaa_coops_water_level/"
+extracted = "extracted/noaa_coops_water_level/"
+filtered = "filtered/noaa_coops_water_level/"
+index = "index/noaa_coops_water_level/"
+samples = "samples/noaa_coops_water_level/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_coops_water_level/samples.jsonl"
+summary = "Download fixed-parameter NOAA CO-OPS API JSON chunks for five selected stations, parse verified water-level values, sort by NOAA UTC timestamp, and emit little-endian float64 station samples."
+deterministic_notes = "Fixed station set, fixed 2022-2023 time span, fixed 30-day chunking, fixed API parameters, timestamp-ordered reconstruction, durable script logs under logs/noaa_coops_water_level/, and generated sample index at index/noaa_coops_water_level/samples.jsonl."
+
+[[series]]
+id = "water_level_f64"
+description = "Verified 6-minute water-level station series from NOAA CO-OPS."
+semantic_meaning = "Float64 meters relative to MLLW, one sample per selected station."
+source_resources = [
+  "san_francisco_2022_2023",
+  "seattle_2022_2023",
+  "the_battery_2022_2023",
+  "boston_2022_2023",
+  "key_west_2022_2023",
+]
+filtered_input_path = "filtered/noaa_coops_water_level/station_stats.tsv"
+filtering = "Keep all JSON rows returned for the five selected stations with fixed 2022-2023 API parameters; reject rows without timestamp or numeric value; deduplicate identical timestamps and fail on conflicting duplicates."
+conversion = "Sort station observations by NOAA GMT timestamp, parse data[].v as Python float, and write IEEE-754 little-endian float64 arrays with one sample file per station."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 5
+total_size_bytes = 7008000
+output_path = "samples/noaa_coops_water_level/water_level_f64/"

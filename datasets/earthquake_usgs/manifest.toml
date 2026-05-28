@@ -1,0 +1,132 @@
+manifest_version = 1
+dataset_id = "earthquake_usgs"
+name = "USGS Earthquake Catalog"
+description = "USGS earthquake event catalog CSV extracts for magnitude >= 4.0, 2014-2023."
+homepage = "https://earthquake.usgs.gov/fdsnws/event/1/"
+
+[license]
+name = "U.S. Government Public Domain"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://earthquake.usgs.gov/fdsnws/event/1/"
+citation = "USGS Earthquake Hazards Program, FDSN event web service."
+notes = "USGS earthquake catalog data are public U.S. government works. Preserve attribution and source provenance."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official USGS FDSN event query API only; no mirrors, leaks, or scraped personal content."
+usage_notes = "Public-domain geophysical event catalog suitable for reproducible numeric dataset collection."
+
+[[origins]]
+id = "usgs_event_api"
+name = "USGS FDSN Event Query"
+url = "https://earthquake.usgs.gov/fdsnws/event/1/query"
+type = "api"
+notes = "Public CSV/GeoJSON API for earthquake event catalog queries."
+
+[[resources]]
+id = "usgs_quakes_2014_2023"
+origin = "usgs_event_api"
+url = "https://earthquake.usgs.gov/fdsnws/event/1/query"
+type = "api_query_result"
+version = "2014-2023-m4plus-csv"
+access = "Yearly CSV queries with fixed starttime, endtime, minmagnitude, format, and orderby parameters."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/earthquake_usgs/"
+notes = "One CSV per year from 2014 through 2023 using full UTC calendar-year query windows."
+
+[local_paths]
+downloads = "downloads/earthquake_usgs/"
+extracted = "extracted/earthquake_usgs/"
+filtered = "filtered/earthquake_usgs/"
+index = "index/earthquake_usgs/"
+samples = "samples/earthquake_usgs/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/earthquake_usgs/samples.jsonl"
+summary = "Download yearly USGS earthquake catalog CSV files, parse selected numeric columns, preserve source row order, and emit raw numeric arrays plus a machine-readable sample index."
+deterministic_notes = "Fixed years 2014-2023, fixed UTC yearly query windows, fixed minmagnitude=4.0, fixed CSV query parameters, preserved source row order within each yearly file, durable script logs under logs/earthquake_usgs/, and generated sample index at index/earthquake_usgs/samples.jsonl."
+
+[[series]]
+id = "eq_depth_f64"
+description = "Earthquake hypocentral depth values."
+semantic_meaning = "Float64 depth in kilometers from the USGS depth column, one sample per year."
+source_resources = ["usgs_quakes_2014_2023"]
+filtered_input_path = "filtered/earthquake_usgs/year_series_stats.tsv"
+filtering = "Keep all rows from the yearly CSV files with a parseable depth value."
+conversion = "Parse the CSV depth column as Python float and write IEEE-754 little-endian float64 arrays preserving row order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 10
+total_size_bytes = 2440192
+output_path = "samples/earthquake_usgs/eq_depth_f64/"
+
+[[series]]
+id = "eq_mag_f64"
+description = "Earthquake magnitude values."
+semantic_meaning = "Float64 magnitude values from the USGS mag column, one sample per year."
+source_resources = ["usgs_quakes_2014_2023"]
+filtered_input_path = "filtered/earthquake_usgs/year_series_stats.tsv"
+filtering = "Keep all rows from the yearly CSV files with a parseable magnitude value."
+conversion = "Parse the CSV mag column as Python float and write IEEE-754 little-endian float64 arrays preserving row order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 10
+total_size_bytes = 2440192
+output_path = "samples/earthquake_usgs/eq_mag_f64/"
+
+[[series]]
+id = "eq_gap_f64"
+description = "Earthquake azimuthal gap values."
+semantic_meaning = "Float64 azimuthal gap values from the USGS gap column, one sample per year."
+source_resources = ["usgs_quakes_2014_2023"]
+filtered_input_path = "filtered/earthquake_usgs/year_series_stats.tsv"
+filtering = "Keep all rows from the yearly CSV files with a parseable gap value."
+conversion = "Parse the CSV gap column as Python float and write IEEE-754 little-endian float64 arrays preserving row order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 10
+total_size_bytes = 2438160
+output_path = "samples/earthquake_usgs/eq_gap_f64/"
+
+[[series]]
+id = "eq_dmin_f64"
+description = "Earthquake nearest-station distance values."
+semantic_meaning = "Float64 dmin values from the USGS dmin column, one sample per year."
+source_resources = ["usgs_quakes_2014_2023"]
+filtered_input_path = "filtered/earthquake_usgs/year_series_stats.tsv"
+filtering = "Keep all rows from the yearly CSV files with a parseable dmin value."
+conversion = "Parse the CSV dmin column as Python float and write IEEE-754 little-endian float64 arrays preserving row order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 10
+total_size_bytes = 2152224
+output_path = "samples/earthquake_usgs/eq_dmin_f64/"
+
+[[series]]
+id = "eq_nst_u16"
+description = "Earthquake reporting-station counts."
+semantic_meaning = "Unsigned 16-bit station-count values from the USGS nst column, one sample per year."
+source_resources = ["usgs_quakes_2014_2023"]
+filtered_input_path = "filtered/earthquake_usgs/year_series_stats.tsv"
+filtering = "Keep rows from the yearly CSV files with a parseable integer nst value in the uint16 range."
+conversion = "Parse the CSV nst column as integer and write little-endian uint16 arrays preserving row order for retained rows."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 10
+total_size_bytes = 54898
+output_path = "samples/earthquake_usgs/eq_nst_u16/"

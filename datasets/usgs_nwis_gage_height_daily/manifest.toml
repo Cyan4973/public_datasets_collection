@@ -1,0 +1,116 @@
+manifest_version = 1
+dataset_id = "usgs_nwis_gage_height_daily"
+name = "USGS NWIS Daily Gage Height"
+description = "USGS NWIS daily gage-height JSON extracts for one fixed site, 2021-2023."
+homepage = "https://waterservices.usgs.gov/"
+
+[license]
+name = "U.S. Government Public Domain"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://waterservices.usgs.gov/"
+citation = "USGS Water Services, NWIS daily values service."
+notes = "USGS gage-height data are public U.S. government works. Preserve attribution and source provenance."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official USGS NWIS daily values API only; no mirrors, leaks, or scraped personal content."
+usage_notes = "Public-domain hydrology observations suitable for reproducible numeric dataset collection."
+
+[[origins]]
+id = "usgs_nwis_dv_api"
+name = "USGS NWIS Daily Values Service"
+url = "https://waterservices.usgs.gov/nwis/dv/"
+type = "api"
+notes = "Public JSON service for historical daily observations by site and parameter code."
+
+[[resources]]
+id = "usgs_gage_height_2021_2023"
+origin = "usgs_nwis_dv_api"
+url = "https://waterservices.usgs.gov/nwis/dv/"
+type = "api_query_result"
+version = "2021-2023-one-site-00065-json"
+access = "Site-year JSON queries with fixed sites, parameterCd=00065, startDT, endDT, format=json, and siteStatus=all."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/usgs_nwis_gage_height_daily/"
+notes = "One JSON file per site per year for the fixed one-site subset."
+
+[local_paths]
+downloads = "downloads/usgs_nwis_gage_height_daily/"
+extracted = "extracted/usgs_nwis_gage_height_daily/"
+filtered = "filtered/usgs_nwis_gage_height_daily/"
+index = "index/usgs_nwis_gage_height_daily/"
+samples = "samples/usgs_nwis_gage_height_daily/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/usgs_nwis_gage_height_daily/samples.jsonl"
+summary = "Download site-year USGS daily gage-height JSON files, select statistic code 00003 when multiple daily statistics are present, derive aligned date component arrays, and emit raw numeric arrays plus a machine-readable sample index."
+deterministic_notes = "Fixed site list, fixed years 2021-2023, fixed parameterCd=00065, fixed API query parameters, explicit selection of statistic code 00003 when multiple daily statistics are present, preserved source observation order within each site-year file, concatenated years in ascending order per site, durable script logs under logs/usgs_nwis_gage_height_daily/, and generated sample index at index/usgs_nwis_gage_height_daily/samples.jsonl."
+
+[[series]]
+id = "usgs_gage_height_ft_f64"
+description = "Daily gage-height values."
+semantic_meaning = "Float64 gage-height values from USGS parameter code 00065, one sample per site after selecting statistic code 00003 where needed."
+source_resources = ["usgs_gage_height_2021_2023"]
+filtered_input_path = "filtered/usgs_nwis_gage_height_daily/site_year_stats.tsv"
+filtering = "Keep rows with parseable gage-height values and parseable observation dates."
+conversion = "Parse the USGS value field as Python float and write IEEE-754 little-endian float64 arrays preserving source order after site-year concatenation."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 1
+total_size_bytes = 0
+output_path = "samples/usgs_nwis_gage_height_daily/usgs_gage_height_ft_f64/"
+
+[[series]]
+id = "obs_year_u16"
+description = "Observation year values aligned to gage height."
+semantic_meaning = "Unsigned 16-bit observation years derived from retained USGS gage-height row dates, one sample per site."
+source_resources = ["usgs_gage_height_2021_2023"]
+filtered_input_path = "filtered/usgs_nwis_gage_height_daily/site_year_stats.tsv"
+filtering = "Keep rows with parseable gage-height values and parseable observation dates."
+conversion = "Parse the observation date year component as integer and write little-endian uint16 arrays aligned 1:1 with retained gage-height values."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 1
+total_size_bytes = 0
+output_path = "samples/usgs_nwis_gage_height_daily/obs_year_u16/"
+
+[[series]]
+id = "obs_month_u8"
+description = "Observation month values aligned to gage height."
+semantic_meaning = "Unsigned 8-bit observation months derived from retained USGS gage-height row dates, one sample per site."
+source_resources = ["usgs_gage_height_2021_2023"]
+filtered_input_path = "filtered/usgs_nwis_gage_height_daily/site_year_stats.tsv"
+filtering = "Keep rows with parseable gage-height values and parseable observation dates."
+conversion = "Parse the observation date month component as integer and write uint8 arrays aligned 1:1 with retained gage-height values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 1
+total_size_bytes = 0
+output_path = "samples/usgs_nwis_gage_height_daily/obs_month_u8/"
+
+[[series]]
+id = "obs_day_u8"
+description = "Observation day values aligned to gage height."
+semantic_meaning = "Unsigned 8-bit observation days derived from retained USGS gage-height row dates, one sample per site."
+source_resources = ["usgs_gage_height_2021_2023"]
+filtered_input_path = "filtered/usgs_nwis_gage_height_daily/site_year_stats.tsv"
+filtering = "Keep rows with parseable gage-height values and parseable observation dates."
+conversion = "Parse the observation date day component as integer and write uint8 arrays aligned 1:1 with retained gage-height values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 1
+total_size_bytes = 0
+output_path = "samples/usgs_nwis_gage_height_daily/obs_day_u8/"

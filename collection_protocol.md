@@ -16,6 +16,7 @@ Vocabulary:
 Repository layout:
 - Dataset recipes should live under `datasets/<dataset_id>/`.
 - Each dataset recipe should include `manifest.toml`, `README.md`, `download.sh`, `build.sh`, and `verify.sh` when applicable. Extra helper scripts should live under `datasets/<dataset_id>/scripts/`.
+- Temporary batch orchestration scripts may be generated outside the repository, typically under `/tmp/`, to let a user launch multiple dataset downloads in one command. These batch scripts are convenience artifacts only. They must not be committed and must not replace per-dataset `download.sh` entry points.
 - Local payloads should live under `.data/` by default, with scripts allowing `DATA_DIR` to override that location.
 - The local data directory should separate downloads, extracted data, filtered data, generated sample indexes, and generated samples, for example `.data/downloads/<dataset_id>/`, `.data/extracted/<dataset_id>/`, `.data/filtered/<dataset_id>/`, `.data/index/<dataset_id>/`, and `.data/samples/<dataset_id>/<series_id>/`.
 - Generated samples should not be placed inside committed dataset recipe directories.
@@ -37,6 +38,13 @@ For any multi-byte numeric width, the byte order must be explicitly defined. For
 Output samples are raw homogeneous arrays of numeric values. The sample content must contain only the numeric value bytes, with no header, delimiter, timestamp, label, metadata block, compression wrapper, or bundled side data. Multi-byte values should be encoded little-endian. No specific file extension is required.
 
 Processing may use any documented transformation needed to convert resources into numeric series, including unpacking archives, parsing formats such as CSV, Parquet, JSON, or database exports, selecting relevant fields, decoding values, converting numeric types, changing byte order, filtering irrelevant records, and splitting outputs into series. Processing must preserve the real upstream data content. It must not fabricate numeric values, synthesize data, augment the dataset with generated values, or mix a small amount of real data with synthetic data to create a series.
+
+Batch execution:
+- It is acceptable and encouraged to prepare batches of multiple dataset recipes for a user to download in one pass.
+- Batch launchers are orchestration helpers only. The durable contract remains per-dataset `download.sh`, `build.sh`, and `verify.sh`.
+- A batch launcher should call the per-dataset `download.sh` scripts and should not embed dataset-specific acquisition logic directly.
+- Batch launchers should be treated as ephemeral local artifacts, not repository content. `/tmp/` is the preferred location unless a user asks for another location.
+- After a batch download completes, each dataset should still be built, verified, accepted, rejected, or recorded under `attempts/` independently.
 
 To be eligible, a dataset must be:
 - Public, with a clearly identified permissive license. Each dataset entry must document the origin URL, license name, SPDX identifier when available, license URL or bundled license text, and any required citation or attribution. Datasets with missing, ambiguous, non-commercial, no-derivatives, or otherwise restrictive licenses are not eligible unless explicitly approved.

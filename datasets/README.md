@@ -12,6 +12,12 @@ Expected per-dataset files:
 
 Dataset payloads do not belong in this directory. Downloads, extracted data, filtered data, and generated samples should live under the gitignored local data directory, `.data/` by default.
 
+Batch downloads:
+- It is acceptable to prepare temporary batch launcher scripts for user convenience when multiple dataset downloads should be run together.
+- Batch launchers should live outside the repository, typically under `/tmp/`.
+- Do not commit batch launchers under `datasets/` or elsewhere in the repository.
+- Batch launchers should call the durable per-dataset `download.sh` entry points rather than reimplementing download logic.
+
 Recommended layout:
 
 ```text
@@ -63,6 +69,7 @@ Review checklist for a dataset recipe:
 - `download.sh` downloads only selected resources and writes under `${DATA_DIR:-.data}`.
 - `build.sh` rebuilds generated samples from local downloads without fabricating, synthesizing, or augmenting data.
 - `download.sh`, `build.sh`, and `verify.sh` are deterministic where possible and document any unavoidable upstream mutability.
+- Any multi-dataset batch launcher used during collection is ephemeral, lives outside the repository, and delegates to the committed per-dataset `download.sh` scripts.
 - `verify.sh` checks expected resource checksums/sizes where stable and validates generated sample counts, series byte sizes, and output format.
 - A generated sample index exists under `${DATA_DIR:-.data}/index/<dataset_id>/` and includes one row per sample with numeric kind, bit width, endianness, element size, sample size, and value count.
 - Each generated series has documented semantic meaning, filtering/conversion summary, numeric kind, bit width, byte order, sample count, total size, and output path.

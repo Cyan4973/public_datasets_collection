@@ -1,9 +1,13 @@
 # Copy this file to datasets/<dataset_id>/manifest.toml and fill it in.
+#
+# Paths in this manifest are relative to ${DATA_DIR:-.data}.
+# Keep the manifest concise. Large generated inventories belong in scripts or
+# verify output, not as committed manifest noise.
 
 manifest_version = 1
 dataset_id = "example_dataset"
 name = "Example Dataset"
-description = "Short description of what is collected."
+description = "Short description of the collected numeric content."
 homepage = "https://example.org/dataset"
 
 [license]
@@ -15,39 +19,54 @@ notes = "Attribution, redistribution, or usage notes."
 
 [safety]
 contains_sensitive_data = false
+contains_personal_data = false
 provenance_notes = "Official provider download; no mirrors, leaks, or scraped personal content."
+usage_notes = "Public, permissive, and appropriate for reproducible numeric dataset collection."
 
 [[origins]]
 id = "official"
+name = "Example Data Portal"
 url = "https://example.org/dataset"
-type = "website"
-notes = "Official dataset page."
+type = "website" # website, api, bucket, repository, data_portal, mirrorless_archive, other
+notes = "Official dataset page or API root."
 
 [[resources]]
 id = "main_archive"
 origin = "official"
 url = "https://example.org/files/data.zip"
-type = "archive"
+type = "archive" # archive, file, table_export, api_query_result, shard, other
 version = "2026-01-15"
-sha256 = ""
+access = "Direct public download."
 size_bytes = 0
+sha256 = ""
 local_path = "downloads/example_dataset/data.zip"
+notes = "Pin exact file/version/checksum where possible."
+
+[local_paths]
+downloads = "downloads/example_dataset/"
+extracted = "extracted/example_dataset/"
+filtered = "filtered/example_dataset/"
+samples = "samples/example_dataset/"
 
 [processing]
 download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
-summary = "Unpack archive, parse source files, filter relevant numeric content, and emit little-endian raw numeric samples."
+summary = "Download pinned upstream resources, extract or decode local files, filter to numeric content, and emit raw little-endian numeric samples."
+deterministic_notes = "Document pinned URLs, fixed parameters, sort order, shard policy, and any checksum or size validations."
 
 [[series]]
 id = "example_f32"
 description = "Example numeric measurements."
+semantic_meaning = "One homogeneous floating-point measurement stream extracted from the upstream dataset."
 source_resources = ["main_archive"]
+filtered_input_path = "filtered/example_dataset/example_f32/"
 filtering = "Document the files, columns, records, fields, ranges, or criteria kept for this series."
-conversion = "Document parsing, numeric conversion, byte order, and output generation."
+conversion = "Document parsing, numeric conversion, byte order, sample boundaries, and output generation."
 numeric_kind = "float" # int, uint, or float
 bit_width = 32
 endianness = "little"
+sample_format = "raw homogeneous numeric array"
 sample_count = 0
 total_size_bytes = 0
-sample_path = "samples/example_dataset/example_f32/"
+output_path = "samples/example_dataset/example_f32/"

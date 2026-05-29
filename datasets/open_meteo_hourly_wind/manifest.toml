@@ -1,0 +1,137 @@
+manifest_version = 1
+dataset_id = "open_meteo_hourly_wind"
+name = "Open-Meteo Hourly Wind"
+description = "Open-Meteo archive hourly wind JSON extracts for five fixed locations, 2022-2023."
+homepage = "https://open-meteo.com/"
+
+[license]
+name = "CC BY 4.0"
+spdx = "CC-BY-4.0"
+url = "https://open-meteo.com/en/features#terms"
+citation = "Open-Meteo weather API."
+notes = "Open-Meteo publishes public weather API data under documented attribution terms."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Open-Meteo archive API only."
+usage_notes = "Public weather observations suitable for reproducible numeric dataset collection."
+
+[[origins]]
+id = "open_meteo_archive_api"
+name = "Open-Meteo Archive API"
+url = "https://archive-api.open-meteo.com/v1/archive"
+type = "api"
+notes = "Public JSON API for historical hourly weather time series."
+
+[[resources]]
+id = "open_meteo_hourly_wind_2022_2023"
+origin = "open_meteo_archive_api"
+url = "https://archive-api.open-meteo.com/v1/archive"
+type = "api_query_result"
+version = "2022-2023-five-locations-wind_speed_10m"
+access = "Location-year JSON queries with fixed coordinates, hourly=wind_speed_10m, start_date, end_date, and timezone=GMT."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/open_meteo_hourly_wind/"
+notes = "One JSON file per selected location-year."
+
+[local_paths]
+downloads = "downloads/open_meteo_hourly_wind/"
+extracted = "extracted/open_meteo_hourly_wind/"
+filtered = "filtered/open_meteo_hourly_wind/"
+index = "index/open_meteo_hourly_wind/"
+samples = "samples/open_meteo_hourly_wind/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/open_meteo_hourly_wind/samples.jsonl"
+summary = "Download selected Open-Meteo hourly archive JSON files, retain parseable hourly wind values, and emit raw numeric arrays plus a machine-readable sample index."
+deterministic_notes = "Fixed location list, fixed hourly variable, fixed years 2022-2023, fixed API query parameters, download-time payload validation, filtered blank and malformed rows only, preserved source hourly order within each location-year response, concatenated years in ascending order per location sample, durable logs under logs/open_meteo_hourly_wind/, and generated sample index at index/open_meteo_hourly_wind/samples.jsonl."
+
+[[series]]
+id = "open_meteo_value_f32"
+description = "Open-Meteo hourly wind values."
+semantic_meaning = "Float32 wind_speed_10m values in the units returned by the API, one sample per location."
+source_resources = ["open_meteo_hourly_wind_2022_2023"]
+filtered_input_path = "filtered/open_meteo_hourly_wind/location_year_stats.tsv"
+filtering = "Keep rows with parseable ISO hourly timestamps and nonblank wind_speed_10m values."
+missing_value_policy = "Filter rows whose values are blank, null, or malformed, and filter rows with malformed timestamps."
+conversion = "Parse retained wind_speed_10m values as Python float and write IEEE-754 little-endian float32 arrays preserving source order after year concatenation."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/open_meteo_hourly_wind/open_meteo_value_f32/"
+
+[[series]]
+id = "obs_year_u16"
+description = "Observation year values aligned to hourly wind."
+semantic_meaning = "Unsigned 16-bit years derived from retained timestamps, one sample per location."
+source_resources = ["open_meteo_hourly_wind_2022_2023"]
+filtered_input_path = "filtered/open_meteo_hourly_wind/location_year_stats.tsv"
+filtering = "Keep rows accepted for open_meteo_value_f32."
+missing_value_policy = "Filter rows rejected by the open_meteo_value_f32 missing-value policy."
+conversion = "Parse the timestamp year component as integer and write little-endian uint16 arrays aligned 1:1 with retained wind values."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/open_meteo_hourly_wind/obs_year_u16/"
+
+[[series]]
+id = "obs_month_u8"
+description = "Observation month values aligned to hourly wind."
+semantic_meaning = "Unsigned 8-bit months derived from retained timestamps, one sample per location."
+source_resources = ["open_meteo_hourly_wind_2022_2023"]
+filtered_input_path = "filtered/open_meteo_hourly_wind/location_year_stats.tsv"
+filtering = "Keep rows accepted for open_meteo_value_f32."
+missing_value_policy = "Filter rows rejected by the open_meteo_value_f32 missing-value policy."
+conversion = "Parse the timestamp month component as integer and write uint8 arrays aligned 1:1 with retained wind values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/open_meteo_hourly_wind/obs_month_u8/"
+
+[[series]]
+id = "obs_day_u8"
+description = "Observation day values aligned to hourly wind."
+semantic_meaning = "Unsigned 8-bit days derived from retained timestamps, one sample per location."
+source_resources = ["open_meteo_hourly_wind_2022_2023"]
+filtered_input_path = "filtered/open_meteo_hourly_wind/location_year_stats.tsv"
+filtering = "Keep rows accepted for open_meteo_value_f32."
+missing_value_policy = "Filter rows rejected by the open_meteo_value_f32 missing-value policy."
+conversion = "Parse the timestamp day component as integer and write uint8 arrays aligned 1:1 with retained wind values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/open_meteo_hourly_wind/obs_day_u8/"
+
+[[series]]
+id = "obs_hour_u8"
+description = "Observation hour values aligned to hourly wind."
+semantic_meaning = "Unsigned 8-bit hours derived from retained timestamps, one sample per location."
+source_resources = ["open_meteo_hourly_wind_2022_2023"]
+filtered_input_path = "filtered/open_meteo_hourly_wind/location_year_stats.tsv"
+filtering = "Keep rows accepted for open_meteo_value_f32."
+missing_value_policy = "Filter rows rejected by the open_meteo_value_f32 missing-value policy."
+conversion = "Parse the timestamp hour component as integer and write uint8 arrays aligned 1:1 with retained wind values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/open_meteo_hourly_wind/obs_hour_u8/"

@@ -1,0 +1,31 @@
+# bls_unemployment_monthly
+
+- Date: 2026-05-29
+- Status: transient_failure
+- Candidate dataset: BLS unemployment monthly, series `LNS14000000`
+- Source:
+  - `https://api.bls.gov/publicAPI/v2/timeseries/data/`
+- Why it looked promising:
+  - public labor-statistics API
+  - monthly unemployment numeric series
+  - produces multiple yearly samples from one canonical series
+- Failure class:
+  - transient upstream access failure
+  - first-pass downloader control-flow bug
+- What happened:
+  - The BLS API call failed in the local environment with `urllib.error.URLError: <urlopen error [Errno -2] Name or service not known>`.
+  - No raw JSON payload was written to `.data/downloads/bls_unemployment_monthly/`.
+  - The initial `download.sh` shell control flow incorrectly logged success after the failed fetch path.
+  - `build.sh` and `verify.sh` then failed because the raw JSON file did not exist.
+- Evidence:
+  - no `.data/downloads/bls_unemployment_monthly/bls_unemployment_monthly.json`
+  - build failure: missing raw JSON
+- Logs:
+  - `.data/logs/bls_unemployment_monthly/download.latest.log`
+  - `.data/logs/bls_unemployment_monthly/build.latest.log`
+  - `.data/logs/bls_unemployment_monthly/verify.latest.log`
+- Decision:
+  - do not accept this recipe in the current batch
+- Retry conditions:
+  - retry if the BLS public API is reachable from the target environment
+  - retry only with a corrected downloader that exits nonzero when no payload is written

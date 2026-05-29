@@ -1,0 +1,33 @@
+# stooq_daily_commodity_etfs
+
+- Date: 2026-05-29
+- Status: rejected
+- Candidate dataset: Stooq daily commodity ETFs
+- Source:
+  - `https://stooq.com/q/d/l/`
+- Why it looked promising:
+  - public market-history CSV endpoint
+  - daily numeric price series across multiple commodity ETF symbols
+  - convenient direct CSV transport
+- Failure class:
+  - upstream access gate
+  - first-pass downloader and verifier were too permissive
+- What happened:
+  - The endpoint returned a captcha/API-key gate page instead of market CSV data.
+  - Cached payloads began with `Get your apikey:` rather than the expected CSV header.
+  - The first-pass downloader incorrectly treated validation failure as success.
+  - The first-pass build and verify logic accepted zero-row outputs, which is not acceptable for this repository.
+- Evidence:
+  - downloaded files contain:
+    - `Get your apikey:`
+    - manual captcha instructions
+  - filtered stats showed `kept_count=0` for every symbol
+- Logs:
+  - `.data/logs/stooq_daily_commodity_etfs/download.latest.log`
+  - `.data/logs/stooq_daily_commodity_etfs/build.latest.log`
+  - `.data/logs/stooq_daily_commodity_etfs/verify.latest.log`
+- Decision:
+  - reject this source for autonomous batch acquisition
+- Retry conditions:
+  - retry only if the source offers unauthenticated, machine-runnable access without captcha or manual API-key acquisition
+  - any future retry must also reject zero-row builds and invalid cached payloads

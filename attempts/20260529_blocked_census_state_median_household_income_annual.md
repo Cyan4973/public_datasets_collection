@@ -1,0 +1,31 @@
+# census_state_median_household_income_annual
+
+- Date: 2026-05-29
+- Status: blocked
+- Candidate dataset: U.S. Census annual state median household income
+- Source:
+  - `https://api.census.gov/data/2021/acs/acs1`
+  - `https://api.census.gov/data/2022/acs/acs1`
+  - `https://api.census.gov/data/2023/acs/acs1`
+- Why it looked promising:
+  - public U.S. government income data
+  - annual state-level numeric series
+  - good domain diversity relative to existing recipes
+- Failure class:
+  - access requirement incompatible with anonymous batch acquisition
+  - first-pass downloader control-flow bug
+- What happened:
+  - The API returned HTML `Missing Key` pages instead of JSON tables.
+  - This happened for all sampled years in the current environment.
+  - The initial downloader incorrectly logged success after validation failure.
+  - No acceptable raw JSON payloads were collected.
+- Evidence:
+  - cached files begin with `<html>` and `Missing Key`
+  - no valid JSON table payloads were produced
+- Logs:
+  - `.data/logs/census_state_median_household_income_annual/download.latest.log`
+- Decision:
+  - do not accept this recipe in the current batch
+- Retry conditions:
+  - retry only if the repository adopts an approved Census API key handling path
+  - any future retry must fail hard on HTML/error payloads and missing-key responses

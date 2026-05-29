@@ -1,0 +1,28 @@
+# sec_company_net_income_quarterly
+
+- Date: 2026-05-29
+- Status: transient_failure
+- Candidate dataset: SEC company net income quarterly
+- Source:
+  - `https://data.sec.gov/api/xbrl/companyfacts/`
+- Why it looked promising:
+  - public U.S. government corporate filing data
+  - quarterly financial numeric series
+  - strong source diversity relative to prior batches
+- Failure class:
+  - transient upstream fetch failure
+  - first-pass downloader control-flow bug
+- What happened:
+  - Company facts requests failed in the local environment with `URLError: [Errno -2] Name or service not known`.
+  - No raw company JSON payloads were written under `.data/downloads/sec_company_net_income_quarterly/`.
+  - The initial downloader incorrectly logged success after the failed fetch path.
+- Evidence:
+  - download directory contains only plan/checksum/failure bookkeeping files
+  - no company JSON files were written
+- Logs:
+  - `.data/logs/sec_company_net_income_quarterly/download.latest.log`
+- Decision:
+  - do not accept this recipe in the current batch
+- Retry conditions:
+  - retry if SEC API connectivity works from the target environment
+  - retry only with a corrected downloader that exits nonzero when no payload is written

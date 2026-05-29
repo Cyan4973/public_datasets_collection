@@ -1,0 +1,68 @@
+manifest_version = 1
+dataset_id = "noaa_coops_air_temperature"
+name = "NOAA CO-OPS Air Temperature"
+description = "NOAA CO-OPS air-temperature JSON extracts for three fixed stations, 2022-2023."
+homepage = "https://api.tidesandcurrents.noaa.gov/api/prod/"
+
+[license]
+name = "U.S. Government Public Domain"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://api.tidesandcurrents.noaa.gov/api/prod/"
+citation = "NOAA Center for Operational Oceanographic Products and Services datagetter API."
+notes = "NOAA CO-OPS data are public U.S. government works."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NOAA CO-OPS API only."
+usage_notes = "Public observational climate data suitable for reproducible numeric dataset collection."
+
+[[origins]]
+id = "noaa_coops_api"
+name = "NOAA CO-OPS Datagetter API"
+url = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter"
+type = "api"
+notes = "Public JSON API for NOAA tide, water level, and meteorological station products."
+
+[[resources]]
+id = "noaa_coops_air_temperature_2022_2023"
+origin = "noaa_coops_api"
+url = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter"
+type = "api_query_result"
+version = "2022-2023-three-stations-air-temperature-json"
+access = "Station/date-window JSON queries with fixed product and parameters."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/noaa_coops_air_temperature/"
+notes = "Chunked JSON responses for the selected station subset."
+
+[local_paths]
+downloads = "downloads/noaa_coops_air_temperature/"
+extracted = "extracted/noaa_coops_air_temperature/"
+filtered = "filtered/noaa_coops_air_temperature/"
+index = "index/noaa_coops_air_temperature/"
+samples = "samples/noaa_coops_air_temperature/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_coops_air_temperature/samples.jsonl"
+summary = "Download selected NOAA CO-OPS air-temperature JSON chunks, deduplicate overlapping timestamps, and emit float64 samples plus a machine-readable sample index."
+deterministic_notes = "Fixed stations, fixed years 2022-2023, fixed product=air_temperature, fixed chunking policy, download-time rejection of NOAA API error payloads, preserved timestamp order after deduplication, durable logs under logs/noaa_coops_air_temperature/, and generated sample index at index/noaa_coops_air_temperature/samples.jsonl."
+
+[[series]]
+id = "air_temperature_f64"
+description = "Air temperature observations."
+semantic_meaning = "Float64 air-temperature values from NOAA CO-OPS, one sample per station."
+source_resources = ["noaa_coops_air_temperature_2022_2023"]
+filtered_input_path = "filtered/noaa_coops_air_temperature/station_stats.tsv"
+filtering = "Keep parseable rows with timestamps and numeric values; deduplicate repeated timestamps across chunk boundaries."
+conversion = "Parse the JSON value field as float and write IEEE-754 little-endian float64 arrays preserving timestamp order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 3
+total_size_bytes = 0
+output_path = "samples/noaa_coops_air_temperature/air_temperature_f64/"

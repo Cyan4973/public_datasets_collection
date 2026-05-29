@@ -18,7 +18,7 @@ Repository layout:
 - Each dataset recipe should include `manifest.toml`, `README.md`, `download.sh`, `build.sh`, and `verify.sh` when applicable. Extra helper scripts should live under `datasets/<dataset_id>/scripts/`.
 - Temporary batch orchestration scripts may be generated outside the repository, typically under `/tmp/`, to let a user launch multiple dataset downloads in one command. These batch scripts are convenience artifacts only. They must not be committed and must not replace per-dataset `download.sh` entry points.
 - Local payloads should live under `.data/` by default, with scripts allowing `DATA_DIR` to override that location.
-- The local data directory should separate downloads, extracted data, filtered data, generated sample indexes, and generated samples, for example `.data/downloads/<dataset_id>/`, `.data/extracted/<dataset_id>/`, `.data/filtered/<dataset_id>/`, `.data/index/<dataset_id>/`, and `.data/samples/<dataset_id>/<series_id>/`.
+- The local data directory should separate downloads, extracted data, filtered data, generated batch summaries, generated sample indexes, and generated samples, for example `.data/downloads/<dataset_id>/`, `.data/extracted/<dataset_id>/`, `.data/filtered/<dataset_id>/`, `.data/batches/<batch_id>/`, `.data/index/<dataset_id>/`, and `.data/samples/<dataset_id>/<series_id>/`.
 - Generated samples should not be placed inside committed dataset recipe directories.
 
 Manifest format:
@@ -30,6 +30,7 @@ Manifest format:
 - Manifest paths for downloads, extracted data, filtered data, and samples should be relative to `${DATA_DIR:-.data}`.
 - Each dataset recipe should generate a machine-readable sample index under `${DATA_DIR:-.data}/index/<dataset_id>/samples.jsonl` or an equivalent documented path. The index must include one row per sample file with `dataset_id`, `series_id`, `sample_path`, `numeric_kind`, `bit_width`, `endianness`, `element_size_bytes`, `sample_size_bytes`, and `value_count`.
 - The manifest should stay concise and reviewable. Large generated inventories should be produced by scripts or `verify.sh`, not committed into the manifest.
+- Each generated series must document its missing-value policy. The policy must state whether upstream blanks, sentinels, flagged rows, NaNs, malformed rows, or unavailable observations are filtered, preserved as explicit sentinel values, or treated as fatal errors. `README.md`, `build.sh`, and `verify.sh` must agree on that policy.
 
 The current priority is numeric series. Samples in a series may contain any homogeneous fixed-width numeric type: signed integer, unsigned integer, or floating point, with each value encoded as 8-bit, 16-bit, 32-bit, or 64-bit.
 
@@ -45,6 +46,18 @@ Batch execution:
 - A batch launcher should call the per-dataset `download.sh` scripts and should not embed dataset-specific acquisition logic directly.
 - Batch launchers should be treated as ephemeral local artifacts, not repository content. `/tmp/` is the preferred location unless a user asks for another location.
 - After a batch download completes, each dataset should still be built, verified, accepted, rejected, or recorded under `attempts/` independently.
+- A batch run should also emit a machine-readable local summary under `${DATA_DIR:-.data}/batches/<batch_id>/summary.jsonl` or `${DATA_DIR:-.data}/batches/<batch_id>/summary.tsv`. Each row should include at least `dataset_id`, `download_status`, `build_status`, `verify_status`, `needs_redownload`, and `notes`.
+
+Script requirements:
+- `download.sh` must validate payload semantics, not only transport success. For archives and static files, this may mean validating checksums, expected size bounds, or basic format headers. For APIs and structured text, this must include rejecting known error payloads and rejecting responses that are missing the documented primary data field.
+- `download.sh` should not keep a cached file that is known to be an upstream error payload or otherwise semantically invalid input. On rerun, it should either replace the invalid cache entry or fail clearly.
+- `build.sh` must process only local files already present under `${DATA_DIR:-.data}` and must apply the documented missing-value policy consistently.
+- `verify.sh` must independently validate the same missing-value policy assumptions used by `build.sh`, including skipped-row counts, retained sentinel counts, or fatal conditions as applicable.
+- All three scripts must write durable logs under `${DATA_DIR:-.data}/logs/<dataset_id>/`.
+
+Recipe evolution:
+- If `download.sh` changes materially, acceptance of the recipe requires a fresh user-run download pass with the updated script before commit. Material changes include modified source URLs, query parameters, selected station/site/resource subsets, payload validation rules, authentication-free access paths, or cache-acceptance rules.
+- If an initially selected upstream subset is only partially supported, the recipe may be narrowed to a working documented subset without being recorded as a failure, but the manifest, README, scripts, sample counts, and local verification outputs must all be updated to reflect the accepted subset before commit.
 
 To be eligible, a dataset must be:
 - Public, with a clearly identified permissive license. Each dataset entry must document the origin URL, license name, SPDX identifier when available, license URL or bundled license text, and any required citation or attribution. Datasets with missing, ambiguous, non-commercial, no-derivatives, or otherwise restrictive licenses are not eligible unless explicitly approved.

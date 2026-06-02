@@ -13,9 +13,9 @@ Missing capability:
 - Channel selection helpers
 
 Current state:
-- `eeg_physionet` has been moved out of `needs_tooling` and into a real recipe
-- the remaining EDF-gated dataset is:
-  - [chbmit_physionet](./20260601_needs_tooling_chbmit_physionet.md)
+- `eeg_physionet` has been moved out of `needs_tooling` and into an accepted recipe
+- `chbmit_physionet` has been moved out of `needs_tooling` and into an accepted recipe
+- the EDF parser workflow is now implemented locally and is no longer an open tooling blocker
 
 Expected value:
 - Adds biomedical multi-channel waveform shapes
@@ -87,14 +87,13 @@ Acceptance bar:
 ## Priority
 
 Recommended implementation order:
-1. `EDF parser workflow`
-2. `WFDB parser workflow`
-3. `Raster / image decode workflow`
-4. `Seismic window selection workflow`
+1. `WFDB parser workflow`
+2. `Raster / image decode workflow`
+3. `Seismic window selection workflow`
 
 Reasoning:
-- `EDF` unlocks 2 datasets with one tooling family
-- `WFDB` unlocks another 2 datasets with one tooling family
+- `EDF` is already done locally
+- `WFDB` unlocks 2 datasets with one tooling family
 - `Raster / image` unlocks 2 datasets but likely has a wider parser surface
 - `Seismic window selection` unlocks only 1 dataset and depends more on
   acquisition design than pure decode logic

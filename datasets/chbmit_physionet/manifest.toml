@@ -1,0 +1,52 @@
+manifest_version = 1
+dataset_id = "chbmit_physionet"
+name = "PhysioNet CHB-MIT Scalp EEG"
+description = "Three selected bipolar EEG channel families extracted from a fixed trimmed EDF subset."
+homepage = "https://physionet.org/content/chbmit/1.0.0/"
+
+[license]
+name = "PhysioNet credentialed/public distribution terms"
+spdx = ""
+url = "https://physionet.org/content/chbmit/1.0.0/"
+citation = "CHB-MIT Scalp EEG Database, PhysioNet."
+notes = "Public PhysioNet-hosted EEG dataset used here through official distribution URLs only."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official PhysioNet distribution only."
+usage_notes = "Public source intended for reproducible numeric dataset collection."
+
+[[origins]]
+id = "official"
+name = "PhysioNet"
+url = "https://physionet.org/content/chbmit/1.0.0/"
+type = "data_portal"
+notes = "Official upstream dataset page."
+
+[[resources]]
+id = "edf_subset"
+origin = "official"
+url = "https://physionet.org/files/chbmit/1.0.0/"
+type = "api_directory"
+version = "1.0.0"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/chbmit_physionet/"
+notes = "Canonical trimmed default downloads first 3 cases and first 3 EDF files per case in RECORDS order."
+
+[local_paths]
+downloads = "downloads/chbmit_physionet/"
+extracted = "extracted/chbmit_physionet/"
+filtered = "filtered/chbmit_physionet/"
+index = "index/chbmit_physionet/"
+samples = "samples/chbmit_physionet/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/chbmit_physionet/samples.jsonl"
+summary = "Download a deterministic trimmed CHB-MIT EDF subset, extract three bipolar EEG channel families as native int16, and generate a machine-readable sample index."
+deterministic_notes = "Build preserves per-record sample identity, resolves channel aliases deterministically, and shards only oversized samples into deterministic contiguous pieces."

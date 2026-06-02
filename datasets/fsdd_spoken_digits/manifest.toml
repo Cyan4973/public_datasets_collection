@@ -1,0 +1,69 @@
+manifest_version = 1
+dataset_id = "fsdd_spoken_digits"
+name = "Free Spoken Digit Dataset"
+description = "Per-utterance 16-bit PCM waveforms from the Free Spoken Digit Dataset."
+homepage = "https://github.com/Jakobovski/free-spoken-digit-dataset"
+
+[license]
+name = "MIT"
+spdx = "MIT"
+url = "https://github.com/Jakobovski/free-spoken-digit-dataset/blob/master/LICENSE"
+citation = "Free Spoken Digit Dataset."
+notes = "GitHub repository is MIT licensed."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official upstream distribution only; no mirrors, leaks, or scraped personal content."
+usage_notes = "Public source intended for reproducible numeric dataset collection."
+
+[[origins]]
+id = "official"
+name = "GitHub repository"
+url = "https://github.com/Jakobovski/free-spoken-digit-dataset"
+type = "data_portal"
+notes = "Official upstream dataset page."
+
+[[resources]]
+id = "main"
+origin = "official"
+url = "https://github.com/Jakobovski/free-spoken-digit-dataset/archive/refs/heads/master.zip"
+type = "archive"
+version = "accessed_by_user"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/fsdd_spoken_digits/fsdd_master.zip"
+notes = "Repository archive containing WAV recordings."
+
+[local_paths]
+downloads = "downloads/fsdd_spoken_digits/"
+extracted = "extracted/fsdd_spoken_digits/"
+filtered = "filtered/fsdd_spoken_digits/"
+index = "index/fsdd_spoken_digits/"
+samples = "samples/fsdd_spoken_digits/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/fsdd_spoken_digits/samples.jsonl"
+summary = "Download pinned upstream resources, build local raw numeric samples only from local files, and generate a machine-readable sample index."
+deterministic_notes = "Build preserves source file order, does no network access, writes durable logs, and emits samples.jsonl under index/fsdd_spoken_digits/."
+
+[[series]]
+id = "fsdd_pcm16"
+description = "Per-utterance PCM waveforms."
+semantic_meaning = "Native mono 16-bit PCM samples from each recording."
+source_resources = ["main"]
+filtered_input_path = "filtered/fsdd_spoken_digits/inventory.tsv"
+filtering = "Keep WAV files from the upstream recordings directory."
+missing_value_policy = "Malformed WAV files are fatal."
+conversion = "Read PCM frames with the Python wave module and copy native little-endian int16 frames into .bin files."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/fsdd_spoken_digits/fsdd_pcm16/"

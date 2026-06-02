@@ -1,0 +1,69 @@
+manifest_version = 1
+dataset_id = "bike_sharing_uci"
+name = "UCI Bike Sharing"
+description = "Hourly bike-sharing observations from hour.csv."
+homepage = "https://archive.ics.uci.edu/dataset/275/bike+sharing+dataset"
+
+[license]
+name = "CC BY 4.0"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Bike Sharing Dataset, UCI Machine Learning Repository."
+notes = "UCI metadata indicates CC BY 4.0."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official upstream distribution only; no mirrors, leaks, or scraped personal content."
+usage_notes = "Public source intended for reproducible numeric dataset collection."
+
+[[origins]]
+id = "official"
+name = "UCI ML Repository"
+url = "https://archive.ics.uci.edu/dataset/275/bike+sharing+dataset"
+type = "data_portal"
+notes = "Official upstream dataset page."
+
+[[resources]]
+id = "main"
+origin = "official"
+url = "https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip"
+type = "archive"
+version = "accessed_by_user"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/bike_sharing_uci/bike_sharing_dataset.zip"
+notes = "Archive containing hour.csv."
+
+[local_paths]
+downloads = "downloads/bike_sharing_uci/"
+extracted = "extracted/bike_sharing_uci/"
+filtered = "filtered/bike_sharing_uci/"
+index = "index/bike_sharing_uci/"
+samples = "samples/bike_sharing_uci/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/bike_sharing_uci/samples.jsonl"
+summary = "Download pinned upstream resources, build local raw numeric samples only from local files, and generate a machine-readable sample index."
+deterministic_notes = "Build preserves source file order, does no network access, writes durable logs, and emits samples.jsonl under index/bike_sharing_uci/."
+
+[[series]]
+id = "bike_hourly"
+description = "Hourly bike-sharing numeric columns emitted as one sample per column."
+semantic_meaning = "Selected numeric columns from hour.csv."
+source_resources = ["main"]
+filtered_input_path = "filtered/bike_sharing_uci/inventory.tsv"
+filtering = "Keep all hourly rows with parseable numeric fields after excluding instant and dteday."
+missing_value_policy = "Malformed rows are fatal."
+conversion = "Parse CSV rows in source order and emit one sample per retained numeric column."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/bike_sharing_uci/bike_hourly/"

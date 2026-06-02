@@ -1,0 +1,69 @@
+manifest_version = 1
+dataset_id = "skadi_srtm_hgt"
+name = "Skadi SRTM HGT"
+description = "A canonical public HGT tile converted from big-endian int16 to little-endian row-band samples."
+homepage = "https://registry.opendata.aws/terrain-tiles/"
+
+[license]
+name = "LicenseRef-Upstream-Terrain-Terms"
+spdx = "LicenseRef-Upstream-Terrain-Terms"
+url = "https://registry.opendata.aws/terrain-tiles/"
+citation = "AWS Open Data Registry terrain tiles entry."
+notes = "Use according to upstream terrain and registry terms."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official upstream distribution only; no mirrors, leaks, or scraped personal content."
+usage_notes = "Public source intended for reproducible numeric dataset collection."
+
+[[origins]]
+id = "official"
+name = "AWS Terrain Tiles / Mapzen Skadi"
+url = "https://registry.opendata.aws/terrain-tiles/"
+type = "data_portal"
+notes = "Official upstream dataset page."
+
+[[resources]]
+id = "main"
+origin = "official"
+url = "https://s3.amazonaws.com/elevation-tiles-prod/skadi/N37/N37W122.hgt.gz"
+type = "file"
+version = "accessed_by_user"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/skadi_srtm_hgt/N37W122.hgt.gz"
+notes = "Canonical elevation tile used by the external reference."
+
+[local_paths]
+downloads = "downloads/skadi_srtm_hgt/"
+extracted = "extracted/skadi_srtm_hgt/"
+filtered = "filtered/skadi_srtm_hgt/"
+index = "index/skadi_srtm_hgt/"
+samples = "samples/skadi_srtm_hgt/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/skadi_srtm_hgt/samples.jsonl"
+summary = "Download pinned upstream resources, build local raw numeric samples only from local files, and generate a machine-readable sample index."
+deterministic_notes = "Build preserves source file order, does no network access, writes durable logs, and emits samples.jsonl under index/skadi_srtm_hgt/."
+
+[[series]]
+id = "skadi_elevation"
+description = "Contiguous row-band shards of the canonical HGT tile."
+semantic_meaning = "Native signed elevation samples from the selected tile."
+source_resources = ["main"]
+filtered_input_path = "filtered/skadi_srtm_hgt/inventory.tsv"
+filtering = "Keep the full decoded raster without resampling."
+missing_value_policy = "Preserve native void values if present."
+conversion = "Decompress the HGT file, reinterpret source samples as big-endian int16, and write contiguous row-band shards as little-endian int16."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/skadi_srtm_hgt/skadi_elevation/"

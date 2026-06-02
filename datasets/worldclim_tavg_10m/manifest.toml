@@ -1,0 +1,69 @@
+manifest_version = 1
+dataset_id = "worldclim_tavg_10m"
+name = "WorldClim 10 Arc-Min Average Temperature"
+description = "Selected six row bands from WorldClim v2.1 monthly average-temperature GeoTIFFs decoded to little-endian float32."
+homepage = "https://www.worldclim.org/data/worldclim21.html"
+
+[license]
+name = "Creative Commons Attribution-ShareAlike 4.0 International"
+spdx = "CC-BY-SA-4.0"
+url = "https://www.worldclim.org/data/license.html"
+citation = "Fick, S.E. and R.J. Hijmans, 2017. WorldClim 2: new 1-km spatial resolution climate surfaces for global land areas. International Journal of Climatology 37: 4302-4315."
+notes = "Use the official WorldClim archive and preserve attribution/share-alike requirements."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official WorldClim archive only; no mirrors, leaks, or scraped personal content."
+usage_notes = "Public climate raster source intended for reproducible numeric dataset collection."
+
+[[origins]]
+id = "official"
+name = "WorldClim"
+url = "https://www.worldclim.org/data/worldclim21.html"
+type = "data_portal"
+notes = "Official WorldClim dataset page."
+
+[[resources]]
+id = "main_archive"
+origin = "official"
+url = "https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_10m_tavg.zip"
+type = "archive"
+version = "v2.1_10m_tavg"
+access = "Direct public download."
+size_bytes = 37364656
+sha256 = "5e567dcfe94379b94229492849ce91078b1c6e5210aaf435fba449fae6b95405"
+local_path = "downloads/worldclim_tavg_10m/wc2.1_10m_tavg.zip"
+notes = "Canonical WorldClim v2.1 10 arc-min monthly average-temperature archive."
+
+[local_paths]
+downloads = "downloads/worldclim_tavg_10m/"
+extracted = "extracted/worldclim_tavg_10m/"
+filtered = "filtered/worldclim_tavg_10m/"
+index = "index/worldclim_tavg_10m/"
+samples = "samples/worldclim_tavg_10m/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/worldclim_tavg_10m/samples.jsonl"
+summary = "Download the pinned WorldClim archive, decode six selected LZW-compressed GeoTIFF row bands, preserve source float32 values including NoData, and emit raw little-endian float32 samples plus a machine-readable sample index."
+deterministic_notes = "Download validates archive size and SHA-256. Build uses a fixed six-band selection, stdlib-only TIFF LZW decode, no reprojection/resampling/interpolation, writes durable logs, and emits samples.jsonl under index/worldclim_tavg_10m/."
+
+[[series]]
+id = "worldclim_tavg_f32"
+description = "Selected monthly average-temperature row bands from WorldClim v2.1 10 arc-min rasters."
+semantic_meaning = "Native float32 average-temperature cells from fixed monthly GeoTIFF row selections."
+source_resources = ["main_archive"]
+filtered_input_path = "filtered/worldclim_tavg_10m/ingest_stats.json"
+filtering = "Keep only six reviewed monthly row bands: Jan rows 120-127, Feb 660-667, Mar 480-487, Jul 1020-1027, Aug 300-307, and Dec 840-847."
+missing_value_policy = "Preserve the source GeoTIFF NoData sentinel exactly as float32; do not impute, drop, or rewrite NoData cells."
+conversion = "Read the source ZIP locally, decode selected LZW-compressed single-strip rows from the embedded GeoTIFFs, convert big-endian TIFF float32 rows to little-endian float32 where needed, and write one raw sample per selected month-band."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/worldclim_tavg_10m/worldclim_tavg_f32/"

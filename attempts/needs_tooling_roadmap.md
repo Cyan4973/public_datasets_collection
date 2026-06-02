@@ -54,25 +54,12 @@ Acceptance bar:
 ## 3. Raster / Image Decode Workflow
 
 Missing capability:
-- Reviewed raster decode path for GeoTIFF
-- Reviewed PNG label-mask decode path where source access is available
-
-Unblocked datasets:
-- [worldclim_tavg_10m](./20260601_needs_tooling_worldclim_tavg_10m.md)
-
-Expected value:
-- Adds gridded climate rasters
-- Adds segmentation-mask numeric label maps when the upstream source is reachable
-
-Acceptance bar:
-- Deterministic decode from local files only
-- Explicit numeric-value preservation policy
-- No third-party Python dependency requirement
+- None for the current external-registry backlog
 
 Current state:
-- `davis17_sparse_masks_u8` is no longer treated as a tooling blocker
-- the DAVIS path is blocked by source access from this environment, not by decode logic
-- `worldclim_tavg_10m` remains the active raster/tooling target
+- `worldclim_tavg_10m` has been moved out of `needs_tooling` and into an accepted recipe
+- `davis17_sparse_masks_u8` is blocked by source access from this environment, not by decode logic
+- raster tooling is no longer an open blocker for the remaining external-registry backlog
 
 ## 4. Seismic Window Selection Workflow
 
@@ -95,12 +82,11 @@ Acceptance bar:
 ## Priority
 
 Recommended implementation order:
-1. `Raster / image decode workflow`
-2. `Seismic window selection workflow`
+1. `Seismic window selection workflow`
 
 Reasoning:
 - `EDF` is already done locally
 - `WFDB` is already done locally
-- `Raster / image` unlocks 2 datasets but likely has a wider parser surface
-- `Seismic window selection` unlocks only 1 dataset and depends more on
+- `Raster / image` is no longer an open tooling blocker for the current external-registry backlog
+- `Seismic window selection` is the remaining open tooling family and depends more on
   acquisition design than pure decode logic

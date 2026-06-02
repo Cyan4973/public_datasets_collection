@@ -34,3 +34,7 @@ Each attempt record should include:
 
 The goal is to preserve negative results so future sessions do not repeat the
 same dead ends blindly.
+
+For `needs_tooling` attempts, also maintain a grouped roadmap in
+`needs_tooling_roadmap.md` so related decoder or importer gaps are tracked as
+shared tooling work instead of isolated one-off failures.

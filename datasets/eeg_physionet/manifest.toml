@@ -1,0 +1,52 @@
+manifest_version = 1
+dataset_id = "eeg_physionet"
+name = "PhysioNet EEG Motor Movement/Imagery"
+description = "Three selected EEG channels extracted from a fixed subset of EDF recordings."
+homepage = "https://physionet.org/content/eegmmidb/1.0.0/"
+
+[license]
+name = "Open Data Commons Attribution License v1.0"
+spdx = ""
+url = "https://physionet.org/content/eegmmidb/1.0.0/"
+citation = "PhysioNet EEG Motor Movement/Imagery Dataset."
+notes = "PhysioNet hosts the dataset without authentication and records ODC-By style attribution terms."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official PhysioNet distribution only."
+usage_notes = "Public source intended for reproducible numeric dataset collection."
+
+[[origins]]
+id = "official"
+name = "PhysioNet"
+url = "https://physionet.org/content/eegmmidb/1.0.0/"
+type = "data_portal"
+notes = "Official upstream dataset page."
+
+[[resources]]
+id = "edf_subset"
+origin = "official"
+url = "https://physionet.org/files/eegmmidb/1.0.0/"
+type = "api_directory"
+version = "1.0.0"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/eeg_physionet/"
+notes = "Canonical trimmed default downloads subjects S001-S010 and runs 01, 02, and 04."
+
+[local_paths]
+downloads = "downloads/eeg_physionet/"
+extracted = "extracted/eeg_physionet/"
+filtered = "filtered/eeg_physionet/"
+index = "index/eeg_physionet/"
+samples = "samples/eeg_physionet/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/eeg_physionet/samples.jsonl"
+summary = "Download a fixed EDF subset, extract C3/Cz/C4 as native int16, and generate a machine-readable sample index."
+deterministic_notes = "Build preserves per-subject run order, concatenates the selected runs per subject and channel, writes durable logs, and emits samples.jsonl under index/eeg_physionet/."

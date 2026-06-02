@@ -20,7 +20,7 @@ unicode_bmp_gutenberg	rejected_attempt	attempts/20260601_rejected_unicode_bmp_gu
 tokens_bert_gutenberg	rejected_attempt	attempts/20260601_rejected_tokens_bert_gutenberg.md	Token IDs are symbolic remappings, not upstream numeric measurements.
 tokens_t5_gutenberg	rejected_attempt	attempts/20260601_rejected_tokens_t5_gutenberg.md	Token IDs are symbolic remappings, not upstream numeric measurements.
 earthquake_usgs	exact_recipe	datasets/earthquake_usgs	Already present as an accepted exact recipe.
-eeg_physionet	needs_tooling_attempt	attempts/20260601_needs_tooling_eeg_physionet.md	EDF parsing helper not yet ported into this repo.
+eeg_physionet	exact_recipe	datasets/eeg_physionet	EDF-backed exact backfill recipe accepted after local download, build, and verify.
 ptbxl_physionet	needs_tooling_attempt	attempts/20260601_needs_tooling_ptbxl_physionet.md	WFDB multi-file parsing helper not yet ported into this repo.
 chbmit_physionet	needs_tooling_attempt	attempts/20260601_needs_tooling_chbmit_physionet.md	EDF parsing helper not yet ported into this repo.
 loghub_templates_public	rejected_attempt	attempts/20260601_rejected_loghub_templates_public.md	Template-ID streams are symbolic remappings, not native numeric measurements.

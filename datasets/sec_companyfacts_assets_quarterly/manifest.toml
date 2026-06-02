@@ -1,0 +1,103 @@
+manifest_version = 1
+dataset_id = "sec_companyfacts_assets_quarterly"
+name = "SEC Companyfacts Assets Quarterly"
+description = "SEC companyfacts quarterly Assets facts for a fixed five-company subset."
+homepage = "https://www.sec.gov/edgar/sec-api-documentation"
+
+[license]
+name = "U.S. Government Work"
+spdx = "LicenseRef-USGov"
+url = "https://www.usa.gov/government-works"
+citation = "U.S. Securities and Exchange Commission companyfacts XBRL API."
+notes = "SEC filings are public. Review any API access policy changes during recipe maintenance."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official SEC companyfacts JSON only."
+usage_notes = "Public corporate financial statement facts suitable for numeric dataset collection."
+
+[[origins]]
+id = "sec_companyfacts"
+name = "SEC Companyfacts API"
+url = "https://data.sec.gov/api/xbrl/companyfacts/"
+type = "api"
+notes = "Per-company JSON facts API keyed by zero-padded CIK."
+
+[[resources]]
+id = "sec_companyfacts_assets_quarterly_company_subset"
+origin = "sec_companyfacts"
+url = "https://data.sec.gov/api/xbrl/companyfacts/"
+type = "api_query_result"
+version = "five-company-subset"
+access = "Five fixed CIK companyfacts JSON fetches."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/sec_companyfacts_assets_quarterly/"
+notes = "One JSON file per selected company."
+
+[local_paths]
+downloads = "downloads/sec_companyfacts_assets_quarterly/"
+extracted = "extracted/sec_companyfacts_assets_quarterly/"
+filtered = "filtered/sec_companyfacts_assets_quarterly/"
+index = "index/sec_companyfacts_assets_quarterly/"
+samples = "samples/sec_companyfacts_assets_quarterly/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/sec_companyfacts_assets_quarterly/samples.jsonl"
+summary = "Download fixed SEC companyfacts JSON payloads, retain quarterly Assets facts, and emit one numeric sample per company plus a machine-readable sample index."
+deterministic_notes = "Fixed company subset, fixed SEC fact name, download-time JSON validation, filtered blank and malformed facts only, deduplicated repeated quarter facts by latest end/filed metadata, durable logs under logs/sec_companyfacts_assets_quarterly/, and generated sample index at index/sec_companyfacts_assets_quarterly/samples.jsonl."
+
+[[series]]
+id = "assets_i64"
+description = "Quarterly Assets facts."
+semantic_meaning = "Signed 64-bit quarterly SEC us-gaap Assets values, one sample per company."
+source_resources = ["sec_companyfacts_assets_quarterly_company_subset"]
+filtered_input_path = "filtered/sec_companyfacts_assets_quarterly/company_stats.tsv"
+filtering = "Keep facts with parseable fiscal year, fiscal quarter, and integral dollar value."
+missing_value_policy = "Filter facts missing fy, fp, or val, non-quarterly fp values, non-integral numeric values, and out-of-range years."
+conversion = "Parse retained values as signed integers and write little-endian int64 arrays ordered by ascending fiscal year and quarter."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sec_companyfacts_assets_quarterly/assets_i64/"
+
+[[series]]
+id = "obs_year_u16"
+description = "Observation year values aligned to quarterly Assets facts."
+semantic_meaning = "Unsigned 16-bit fiscal years aligned to retained SEC quarterly Assets values."
+source_resources = ["sec_companyfacts_assets_quarterly_company_subset"]
+filtered_input_path = "filtered/sec_companyfacts_assets_quarterly/company_stats.tsv"
+filtering = "Keep facts accepted for assets_i64."
+missing_value_policy = "Filter facts rejected by the assets_i64 missing-value policy."
+conversion = "Write little-endian uint16 arrays aligned 1:1 with retained Assets values."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sec_companyfacts_assets_quarterly/obs_year_u16/"
+
+[[series]]
+id = "obs_quarter_u8"
+description = "Observation fiscal quarter values aligned to quarterly Assets facts."
+semantic_meaning = "Unsigned 8-bit fiscal quarter numbers aligned to retained SEC quarterly Assets values."
+source_resources = ["sec_companyfacts_assets_quarterly_company_subset"]
+filtered_input_path = "filtered/sec_companyfacts_assets_quarterly/company_stats.tsv"
+filtering = "Keep facts accepted for assets_i64."
+missing_value_policy = "Filter facts rejected by the assets_i64 missing-value policy."
+conversion = "Write uint8 arrays of fiscal quarter numbers aligned 1:1 with retained Assets values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sec_companyfacts_assets_quarterly/obs_quarter_u8/"

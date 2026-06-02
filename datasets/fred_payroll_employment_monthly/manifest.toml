@@ -1,0 +1,103 @@
+manifest_version = 1
+dataset_id = "fred_payroll_employment_monthly"
+name = "FRED Payroll_Employment Monthly"
+description = "FRED PAYEMS CSV extract, emitted as one sample per year."
+homepage = "https://fred.stlouisfed.org/"
+
+[license]
+name = "FRED Terms"
+spdx = "LicenseRef-FRED"
+url = "https://fred.stlouisfed.org/legal/"
+citation = "Federal Reserve Economic Data (FRED), series PAYEMS."
+notes = "Confirm any downstream attribution requirements during review."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official FRED graph CSV endpoint only."
+usage_notes = "Public macroeconomic series suitable for reproducible numeric dataset collection."
+
+[[origins]]
+id = "fred_graph_csv"
+name = "FRED Graph CSV Endpoint"
+url = "https://fred.stlouisfed.org/graph/fredgraph.csv"
+type = "api"
+notes = "Public CSV endpoint for individual FRED time series."
+
+[[resources]]
+id = "fred_payroll_employment_monthly_2015_2024"
+origin = "fred_graph_csv"
+url = "https://fred.stlouisfed.org/graph/fredgraph.csv"
+type = "api_query_result"
+version = "PAYEMS-2015-2024"
+access = "Single CSV query with fixed id, cosd, and coed parameters."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/fred_payroll_employment_monthly/"
+notes = "One CSV file for the fixed FRED series."
+
+[local_paths]
+downloads = "downloads/fred_payroll_employment_monthly/"
+extracted = "extracted/fred_payroll_employment_monthly/"
+filtered = "filtered/fred_payroll_employment_monthly/"
+index = "index/fred_payroll_employment_monthly/"
+samples = "samples/fred_payroll_employment_monthly/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/fred_payroll_employment_monthly/samples.jsonl"
+summary = "Download a fixed FRED CSV series, retain parseable observation rows, and emit one yearly sample per series plus a machine-readable sample index."
+deterministic_notes = "Fixed FRED series id, fixed query parameters, download-time CSV validation, filtered blank, dot-sentinel, and malformed rows only, sorted retained rows by date within each year, durable logs under logs/fred_payroll_employment_monthly/, and generated sample index at index/fred_payroll_employment_monthly/samples.jsonl."
+
+[[series]]
+id = "payroll_employment_f32"
+description = "FRED series values."
+semantic_meaning = "Float32 values for PAYEMS, one sample per year."
+source_resources = ["fred_payroll_employment_monthly_2015_2024"]
+filtered_input_path = "filtered/fred_payroll_employment_monthly/year_stats.tsv"
+filtering = "Keep rows with parseable DATE values and parseable PAYEMS values."
+missing_value_policy = "Filter rows with blank dates, blank values, dot sentinel values, malformed dates, or malformed numeric values."
+conversion = "Parse retained values as Python float, sort by ascending date within each year, and write IEEE-754 little-endian float32 arrays."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/fred_payroll_employment_monthly/payroll_employment_f32/"
+
+[[series]]
+id = "obs_month_u8"
+description = "Observation month values aligned to FRED values."
+semantic_meaning = "Unsigned 8-bit months derived from retained FRED observation dates, one sample per year."
+source_resources = ["fred_payroll_employment_monthly_2015_2024"]
+filtered_input_path = "filtered/fred_payroll_employment_monthly/year_stats.tsv"
+filtering = "Keep rows accepted for payroll_employment_f32."
+missing_value_policy = "Filter rows rejected by the payroll_employment_f32 missing-value policy."
+conversion = "Parse retained month components as integers and write uint8 arrays aligned 1:1 with retained FRED values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/fred_payroll_employment_monthly/obs_month_u8/"
+
+[[series]]
+id = "obs_day_u8"
+description = "Observation day values aligned to FRED values."
+semantic_meaning = "Unsigned 8-bit days derived from retained FRED observation dates, one sample per year."
+source_resources = ["fred_payroll_employment_monthly_2015_2024"]
+filtered_input_path = "filtered/fred_payroll_employment_monthly/year_stats.tsv"
+filtering = "Keep rows accepted for payroll_employment_f32."
+missing_value_policy = "Filter rows rejected by the payroll_employment_f32 missing-value policy."
+conversion = "Parse retained day components as integers and write uint8 arrays aligned 1:1 with retained FRED values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/fred_payroll_employment_monthly/obs_day_u8/"

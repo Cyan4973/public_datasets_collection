@@ -1,0 +1,120 @@
+manifest_version = 1
+dataset_id = "nasa_power_daily_surface_state"
+name = "NASA POWER Daily Wind"
+description = "NASA POWER daily point wind JSON extracts for five fixed locations, 2021-2023."
+homepage = "https://power.larc.nasa.gov/"
+
+[license]
+name = "NASA Open Data"
+spdx = "LicenseRef-NASA-Open-Data"
+url = "https://power.larc.nasa.gov/docs/services/api/"
+citation = "NASA POWER Project daily point API."
+notes = "NASA POWER data are publicly accessible."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NASA POWER API only."
+usage_notes = "Public climate point data suitable for reproducible numeric dataset collection."
+
+[[origins]]
+id = "nasa_power_daily_api"
+name = "NASA POWER Daily Point API"
+url = "https://power.larc.nasa.gov/api/temporal/daily/point"
+type = "api"
+notes = "Public JSON API for daily point climate time series."
+
+[[resources]]
+id = "power_daily_wind_2021_2023"
+origin = "nasa_power_daily_api"
+url = "https://power.larc.nasa.gov/api/temporal/daily/point"
+type = "api_query_result"
+version = "2021-2023-five-locations-three-wind-parameters"
+access = "Location-year JSON queries with fixed coordinates, parameters, start, end, format, and UTC time standard."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/nasa_power_daily_surface_state/"
+notes = "One JSON file per selected location-year."
+
+[local_paths]
+downloads = "downloads/nasa_power_daily_surface_state/"
+extracted = "extracted/nasa_power_daily_surface_state/"
+filtered = "filtered/nasa_power_daily_surface_state/"
+index = "index/nasa_power_daily_surface_state/"
+samples = "samples/nasa_power_daily_surface_state/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_power_daily_surface_state/samples.jsonl"
+summary = "Download selected NASA POWER daily point JSON files, retain parseable wind parameter values, and emit raw numeric arrays plus a machine-readable sample index."
+deterministic_notes = "Fixed location list, fixed parameter list, fixed years 2021-2023, fixed API query parameters, download-time payload validation, skipped fill-value and malformed rows only, preserved day order within each location-year response, concatenated years in ascending order per location-parameter sample, durable logs under logs/nasa_power_daily_surface_state/, and generated sample index at index/nasa_power_daily_surface_state/samples.jsonl."
+
+[[series]]
+id = "power_value_f64"
+description = "NASA POWER wind parameter values."
+semantic_meaning = "Float64 daily wind-related parameter values; semantic units depend on the parameter id encoded in the sample path and sample index."
+source_resources = ["power_daily_wind_2021_2023"]
+filtered_input_path = "filtered/nasa_power_daily_surface_state/location_parameter_year_stats.tsv"
+filtering = "Keep rows with parseable date keys and parameter values that are not equal to the API fill value."
+missing_value_policy = "Filter rows whose values equal the API fill value, blank strings, NaN strings, malformed date keys, or malformed numeric values."
+conversion = "Parse retained parameter values as Python float and write IEEE-754 little-endian float64 arrays preserving chronological order within each location-parameter sample."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/nasa_power_daily_surface_state/power_value_f64/"
+
+[[series]]
+id = "obs_year_u16"
+description = "Observation year values aligned to retained POWER rows."
+semantic_meaning = "Unsigned 16-bit years derived from retained POWER date keys."
+source_resources = ["power_daily_wind_2021_2023"]
+filtered_input_path = "filtered/nasa_power_daily_surface_state/location_parameter_year_stats.tsv"
+filtering = "Keep rows accepted for power_value_f64."
+missing_value_policy = "Filter rows rejected by the power_value_f64 series missing-value policy."
+conversion = "Parse the date year component as integer and write little-endian uint16 arrays aligned to retained value rows."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/nasa_power_daily_surface_state/obs_year_u16/"
+
+[[series]]
+id = "obs_month_u8"
+description = "Observation month values aligned to retained POWER rows."
+semantic_meaning = "Unsigned 8-bit months derived from retained POWER date keys."
+source_resources = ["power_daily_wind_2021_2023"]
+filtered_input_path = "filtered/nasa_power_daily_surface_state/location_parameter_year_stats.tsv"
+filtering = "Keep rows accepted for power_value_f64."
+missing_value_policy = "Filter rows rejected by the power_value_f64 series missing-value policy."
+conversion = "Parse the date month component as integer and write uint8 arrays aligned to retained value rows."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/nasa_power_daily_surface_state/obs_month_u8/"
+
+[[series]]
+id = "obs_day_u8"
+description = "Observation day values aligned to retained POWER rows."
+semantic_meaning = "Unsigned 8-bit day-of-month values derived from retained POWER date keys."
+source_resources = ["power_daily_wind_2021_2023"]
+filtered_input_path = "filtered/nasa_power_daily_surface_state/location_parameter_year_stats.tsv"
+filtering = "Keep rows accepted for power_value_f64."
+missing_value_policy = "Filter rows rejected by the power_value_f64 series missing-value policy."
+conversion = "Parse the date day component as integer and write uint8 arrays aligned to retained value rows."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/nasa_power_daily_surface_state/obs_day_u8/"

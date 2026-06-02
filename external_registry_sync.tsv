@@ -21,7 +21,7 @@ tokens_bert_gutenberg	rejected_attempt	attempts/20260601_rejected_tokens_bert_gu
 tokens_t5_gutenberg	rejected_attempt	attempts/20260601_rejected_tokens_t5_gutenberg.md	Token IDs are symbolic remappings, not upstream numeric measurements.
 earthquake_usgs	exact_recipe	datasets/earthquake_usgs	Already present as an accepted exact recipe.
 eeg_physionet	exact_recipe	datasets/eeg_physionet	EDF-backed exact backfill recipe accepted after local download, build, and verify.
-ptbxl_physionet	needs_tooling_attempt	attempts/20260601_needs_tooling_ptbxl_physionet.md	WFDB multi-file parsing helper not yet ported into this repo.
+ptbxl_physionet	exact_recipe	datasets/ptbxl_physionet	WFDB-backed exact backfill recipe accepted after local download, build, and verify.
 chbmit_physionet	exact_recipe	datasets/chbmit_physionet	EDF-backed exact backfill recipe accepted after local download, build, and verify.
 loghub_templates_public	rejected_attempt	attempts/20260601_rejected_loghub_templates_public.md	Template-ID streams are symbolic remappings, not native numeric measurements.
 low_cardinality_u16_mirrors	rejected_attempt	attempts/20260601_rejected_low_cardinality_u16_mirrors.md	Derived widening of other datasets is out of scope for primary-source acquisition.

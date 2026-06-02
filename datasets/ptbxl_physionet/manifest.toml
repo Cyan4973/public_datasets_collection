@@ -1,0 +1,52 @@
+manifest_version = 1
+dataset_id = "ptbxl_physionet"
+name = "PhysioNet PTB-XL"
+description = "Fixed-shape low-resolution ECG records decoded from WFDB into float32."
+homepage = "https://physionet.org/content/ptb-xl/1.0.3/"
+
+[license]
+name = "PhysioNet public distribution terms"
+spdx = ""
+url = "https://physionet.org/content/ptb-xl/1.0.3/"
+citation = "PTB-XL, a large publicly available electrocardiography dataset."
+notes = "Official PhysioNet distribution only."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official PhysioNet distribution only."
+usage_notes = "Public source intended for reproducible numeric dataset collection."
+
+[[origins]]
+id = "official"
+name = "PhysioNet"
+url = "https://physionet.org/content/ptb-xl/1.0.3/"
+type = "data_portal"
+notes = "Official upstream dataset page."
+
+[[resources]]
+id = "wfdb_subset"
+origin = "official"
+url = "https://physionet.org/files/ptb-xl/1.0.3/"
+type = "api_directory"
+version = "1.0.3"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/ptbxl_physionet/"
+notes = "Canonical trimmed default downloads ptbxl_database.csv, scp_statements.csv, and 20 low-resolution records per stratified fold."
+
+[local_paths]
+downloads = "downloads/ptbxl_physionet/"
+extracted = "extracted/ptbxl_physionet/"
+filtered = "filtered/ptbxl_physionet/"
+index = "index/ptbxl_physionet/"
+samples = "samples/ptbxl_physionet/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/ptbxl_physionet/samples.jsonl"
+summary = "Download a deterministic trimmed PTB-XL low-resolution subset, decode WFDB format 16 to physical float32 values, and generate a machine-readable sample index."
+deterministic_notes = "Build preserves one sample per selected ECG record, requires canonical 12-lead order, and emits samples.jsonl under index/ptbxl_physionet/."

@@ -36,7 +36,11 @@ Missing capability:
 
 Unblocked datasets:
 - [mitbih_arrhythmia_physionet](./20260601_needs_tooling_mitbih_arrhythmia_physionet.md)
-- [ptbxl_physionet](./20260601_needs_tooling_ptbxl_physionet.md)
+
+Current state:
+- `ptbxl_physionet` has been moved out of `needs_tooling` and into an accepted recipe
+- the remaining WFDB-gated dataset is:
+  - [mitbih_arrhythmia_physionet](./20260601_needs_tooling_mitbih_arrhythmia_physionet.md)
 
 Expected value:
 - Adds ECG waveform families with different record structures

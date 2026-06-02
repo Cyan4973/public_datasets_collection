@@ -1,0 +1,86 @@
+manifest_version = 1
+dataset_id = "world_bank_death_rate_annual"
+name = "World Bank Access to Electricity Percent"
+description = "World Bank annual access-to-electricity percentage indicator JSON extracts for ten fixed countries."
+homepage = "https://data.worldbank.org/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://www.worldbank.org/en/about/legal/terms-and-conditions"
+citation = "World Bank indicator API."
+notes = "World Bank indicator data are publicly accessible under documented attribution terms."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official World Bank API only."
+usage_notes = "Public development indicator data suitable for reproducible numeric dataset collection."
+
+[[origins]]
+id = "world_bank_indicator_api"
+name = "World Bank Indicator API"
+url = "https://api.worldbank.org/v2/"
+type = "api"
+notes = "Public JSON API for country indicator time series."
+
+[[resources]]
+id = "world_bank_death_rate_annual_country_subset"
+origin = "world_bank_indicator_api"
+url = "https://api.worldbank.org/v2/"
+type = "api_query_result"
+version = "ten-countries-SP.DYN.CDRT.IN"
+access = "Country-indicator JSON queries with fixed country list, indicator id, format=json, and per_page=20000."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/world_bank_death_rate_annual/"
+notes = "One JSON file per selected country."
+
+[local_paths]
+downloads = "downloads/world_bank_death_rate_annual/"
+extracted = "extracted/world_bank_death_rate_annual/"
+filtered = "filtered/world_bank_death_rate_annual/"
+index = "index/world_bank_death_rate_annual/"
+samples = "samples/world_bank_death_rate_annual/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/world_bank_death_rate_annual/samples.jsonl"
+summary = "Download selected World Bank country-indicator JSON files, retain parseable annual values, and emit raw numeric arrays plus a machine-readable sample index."
+deterministic_notes = "Fixed country list, fixed indicator id, fixed API query parameters, download-time payload validation, sorted retained rows by ascending year within each country, durable logs under logs/world_bank_death_rate_annual/, and generated sample index at index/world_bank_death_rate_annual/samples.jsonl."
+
+[[series]]
+id = "death_rate_f64"
+description = "World Bank annual indicator values."
+semantic_meaning = "Float64 annual access-to-electricity percentage values for SP.DYN.CDRT.IN, one sample per country."
+source_resources = ["world_bank_death_rate_annual_country_subset"]
+filtered_input_path = "filtered/world_bank_death_rate_annual/country_stats.tsv"
+filtering = "Keep rows with non-null values and parseable years between 1900 and 2100."
+missing_value_policy = "Filter rows whose value is null or blank, whose year is malformed, or whose numeric value is malformed."
+conversion = "Parse retained values as Python float, sort by ascending year, and write IEEE-754 little-endian float64 arrays."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/world_bank_death_rate_annual/death_rate_f64/"
+
+[[series]]
+id = "obs_year_u16"
+description = "Observation year values aligned to annual indicator values."
+semantic_meaning = "Unsigned 16-bit years derived from retained World Bank rows, one sample per country."
+source_resources = ["world_bank_death_rate_annual_country_subset"]
+filtered_input_path = "filtered/world_bank_death_rate_annual/country_stats.tsv"
+filtering = "Keep rows accepted for death_rate_f64."
+missing_value_policy = "Filter rows rejected by the death_rate_f64 missing-value policy."
+conversion = "Parse retained year strings as integers, sort by ascending year, and write little-endian uint16 arrays aligned 1:1 with retained values."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/world_bank_death_rate_annual/obs_year_u16/"

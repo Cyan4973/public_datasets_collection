@@ -1,0 +1,86 @@
+manifest_version = 1
+dataset_id = "owid_flaring_co2_annual"
+name = "OWID Flaring CO2 Annual"
+description = "Our World in Data annual Flaring Flaring CO2 values from the OWID CO2 data CSV, emitted as one sample per selected country."
+homepage = "https://ourworldindata.org/co2-and-greenhouse-gas-emissions"
+
+[license]
+name = "CC BY 4.0"
+spdx = "CC-BY-4.0"
+url = "https://github.com/owid/co2-data"
+citation = "Our World in Data CO2 Data."
+notes = "Confirm downstream attribution handling during review."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Our World in Data CO2 CSV only."
+usage_notes = "Public country-level emissions and energy data suitable for reproducible numeric dataset collection."
+
+[[origins]]
+id = "owid_co2_github_raw"
+name = "OWID CO2 GitHub Raw"
+url = "https://raw.githubusercontent.com/owid/co2-data/"
+type = "file_download"
+notes = "Public raw CSV files from the OWID CO2 data repository."
+
+[[resources]]
+id = "owid_co2_csv"
+origin = "owid_co2_github_raw"
+url = "https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv"
+type = "csv"
+version = "master"
+access = "Single fixed raw CSV URL."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/owid_flaring_co2_annual/"
+notes = "Annual country rows with multiple emissions and energy columns."
+
+[local_paths]
+downloads = "downloads/owid_flaring_co2_annual/"
+extracted = "extracted/owid_flaring_co2_annual/"
+filtered = "filtered/owid_flaring_co2_annual/"
+index = "index/owid_flaring_co2_annual/"
+samples = "samples/owid_flaring_co2_annual/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/owid_flaring_co2_annual/samples.jsonl"
+summary = "Download the OWID CO2 CSV, retain parseable annual CO2 rows for selected countries, and emit numeric arrays plus a machine-readable sample index."
+deterministic_notes = "Fixed input URL, fixed country list, fixed target column, download-time CSV validation, filtered blank and malformed rows only, sorted retained rows by year per country, durable logs under logs/owid_flaring_co2_annual/, and generated sample index at index/owid_flaring_co2_annual/samples.jsonl."
+
+[[series]]
+id = "owid_value_f32"
+description = "Annual OWID Flaring CO2 values."
+semantic_meaning = "Float32 annual Flaring Flaring CO2 values, one sample per selected country."
+source_resources = ["owid_co2_csv"]
+filtered_input_path = "filtered/owid_flaring_co2_annual/country_stats.tsv"
+filtering = "Keep rows with selected ISO3 country codes, parseable years, and parseable Flaring CO2 values."
+missing_value_policy = "Filter rows with blank or malformed year or Flaring CO2 values."
+conversion = "Sort retained rows by ascending year within each country and write IEEE-754 little-endian float32 arrays."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/owid_flaring_co2_annual/owid_value_f32/"
+
+[[series]]
+id = "obs_year_u16"
+description = "Observation year values aligned to OWID Flaring CO2 values."
+semantic_meaning = "Unsigned 16-bit years aligned 1:1 with retained OWID Flaring CO2 values."
+source_resources = ["owid_co2_csv"]
+filtered_input_path = "filtered/owid_flaring_co2_annual/country_stats.tsv"
+filtering = "Keep rows accepted for owid_value_f32."
+missing_value_policy = "Filter rows rejected by the owid_value_f32 missing-value policy."
+conversion = "Write little-endian uint16 year arrays aligned 1:1 with retained OWID Flaring CO2 values."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/owid_flaring_co2_annual/obs_year_u16/"

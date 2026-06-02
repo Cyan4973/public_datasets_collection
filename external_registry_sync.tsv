@@ -12,7 +12,7 @@ susy_uci	exact_recipe	datasets/susy_uci	Exact external registry reference is now
 covertype_uci	exact_recipe	datasets/covertype_uci	Exact external registry reference is now present as an accepted recipe.
 mnist_px_28x28	rejected_attempt	attempts/20260601_rejected_mnist_px_28x28.md	External exact ID is a trimmed subset, which does not match this repo's acquisition policy.
 fsdd_spoken_digits	exact_recipe	datasets/fsdd_spoken_digits	Exact external registry reference is now present as an accepted recipe.
-mitbih_arrhythmia_physionet	needs_tooling_attempt	attempts/20260601_needs_tooling_mitbih_arrhythmia_physionet.md	WFDB 212 decode helper not yet ported into this repo.
+mitbih_arrhythmia_physionet	exact_recipe	datasets/mitbih_arrhythmia_physionet	WFDB-212-backed exact backfill recipe accepted after local download, build, and verify.
 noaa_isd_lite	exact_recipe	datasets/noaa_isd_lite	Already present as an accepted exact recipe.
 skadi_srtm_hgt	exact_recipe	datasets/skadi_srtm_hgt	Exact external registry reference is now present as an accepted recipe.
 sensorless_drive_diagnosis_uci	exact_recipe	datasets/sensorless_drive_diagnosis_uci	Exact external registry reference is now present as an accepted recipe.

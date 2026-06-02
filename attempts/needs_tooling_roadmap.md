@@ -39,8 +39,8 @@ Unblocked datasets:
 
 Current state:
 - `ptbxl_physionet` has been moved out of `needs_tooling` and into an accepted recipe
-- the remaining WFDB-gated dataset is:
-  - [mitbih_arrhythmia_physionet](./20260601_needs_tooling_mitbih_arrhythmia_physionet.md)
+- `mitbih_arrhythmia_physionet` has been moved out of `needs_tooling` and into an accepted recipe
+- the WFDB parser workflow is now implemented locally and is no longer an open tooling blocker
 
 Expected value:
 - Adds ECG waveform families with different record structures
@@ -91,13 +91,12 @@ Acceptance bar:
 ## Priority
 
 Recommended implementation order:
-1. `WFDB parser workflow`
-2. `Raster / image decode workflow`
-3. `Seismic window selection workflow`
+1. `Raster / image decode workflow`
+2. `Seismic window selection workflow`
 
 Reasoning:
 - `EDF` is already done locally
-- `WFDB` unlocks 2 datasets with one tooling family
+- `WFDB` is already done locally
 - `Raster / image` unlocks 2 datasets but likely has a wider parser surface
 - `Seismic window selection` unlocks only 1 dataset and depends more on
   acquisition design than pure decode logic

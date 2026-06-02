@@ -1,0 +1,52 @@
+manifest_version = 1
+dataset_id = "covertype_uci"
+name = "UCI Covertype"
+description = "Integer cartography and land-cover columns from the UCI Covertype dataset."
+homepage = "https://archive.ics.uci.edu/dataset/31/covertype"
+
+[license]
+name = "CC BY 4.0"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Covertype, UCI Machine Learning Repository."
+notes = "UCI metadata indicates CC BY 4.0."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official upstream distribution only; no mirrors, leaks, or scraped personal content."
+usage_notes = "Public source intended for reproducible numeric dataset collection."
+
+[[origins]]
+id = "official"
+name = "UCI ML Repository"
+url = "https://archive.ics.uci.edu/dataset/31/covertype"
+type = "data_portal"
+notes = "Official upstream dataset page."
+
+[[resources]]
+id = "main"
+origin = "official"
+url = "https://archive.ics.uci.edu/static/public/31/covertype.zip"
+type = "archive"
+version = "accessed_by_user"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/covertype_uci/covertype.zip"
+notes = "Archive containing covtype.data."
+
+[local_paths]
+downloads = "downloads/covertype_uci/"
+extracted = "extracted/covertype_uci/"
+filtered = "filtered/covertype_uci/"
+index = "index/covertype_uci/"
+samples = "samples/covertype_uci/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/covertype_uci/samples.jsonl"
+summary = "Download pinned upstream resources, build local raw numeric samples only from local files, and generate a machine-readable sample index."
+deterministic_notes = "Build preserves row order, emits one sample per column, writes durable logs, and emits samples.jsonl under index/covertype_uci/."

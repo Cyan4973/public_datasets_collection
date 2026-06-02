@@ -1,0 +1,52 @@
+manifest_version = 1
+dataset_id = "gas_sensor_array_drift_uci"
+name = "UCI Gas Sensor Array Drift"
+description = "Dense gas-sensor features and labels parsed from the UCI gas sensor drift batches."
+homepage = "https://archive.ics.uci.edu/dataset/224/gas+sensor+array+drift+dataset"
+
+[license]
+name = "CC BY 4.0"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Gas Sensor Array Drift Dataset, UCI Machine Learning Repository."
+notes = "UCI metadata indicates CC BY 4.0."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official upstream distribution only; no mirrors, leaks, or scraped personal content."
+usage_notes = "Public source intended for reproducible numeric dataset collection."
+
+[[origins]]
+id = "official"
+name = "UCI ML Repository"
+url = "https://archive.ics.uci.edu/dataset/224/gas+sensor+array+drift+dataset"
+type = "data_portal"
+notes = "Official upstream dataset page."
+
+[[resources]]
+id = "main"
+origin = "official"
+url = "https://archive.ics.uci.edu/static/public/224/gas+sensor+array+drift+dataset.zip"
+type = "archive"
+version = "accessed_by_user"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/gas_sensor_array_drift_uci/gas_sensor_array_drift.zip"
+notes = "Archive containing Dataset/batch*.dat."
+
+[local_paths]
+downloads = "downloads/gas_sensor_array_drift_uci/"
+extracted = "extracted/gas_sensor_array_drift_uci/"
+filtered = "filtered/gas_sensor_array_drift_uci/"
+index = "index/gas_sensor_array_drift_uci/"
+samples = "samples/gas_sensor_array_drift_uci/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/gas_sensor_array_drift_uci/samples.jsonl"
+summary = "Download pinned upstream resources, build local raw numeric samples only from local files, and generate a machine-readable sample index."
+deterministic_notes = "Build preserves batch order batch1..batch10 and within-file line order, emits one label sample and one sample per feature column, writes durable logs, and emits samples.jsonl under index/gas_sensor_array_drift_uci/."

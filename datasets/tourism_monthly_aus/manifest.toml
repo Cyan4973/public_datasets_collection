@@ -1,0 +1,52 @@
+manifest_version = 1
+dataset_id = "tourism_monthly_aus"
+name = "Tourism Monthly AUS"
+description = "Monthly CPI and inflation-rate covariates from the pinned tourism CSV."
+homepage = "https://huggingface.co/datasets/zaai-ai/time_series_datasets"
+
+[license]
+name = "CC-BY-4.0"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "zaai-ai/time_series_datasets README and dataset card."
+notes = "Pinned to the revision used by the external reference."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official upstream distribution only; no mirrors, leaks, or scraped personal content."
+usage_notes = "Public source intended for reproducible numeric dataset collection."
+
+[[origins]]
+id = "official"
+name = "Hugging Face datasets"
+url = "https://huggingface.co/datasets/zaai-ai/time_series_datasets"
+type = "data_portal"
+notes = "Official dataset card."
+
+[[resources]]
+id = "main"
+origin = "official"
+url = "https://huggingface.co/datasets/zaai-ai/time_series_datasets/resolve/1229de3483f31edf12057b7a0775902c1ef1fc3b/data.csv"
+type = "file"
+version = "1229de3483f31edf12057b7a0775902c1ef1fc3b"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/tourism_monthly_aus/data.csv"
+notes = "Pinned tourism CSV used by the external reference."
+
+[local_paths]
+downloads = "downloads/tourism_monthly_aus/"
+extracted = "extracted/tourism_monthly_aus/"
+filtered = "filtered/tourism_monthly_aus/"
+index = "index/tourism_monthly_aus/"
+samples = "samples/tourism_monthly_aus/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/tourism_monthly_aus/samples.jsonl"
+summary = "Download pinned upstream resources, build local raw numeric samples only from local files, and generate a machine-readable sample index."
+deterministic_notes = "Build groups rows by unique_id in source order, keeps CPI and Inflation_Rate only, does no network access, writes durable logs, and emits samples.jsonl under index/tourism_monthly_aus/."

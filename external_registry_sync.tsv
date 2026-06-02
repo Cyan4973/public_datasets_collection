@@ -1,21 +1,21 @@
 external_dataset_id	local_status	local_path	notes
 uci_wine_quality	exact_recipe	datasets/uci_wine_quality	Exact external registry reference is now present as an accepted recipe.
 bike_sharing_uci	exact_recipe	datasets/bike_sharing_uci	Exact external registry reference is now present as an accepted recipe.
-har_smartphone_uci	blocked_attempt	attempts/20260601_blocked_har_smartphone_uci.md	UCI HAR backfill deferred after narrowing the first exact-ID batch.
-household_power_uci	blocked_attempt	attempts/20260601_blocked_household_power_uci.md	Large-row UCI import deferred from this pass; operationally heavier than the current backfill batch.
+har_smartphone_uci	exact_recipe	datasets/har_smartphone_uci	Exact external registry reference is now present as an accepted recipe.
+household_power_uci	exact_recipe	datasets/household_power_uci	Exact external registry reference is now present as an accepted recipe.
 beijing_air_quality_uci	exact_recipe	datasets/beijing_air_quality_uci	Exact external registry reference is now present as an accepted recipe.
-appliances_energy_uci	blocked_attempt	attempts/20260601_blocked_appliances_energy_uci.md	UCI appliances-energy backfill deferred after narrowing the first exact-ID batch.
-gas_sensor_array_drift_uci	blocked_attempt	attempts/20260601_blocked_gas_sensor_array_drift_uci.md	Dense libsvm-style ingest deferred from the first exact-ID backfill batch.
-yearpredictionmsd_uci	blocked_attempt	attempts/20260601_blocked_yearpredictionmsd_uci.md	Large raw and output footprint deferred from this pass.
-electricity_load_diagrams_uci	blocked_attempt	attempts/20260601_blocked_electricity_load_diagrams_uci.md	Large raw and output footprint deferred from this pass.
-susy_uci	blocked_attempt	attempts/20260601_blocked_susy_uci.md	Very large raw and output footprint deferred from this pass.
-covertype_uci	blocked_attempt	attempts/20260601_blocked_covertype_uci.md	Medium-large integer import deferred from this pass.
+appliances_energy_uci	exact_recipe	datasets/appliances_energy_uci	Exact external registry reference is now present as an accepted recipe.
+gas_sensor_array_drift_uci	exact_recipe	datasets/gas_sensor_array_drift_uci	Exact external registry reference is now present as an accepted recipe.
+yearpredictionmsd_uci	exact_recipe	datasets/yearpredictionmsd_uci	Exact external registry reference is now present as an accepted recipe.
+electricity_load_diagrams_uci	exact_recipe	datasets/electricity_load_diagrams_uci	Exact external registry reference is now present as an accepted recipe.
+susy_uci	exact_recipe	datasets/susy_uci	Exact external registry reference is now present as an accepted recipe.
+covertype_uci	exact_recipe	datasets/covertype_uci	Exact external registry reference is now present as an accepted recipe.
 mnist_px_28x28	rejected_attempt	attempts/20260601_rejected_mnist_px_28x28.md	External exact ID is a trimmed subset, which does not match this repo's acquisition policy.
 fsdd_spoken_digits	exact_recipe	datasets/fsdd_spoken_digits	Exact external registry reference is now present as an accepted recipe.
 mitbih_arrhythmia_physionet	needs_tooling_attempt	attempts/20260601_needs_tooling_mitbih_arrhythmia_physionet.md	WFDB 212 decode helper not yet ported into this repo.
 noaa_isd_lite	exact_recipe	datasets/noaa_isd_lite	Already present as an accepted exact recipe.
 skadi_srtm_hgt	exact_recipe	datasets/skadi_srtm_hgt	Exact external registry reference is now present as an accepted recipe.
-sensorless_drive_diagnosis_uci	blocked_attempt	attempts/20260601_blocked_sensorless_drive_diagnosis_uci.md	Dense industrial tabular ingest deferred from the first exact-ID backfill batch.
+sensorless_drive_diagnosis_uci	exact_recipe	datasets/sensorless_drive_diagnosis_uci	Exact external registry reference is now present as an accepted recipe.
 unicode_bmp_gutenberg	rejected_attempt	attempts/20260601_rejected_unicode_bmp_gutenberg.md	Text codepoint streams are outside this repo's numeric-content scope.
 tokens_bert_gutenberg	rejected_attempt	attempts/20260601_rejected_tokens_bert_gutenberg.md	Token IDs are symbolic remappings, not upstream numeric measurements.
 tokens_t5_gutenberg	rejected_attempt	attempts/20260601_rejected_tokens_t5_gutenberg.md	Token IDs are symbolic remappings, not upstream numeric measurements.
@@ -31,7 +31,7 @@ cds_codon_start_u8	rejected_attempt	attempts/20260601_rejected_cds_codon_start_u
 bf_snips_slots_u8	rejected_attempt	attempts/20260601_rejected_bf_snips_slots_u8.md	Slot-label IDs are symbolic remappings, not upstream numeric measurements.
 omniglot_selector_gap_i16	rejected_attempt	attempts/20260601_rejected_omniglot_selector_gap_i16.md	Selector-gap streams are derived transforms, not direct public numeric content.
 suitesparse_bcsstk_gap_i16	rejected_attempt	attempts/20260601_rejected_suitesparse_bcsstk_gap_i16.md	Selector-gap streams are derived transforms, not direct public numeric content.
-tourism_monthly_aus	blocked_attempt	attempts/20260601_blocked_tourism_monthly_aus.md	Pinned tourism CSV backfill deferred after narrowing the first exact-ID batch.
+tourism_monthly_aus	exact_recipe	datasets/tourism_monthly_aus	Exact external registry reference is now present as an accepted recipe.
 noaa_coops_water_level	exact_recipe	datasets/noaa_coops_water_level	Already present as an accepted exact recipe.
 seismic_waveform_i32	needs_tooling_attempt	attempts/20260601_needs_tooling_seismic_waveform_i32.md	Curated IRIS waveform-window import needs a reusable source-window selection helper before porting.
 worldclim_tavg_10m	needs_tooling_attempt	attempts/20260601_needs_tooling_worldclim_tavg_10m.md	GeoTIFF strip decoding needs raster tooling not yet present here.

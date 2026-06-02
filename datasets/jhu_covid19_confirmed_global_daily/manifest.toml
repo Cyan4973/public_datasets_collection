@@ -1,0 +1,120 @@
+manifest_version = 1
+dataset_id = "jhu_covid19_confirmed_global_daily"
+name = "JHU COVID-19 Confirmed Global Daily"
+description = "Johns Hopkins CSSE global cumulative confirmed COVID-19 daily time series, emitted as one sample per selected country."
+homepage = "https://github.com/CSSEGISandData/COVID-19"
+
+[license]
+name = "CC BY 4.0"
+spdx = "CC-BY-4.0"
+url = "https://github.com/CSSEGISandData/COVID-19"
+citation = "Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE) COVID-19 Data Repository."
+notes = "Confirm downstream attribution handling during review."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official JHU CSSE GitHub raw time-series CSV only."
+usage_notes = "Public aggregate epidemic counts suitable for reproducible numeric dataset collection."
+
+[[origins]]
+id = "jhu_csse_github_raw"
+name = "JHU CSSE GitHub Raw"
+url = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/"
+type = "file_download"
+notes = "Public raw CSV files from the JHU CSSE COVID-19 repository."
+
+[[resources]]
+id = "jhu_covid19_confirmed_global_csv"
+origin = "jhu_csse_github_raw"
+url = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"
+type = "csv"
+version = "master"
+access = "Single fixed raw CSV URL."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/jhu_covid19_confirmed_global_daily/"
+notes = "Global cumulative confirmed counts by province or country and date."
+
+[local_paths]
+downloads = "downloads/jhu_covid19_confirmed_global_daily/"
+extracted = "extracted/jhu_covid19_confirmed_global_daily/"
+filtered = "filtered/jhu_covid19_confirmed_global_daily/"
+index = "index/jhu_covid19_confirmed_global_daily/"
+samples = "samples/jhu_covid19_confirmed_global_daily/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/jhu_covid19_confirmed_global_daily/samples.jsonl"
+summary = "Download the JHU CSSE global confirmed CSV, aggregate selected countries across province rows, and emit cumulative daily numeric arrays plus a machine-readable sample index."
+deterministic_notes = "Fixed input URL, fixed country list, download-time CSV validation, deterministic aggregation across province rows per country, filtered blank and malformed values only, preserved chronological order of source date columns, durable logs under logs/jhu_covid19_confirmed_global_daily/, and generated sample index at index/jhu_covid19_confirmed_global_daily/samples.jsonl."
+
+[[series]]
+id = "confirmed_cases_u32"
+description = "Cumulative confirmed COVID-19 case counts."
+semantic_meaning = "Unsigned 32-bit cumulative daily confirmed counts, one sample per selected country."
+source_resources = ["jhu_covid19_confirmed_global_csv"]
+filtered_input_path = "filtered/jhu_covid19_confirmed_global_daily/country_stats.tsv"
+filtering = "Keep header date columns with parseable dates and integer cumulative counts after country aggregation."
+missing_value_policy = "Filter blank or malformed daily count cells."
+conversion = "Aggregate selected country rows by date, preserve source column order, and write little-endian uint32 arrays."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/jhu_covid19_confirmed_global_daily/confirmed_cases_u32/"
+
+[[series]]
+id = "obs_year_u16"
+description = "Observation year values aligned to confirmed counts."
+semantic_meaning = "Unsigned 16-bit years derived from retained source date columns."
+source_resources = ["jhu_covid19_confirmed_global_csv"]
+filtered_input_path = "filtered/jhu_covid19_confirmed_global_daily/country_stats.tsv"
+filtering = "Keep dates accepted for confirmed_cases_u32."
+missing_value_policy = "Filter dates rejected by the confirmed_cases_u32 missing-value policy."
+conversion = "Parse retained dates and write little-endian uint16 arrays aligned 1:1 with confirmed_cases_u32."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/jhu_covid19_confirmed_global_daily/obs_year_u16/"
+
+[[series]]
+id = "obs_month_u8"
+description = "Observation month values aligned to confirmed counts."
+semantic_meaning = "Unsigned 8-bit months derived from retained source date columns."
+source_resources = ["jhu_covid19_confirmed_global_csv"]
+filtered_input_path = "filtered/jhu_covid19_confirmed_global_daily/country_stats.tsv"
+filtering = "Keep dates accepted for confirmed_cases_u32."
+missing_value_policy = "Filter dates rejected by the confirmed_cases_u32 missing-value policy."
+conversion = "Parse retained dates and write uint8 arrays aligned 1:1 with confirmed_cases_u32."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/jhu_covid19_confirmed_global_daily/obs_month_u8/"
+
+[[series]]
+id = "obs_day_u8"
+description = "Observation day values aligned to confirmed counts."
+semantic_meaning = "Unsigned 8-bit day-of-month values derived from retained source date columns."
+source_resources = ["jhu_covid19_confirmed_global_csv"]
+filtered_input_path = "filtered/jhu_covid19_confirmed_global_daily/country_stats.tsv"
+filtering = "Keep dates accepted for confirmed_cases_u32."
+missing_value_policy = "Filter dates rejected by the confirmed_cases_u32 missing-value policy."
+conversion = "Parse retained dates and write uint8 arrays aligned 1:1 with confirmed_cases_u32."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/jhu_covid19_confirmed_global_daily/obs_day_u8/"

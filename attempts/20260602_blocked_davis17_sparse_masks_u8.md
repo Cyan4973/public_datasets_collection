@@ -1,0 +1,29 @@
+# davis17_sparse_masks_u8
+
+- Date: 2026-06-02
+- Status: blocked
+- Candidate dataset: `davis17_sparse_masks_u8`
+- Source: DAVIS 2017 train/val annotations archive
+- Why it looked promising:
+  - Exact external-registry reference with real upstream numeric mask labels
+  - Sibling collection repo already demonstrated a stdlib-only PNG decode path
+  - Would add sparse segmentation-mask `uint8` label maps to this collection
+- Failure class: source access blocked in this environment
+- What happened:
+  - The local recipe and PNG decode path were prepared successfully.
+  - User-ran download failed before any archive members were fetched.
+  - Official DAVIS hosts were not reachable from this session's network path.
+  - The blocker is source reachability from this environment, not the dataset shape or decode logic.
+- Evidence:
+  - `download.latest.log` shows `urllib.error.URLError: <urlopen error [Errno -2] Name or service not known>`
+  - Diagnostic HEAD requests to official DAVIS hosts returned proxy `403` destination filtering from this environment
+  - Sibling repo uses the same official ETH Zurich URL and supports a local archive fallback
+- Logs:
+  - `.data/logs/davis17_sparse_masks_u8/download.latest.log`
+- Decision:
+  - Do not keep this dataset as a prepared runnable recipe in `datasets/` until source access is available.
+  - Track it as blocked instead of `needs_tooling`.
+- Retry conditions:
+  - User provides a local `DAVIS-2017-trainval-480p.zip` archive path, or
+  - This environment gains allowlisted access to an official DAVIS host, or
+  - A trustable official mirror is identified and verified reachable from this environment

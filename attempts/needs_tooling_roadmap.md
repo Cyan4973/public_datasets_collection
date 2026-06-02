@@ -55,20 +55,24 @@ Acceptance bar:
 
 Missing capability:
 - Reviewed raster decode path for GeoTIFF
-- Reviewed PNG label-mask decode path
+- Reviewed PNG label-mask decode path where source access is available
 
 Unblocked datasets:
 - [worldclim_tavg_10m](./20260601_needs_tooling_worldclim_tavg_10m.md)
-- [davis17_sparse_masks_u8](./20260601_needs_tooling_davis17_sparse_masks_u8.md)
 
 Expected value:
 - Adds gridded climate rasters
-- Adds segmentation-mask numeric label maps
+- Adds segmentation-mask numeric label maps when the upstream source is reachable
 
 Acceptance bar:
 - Deterministic decode from local files only
 - Explicit numeric-value preservation policy
 - No third-party Python dependency requirement
+
+Current state:
+- `davis17_sparse_masks_u8` is no longer treated as a tooling blocker
+- the DAVIS path is blocked by source access from this environment, not by decode logic
+- `worldclim_tavg_10m` remains the active raster/tooling target
 
 ## 4. Seismic Window Selection Workflow
 

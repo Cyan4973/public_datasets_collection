@@ -26,7 +26,7 @@ chbmit_physionet	exact_recipe	datasets/chbmit_physionet	EDF-backed exact backfil
 loghub_templates_public	rejected_attempt	attempts/20260601_rejected_loghub_templates_public.md	Template-ID streams are symbolic remappings, not native numeric measurements.
 low_cardinality_u16_mirrors	rejected_attempt	attempts/20260601_rejected_low_cardinality_u16_mirrors.md	Derived widening of other datasets is out of scope for primary-source acquisition.
 ud_deprel_u8	rejected_attempt	attempts/20260601_rejected_ud_deprel_u8.md	Dependency-label IDs are symbolic remappings, not upstream numeric measurements.
-davis17_sparse_masks_u8	needs_tooling_attempt	attempts/20260601_needs_tooling_davis17_sparse_masks_u8.md	PNG mask decoding is not yet supported by the current stdlib-only recipe set.
+davis17_sparse_masks_u8	blocked_attempt	attempts/20260602_blocked_davis17_sparse_masks_u8.md	Prepared PNG-backed exact backfill recipe cannot be fetched from this environment because official DAVIS hosts are not reachable; retry with a local archive or reachable official mirror.
 cds_codon_start_u8	rejected_attempt	attempts/20260601_rejected_cds_codon_start_u8.md	Derived codon-position labels are annotation transforms, not native numeric measurements.
 bf_snips_slots_u8	rejected_attempt	attempts/20260601_rejected_bf_snips_slots_u8.md	Slot-label IDs are symbolic remappings, not upstream numeric measurements.
 omniglot_selector_gap_i16	rejected_attempt	attempts/20260601_rejected_omniglot_selector_gap_i16.md	Selector-gap streams are derived transforms, not direct public numeric content.

@@ -1,0 +1,120 @@
+manifest_version = 1
+dataset_id = "gdelt_events_avgtone_daily"
+name = "GDELT Events AvgTone Daily"
+description = "GDELT daily event export subset emitting AvgToneScale event arrays for seven fixed days."
+homepage = "https://www.gdeltproject.org/"
+
+[license]
+name = "GDELT Terms"
+spdx = "LicenseRef-GDELT"
+url = "https://www.gdeltproject.org/about.html#termsofuse"
+citation = "GDELT Project event exports."
+notes = "Confirm downstream reuse and attribution terms during review."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official GDELT event export ZIP files only."
+usage_notes = "Public event-level numeric data suitable for numeric dataset collection if licensing review remains acceptable."
+
+[[origins]]
+id = "gdelt_events"
+name = "GDELT Event Exports"
+url = "http://data.gdeltproject.org/events/"
+type = "file_download"
+notes = "Daily ZIP archives of tab-delimited event rows."
+
+[[resources]]
+id = "gdelt_events_avgtone_daily_day_subset"
+origin = "gdelt_events"
+url = "http://data.gdeltproject.org/events/"
+type = "zip_archive"
+version = "20240101-20240107"
+access = "Seven fixed daily ZIP downloads."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/gdelt_events_avgtone_daily/"
+notes = "One ZIP file per fixed day."
+
+[local_paths]
+downloads = "downloads/gdelt_events_avgtone_daily/"
+extracted = "extracted/gdelt_events_avgtone_daily/"
+filtered = "filtered/gdelt_events_avgtone_daily/"
+index = "index/gdelt_events_avgtone_daily/"
+samples = "samples/gdelt_events_avgtone_daily/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/gdelt_events_avgtone_daily/samples.jsonl"
+summary = "Download fixed GDELT event ZIP files, retain rows with parseable AvgToneScale values, and emit one numeric sample per day plus a machine-readable sample index."
+deterministic_notes = "Fixed day subset, fixed GDELT column selection, download-time ZIP validation, filtered blank and malformed rows only, durable logs under logs/gdelt_events_avgtone_daily/, and generated sample index at index/gdelt_events_avgtone_daily/samples.jsonl."
+
+[[series]]
+id = "avgtone_f32"
+description = "Event-level AvgToneScale values."
+semantic_meaning = "Float32 AvgToneScale values for retained event rows, one sample per day."
+source_resources = ["gdelt_events_avgtone_daily_day_subset"]
+filtered_input_path = "filtered/gdelt_events_avgtone_daily/day_stats.tsv"
+filtering = "Keep rows with parseable SQLDATE and AvgToneScale values."
+missing_value_policy = "Filter rows with blank SQLDATE, blank AvgToneScale, malformed dates, malformed numeric values, or truncated rows."
+conversion = "Parse retained AvgToneScale values as float32 and write IEEE-754 little-endian arrays in source row order."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gdelt_events_avgtone_daily/avgtone_f32/"
+
+[[series]]
+id = "obs_year_u16"
+description = "Observation years aligned to AvgToneScale values."
+semantic_meaning = "Unsigned 16-bit years derived from retained GDELT SQLDATE values."
+source_resources = ["gdelt_events_avgtone_daily_day_subset"]
+filtered_input_path = "filtered/gdelt_events_avgtone_daily/day_stats.tsv"
+filtering = "Keep rows accepted for avgtone_f32."
+missing_value_policy = "Filter rows rejected by the avgtone_f32 missing-value policy."
+conversion = "Write little-endian uint16 arrays aligned 1:1 with retained AvgToneScale values."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gdelt_events_avgtone_daily/obs_year_u16/"
+
+[[series]]
+id = "obs_month_u8"
+description = "Observation months aligned to AvgToneScale values."
+semantic_meaning = "Unsigned 8-bit months derived from retained GDELT SQLDATE values."
+source_resources = ["gdelt_events_avgtone_daily_day_subset"]
+filtered_input_path = "filtered/gdelt_events_avgtone_daily/day_stats.tsv"
+filtering = "Keep rows accepted for avgtone_f32."
+missing_value_policy = "Filter rows rejected by the avgtone_f32 missing-value policy."
+conversion = "Write uint8 arrays aligned 1:1 with retained AvgToneScale values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gdelt_events_avgtone_daily/obs_month_u8/"
+
+[[series]]
+id = "obs_day_u8"
+description = "Observation days aligned to AvgToneScale values."
+semantic_meaning = "Unsigned 8-bit days derived from retained GDELT SQLDATE values."
+source_resources = ["gdelt_events_avgtone_daily_day_subset"]
+filtered_input_path = "filtered/gdelt_events_avgtone_daily/day_stats.tsv"
+filtering = "Keep rows accepted for avgtone_f32."
+missing_value_policy = "Filter rows rejected by the avgtone_f32 missing-value policy."
+conversion = "Write uint8 arrays aligned 1:1 with retained AvgToneScale values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gdelt_events_avgtone_daily/obs_day_u8/"

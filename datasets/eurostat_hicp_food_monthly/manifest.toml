@@ -1,0 +1,103 @@
+manifest_version = 1
+dataset_id = "eurostat_hicp_food_monthly"
+name = "Eurostat HICP Food Monthly"
+description = "Eurostat monthly HICP food index JSON-stat extract for a fixed five-country subset."
+homepage = "https://ec.europa.eu/eurostat/"
+
+[license]
+name = "European Commission Reuse Notice"
+spdx = "LicenseRef-EC-Reuse"
+url = "https://commission.europa.eu/legal-notice_en"
+citation = "Eurostat dissemination API."
+notes = "Confirm any attribution requirements during review."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Eurostat dissemination API only."
+usage_notes = "Public official statistics suitable for numeric dataset collection if licensing review remains acceptable."
+
+[[origins]]
+id = "eurostat_api"
+name = "Eurostat Dissemination API"
+url = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/"
+type = "api"
+notes = "JSON-stat style public API."
+
+[[resources]]
+id = "eurostat_hicp_food_monthly_country_subset"
+origin = "eurostat_api"
+url = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hicp_midx"
+type = "api_query_result"
+version = "five-country-subset"
+access = "One fixed JSON query with five selected countries and fixed filters."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/eurostat_hicp_food_monthly/"
+notes = "Single JSON-stat payload."
+
+[local_paths]
+downloads = "downloads/eurostat_hicp_food_monthly/"
+extracted = "extracted/eurostat_hicp_food_monthly/"
+filtered = "filtered/eurostat_hicp_food_monthly/"
+index = "index/eurostat_hicp_food_monthly/"
+samples = "samples/eurostat_hicp_food_monthly/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/eurostat_hicp_food_monthly/samples.jsonl"
+summary = "Download a fixed Eurostat JSON-stat query, retain parseable monthly values, and emit one numeric sample per country plus a machine-readable sample index."
+deterministic_notes = "Fixed country subset, fixed filters, download-time JSON validation, filtered sparse and malformed cells only, durable logs under logs/eurostat_hicp_food_monthly/, and generated sample index at index/eurostat_hicp_food_monthly/samples.jsonl."
+
+[[series]]
+id = "hicp_food_index_f32"
+description = "Monthly HICP food index values."
+semantic_meaning = "Float32 monthly HICP food index values, one sample per country."
+source_resources = ["eurostat_hicp_food_monthly_country_subset"]
+filtered_input_path = "filtered/eurostat_hicp_food_monthly/country_stats.tsv"
+filtering = "Keep sparse-value cells with parseable monthly time keys and parseable numeric values."
+missing_value_policy = "Filter sparse missing cells, malformed time keys, and malformed numeric values."
+conversion = "Parse retained values as float32 and write IEEE-754 little-endian arrays ordered by ascending month."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/eurostat_hicp_food_monthly/hicp_food_index_f32/"
+
+[[series]]
+id = "obs_year_u16"
+description = "Observation years aligned to monthly HICP food index values."
+semantic_meaning = "Unsigned 16-bit years aligned 1:1 with retained Eurostat HICP food values."
+source_resources = ["eurostat_hicp_food_monthly_country_subset"]
+filtered_input_path = "filtered/eurostat_hicp_food_monthly/country_stats.tsv"
+filtering = "Keep rows accepted for hicp_food_index_f32."
+missing_value_policy = "Filter rows rejected by the hicp_food_index_f32 missing-value policy."
+conversion = "Write little-endian uint16 arrays aligned 1:1 with retained HICP food values."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/eurostat_hicp_food_monthly/obs_year_u16/"
+
+[[series]]
+id = "obs_month_u8"
+description = "Observation months aligned to monthly HICP food index values."
+semantic_meaning = "Unsigned 8-bit months aligned 1:1 with retained Eurostat HICP food values."
+source_resources = ["eurostat_hicp_food_monthly_country_subset"]
+filtered_input_path = "filtered/eurostat_hicp_food_monthly/country_stats.tsv"
+filtering = "Keep rows accepted for hicp_food_index_f32."
+missing_value_policy = "Filter rows rejected by the hicp_food_index_f32 missing-value policy."
+conversion = "Write uint8 arrays aligned 1:1 with retained HICP food values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/eurostat_hicp_food_monthly/obs_month_u8/"

@@ -33,7 +33,7 @@ omniglot_selector_gap_i16	rejected_attempt	attempts/20260601_rejected_omniglot_s
 suitesparse_bcsstk_gap_i16	rejected_attempt	attempts/20260601_rejected_suitesparse_bcsstk_gap_i16.md	Selector-gap streams are derived transforms, not direct public numeric content.
 tourism_monthly_aus	exact_recipe	datasets/tourism_monthly_aus	Exact external registry reference is now present as an accepted recipe.
 noaa_coops_water_level	exact_recipe	datasets/noaa_coops_water_level	Already present as an accepted exact recipe.
-seismic_waveform_i32	needs_tooling_attempt	attempts/20260601_needs_tooling_seismic_waveform_i32.md	Curated IRIS waveform-window import needs a reusable source-window selection helper before porting.
+seismic_waveform_i32	exact_recipe	datasets/seismic_waveform_i32	Fixed 12-window IRIS/FDSN waveform plan was ported from the sibling repo and accepted after local download, build, and verify.
 worldclim_tavg_10m	exact_recipe	datasets/worldclim_tavg_10m	GeoTIFF strip decode was ported from the sibling repo and accepted after local download, build, and verify.
 nyc_311_descriptor_u16	rejected_attempt	attempts/20260601_rejected_nyc_311_descriptor_u16.md	Descriptor IDs are categorical remappings, not native numeric measurements.
 openf1_belgium_2023_q_u8	rejected_attempt	attempts/20260601_rejected_openf1_belgium_2023_q_u8.md	Quantized and categorical telemetry states are derived symbolic streams.

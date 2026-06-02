@@ -1,0 +1,69 @@
+manifest_version = 1
+dataset_id = "seismic_waveform_i32"
+name = "IRIS Seismic Waveform Counts"
+description = "Selected broadband vertical seismic waveform windows from IRIS/FDSN, preserved as little-endian signed int32 count streams."
+homepage = "https://service.iris.edu/irisws/timeseries/1/"
+
+[license]
+name = "FDSN Open Data Policy"
+spdx = "LicenseRef-FDSN-Open-Data-Policy"
+url = "https://www.fdsn.org/webservices/"
+citation = "IRIS DMC. Data Services Products. doi:10.17611/DP/FDSNWS.TIMESERIES.1"
+notes = "The selected waveform windows are distributed by IRIS/FDSN web services under the FDSN open data policy."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official IRIS/FDSN timeseries web-service responses only; no mirrors, leaks, or scraped personal content."
+usage_notes = "Public seismic waveform source intended for reproducible numeric dataset collection."
+
+[[origins]]
+id = "official"
+name = "IRIS FDSN"
+url = "https://service.iris.edu/irisws/timeseries/1/"
+type = "api"
+notes = "Official IRIS timeseries service."
+
+[[resources]]
+id = "accepted_windows"
+origin = "official"
+url = "https://service.iris.edu/irisws/timeseries/1/query"
+type = "api_query_result"
+version = "fixed_12_window_plan"
+access = "Direct public API queries."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/seismic_waveform_i32/"
+notes = "Canonical recipe fetches 12 accepted broadband vertical waveform windows."
+
+[local_paths]
+downloads = "downloads/seismic_waveform_i32/"
+extracted = "extracted/seismic_waveform_i32/"
+filtered = "filtered/seismic_waveform_i32/"
+index = "index/seismic_waveform_i32/"
+samples = "samples/seismic_waveform_i32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/seismic_waveform_i32/samples.jsonl"
+summary = "Fetch a fixed set of 12 IRIS/FDSN ASCII TSPAIR waveform windows, preserve the integer COUNTS column exactly as little-endian signed int32, and emit one sample per source window."
+deterministic_notes = "Download uses a fixed 12-window query plan, validates parsed sample counts, writes durable logs, and records the query plan. Build parses the TIMESERIES header for validation, preserves row order, keeps one source window per output file, and emits samples.jsonl under index/seismic_waveform_i32/."
+
+[[series]]
+id = "seismic_waveform_i32"
+description = "Selected IRIS/FDSN waveform windows preserved as signed int32 count streams."
+semantic_meaning = "Native seismic COUNTS values from fixed BHZ waveform windows."
+source_resources = ["accepted_windows"]
+filtered_input_path = "filtered/seismic_waveform_i32/ingest_stats.json"
+filtering = "Keep exactly the 12 canonical accepted waveform windows from the fixed query plan; no additional station/event discovery is performed during build."
+missing_value_policy = "Treat malformed headers, malformed rows, or missing files as fatal. Preserve all parsed integer count rows exactly; do not drop or impute values."
+conversion = "Parse the IRIS ASCII TSPAIR TIMESERIES header for metadata, parse the final whitespace-separated field of each data row as a signed integer count, validate int32 range, and write one little-endian int32 sample per source window."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/seismic_waveform_i32/seismic_waveform_i32/"

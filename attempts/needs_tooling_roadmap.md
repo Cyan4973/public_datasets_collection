@@ -64,29 +64,20 @@ Current state:
 ## 4. Seismic Window Selection Workflow
 
 Missing capability:
-- Reusable event-window selection helper for IRIS imports
-- Stable parameterization for reproducible waveform-window acquisition
+- None for the current external-registry backlog
 
-Unblocked datasets:
-- [seismic_waveform_i32](./20260601_needs_tooling_seismic_waveform_i32.md)
-
-Expected value:
-- Adds seismic waveform counts, which are numerically and structurally unlike
-  the current corpus
-
-Acceptance bar:
-- Deterministic window selection recorded in the manifest
-- Clear provenance for each selected event/window
-- Local validation of sample counts and integer preservation
+Current state:
+- `seismic_waveform_i32` has been moved out of `needs_tooling` and into an accepted recipe
+- the fixed 12-window IRIS selection is now implemented locally
+- seismic window selection is no longer an open tooling blocker for the current external-registry backlog
 
 ## Priority
 
 Recommended implementation order:
-1. `Seismic window selection workflow`
+1. No remaining tooling blockers in the current external-registry backlog
 
 Reasoning:
-- `EDF` is already done locally
-- `WFDB` is already done locally
+- `EDF` is done locally
+- `WFDB` is done locally
 - `Raster / image` is no longer an open tooling blocker for the current external-registry backlog
-- `Seismic window selection` is the remaining open tooling family and depends more on
-  acquisition design than pure decode logic
+- `Seismic window selection` is no longer an open tooling blocker for the current external-registry backlog

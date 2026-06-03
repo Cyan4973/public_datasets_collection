@@ -1,0 +1,22 @@
+# loghub_templates_public
+
+- Date: 2026-06-02
+- Status: blocked
+- Candidate dataset: LogHub template ID streams
+- Source: https://zenodo.org/records/8196385
+- Why it looked promising:
+  - Template-ID streams are a plausible real infrastructure compression target for log-processing systems.
+  - The parser/template pipeline can be pinned and documented.
+  - This is now in scope under the derived operational numeric rule.
+- Failure class: backlog_not_yet_ported
+- What happened:
+  - The prior rejection was policy-based and has been superseded by the broader compression-target rule.
+  - The dataset is now considered in-scope, but no local recipe has been prepared yet.
+- Evidence:
+  - External registry entry and prior rejected attempt.
+- Logs:
+  - No local download or build logs yet after reclassification.
+- Decision:
+  - Move from rejected to blocked pending a real recipe port.
+- Retry conditions:
+  - Retry when ready to prepare a pinned template-extraction recipe.

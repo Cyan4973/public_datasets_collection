@@ -51,6 +51,7 @@ Script contract:
 - `build.sh` emits final raw numeric samples under `${DATA_DIR:-.data}/samples/<dataset_id>/<series_id>/`.
 - `build.sh` also emits a machine-readable sample index under `${DATA_DIR:-.data}/index/<dataset_id>/`.
 - `build.sh` must implement an explicit missing-value policy. Upstream blanks, sentinels, flagged rows, NaNs, malformed rows, or unavailable observations must be either filtered, preserved as documented sentinel values, or treated as fatal. This policy should be stated in the dataset `README.md` and manifest.
+- If a series is a derived machine-facing representation rather than native numeric source content, `README.md` and the manifest must state that explicitly, pin the transform, and explain why the representation is a legitimate compression target rather than a synthetic local numericization.
 - `verify.sh` validates pinned resource properties where stable and checks generated sample counts, sizes, encoding assumptions, and the same missing-value policy applied by `build.sh`.
 - All scripts should support `DATA_DIR` overrides and be safe to rerun.
 - All scripts should write durable logs under `${DATA_DIR:-.data}/logs/<dataset_id>/`.
@@ -61,6 +62,7 @@ Scaling guidance:
 - Use deterministic file naming, sort order, and shard boundaries so two users can regenerate the same local outputs.
 - Keep committed metadata concise; put bulky inventories, row counts, or derived statistics in `verify.sh` output or generated local reports instead of expanding the manifest unnecessarily.
 - When the same upstream dataset can be represented at multiple numeric widths or meanings, define one series per distinct semantic output.
+- Do not admit arbitrary local remaps just because they yield integers. Derived numeric outputs are acceptable only when they correspond to a stable, reproducible, machine-facing artifact that real systems plausibly store or transmit.
 - If `download.sh` changes materially, rerun the updated downloader before accepting or committing the recipe. Material changes include different URLs, query parameters, selected subsets, payload-validation rules, or cache-acceptance behavior.
 - If a curated subset turns out to be only partially supported upstream, narrow the subset explicitly and update the manifest, README, build logic, verify logic, and sample counts before accepting the recipe.
 
@@ -87,6 +89,7 @@ Review checklist for a dataset recipe:
 - `download.sh` rejects semantically invalid payloads instead of caching them as successful downloads.
 - `build.sh` rebuilds generated samples from local downloads without fabricating, synthesizing, or augmenting data.
 - Missing-value handling is explicit, documented, and enforced consistently in both `build.sh` and `verify.sh`.
+- Any derived operational numeric series is explicitly labeled as derived, with the transform pinned and justified as a legitimate compression target.
 - `download.sh`, `build.sh`, and `verify.sh` are deterministic where possible and document any unavoidable upstream mutability.
 - Any multi-dataset batch launcher used during collection is ephemeral, lives outside the repository, and delegates to the committed per-dataset `download.sh` scripts.
 - If `download.sh` changed materially during recipe development, the updated downloader was rerun before acceptance.

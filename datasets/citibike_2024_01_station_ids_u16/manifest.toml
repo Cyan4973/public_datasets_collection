@@ -1,0 +1,90 @@
+manifest_version = 1
+dataset_id = "citibike_2024_01_station_ids_u16"
+name = "Citi Bike January 2024 Station ID Streams"
+description = "January 2024 Citi Bike tripdata converted into aligned uint16 start-station and end-station identifier streams using a shared global first-seen dictionary."
+homepage = "https://citibikenyc.com/system-data"
+
+[license]
+name = "LicenseRef-Citi-Bike-System-Data"
+spdx = "LicenseRef-Citi-Bike-System-Data"
+url = "https://citibikenyc.com/system-data"
+citation = "Citi Bike NYC system data tripdata archive for January 2024."
+notes = "The public system-data tripdata archive is treated as the accepted public source scope."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Citi Bike public tripdata ZIP only; no mirrors, leaks, or scraped personal content."
+usage_notes = "Public operational tripdata source intended for reproducible numeric dataset collection."
+
+[[origins]]
+id = "official"
+name = "Citi Bike NYC System Data"
+url = "https://citibikenyc.com/system-data"
+type = "data_portal"
+notes = "Official dataset page for Citi Bike tripdata archives."
+
+[[resources]]
+id = "january_2024_zip"
+origin = "official"
+url = "https://s3.amazonaws.com/tripdata/202401-citibike-tripdata.zip"
+type = "archive"
+version = "2024-01"
+access = "Direct public download."
+size_bytes = 369035302
+sha256 = "0a2e81eacd7bf3890712de8f2a1b56bda985c17d9e61b08acf5e7c7ec9f20eb0"
+local_path = "downloads/citibike_2024_01_station_ids_u16/202401-citibike-tripdata.zip"
+notes = "Accepted January 2024 tripdata ZIP."
+
+[local_paths]
+downloads = "downloads/citibike_2024_01_station_ids_u16/"
+extracted = "extracted/citibike_2024_01_station_ids_u16/"
+filtered = "filtered/citibike_2024_01_station_ids_u16/"
+index = "index/citibike_2024_01_station_ids_u16/"
+samples = "samples/citibike_2024_01_station_ids_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/citibike_2024_01_station_ids_u16/samples.jsonl"
+summary = "Download the accepted January 2024 Citi Bike tripdata ZIP, map start_station_id and end_station_id strings to a shared global first-seen uint16 dictionary, and emit aligned little-endian uint16 shards."
+deterministic_notes = "Download validates ZIP size and SHA-256. Build preserves ZIP member order and CSV row order, uses a shared first-seen dictionary with code 0 reserved for missing station ids, applies fixed aligned shard lengths, writes durable logs, and emits samples.jsonl under index/citibike_2024_01_station_ids_u16/."
+
+[[series]]
+id = "citibike_start_station_id"
+description = "Aligned uint16 shards of Citi Bike start station identifier codes."
+semantic_meaning = "Shared-dictionary operational station-id stream for the start_station_id field."
+representation_class = "derived_operational_numeric"
+representation_notes = "Derived from the public tripdata ZIP by applying a pinned shared global first-seen station-id dictionary. The resulting ID stream is a plausible real infrastructure compression target because station identifiers are operational fields stored and transmitted in ride-processing systems."
+source_resources = ["january_2024_zip"]
+filtered_input_path = "filtered/citibike_2024_01_station_ids_u16/ingest_stats.json"
+filtering = "Keep every row in ZIP member order and CSV row order. Select only the start_station_id field."
+missing_value_policy = "Empty station ids map to code 0. Non-empty station ids are preserved via shared global dictionary codes. No imputation or row dropping."
+conversion = "Read the ZIP locally, parse CSV rows in member order, map station-id strings to a shared global first-seen uint16 dictionary with code 0 reserved for missing values, and write 8 aligned little-endian uint16 shards."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/citibike_2024_01_station_ids_u16/citibike_start_station_id/"
+
+[[series]]
+id = "citibike_end_station_id"
+description = "Aligned uint16 shards of Citi Bike end station identifier codes."
+semantic_meaning = "Shared-dictionary operational station-id stream for the end_station_id field."
+representation_class = "derived_operational_numeric"
+representation_notes = "Derived from the public tripdata ZIP by applying the same pinned shared global first-seen station-id dictionary used for start_station_id. The resulting ID stream is a plausible real infrastructure compression target because station identifiers are operational fields stored and transmitted in ride-processing systems."
+source_resources = ["january_2024_zip"]
+filtered_input_path = "filtered/citibike_2024_01_station_ids_u16/ingest_stats.json"
+filtering = "Keep every row in ZIP member order and CSV row order. Select only the end_station_id field."
+missing_value_policy = "Empty station ids map to code 0. Non-empty station ids are preserved via shared global dictionary codes. No imputation or row dropping."
+conversion = "Read the ZIP locally, parse CSV rows in member order, map station-id strings to the shared global first-seen uint16 dictionary, and write 8 aligned little-endian uint16 shards."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/citibike_2024_01_station_ids_u16/citibike_end_station_id/"

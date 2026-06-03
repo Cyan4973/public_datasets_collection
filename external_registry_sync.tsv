@@ -16,14 +16,14 @@ mitbih_arrhythmia_physionet	exact_recipe	datasets/mitbih_arrhythmia_physionet	WF
 noaa_isd_lite	exact_recipe	datasets/noaa_isd_lite	Already present as an accepted exact recipe.
 skadi_srtm_hgt	exact_recipe	datasets/skadi_srtm_hgt	Exact external registry reference is now present as an accepted recipe.
 sensorless_drive_diagnosis_uci	exact_recipe	datasets/sensorless_drive_diagnosis_uci	Exact external registry reference is now present as an accepted recipe.
-unicode_bmp_gutenberg	rejected_attempt	attempts/20260601_rejected_unicode_bmp_gutenberg.md	Text codepoint streams are outside this repo's numeric-content scope.
-tokens_bert_gutenberg	rejected_attempt	attempts/20260601_rejected_tokens_bert_gutenberg.md	Token IDs are symbolic remappings, not upstream numeric measurements.
-tokens_t5_gutenberg	rejected_attempt	attempts/20260601_rejected_tokens_t5_gutenberg.md	Token IDs are symbolic remappings, not upstream numeric measurements.
+unicode_bmp_gutenberg	blocked_attempt	attempts/20260602_blocked_unicode_bmp_gutenberg.md	Reconsidered under the derived operational numeric rule; a pinned codepoint-stream recipe is now in scope but not yet ported.
+tokens_bert_gutenberg	blocked_attempt	attempts/20260602_blocked_tokens_bert_gutenberg.md	Reconsidered under the derived operational numeric rule; a pinned tokenizer-backed recipe is now in scope but not yet ported.
+tokens_t5_gutenberg	blocked_attempt	attempts/20260602_blocked_tokens_t5_gutenberg.md	Reconsidered under the derived operational numeric rule; a pinned tokenizer-backed recipe is now in scope but not yet ported.
 earthquake_usgs	exact_recipe	datasets/earthquake_usgs	Already present as an accepted exact recipe.
 eeg_physionet	exact_recipe	datasets/eeg_physionet	EDF-backed exact backfill recipe accepted after local download, build, and verify.
 ptbxl_physionet	exact_recipe	datasets/ptbxl_physionet	WFDB-backed exact backfill recipe accepted after local download, build, and verify.
 chbmit_physionet	exact_recipe	datasets/chbmit_physionet	EDF-backed exact backfill recipe accepted after local download, build, and verify.
-loghub_templates_public	rejected_attempt	attempts/20260601_rejected_loghub_templates_public.md	Template-ID streams are symbolic remappings, not native numeric measurements.
+loghub_templates_public	blocked_attempt	attempts/20260602_blocked_loghub_templates_public.md	Reconsidered under the derived operational numeric rule; a pinned template-ID recipe is now in scope but not yet ported.
 low_cardinality_u16_mirrors	rejected_attempt	attempts/20260601_rejected_low_cardinality_u16_mirrors.md	Derived widening of other datasets is out of scope for primary-source acquisition.
 ud_deprel_u8	rejected_attempt	attempts/20260601_rejected_ud_deprel_u8.md	Dependency-label IDs are symbolic remappings, not upstream numeric measurements.
 davis17_sparse_masks_u8	blocked_attempt	attempts/20260602_blocked_davis17_sparse_masks_u8.md	Prepared PNG-backed exact backfill recipe cannot be fetched from this environment because official DAVIS hosts are not reachable; retry with a local archive or reachable official mirror.
@@ -37,5 +37,5 @@ seismic_waveform_i32	exact_recipe	datasets/seismic_waveform_i32	Fixed 12-window 
 worldclim_tavg_10m	exact_recipe	datasets/worldclim_tavg_10m	GeoTIFF strip decode was ported from the sibling repo and accepted after local download, build, and verify.
 nyc_311_descriptor_u16	rejected_attempt	attempts/20260601_rejected_nyc_311_descriptor_u16.md	Descriptor IDs are categorical remappings, not native numeric measurements.
 openf1_belgium_2023_q_u8	rejected_attempt	attempts/20260601_rejected_openf1_belgium_2023_q_u8.md	Quantized and categorical telemetry states are derived symbolic streams.
-citibike_2024_01_station_ids_u16	rejected_attempt	attempts/20260601_rejected_citibike_2024_01_station_ids_u16.md	Station-ID dictionaries are categorical remappings, not native numeric measurements.
+citibike_2024_01_station_ids_u16	exact_recipe	datasets/citibike_2024_01_station_ids_u16	Accepted as a derived operational numeric dataset after local download, build, and verify: January 2024 Citi Bike tripdata with pinned shared-dictionary uint16 start/end station-id streams.
 ndbc_missingmask_u16	rejected_attempt	attempts/20260601_rejected_ndbc_missingmask_u16.md	Packed missingness masks are derived annotations, not native numeric measurements.

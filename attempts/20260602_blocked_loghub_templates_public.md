@@ -5,18 +5,21 @@
 - Candidate dataset: LogHub template ID streams
 - Source: https://zenodo.org/records/8196385
 - Why it looked promising:
-  - Template-ID streams are a plausible real infrastructure compression target for log-processing systems.
-  - The parser/template pipeline can be pinned and documented.
-  - This is now in scope under the derived operational numeric rule.
-- Failure class: backlog_not_yet_ported
+  - Template-ID streams are a plausible real infrastructure compression target.
+  - The normalization and signed int16 mapping can be pinned deterministically.
+  - This is in scope under the derived operational numeric rule.
+- Failure class: source_access_blocked_in_environment
 - What happened:
-  - The prior rejection was policy-based and has been superseded by the broader compression-target rule.
-  - The dataset is now considered in-scope, but no local recipe has been prepared yet.
+  - The prepared downloader failed before any useful payload was fetched.
+  - `urllib` could not resolve `zenodo.org` from this environment, so the run stopped at metadata fetch time.
+  - This is a source-access problem on the current network path, not a build/parser problem.
 - Evidence:
-  - External registry entry and prior rejected attempt.
+  - `.data/logs/loghub_templates_public/download.latest.log`
+  - Error: `urllib.error.URLError: <urlopen error [Errno -2] Name or service not known>`
 - Logs:
-  - No local download or build logs yet after reclassification.
+  - `.data/logs/loghub_templates_public/download.latest.log`
 - Decision:
-  - Move from rejected to blocked pending a real recipe port.
+  - Keep blocked for this environment.
+  - Do not count as an accepted or still-prepared recipe until the source is reachable or a local archive path is provided.
 - Retry conditions:
-  - Retry when ready to prepare a pinned template-extraction recipe.
+  - Retry from an environment that can resolve `zenodo.org`, or add an approved local-archive input path and rerun `download.sh`.

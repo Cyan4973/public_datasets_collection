@@ -1,0 +1,90 @@
+manifest_version = 1
+dataset_id = "tokens_bert_gutenberg"
+name = "BERT WordPiece Token IDs for Project Gutenberg"
+description = "Pinned Project Gutenberg books tokenized with the public bert-base-uncased WordPiece vocabulary into raw little-endian uint16 token-ID streams."
+homepage = "https://huggingface.co/google-bert/bert-base-uncased"
+
+[license]
+name = "Apache License 2.0 plus Project Gutenberg Terms"
+spdx = "Apache-2.0"
+url = "https://huggingface.co/google-bert/bert-base-uncased"
+citation = "google-bert/bert-base-uncased vocabulary plus selected public-domain Project Gutenberg books."
+notes = "Vocabulary is Apache 2.0. Texts are pre-1928 Project Gutenberg books distributed under Project Gutenberg site terms."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official HuggingFace vocabulary file plus official Project Gutenberg texts only."
+usage_notes = "Accepted as a derived operational numeric representation: pinned BERT token IDs are a real machine-facing compression target."
+
+[[origins]]
+id = "huggingface"
+name = "HuggingFace"
+url = "https://huggingface.co/google-bert/bert-base-uncased"
+type = "model_hub"
+notes = "Official hosted BERT vocabulary."
+
+[[origins]]
+id = "gutenberg"
+name = "Project Gutenberg"
+url = "https://www.gutenberg.org/"
+type = "data_portal"
+notes = "Official public-domain text archive."
+
+[[resources]]
+id = "bert_vocab"
+origin = "huggingface"
+url = "https://huggingface.co/google-bert/bert-base-uncased/resolve/main/vocab.txt"
+type = "model_artifact"
+version = "bert-base-uncased_main"
+access = "Direct public download."
+size_bytes = 231508
+sha256 = ""
+local_path = "downloads/tokens_bert_gutenberg/vocab.txt"
+notes = "Pinned bert-base-uncased WordPiece vocabulary."
+
+[[resources]]
+id = "books"
+origin = "gutenberg"
+url = "https://www.gutenberg.org/cache/epub/"
+type = "text_corpus"
+version = "pinned_12_books"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/tokens_bert_gutenberg/texts/"
+notes = "Twelve pinned Gutenberg plain-text books shared with the sibling public token pipelines."
+
+[local_paths]
+downloads = "downloads/tokens_bert_gutenberg/"
+extracted = "extracted/tokens_bert_gutenberg/"
+filtered = "filtered/tokens_bert_gutenberg/"
+index = "index/tokens_bert_gutenberg/"
+samples = "samples/tokens_bert_gutenberg/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/tokens_bert_gutenberg/samples.jsonl"
+summary = "Download the public BERT vocabulary and 12 pinned Gutenberg books, strip Gutenberg boilerplate, tokenize with a stdlib-only WordPiece implementation, and emit one raw uint16 sample per book."
+deterministic_notes = "Download validates that the vocabulary and all 12 books are present. Build preserves the fixed book list and applies the pinned lowercase, accent-strip, punctuation-split, greedy WordPiece pipeline without third-party tokenizer dependencies."
+
+[[series]]
+id = "tokens_bert_ids"
+description = "BERT WordPiece token-ID streams for 12 pinned Project Gutenberg books."
+semantic_meaning = "Pinned machine-facing BERT token IDs."
+representation_class = "derived_operational_numeric"
+representation_notes = "The token IDs are a deterministic, standardized machine representation used directly in real training and inference infrastructure."
+source_resources = ["bert_vocab", "books"]
+filtered_input_path = "filtered/tokens_bert_gutenberg/ingest_stats.json"
+filtering = "Keep the 12 pinned books. Strip Project Gutenberg boilerplate with the fixed marker list. Tokenize the remaining text with the public bert-base-uncased vocabulary."
+missing_value_policy = "Unknown subwords map to [UNK] using the pinned vocabulary. No row dropping or imputation."
+conversion = "Lowercase, strip accents, split punctuation, apply greedy WordPiece with ## continuations, and emit little-endian uint16 token IDs."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/tokens_bert_gutenberg/tokens_bert_ids/"

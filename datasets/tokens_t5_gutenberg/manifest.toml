@@ -1,0 +1,90 @@
+manifest_version = 1
+dataset_id = "tokens_t5_gutenberg"
+name = "T5 Token IDs for Project Gutenberg"
+description = "Pinned Project Gutenberg books tokenized with the public t5-small tokenizer into raw little-endian uint16 token-ID streams."
+homepage = "https://huggingface.co/google-t5/t5-small"
+
+[license]
+name = "Apache License 2.0 plus Project Gutenberg Terms"
+spdx = "Apache-2.0"
+url = "https://huggingface.co/google-t5/t5-small"
+citation = "google-t5/t5-small tokenizer plus selected public-domain Project Gutenberg books."
+notes = "Tokenizer is Apache 2.0. Texts are pre-1928 Project Gutenberg books distributed under Project Gutenberg site terms."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official HuggingFace tokenizer file plus official Project Gutenberg texts only."
+usage_notes = "Accepted as a derived operational numeric representation: pinned T5 token IDs are a real machine-facing compression target."
+
+[[origins]]
+id = "huggingface"
+name = "HuggingFace"
+url = "https://huggingface.co/google-t5/t5-small"
+type = "model_hub"
+notes = "Official hosted T5 tokenizer."
+
+[[origins]]
+id = "gutenberg"
+name = "Project Gutenberg"
+url = "https://www.gutenberg.org/"
+type = "data_portal"
+notes = "Official public-domain text archive."
+
+[[resources]]
+id = "t5_tokenizer"
+origin = "huggingface"
+url = "https://huggingface.co/google-t5/t5-small/resolve/main/tokenizer.json"
+type = "model_artifact"
+version = "t5-small_main"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/tokens_t5_gutenberg/tokenizer.json"
+notes = "Pinned t5-small tokenizer model JSON."
+
+[[resources]]
+id = "books"
+origin = "gutenberg"
+url = "https://www.gutenberg.org/cache/epub/"
+type = "text_corpus"
+version = "pinned_12_books"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/tokens_t5_gutenberg/texts/"
+notes = "Twelve pinned Gutenberg plain-text books shared with the sibling public token pipelines."
+
+[local_paths]
+downloads = "downloads/tokens_t5_gutenberg/"
+extracted = "extracted/tokens_t5_gutenberg/"
+filtered = "filtered/tokens_t5_gutenberg/"
+index = "index/tokens_t5_gutenberg/"
+samples = "samples/tokens_t5_gutenberg/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/tokens_t5_gutenberg/samples.jsonl"
+summary = "Download the public T5 tokenizer and 12 pinned Gutenberg books, strip Gutenberg boilerplate, tokenize with a stdlib-only Unigram implementation, and emit one raw uint16 sample per book."
+deterministic_notes = "Download validates that tokenizer.json and all 12 books are present. Build preserves the fixed book list and applies the pinned whitespace/metaspace/Viterbi Unigram pipeline without third-party tokenizer dependencies."
+
+[[series]]
+id = "tokens_t5_ids"
+description = "T5 token-ID streams for 12 pinned Project Gutenberg books."
+semantic_meaning = "Pinned machine-facing T5 token IDs."
+representation_class = "derived_operational_numeric"
+representation_notes = "The token IDs are a deterministic, standardized machine representation used directly in real training and inference infrastructure."
+source_resources = ["t5_tokenizer", "books"]
+filtered_input_path = "filtered/tokens_t5_gutenberg/ingest_stats.json"
+filtering = "Keep the 12 pinned books. Strip Project Gutenberg boilerplate with the fixed marker list. Tokenize the remaining text with the public t5-small tokenizer model."
+missing_value_policy = "If the dynamic program cannot fully segment a metaspace word, emit the tokenizer's pinned unk_id for the unmatched characters. No row dropping or imputation."
+conversion = "Split on whitespace, prepend metaspace marker U+2581 to each word, run Unigram Viterbi tokenization from tokenizer.json, and emit little-endian uint16 token IDs."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/tokens_t5_gutenberg/tokens_t5_ids/"

@@ -1,0 +1,178 @@
+manifest_version = 1
+dataset_id = "openf1_belgium_2023_car_data_native"
+name = "OpenF1 Belgium 2023 Native Car Data"
+description = "Per-driver native OpenF1 car_data fields for the 2023 Belgian Grand Prix Qualifying session."
+homepage = "https://openf1.org/"
+
+[license]
+name = "CC0 1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "OpenF1 public telemetry API for the 2023 Belgian GP Qualifying session."
+notes = "OpenF1 documents the API and published data as CC0 1.0 public-domain material."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official OpenF1 API responses only; no mirrors, leaks, or scraped personal content."
+usage_notes = "Public telemetry source intended for reproducible numeric dataset collection."
+
+[[origins]]
+id = "official"
+name = "OpenF1"
+url = "https://openf1.org/"
+type = "api"
+notes = "Official public Formula 1 telemetry API."
+
+[[resources]]
+id = "session_roster"
+origin = "official"
+url = "https://api.openf1.org/v1/drivers?session_key=9135"
+type = "api_query_result"
+version = "session_key_9135"
+access = "Direct public API query."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/openf1_belgium_2023_car_data_native/"
+notes = "Driver roster for the 2023 Belgian GP Qualifying session."
+
+[[resources]]
+id = "car_data"
+origin = "official"
+url = "https://api.openf1.org/v1/car_data?session_key=9135&driver_number=<driver>"
+type = "api_query_result"
+version = "session_key_9135"
+access = "Direct public API query."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/openf1_belgium_2023_car_data_native/"
+notes = "Per-driver car_data JSON arrays for all drivers returned by the session roster."
+
+[local_paths]
+downloads = "downloads/openf1_belgium_2023_car_data_native/"
+extracted = "extracted/openf1_belgium_2023_car_data_native/"
+filtered = "filtered/openf1_belgium_2023_car_data_native/"
+index = "index/openf1_belgium_2023_car_data_native/"
+samples = "samples/openf1_belgium_2023_car_data_native/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/openf1_belgium_2023_car_data_native/samples.jsonl"
+summary = "Fetch the OpenF1 Belgian GP 2023 Qualifying session roster and per-driver car_data JSON, preserve native numeric fields after stable sort by date, and emit one raw sample per driver per field."
+deterministic_notes = "Download verifies the pinned session mapping and uses the discovered driver roster for session_key 9135. Build reads only local JSON, sorts each driver's samples by date, preserves native numeric field values without quantization, writes durable logs, and emits samples.jsonl under index/openf1_belgium_2023_car_data_native/."
+
+[[series]]
+id = "openf1_speed"
+description = "Per-driver native OpenF1 speed stream."
+semantic_meaning = "Speed values from the native OpenF1 car_data field."
+representation_class = "native_numeric"
+representation_notes = "Direct native telemetry field from the public OpenF1 API."
+source_resources = ["car_data"]
+filtered_input_path = "filtered/openf1_belgium_2023_car_data_native/ingest_stats.json"
+filtering = "Keep every per-driver car_data row after stable sort by date. Select only the speed field."
+missing_value_policy = "Rows missing any required telemetry field are treated as fatal for this recipe."
+conversion = "Parse per-driver JSON arrays, stable sort by date, validate integer range, and write one little-endian uint16 sample per driver."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/openf1_belgium_2023_car_data_native/openf1_speed/"
+
+[[series]]
+id = "openf1_rpm"
+description = "Per-driver native OpenF1 RPM stream."
+semantic_meaning = "Engine RPM values from the native OpenF1 car_data field."
+representation_class = "native_numeric"
+representation_notes = "Direct native telemetry field from the public OpenF1 API."
+source_resources = ["car_data"]
+filtered_input_path = "filtered/openf1_belgium_2023_car_data_native/ingest_stats.json"
+filtering = "Keep every per-driver car_data row after stable sort by date. Select only the rpm field."
+missing_value_policy = "Rows missing any required telemetry field are treated as fatal for this recipe."
+conversion = "Parse per-driver JSON arrays, stable sort by date, validate integer range, and write one little-endian uint16 sample per driver."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/openf1_belgium_2023_car_data_native/openf1_rpm/"
+
+[[series]]
+id = "openf1_throttle"
+description = "Per-driver native OpenF1 throttle stream."
+semantic_meaning = "Throttle percentage values from the native OpenF1 car_data field."
+representation_class = "native_numeric"
+representation_notes = "Direct native telemetry field from the public OpenF1 API."
+source_resources = ["car_data"]
+filtered_input_path = "filtered/openf1_belgium_2023_car_data_native/ingest_stats.json"
+filtering = "Keep every per-driver car_data row after stable sort by date. Select only the throttle field."
+missing_value_policy = "Rows missing any required telemetry field are treated as fatal for this recipe."
+conversion = "Parse per-driver JSON arrays, stable sort by date, validate integer range, and write one uint8 sample per driver."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/openf1_belgium_2023_car_data_native/openf1_throttle/"
+
+[[series]]
+id = "openf1_brake"
+description = "Per-driver native OpenF1 brake stream."
+semantic_meaning = "Brake values from the native OpenF1 car_data field."
+representation_class = "native_numeric"
+representation_notes = "Direct native telemetry field from the public OpenF1 API."
+source_resources = ["car_data"]
+filtered_input_path = "filtered/openf1_belgium_2023_car_data_native/ingest_stats.json"
+filtering = "Keep every per-driver car_data row after stable sort by date. Select only the brake field."
+missing_value_policy = "Rows missing any required telemetry field are treated as fatal for this recipe."
+conversion = "Parse per-driver JSON arrays, stable sort by date, validate integer range, and write one uint8 sample per driver."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/openf1_belgium_2023_car_data_native/openf1_brake/"
+
+[[series]]
+id = "openf1_n_gear"
+description = "Per-driver native OpenF1 gear stream."
+semantic_meaning = "Selected gear values from the native OpenF1 car_data field."
+representation_class = "native_numeric"
+representation_notes = "Direct native telemetry field from the public OpenF1 API."
+source_resources = ["car_data"]
+filtered_input_path = "filtered/openf1_belgium_2023_car_data_native/ingest_stats.json"
+filtering = "Keep every per-driver car_data row after stable sort by date. Select only the n_gear field."
+missing_value_policy = "Rows missing any required telemetry field are treated as fatal for this recipe."
+conversion = "Parse per-driver JSON arrays, stable sort by date, validate integer range, and write one uint8 sample per driver."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/openf1_belgium_2023_car_data_native/openf1_n_gear/"
+
+[[series]]
+id = "openf1_drs"
+description = "Per-driver native OpenF1 DRS stream."
+semantic_meaning = "DRS state values from the native OpenF1 car_data field."
+representation_class = "native_numeric"
+representation_notes = "Direct native telemetry field from the public OpenF1 API."
+source_resources = ["car_data"]
+filtered_input_path = "filtered/openf1_belgium_2023_car_data_native/ingest_stats.json"
+filtering = "Keep every per-driver car_data row after stable sort by date. Select only the drs field."
+missing_value_policy = "Rows missing any required telemetry field are treated as fatal for this recipe."
+conversion = "Parse per-driver JSON arrays, stable sort by date, validate integer range, and write one uint8 sample per driver."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/openf1_belgium_2023_car_data_native/openf1_drs/"

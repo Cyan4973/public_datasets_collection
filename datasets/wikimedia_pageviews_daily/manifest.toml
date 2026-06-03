@@ -1,0 +1,71 @@
+manifest_version = 1
+dataset_id = "wikimedia_pageviews_daily"
+name = "Wikimedia Daily Pageviews"
+description = "Pinned 2024 daily Wikimedia pageview count streams for a fixed multi-project page set."
+homepage = "https://wikimedia.org/api/rest_v1/"
+
+[license]
+name = "Creative Commons Attribution-ShareAlike 4.0 International"
+spdx = "CC-BY-SA-4.0"
+url = "https://foundation.wikimedia.org/wiki/Policy:Terms_of_Use"
+citation = "Wikimedia REST API pageviews endpoint."
+notes = "Wikimedia content and derived traffic metadata are public under Wikimedia terms and attribution requirements."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Wikimedia REST API only."
+usage_notes = "Public operational traffic-count source intended for reproducible numeric dataset collection."
+
+[[origins]]
+id = "wikimedia"
+name = "Wikimedia REST API"
+url = "https://wikimedia.org/api/rest_v1/"
+type = "api"
+notes = "Official public Wikimedia metrics API."
+
+[[resources]]
+id = "daily_pageview_api"
+origin = "wikimedia"
+url = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/"
+type = "api_endpoint"
+version = "2024_daily_fixed_pages"
+access = "Direct public API."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/wikimedia_pageviews_daily/"
+notes = "Pinned set of daily pageview queries for 2024."
+
+[local_paths]
+downloads = "downloads/wikimedia_pageviews_daily/"
+extracted = "extracted/wikimedia_pageviews_daily/"
+filtered = "filtered/wikimedia_pageviews_daily/"
+index = "index/wikimedia_pageviews_daily/"
+samples = "samples/wikimedia_pageviews_daily/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/wikimedia_pageviews_daily/samples.jsonl"
+summary = "Download a fixed set of Wikimedia REST pageview JSON payloads for 2024, validate the daily sequence, and emit one raw uint32 sample per page."
+deterministic_notes = "Download uses pinned API paths, validates JSON structure, writes durable logs, and preserves the returned item order. Build requires a complete daily 2024 sequence for each page and emits one sample per page plus a machine-readable sample index."
+
+[[series]]
+id = "wikimedia_daily_pageviews"
+description = "Daily pageview count streams for pinned Wikimedia pages during 2024."
+semantic_meaning = "Native daily pageview counts returned by the public Wikimedia metrics API."
+representation_class = "native_numeric"
+representation_notes = "These are public operational traffic counts, not derived local encodings."
+source_resources = ["daily_pageview_api"]
+filtered_input_path = "filtered/wikimedia_pageviews_daily/ingest_stats.json"
+filtering = "Keep only the pinned project/article pairs and only the 2024 daily items returned by the API."
+missing_value_policy = "Treat missing payloads, missing days, malformed timestamps, or missing view counts as fatal errors. Do not impute or pad."
+conversion = "Read local JSON payloads, validate one item per calendar day in 2024, extract `views`, and emit little-endian uint32 arrays."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/wikimedia_pageviews_daily/wikimedia_daily_pageviews/"

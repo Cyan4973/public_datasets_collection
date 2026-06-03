@@ -1,0 +1,71 @@
+manifest_version = 1
+dataset_id = "nyc_311_descriptor_u16"
+name = "NYC 311 Descriptor IDs"
+description = "A pinned January 2024 NYC 311 descriptor stream encoded as little-endian uint16 operational category IDs."
+homepage = "https://data.cityofnewyork.us/Social-Services/311-Service-Requests/erm2-nwe9"
+
+[license]
+name = "NYC Open Data Terms of Use"
+spdx = "LicenseRef-NYC-Open-Data"
+url = "https://opendata.cityofnewyork.us/overview/"
+citation = "NYC Open Data 311 Service Requests dataset, January 2024 descriptor slice."
+notes = "Use the official NYC Open Data dataset and preserve the platform terms."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NYC Open Data CSV export only."
+usage_notes = "Accepted as a derived operational numeric representation: the descriptor field is a real operational categorical stream used in civic request processing systems."
+
+[[origins]]
+id = "nyc_open_data"
+name = "NYC Open Data"
+url = "https://data.cityofnewyork.us/"
+type = "data_portal"
+notes = "Official NYC Open Data portal."
+
+[[resources]]
+id = "jan_2024_descriptor_csv"
+origin = "nyc_open_data"
+url = "https://data.cityofnewyork.us/resource/erm2-nwe9.csv"
+type = "api_csv"
+version = "2024-01_descriptor_slice"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/nyc_311_descriptor_u16/nyc_311_jan_2024_descriptor.csv"
+notes = "Pinned CSV slice selecting `descriptor` for records with created_date in January 2024, ordered by unique_key."
+
+[local_paths]
+downloads = "downloads/nyc_311_descriptor_u16/"
+extracted = "extracted/nyc_311_descriptor_u16/"
+filtered = "filtered/nyc_311_descriptor_u16/"
+index = "index/nyc_311_descriptor_u16/"
+samples = "samples/nyc_311_descriptor_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nyc_311_descriptor_u16/samples.jsonl"
+summary = "Download a pinned January 2024 NYC 311 CSV slice, map descriptor strings to stable lexicographic uint16 codes, and emit deterministic contiguous shards plus a machine-readable sample index."
+deterministic_notes = "Download uses a fixed Socrata query and row ordering by unique_key. Build preserves input row order, reserves code 0 for missing descriptors, assigns non-empty descriptors lexicographically to uint16 codes, writes durable logs, and emits samples.jsonl."
+
+[[series]]
+id = "nyc_311_descriptor_id"
+description = "Pinned January 2024 NYC 311 descriptor identifier stream."
+semantic_meaning = "Operational category-ID stream for the public 311 descriptor field."
+representation_class = "derived_operational_numeric"
+representation_notes = "The numeric stream is derived from a real operational field by a pinned stable dictionary mapping. It is treated as a plausible compression target for infrastructure that persists categorical fields."
+source_resources = ["jan_2024_descriptor_csv"]
+filtered_input_path = "filtered/nyc_311_descriptor_u16/ingest_stats.json"
+filtering = "Keep all rows returned by the fixed January 2024 Socrata query in unique_key order. Select only the descriptor field."
+missing_value_policy = "Missing or empty descriptors map to code 0. Non-empty descriptors are preserved via a stable lexicographic uint16 dictionary."
+conversion = "Read the CSV in source order, build a lexicographic dictionary over distinct non-empty descriptors, map rows to uint16 codes, and emit deterministic contiguous shards."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/nyc_311_descriptor_u16/nyc_311_descriptor_id/"

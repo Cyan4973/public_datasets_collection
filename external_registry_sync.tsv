@@ -35,7 +35,7 @@ tourism_monthly_aus	exact_recipe	datasets/tourism_monthly_aus	Exact external reg
 noaa_coops_water_level	exact_recipe	datasets/noaa_coops_water_level	Already present as an accepted exact recipe.
 seismic_waveform_i32	exact_recipe	datasets/seismic_waveform_i32	Fixed 12-window IRIS/FDSN waveform plan was ported from the sibling repo and accepted after local download, build, and verify.
 worldclim_tavg_10m	exact_recipe	datasets/worldclim_tavg_10m	GeoTIFF strip decode was ported from the sibling repo and accepted after local download, build, and verify.
-nyc_311_descriptor_u16	rejected_attempt	attempts/20260601_rejected_nyc_311_descriptor_u16.md	Descriptor IDs are categorical remappings, not native numeric measurements.
+nyc_311_descriptor_u16	prepared_recipe	datasets/nyc_311_descriptor_u16	Operational categorical field recipe prepared under the derived operational numeric rule; awaiting local download/build/verify.
 openf1_belgium_2023_q_u8	rejected_attempt	attempts/20260601_rejected_openf1_belgium_2023_q_u8.md	Quantized and categorical telemetry states are derived symbolic streams.
 citibike_2024_01_station_ids_u16	exact_recipe	datasets/citibike_2024_01_station_ids_u16	Accepted as a derived operational numeric dataset after local download, build, and verify: January 2024 Citi Bike tripdata with pinned shared-dictionary uint16 start/end station-id streams.
 ndbc_missingmask_u16	rejected_attempt	attempts/20260601_rejected_ndbc_missingmask_u16.md	Packed missingness masks are derived annotations, not native numeric measurements.

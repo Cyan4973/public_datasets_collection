@@ -1,0 +1,28 @@
+# loghub_templates_public
+
+- Date: 2026-06-03
+- Status: blocked
+- Candidate dataset: LogHub template ID streams
+- Source:
+  - Canonical: https://zenodo.org/records/8196385
+  - Fallback tried here: https://github.com/logpai/loghub
+- Why it looked promising:
+  - Template-ID streams are a plausible real infrastructure compression target.
+  - The normalization and signed int16 mapping can be pinned deterministically.
+  - This is in scope under the derived operational numeric rule.
+- Failure class: source_access_blocked_in_environment
+- What happened:
+  - The Zenodo path was already blocked by DNS resolution failure in this environment.
+  - A second attempt switched to the public GitHub sample archive as the default source path.
+  - That fallback also failed immediately at DNS resolution before any archive payload was fetched.
+  - So this is an environment-level source-access problem on both public hosts, not a parser/build issue.
+- Evidence:
+  - `.data/logs/loghub_templates_public/download.latest.log`
+  - Error: `urllib.error.URLError: <urlopen error [Errno -2] Name or service not known>`
+- Logs:
+  - `.data/logs/loghub_templates_public/download.latest.log`
+- Decision:
+  - Keep blocked for this environment.
+  - Do not count as accepted or prepared unless a reachable network path or local archive is available.
+- Retry conditions:
+  - Retry with `LOGHUB_LOCAL_ARCHIVE=/absolute/path/to/archive.zip`, or from an environment that can resolve and fetch either `zenodo.org` or `github.com`.

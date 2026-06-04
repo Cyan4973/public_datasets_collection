@@ -1,4 +1,6 @@
-# Copy this file to datasets/<dataset_id>/manifest.toml and fill it in.
+# Copy this file to staging/<dataset_id>/manifest.toml first, then promote the
+# whole recipe to datasets/<dataset_id>/ only after successful
+# download/build/verify.
 #
 # Paths in this manifest are relative to ${DATA_DIR:-.data}.
 # Keep the manifest concise. Large generated inventories belong in scripts or

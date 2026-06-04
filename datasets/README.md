@@ -1,6 +1,8 @@
 # Dataset Recipes
 
-Each subdirectory under `datasets/` describes how to collect one public dataset.
+Each subdirectory under `datasets/` is an accepted recipe only.
+
+Draft or unconfirmed recipes belong under `staging/`, not here. Move a recipe into `datasets/` only after the current `download.sh` has been user-run and the recipe has then passed local `build.sh` and `verify.sh`.
 
 Expected per-dataset files:
 - `manifest.toml`: origin, resources, license metadata, generated series, and validation metadata. Start from `datasets/manifest.template.toml`.
@@ -79,6 +81,7 @@ Batch outcomes:
 
 Review checklist for a dataset recipe:
 - Dataset recipe lives under `datasets/<dataset_id>/`.
+- Recipe was staged first when it was still experimental or unconfirmed, and was promoted into `datasets/` only after successful download/build/verify.
 - No dataset payloads, downloads, extracted data, filtered data, or generated samples are committed.
 - `manifest.toml` is present and uses the current `manifest_version`.
 - Origin URL, resource URLs or access descriptions, and resource versions are documented.

@@ -17,8 +17,9 @@ Vocabulary:
 - Sample: one final clean numeric array produced by this repository. A sample contains only homogeneous fixed-width numeric values. It may be small or large; training-time sharding is handled outside this repository.
 
 Repository layout:
-- Dataset recipes should live under `datasets/<dataset_id>/`.
-- Each dataset recipe should include `manifest.toml`, `README.md`, `download.sh`, `build.sh`, and `verify.sh` when applicable. Extra helper scripts should live under `datasets/<dataset_id>/scripts/`.
+- Draft recipes that are still being prepared or tested should live under `staging/<dataset_id>/`.
+- Confirmed recipes should live under `datasets/<dataset_id>/` only after the user has run the current `download.sh` and the recipe has then passed local `build.sh` and `verify.sh`.
+- Both staged and confirmed recipes should use the same per-dataset file shape: `manifest.toml`, `README.md`, `download.sh`, `build.sh`, and `verify.sh` when applicable. Extra helper scripts should live under `<area>/<dataset_id>/scripts/`.
 - Temporary batch orchestration scripts may be generated outside the repository, typically under `/tmp/`, to let a user launch multiple dataset downloads in one command. These batch scripts are convenience artifacts only. They must not be committed and must not replace per-dataset `download.sh` entry points.
 - Local payloads should live under `.data/` by default, with scripts allowing `DATA_DIR` to override that location.
 - The local data directory should separate downloads, extracted data, filtered data, generated batch summaries, generated sample indexes, and generated samples, for example `.data/downloads/<dataset_id>/`, `.data/extracted/<dataset_id>/`, `.data/filtered/<dataset_id>/`, `.data/batches/<batch_id>/`, `.data/index/<dataset_id>/`, and `.data/samples/<dataset_id>/<series_id>/`.
@@ -72,6 +73,12 @@ Script requirements:
 - All three scripts must write durable logs under `${DATA_DIR:-.data}/logs/<dataset_id>/`.
 
 Recipe evolution:
+- New recipe work should start in `staging/`, not in `datasets/`.
+- Promotion from `staging/<dataset_id>/` to `datasets/<dataset_id>/` requires:
+  - a user-run download using the current `download.sh`
+  - a successful local `build.sh`
+  - a successful local `verify.sh`
+- If a staged recipe fails because of access, schema drift, source-path problems, or policy issues, it should be revised in `staging/` or recorded under `attempts/`. It should not be placed under `datasets/` until it has actually cleared the acceptance path above.
 - If `download.sh` changes materially, acceptance of the recipe requires a fresh user-run download pass with the updated script before commit. Material changes include modified source URLs, query parameters, selected station/site/resource subsets, payload validation rules, authentication-free access paths, or cache-acceptance rules.
 - If an initially selected upstream subset is only partially supported, the recipe may be narrowed to a working documented subset without being recorded as a failure, but the manifest, README, scripts, sample counts, and local verification outputs must all be updated to reflect the accepted subset before commit.
 

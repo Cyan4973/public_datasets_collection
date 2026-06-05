@@ -1,1 +1,3 @@
 .data/
+staging/*
+!staging/README.md

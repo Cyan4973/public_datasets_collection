@@ -1,0 +1,60 @@
+manifest_version = 1
+dataset_id = "stackexchange_top_questions_jan_2024"
+name = "Stack Exchange Top Questions January 2024"
+description = "Pinned Stack Exchange questions response with native score and interaction-count fields."
+
+[license]
+name = "CC BY-SA 4.0"
+spdx = "CC-BY-SA-4.0"
+url = "https://api.stackexchange.com/"
+
+[[resources]]
+id = "questions_json"
+url = "https://api.stackexchange.com/2.3/questions?fromdate=1704067200&todate=1706745599&order=desc&sort=votes&site=stackoverflow&pagesize=100"
+type = "api_response"
+local_path = "downloads/stackexchange_top_questions_jan_2024/stackexchange_top_questions_jan_2024.json"
+
+[local_paths]
+downloads = "downloads/stackexchange_top_questions_jan_2024/"
+filtered = "filtered/stackexchange_top_questions_jan_2024/"
+index = "index/stackexchange_top_questions_jan_2024/"
+samples = "samples/stackexchange_top_questions_jan_2024/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/stackexchange_top_questions_jan_2024/samples.jsonl"
+
+[[series]]
+id = "stackexchange_score"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "stackexchange_answer_count"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "stackexchange_view_count"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "stackexchange_creation_date"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+

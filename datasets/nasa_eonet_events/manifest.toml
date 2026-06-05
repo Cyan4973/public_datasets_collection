@@ -1,0 +1,60 @@
+manifest_version = 1
+dataset_id = "nasa_eonet_events"
+name = "NASA EONET Events"
+description = "Pinned EONET events payload with event-level geometry and category counts."
+
+[license]
+name = "LicenseRef-EONET"
+spdx = "LicenseRef-EONET"
+url = "https://eonet.gsfc.nasa.gov/docs/v3"
+
+[[resources]]
+id = "eonet_events_json"
+url = "https://eonet.gsfc.nasa.gov/api/v3/events"
+type = "api_response"
+local_path = "downloads/nasa_eonet_events/eonet_events.json"
+
+[local_paths]
+downloads = "downloads/nasa_eonet_events/"
+filtered = "filtered/nasa_eonet_events/"
+index = "index/nasa_eonet_events/"
+samples = "samples/nasa_eonet_events/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_eonet_events/samples.jsonl"
+
+[[series]]
+id = "eonet_geometry_count"
+representation_class = "native_numeric"
+missing_value_policy = "Malformed rows are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "eonet_categories_count"
+representation_class = "native_numeric"
+missing_value_policy = "Malformed rows are filtered."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "eonet_sources_count"
+representation_class = "native_numeric"
+missing_value_policy = "Malformed rows are filtered."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "eonet_first_geometry_timestamp"
+representation_class = "native_numeric"
+missing_value_policy = "Malformed rows are filtered."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+

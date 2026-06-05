@@ -18,6 +18,7 @@ Vocabulary:
 
 Repository layout:
 - Draft recipes that are still being prepared or tested should live under `staging/<dataset_id>/`.
+- `staging/` should be git-ignored except for minimal committed documentation such as `staging/README.md`, so unfinished recipes are not accidentally committed.
 - Confirmed recipes should live under `datasets/<dataset_id>/` only after the user has run the current `download.sh` and the recipe has then passed local `build.sh` and `verify.sh`.
 - Both staged and confirmed recipes should use the same per-dataset file shape: `manifest.toml`, `README.md`, `download.sh`, `build.sh`, and `verify.sh` when applicable. Extra helper scripts should live under `<area>/<dataset_id>/scripts/`.
 - Temporary batch orchestration scripts may be generated outside the repository, typically under `/tmp/`, to let a user launch multiple dataset downloads in one command. These batch scripts are convenience artifacts only. They must not be committed and must not replace per-dataset `download.sh` entry points.

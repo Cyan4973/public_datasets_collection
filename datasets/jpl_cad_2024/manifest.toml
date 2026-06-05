@@ -1,0 +1,60 @@
+manifest_version = 1
+dataset_id = "jpl_cad_2024"
+name = "JPL Small-Body Close Approaches 2024"
+description = "Pinned JPL CAD response with native close-approach numeric fields."
+
+[license]
+name = "LicenseRef-JPL"
+spdx = "LicenseRef-JPL"
+url = "https://ssd-api.jpl.nasa.gov/"
+
+[[resources]]
+id = "cad_2024_json"
+url = "https://ssd-api.jpl.nasa.gov/cad.api?date-min=2024-01-01&date-max=2024-12-31&sort=date&fullname=true"
+type = "api_response"
+local_path = "downloads/jpl_cad_2024/cad_2024.json"
+
+[local_paths]
+downloads = "downloads/jpl_cad_2024/"
+filtered = "filtered/jpl_cad_2024/"
+index = "index/jpl_cad_2024/"
+samples = "samples/jpl_cad_2024/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/jpl_cad_2024/samples.jsonl"
+
+[[series]]
+id = "jpl_cad_jd"
+representation_class = "native_numeric"
+missing_value_policy = "Malformed rows are fatal."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "jpl_cad_dist"
+representation_class = "native_numeric"
+missing_value_policy = "Malformed rows are fatal."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "jpl_cad_v_rel"
+representation_class = "native_numeric"
+missing_value_policy = "Malformed rows are fatal."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "jpl_cad_v_inf"
+representation_class = "native_numeric"
+missing_value_policy = "Malformed rows are fatal."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+

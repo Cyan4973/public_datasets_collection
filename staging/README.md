@@ -2,6 +2,8 @@
 
 `staging/` is the draft area for dataset recipes that are not accepted yet.
 
+By design, staged recipe contents should be git-ignored so unfinished acquisition scripts are not accidentally committed. The only intended committed file in this directory is this README.
+
 Use it for:
 - first-pass recipe authoring
 - source-path experiments

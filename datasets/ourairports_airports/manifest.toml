@@ -1,0 +1,109 @@
+manifest_version = 1
+dataset_id = "ourairports_airports"
+name = "OurAirports Airports"
+description = "Pinned OurAirports airport CSV with native geospatial and elevation fields."
+homepage = "https://ourairports.com/data/"
+
+[license]
+name = "OurAirports Open Data Terms"
+spdx = "LicenseRef-OurAirports"
+url = "https://ourairports.com/data/"
+citation = "OurAirports open airport data."
+notes = "Refer to upstream data page."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official OurAirports CSV only."
+usage_notes = "Public aviation reference data."
+
+[[origins]]
+id = "official"
+name = "OurAirports"
+url = "https://ourairports.com/data/"
+type = "data_portal"
+notes = "Official data download page."
+
+[[resources]]
+id = "airports_csv"
+origin = "official"
+url = "https://ourairports.com/data/airports.csv"
+type = "file"
+version = "current_csv"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/ourairports_airports/airports.csv"
+notes = "CSV export of airport records."
+
+[local_paths]
+downloads = "downloads/ourairports_airports/"
+extracted = "extracted/ourairports_airports/"
+filtered = "filtered/ourairports_airports/"
+index = "index/ourairports_airports/"
+samples = "samples/ourairports_airports/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/ourairports_airports/samples.jsonl"
+summary = "Download the pinned airport CSV and emit numeric latitude, longitude, and elevation samples."
+deterministic_notes = "Build preserves CSV row order and filters blank elevation independently."
+
+[[series]]
+id = "ourairports_latitude"
+description = "Airport latitude values."
+semantic_meaning = "Airport latitude in decimal degrees."
+representation_class = "native_numeric"
+representation_notes = "Native floating-point field."
+source_resources = ["airports_csv"]
+filtered_input_path = "filtered/ourairports_airports/ingest_stats.json"
+filtering = "Keep all rows with non-empty latitude."
+missing_value_policy = "Malformed rows are fatal."
+conversion = "Parse latitude_deg as float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/ourairports_airports/ourairports_latitude/"
+
+[[series]]
+id = "ourairports_longitude"
+description = "Airport longitude values."
+semantic_meaning = "Airport longitude in decimal degrees."
+representation_class = "native_numeric"
+representation_notes = "Native floating-point field."
+source_resources = ["airports_csv"]
+filtered_input_path = "filtered/ourairports_airports/ingest_stats.json"
+filtering = "Keep all rows with non-empty longitude."
+missing_value_policy = "Malformed rows are fatal."
+conversion = "Parse longitude_deg as float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/ourairports_airports/ourairports_longitude/"
+
+[[series]]
+id = "ourairports_elevation_ft"
+description = "Airport elevation values."
+semantic_meaning = "Airport elevation above sea level in feet."
+representation_class = "native_numeric"
+representation_notes = "Native integer field."
+source_resources = ["airports_csv"]
+filtered_input_path = "filtered/ourairports_airports/ingest_stats.json"
+filtering = "Keep rows with non-empty elevation_ft."
+missing_value_policy = "Blank elevation_ft values are filtered. Malformed rows are fatal."
+conversion = "Parse elevation_ft as int32."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/ourairports_airports/ourairports_elevation_ft/"

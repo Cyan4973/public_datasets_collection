@@ -1,0 +1,109 @@
+manifest_version = 1
+dataset_id = "geonames_cities5000"
+name = "GeoNames Cities5000"
+description = "Pinned GeoNames cities5000 archive with native latitude, longitude, and population fields."
+homepage = "https://www.geonames.org/datasources/"
+
+[license]
+name = "GeoNames License"
+spdx = "LicenseRef-GeoNames"
+url = "https://www.geonames.org/export/"
+citation = "GeoNames geographical database."
+notes = "Refer to upstream terms."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official GeoNames archive only."
+usage_notes = "Public geospatial gazetteer data."
+
+[[origins]]
+id = "official"
+name = "GeoNames"
+url = "http://download.geonames.org/export/dump/"
+type = "data_portal"
+notes = "Official GeoNames export dump."
+
+[[resources]]
+id = "cities5000_zip"
+origin = "official"
+url = "http://download.geonames.org/export/dump/cities5000.zip"
+type = "archive"
+version = "cities5000"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/geonames_cities5000/cities5000.zip"
+notes = "Zip archive containing cities5000.txt."
+
+[local_paths]
+downloads = "downloads/geonames_cities5000/"
+extracted = "extracted/geonames_cities5000/"
+filtered = "filtered/geonames_cities5000/"
+index = "index/geonames_cities5000/"
+samples = "samples/geonames_cities5000/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/geonames_cities5000/samples.jsonl"
+summary = "Download the pinned GeoNames archive and emit native numeric geospatial field samples."
+deterministic_notes = "Build preserves source row order and filters blanks independently per series."
+
+[[series]]
+id = "geonames_latitude"
+description = "Latitude values from cities5000."
+semantic_meaning = "Place latitude in decimal degrees."
+representation_class = "native_numeric"
+representation_notes = "Native floating-point field from source."
+source_resources = ["cities5000_zip"]
+filtered_input_path = "filtered/geonames_cities5000/ingest_stats.json"
+filtering = "Keep rows with non-empty latitude."
+missing_value_policy = "Blank values are filtered. Malformed rows are fatal."
+conversion = "Parse latitude as float64 and write one raw sample."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/geonames_cities5000/geonames_latitude/"
+
+[[series]]
+id = "geonames_longitude"
+description = "Longitude values from cities5000."
+semantic_meaning = "Place longitude in decimal degrees."
+representation_class = "native_numeric"
+representation_notes = "Native floating-point field from source."
+source_resources = ["cities5000_zip"]
+filtered_input_path = "filtered/geonames_cities5000/ingest_stats.json"
+filtering = "Keep rows with non-empty longitude."
+missing_value_policy = "Blank values are filtered. Malformed rows are fatal."
+conversion = "Parse longitude as float64 and write one raw sample."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/geonames_cities5000/geonames_longitude/"
+
+[[series]]
+id = "geonames_population"
+description = "Population values from cities5000."
+semantic_meaning = "Reported population count for the place."
+representation_class = "native_numeric"
+representation_notes = "Native integer field from source."
+source_resources = ["cities5000_zip"]
+filtered_input_path = "filtered/geonames_cities5000/ingest_stats.json"
+filtering = "Keep rows with non-empty population."
+missing_value_policy = "Blank values are filtered. Malformed rows are fatal."
+conversion = "Parse population as uint32 and write one raw sample."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/geonames_cities5000/geonames_population/"

@@ -1,0 +1,90 @@
+manifest_version = 1
+dataset_id = "uniprot_human_reviewed_lengths"
+name = "UniProt Human Reviewed Lengths"
+description = "Pinned UniProt TSV query for reviewed human proteins with native length and mass fields."
+homepage = "https://rest.uniprot.org/"
+
+[license]
+name = "UniProt Terms"
+spdx = "LicenseRef-UniProt"
+url = "https://www.uniprot.org/help/license"
+citation = "UniProt Consortium."
+notes = "Refer to upstream terms."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official UniProt REST query only."
+usage_notes = "Public protein catalog data."
+
+[[origins]]
+id = "official"
+name = "UniProt"
+url = "https://rest.uniprot.org/"
+type = "api"
+notes = "Official UniProt REST API."
+
+[[resources]]
+id = "reviewed_human_tsv"
+origin = "official"
+url = "https://rest.uniprot.org/uniprotkb/search?query=reviewed:true+AND+organism_id:9606&fields=accession,length,mass&format=tsv&size=500"
+type = "api_query_result"
+version = "reviewed_human_length_mass_size_500"
+access = "Direct public API query."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/uniprot_human_reviewed_lengths/uniprot_human_reviewed.tsv"
+notes = "TSV with accession, length, and mass."
+
+[local_paths]
+downloads = "downloads/uniprot_human_reviewed_lengths/"
+extracted = "extracted/uniprot_human_reviewed_lengths/"
+filtered = "filtered/uniprot_human_reviewed_lengths/"
+index = "index/uniprot_human_reviewed_lengths/"
+samples = "samples/uniprot_human_reviewed_lengths/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/uniprot_human_reviewed_lengths/samples.jsonl"
+summary = "Download a pinned UniProt TSV query and emit native length and mass samples."
+deterministic_notes = "Build preserves TSV row order and filters blanks independently per series."
+
+[[series]]
+id = "uniprot_length"
+description = "Protein length values."
+semantic_meaning = "Protein sequence length in amino acids."
+representation_class = "native_numeric"
+representation_notes = "Native integer field from source."
+source_resources = ["reviewed_human_tsv"]
+filtered_input_path = "filtered/uniprot_human_reviewed_lengths/ingest_stats.json"
+filtering = "Keep rows with non-empty Length."
+missing_value_policy = "Blank values are filtered. Malformed rows are fatal."
+conversion = "Parse Length as uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/uniprot_human_reviewed_lengths/uniprot_length/"
+
+[[series]]
+id = "uniprot_mass"
+description = "Protein mass values."
+semantic_meaning = "Protein molecular mass."
+representation_class = "native_numeric"
+representation_notes = "Native integer field from source."
+source_resources = ["reviewed_human_tsv"]
+filtered_input_path = "filtered/uniprot_human_reviewed_lengths/ingest_stats.json"
+filtering = "Keep rows with non-empty Mass."
+missing_value_policy = "Blank values are filtered. Malformed rows are fatal."
+conversion = "Parse Mass as uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/uniprot_human_reviewed_lengths/uniprot_mass/"

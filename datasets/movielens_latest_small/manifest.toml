@@ -1,0 +1,90 @@
+manifest_version = 1
+dataset_id = "movielens_latest_small"
+name = "MovieLens Latest Small Ratings"
+description = "Pinned MovieLens latest-small ratings archive with native rating and timestamp fields."
+homepage = "https://grouplens.org/datasets/movielens/"
+
+[license]
+name = "LicenseRef-GroupLens-MovieLens"
+spdx = "LicenseRef-GroupLens-MovieLens"
+url = "https://grouplens.org/datasets/movielens/"
+citation = "GroupLens Research, MovieLens Latest Datasets."
+notes = "Refer to the upstream dataset page for current terms."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official GroupLens archive only."
+usage_notes = "Public recommendation benchmark data."
+
+[[origins]]
+id = "official"
+name = "GroupLens"
+url = "https://grouplens.org/datasets/movielens/"
+type = "data_portal"
+notes = "Official MovieLens dataset page."
+
+[[resources]]
+id = "ml_latest_small_zip"
+origin = "official"
+url = "https://files.grouplens.org/datasets/movielens/ml-latest-small.zip"
+type = "archive"
+version = "latest-small"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/movielens_latest_small/ml-latest-small.zip"
+notes = "Archive containing ratings.csv and companion files."
+
+[local_paths]
+downloads = "downloads/movielens_latest_small/"
+extracted = "extracted/movielens_latest_small/"
+filtered = "filtered/movielens_latest_small/"
+index = "index/movielens_latest_small/"
+samples = "samples/movielens_latest_small/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/movielens_latest_small/samples.jsonl"
+summary = "Download the pinned MovieLens archive and emit native numeric rating and timestamp samples."
+deterministic_notes = "Build preserves source CSV row order and uses only local files."
+
+[[series]]
+id = "movielens_rating"
+description = "Movie rating values from ratings.csv."
+semantic_meaning = "Explicit user rating values."
+representation_class = "native_numeric"
+representation_notes = "Native floating-point values from the source."
+source_resources = ["ml_latest_small_zip"]
+filtered_input_path = "filtered/movielens_latest_small/ingest_stats.json"
+filtering = "Keep all rows from ratings.csv."
+missing_value_policy = "Malformed rows are fatal."
+conversion = "Parse rating as float32 and write one raw sample."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/movielens_latest_small/movielens_rating/"
+
+[[series]]
+id = "movielens_rating_timestamp"
+description = "Unix timestamps from ratings.csv."
+semantic_meaning = "Rating event timestamps."
+representation_class = "native_numeric"
+representation_notes = "Native integer timestamps from the source."
+source_resources = ["ml_latest_small_zip"]
+filtered_input_path = "filtered/movielens_latest_small/ingest_stats.json"
+filtering = "Keep all rows from ratings.csv."
+missing_value_policy = "Malformed rows are fatal."
+conversion = "Parse timestamp as uint32 and write one raw sample."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/movielens_latest_small/movielens_rating_timestamp/"

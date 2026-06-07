@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "chembl_molecules"
+name = "ChEMBL Molecules"
+description = "Pinned ChEMBL molecule listing with native catalog and property fields."
+
+[local_paths]
+downloads = "downloads/chembl_molecules/"
+filtered = "filtered/chembl_molecules/"
+index = "index/chembl_molecules/"
+samples = "samples/chembl_molecules/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/chembl_molecules/samples.jsonl"

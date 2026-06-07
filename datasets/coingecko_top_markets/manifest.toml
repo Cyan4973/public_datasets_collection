@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "coingecko_top_markets"
+name = "CoinGecko Top Markets"
+description = "Pinned CoinGecko market snapshot for top assets in USD."
+
+[local_paths]
+downloads = "downloads/coingecko_top_markets/"
+filtered = "filtered/coingecko_top_markets/"
+index = "index/coingecko_top_markets/"
+samples = "samples/coingecko_top_markets/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/coingecko_top_markets/samples.jsonl"

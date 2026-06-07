@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "osm_overpass_cafes"
+name = "OSM Overpass Cafes"
+description = "Pinned OSM Overpass cafe node sample with native ids and coordinates."
+
+[local_paths]
+downloads = "downloads/osm_overpass_cafes/"
+filtered = "filtered/osm_overpass_cafes/"
+index = "index/osm_overpass_cafes/"
+samples = "samples/osm_overpass_cafes/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/osm_overpass_cafes/samples.jsonl"

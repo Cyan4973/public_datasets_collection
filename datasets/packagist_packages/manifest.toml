@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "packagist_packages"
+name = "Packagist Search Results"
+description = "Pinned Packagist package search results with download and favor metrics."
+
+[local_paths]
+downloads = "downloads/packagist_packages/"
+filtered = "filtered/packagist_packages/"
+index = "index/packagist_packages/"
+samples = "samples/packagist_packages/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/packagist_packages/samples.jsonl"

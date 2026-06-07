@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "opensky_states"
+name = "OpenSky State Vectors"
+description = "Pinned OpenSky states snapshot with aircraft position and motion values."
+
+[local_paths]
+downloads = "downloads/opensky_states/"
+filtered = "filtered/opensky_states/"
+index = "index/opensky_states/"
+samples = "samples/opensky_states/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/opensky_states/samples.jsonl"

@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "coinpaprika_tickers"
+name = "CoinPaprika Tickers"
+description = "Pinned CoinPaprika tickers snapshot with USD quote metrics."
+
+[local_paths]
+downloads = "downloads/coinpaprika_tickers/"
+filtered = "filtered/coinpaprika_tickers/"
+index = "index/coinpaprika_tickers/"
+samples = "samples/coinpaprika_tickers/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/coinpaprika_tickers/samples.jsonl"

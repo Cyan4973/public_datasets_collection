@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "rubygems_search"
+name = "RubyGems Search Results"
+description = "Pinned RubyGems search results with download counters."
+
+[local_paths]
+downloads = "downloads/rubygems_search/"
+filtered = "filtered/rubygems_search/"
+index = "index/rubygems_search/"
+samples = "samples/rubygems_search/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/rubygems_search/samples.jsonl"

@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "cratesio_crates"
+name = "crates.io Crates Search"
+description = "Pinned crates.io search response with download and version metrics."
+
+[local_paths]
+downloads = "downloads/cratesio_crates/"
+filtered = "filtered/cratesio_crates/"
+index = "index/cratesio_crates/"
+samples = "samples/cratesio_crates/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/cratesio_crates/samples.jsonl"

@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "anilist_media"
+name = "AniList Media Popularity Snapshot"
+description = "Pinned AniList GraphQL response for popular anime numeric metadata."
+
+[local_paths]
+downloads = "downloads/anilist_media/"
+filtered = "filtered/anilist_media/"
+index = "index/anilist_media/"
+samples = "samples/anilist_media/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/anilist_media/samples.jsonl"

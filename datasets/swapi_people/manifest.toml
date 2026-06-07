@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "swapi_people"
+name = "SWAPI People Snapshot"
+description = "Pinned SWAPI people listing with numeric character metadata and relation counts."
+
+[local_paths]
+downloads = "downloads/swapi_people/"
+filtered = "filtered/swapi_people/"
+index = "index/swapi_people/"
+samples = "samples/swapi_people/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/swapi_people/samples.jsonl"

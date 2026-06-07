@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "itunes_search"
+name = "iTunes Search Song Metrics"
+description = "Pinned iTunes Search response for a song search with pricing and duration fields."
+
+[local_paths]
+downloads = "downloads/itunes_search/"
+filtered = "filtered/itunes_search/"
+index = "index/itunes_search/"
+samples = "samples/itunes_search/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/itunes_search/samples.jsonl"

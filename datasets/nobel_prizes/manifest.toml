@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "nobel_prizes"
+name = "Nobel Prize Award Metrics"
+description = "Pinned Nobel Prize API response for 2024 award-level numeric fields."
+
+[local_paths]
+downloads = "downloads/nobel_prizes/"
+filtered = "filtered/nobel_prizes/"
+index = "index/nobel_prizes/"
+samples = "samples/nobel_prizes/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nobel_prizes/samples.jsonl"

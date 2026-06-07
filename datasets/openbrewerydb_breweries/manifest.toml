@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "openbrewerydb_breweries"
+name = "Open Brewery DB Breweries"
+description = "Pinned Open Brewery DB brewery listing."
+
+[local_paths]
+downloads = "downloads/openbrewerydb_breweries/"
+filtered = "filtered/openbrewerydb_breweries/"
+index = "index/openbrewerydb_breweries/"
+samples = "samples/openbrewerydb_breweries/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/openbrewerydb_breweries/samples.jsonl"

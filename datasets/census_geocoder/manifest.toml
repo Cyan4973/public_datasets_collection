@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "census_geocoder"
+name = "Census Geocoder"
+description = "Pinned Census geocoder response for a single address."
+
+[local_paths]
+downloads = "downloads/census_geocoder/"
+filtered = "filtered/census_geocoder/"
+index = "index/census_geocoder/"
+samples = "samples/census_geocoder/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/census_geocoder/samples.jsonl"

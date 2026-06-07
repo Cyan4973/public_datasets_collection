@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "medrxiv_details"
+name = "Medrxiv Details"
+description = "Pinned medrxiv preprint detail feed for January 2024."
+
+[local_paths]
+downloads = "downloads/medrxiv_details/"
+filtered = "filtered/medrxiv_details/"
+index = "index/medrxiv_details/"
+samples = "samples/medrxiv_details/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/medrxiv_details/samples.jsonl"

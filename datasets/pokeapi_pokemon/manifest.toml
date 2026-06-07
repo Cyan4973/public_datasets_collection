@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "pokeapi_pokemon"
+name = "PokeAPI Pokemon"
+description = "Pinned PokeAPI Pokemon listing using numeric ids extracted from resource URLs."
+
+[local_paths]
+downloads = "downloads/pokeapi_pokemon/"
+filtered = "filtered/pokeapi_pokemon/"
+index = "index/pokeapi_pokemon/"
+samples = "samples/pokeapi_pokemon/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/pokeapi_pokemon/samples.jsonl"

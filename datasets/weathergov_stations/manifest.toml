@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "weathergov_stations"
+name = "Weather.gov Stations"
+description = "Pinned weather.gov station listing."
+
+[local_paths]
+downloads = "downloads/weathergov_stations/"
+filtered = "filtered/weathergov_stations/"
+index = "index/weathergov_stations/"
+samples = "samples/weathergov_stations/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/weathergov_stations/samples.jsonl"

@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "bls_cpi_series"
+name = "BLS CPI Series"
+description = "Pinned BLS CPI-U series for all items."
+
+[local_paths]
+downloads = "downloads/bls_cpi_series/"
+filtered = "filtered/bls_cpi_series/"
+index = "index/bls_cpi_series/"
+samples = "samples/bls_cpi_series/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/bls_cpi_series/samples.jsonl"

@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "huggingface_datasets"
+name = "Hugging Face Datasets"
+description = "Pinned Hugging Face datasets API listing."
+
+[local_paths]
+downloads = "downloads/huggingface_datasets/"
+filtered = "filtered/huggingface_datasets/"
+index = "index/huggingface_datasets/"
+samples = "samples/huggingface_datasets/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/huggingface_datasets/samples.jsonl"

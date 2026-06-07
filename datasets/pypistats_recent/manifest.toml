@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "pypistats_recent"
+name = "PyPIStats Recent Downloads"
+description = "Pinned PyPIStats recent download counters for requests."
+
+[local_paths]
+downloads = "downloads/pypistats_recent/"
+filtered = "filtered/pypistats_recent/"
+index = "index/pypistats_recent/"
+samples = "samples/pypistats_recent/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/pypistats_recent/samples.jsonl"

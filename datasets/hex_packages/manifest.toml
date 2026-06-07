@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "hex_packages"
+name = "Hex Package Search Results"
+description = "Pinned Hex package search results with download counters."
+
+[local_paths]
+downloads = "downloads/hex_packages/"
+filtered = "filtered/hex_packages/"
+index = "index/hex_packages/"
+samples = "samples/hex_packages/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/hex_packages/samples.jsonl"

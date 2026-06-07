@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "binance_ticker_24hr"
+name = "Binance 24h Ticker Snapshot"
+description = "Pinned Binance 24-hour ticker snapshot across trading pairs."
+
+[local_paths]
+downloads = "downloads/binance_ticker_24hr/"
+filtered = "filtered/binance_ticker_24hr/"
+index = "index/binance_ticker_24hr/"
+samples = "samples/binance_ticker_24hr/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/binance_ticker_24hr/samples.jsonl"

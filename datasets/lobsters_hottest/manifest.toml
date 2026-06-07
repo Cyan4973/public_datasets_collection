@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "lobsters_hottest"
+name = "Lobsters Hottest Stories"
+description = "Pinned Lobsters hottest stories snapshot."
+
+[local_paths]
+downloads = "downloads/lobsters_hottest/"
+filtered = "filtered/lobsters_hottest/"
+index = "index/lobsters_hottest/"
+samples = "samples/lobsters_hottest/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/lobsters_hottest/samples.jsonl"

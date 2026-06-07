@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "nagerdate_holidays"
+name = "Nager.Date US Holidays"
+description = "Pinned Nager.Date public holidays for the United States in 2024."
+
+[local_paths]
+downloads = "downloads/nagerdate_holidays/"
+filtered = "filtered/nagerdate_holidays/"
+index = "index/nagerdate_holidays/"
+samples = "samples/nagerdate_holidays/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nagerdate_holidays/samples.jsonl"

@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "pypi_requests_json"
+name = "PyPI Requests Metadata"
+description = "Pinned PyPI JSON metadata for requests using release files as rows."
+
+[local_paths]
+downloads = "downloads/pypi_requests_json/"
+filtered = "filtered/pypi_requests_json/"
+index = "index/pypi_requests_json/"
+samples = "samples/pypi_requests_json/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/pypi_requests_json/samples.jsonl"

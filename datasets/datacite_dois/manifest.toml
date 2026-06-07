@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "datacite_dois"
+name = "DataCite DOIs"
+description = "Pinned DataCite DOI search response for machine learning."
+
+[local_paths]
+downloads = "downloads/datacite_dois/"
+filtered = "filtered/datacite_dois/"
+index = "index/datacite_dois/"
+samples = "samples/datacite_dois/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/datacite_dois/samples.jsonl"

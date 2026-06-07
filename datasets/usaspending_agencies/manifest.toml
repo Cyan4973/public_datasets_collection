@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "usaspending_agencies"
+name = "USAspending Agencies"
+description = "Pinned USAspending agency summary response."
+
+[local_paths]
+downloads = "downloads/usaspending_agencies/"
+filtered = "filtered/usaspending_agencies/"
+index = "index/usaspending_agencies/"
+samples = "samples/usaspending_agencies/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/usaspending_agencies/samples.jsonl"

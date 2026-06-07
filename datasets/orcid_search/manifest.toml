@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "orcid_search"
+name = "ORCID Search"
+description = "Pinned ORCID search result set represented as ORCID identifier chunks."
+
+[local_paths]
+downloads = "downloads/orcid_search/"
+filtered = "filtered/orcid_search/"
+index = "index/orcid_search/"
+samples = "samples/orcid_search/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/orcid_search/samples.jsonl"

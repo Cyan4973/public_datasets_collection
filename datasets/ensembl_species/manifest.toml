@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "ensembl_species"
+name = "Ensembl Species"
+description = "Pinned Ensembl species listing with taxonomic and catalog counts."
+
+[local_paths]
+downloads = "downloads/ensembl_species/"
+filtered = "filtered/ensembl_species/"
+index = "index/ensembl_species/"
+samples = "samples/ensembl_species/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/ensembl_species/samples.jsonl"

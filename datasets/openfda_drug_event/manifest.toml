@@ -1,0 +1,17 @@
+manifest_version = 1
+dataset_id = "openfda_drug_event"
+name = "openFDA Drug Event"
+description = "Pinned openFDA drug event response with native seriousness and case-count fields."
+
+[local_paths]
+downloads = "downloads/openfda_drug_event/"
+filtered = "filtered/openfda_drug_event/"
+index = "index/openfda_drug_event/"
+samples = "samples/openfda_drug_event/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/openfda_drug_event/samples.jsonl"
+

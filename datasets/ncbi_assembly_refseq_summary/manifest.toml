@@ -1,0 +1,17 @@
+manifest_version = 1
+dataset_id = "ncbi_assembly_refseq_summary"
+name = "NCBI Assembly RefSeq Summary"
+description = "Pinned RefSeq assembly summary table with native genome-size and gene-count fields."
+
+[local_paths]
+downloads = "downloads/ncbi_assembly_refseq_summary/"
+filtered = "filtered/ncbi_assembly_refseq_summary/"
+index = "index/ncbi_assembly_refseq_summary/"
+samples = "samples/ncbi_assembly_refseq_summary/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/ncbi_assembly_refseq_summary/samples.jsonl"
+

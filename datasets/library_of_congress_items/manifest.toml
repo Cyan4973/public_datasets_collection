@@ -1,0 +1,17 @@
+manifest_version = 1
+dataset_id = "library_of_congress_items"
+name = "Library of Congress Items"
+description = "Pinned Library of Congress item search with native record and resource-count fields."
+
+[local_paths]
+downloads = "downloads/library_of_congress_items/"
+filtered = "filtered/library_of_congress_items/"
+index = "index/library_of_congress_items/"
+samples = "samples/library_of_congress_items/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/library_of_congress_items/samples.jsonl"
+

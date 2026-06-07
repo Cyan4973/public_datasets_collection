@@ -1,0 +1,17 @@
+manifest_version = 1
+dataset_id = "europe_pmc_search"
+name = "Europe PMC Search"
+description = "Pinned Europe PMC search response with publication year and citation fields."
+
+[local_paths]
+downloads = "downloads/europe_pmc_search/"
+filtered = "filtered/europe_pmc_search/"
+index = "index/europe_pmc_search/"
+samples = "samples/europe_pmc_search/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/europe_pmc_search/samples.jsonl"
+

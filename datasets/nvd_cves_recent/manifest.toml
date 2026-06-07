@@ -1,0 +1,17 @@
+manifest_version = 1
+dataset_id = "nvd_cves_recent"
+name = "NVD CVEs Recent"
+description = "Pinned NVD recent-CVE response with native timestamp and metadata-count fields."
+
+[local_paths]
+downloads = "downloads/nvd_cves_recent/"
+filtered = "filtered/nvd_cves_recent/"
+index = "index/nvd_cves_recent/"
+samples = "samples/nvd_cves_recent/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nvd_cves_recent/samples.jsonl"
+

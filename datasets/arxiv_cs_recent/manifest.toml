@@ -1,0 +1,17 @@
+manifest_version = 1
+dataset_id = "arxiv_cs_recent"
+name = "arXiv CS Recent"
+description = "Pinned arXiv Atom feed with native timestamps and entry metadata counts."
+
+[local_paths]
+downloads = "downloads/arxiv_cs_recent/"
+filtered = "filtered/arxiv_cs_recent/"
+index = "index/arxiv_cs_recent/"
+samples = "samples/arxiv_cs_recent/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/arxiv_cs_recent/samples.jsonl"
+

@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "crossref_funders"
+name = "Crossref Funders Snapshot"
+description = "Pinned Crossref funders listing with identifier and token counts."
+
+[local_paths]
+downloads = "downloads/crossref_funders/"
+filtered = "filtered/crossref_funders/"
+index = "index/crossref_funders/"
+samples = "samples/crossref_funders/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/crossref_funders/samples.jsonl"

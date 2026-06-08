@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "pokemontcg_cards"
+name = "Pokemon TCG Cards"
+description = "Pinned Pokemon TCG cards response with card stats and market metrics."
+
+[local_paths]
+downloads = "downloads/pokemontcg_cards/"
+filtered = "filtered/pokemontcg_cards/"
+index = "index/pokemontcg_cards/"
+samples = "samples/pokemontcg_cards/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/pokemontcg_cards/samples.jsonl"

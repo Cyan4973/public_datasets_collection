@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "sec_submissions_recent"
+name = "SEC Recent Submissions"
+description = "Pinned SEC submissions metadata for Apple and Microsoft recent filing streams."
+
+[local_paths]
+downloads = "downloads/sec_submissions_recent/"
+filtered = "filtered/sec_submissions_recent/"
+index = "index/sec_submissions_recent/"
+samples = "samples/sec_submissions_recent/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/sec_submissions_recent/samples.jsonl"

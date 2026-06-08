@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "cisa_kev_catalog"
+name = "CISA Known Exploited Vulnerabilities"
+description = "Pinned CISA KEV catalog with vulnerability metadata counts and date fields."
+
+[local_paths]
+downloads = "downloads/cisa_kev_catalog/"
+filtered = "filtered/cisa_kev_catalog/"
+index = "index/cisa_kev_catalog/"
+samples = "samples/cisa_kev_catalog/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/cisa_kev_catalog/samples.jsonl"

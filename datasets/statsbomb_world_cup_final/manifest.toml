@@ -1,0 +1,105 @@
+manifest_version = 1
+dataset_id = "statsbomb_world_cup_final"
+name = "StatsBomb World Cup Final"
+description = "Numeric event and match fields from the public StatsBomb World Cup final open-data files."
+
+[license]
+name = "LicenseRef-StatsBomb-Open-Data"
+spdx = "LicenseRef-StatsBomb-Open-Data"
+url = "https://github.com/statsbomb/open-data"
+
+[[resources]]
+id = "matches_json"
+url = "https://raw.githubusercontent.com/statsbomb/open-data/master/data/matches/43/3.json"
+type = "api_response"
+local_path = "downloads/statsbomb_world_cup_final/statsbomb_matches_wc_final.json"
+
+[[resources]]
+id = "events_json"
+url = "https://raw.githubusercontent.com/statsbomb/open-data/master/data/events/7585.json"
+type = "api_response"
+local_path = "downloads/statsbomb_world_cup_final/statsbomb_events_wc_final.json"
+
+[local_paths]
+downloads = "downloads/statsbomb_world_cup_final/"
+filtered = "filtered/statsbomb_world_cup_final/"
+index = "index/statsbomb_world_cup_final/"
+samples = "samples/statsbomb_world_cup_final/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/statsbomb_world_cup_final/samples.jsonl"
+
+[[series]]
+id = "statsbomb_event_index"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing the required numeric field are filtered for that series."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "statsbomb_event_minute"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing the required numeric field are filtered for that series."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "statsbomb_event_second"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing the required numeric field are filtered for that series."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "statsbomb_event_duration"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing the required numeric field are filtered for that series."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "statsbomb_event_location_x"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing location coordinates are filtered for that series."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "statsbomb_event_location_y"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing location coordinates are filtered for that series."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "statsbomb_match_home_score"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing the required numeric field are filtered for that series."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "statsbomb_match_away_score"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing the required numeric field are filtered for that series."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "statsbomb_match_week"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing the required numeric field are filtered for that series."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"

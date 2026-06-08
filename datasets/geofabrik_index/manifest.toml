@@ -1,0 +1,59 @@
+manifest_version = 1
+dataset_id = "geofabrik_index"
+name = "Geofabrik Index"
+description = "Regional bounding boxes extracted from Geofabrik's public index GeoJSON."
+
+[license]
+name = "Open Database License 1.0"
+spdx = "ODbL-1.0"
+url = "https://opendatacommons.org/licenses/odbl/"
+
+[[resources]]
+id = "geofabrik_index_json"
+url = "https://download.geofabrik.de/index-v1.json"
+type = "api_response"
+local_path = "downloads/geofabrik_index/geofabrik_index.json"
+
+[local_paths]
+downloads = "downloads/geofabrik_index/"
+filtered = "filtered/geofabrik_index/"
+index = "index/geofabrik_index/"
+samples = "samples/geofabrik_index/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/geofabrik_index/samples.jsonl"
+
+[[series]]
+id = "geofabrik_bbox_min_lon"
+representation_class = "native_numeric"
+missing_value_policy = "Features whose geometry cannot be reduced to a numeric bounding box are filtered."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "geofabrik_bbox_min_lat"
+representation_class = "native_numeric"
+missing_value_policy = "Features whose geometry cannot be reduced to a numeric bounding box are filtered."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "geofabrik_bbox_max_lon"
+representation_class = "native_numeric"
+missing_value_policy = "Features whose geometry cannot be reduced to a numeric bounding box are filtered."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "geofabrik_bbox_max_lat"
+representation_class = "native_numeric"
+missing_value_policy = "Features whose geometry cannot be reduced to a numeric bounding box are filtered."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"

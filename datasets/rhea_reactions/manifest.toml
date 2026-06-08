@@ -1,0 +1,59 @@
+manifest_version = 1
+dataset_id = "rhea_reactions"
+name = "Rhea Reactions"
+description = "Numeric identifiers and booleans extracted from the public Rhea reactions catalog."
+
+[license]
+name = "CC BY 4.0"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+
+[[resources]]
+id = "rhea_json"
+url = "https://www.rhea-db.org/rhea?query=*&columns=rhea-id,equation,chebi-id&format=json&page=1&pageSize=100"
+type = "api_response"
+local_path = "downloads/rhea_reactions/rhea_reactions.json"
+
+[local_paths]
+downloads = "downloads/rhea_reactions/"
+filtered = "filtered/rhea_reactions/"
+index = "index/rhea_reactions/"
+samples = "samples/rhea_reactions/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/rhea_reactions/samples.jsonl"
+
+[[series]]
+id = "rhea_id"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing numeric ids are filtered."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "rhea_balanced"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing boolean flags are filtered."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "rhea_transport"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing boolean flags are filtered."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "rhea_chebi_ref_count"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing HTML equations are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"

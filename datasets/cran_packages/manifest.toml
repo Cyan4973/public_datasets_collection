@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "cran_packages"
+name = "CRAN Package Database"
+description = "Pinned CRAN package database snapshot with package-level counts from latest metadata."
+
+[local_paths]
+downloads = "downloads/cran_packages/"
+filtered = "filtered/cran_packages/"
+index = "index/cran_packages/"
+samples = "samples/cran_packages/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/cran_packages/samples.jsonl"

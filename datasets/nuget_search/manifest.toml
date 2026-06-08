@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "nuget_search"
+name = "NuGet Package Search"
+description = "Pinned NuGet package-search response with download and package metadata counts."
+
+[local_paths]
+downloads = "downloads/nuget_search/"
+filtered = "filtered/nuget_search/"
+index = "index/nuget_search/"
+samples = "samples/nuget_search/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nuget_search/samples.jsonl"

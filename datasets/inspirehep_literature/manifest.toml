@@ -1,0 +1,67 @@
+manifest_version = 1
+dataset_id = "inspirehep_literature"
+name = "INSPIRE HEP Literature"
+description = "Numeric bibliographic fields from a public INSPIRE-HEP literature search."
+
+[license]
+name = "CC BY 4.0"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+
+[[resources]]
+id = "inspirehep_json"
+url = "https://inspirehep.net/api/literature?q=electron&size=1000"
+type = "api_response"
+local_path = "downloads/inspirehep_literature/inspirehep_literature.json"
+
+[local_paths]
+downloads = "downloads/inspirehep_literature/"
+filtered = "filtered/inspirehep_literature/"
+index = "index/inspirehep_literature/"
+samples = "samples/inspirehep_literature/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/inspirehep_literature/samples.jsonl"
+
+[[series]]
+id = "inspirehep_citation_count"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "inspirehep_author_count"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "inspirehep_page_count"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "inspirehep_created_at"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "inspirehep_updated_at"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"

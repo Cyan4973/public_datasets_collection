@@ -1,0 +1,75 @@
+manifest_version = 1
+dataset_id = "dataone_solr"
+name = "DataONE Solr"
+description = "Numeric repository metadata fields extracted from a public DataONE Solr query."
+
+[license]
+name = "LicenseRef-DataONE"
+spdx = "LicenseRef-DataONE"
+url = "https://www.dataone.org/"
+
+[[resources]]
+id = "dataone_json"
+url = "https://cn.dataone.org/cn/v2/query/solr/?q=*:*&rows=1000&wt=json"
+type = "api_response"
+local_path = "downloads/dataone_solr/dataone_solr.json"
+
+[local_paths]
+downloads = "downloads/dataone_solr/"
+filtered = "filtered/dataone_solr/"
+index = "index/dataone_solr/"
+samples = "samples/dataone_solr/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/dataone_solr/samples.jsonl"
+
+[[series]]
+id = "dataone_size"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered for that series."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "dataone_number_replicas"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered for that series."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "dataone_date_uploaded"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered for that series."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "dataone_update_date"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered for that series."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "dataone_date_modified"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered for that series."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "dataone_is_public"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered for that series."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"

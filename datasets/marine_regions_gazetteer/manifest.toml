@@ -1,0 +1,91 @@
+manifest_version = 1
+dataset_id = "marine_regions_gazetteer"
+name = "Marine Regions Gazetteer"
+description = "Numeric marine-region identifiers and bounding coordinates from the public Marine Regions gazetteer."
+
+[license]
+name = "CC BY 4.0"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+
+[[resources]]
+id = "marine_regions_json"
+url = "https://www.marineregions.org/rest/getGazetteerRecordsByName.json/Atlantic%20Ocean/like/false/true/"
+type = "api_response"
+local_path = "downloads/marine_regions_gazetteer/marine_regions_gazetteer.json"
+
+[local_paths]
+downloads = "downloads/marine_regions_gazetteer/"
+filtered = "filtered/marine_regions_gazetteer/"
+index = "index/marine_regions_gazetteer/"
+samples = "samples/marine_regions_gazetteer/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/marine_regions_gazetteer/samples.jsonl"
+
+[[series]]
+id = "marine_regions_mrgid"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered for that series."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "marine_regions_latitude"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered for that series."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "marine_regions_longitude"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered for that series."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "marine_regions_min_latitude"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered for that series."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "marine_regions_min_longitude"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered for that series."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "marine_regions_max_latitude"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered for that series."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "marine_regions_max_longitude"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered for that series."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "marine_regions_accepted"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered for that series."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"

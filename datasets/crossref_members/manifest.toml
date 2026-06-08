@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "crossref_members"
+name = "Crossref Members"
+description = "Pinned Crossref members response with DOI and metadata coverage counters."
+
+[local_paths]
+downloads = "downloads/crossref_members/"
+filtered = "filtered/crossref_members/"
+index = "index/crossref_members/"
+samples = "samples/crossref_members/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/crossref_members/samples.jsonl"

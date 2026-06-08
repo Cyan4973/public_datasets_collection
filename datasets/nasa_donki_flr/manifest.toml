@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "nasa_donki_flr"
+name = "NASA DONKI Solar Flares"
+description = "Pinned DONKI solar flare event feed with event metadata and timing fields."
+
+[local_paths]
+downloads = "downloads/nasa_donki_flr/"
+filtered = "filtered/nasa_donki_flr/"
+index = "index/nasa_donki_flr/"
+samples = "samples/nasa_donki_flr/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_donki_flr/samples.jsonl"

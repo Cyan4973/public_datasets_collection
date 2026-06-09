@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "worldbank_population_total"
+name = "World Bank Population Total"
+description = "Pinned World Bank population response with row-level value and date fields."
+
+[local_paths]
+downloads = "downloads/worldbank_population_total/"
+filtered = "filtered/worldbank_population_total/"
+index = "index/worldbank_population_total/"
+samples = "samples/worldbank_population_total/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/worldbank_population_total/samples.jsonl"

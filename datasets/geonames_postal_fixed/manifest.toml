@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "geonames_postal_fixed"
+name = "GeoNames US Postal Codes"
+description = "Pinned GeoNames US postal code archive with native postal, coordinate, and accuracy fields."
+
+[local_paths]
+downloads = "downloads/geonames_postal_fixed/"
+filtered = "filtered/geonames_postal_fixed/"
+index = "index/geonames_postal_fixed/"
+samples = "samples/geonames_postal_fixed/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/geonames_postal_fixed/samples.jsonl"

@@ -1,0 +1,69 @@
+manifest_version = 1
+dataset_id = "noaa_tides_water_level"
+status = "staged"
+kind = "native_numeric"
+
+[origin]
+name = "NOAA Tides and Currents"
+url = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter"
+license = "Public API terms"
+
+[build]
+sample_index_path = ".data/index/noaa_tides_water_level/samples.jsonl"
+missing_value_policy = "Rows with unparseable timestamp or numeric water-level fields are dropped."
+
+[[series]]
+id = "noaa_tides_level_f64"
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw"
+
+[[series]]
+id = "noaa_tides_sigma_f64"
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw"
+
+[[series]]
+id = "noaa_tides_year_u16"
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw"
+
+[[series]]
+id = "noaa_tides_month_u8"
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw"
+
+[[series]]
+id = "noaa_tides_day_u8"
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw"
+
+[[series]]
+id = "noaa_tides_hour_u8"
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw"
+
+[[series]]
+id = "noaa_tides_minute_u8"
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw"
+
+[[series]]
+id = "noaa_tides_q_length_u8"
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw"

@@ -1,0 +1,43 @@
+manifest_version = 1
+dataset_id = "dataone_solr_1000"
+name = "DataONE Solr 1000"
+description = "Pinned DataONE Solr sample with object sizes and upload timestamps."
+
+[license]
+name = "DataONE"
+spdx = "LicenseRef-DataONE"
+url = "https://www.dataone.org/"
+
+[[resources]]
+id = "dataone_solr_json"
+url = "https://cn.dataone.org/cn/v2/query/solr/?q=*:*&rows=1000&wt=json&fl=id,size,dateUploaded,authoritativeMN"
+type = "api_response"
+local_path = "downloads/dataone_solr_1000/dataone_solr_1000.json"
+
+[local_paths]
+downloads = "downloads/dataone_solr_1000/"
+filtered = "filtered/dataone_solr_1000/"
+index = "index/dataone_solr_1000/"
+samples = "samples/dataone_solr_1000/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/dataone_solr_1000/samples.jsonl"
+
+[[series]]
+id = "dataone_size_u64"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "dataone_uploaded_year_u16"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing date fields are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"

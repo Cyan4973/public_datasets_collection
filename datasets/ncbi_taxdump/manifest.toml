@@ -1,0 +1,67 @@
+manifest_version = 1
+dataset_id = "ncbi_taxdump"
+name = "NCBI Taxdump"
+description = "NCBI taxonomy dump using nodes and names counts from the public taxdump archive."
+
+[license]
+name = "U.S. Government Work"
+spdx = "LicenseRef-USGov"
+url = "https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/"
+
+[[resources]]
+id = "ncbi_taxdump_tar_gz"
+url = "https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz"
+type = "archive"
+local_path = "downloads/ncbi_taxdump/ncbi_taxdump.tar.gz"
+
+[local_paths]
+downloads = "downloads/ncbi_taxdump/"
+filtered = "filtered/ncbi_taxdump/"
+index = "index/ncbi_taxdump/"
+samples = "samples/ncbi_taxdump/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/ncbi_taxdump/samples.jsonl"
+
+[[series]]
+id = "ncbi_nodes_tax_id_u32"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing node fields are filtered."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "ncbi_nodes_parent_tax_id_u32"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing node fields are filtered."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "ncbi_nodes_rank_length_u16"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing node fields are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "ncbi_names_tax_id_u32"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing name fields are filtered."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "ncbi_names_name_length_u16"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing name fields are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"

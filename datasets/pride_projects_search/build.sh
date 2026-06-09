@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+set -euo pipefail
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+DATA_DIR="${DATA_DIR:-.data}"
+DATASET_ID="pride_projects_search"
+LOG_DIR="$REPO_ROOT/$DATA_DIR/logs/$DATASET_ID"
+DOWNLOAD_DIR="$REPO_ROOT/$DATA_DIR/downloads/$DATASET_ID"
+FILTER_DIR="$REPO_ROOT/$DATA_DIR/filtered/$DATASET_ID"
+INDEX_DIR="$REPO_ROOT/$DATA_DIR/index/$DATASET_ID"
+SAMPLES_DIR="$REPO_ROOT/$DATA_DIR/samples/$DATASET_ID"
+mkdir -p "$LOG_DIR" "$DOWNLOAD_DIR" "$FILTER_DIR" "$INDEX_DIR" "$SAMPLES_DIR"
+RUN_TS="$(date +%Y%m%d_%H%M%S)"
+LOG_FILE="$LOG_DIR/build.$RUN_TS.log"
+LATEST_LOG="$LOG_DIR/build.latest.log"
+exec > >(tee "$LOG_FILE" "$LATEST_LOG") 2>&1
+export REPO_ROOT DATA_DIR DOWNLOAD_DIR FILTER_DIR INDEX_DIR SAMPLES_DIR
+python3 - <<'PY'
+from __future__ import annotations
+import calendar, json, os, shutil, struct
+from datetime import datetime
+from pathlib import Path
+repo_root=Path(os.environ['REPO_ROOT']); data_root=repo_root/os.environ['DATA_DIR']
+download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTER_DIR']); index_dir=Path(os.environ['INDEX_DIR']); samples_dir=Path(os.environ['SAMPLES_DIR'])
+rows_in=json.load(open(download_dir/'pride_projects.json', encoding='utf-8'))
+meta={
+ 'pride_project_download_count_u32':('uint',32,'I'),
+ 'pride_project_avg_downloads_per_file_f32':('float',32,'f'),
+ 'pride_project_percentile_f32':('float',32,'f'),
+ 'pride_project_title_length_u16':('uint',16,'H'),
+ 'pride_project_description_length_u32':('uint',32,'I'),
+ 'pride_project_submission_date_u32':('uint',32,'I'),
+ 'pride_project_publication_date_u32':('uint',32,'I'),
+ 'pride_project_submitter_count_u16':('uint',16,'H'),
+ 'pride_project_labpi_count_u16':('uint',16,'H'),
+ 'pride_project_organism_count_u16':('uint',16,'H'),
+}
+vals={sid:[] for sid in meta}
+for sid in vals:
+ d=samples_dir/sid
+ if d.exists(): shutil.rmtree(d)
+ d.mkdir(parents=True, exist_ok=True)
+rows_total=len(rows_in); rows_skipped=0
+def day_ts(s:str)->int:
+ return calendar.timegm(datetime.strptime(s[:10], '%Y-%m-%d').utctimetuple())
+for row in rows_in:
+ try:
+  vals['pride_project_download_count_u32'].append(int(row.get('downloadCount') or 0))
+  vals['pride_project_avg_downloads_per_file_f32'].append(float(row.get('avgDownloadsPerFile') or 0))
+  vals['pride_project_percentile_f32'].append(float(row.get('percentile') or 0))
+  vals['pride_project_title_length_u16'].append(len(row.get('title') or ''))
+  vals['pride_project_description_length_u32'].append(len(row.get('projectDescription') or ''))
+  vals['pride_project_submission_date_u32'].append(day_ts(row.get('submissionDate') or '1970-01-01'))
+  vals['pride_project_publication_date_u32'].append(day_ts(row.get('publicationDate') or '1970-01-01'))
+  vals['pride_project_submitter_count_u16'].append(len(row.get('submitters') or []))
+  vals['pride_project_labpi_count_u16'].append(len(row.get('labPIs') or []))
+  vals['pride_project_organism_count_u16'].append(len(row.get('organisms') or []))
+ except Exception:
+  rows_skipped += 1
+rows=[]
+for sid,(kind,bits,code) in meta.items():
+ values=vals[sid]
+ out=samples_dir/sid/f"{sid}_{kind}{bits}_n{len(values):06d}.bin"
+ with out.open('wb') as fh: fh.write(struct.pack('<'+code*len(values), *values))
+ rows.append({'dataset_id':'pride_projects_search','series_id':sid,'sample_path':out.relative_to(data_root).as_posix(),'numeric_kind':kind,'bit_width':bits,'endianness':'little','element_size_bytes':bits//8,'sample_size_bytes':out.stat().st_size,'value_count':len(values)})
+(filter_dir/'ingest_stats.json').write_text(json.dumps({'dataset_id':'pride_projects_search','rows_total':rows_total,'rows_skipped':rows_skipped}, indent=2, sort_keys=True)+'\n', encoding='utf-8')
+with (index_dir/'samples.jsonl').open('w', encoding='utf-8') as fh:
+ for row in rows: fh.write(json.dumps(row, sort_keys=True)+'\n')
+PY
+echo "[$(date -Is)] build done dataset=$DATASET_ID"

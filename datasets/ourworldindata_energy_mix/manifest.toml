@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "ourworldindata_energy_mix"
+name = "Our World in Data Energy Mix"
+description = "Pinned OWID energy mix CSV with row-level annual mix shares."
+
+[local_paths]
+downloads = "downloads/ourworldindata_energy_mix/"
+filtered = "filtered/ourworldindata_energy_mix/"
+index = "index/ourworldindata_energy_mix/"
+samples = "samples/ourworldindata_energy_mix/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/ourworldindata_energy_mix/samples.jsonl"

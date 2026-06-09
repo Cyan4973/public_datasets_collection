@@ -1,0 +1,16 @@
+manifest_version = 1
+dataset_id = "arxiv_ai_recent"
+name = "arXiv AI Recent"
+description = "Pinned arXiv Atom feed for cs.AI with timestamps and entry metadata counts."
+
+[local_paths]
+downloads = "downloads/arxiv_ai_recent/"
+filtered = "filtered/arxiv_ai_recent/"
+index = "index/arxiv_ai_recent/"
+samples = "samples/arxiv_ai_recent/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/arxiv_ai_recent/samples.jsonl"

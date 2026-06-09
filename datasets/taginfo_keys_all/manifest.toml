@@ -1,0 +1,91 @@
+manifest_version = 1
+dataset_id = "taginfo_keys_all"
+name = "Taginfo Keys All"
+description = "Pinned OpenStreetMap Taginfo key statistics."
+
+[license]
+name = "OpenStreetMap"
+spdx = "ODbL-1.0"
+url = "https://taginfo.openstreetmap.org/"
+
+[[resources]]
+id = "taginfo_keys_json"
+url = "https://taginfo.openstreetmap.org/api/4/keys/all?page=1&rp=500"
+type = "api_response"
+local_path = "downloads/taginfo_keys_all/taginfo_keys_all.json"
+
+[local_paths]
+downloads = "downloads/taginfo_keys_all/"
+filtered = "filtered/taginfo_keys_all/"
+index = "index/taginfo_keys_all/"
+samples = "samples/taginfo_keys_all/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/taginfo_keys_all/samples.jsonl"
+
+[[series]]
+id = "taginfo_count_all"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "taginfo_count_nodes"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "taginfo_count_ways"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "taginfo_count_relations"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "taginfo_values_all"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "taginfo_users_all"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "taginfo_in_wiki"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "taginfo_projects"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"

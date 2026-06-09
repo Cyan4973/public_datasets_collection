@@ -1,0 +1,67 @@
+manifest_version = 1
+dataset_id = "gbif_occurrence_large"
+name = "GBIF Occurrence Large"
+description = "Pinned GBIF occurrence sample with coordinate and calendar fields."
+
+[license]
+name = "GBIF"
+spdx = "CC-BY-4.0"
+url = "https://www.gbif.org/"
+
+[[resources]]
+id = "gbif_occurrence_json"
+url = "https://api.gbif.org/v1/occurrence/search?limit=500&hasCoordinate=true"
+type = "api_response"
+local_path = "downloads/gbif_occurrence_large/gbif_occurrence_large.json"
+
+[local_paths]
+downloads = "downloads/gbif_occurrence_large/"
+filtered = "filtered/gbif_occurrence_large/"
+index = "index/gbif_occurrence_large/"
+samples = "samples/gbif_occurrence_large/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/gbif_occurrence_large/samples.jsonl"
+
+[[series]]
+id = "gbif_latitude"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing required numeric fields are filtered."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "gbif_longitude"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing required numeric fields are filtered."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "gbif_year"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing required numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "gbif_month"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing required numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "gbif_day"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing required numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"

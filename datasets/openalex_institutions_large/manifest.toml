@@ -1,0 +1,91 @@
+manifest_version = 1
+dataset_id = "openalex_institutions_large"
+name = "OpenAlex Institutions Large"
+description = "Pinned OpenAlex institutions sample with institution metrics."
+
+[license]
+name = "LicenseRef-OpenAlex"
+spdx = "LicenseRef-OpenAlex"
+url = "https://docs.openalex.org/"
+
+[[resources]]
+id = "openalex_institutions_json"
+url = "https://api.openalex.org/institutions?per-page=200&sort=works_count:desc"
+type = "api_response"
+local_path = "downloads/openalex_institutions_large/openalex_institutions_large.json"
+
+[local_paths]
+downloads = "downloads/openalex_institutions_large/"
+filtered = "filtered/openalex_institutions_large/"
+index = "index/openalex_institutions_large/"
+samples = "samples/openalex_institutions_large/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/openalex_institutions_large/samples.jsonl"
+
+[[series]]
+id = "openalex_inst_works_count"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "openalex_inst_cited_by_count"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "openalex_inst_h_index"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "openalex_inst_i10_index"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "openalex_inst_repo_count"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "openalex_inst_topic_count"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "openalex_inst_role_count"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "openalex_inst_assoc_count"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"

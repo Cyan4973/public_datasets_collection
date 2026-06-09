@@ -1,0 +1,91 @@
+manifest_version = 1
+dataset_id = "usgs_quakes_month"
+name = "USGS Quakes Month"
+description = "Pinned USGS monthly earthquake GeoJSON feed."
+
+[license]
+name = "U.S. Government Work"
+spdx = "LicenseRef-USGov"
+url = "https://earthquake.usgs.gov/"
+
+[[resources]]
+id = "usgs_quakes_geojson"
+url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson"
+type = "api_response"
+local_path = "downloads/usgs_quakes_month/usgs_quakes_month.json"
+
+[local_paths]
+downloads = "downloads/usgs_quakes_month/"
+filtered = "filtered/usgs_quakes_month/"
+index = "index/usgs_quakes_month/"
+samples = "samples/usgs_quakes_month/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/usgs_quakes_month/samples.jsonl"
+
+[[series]]
+id = "usgs_quake_mag"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing required numeric fields are filtered."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "usgs_quake_time_ms"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing required numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "usgs_quake_sig"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing required numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "usgs_quake_tsunami"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing required numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "usgs_quake_gap"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing required numeric fields are filtered."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "usgs_quake_lon"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing required numeric fields are filtered."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "usgs_quake_lat"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing required numeric fields are filtered."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "usgs_quake_depth_km"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing required numeric fields are filtered."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"

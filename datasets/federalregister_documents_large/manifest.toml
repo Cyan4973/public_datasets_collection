@@ -1,0 +1,75 @@
+manifest_version = 1
+dataset_id = "federalregister_documents_large"
+name = "Federal Register Documents Large"
+description = "Pinned Federal Register documents sample with publication and field-length metrics."
+
+[license]
+name = "U.S. Government Work"
+spdx = "LicenseRef-USGov"
+url = "https://www.federalregister.gov/"
+
+[[resources]]
+id = "federalregister_documents_json"
+url = "https://www.federalregister.gov/api/v1/documents.json?per_page=1000&conditions%5Bpublication_date%5D%5Bgte%5D=2024-01-01&conditions%5Bpublication_date%5D%5Blte%5D=2024-12-31"
+type = "api_response"
+local_path = "downloads/federalregister_documents_large/federalregister_documents_large.json"
+
+[local_paths]
+downloads = "downloads/federalregister_documents_large/"
+filtered = "filtered/federalregister_documents_large/"
+index = "index/federalregister_documents_large/"
+samples = "samples/federalregister_documents_large/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/federalregister_documents_large/samples.jsonl"
+
+[[series]]
+id = "fedreg_agencies_count"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing required fields are filtered."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "fedreg_title_length"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing required fields are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "fedreg_abstract_length"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing required fields are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "fedreg_publication_year"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing required fields are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "fedreg_publication_month"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing required fields are filtered."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "fedreg_publication_day"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing required fields are filtered."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"

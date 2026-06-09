@@ -1,0 +1,43 @@
+manifest_version = 1
+dataset_id = "plos_search"
+name = "PLOS Search"
+description = "Pinned PLOS search results reduced to basic numeric publication metadata."
+
+[local_paths]
+downloads = "downloads/plos_search/"
+filtered = "filtered/plos_search/"
+index = "index/plos_search/"
+samples = "samples/plos_search/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/plos_search/samples.jsonl"
+
+[[series]]
+id = "plos_counter_total_all_u32"
+path = "samples/plos_search/plos_counter_total_all_u32/docs.bin"
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_with_missing_total_counters"
+
+[[series]]
+id = "plos_publication_year_u16"
+path = "samples/plos_search/plos_publication_year_u16/docs.bin"
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_with_invalid_publication_dates"
+
+[[series]]
+id = "plos_publication_month_u8"
+path = "samples/plos_search/plos_publication_month_u8/docs.bin"
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_with_invalid_publication_dates"

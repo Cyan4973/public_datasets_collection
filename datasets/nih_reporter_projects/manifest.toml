@@ -1,0 +1,61 @@
+manifest_version = 1
+dataset_id = "nih_reporter_projects"
+name = "NIH Reporter Projects"
+description = "Pinned NIH Reporter project search results for fiscal year 2024."
+
+[local_paths]
+downloads = "downloads/nih_reporter_projects/"
+filtered = "filtered/nih_reporter_projects/"
+index = "index/nih_reporter_projects/"
+samples = "samples/nih_reporter_projects/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nih_reporter_projects/samples.jsonl"
+
+[[series]]
+id = "nih_award_amount_u64"
+path = "samples/nih_reporter_projects/nih_award_amount_u64/projects.bin"
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_with_missing_award_amount"
+
+[[series]]
+id = "nih_direct_cost_amount_u64"
+path = "samples/nih_reporter_projects/nih_direct_cost_amount_u64/projects.bin"
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_with_missing_direct_cost_amount"
+
+[[series]]
+id = "nih_fiscal_year_u16"
+path = "samples/nih_reporter_projects/nih_fiscal_year_u16/projects.bin"
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_with_missing_fiscal_year"
+
+[[series]]
+id = "nih_project_start_year_u16"
+path = "samples/nih_reporter_projects/nih_project_start_year_u16/projects.bin"
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_with_invalid_project_start_dates"
+
+[[series]]
+id = "nih_project_end_year_u16"
+path = "samples/nih_reporter_projects/nih_project_end_year_u16/projects.bin"
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_with_invalid_project_end_dates"

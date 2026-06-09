@@ -1,0 +1,79 @@
+manifest_version = 1
+dataset_id = "openml_tasks_large"
+name = "OpenML Tasks Large"
+description = "Pinned OpenML task list reduced to task identifiers and selected dataset quality metrics."
+
+[local_paths]
+downloads = "downloads/openml_tasks_large/"
+filtered = "filtered/openml_tasks_large/"
+index = "index/openml_tasks_large/"
+samples = "samples/openml_tasks_large/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/openml_tasks_large/samples.jsonl"
+
+[[series]]
+id = "openml_task_id_u32"
+path = "samples/openml_tasks_large/openml_task_id_u32/tasks.bin"
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_missing_required_quality_metrics"
+
+[[series]]
+id = "openml_dataset_id_u32"
+path = "samples/openml_tasks_large/openml_dataset_id_u32/tasks.bin"
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_missing_required_quality_metrics"
+
+[[series]]
+id = "openml_task_type_id_u16"
+path = "samples/openml_tasks_large/openml_task_type_id_u16/tasks.bin"
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_missing_required_quality_metrics"
+
+[[series]]
+id = "openml_number_of_instances_f32"
+path = "samples/openml_tasks_large/openml_number_of_instances_f32/tasks.bin"
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_missing_required_quality_metrics"
+
+[[series]]
+id = "openml_number_of_features_f32"
+path = "samples/openml_tasks_large/openml_number_of_features_f32/tasks.bin"
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_missing_required_quality_metrics"
+
+[[series]]
+id = "openml_number_of_classes_f32"
+path = "samples/openml_tasks_large/openml_number_of_classes_f32/tasks.bin"
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_missing_required_quality_metrics"
+
+[[series]]
+id = "openml_number_of_missing_values_f32"
+path = "samples/openml_tasks_large/openml_number_of_missing_values_f32/tasks.bin"
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_missing_required_quality_metrics"

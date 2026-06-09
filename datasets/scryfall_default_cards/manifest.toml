@@ -1,0 +1,79 @@
+manifest_version = 1
+dataset_id = "scryfall_default_cards"
+name = "Scryfall Default Cards"
+description = "Pinned Scryfall card search reduced to direct numeric card metadata."
+
+[local_paths]
+downloads = "downloads/scryfall_default_cards/"
+filtered = "filtered/scryfall_default_cards/"
+index = "index/scryfall_default_cards/"
+samples = "samples/scryfall_default_cards/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/scryfall_default_cards/samples.jsonl"
+
+[[series]]
+id = "scryfall_cmc_f32"
+path = "samples/scryfall_default_cards/scryfall_cmc_f32/cards.bin"
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_with_invalid_numeric_card_fields"
+
+[[series]]
+id = "scryfall_edhrec_rank_u32"
+path = "samples/scryfall_default_cards/scryfall_edhrec_rank_u32/cards.bin"
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "missing_edhrec_rank_preserved_as_zero"
+
+[[series]]
+id = "scryfall_released_year_u16"
+path = "samples/scryfall_default_cards/scryfall_released_year_u16/cards.bin"
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_with_invalid_numeric_card_fields"
+
+[[series]]
+id = "scryfall_released_month_u8"
+path = "samples/scryfall_default_cards/scryfall_released_month_u8/cards.bin"
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_with_invalid_release_dates"
+
+[[series]]
+id = "scryfall_games_count_u8"
+path = "samples/scryfall_default_cards/scryfall_games_count_u8/cards.bin"
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "preserved_zero_for_missing_games_list"
+
+[[series]]
+id = "scryfall_color_count_u8"
+path = "samples/scryfall_default_cards/scryfall_color_count_u8/cards.bin"
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "preserved_zero_for_missing_color_lists"
+
+[[series]]
+id = "scryfall_color_identity_count_u8"
+path = "samples/scryfall_default_cards/scryfall_color_identity_count_u8/cards.bin"
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "preserved_zero_for_missing_color_identity_lists"

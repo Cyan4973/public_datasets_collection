@@ -1,0 +1,107 @@
+manifest_version = 1
+dataset_id = "metacpan_releases_search_large"
+name = "MetaCPAN Releases Search Large"
+description = "Pinned MetaCPAN release search sample with release metadata metrics."
+
+[license]
+name = "MetaCPAN"
+spdx = "LicenseRef-MetaCPAN"
+url = "https://metacpan.org/"
+
+[[resources]]
+id = "metacpan_releases_json"
+url = "https://fastapi.metacpan.org/v1/release/_search"
+type = "api_response"
+local_path = "downloads/metacpan_releases_search_large/metacpan_releases_search_large.json"
+
+[local_paths]
+downloads = "downloads/metacpan_releases_search_large/"
+filtered = "filtered/metacpan_releases_search_large/"
+index = "index/metacpan_releases_search_large/"
+samples = "samples/metacpan_releases_search_large/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/metacpan_releases_search_large/samples.jsonl"
+
+[[series]]
+id = "metacpan_version_numified"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "metacpan_stat_size"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "metacpan_stat_mtime"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "metacpan_dependency_count"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing list fields are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "metacpan_provides_count"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing list fields are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "metacpan_license_count"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing list fields are filtered."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "metacpan_tests_pass"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing test fields are filtered."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "metacpan_tests_fail"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing test fields are filtered."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "metacpan_tests_na"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing test fields are filtered."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "metacpan_tests_unknown"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing test fields are filtered."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"

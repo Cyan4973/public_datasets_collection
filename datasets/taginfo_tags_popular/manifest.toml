@@ -1,0 +1,91 @@
+manifest_version = 1
+dataset_id = "taginfo_tags_popular"
+name = "Taginfo Tags Popular"
+description = "Pinned OpenStreetMap Taginfo popular tag statistics."
+
+[license]
+name = "OpenStreetMap"
+spdx = "ODbL-1.0"
+url = "https://taginfo.openstreetmap.org/"
+
+[[resources]]
+id = "taginfo_tags_json"
+url = "https://taginfo.openstreetmap.org/api/4/tags/popular?page=1&rp=500"
+type = "api_response"
+local_path = "downloads/taginfo_tags_popular/taginfo_tags_popular.json"
+
+[local_paths]
+downloads = "downloads/taginfo_tags_popular/"
+filtered = "filtered/taginfo_tags_popular/"
+index = "index/taginfo_tags_popular/"
+samples = "samples/taginfo_tags_popular/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/taginfo_tags_popular/samples.jsonl"
+
+[[series]]
+id = "taginfo_tag_count_all"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "taginfo_tag_count_nodes"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "taginfo_tag_count_ways"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "taginfo_tag_count_relations"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "taginfo_tag_projects"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "taginfo_tag_in_wiki"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "taginfo_tag_key_length"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing text fields are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "taginfo_tag_value_length"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing text fields are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"

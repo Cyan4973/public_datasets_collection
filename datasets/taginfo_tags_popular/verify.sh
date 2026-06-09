@@ -2,7 +2,7 @@
 set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 DATA_DIR="${DATA_DIR:-.data}"
-DATASET_ID="statsbomb_world_cup_final"
+DATASET_ID="taginfo_tags_popular"
 LOG_DIR="$REPO_ROOT/$DATA_DIR/logs/$DATASET_ID"
 FILTER_DIR="$REPO_ROOT/$DATA_DIR/filtered/$DATASET_ID"
 INDEX_DIR="$REPO_ROOT/$DATA_DIR/index/$DATASET_ID"
@@ -18,8 +18,8 @@ from pathlib import Path
 root=Path(os.environ['REPO_ROOT'])/os.environ['DATA_DIR']
 stats=json.loads((Path(os.environ['FILTER_DIR'])/'ingest_stats.json').read_text())
 rows=[json.loads(line) for line in (Path(os.environ['INDEX_DIR'])/'samples.jsonl').read_text().splitlines() if line.strip()]
-if len(rows)!=9: raise SystemExit(f'unexpected row count {len(rows)}')
-if stats['rows_total'] < 2000: raise SystemExit(f'rows_total too small {stats["rows_total"]}')
+if len(rows)!=8: raise SystemExit(f'unexpected row count {len(rows)}')
+if stats['rows_total'] < 500: raise SystemExit(f'rows_total too small {stats["rows_total"]}')
 for row in rows:
  p=root/row['sample_path']
  if not p.is_file(): raise SystemExit(f'missing sample {row["sample_path"]}')

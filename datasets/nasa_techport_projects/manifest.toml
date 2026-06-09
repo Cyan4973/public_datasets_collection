@@ -1,0 +1,115 @@
+manifest_version = 1
+dataset_id = "nasa_techport_projects"
+name = "NASA TechPort Projects"
+description = "Pinned NASA TechPort project search export with project metrics."
+
+[license]
+name = "U.S. Government Work"
+spdx = "LicenseRef-USGov"
+url = "https://techport.nasa.gov/"
+
+[[resources]]
+id = "nasa_techport_projects_json"
+url = "https://techport.nasa.gov/api/projects/search"
+type = "api_response"
+local_path = "downloads/nasa_techport_projects/nasa_techport_projects.json"
+
+[local_paths]
+downloads = "downloads/nasa_techport_projects/"
+filtered = "filtered/nasa_techport_projects/"
+index = "index/nasa_techport_projects/"
+samples = "samples/nasa_techport_projects/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_techport_projects/samples.jsonl"
+
+[[series]]
+id = "techport_project_id"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing required numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "techport_view_count"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing required numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "techport_trl_begin"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing required numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "techport_trl_current"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing required numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "techport_trl_end"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing required numeric fields are filtered."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "techport_library_items_count"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing list fields are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "techport_states_count"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing list fields are filtered."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "techport_program_contacts_count"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing list fields are filtered."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "techport_project_contacts_count"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing list fields are filtered."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "techport_start_year"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing date fields are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "techport_end_year"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing date fields are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"

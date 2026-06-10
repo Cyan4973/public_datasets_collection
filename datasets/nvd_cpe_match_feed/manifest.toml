@@ -1,0 +1,41 @@
+manifest_version = 1
+dataset_id = "nvd_cpe_match_feed"
+status = "staged"
+kind = "native_numeric"
+
+[origin]
+name = "NVD CPE Match Feed"
+url = "https://services.nvd.nist.gov/rest/json/cpematch/2.0"
+license = "NVD terms"
+
+[build]
+sample_index_path = ".data/index/nvd_cpe_match_feed/samples.jsonl"
+missing_value_policy = "Rows lacking parseable timestamps are dropped. Match count defaults to zero when matches is absent."
+
+[[series]]
+id = "nvd_cpe_created_at_u32"
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw"
+
+[[series]]
+id = "nvd_cpe_last_modified_at_u32"
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw"
+
+[[series]]
+id = "nvd_cpe_cpe_last_modified_at_u32"
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw"
+
+[[series]]
+id = "nvd_cpe_match_count_u16"
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw"

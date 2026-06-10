@@ -1,0 +1,34 @@
+manifest_version = 1
+dataset_id = "ghcnd_stations"
+status = "staged"
+kind = "native_numeric"
+
+[origin]
+name = "NOAA GHCN Daily Stations"
+url = "https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt"
+license = "U.S. Government Public Domain"
+
+[build]
+sample_index_path = ".data/index/ghcnd_stations/samples.jsonl"
+missing_value_policy = "Rows lacking parseable latitude, longitude, or elevation are dropped."
+
+[[series]]
+id = "ghcnd_station_latitude_f32"
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw"
+
+[[series]]
+id = "ghcnd_station_longitude_f32"
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw"
+
+[[series]]
+id = "ghcnd_station_elevation_f32"
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw"

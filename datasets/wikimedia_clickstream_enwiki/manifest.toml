@@ -1,0 +1,20 @@
+manifest_version = 1
+dataset_id = "wikimedia_clickstream_enwiki"
+status = "staged"
+kind = "native_numeric"
+
+[origin]
+name = "Wikimedia Clickstream"
+url = "https://dumps.wikimedia.org/other/clickstream/"
+license = "Wikimedia dump terms"
+
+[build]
+sample_index_path = ".data/index/wikimedia_clickstream_enwiki/samples.jsonl"
+missing_value_policy = "Rows lacking a parseable count are dropped."
+
+[[series]]
+id = "wikimedia_clickstream_count_u32"
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw"

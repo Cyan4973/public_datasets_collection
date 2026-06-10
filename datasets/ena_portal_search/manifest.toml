@@ -1,0 +1,43 @@
+manifest_version = 1
+dataset_id = "ena_portal_search"
+name = "ENA Portal Search"
+description = "Pinned ENA portal read-run search reduced to base counts and lightweight metadata lengths."
+
+[local_paths]
+downloads = "downloads/ena_portal_search/"
+filtered = "filtered/ena_portal_search/"
+index = "index/ena_portal_search/"
+samples = "samples/ena_portal_search/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/ena_portal_search/samples.jsonl"
+
+[[series]]
+id = "ena_base_count_u64"
+path = "samples/ena_portal_search/ena_base_count_u64/runs.bin"
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_malformed_rows"
+
+[[series]]
+id = "ena_collection_year_u16"
+path = "samples/ena_portal_search/ena_collection_year_u16/runs.bin"
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "missing_collection_year_preserved_as_zero"
+
+[[series]]
+id = "ena_scientific_name_length_u16"
+path = "samples/ena_portal_search/ena_scientific_name_length_u16/runs.bin"
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_malformed_rows"

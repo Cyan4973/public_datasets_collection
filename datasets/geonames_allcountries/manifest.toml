@@ -1,0 +1,61 @@
+manifest_version = 1
+dataset_id = "geonames_allcountries"
+name = "GeoNames All Countries"
+description = "Pinned GeoNames allCountries dump reduced to core geographic numeric fields."
+
+[local_paths]
+downloads = "downloads/geonames_allcountries/"
+filtered = "filtered/geonames_allcountries/"
+index = "index/geonames_allcountries/"
+samples = "samples/geonames_allcountries/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/geonames_allcountries/samples.jsonl"
+
+[[series]]
+id = "geonames_latitude_f32"
+path = "samples/geonames_allcountries/geonames_latitude_f32/allcountries.bin"
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_malformed_rows"
+
+[[series]]
+id = "geonames_longitude_f32"
+path = "samples/geonames_allcountries/geonames_longitude_f32/allcountries.bin"
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_malformed_rows"
+
+[[series]]
+id = "geonames_population_u64"
+path = "samples/geonames_allcountries/geonames_population_u64/allcountries.bin"
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_malformed_rows"
+
+[[series]]
+id = "geonames_elevation_i32"
+path = "samples/geonames_allcountries/geonames_elevation_i32/allcountries.bin"
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "missing_elevation_preserved_as_int32_min"
+
+[[series]]
+id = "geonames_dem_i32"
+path = "samples/geonames_allcountries/geonames_dem_i32/allcountries.bin"
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "missing_dem_preserved_as_int32_min"

@@ -1,0 +1,70 @@
+manifest_version = 1
+dataset_id = "geonames_alternatenames"
+name = "GeoNames Alternate Names"
+description = "Pinned GeoNames alternateNames dump reduced to identifier, text-length, and flag series."
+
+[local_paths]
+downloads = "downloads/geonames_alternatenames/"
+filtered = "filtered/geonames_alternatenames/"
+index = "index/geonames_alternatenames/"
+samples = "samples/geonames_alternatenames/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/geonames_alternatenames/samples.jsonl"
+
+[[series]]
+id = "geonames_altname_id_u32"
+path = "samples/geonames_alternatenames/geonames_altname_id_u32/alternatenames.bin"
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_malformed_rows"
+
+[[series]]
+id = "geonames_altname_geoname_id_u32"
+path = "samples/geonames_alternatenames/geonames_altname_geoname_id_u32/alternatenames.bin"
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_malformed_rows"
+
+[[series]]
+id = "geonames_altname_iso_lang_length_u8"
+path = "samples/geonames_alternatenames/geonames_altname_iso_lang_length_u8/alternatenames.bin"
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_malformed_rows"
+
+[[series]]
+id = "geonames_altname_text_length_u16"
+path = "samples/geonames_alternatenames/geonames_altname_text_length_u16/alternatenames.bin"
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_malformed_rows"
+
+[[series]]
+id = "geonames_altname_is_preferred_u8"
+path = "samples/geonames_alternatenames/geonames_altname_is_preferred_u8/alternatenames.bin"
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "missing_preferred_flag_preserved_as_zero"
+
+[[series]]
+id = "geonames_altname_is_short_u8"
+path = "samples/geonames_alternatenames/geonames_altname_is_short_u8/alternatenames.bin"
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "missing_short_flag_preserved_as_zero"

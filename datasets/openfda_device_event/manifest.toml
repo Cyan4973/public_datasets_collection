@@ -1,0 +1,61 @@
+manifest_version = 1
+dataset_id = "openfda_device_event"
+name = "openFDA Device Event"
+description = "Pinned openFDA device adverse event page reduced to direct event count and date series."
+
+[local_paths]
+downloads = "downloads/openfda_device_event/"
+filtered = "filtered/openfda_device_event/"
+index = "index/openfda_device_event/"
+samples = "samples/openfda_device_event/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/openfda_device_event/samples.jsonl"
+
+[[series]]
+id = "openfda_device_event_date_received_ymd_u32"
+path = "samples/openfda_device_event/openfda_device_event_date_received_ymd_u32/events.bin"
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_with_invalid_received_dates"
+
+[[series]]
+id = "openfda_device_event_devices_in_event_u16"
+path = "samples/openfda_device_event/openfda_device_event_devices_in_event_u16/events.bin"
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "missing_device_counts_preserved_as_zero"
+
+[[series]]
+id = "openfda_device_event_patients_in_event_u16"
+path = "samples/openfda_device_event/openfda_device_event_patients_in_event_u16/events.bin"
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "missing_patient_counts_preserved_as_zero"
+
+[[series]]
+id = "openfda_device_event_mdr_text_count_u16"
+path = "samples/openfda_device_event/openfda_device_event_mdr_text_count_u16/events.bin"
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "missing_mdr_text_preserved_as_zero"
+
+[[series]]
+id = "openfda_device_event_adverse_flag_u8"
+path = "samples/openfda_device_event/openfda_device_event_adverse_flag_u8/events.bin"
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "missing_adverse_flags_preserved_as_zero"

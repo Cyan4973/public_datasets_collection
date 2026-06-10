@@ -1,0 +1,43 @@
+manifest_version = 1
+dataset_id = "gbif_datasets"
+name = "GBIF Datasets"
+description = "Pinned GBIF dataset search results reduced to record counts and list cardinalities."
+
+[local_paths]
+downloads = "downloads/gbif_datasets/"
+filtered = "filtered/gbif_datasets/"
+index = "index/gbif_datasets/"
+samples = "samples/gbif_datasets/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/gbif_datasets/samples.jsonl"
+
+[[series]]
+id = "gbif_record_count_u64"
+path = "samples/gbif_datasets/gbif_record_count_u64/datasets.bin"
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "missing_record_counts_preserved_as_zero"
+
+[[series]]
+id = "gbif_keyword_count_u16"
+path = "samples/gbif_datasets/gbif_keyword_count_u16/datasets.bin"
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "missing_keyword_lists_preserved_as_zero"
+
+[[series]]
+id = "gbif_decade_count_u16"
+path = "samples/gbif_datasets/gbif_decade_count_u16/datasets.bin"
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "missing_decade_lists_preserved_as_zero"

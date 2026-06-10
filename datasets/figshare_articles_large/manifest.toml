@@ -1,0 +1,70 @@
+manifest_version = 1
+dataset_id = "figshare_articles_large"
+name = "Figshare Articles Large"
+description = "Pinned Figshare article listing reduced to IDs, type, group, and timestamps."
+
+[local_paths]
+downloads = "downloads/figshare_articles_large/"
+filtered = "filtered/figshare_articles_large/"
+index = "index/figshare_articles_large/"
+samples = "samples/figshare_articles_large/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/figshare_articles_large/samples.jsonl"
+
+[[series]]
+id = "figshare_id_u32"
+path = "samples/figshare_articles_large/figshare_id_u32/articles.bin"
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_with_invalid_required_fields"
+
+[[series]]
+id = "figshare_defined_type_u16"
+path = "samples/figshare_articles_large/figshare_defined_type_u16/articles.bin"
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_with_invalid_required_fields"
+
+[[series]]
+id = "figshare_group_id_u32"
+path = "samples/figshare_articles_large/figshare_group_id_u32/articles.bin"
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_with_invalid_required_fields"
+
+[[series]]
+id = "figshare_published_timestamp_u64"
+path = "samples/figshare_articles_large/figshare_published_timestamp_u64/articles.bin"
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_with_invalid_required_fields"
+
+[[series]]
+id = "figshare_created_timestamp_u64"
+path = "samples/figshare_articles_large/figshare_created_timestamp_u64/articles.bin"
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_with_invalid_required_fields"
+
+[[series]]
+id = "figshare_modified_timestamp_u64"
+path = "samples/figshare_articles_large/figshare_modified_timestamp_u64/articles.bin"
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_with_invalid_required_fields"

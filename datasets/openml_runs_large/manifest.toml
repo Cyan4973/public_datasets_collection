@@ -1,0 +1,70 @@
+manifest_version = 1
+dataset_id = "openml_runs_large"
+name = "OpenML Runs Large"
+description = "Pinned OpenML run list reduced to identifiers and upload timestamps."
+
+[local_paths]
+downloads = "downloads/openml_runs_large/"
+filtered = "filtered/openml_runs_large/"
+index = "index/openml_runs_large/"
+samples = "samples/openml_runs_large/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/openml_runs_large/samples.jsonl"
+
+[[series]]
+id = "openml_run_id_u32"
+path = "samples/openml_runs_large/openml_run_id_u32/runs.bin"
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_with_invalid_required_fields"
+
+[[series]]
+id = "openml_task_id_u32"
+path = "samples/openml_runs_large/openml_task_id_u32/runs.bin"
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_with_invalid_required_fields"
+
+[[series]]
+id = "openml_setup_id_u32"
+path = "samples/openml_runs_large/openml_setup_id_u32/runs.bin"
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_with_invalid_required_fields"
+
+[[series]]
+id = "openml_flow_id_u32"
+path = "samples/openml_runs_large/openml_flow_id_u32/runs.bin"
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_with_invalid_required_fields"
+
+[[series]]
+id = "openml_uploader_u32"
+path = "samples/openml_runs_large/openml_uploader_u32/runs.bin"
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_with_invalid_required_fields"
+
+[[series]]
+id = "openml_upload_timestamp_u64"
+path = "samples/openml_runs_large/openml_upload_timestamp_u64/runs.bin"
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_with_invalid_required_fields"

@@ -1,0 +1,13 @@
+manifest_version = 1
+dataset_id = "europepmc_grants"
+status = "staged"
+kind = "derived_operational_numeric"
+
+[origin]
+name = "Europe PMC Search"
+url = "https://www.ebi.ac.uk/europepmc/webservices/rest/search"
+license = "Europe PMC terms"
+
+[build]
+sample_index_path = ".data/index/europepmc_grants/samples.jsonl"
+missing_value_policy = "Rows lacking parseable pubYear are dropped. Missing citedByCount becomes zero."

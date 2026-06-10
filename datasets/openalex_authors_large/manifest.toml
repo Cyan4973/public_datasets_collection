@@ -1,0 +1,13 @@
+manifest_version = 1
+dataset_id = "openalex_authors_large"
+status = "staged"
+kind = "derived_operational_numeric"
+
+[origin]
+name = "OpenAlex Authors"
+url = "https://api.openalex.org/authors"
+license = "OpenAlex terms"
+
+[build]
+sample_index_path = ".data/index/openalex_authors_large/samples.jsonl"
+missing_value_policy = "Rows lacking works_count or cited_by_count are dropped. Missing summary stats become zero."

@@ -1,0 +1,13 @@
+manifest_version = 1
+dataset_id = "nasa_donki_cme"
+status = "staged"
+kind = "native_numeric"
+
+[origin]
+name = "NASA DONKI CME"
+url = "https://kauai.ccmc.gsfc.nasa.gov/DONKI/WS/get/CME"
+license = "NASA terms"
+
+[build]
+sample_index_path = ".data/index/nasa_donki_cme/samples.jsonl"
+missing_value_policy = "Rows lacking startTime are dropped. Missing activeRegionNum becomes zero. Missing first-analysis speed or halfAngle becomes NaN."

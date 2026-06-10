@@ -1,0 +1,13 @@
+manifest_version = 1
+dataset_id = "ourworldindata_co2_latest"
+status = "staged"
+kind = "native_numeric"
+
+[origin]
+name = "Our World in Data CO2"
+url = "https://ourworldindata.org/grapher/annual-co2-emissions-per-country.csv"
+license = "OWID terms"
+
+[build]
+sample_index_path = ".data/index/ourworldindata_co2_latest/samples.jsonl"
+missing_value_policy = "Rows lacking parseable year or annual emissions are dropped."

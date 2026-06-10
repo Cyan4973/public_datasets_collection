@@ -1,0 +1,13 @@
+manifest_version = 1
+dataset_id = "gdc_cases"
+status = "staged"
+kind = "derived_operational_numeric"
+
+[origin]
+name = "GDC Cases API"
+url = "https://api.gdc.cancer.gov/cases"
+license = "GDC terms"
+
+[build]
+sample_index_path = ".data/index/gdc_cases/samples.jsonl"
+missing_value_policy = "Rows lacking project_id or submitter_id are dropped. Missing age_at_diagnosis becomes -1."

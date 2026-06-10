@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "noaa_ndbc_stdmet_historical"
 name = "NOAA NDBC Historical Stdmet"
-description = "NOAA NDBC historical standard meteorological archives for four fixed stations, 2019-2023."
+description = "NOAA NDBC historical standard meteorological archives for 39 fixed stations spanning the Atlantic, Gulf of Mexico, Pacific, and Hawaii, 2019-2023."
 homepage = "https://www.ndbc.noaa.gov/"
 
 [license]
@@ -29,7 +29,7 @@ id = "ndbc_stdmet_station_subset"
 origin = "noaa_ndbc_stdmet"
 url = "https://www.ndbc.noaa.gov/data/historical/stdmet/"
 type = "archive_subset"
-version = "2019-2023-four-stations-seven-elements"
+version = "2019-2023-39stations-seven-elements"
 access = "Fixed station-year .txt.gz downloads from the NDBC historical stdmet archive."
 size_bytes = 0
 sha256 = ""

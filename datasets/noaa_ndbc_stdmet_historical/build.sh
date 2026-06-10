@@ -54,7 +54,21 @@ samples_root = Path(os.environ["SAMPLES_ROOT"])
 data_root = samples_root.parent.parent
 
 dataset_id = "noaa_ndbc_stdmet_historical"
-station_ids = ["41009", "44013", "46042", "51001"]
+station_ids = [
+    # Atlantic Ocean
+    "41002", "41004", "41008", "41009", "41010",
+    "41025", "41047", "41048",
+    "44005", "44008", "44011", "44013", "44017",
+    "44025", "44027",
+    # Gulf of Mexico
+    "42001", "42002", "42019", "42020", "42036",
+    # Pacific Ocean
+    "46002", "46005", "46006", "46011", "46012",
+    "46013", "46014", "46022", "46025", "46026",
+    "46028", "46042", "46047", "46059", "46069",
+    # Hawaii / Pacific Islands
+    "51001", "51002", "51003", "51004",
+]
 element_ids = ["WDIR", "WSPD", "GST", "WVHT", "PRES", "ATMP", "WTMP"]
 series_defs = [
     {"series_id": "ndbc_value_f64", "array_type": "d", "numeric_kind": "float", "bit_width": 64, "endianness": "little", "element_size_bytes": 8},
@@ -121,9 +135,11 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
         for year in range(2019, 2024):
             path = download_root / f"{station_id}h{year}.txt.gz"
             if not path.is_file():
-                raise SystemExit(f"missing raw file: {path}")
+                print(f"warning: skipping missing station-year file: {path}")
+                continue
 
-            header_tokens: list[str] | None = None
+            header_map: dict[str, int] | None = None
+            year_col: str | None = None
             with gzip.open(path, "rt", encoding="utf-8", errors="replace", newline="") as handle:
                 for raw_line in handle:
                     line = raw_line.strip()
@@ -133,23 +149,27 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
                     first = tokens[0].lstrip("#").upper()
                     if first in {"YY", "YYYY"}:
                         header_tokens = normalize_header_tokens(tokens)
+                        # Use first-occurrence semantics so MM (month, col 1) wins
+                        # over mm (minute, col 4) which also normalises to MM.
+                        header_map = {}
+                        for idx, name in enumerate(header_tokens):
+                            if name not in header_map:
+                                header_map[name] = idx
+                        year_col = "YYYY" if "YYYY" in header_map else "YY" if "YY" in header_map else None
+                        if year_col is None:
+                            raise SystemExit(f"missing year column in {path}")
+                        required_date_cols = [year_col, "MM", "DD", "HH"]
+                        if not all(col in header_map for col in required_date_cols):
+                            raise SystemExit(f"missing date columns in {path}")
                         continue
-                    if header_tokens is None:
+                    if header_map is None:
                         continue
                     if first in {"YR", "YYYY", "YY"}:
                         continue
 
-                    header_map = {name: idx for idx, name in enumerate(header_tokens)}
-                    year_col = "YYYY" if "YYYY" in header_map else "YY" if "YY" in header_map else None
-                    if year_col is None:
-                        raise SystemExit(f"missing year column in {path}")
-                    required_date_cols = [year_col, "MM", "DD", "HH"]
-                    if not all(col in header_map for col in required_date_cols):
-                        raise SystemExit(f"missing date columns in {path}")
-
                     try:
                         obs_year = int(tokens[header_map[year_col]])
-                        if year_col == "YY":
+                        if year_col == "YY" and obs_year < 100:
                             obs_year += 1900 if obs_year >= 70 else 2000
                         obs_month = int(tokens[header_map["MM"]])
                         obs_day = int(tokens[header_map["DD"]])

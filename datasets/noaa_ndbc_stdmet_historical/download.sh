@@ -42,7 +42,21 @@ import sys
 
 plan_path = Path(sys.argv[1])
 base_url = "https://www.ndbc.noaa.gov/data/historical/stdmet"
-stations = ["41009", "44013", "46042", "51001"]
+stations = [
+        # Atlantic Ocean
+        "41002", "41004", "41008", "41009", "41010",
+        "41025", "41047", "41048",
+        "44005", "44008", "44011", "44013", "44017",
+        "44025", "44027",
+        # Gulf of Mexico
+        "42001", "42002", "42019", "42020", "42036",
+        # Pacific Ocean
+        "46002", "46005", "46006", "46011", "46012",
+        "46013", "46014", "46022", "46025", "46026",
+        "46028", "46042", "46047", "46059", "46069",
+        # Hawaii / Pacific Islands
+        "51001", "51002", "51003", "51004",
+    ]
 
 with plan_path.open("w", encoding="utf-8", newline="") as plan_file:
     for station_id in stations:

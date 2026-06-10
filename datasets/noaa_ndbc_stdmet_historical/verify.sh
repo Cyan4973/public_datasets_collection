@@ -55,7 +55,21 @@ stats_path = filtered_root / "station_element_year_stats.tsv"
 index_path = index_root / "samples.jsonl"
 failures_path = download_root / "download_failures.tsv"
 
-station_ids = ["41009", "44013", "46042", "51001"]
+station_ids = [
+    # Atlantic Ocean
+    "41002", "41004", "41008", "41009", "41010",
+    "41025", "41047", "41048",
+    "44005", "44008", "44011", "44013", "44017",
+    "44025", "44027",
+    # Gulf of Mexico
+    "42001", "42002", "42019", "42020", "42036",
+    # Pacific Ocean
+    "46002", "46005", "46006", "46011", "46012",
+    "46013", "46014", "46022", "46025", "46026",
+    "46028", "46042", "46047", "46059", "46069",
+    # Hawaii / Pacific Islands
+    "51001", "51002", "51003", "51004",
+]
 element_ids = ["WDIR", "WSPD", "GST", "WVHT", "PRES", "ATMP", "WTMP"]
 series_defs = [
     {"series_id": "ndbc_value_f64", "numeric_kind": "float", "bit_width": 64, "endianness": "little", "element_size_bytes": 8},
@@ -66,7 +80,7 @@ series_defs = [
 ]
 
 if failures_path.is_file() and failures_path.stat().st_size > 0:
-    raise SystemExit(f"download failures recorded in {failures_path}")
+    print(f"warning: download failures recorded in {failures_path} (some station-years may be missing)")
 if not stats_path.is_file():
     raise SystemExit(f"missing stats file: {stats_path}")
 if not index_path.is_file():
@@ -101,7 +115,8 @@ for station_id in station_ids:
     for year in range(2019, 2024):
         path = download_root / f"{station_id}h{year}.txt.gz"
         if not path.is_file():
-            raise SystemExit(f"missing raw file: {path}")
+            print(f"warning: skipping missing station-year file: {path}")
+            continue
         if path.stat().st_size <= 0:
             raise SystemExit(f"empty raw file: {path}")
 

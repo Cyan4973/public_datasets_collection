@@ -1,0 +1,180 @@
+manifest_version = 1
+dataset_id = "npm_search_packages_large"
+name = "npm Search Packages Large"
+description = "Numeric package metadata streams from a fixed 250-row npm search result."
+homepage = "https://registry.npmjs.org/-/v1/search"
+
+[license]
+name = "npm Registry Terms"
+spdx = "NOASSERTION"
+url = "https://registry.npmjs.org/-/v1/search"
+citation = "https://registry.npmjs.org/-/v1/search"
+notes = "Use the upstream provider terms."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public dataset acquired from the official endpoint."
+usage_notes = "Staged recipe; promote only after a fresh successful user-run download."
+
+[[origins]]
+id = "official"
+name = "npm Search Packages Large"
+url = "https://registry.npmjs.org/-/v1/search"
+type = "api"
+notes = "Official public endpoint."
+
+[[resources]]
+id = "search_result"
+origin = "official"
+url = "https://registry.npmjs.org/-/v1/search?text=keywords:data&size=250"
+type = "api_query_result"
+version = "2026-06-10"
+access = "Direct public HTTP request."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/npm_search_packages_large/npm_search_packages_large.json"
+notes = "Pinned query parameters from the scout batch."
+
+[local_paths]
+downloads = "downloads/npm_search_packages_large/"
+extracted = "extracted/npm_search_packages_large/"
+filtered = "filtered/npm_search_packages_large/"
+index = "index/npm_search_packages_large/"
+samples = "samples/npm_search_packages_large/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/npm_search_packages_large/samples.jsonl"
+summary = "Download the pinned public JSON payload, validate its top-level structure, extract numeric fields, and emit raw little-endian numeric samples."
+deterministic_notes = "Fixed endpoint, fixed query parameters, fixed field extraction, and source-order row retention."
+
+[[series]]
+id = "npm_downloads_monthly"
+description = "Monthly package downloads."
+semantic_meaning = "npm search result downloads.monthly field."
+representation_class = "native_numeric"
+representation_notes = "Direct numeric metadata from the pinned npm registry search response."
+source_resources = ["search_result"]
+filtering = "Keep rows with numeric downloads, dependents, score, and package metadata counts."
+missing_value_policy = "Rows missing required numeric fields are skipped."
+conversion = "Parse response objects in order and emit raw little-endian arrays."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+output_path = "samples/npm_search_packages_large/npm_downloads_monthly/"
+
+[[series]]
+id = "npm_downloads_weekly"
+description = "Weekly package downloads."
+semantic_meaning = "npm search result downloads.weekly field."
+representation_class = "native_numeric"
+representation_notes = "Direct numeric metadata from the pinned npm registry search response."
+source_resources = ["search_result"]
+filtering = "Same retained row set as npm_downloads_monthly."
+missing_value_policy = "Rows missing required numeric fields are skipped."
+conversion = "Same retained row set as npm_downloads_monthly."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+output_path = "samples/npm_search_packages_large/npm_downloads_weekly/"
+
+[[series]]
+id = "npm_dependents_count"
+description = "Dependent package count."
+semantic_meaning = "npm search result dependents field parsed as uint32."
+representation_class = "derived_operational_numeric"
+representation_notes = "Pinned machine-facing registry metadata field parsed from the public search response."
+source_resources = ["search_result"]
+filtering = "Same retained row set as npm_downloads_monthly."
+missing_value_policy = "Rows missing required numeric fields are skipped."
+conversion = "Parse string integer values deterministically and emit raw little-endian arrays."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+output_path = "samples/npm_search_packages_large/npm_dependents_count/"
+
+[[series]]
+id = "npm_search_score"
+description = "Search score."
+semantic_meaning = "npm search result searchScore field."
+representation_class = "native_numeric"
+representation_notes = "Direct numeric metadata from the pinned npm registry search response."
+source_resources = ["search_result"]
+filtering = "Same retained row set as npm_downloads_monthly."
+missing_value_policy = "Rows missing required numeric fields are skipped."
+conversion = "Emit raw little-endian float64 arrays."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+output_path = "samples/npm_search_packages_large/npm_search_score/"
+
+[[series]]
+id = "npm_score_final"
+description = "Final package score."
+semantic_meaning = "npm search result score.final field."
+representation_class = "native_numeric"
+representation_notes = "Direct numeric metadata from the pinned npm registry search response."
+source_resources = ["search_result"]
+filtering = "Same retained row set as npm_downloads_monthly."
+missing_value_policy = "Rows missing required numeric fields are skipped."
+conversion = "Emit raw little-endian float64 arrays."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+output_path = "samples/npm_search_packages_large/npm_score_final/"
+
+[[series]]
+id = "npm_maintainers_count"
+description = "Maintainer count per package."
+semantic_meaning = "Count of package maintainers in the search response."
+representation_class = "derived_operational_numeric"
+representation_notes = "Deterministic count derived from a pinned machine-facing response shape."
+source_resources = ["search_result"]
+filtering = "Same retained row set as npm_downloads_monthly."
+missing_value_policy = "Rows missing required numeric fields are skipped."
+conversion = "Count list lengths deterministically and emit raw little-endian arrays."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+output_path = "samples/npm_search_packages_large/npm_maintainers_count/"
+
+[[series]]
+id = "npm_keywords_count"
+description = "Keyword count per package."
+semantic_meaning = "Count of package keywords in the search response."
+representation_class = "derived_operational_numeric"
+representation_notes = "Deterministic count derived from a pinned machine-facing response shape."
+source_resources = ["search_result"]
+filtering = "Same retained row set as npm_downloads_monthly."
+missing_value_policy = "Rows missing required numeric fields are skipped."
+conversion = "Count list lengths deterministically and emit raw little-endian arrays."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+output_path = "samples/npm_search_packages_large/npm_keywords_count/"
+
+[[series]]
+id = "npm_insecure_flag"
+description = "Insecure flag per package."
+semantic_meaning = "npm search result flags.insecure field as uint8."
+representation_class = "derived_operational_numeric"
+representation_notes = "Pinned machine-facing registry metadata field preserved directly as a numeric flag."
+source_resources = ["search_result"]
+filtering = "Same retained row set as npm_downloads_monthly."
+missing_value_policy = "Rows missing required numeric fields are skipped."
+conversion = "Emit raw little-endian uint8 arrays."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+output_path = "samples/npm_search_packages_large/npm_insecure_flag/"

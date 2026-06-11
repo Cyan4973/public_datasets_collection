@@ -1,0 +1,52 @@
+manifest_version = 1
+dataset_id = "usgs_sitefile_all_large"
+name = "USGS Site File All Large"
+description = "Large USGS site inventory subset for California from the public site service."
+homepage = "https://waterservices.usgs.gov/"
+
+[license]
+name = "USGS Terms"
+spdx = "NOASSERTION"
+url = "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits"
+citation = "https://waterservices.usgs.gov/"
+notes = "Public USGS site inventory output."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public tab-delimited site file from a fixed state query."
+usage_notes = "Promote only after fresh successful download."
+
+[[origins]]
+id = "official"
+name = "USGS Water Services"
+url = "https://waterservices.usgs.gov/"
+type = "api"
+notes = "Official public endpoint."
+
+[[resources]]
+id = "sitefile"
+origin = "official"
+url = "https://waterservices.usgs.gov/nwis/site/?format=rdb&siteOutput=expanded&stateCd=ca"
+type = "table_export"
+version = "2026-06-11"
+access = "Direct public HTTP request."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/usgs_sitefile_all_large/usgs_sitefile_all_large.txt"
+notes = "Pinned California expanded site file query."
+
+[local_paths]
+downloads = "downloads/usgs_sitefile_all_large/"
+extracted = "extracted/usgs_sitefile_all_large/"
+filtered = "filtered/usgs_sitefile_all_large/"
+index = "index/usgs_sitefile_all_large/"
+samples = "samples/usgs_sitefile_all_large/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/usgs_sitefile_all_large/samples.jsonl"
+summary = "Download the pinned USGS site file, parse the tab-delimited rows, keep rows with required numeric fields, and emit homogeneous raw little-endian numeric samples."
+deterministic_notes = "Fixed query parameters, header-driven column selection, source-order row retention."

@@ -1,0 +1,52 @@
+manifest_version = 1
+dataset_id = "usgs_daily_values_large"
+name = "USGS Daily Values Large"
+description = "Large daily USGS water values for a fixed multi-site, multi-parameter query."
+homepage = "https://waterservices.usgs.gov/"
+
+[license]
+name = "USGS Terms"
+spdx = "NOASSERTION"
+url = "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits"
+citation = "https://waterservices.usgs.gov/"
+notes = "Public USGS water services output."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public JSON response from a fixed USGS Water Services query."
+usage_notes = "Promote only after fresh successful download."
+
+[[origins]]
+id = "official"
+name = "USGS Water Services"
+url = "https://waterservices.usgs.gov/"
+type = "api"
+notes = "Official public endpoint."
+
+[[resources]]
+id = "daily_values"
+origin = "official"
+url = "https://waterservices.usgs.gov/nwis/dv/?format=json&sites=01646500,02087500,07374000&startDT=2023-01-01&endDT=2024-12-31&parameterCd=00060,00065&siteStatus=all"
+type = "api_query_result"
+version = "2026-06-11"
+access = "Direct public HTTP request."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/usgs_daily_values_large/usgs_daily_values_large.json"
+notes = "Pinned site list, time range, and parameter list."
+
+[local_paths]
+downloads = "downloads/usgs_daily_values_large/"
+extracted = "extracted/usgs_daily_values_large/"
+filtered = "filtered/usgs_daily_values_large/"
+index = "index/usgs_daily_values_large/"
+samples = "samples/usgs_daily_values_large/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/usgs_daily_values_large/samples.jsonl"
+summary = "Download the pinned USGS JSON payload, keep non-empty time-series rows with parseable numeric values and dates, and emit per-series raw little-endian numeric arrays."
+deterministic_notes = "Fixed query parameters, source-order row retention inside each timeSeries, deterministic sample naming by timeSeries name."

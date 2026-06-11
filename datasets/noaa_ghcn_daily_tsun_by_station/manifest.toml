@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "noaa_ghcn_daily_tsun_by_station"
 name = "NOAA GHCN Daily TSUN By Station"
-description = "NOAA GHCN Daily by-station archives filtered to TSUN observations for 59 fixed US stations, 1763-2026."
+description = "NOAA GHCN Daily by-station archives filtered to TSUN observations for 83 airport (USW/ASOS) stations, 1763-2026."
 homepage = "https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily"
 
 [license]
@@ -29,7 +29,7 @@ id = "ghcn_daily_tsun_station_subset"
 origin = "noaa_ncei_ghcn_daily"
 url = "https://www.ncei.noaa.gov/pub/data/ghcn/daily/by_station/"
 type = "archive_subset"
-version = "1763-2026-59-stations-tsun"
+version = "1763-2026-83-airport-stations-tsun"
 access = "Fixed station-file downloads from by_station/ plus ghcnd-stations.txt metadata."
 size_bytes = 0
 sha256 = ""

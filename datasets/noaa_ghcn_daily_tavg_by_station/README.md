@@ -5,9 +5,9 @@ retains average temperature (`TAVG`) observations as raw numeric samples.
 
 Selected scope:
 - years `1763` through `2026`
-- stations: a fixed, deterministic set of 59 US long-record stations —
-  the original 6 first-order airport stations plus a spread of US HCN
-  reference-network stations; see `download.sh` for the exact pinned list
+- stations: a fixed, deterministic spread of 83 US airport (USW/ASOS)
+  stations, which report the wind / gust / sunshine / average-temperature
+  elements that COOP stations do not; see `download.sh` for the exact pinned list
 - one output sample per station that reports the element, per series
 
 Series emitted by `build.sh`:

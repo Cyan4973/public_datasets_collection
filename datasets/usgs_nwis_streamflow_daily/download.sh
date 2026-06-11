@@ -44,10 +44,46 @@ import urllib.parse
 plan_path = Path(sys.argv[1])
 base_url = "https://waterservices.usgs.gov/nwis/dv/"
 sites = [
-    "01646500",
-    "07374000",
-    "08158000",
-    "09380000",
+    # Northeast / Mid-Atlantic
+    "01100000",  # Merrimack R at Lawrence MA
+    "01372500",  # Hudson R at Poughkeepsie NY
+    "01463500",  # Delaware R at Trenton NJ
+    "01481500",  # Brandywine Ck at Wilmington DE
+    "01578310",  # Susquehanna R at Conowingo MD
+    "01594440",  # Patuxent R at Bowie MD
+    "01646500",  # Potomac R at Little Falls MD
+    # Southeast
+    "02087500",  # Neuse R near Kinston NC
+    "02169500",  # Congaree R near Columbia SC
+    "02215500",  # Oconee R at Milledgeville GA
+    "02335000",  # Chattahoochee R at Atlanta GA
+    "02342500",  # Apalachicola R at Chattahoochee FL
+    # Midwest
+    "04085427",  # Fox R at Green Bay WI
+    "04193500",  # Maumee R at Waterville OH
+    "05288500",  # Mississippi R at Minneapolis MN
+    "05420500",  # Mississippi R at Clinton IA
+    "05587450",  # Illinois R at Valley City IL
+    "06892350",  # Kansas R at DeSoto KS
+    "06934500",  # Missouri R at Hermann MO
+    # South / Lower Mississippi
+    "07022000",  # Mississippi R at Thebes IL
+    "07144200",  # Arkansas R at Wichita KS
+    "07374000",  # Mississippi R at Baton Rouge LA
+    "07381490",  # Atchafalaya R at Melville LA
+    # Great Plains
+    "06805500",  # Platte R at Ashland NE
+    # South / Texas
+    "08158000",  # Colorado R at Austin TX
+    # Mountain West
+    "09085000",  # Colorado R near Dotsero CO
+    "09163500",  # Colorado R near Colorado-Utah line
+    # Pacific / West Coast
+    "11447650",  # Sacramento R at Sacramento CA
+    "12114500",  # Green R at Auburn WA
+    "13011900",  # Snake R near Moran WY
+    "14048000",  # Deschutes R at Moody OR
+    "14211720",  # Willamette R at Portland OR
 ]
 
 with plan_path.open("w", encoding="utf-8", newline="") as plan_file:
@@ -65,6 +101,20 @@ with plan_path.open("w", encoding="utf-8", newline="") as plan_file:
             out = f"dv_{site}_{year}.json"
             plan_file.write(f"{site}\t{year}\t{url}\t{out}\n")
 PY
+
+validate_payload() {
+ path=$1
+ python3 - <<'PY' "${path}" >>"${LOG_FILE}" 2>&1
+from __future__ import annotations
+import json, sys
+from pathlib import Path
+path = Path(sys.argv[1])
+try:
+    json.loads(path.read_text(encoding="utf-8"))
+except Exception as exc:
+    raise SystemExit(f"invalid JSON in {path}: {exc}")
+PY
+}
 
 fetch() {
   url=$1

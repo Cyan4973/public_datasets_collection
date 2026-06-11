@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "usgs_nwis_gage_height_daily"
 name = "USGS NWIS Daily Gage Height"
-description = "USGS NWIS daily gage-height JSON extracts for one fixed site, 2021-2023."
+description = "USGS NWIS daily gage-height JSON extracts for 32 geographically diverse stream sites across the US, 2021-2023."
 homepage = "https://waterservices.usgs.gov/"
 
 [license]
@@ -49,7 +49,7 @@ build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/usgs_nwis_gage_height_daily/samples.jsonl"
 summary = "Download site-year USGS daily gage-height JSON files, select statistic code 00003 when multiple daily statistics are present, derive aligned date component arrays, and emit raw numeric arrays plus a machine-readable sample index."
-deterministic_notes = "Fixed site list, fixed years 2021-2023, fixed parameterCd=00065, fixed API query parameters, explicit selection of statistic code 00003 when multiple daily statistics are present, preserved source observation order within each site-year file, concatenated years in ascending order per site, durable script logs under logs/usgs_nwis_gage_height_daily/, and generated sample index at index/usgs_nwis_gage_height_daily/samples.jsonl."
+deterministic_notes = "Fixed 32-site list, fixed years 2021-2023, fixed parameterCd=00065, fixed API query parameters, explicit selection of statistic code 00003 when multiple daily statistics are present, preserved source observation order within each site-year file, concatenated years in ascending order per site, durable script logs under logs/usgs_nwis_gage_height_daily/, and generated sample index at index/usgs_nwis_gage_height_daily/samples.jsonl."
 
 [[series]]
 id = "usgs_gage_height_ft_f64"
@@ -63,7 +63,7 @@ numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
-sample_count = 1
+sample_count = 15
 total_size_bytes = 0
 output_path = "samples/usgs_nwis_gage_height_daily/usgs_gage_height_ft_f64/"
 
@@ -79,7 +79,7 @@ numeric_kind = "uint"
 bit_width = 16
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
-sample_count = 1
+sample_count = 15
 total_size_bytes = 0
 output_path = "samples/usgs_nwis_gage_height_daily/obs_year_u16/"
 
@@ -95,7 +95,7 @@ numeric_kind = "uint"
 bit_width = 8
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
-sample_count = 1
+sample_count = 15
 total_size_bytes = 0
 output_path = "samples/usgs_nwis_gage_height_daily/obs_month_u8/"
 
@@ -111,6 +111,6 @@ numeric_kind = "uint"
 bit_width = 8
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
-sample_count = 1
+sample_count = 15
 total_size_bytes = 0
 output_path = "samples/usgs_nwis_gage_height_daily/obs_day_u8/"

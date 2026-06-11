@@ -42,6 +42,7 @@ import array
 import csv
 import json
 import os
+import re
 import shutil
 from pathlib import Path
 
@@ -52,9 +53,7 @@ samples_root = Path(os.environ["SAMPLES_ROOT"])
 data_root = samples_root.parent.parent
 
 dataset_id = "usgs_nwis_gage_height_daily"
-site_ids = [
-    "07374000",
-]
+
 series_defs = [
     {"series_id": "usgs_gage_height_ft_f64", "array_type": "d", "numeric_kind": "float", "bit_width": 64, "endianness": "little", "element_size_bytes": 8},
     {"series_id": "obs_year_u16", "array_type": "H", "numeric_kind": "uint", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
@@ -71,31 +70,36 @@ for series in series_defs:
 filtered_root.mkdir(parents=True, exist_ok=True)
 index_root.mkdir(parents=True, exist_ok=True)
 
+pat = re.compile(r"^dv_(\d+)_(\d{4})\.json$")
+site_years: dict[str, list[int]] = {}
+for f in sorted(download_root.glob("dv_*_*.json")):
+    m = pat.match(f.name)
+    if not m:
+        continue
+    site_id, year = m.group(1), int(m.group(2))
+    site_years.setdefault(site_id, []).append(year)
+
 stats_path = filtered_root / "site_year_stats.tsv"
 index_path = index_root / "samples.jsonl"
 index_records: list[dict[str, object]] = []
 
 with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
     writer = csv.writer(stats_file, delimiter="\t")
-    writer.writerow(["site_id", "year", "row_count", "value_count", "skipped_count", "start_date", "end_date"])
+    writer.writerow(["site_id", "year", "row_count", "value_count", "skipped_count", "start_date", "end_date", "series_name"])
 
-    for site_id in site_ids:
+    for site_id in sorted(site_years):
         value_series: list[float] = []
         year_values: list[int] = []
         month_values: list[int] = []
         day_values: list[int] = []
 
-        for year in range(2021, 2024):
+        for year in sorted(site_years[site_id]):
             json_path = download_root / f"dv_{site_id}_{year}.json"
-            if not json_path.is_file():
-                raise SystemExit(f"missing raw JSON: {json_path}")
-
-            with json_path.open("r", encoding="utf-8") as handle:
-                payload = json.load(handle)
-
+            payload = json.loads(json_path.read_text(encoding="utf-8"))
             time_series = payload.get("value", {}).get("timeSeries", [])
             if not time_series:
-                raise SystemExit(f"no timeSeries data in {json_path}")
+                print(f"no timeSeries in {json_path.name}, skipping year", flush=True)
+                continue
             selected_series = None
             for candidate in time_series:
                 name = str(candidate.get("name", ""))
@@ -104,13 +108,19 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
                     break
             if selected_series is None:
                 selected_series = time_series[0]
-
             values_wrappers = selected_series.get("values", [])
             if not values_wrappers:
-                raise SystemExit(f"no values data in {json_path}")
-            rows = values_wrappers[0].get("value", [])
-            if not isinstance(rows, list):
-                raise SystemExit(f"unexpected values payload in {json_path}")
+                print(f"no values in {json_path.name}, skipping year", flush=True)
+                continue
+            rows = None
+            for wrapper in values_wrappers:
+                candidate = wrapper.get("value", [])
+                if isinstance(candidate, list) and candidate:
+                    rows = candidate
+                    break
+            if rows is None:
+                print(f"no non-empty value wrapper in {json_path.name}, skipping year", flush=True)
+                continue
 
             row_count = len(rows)
             value_count = 0
@@ -154,7 +164,11 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
                     first_date = date_part
                 last_date = date_part
 
-            writer.writerow([site_id, year, row_count, value_count, skipped_count, first_date, last_date])
+            writer.writerow([site_id, year, row_count, value_count, skipped_count, first_date, last_date, selected_series.get("name", "")])
+
+        if not value_series:
+            print(f"site {site_id}: no usable values, skipping sample output", flush=True)
+            continue
 
         site_slug = f"site_{site_id}"
         payloads = {
@@ -165,15 +179,13 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
         }
 
         for series in series_defs:
-            payload = array.array(series["array_type"], payloads[series["series_id"]])
-            if payload.itemsize > 1 and os.sys.byteorder != "little":
-                payload.byteswap()
-
+            arr = array.array(series["array_type"], payloads[series["series_id"]])
+            if arr.itemsize > 1 and os.sys.byteorder != "little":
+                arr.byteswap()
             out_path = samples_root / series["series_id"] / f"{site_slug}.bin"
             with out_path.open("wb") as out_file:
-                out_file.write(payload.tobytes())
+                out_file.write(arr.tobytes())
             sample_size_bytes = out_path.stat().st_size
-
             index_records.append(
                 {
                     "dataset_id": dataset_id,
@@ -192,6 +204,9 @@ with index_path.open("w", encoding="utf-8", newline="") as index_file:
     for record in index_records:
         index_file.write(json.dumps(record, sort_keys=True))
         index_file.write("\n")
+
+samples_written = sum(1 for r in index_records if r["series_id"] == "usgs_gage_height_ft_f64")
+print(f"wrote samples for {samples_written} sites", flush=True)
 PY
 
 say "built samples under ${SAMPLES_ROOT}"

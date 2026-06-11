@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "usgs_nwis_dissolved_oxygen_daily"
 name = "USGS NWIS Daily Dissolved Oxygen"
-description = "USGS NWIS daily dissolved-oxygen JSON extracts for one fixed site, 2021-2023."
+description = "USGS NWIS daily dissolved-oxygen JSON extracts for 32 geographically diverse stream sites across the US, 2021-2023."
 homepage = "https://waterservices.usgs.gov/"
 [license]
 name = "U.S. Government Public Domain"
@@ -30,7 +30,7 @@ access = "Site-year JSON queries with fixed sites, parameterCd=00300, startDT, e
 size_bytes = 0
 sha256 = ""
 local_path = "downloads/usgs_nwis_dissolved_oxygen_daily/"
-notes = "One JSON file per site per year for the fixed one-site subset."
+notes = "One JSON file per site per year for the 32-site subset. Sites with no parameter-00300 data for a given year are skipped at build time."
 [local_paths]
 downloads = "downloads/usgs_nwis_dissolved_oxygen_daily/"
 extracted = "extracted/usgs_nwis_dissolved_oxygen_daily/"
@@ -42,12 +42,12 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/usgs_nwis_dissolved_oxygen_daily/samples.jsonl"
-summary = "Download site-year USGS daily dissolved-oxygen JSON files, select statistic code 00003 when multiple daily statistics are present, derive aligned date component arrays, and emit raw numeric arrays plus a machine-readable sample index."
-deterministic_notes = "Fixed one-site list, fixed years 2021-2023, fixed parameterCd=00300, fixed API query parameters, explicit selection of statistic code 00003 when multiple daily statistics are present, preserved source observation order within each site-year file, concatenated years in ascending order per site, durable script logs under logs/usgs_nwis_dissolved_oxygen_daily/, and generated sample index at index/usgs_nwis_dissolved_oxygen_daily/samples.jsonl."
+summary = "Download site-year USGS daily dissolved-oxygen JSON files for 32 sites, select statistic code 00003 when multiple daily statistics are present, derive aligned date component arrays, and emit raw numeric arrays plus a machine-readable sample index."
+deterministic_notes = "Fixed 32-site list, fixed years 2021-2023, fixed parameterCd=00300, fixed API query parameters, explicit selection of statistic code 00003 when multiple daily statistics are present, sites sorted lexicographically, years concatenated in ascending order per site, sites with no parameter-00300 data skipped deterministically, durable script logs under logs/usgs_nwis_dissolved_oxygen_daily/, and generated sample index at index/usgs_nwis_dissolved_oxygen_daily/samples.jsonl."
 [[series]]
 id = "usgs_dissolved_oxygen_f64"
 description = "Daily dissolved-oxygen values."
-semantic_meaning = "Float64 dissolved-oxygen values from USGS parameter code 00300, one sample per site."
+semantic_meaning = "Float64 dissolved-oxygen values from USGS parameter code 00300, one sample per site with available data."
 source_resources = ["usgs_dissolved_oxygen_2021_2023"]
 filtered_input_path = "filtered/usgs_nwis_dissolved_oxygen_daily/site_year_stats.tsv"
 filtering = "Keep rows with parseable dissolved-oxygen values and parseable observation dates."
@@ -56,7 +56,7 @@ numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
-sample_count = 1
+sample_count = 13
 total_size_bytes = 0
 output_path = "samples/usgs_nwis_dissolved_oxygen_daily/usgs_dissolved_oxygen_f64/"
 [[series]]
@@ -71,7 +71,7 @@ numeric_kind = "uint"
 bit_width = 16
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
-sample_count = 1
+sample_count = 13
 total_size_bytes = 0
 output_path = "samples/usgs_nwis_dissolved_oxygen_daily/obs_year_u16/"
 [[series]]
@@ -86,7 +86,7 @@ numeric_kind = "uint"
 bit_width = 8
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
-sample_count = 1
+sample_count = 13
 total_size_bytes = 0
 output_path = "samples/usgs_nwis_dissolved_oxygen_daily/obs_month_u8/"
 [[series]]
@@ -101,6 +101,6 @@ numeric_kind = "uint"
 bit_width = 8
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
-sample_count = 1
+sample_count = 13
 total_size_bytes = 0
 output_path = "samples/usgs_nwis_dissolved_oxygen_daily/obs_day_u8/"

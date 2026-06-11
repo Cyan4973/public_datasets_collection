@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "usgs_nwis_streamflow_daily"
 name = "USGS NWIS Daily Streamflow"
-description = "USGS NWIS daily streamflow JSON extracts for four fixed sites, 2021-2023."
+description = "USGS NWIS daily streamflow JSON extracts for 32 geographically diverse stream sites, 2021-2023."
 homepage = "https://waterservices.usgs.gov/"
 
 [license]
@@ -29,12 +29,12 @@ id = "usgs_streamflow_2021_2023"
 origin = "usgs_nwis_dv_api"
 url = "https://waterservices.usgs.gov/nwis/dv/"
 type = "api_query_result"
-version = "2021-2023-four-sites-00060-json"
+version = "2021-2023-32-sites-00060-json"
 access = "Site-year JSON queries with fixed sites, parameterCd=00060, startDT, endDT, format=json, and siteStatus=all."
 size_bytes = 0
 sha256 = ""
 local_path = "downloads/usgs_nwis_streamflow_daily/"
-notes = "One JSON file per site per year for the fixed four-site subset."
+notes = "One JSON file per site per year for the 32-site geographically diverse subset."
 
 [local_paths]
 downloads = "downloads/usgs_nwis_streamflow_daily/"
@@ -49,7 +49,7 @@ build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/usgs_nwis_streamflow_daily/samples.jsonl"
 summary = "Download site-year USGS daily streamflow JSON files, select the mean daily statistic for parameter 00060 when multiple statistics are present, derive aligned date component arrays, and emit raw numeric arrays plus a machine-readable sample index."
-deterministic_notes = "Fixed sites, fixed years 2021-2023, fixed parameterCd=00060, fixed API query parameters, explicit selection of statistic code 00003 when multiple daily statistics are present, preserved source observation order within each site-year file, concatenated years in ascending order per site, durable script logs under logs/usgs_nwis_streamflow_daily/, and generated sample index at index/usgs_nwis_streamflow_daily/samples.jsonl."
+deterministic_notes = "Fixed 32-site list, fixed years 2021-2023, fixed parameterCd=00060, fixed API query parameters, explicit selection of statistic code 00003 when multiple daily statistics are present, preserved source observation order within each site-year file, concatenated years in ascending order per site, durable script logs under logs/usgs_nwis_streamflow_daily/, and generated sample index at index/usgs_nwis_streamflow_daily/samples.jsonl."
 
 [[series]]
 id = "usgs_discharge_cfs_f64"
@@ -63,7 +63,7 @@ numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
-sample_count = 4
+sample_count = 32
 total_size_bytes = 0
 output_path = "samples/usgs_nwis_streamflow_daily/usgs_discharge_cfs_f64/"
 
@@ -79,7 +79,7 @@ numeric_kind = "uint"
 bit_width = 16
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
-sample_count = 4
+sample_count = 32
 total_size_bytes = 0
 output_path = "samples/usgs_nwis_streamflow_daily/obs_year_u16/"
 
@@ -95,7 +95,7 @@ numeric_kind = "uint"
 bit_width = 8
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
-sample_count = 4
+sample_count = 32
 total_size_bytes = 0
 output_path = "samples/usgs_nwis_streamflow_daily/obs_month_u8/"
 
@@ -111,6 +111,6 @@ numeric_kind = "uint"
 bit_width = 8
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
-sample_count = 4
+sample_count = 32
 total_size_bytes = 0
 output_path = "samples/usgs_nwis_streamflow_daily/obs_day_u8/"

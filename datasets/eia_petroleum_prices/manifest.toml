@@ -1,0 +1,13 @@
+manifest_version = 1
+dataset_id = "eia_petroleum_prices"
+status = "staged"
+kind = "native_numeric"
+
+[origin]
+name = "EIA Petroleum Prices"
+url = "https://api.eia.gov/v2/petroleum/pri/gnd/data/"
+license = "EIA terms"
+
+[build]
+sample_index_path = ".data/index/eia_petroleum_prices/samples.jsonl"
+missing_value_policy = "Rows lacking parseable period or value are dropped."

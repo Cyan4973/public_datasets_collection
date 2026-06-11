@@ -1,0 +1,13 @@
+manifest_version = 1
+dataset_id = "usgs_fdsn_events_large"
+status = "staged"
+kind = "native_numeric"
+
+[origin]
+name = "USGS FDSN Event API"
+url = "https://earthquake.usgs.gov/fdsnws/event/1/query"
+license = "USGS public data"
+
+[build]
+sample_index_path = ".data/index/usgs_fdsn_events_large/samples.jsonl"
+missing_value_policy = "Rows lacking parseable magnitude or time are dropped. Missing nullable numeric fields default to -1."

@@ -1,0 +1,13 @@
+manifest_version = 1
+dataset_id = "who_atlas_gisah"
+status = "staged"
+kind = "native_numeric"
+
+[origin]
+name = "WHO GHO API"
+url = "https://ghoapi.azureedge.net/api/SA_0000001400"
+license = "Public API terms"
+
+[build]
+sample_index_path = ".data/index/who_atlas_gisah/samples.jsonl"
+missing_value_policy = "Rows lacking NumericValue, TimeDim, or Id are dropped."

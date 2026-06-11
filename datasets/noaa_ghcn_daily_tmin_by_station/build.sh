@@ -39,12 +39,71 @@ data_root = samples_root.parent.parent
 
 dataset_id = "noaa_ghcn_daily_tmin_by_station"
 element_id = "TMIN"
-station_ids = ["USW00094728", "USW00014922", "USW00094846", "USW00014739", "USW00023062", "USW00025339"]
+station_ids = [
+    "USC00011084",
+    "USC00024849",
+    "USC00034756",
+    "USC00043761",
+    "USC00047916",
+    "USC00053038",
+    "USC00079605",
+    "USC00091500",
+    "USC00101408",
+    "USC00110072",
+    "USC00115943",
+    "USC00122149",
+    "USC00129113",
+    "USC00137147",
+    "USC00144972",
+    "USC00158709",
+    "USC00173046",
+    "USC00190736",
+    "USC00204090",
+    "USC00213303",
+    "USC00221389",
+    "USC00229079",
+    "USC00235834",
+    "USC00243139",
+    "USC00248597",
+    "USC00253630",
+    "USC00258480",
+    "USC00284229",
+    "USC00295960",
+    "USC00301974",
+    "USC00306164",
+    "USC00314938",
+    "USC00322365",
+    "USC00331890",
+    "USC00340017",
+    "USC00345063",
+    "USC00351765",
+    "USC00356634",
+    "USC00368449",
+    "USC00384690",
+    "USC00393217",
+    "USC00406371",
+    "USC00412679",
+    "USC00417336",
+    "USC00425402",
+    "USC00431580",
+    "USC00449263",
+    "USC00455946",
+    "USC00465224",
+    "USC00476208",
+    "USC00486440",
+    "USW00013724",
+    "USW00014739",
+    "USW00014922",
+    "USW00023062",
+    "USW00024149",
+    "USW00025339",
+    "USW00094728",
+    "USW00094846",
+]
+YEAR_MIN = 1763
+YEAR_MAX = 2026
 series_defs = [
     {"series_id": "ghcn_value_i16", "array_type": "h", "numeric_kind": "int", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
-    {"series_id": "obs_year_u16", "array_type": "H", "numeric_kind": "uint", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
-    {"series_id": "obs_month_u8", "array_type": "B", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
-    {"series_id": "obs_day_u8", "array_type": "B", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
 ]
 
 station_names = {}
@@ -73,13 +132,10 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
     writer.writerow(["station_id", "year", "row_count", "kept_count", "skipped_quality_count", "skipped_parse_count", "start_date", "end_date"])
     for station_id in station_ids:
         value_series = []
-        year_series = []
-        month_series = []
-        day_series = []
         csv_path = download_root / f"{station_id}.csv.gz"
         if not csv_path.is_file():
             raise SystemExit(f"missing raw station file: {csv_path}")
-        per_year = {year: {"row_count": 0, "kept_count": 0, "skipped_quality_count": 0, "skipped_parse_count": 0, "start_date": "", "end_date": ""} for year in range(2010, 2024)}
+        per_year = {}
         with gzip.open(csv_path, "rt", encoding="utf-8", newline="") as handle:
             reader = csv.reader(handle)
             for row in reader:
@@ -91,9 +147,9 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
                 if len(raw_date) != 8 or not raw_date.isdigit():
                     continue
                 year = int(raw_date[:4])
-                if year < 2010 or year > 2023:
+                if year < YEAR_MIN or year > YEAR_MAX:
                     continue
-                bucket = per_year[year]
+                bucket = per_year.setdefault(year, {"row_count": 0, "kept_count": 0, "skipped_quality_count": 0, "skipped_parse_count": 0, "start_date": "", "end_date": ""})
                 bucket["row_count"] += 1
                 if qflag.strip() != "":
                     bucket["skipped_quality_count"] += 1
@@ -110,17 +166,16 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
                     bucket["skipped_parse_count"] += 1
                     continue
                 value_series.append(value)
-                year_series.append(obs_year)
-                month_series.append(obs_month)
-                day_series.append(obs_day)
                 bucket["kept_count"] += 1
                 if bucket["start_date"] == "":
                     bucket["start_date"] = raw_date
                 bucket["end_date"] = raw_date
-        for year in range(2010, 2024):
+        for year in sorted(per_year):
             bucket = per_year[year]
             writer.writerow([station_id, year, bucket["row_count"], bucket["kept_count"], bucket["skipped_quality_count"], bucket["skipped_parse_count"], bucket["start_date"], bucket["end_date"]])
-        payloads = {"ghcn_value_i16": value_series, "obs_year_u16": year_series, "obs_month_u8": month_series, "obs_day_u8": day_series}
+        if not value_series:
+            continue
+        payloads = {"ghcn_value_i16": value_series}
         for series in series_defs:
             payload = array.array(series["array_type"], payloads[series["series_id"]])
             if payload.itemsize > 1 and os.sys.byteorder != "little":

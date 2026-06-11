@@ -4,21 +4,14 @@ This recipe collects a curated subset of NOAA GHCN Daily station archives and
 retains peak wind gust (`WSFG`) observations as raw numeric samples.
 
 Selected scope:
-- years `2010` through `2023`
-- stations:
-  - `USW00094728`
-  - `USW00014922`
-  - `USW00094846`
-  - `USW00014739`
-  - `USW00023062`
-  - `USW00025339`
-- one output sample per station per series
+- years `1763` through `2026`
+- stations: a fixed, deterministic set of 59 US long-record stations —
+  the original 6 first-order airport stations plus a spread of US HCN
+  reference-network stations; see `download.sh` for the exact pinned list
+- one output sample per station that reports the element, per series
 
 Series emitted by `build.sh`:
 - `ghcn_value_i16` (`int16`, little-endian)
-- `obs_year_u16` (`uint16`, little-endian)
-- `obs_month_u8` (`uint8`)
-- `obs_day_u8` (`uint8`)
 
 Notes:
 - Source data comes from NOAA NCEI GHCN Daily by-station archives.

@@ -40,13 +40,72 @@ data_root = samples_root.parent.parent
 stats_path = filtered_root / "station_year_stats.tsv"
 index_path = index_root / "samples.jsonl"
 failures_path = download_root / "download_failures.tsv"
-station_ids = ["USW00094728", "USW00014922", "USW00094846", "USW00014739", "USW00023062", "USW00025339"]
+station_ids = [
+    "USC00011084",
+    "USC00024849",
+    "USC00034756",
+    "USC00043761",
+    "USC00047916",
+    "USC00053038",
+    "USC00079605",
+    "USC00091500",
+    "USC00101408",
+    "USC00110072",
+    "USC00115943",
+    "USC00122149",
+    "USC00129113",
+    "USC00137147",
+    "USC00144972",
+    "USC00158709",
+    "USC00173046",
+    "USC00190736",
+    "USC00204090",
+    "USC00213303",
+    "USC00221389",
+    "USC00229079",
+    "USC00235834",
+    "USC00243139",
+    "USC00248597",
+    "USC00253630",
+    "USC00258480",
+    "USC00284229",
+    "USC00295960",
+    "USC00301974",
+    "USC00306164",
+    "USC00314938",
+    "USC00322365",
+    "USC00331890",
+    "USC00340017",
+    "USC00345063",
+    "USC00351765",
+    "USC00356634",
+    "USC00368449",
+    "USC00384690",
+    "USC00393217",
+    "USC00406371",
+    "USC00412679",
+    "USC00417336",
+    "USC00425402",
+    "USC00431580",
+    "USC00449263",
+    "USC00455946",
+    "USC00465224",
+    "USC00476208",
+    "USC00486440",
+    "USW00013724",
+    "USW00014739",
+    "USW00014922",
+    "USW00023062",
+    "USW00024149",
+    "USW00025339",
+    "USW00094728",
+    "USW00094846",
+]
+YEAR_MIN = 1763
+YEAR_MAX = 2026
 element_id = "WSFG"
 series_defs = [
     {"series_id": "ghcn_value_i16", "numeric_kind": "int", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
-    {"series_id": "obs_year_u16", "numeric_kind": "uint", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
-    {"series_id": "obs_month_u8", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
-    {"series_id": "obs_day_u8", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
 ]
 if failures_path.is_file() and failures_path.stat().st_size > 0:
     raise SystemExit(f"download failures recorded in {failures_path}")
@@ -76,7 +135,7 @@ for station_id in station_ids:
     if csv_path.stat().st_size <= 0:
         raise SystemExit(f"empty raw station file: {csv_path}")
     total_values = 0
-    per_year = {year: {"row_count": 0, "kept_count": 0, "skipped_quality_count": 0, "skipped_parse_count": 0, "start_date": "", "end_date": ""} for year in range(2010, 2024)}
+    per_year = {}
     with gzip.open(csv_path, "rt", encoding="utf-8", newline="") as handle:
         reader = csv.reader(handle)
         for row in reader:
@@ -88,9 +147,9 @@ for station_id in station_ids:
             if len(raw_date) != 8 or not raw_date.isdigit():
                 continue
             year = int(raw_date[:4])
-            if year < 2010 or year > 2023:
+            if year < YEAR_MIN or year > YEAR_MAX:
                 continue
-            bucket = per_year[year]
+            bucket = per_year.setdefault(year, {"row_count": 0, "kept_count": 0, "skipped_quality_count": 0, "skipped_parse_count": 0, "start_date": "", "end_date": ""})
             bucket["row_count"] += 1
             if qflag.strip() != "":
                 bucket["skipped_quality_count"] += 1
@@ -110,7 +169,7 @@ for station_id in station_ids:
                 bucket["start_date"] = raw_date
             bucket["end_date"] = raw_date
             bucket["kept_count"] += 1
-    for year in range(2010, 2024):
+    for year in sorted(per_year):
         bucket = per_year[year]
         stats_row = stats_by_key.get((station_id, str(year)))
         if stats_row is None:
@@ -122,6 +181,8 @@ for station_id in station_ids:
             raise SystemExit(f"start date mismatch for {station_id} {year}: stats={stats_row['start_date']!r} raw={bucket['start_date']!r}")
         if stats_row["end_date"] != bucket["end_date"]:
             raise SystemExit(f"end date mismatch for {station_id} {year}: stats={stats_row['end_date']!r} raw={bucket['end_date']!r}")
+    if total_values == 0:
+        continue
     for series in series_defs:
         sample_path = samples_root / series["series_id"] / f"{station_id}.bin"
         if not sample_path.is_file():

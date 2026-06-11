@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "noaa_ghcn_daily_tsun_by_station"
 name = "NOAA GHCN Daily TSUN By Station"
-description = "NOAA GHCN Daily by-station archives filtered to TSUN observations for six fixed stations, 2010-2023."
+description = "NOAA GHCN Daily by-station archives filtered to TSUN observations for 59 fixed US stations, 1763-2026."
 homepage = "https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily"
 
 [license]
@@ -29,7 +29,7 @@ id = "ghcn_daily_tsun_station_subset"
 origin = "noaa_ncei_ghcn_daily"
 url = "https://www.ncei.noaa.gov/pub/data/ghcn/daily/by_station/"
 type = "archive_subset"
-version = "2010-2023-six-stations-tsun"
+version = "1763-2026-59-stations-tsun"
 access = "Fixed station-file downloads from by_station/ plus ghcnd-stations.txt metadata."
 size_bytes = 0
 sha256 = ""
@@ -49,7 +49,7 @@ build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/noaa_ghcn_daily_tsun_by_station/samples.jsonl"
 summary = "Download selected NOAA GHCN Daily station archives, retain TSUN rows, and emit raw numeric arrays plus a machine-readable sample index."
-deterministic_notes = "Fixed station list, fixed element TSUN, fixed year window 2010-2023, download-time gzip and metadata validation, retained only rows with blank quality flag and parseable bounded numeric values, preserved source row order within each station file, durable script logs under logs/noaa_ghcn_daily_tsun_by_station/, and generated sample index at index/noaa_ghcn_daily_tsun_by_station/samples.jsonl."
+deterministic_notes = "Fixed station list, fixed element TSUN, fixed year window 1763-2026, download-time gzip and metadata validation, retained only rows with blank quality flag and parseable bounded numeric values, preserved source row order within each station file, durable script logs under logs/noaa_ghcn_daily_tsun_by_station/, and generated sample index at index/noaa_ghcn_daily_tsun_by_station/samples.jsonl."
 
 [[series]]
 id = "ghcn_value_i16"
@@ -57,7 +57,7 @@ description = "Native GHCN TSUN daily values."
 semantic_meaning = "Signed 16-bit TSUN values from retained GHCN rows, one sample per station."
 source_resources = ["ghcn_daily_tsun_station_subset"]
 filtered_input_path = "filtered/noaa_ghcn_daily_tsun_by_station/station_year_stats.tsv"
-filtering = "Keep TSUN rows from selected stations whose year is in 2010-2023, whose quality flag is blank, and whose value/date fields parse cleanly."
+filtering = "Keep TSUN rows from selected stations whose year is in 1763-2026, whose quality flag is blank, and whose value/date fields parse cleanly."
 missing_value_policy = "Filter rows with non-blank quality flags, malformed dates, malformed numeric values, or out-of-range int16 values."
 conversion = "Parse the GHCN value column as integer and write little-endian int16 arrays preserving row order within each station sample."
 numeric_kind = "int"
@@ -67,54 +67,3 @@ sample_format = "raw homogeneous numeric array"
 sample_count = 0
 total_size_bytes = 0
 output_path = "samples/noaa_ghcn_daily_tsun_by_station/ghcn_value_i16/"
-
-[[series]]
-id = "obs_year_u16"
-description = "Observation year values aligned to retained TSUN rows."
-semantic_meaning = "Unsigned 16-bit years derived from retained GHCN row dates."
-source_resources = ["ghcn_daily_tsun_station_subset"]
-filtered_input_path = "filtered/noaa_ghcn_daily_tsun_by_station/station_year_stats.tsv"
-filtering = "Keep rows accepted for ghcn_value_i16."
-missing_value_policy = "Filter rows rejected by the ghcn_value_i16 series missing-value policy."
-conversion = "Parse the date year component as integer and write little-endian uint16 arrays aligned to retained value rows."
-numeric_kind = "uint"
-bit_width = 16
-endianness = "little"
-sample_format = "raw homogeneous numeric array"
-sample_count = 0
-total_size_bytes = 0
-output_path = "samples/noaa_ghcn_daily_tsun_by_station/obs_year_u16/"
-
-[[series]]
-id = "obs_month_u8"
-description = "Observation month values aligned to retained TSUN rows."
-semantic_meaning = "Unsigned 8-bit months derived from retained GHCN row dates."
-source_resources = ["ghcn_daily_tsun_station_subset"]
-filtered_input_path = "filtered/noaa_ghcn_daily_tsun_by_station/station_year_stats.tsv"
-filtering = "Keep rows accepted for ghcn_value_i16."
-missing_value_policy = "Filter rows rejected by the ghcn_value_i16 series missing-value policy."
-conversion = "Parse the date month component as integer and write uint8 arrays aligned to retained value rows."
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-sample_format = "raw homogeneous numeric array"
-sample_count = 0
-total_size_bytes = 0
-output_path = "samples/noaa_ghcn_daily_tsun_by_station/obs_month_u8/"
-
-[[series]]
-id = "obs_day_u8"
-description = "Observation day values aligned to retained TSUN rows."
-semantic_meaning = "Unsigned 8-bit day-of-month values derived from retained GHCN row dates."
-source_resources = ["ghcn_daily_tsun_station_subset"]
-filtered_input_path = "filtered/noaa_ghcn_daily_tsun_by_station/station_year_stats.tsv"
-filtering = "Keep rows accepted for ghcn_value_i16."
-missing_value_policy = "Filter rows rejected by the ghcn_value_i16 series missing-value policy."
-conversion = "Parse the date day component as integer and write uint8 arrays aligned to retained value rows."
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-sample_format = "raw homogeneous numeric array"
-sample_count = 0
-total_size_bytes = 0
-output_path = "samples/noaa_ghcn_daily_tsun_by_station/obs_day_u8/"

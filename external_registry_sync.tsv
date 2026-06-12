@@ -1,6 +1,6 @@
 external_dataset_id	local_status	local_path	notes
 uci_wine_quality	exact_recipe	datasets/uci_wine_quality	Exact external registry reference is now present as an accepted recipe.
-bike_sharing_uci	exact_recipe	datasets/bike_sharing_uci	Exact external registry reference is now present as an accepted recipe.
+bike_sharing_uci	exact_recipe	datasets/bike_sharing_uci	Local recipe present, curated: emits only real measured columns — weather (f32), ride counts (u16), weathersit (u8); calendar/index columns dropped, so output intentionally differs from the external corpus representation.
 har_smartphone_uci	exact_recipe	datasets/har_smartphone_uci	Exact external registry reference is now present as an accepted recipe.
 household_power_uci	exact_recipe	datasets/household_power_uci	Exact external registry reference is now present as an accepted recipe.
 beijing_air_quality_uci	exact_recipe	datasets/beijing_air_quality_uci	Exact external registry reference is now present as an accepted recipe.

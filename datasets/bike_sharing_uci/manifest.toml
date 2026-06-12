@@ -1,8 +1,7 @@
 manifest_version = 1
 dataset_id = "bike_sharing_uci"
 name = "UCI Bike Sharing"
-description = "Hourly bike-sharing observations from hour.csv."
-homepage = "https://archive.ics.uci.edu/dataset/275/bike+sharing+dataset"
+description = "Real measured columns from the UCI Bike Sharing hourly file (hour.csv): weather measurements, the weather-condition code, and ride counts. Calendar/calendar-derived index columns are excluded."
 
 [license]
 name = "CC BY 4.0"
@@ -48,22 +47,141 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/bike_sharing_uci/samples.jsonl"
-summary = "Download pinned upstream resources, build local raw numeric samples only from local files, and generate a machine-readable sample index."
-deterministic_notes = "Build preserves source file order, does no network access, writes durable logs, and emits samples.jsonl under index/bike_sharing_uci/."
+summary = "Parse hour.csv in source order and emit one sample per retained measured column at the smallest target width its values fit. Calendar/calendar-derived columns are dropped."
+deterministic_notes = "Build is local-only and order-preserving. Retained columns: temp/atemp/hum/windspeed (f32), weathersit (u8), casual/registered/cnt (u16). Excluded columns: instant (record index), dteday (date string), and the calendar/calendar-derived fields season, yr, mnth, hr, weekday, holiday, workingday. Integer columns are range-checked to fit their unsigned width; out-of-range or malformed rows are fatal."
 
 [[series]]
-id = "bike_hourly"
-description = "Hourly bike-sharing numeric columns emitted as one sample per column."
-semantic_meaning = "Selected numeric columns from hour.csv."
+id = "bike_temp"
+description = "Normalized hourly air temperature."
+semantic_meaning = "Normalized temperature in Celsius (upstream value divided by 41), one value per hour in source order."
 source_resources = ["main"]
 filtered_input_path = "filtered/bike_sharing_uci/inventory.tsv"
-filtering = "Keep all hourly rows with parseable numeric fields after excluding instant and dteday."
-missing_value_policy = "Malformed rows are fatal."
-conversion = "Parse CSV rows in source order and emit one sample per retained numeric column."
+filtering = "Keep the temp column for all hourly rows."
+missing_value_policy = "No missing values upstream; malformed rows are fatal."
+conversion = "Parse as float and write little-endian float32."
 numeric_kind = "float"
-bit_width = 64
+bit_width = 32
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
 sample_count = 0
 total_size_bytes = 0
-output_path = "samples/bike_sharing_uci/bike_hourly/"
+output_path = "samples/bike_sharing_uci/bike_temp/"
+
+[[series]]
+id = "bike_atemp"
+description = "Normalized hourly feeling temperature."
+semantic_meaning = "Normalized feeling temperature in Celsius (upstream value divided by 50), one value per hour in source order."
+source_resources = ["main"]
+filtered_input_path = "filtered/bike_sharing_uci/inventory.tsv"
+filtering = "Keep the atemp column for all hourly rows."
+missing_value_policy = "No missing values upstream; malformed rows are fatal."
+conversion = "Parse as float and write little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/bike_sharing_uci/bike_atemp/"
+
+[[series]]
+id = "bike_hum"
+description = "Normalized hourly humidity."
+semantic_meaning = "Normalized humidity (upstream value divided by 100), one value per hour in source order."
+source_resources = ["main"]
+filtered_input_path = "filtered/bike_sharing_uci/inventory.tsv"
+filtering = "Keep the hum column for all hourly rows."
+missing_value_policy = "No missing values upstream; malformed rows are fatal."
+conversion = "Parse as float and write little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/bike_sharing_uci/bike_hum/"
+
+[[series]]
+id = "bike_windspeed"
+description = "Normalized hourly wind speed."
+semantic_meaning = "Normalized wind speed (upstream value divided by 67), one value per hour in source order."
+source_resources = ["main"]
+filtered_input_path = "filtered/bike_sharing_uci/inventory.tsv"
+filtering = "Keep the windspeed column for all hourly rows."
+missing_value_policy = "No missing values upstream; malformed rows are fatal."
+conversion = "Parse as float and write little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/bike_sharing_uci/bike_windspeed/"
+
+[[series]]
+id = "bike_weathersit"
+description = "Hourly weather-situation category."
+semantic_meaning = "Observed weather condition code (1=clear .. 4=heavy precipitation), one value per hour in source order."
+source_resources = ["main"]
+filtered_input_path = "filtered/bike_sharing_uci/inventory.tsv"
+filtering = "Keep the weathersit column for all hourly rows."
+missing_value_policy = "No missing values upstream; values are range-checked to [0,255]; malformed rows are fatal."
+conversion = "Parse as integer and write canonical uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/bike_sharing_uci/bike_weathersit/"
+
+[[series]]
+id = "bike_casual"
+description = "Hourly casual-user rental count."
+semantic_meaning = "Count of casual-user bike rentals per hour, one value per hour in source order."
+source_resources = ["main"]
+filtered_input_path = "filtered/bike_sharing_uci/inventory.tsv"
+filtering = "Keep the casual column for all hourly rows."
+missing_value_policy = "No missing values upstream; values are range-checked to [0,65535]; malformed rows are fatal."
+conversion = "Parse as integer and write little-endian uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/bike_sharing_uci/bike_casual/"
+
+[[series]]
+id = "bike_registered"
+description = "Hourly registered-user rental count."
+semantic_meaning = "Count of registered-user bike rentals per hour, one value per hour in source order."
+source_resources = ["main"]
+filtered_input_path = "filtered/bike_sharing_uci/inventory.tsv"
+filtering = "Keep the registered column for all hourly rows."
+missing_value_policy = "No missing values upstream; values are range-checked to [0,65535]; malformed rows are fatal."
+conversion = "Parse as integer and write little-endian uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/bike_sharing_uci/bike_registered/"
+
+[[series]]
+id = "bike_cnt"
+description = "Hourly total rental count."
+semantic_meaning = "Total bike rentals per hour (casual + registered), one value per hour in source order."
+source_resources = ["main"]
+filtered_input_path = "filtered/bike_sharing_uci/inventory.tsv"
+filtering = "Keep the cnt column for all hourly rows."
+missing_value_policy = "No missing values upstream; values are range-checked to [0,65535]; malformed rows are fatal."
+conversion = "Parse as integer and write little-endian uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/bike_sharing_uci/bike_cnt/"

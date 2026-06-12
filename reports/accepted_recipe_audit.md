@@ -2,8 +2,8 @@
 
 Acceptance floor: at least `10000` numeric values total or at least `102400` bytes of generated sample payload.
 
-- `ok`: 127
-- `below_floor`: 239
+- `ok`: 128
+- `below_floor`: 220
 - `broken`: 0
 
 ## Below Floor
@@ -181,25 +181,6 @@ Acceptance floor: at least `10000` numeric values total or at least `102400` byt
 | `fred_treasury_2y_daily` | 2501 | 10004 | 10 |
 | `fred_treasury_30y_daily` | 2501 | 10004 | 10 |
 | `fred_wti_crude_daily` | 2505 | 10020 | 10 |
-| `ecb_fx_aud_eur_daily` | 2561 | 10244 | 10 |
-| `ecb_fx_cad_eur_daily` | 2561 | 10244 | 10 |
-| `ecb_fx_chf_eur_daily` | 2561 | 10244 | 10 |
-| `ecb_fx_czk_eur_daily` | 2561 | 10244 | 10 |
-| `ecb_fx_dkk_eur_daily` | 2561 | 10244 | 10 |
-| `ecb_fx_gbp_eur_daily` | 2561 | 10244 | 10 |
-| `ecb_fx_hkd_eur_daily` | 2561 | 10244 | 10 |
-| `ecb_fx_huf_eur_daily` | 2561 | 10244 | 10 |
-| `ecb_fx_jpy_eur_daily` | 2561 | 10244 | 10 |
-| `ecb_fx_krw_eur_daily` | 2561 | 10244 | 10 |
-| `ecb_fx_mxn_eur_daily` | 2561 | 10244 | 10 |
-| `ecb_fx_nok_eur_daily` | 2561 | 10244 | 10 |
-| `ecb_fx_nzd_eur_daily` | 2561 | 10244 | 10 |
-| `ecb_fx_pln_eur_daily` | 2561 | 10244 | 10 |
-| `ecb_fx_ron_eur_daily` | 2561 | 10244 | 10 |
-| `ecb_fx_sek_eur_daily` | 2561 | 10244 | 10 |
-| `ecb_fx_sgd_eur_daily` | 2561 | 10244 | 10 |
-| `ecb_fx_try_eur_daily` | 2561 | 10244 | 10 |
-| `ecb_fx_usd_eur_daily` | 2561 | 10244 | 10 |
 | `wikimedia_pageviews_daily` | 2562 | 10248 | 7 |
 | `rubygems_versions_large` | 2580 | 9288 | 5 |
 | `owid_co2_per_gdp_annual` | 2806 | 8418 | 20 |

@@ -4,7 +4,7 @@ set -eu
 SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 REPO_ROOT=$(CDPATH= cd -- "${SCRIPT_DIR}/../.." && pwd)
 DATA_DIR=${DATA_DIR:-"${REPO_ROOT}/.data"}
-DATASET_ID="ecb_fx_dkk_eur_daily"
+DATASET_ID="ecb_fx_eur_daily_matrix"
 DOWNLOAD_ROOT="${DATA_DIR}/downloads/${DATASET_ID}"
 LOG_ROOT="${DATA_DIR}/logs/${DATASET_ID}"
 FORCE=${FORCE:-0}
@@ -33,15 +33,21 @@ from pathlib import Path
 import sys, urllib.parse
 
 plan_path = Path(sys.argv[1])
-base_url = "https://data-api.ecb.europa.eu/service/data/EXR/D.DKK.EUR.SP00.A"
+pairs = [
+    "AUD.EUR","CAD.EUR","CHF.EUR","CZK.EUR","DKK.EUR","GBP.EUR","HKD.EUR","HUF.EUR",
+    "JPY.EUR","KRW.EUR","MXN.EUR","NOK.EUR","NZD.EUR","PLN.EUR","RON.EUR","SEK.EUR",
+    "SGD.EUR","TRY.EUR","USD.EUR",
+]
 params = {
     "startPeriod": "2015-01-01",
     "endPeriod": "2024-12-31",
     "format": "csvdata",
 }
-url = base_url + "?" + urllib.parse.urlencode(params)
 with plan_path.open("w", encoding="utf-8", newline="") as plan_file:
-    plan_file.write(f"DKK.EUR\t{url}\tdkk_eur.csv\n")
+    for pair in pairs:
+        currency = pair.split(".")[0].lower()
+        url = "https://data-api.ecb.europa.eu/service/data/EXR/D." + pair + ".SP00.A?" + urllib.parse.urlencode(params)
+        plan_file.write(f"{pair}\t{url}\t{currency}_eur.csv\n")
 PY
 
 validate_payload() {
@@ -102,7 +108,7 @@ while IFS='	' read -r series_key url rel_out; do
     status=$?
     if [ "${status}" -eq 2 ]; then
       cached_count=$((cached_count + 1))
-      say "cached ${series_key} ${out}"
+      say "cache_hit ${series_key} ${out}"
     else
       failure_count=$((failure_count + 1))
       rm -f "${out}" "${out}.tmp"

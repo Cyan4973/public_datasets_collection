@@ -2,10 +2,10 @@
 
 This report turns the remaining accepted `below_floor` set into cleanup actions.
 
-Current accepted audit baseline after `f866f7e`:
+Current accepted audit baseline after the latest cleanup pass:
 
-- `ok`: `127`
-- `below_floor`: `246`
+- `ok`: `128`
+- `below_floor`: `220`
 - `broken`: `0`
 
 The remaining below-floor set falls into three different buckets:
@@ -70,12 +70,13 @@ Action:
 - examples that may be coherent: labor monthly, rates daily, macro monthly
 - do not collapse all FRED indicators into one mixed bundle
 
-### ECB FX single-pair recipes (`19`)
+### ECB FX single-pair recipes (`resolved`)
 
-All `ecb_fx_*_eur_daily` recipes are below floor individually.
+This family has been consolidated into:
 
-Action:
-- replace with a homogeneous ECB FX matrix recipe instead of keeping one currency-pair recipe per dataset
+- `ecb_fx_eur_daily_matrix`
+
+The individual `ecb_fx_*_eur_daily` standalones are no longer part of the accepted set.
 
 ### World Bank single-indicator recipes (`16`)
 

@@ -10,7 +10,6 @@ nobel_prizes	below_floor	24	66	4	1
 frankfurter_usd_rates	below_floor	30	240	1	1
 fred_real_gdp_quarterly	below_floor	40	160	10	1
 ror_organizations	below_floor	54	63	6	1
-swapi_people	below_floor	60	110	6	1
 rubygems_search	below_floor	60	480	2	1
 metmuseum_objects	below_floor	70	280	1	1
 nagerdate_holidays	below_floor	85	102	5	1
@@ -51,7 +50,6 @@ dockerhub_repositories	below_floor	300	1300	3	1
 weathergov_stations	below_floor	300	2000	3	1
 openlibrary_subjects	below_floor	305	692	6	1
 esco_occupations	below_floor	355	639	5	1
-gdc_projects	below_floor	364	546	4	1
 orcid_search	below_floor	390	780	4	1
 europe_pmc_search	below_floor	400	800	4	1
 openlibrary_search	below_floor	400	800	5	1
@@ -122,7 +120,6 @@ imf_inflation_annual	below_floor	832	2496	16	1
 imf_nominal_gdp_usd_annual	below_floor	832	2496	16	1
 imf_population_annual	below_floor	832	2496	16	1
 imf_unemployment_rate_annual	below_floor	832	2496	16	1
-usaspending_agencies	below_floor	888	5217	8	1
 chembl_molecules	below_floor	973	2043	10	1
 eia_petroleum_prices	below_floor	988	3952	2	1
 gleif_lei_records_api	below_floor	1000	1800	5	1
@@ -150,7 +147,6 @@ world_bank_gdp_per_capita_current_usd_annual	below_floor	1300	6500	20	1
 world_bank_life_expectancy	below_floor	1300	6500	20	1
 world_bank_population_total	below_floor	1300	6500	20	1
 world_bank_urban_population_percent_annual	below_floor	1300	6500	20	1
-ensembl_species	below_floor	1392	2784	4	1
 openalex_authors_large	below_floor	1400	3000	7	1
 gbif_occurrence_large	below_floor	1499	5999	5	1
 plos_search	below_floor	1500	3500	3	1
@@ -160,10 +156,7 @@ internetarchive_advancedsearch	below_floor	1500	7000	3	1
 crossref_works_large_retry	below_floor	1500	8000	3	1
 coinpaprika_exchanges	below_floor	1530	5760	6	1
 openalex_institutions_large	below_floor	1600	4600	8	1
-freetogame_games	below_floor	1640	3280	4	1
 tvmaze_shows	below_floor	1715	4655	7	1
-restcountries_all	below_floor	1740	7210	7	1
-geonames_country_info	below_floor	1764	6300	7	1
 openalex_sources_large	below_floor	1800	5400	9	1
 europepmc_grants	below_floor	1984	3968	4	1
 gdc_cases	below_floor	2000	3500	4	1
@@ -173,7 +166,6 @@ npi_registry_ca	below_floor	2000	7000	4	1
 nvd_cpe_match_feed	below_floor	2000	7000	4	1
 dataone_solr_1000	below_floor	2000	10000	2	1
 npm_search_packages_large	below_floor	2000	10250	8	1
-noaa_coops_stations	below_floor	2107	7525	7	1
 nih_reporter_projects	below_floor	2140	9416	5	1
 fred_sp500_daily	below_floor	2162	8648	9	1
 geofabrik_index	below_floor	2220	17760	4	1

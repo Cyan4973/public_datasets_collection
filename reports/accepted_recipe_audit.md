@@ -3,7 +3,7 @@
 Acceptance floor: at least `10000` numeric values total or at least `102400` bytes of generated sample payload.
 
 - `ok`: 127
-- `below_floor`: 254
+- `below_floor`: 246
 - `broken`: 0
 
 ## Below Floor
@@ -21,7 +21,6 @@ Acceptance floor: at least `10000` numeric values total or at least `102400` byt
 | `frankfurter_usd_rates` | 30 | 240 | 1 |
 | `fred_real_gdp_quarterly` | 40 | 160 | 10 |
 | `ror_organizations` | 54 | 63 | 6 |
-| `swapi_people` | 60 | 110 | 6 |
 | `rubygems_search` | 60 | 480 | 2 |
 | `metmuseum_objects` | 70 | 280 | 1 |
 | `nagerdate_holidays` | 85 | 102 | 5 |
@@ -62,7 +61,6 @@ Acceptance floor: at least `10000` numeric values total or at least `102400` byt
 | `weathergov_stations` | 300 | 2000 | 3 |
 | `openlibrary_subjects` | 305 | 692 | 6 |
 | `esco_occupations` | 355 | 639 | 5 |
-| `gdc_projects` | 364 | 546 | 4 |
 | `orcid_search` | 390 | 780 | 4 |
 | `europe_pmc_search` | 400 | 800 | 4 |
 | `openlibrary_search` | 400 | 800 | 5 |
@@ -133,7 +131,6 @@ Acceptance floor: at least `10000` numeric values total or at least `102400` byt
 | `imf_nominal_gdp_usd_annual` | 832 | 2496 | 16 |
 | `imf_population_annual` | 832 | 2496 | 16 |
 | `imf_unemployment_rate_annual` | 832 | 2496 | 16 |
-| `usaspending_agencies` | 888 | 5217 | 8 |
 | `chembl_molecules` | 973 | 2043 | 10 |
 | `eia_petroleum_prices` | 988 | 3952 | 2 |
 | `gleif_lei_records_api` | 1000 | 1800 | 5 |
@@ -161,7 +158,6 @@ Acceptance floor: at least `10000` numeric values total or at least `102400` byt
 | `world_bank_life_expectancy` | 1300 | 6500 | 20 |
 | `world_bank_population_total` | 1300 | 6500 | 20 |
 | `world_bank_urban_population_percent_annual` | 1300 | 6500 | 20 |
-| `ensembl_species` | 1392 | 2784 | 4 |
 | `openalex_authors_large` | 1400 | 3000 | 7 |
 | `gbif_occurrence_large` | 1499 | 5999 | 5 |
 | `plos_search` | 1500 | 3500 | 3 |
@@ -171,10 +167,7 @@ Acceptance floor: at least `10000` numeric values total or at least `102400` byt
 | `crossref_works_large_retry` | 1500 | 8000 | 3 |
 | `coinpaprika_exchanges` | 1530 | 5760 | 6 |
 | `openalex_institutions_large` | 1600 | 4600 | 8 |
-| `freetogame_games` | 1640 | 3280 | 4 |
 | `tvmaze_shows` | 1715 | 4655 | 7 |
-| `restcountries_all` | 1740 | 7210 | 7 |
-| `geonames_country_info` | 1764 | 6300 | 7 |
 | `openalex_sources_large` | 1800 | 5400 | 9 |
 | `europepmc_grants` | 1984 | 3968 | 4 |
 | `gdc_cases` | 2000 | 3500 | 4 |
@@ -184,7 +177,6 @@ Acceptance floor: at least `10000` numeric values total or at least `102400` byt
 | `nvd_cpe_match_feed` | 2000 | 7000 | 4 |
 | `dataone_solr_1000` | 2000 | 10000 | 2 |
 | `npm_search_packages_large` | 2000 | 10250 | 8 |
-| `noaa_coops_stations` | 2107 | 7525 | 7 |
 | `nih_reporter_projects` | 2140 | 9416 | 5 |
 | `fred_sp500_daily` | 2162 | 8648 | 9 |
 | `geofabrik_index` | 2220 | 17760 | 4 |

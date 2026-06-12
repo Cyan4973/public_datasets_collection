@@ -216,7 +216,6 @@ coinpaprika_tickers	below_floor	8000	52000	4	1
 cisa_kev_catalog	below_floor	8060	14508	5	1
 usgs_daily_values_large	below_floor	8890	44450	14	1
 nasa_donki_cme	below_floor	9072	24192	6	1
-sec_submissions_recent	ok	10000	20000	10	1
 metacpan_releases_search_large	ok	10000	37000	10	1
 nomis_employment	ok	10815	26265	7	1
 jhu_covid19_confirmed_global_daily	ok	11430	34290	10	1
@@ -302,6 +301,7 @@ noaa_coops_air_pressure	ok	525156	4201248	3	1
 usgs_sitefile_all_large	ok	542424	3254544	6	1
 noaa_ghcn_daily_awnd_by_station	ok	545792	1091584	57	1
 appliances_energy_uci	ok	552580	4420640	28	1
+sec_submissions_largecap_bundle	ok	579882	1932940	294	1
 gharchive_hourly_events_20240101_00	ok	614476	4301332	4	1
 earthquake_usgs	ok	630753	4880874	50	1
 noaa_coops_water_level	ok	876000	7008000	5	1

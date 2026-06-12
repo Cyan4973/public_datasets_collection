@@ -1,0 +1,23 @@
+manifest_version = 1
+dataset_id = "sec_submissions_largecap_bundle"
+name = "SEC Submissions Large-Cap Bundle"
+description = "Pinned SEC recent submissions metadata for 49 large-cap issuers, emitted as homogeneous filing-metadata series."
+
+[license]
+name = "SEC Terms"
+spdx = "NOASSERTION"
+url = "https://www.sec.gov/"
+notes = "Public SEC submissions output."
+
+[local_paths]
+downloads = "downloads/sec_submissions_largecap_bundle/"
+filtered = "filtered/sec_submissions_largecap_bundle/"
+index = "index/sec_submissions_largecap_bundle/"
+samples = "samples/sec_submissions_largecap_bundle/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/sec_submissions_largecap_bundle/samples.jsonl"
+summary = "Download 50 pinned SEC submissions JSON payloads and emit homogeneous filing-metadata arrays."

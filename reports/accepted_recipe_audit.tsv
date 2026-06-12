@@ -204,9 +204,6 @@ eurostat_male_unemployment_monthly	below_floor	4930	14790	10	1
 eurostat_unemployment_monthly	below_floor	4930	14790	10	1
 usgs_water_sites_rdb	below_floor	4992	36976	6	1
 crossref_funders_large	below_floor	5000	10000	5	1
-sec_submissions_amd	below_floor	5000	10000	5	1
-sec_submissions_tsla	below_floor	5005	16016	5	1
-sec_submissions_nvda	below_floor	5010	16032	5	1
 dataone_solr	below_floor	5039	25078	6	1
 dataone_solr_large_retry	below_floor	5039	25078	6	1
 federalregister_documents_large	below_floor	6000	9000	6	1

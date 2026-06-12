@@ -3,7 +3,7 @@
 Acceptance floor: at least `10000` numeric values total or at least `102400` bytes of generated sample payload.
 
 - `ok`: 128
-- `below_floor`: 220
+- `below_floor`: 217
 - `broken`: 0
 
 ## Below Floor
@@ -215,9 +215,6 @@ Acceptance floor: at least `10000` numeric values total or at least `102400` byt
 | `eurostat_unemployment_monthly` | 4930 | 14790 | 10 |
 | `usgs_water_sites_rdb` | 4992 | 36976 | 6 |
 | `crossref_funders_large` | 5000 | 10000 | 5 |
-| `sec_submissions_amd` | 5000 | 10000 | 5 |
-| `sec_submissions_tsla` | 5005 | 16016 | 5 |
-| `sec_submissions_nvda` | 5010 | 16032 | 5 |
 | `dataone_solr` | 5039 | 25078 | 6 |
 | `dataone_solr_large_retry` | 5039 | 25078 | 6 |
 | `federalregister_documents_large` | 6000 | 9000 | 6 |

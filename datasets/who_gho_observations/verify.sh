@@ -19,7 +19,7 @@ import json, os, sys
 idx, stats = sys.argv[1:3]
 rows = [json.loads(line) for line in open(idx)]
 st = json.load(open(stats))
-assert len(rows) == 9
+assert len(rows) == 8
 for r in rows:
     assert os.path.exists(r["sample_path"])
     assert r["sample_size_bytes"] == os.path.getsize(r["sample_path"])

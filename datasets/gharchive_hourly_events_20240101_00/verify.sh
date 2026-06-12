@@ -18,10 +18,9 @@ from pathlib import Path
 root=Path(os.environ["REPO_ROOT"]) / os.environ["DATA_DIR"]
 rows=[json.loads(line) for line in (Path(os.environ["INDEX_DIR"])/"samples.jsonl").read_text().splitlines() if line.strip()]
 stats=json.loads((Path(os.environ["FILTER_DIR"])/"ingest_stats.json").read_text())
-if len(rows) != 5: raise SystemExit(f"unexpected row count {len(rows)}")
+if len(rows) != 4: raise SystemExit(f"unexpected row count {len(rows)}")
 for row in rows:
     if not (root/row["sample_path"]).is_file(): raise SystemExit(f"missing sample {row['sample_path']}")
 print(f"verified_samples={len(rows)} rows_total={stats['rows_total']} rows_skipped={stats['rows_skipped']}")
 PY
 echo "[$(date -Is)] verify done dataset=$DATASET_ID"
-

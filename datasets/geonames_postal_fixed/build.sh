@@ -34,7 +34,6 @@ meta = {
     "geonames_postal_code_u32": ("uint", 32, "I"),
     "geonames_postal_latitude_f64": ("float", 64, "d"),
     "geonames_postal_longitude_f64": ("float", 64, "d"),
-    "geonames_postal_admin1_code_u8": ("uint", 8, "B"),
     "geonames_postal_admin2_code_u16": ("uint", 16, "H"),
     "geonames_postal_accuracy_u8": ("uint", 8, "B"),
 }
@@ -73,7 +72,6 @@ with zipfile.ZipFile(raw) as zf:
             vals["geonames_postal_code_u32"].append(postal_code)
             vals["geonames_postal_latitude_f64"].append(latitude)
             vals["geonames_postal_longitude_f64"].append(longitude)
-            vals["geonames_postal_admin1_code_u8"].append(admin1_code)
             vals["geonames_postal_admin2_code_u16"].append(admin2_code)
             vals["geonames_postal_accuracy_u8"].append(accuracy)
 

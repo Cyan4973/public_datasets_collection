@@ -21,7 +21,8 @@ import csv, gzip, json, os, struct
 from pathlib import Path
 repo = Path(os.environ['REPO_ROOT']); data_dir = os.environ['DATA_DIR']
 extract_dir = Path(os.environ['EXTRACT_DIR']); filter_dir = Path(os.environ['FILTER_DIR']); index_dir = Path(os.environ['INDEX_DIR']); samples_dir = Path(os.environ['SAMPLES_DIR'])
-cols = [[] for _ in range(55)]
+drop_cols = {21, 22, 29, 39, 50, 51}
+cols = {i: [] for i in range(1, 56) if i not in drop_cols}
 row_count = 0
 with gzip.open(extract_dir / 'covtype.data.gz', 'rt', newline='') as fh:
     reader = csv.reader(fh)
@@ -29,12 +30,13 @@ with gzip.open(extract_dir / 'covtype.data.gz', 'rt', newline='') as fh:
         if len(row) != 55:
             raise SystemExit('unexpected row width')
         row_count += 1
-        for i, value in enumerate(row):
-            cols[i].append(int(value))
+        for i, value in enumerate(row, start=1):
+            if i in cols:
+                cols[i].append(int(value))
 filter_dir.mkdir(parents=True, exist_ok=True); index_dir.mkdir(parents=True, exist_ok=True)
 (filter_dir / 'inventory.tsv').write_text(f'row_count\n{row_count}\n')
 rows=[]
-for i, values in enumerate(cols, start=1):
+for i, values in cols.items():
     if i == 5:
         kind, fmt, bits, size = 'int', '<h', 16, 2
     elif i <= 10:

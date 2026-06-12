@@ -55,11 +55,13 @@ Script contract:
 - `build.sh` must implement an explicit missing-value policy. Upstream blanks, sentinels, flagged rows, NaNs, malformed rows, or unavailable observations must be either filtered, preserved as documented sentinel values, or treated as fatal. This policy should be stated in the dataset `README.md` and manifest.
 - If a series is a derived machine-facing representation rather than native numeric source content, `README.md` and the manifest must state that explicitly, pin the transform, and explain why the representation is a legitimate compression target rather than a synthetic local numericization.
 - `verify.sh` validates pinned resource properties where stable and checks generated sample counts, sizes, encoding assumptions, and the same missing-value policy applied by `build.sh`.
+- `verify.sh` must fail constant series and other structurally degenerate outputs. Fixed schema-length proxies and binary series with a minority class below `0.1%` are not acceptable unless explicitly justified.
 - All scripts should support `DATA_DIR` overrides and be safe to rerun.
 - All scripts should write durable logs under `${DATA_DIR:-.data}/logs/<dataset_id>/`.
 
 Scaling guidance:
 - Keep one dataset per recipe directory. If one upstream source yields multiple distinct numeric outputs, model them as separate `series` entries in one manifest.
+- An accepted recipe must meet the repository usefulness floor: at least `10,000` numeric values total across its generated sample index or at least `100 KB` of total generated sample payload bytes.
 - Prefer stable upstream releases, snapshots, or explicitly versioned API parameters over unpinned "latest" endpoints.
 - Use deterministic file naming, sort order, and shard boundaries so two users can regenerate the same local outputs.
 - Keep committed metadata concise; put bulky inventories, row counts, or derived statistics in `verify.sh` output or generated local reports instead of expanding the manifest unnecessarily.

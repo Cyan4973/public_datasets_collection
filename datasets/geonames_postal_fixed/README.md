@@ -6,7 +6,6 @@ Selected series:
 - `geonames_postal_code_u32`
 - `geonames_postal_latitude_f64`
 - `geonames_postal_longitude_f64`
-- `geonames_postal_admin1_code_u8`
 - `geonames_postal_admin2_code_u16`
 - `geonames_postal_accuracy_u8`
 

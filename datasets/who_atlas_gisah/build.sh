@@ -21,10 +21,8 @@ series = {
     "who_gisah_id_u32": ("I", [], "uint", 32),
     "who_gisah_time_dim_u16": ("H", [], "uint", 16),
     "who_gisah_numeric_value_f64": ("d", [], "float", 64),
-    "who_gisah_spatial_dim_length_u8": ("B", [], "uint", 8),
     "who_gisah_parent_location_length_u8": ("B", [], "uint", 8),
     "who_gisah_dim1_length_u8": ("B", [], "uint", 8),
-    "who_gisah_data_source_length_u8": ("B", [], "uint", 8),
 }
 kept = 0
 for r in rows:
@@ -37,10 +35,8 @@ for r in rows:
     series["who_gisah_id_u32"][1].append(rid)
     series["who_gisah_time_dim_u16"][1].append(td)
     series["who_gisah_numeric_value_f64"][1].append(nv)
-    series["who_gisah_spatial_dim_length_u8"][1].append(min(len(r.get("SpatialDim") or ""), 255))
     series["who_gisah_parent_location_length_u8"][1].append(min(len(r.get("ParentLocation") or ""), 255))
     series["who_gisah_dim1_length_u8"][1].append(min(len(r.get("Dim1") or ""), 255))
-    series["who_gisah_data_source_length_u8"][1].append(min(len(r.get("DataSourceDim") or ""), 255))
     kept += 1
 with open(os.path.join(index_dir, "samples.jsonl"), "w", encoding="utf-8") as idx:
     for sid, (fmt, vals, nk, bw) in series.items():

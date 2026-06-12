@@ -55,13 +55,6 @@ endianness = "little"
 sample_format = "raw"
 
 [[series]]
-id = "who_gho_dim2_length_u8"
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-sample_format = "raw"
-
-[[series]]
 id = "who_gho_low_f64"
 numeric_kind = "float"
 bit_width = 64
@@ -74,4 +67,3 @@ numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 sample_format = "raw"
-

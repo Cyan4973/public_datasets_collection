@@ -36,7 +36,6 @@ meta = {
     "hgnc_uniprot_count_u8": ("uint", 8, "B"),
     "hgnc_gene_group_count_u16": ("uint", 16, "H"),
     "hgnc_location_length_u16": ("uint", 16, "H"),
-    "hgnc_status_length_u8": ("uint", 8, "B"),
     "hgnc_approved_date_u32": ("uint", 32, "I"),
     "hgnc_modified_date_u32": ("uint", 32, "I"),
 }
@@ -66,7 +65,6 @@ for row in docs:
         vals["hgnc_uniprot_count_u8"].append(len(row.get("uniprot_ids") or []))
         vals["hgnc_gene_group_count_u16"].append(len(row.get("gene_group") or []))
         vals["hgnc_location_length_u16"].append(len(row.get("location") or ""))
-        vals["hgnc_status_length_u8"].append(len(row.get("status") or ""))
         vals["hgnc_approved_date_u32"].append(day_ts(row.get("date_approved_reserved") or "1970-01-01"))
         vals["hgnc_modified_date_u32"].append(day_ts(row.get("date_modified") or "1970-01-01"))
     except Exception:

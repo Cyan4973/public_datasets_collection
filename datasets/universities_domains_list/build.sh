@@ -20,7 +20,7 @@ from pathlib import Path
 repo_root=Path(os.environ['REPO_ROOT']); data_root=repo_root/os.environ['DATA_DIR']
 download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTER_DIR']); index_dir=Path(os.environ['INDEX_DIR']); samples_dir=Path(os.environ['SAMPLES_DIR'])
 obj=json.load(open(download_dir/'universities_domains_list.json',encoding='utf-8'))
-meta={'universities_name_length':('uint',16,'H'),'universities_domains_count':('uint',8,'B'),'universities_web_pages_count':('uint',8,'B'),'universities_country_length':('uint',8,'B'),'universities_alpha_two_code_length':('uint',8,'B'),'universities_state_province_length':('uint',16,'H')}
+meta={'universities_name_length':('uint',16,'H'),'universities_domains_count':('uint',8,'B'),'universities_web_pages_count':('uint',8,'B'),'universities_country_length':('uint',8,'B'),'universities_state_province_length':('uint',16,'H')}
 vals={k:[] for k in meta}; skipped=0
 for sid in vals:
  d=samples_dir/sid
@@ -32,7 +32,6 @@ for row in obj:
   vals['universities_domains_count'].append(len(row.get('domains') or []))
   vals['universities_web_pages_count'].append(len(row.get('web_pages') or []))
   vals['universities_country_length'].append(len(row.get('country') or ''))
-  vals['universities_alpha_two_code_length'].append(len(row.get('alpha_two_code') or ''))
   vals['universities_state_province_length'].append(len(row.get('state-province') or ''))
  except Exception:
   skipped += 1

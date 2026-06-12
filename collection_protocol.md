@@ -71,6 +71,7 @@ Script requirements:
 - `download.sh` should not keep a cached file that is known to be an upstream error payload or otherwise semantically invalid input. On rerun, it should either replace the invalid cache entry or fail clearly.
 - `build.sh` must process only local files already present under `${DATA_DIR:-.data}` and must apply the documented missing-value policy consistently.
 - `verify.sh` must independently validate the same missing-value policy assumptions used by `build.sh`, including skipped-row counts, retained sentinel counts, or fatal conditions as applicable.
+- `verify.sh` must also reject obviously degenerate series. Constant series are not acceptable. Structurally degenerate proxy series, such as fixed string-length fields that are constant by schema, are not acceptable. Binary series with a minority class below `0.1%` are not acceptable unless explicitly justified in the manifest.
 - All three scripts must write durable logs under `${DATA_DIR:-.data}/logs/<dataset_id>/`.
 
 Recipe evolution:
@@ -79,6 +80,7 @@ Recipe evolution:
   - a user-run download using the current `download.sh`
   - a successful local `build.sh`
   - a successful local `verify.sh`
+  - meeting the repository usefulness floor of at least `10,000` numeric values total across the generated sample index or at least `100 KB` of total generated sample bytes
 - If a staged recipe fails because of access, schema drift, source-path problems, or policy issues, it should be revised in `staging/` or recorded under `attempts/`. It should not be placed under `datasets/` until it has actually cleared the acceptance path above.
 - If `download.sh` changes materially, acceptance of the recipe requires a fresh user-run download pass with the updated script before commit. Material changes include modified source URLs, query parameters, selected station/site/resource subsets, payload validation rules, authentication-free access paths, or cache-acceptance rules.
 - If an initially selected upstream subset is only partially supported, the recipe may be narrowed to a working documented subset without being recorded as a failure, but the manifest, README, scripts, sample counts, and local verification outputs must all be updated to reflect the accepted subset before commit.
@@ -93,5 +95,8 @@ To be eligible, a dataset must be:
   - derived operational numeric representations that satisfy the stricter rule above
 - Each series corresponds to one homogeneous kind of numeric content. If filtered data contains multiple columns, fields, records, or other values with different meanings or numeric formats, each output should become its own series.
 - Exclude synthetic local numeric transforms. Arbitrary local recodings, gratuitous widenings, and review-driven fabricated numericizations are not eligible.
-- Avoid trivially small resources. As general guidance, a resource should produce at least 5 samples, or contain enough data to produce one useful large sample. A single large resource is acceptable when it produces one useful sample; training-time sharding is handled outside this repository. The current guidance threshold for "large enough to be useful" is about 250 KB, but this is not meant to be a strict pass/fail rule.
+- Avoid trivially small resources. Acceptance requires at least one of:
+  - at least `10,000` numeric values total across the generated sample index, or
+  - at least `100 KB` of total generated sample payload bytes across the generated sample index.
+  Smaller outputs are not accepted as standalone recipes unless explicitly approved and documented as exceptions.
 - Keep generated series bounded. As general guidance, the total size of a generated series should not exceed 1 GB, counting all samples in that series. There is no per-sample size limit during this collection stage. For larger resources, scripts may use documented filtering or processing to keep each generated series below the limit and avoid downloading or generating much more data than needed.

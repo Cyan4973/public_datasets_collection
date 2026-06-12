@@ -22,7 +22,6 @@ repo_root=Path(os.environ['REPO_ROOT']); data_root=repo_root/os.environ['DATA_DI
 download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTER_DIR']); index_dir=Path(os.environ['INDEX_DIR']); samples_dir=Path(os.environ['SAMPLES_DIR'])
 items=json.load(open(download_dir/"cran_packages.json", encoding='utf-8'))
 meta={
-    "cran_archived_flag": ("uint", 8, "B"),
     "cran_version_count": ("uint", 16, "H"),
     "cran_release_count": ("uint", 16, "H"),
     "cran_import_count": ("uint", 16, "H"),
@@ -39,7 +38,6 @@ for _pkg,row in items.items():
         versions=row.get("versions") or {}
         latest=row.get("latest")
         latest_meta=versions.get(latest) or {}
-        vals["cran_archived_flag"].append(1 if row.get("archived") else 0)
         vals["cran_version_count"].append(len(versions))
         vals["cran_release_count"].append(len(latest_meta.get("releases") or []))
         vals["cran_import_count"].append(len(latest_meta.get("Imports") or {}))

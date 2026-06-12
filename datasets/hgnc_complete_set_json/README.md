@@ -10,7 +10,6 @@ Selected series:
 - `hgnc_uniprot_count_u8`
 - `hgnc_gene_group_count_u16`
 - `hgnc_location_length_u16`
-- `hgnc_status_length_u8`
 - `hgnc_approved_date_u32`
 - `hgnc_modified_date_u32`
 

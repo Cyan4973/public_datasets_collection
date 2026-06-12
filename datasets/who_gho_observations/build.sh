@@ -29,7 +29,6 @@ series = {
     "who_gho_spatial_dim_length_u8": ("B", [], "uint", 8),
     "who_gho_parent_location_length_u8": ("B", [], "uint", 8),
     "who_gho_dim1_length_u8": ("B", [], "uint", 8),
-    "who_gho_dim2_length_u8": ("B", [], "uint", 8),
     "who_gho_low_f64": ("d", [], "float", 64),
     "who_gho_high_f64": ("d", [], "float", 64),
 }
@@ -49,7 +48,6 @@ for r in rows:
     series["who_gho_spatial_dim_length_u8"][1].append(slen(r.get("SpatialDim")))
     series["who_gho_parent_location_length_u8"][1].append(slen(r.get("ParentLocation")))
     series["who_gho_dim1_length_u8"][1].append(slen(r.get("Dim1")))
-    series["who_gho_dim2_length_u8"][1].append(slen(r.get("Dim2")))
     series["who_gho_low_f64"][1].append(float(r["Low"]) if r.get("Low") is not None else float("nan"))
     series["who_gho_high_f64"][1].append(float(r["High"]) if r.get("High") is not None else float("nan"))
     kept += 1

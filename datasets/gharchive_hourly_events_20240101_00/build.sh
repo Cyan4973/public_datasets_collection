@@ -21,7 +21,7 @@ from datetime import datetime
 from pathlib import Path
 repo_root=Path(os.environ["REPO_ROOT"]); data_root=repo_root/os.environ["DATA_DIR"]
 download_dir=Path(os.environ["DOWNLOAD_DIR"]); filter_dir=Path(os.environ["FILTER_DIR"]); index_dir=Path(os.environ["INDEX_DIR"]); samples_dir=Path(os.environ["SAMPLES_DIR"])
-vals={"gharchive_event_id":[],"gharchive_actor_id":[],"gharchive_repo_id":[],"gharchive_public":[],"gharchive_created_at":[]}
+vals={"gharchive_event_id":[],"gharchive_actor_id":[],"gharchive_repo_id":[],"gharchive_created_at":[]}
 for sid in vals:
     d=samples_dir/sid
     if d.exists(): shutil.rmtree(d)
@@ -37,11 +37,10 @@ with gzip.open(download_dir/"2024-01-01-0.json.gz",'rt',encoding='utf-8') as f:
             vals["gharchive_event_id"].append(int(obj["id"]))
             vals["gharchive_actor_id"].append(int(obj["actor"]["id"]))
             vals["gharchive_repo_id"].append(int(obj["repo"]["id"]))
-            vals["gharchive_public"].append(1 if obj["public"] else 0)
             vals["gharchive_created_at"].append(ts(obj["created_at"]))
         except Exception:
             skipped += 1
-meta={"gharchive_event_id":("uint",64,"Q"),"gharchive_actor_id":("uint",64,"Q"),"gharchive_repo_id":("uint",64,"Q"),"gharchive_public":("uint",8,"B"),"gharchive_created_at":("uint",32,"I")}
+meta={"gharchive_event_id":("uint",64,"Q"),"gharchive_actor_id":("uint",64,"Q"),"gharchive_repo_id":("uint",64,"Q"),"gharchive_created_at":("uint",32,"I")}
 rows=[]
 for sid,values in vals.items():
     kind,bits,code=meta[sid]
@@ -54,4 +53,3 @@ with (index_dir/"samples.jsonl").open("w",encoding="utf-8") as fh:
     for row in rows: fh.write(json.dumps(row,sort_keys=True)+"\n")
 PY
 echo "[$(date -Is)] build done dataset=$DATASET_ID"
-

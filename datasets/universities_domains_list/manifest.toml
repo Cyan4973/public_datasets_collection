@@ -59,14 +59,6 @@ bit_width = 8
 endianness = "little"
 
 [[series]]
-id = "universities_alpha_two_code_length"
-representation_class = "derived_operational_numeric"
-missing_value_policy = "Rows missing text fields are filtered."
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-
-[[series]]
 id = "universities_state_province_length"
 representation_class = "derived_operational_numeric"
 missing_value_policy = "Rows missing text fields are filtered."

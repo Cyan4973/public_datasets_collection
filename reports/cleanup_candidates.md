@@ -1,0 +1,105 @@
+# Cleanup Candidates
+
+Current acceptance floor: `10,000` values or `100 KB` total sample bytes.
+
+- broken: `2`
+- below_floor: `253`
+
+## Broken Remove Now
+
+- `eurostat_youth_unemployment_monthly` — values=0, bytes=0, sample_rows=15
+- `owid_renewables_share_energy_annual` — values=0, bytes=0, sample_rows=20
+
+## Below Floor Remove First
+
+- `open_notify_iss` — values=3, bytes=12, sample_rows=3
+- `pypistats_recent` — values=3, bytes=24, sample_rows=3
+- `pubchem_compound_properties` — values=4, bytes=16, sample_rows=4
+- `github_linux_repo_snapshot` — values=6, bytes=24, sample_rows=6
+- `pypi_requests_json` — values=6, bytes=26, sample_rows=3
+- `census_geocoder` — values=6, bytes=32, sample_rows=6
+- `nominatim_berlin` — values=6, bytes=34, sample_rows=6
+- `nobel_prizes` — values=24, bytes=66, sample_rows=4
+- `frankfurter_usd_rates` — values=30, bytes=240, sample_rows=1
+- `ror_organizations` — values=54, bytes=63, sample_rows=6
+- `swapi_people` — values=60, bytes=110, sample_rows=6
+- `rubygems_search` — values=60, bytes=480, sample_rows=2
+- `metmuseum_objects` — values=70, bytes=280, sample_rows=1
+- `nagerdate_holidays` — values=85, bytes=102, sample_rows=5
+- `bls_cpi_series` — values=96, bytes=192, sample_rows=4
+- `jolpica_f1_results` — values=98, bytes=272, sample_rows=5
+- `rickandmorty_characters` — values=100, bytes=240, sample_rows=5
+- `lobsters_hottest` — values=100, bytes=350, sample_rows=4
+- `pokeapi_pokemon` — values=100, bytes=400, sample_rows=1
+- `fred_real_gdp_quarterly` — values=120, bytes=240, sample_rows=30
+- `biorxiv_details` — values=150, bytes=390, sample_rows=5
+- `dryad_search` — values=160, bytes=600, sample_rows=8
+- `wikidata_sparql` — values=200, bytes=600, sample_rows=2
+- `maven_central_search` — values=200, bytes=1000, sample_rows=2
+- `internet_archive_metadata` — values=200, bytes=1200, sample_rows=2
+- `packagist_packages` — values=200, bytes=1200, sample_rows=2
+- `openbrewerydb_breweries` — values=246, bytes=1640, sample_rows=3
+- `noaa_swpc_planetary_k_index` — values=252, bytes=693, sample_rows=4
+- `gutendex_books` — values=256, bytes=576, sample_rows=8
+- `nasa_neows_feed` — values=270, bytes=1305, sample_rows=6
+- `library_of_congress_items` — values=276, bytes=1016, sample_rows=5
+- `anilist_media` — values=295, bytes=837, sample_rows=6
+- `semanticscholar_papers` — values=300, bytes=1000, sample_rows=3
+- `dockerhub_repositories` — values=300, bytes=1300, sample_rows=3
+- `weathergov_stations` — values=300, bytes=2000, sample_rows=3
+- `openlibrary_subjects` — values=305, bytes=692, sample_rows=6
+- `esco_occupations` — values=355, bytes=639, sample_rows=5
+- `fred_capacity_utilization_monthly` — values=360, bytes=720, sample_rows=30
+- `fred_civilian_labor_force_monthly` — values=360, bytes=720, sample_rows=30
+- `fred_consumer_sentiment_monthly` — values=360, bytes=720, sample_rows=30
+- `fred_core_cpi_monthly` — values=360, bytes=720, sample_rows=30
+- `fred_cpi_all_items_monthly` — values=360, bytes=720, sample_rows=30
+- `fred_federal_funds_monthly` — values=360, bytes=720, sample_rows=30
+- `fred_housing_starts_monthly` — values=360, bytes=720, sample_rows=30
+- `fred_industrial_production_monthly` — values=360, bytes=720, sample_rows=30
+- `fred_labor_force_participation_monthly` — values=360, bytes=720, sample_rows=30
+- `fred_m2_money_stock_monthly` — values=360, bytes=720, sample_rows=30
+- `fred_payroll_employment_monthly` — values=360, bytes=720, sample_rows=30
+- `fred_pce_price_index_monthly` — values=360, bytes=720, sample_rows=30
+- `fred_ppi_all_commodities_monthly` — values=360, bytes=720, sample_rows=30
+- `fred_unemployment_level_monthly` — values=360, bytes=720, sample_rows=30
+- `fred_unemployment_rate_monthly` — values=360, bytes=720, sample_rows=30
+- `gdc_projects` — values=364, bytes=546, sample_rows=4
+- `orcid_search` — values=390, bytes=780, sample_rows=4
+- `europe_pmc_search` — values=400, bytes=800, sample_rows=4
+- `openlibrary_search` — values=400, bytes=800, sample_rows=5
+- `wger_exercises` — values=400, bytes=800, sample_rows=4
+- `arxiv_cs_recent` — values=400, bytes=1200, sample_rows=4
+- `osf_preprints` — values=400, bytes=1300, sample_rows=4
+- `stackexchange_top_questions_jan_2024` — values=400, bytes=1400, sample_rows=4
+- `hn_algolia_search` — values=400, bytes=1600, sample_rows=4
+- `cratesio_crates` — values=400, bytes=2000, sample_rows=4
+- `hex_packages` — values=400, bytes=2600, sample_rows=4
+- `osm_overpass_cafes` — values=400, bytes=2600, sample_rows=4
+- `musicbrainz_recordings` — values=476, bytes=1046, sample_rows=5
+- `musicbrainz_release_groups` — values=491, bytes=982, sample_rows=5
+- `openfoodfacts_products` — values=491, bytes=1870, sample_rows=5
+- `inaturalist_observations` — values=495, bytes=1188, sample_rows=5
+- `openfda_drug_event` — values=495, bytes=1683, sample_rows=5
+- `pokemontcg_cards` — values=498, bytes=1071, sample_rows=6
+- `gbif_occurrence` — values=498, bytes=2284, sample_rows=5
+- `treasury_avg_interest_rates` — values=500, bytes=1000, sample_rows=5
+- `crossref_funders` — values=500, bytes=1200, sample_rows=5
+- `medrxiv_details` — values=500, bytes=1300, sample_rows=5
+- `artic_artworks_search` — values=500, bytes=1400, sample_rows=5
+- `figshare_articles` — values=500, bytes=1400, sample_rows=5
+- `nvd_cves_recent` — values=500, bytes=1400, sample_rows=5
+- `nuget_search` — values=500, bytes=1500, sample_rows=5
+- `hackernews_topstories` — values=500, bytes=2000, sample_rows=1
+- `europeana_search` — values=500, bytes=2300, sample_rows=5
+
+## Recently Fixed Degenerate Series
+
+- `covertype_uci`: dropped ultra-sparse one-hot columns `21`, `22`, `29`, `39`, `50`, `51`
+- `cran_packages`: dropped constant `cran_archived_flag`
+- `geonames_postal_fixed`: dropped broken `geonames_postal_admin1_code_u8`
+- `gharchive_hourly_events_20240101_00`: dropped constant `gharchive_public`
+- `hgnc_complete_set_json`: dropped constant `hgnc_status_length_u8`
+- `universities_domains_list`: dropped constant `universities_alpha_two_code_length`
+- `who_atlas_gisah`: dropped constant `who_gisah_spatial_dim_length_u8` and `who_gisah_data_source_length_u8`
+- `who_gho_observations`: dropped constant `who_gho_dim2_length_u8`

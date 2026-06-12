@@ -61,12 +61,14 @@ Script contract:
 
 Scaling guidance:
 - Keep one dataset per recipe directory. If one upstream source yields multiple distinct numeric outputs, model them as separate `series` entries in one manifest.
+- When widening or consolidating recipes, keep the result materially homogeneous. Sharing an API or portal is not enough. Group only series that share the same material type, cadence, and unit semantics.
 - An accepted recipe must meet the repository usefulness floor: at least `10,000` numeric values total across its generated sample index or at least `100 KB` of total generated sample payload bytes.
 - Prefer stable upstream releases, snapshots, or explicitly versioned API parameters over unpinned "latest" endpoints.
 - Use deterministic file naming, sort order, and shard boundaries so two users can regenerate the same local outputs.
 - Keep committed metadata concise; put bulky inventories, row counts, or derived statistics in `verify.sh` output or generated local reports instead of expanding the manifest unnecessarily.
 - When the same upstream dataset can be represented at multiple numeric widths or meanings, define one series per distinct semantic output.
 - Do not admit arbitrary local remaps just because they yield integers. Derived numeric outputs are acceptable only when they correspond to a stable, reproducible, machine-facing artifact that real systems plausibly store or transmit.
+- Thin recipes from the same source family should be replaced only by homogeneous bundles. Do not combine unrelated indicators just to clear the usefulness floor.
 - If `download.sh` changes materially, rerun the updated downloader before accepting or committing the recipe. Material changes include different URLs, query parameters, selected subsets, payload-validation rules, or cache-acceptance behavior.
 - If a curated subset turns out to be only partially supported upstream, narrow the subset explicitly and update the manifest, README, build logic, verify logic, and sample counts before accepting the recipe.
 

@@ -1,0 +1,52 @@
+manifest_version = 1
+dataset_id = "geonames_admin1_codes"
+name = "GeoNames Admin1 Codes"
+description = "Admin1 code metadata from the GeoNames admin1CodesASCII dump."
+homepage = "https://www.geonames.org/"
+
+[license]
+name = "GeoNames Terms"
+spdx = "CC-BY-4.0"
+url = "https://www.geonames.org/export/"
+citation = "https://www.geonames.org/"
+notes = "Public GeoNames dump."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public GeoNames text dump."
+usage_notes = "Promote only after fresh successful download."
+
+[[origins]]
+id = "official"
+name = "GeoNames"
+url = "https://download.geonames.org/export/dump/admin1CodesASCII.txt"
+type = "file"
+notes = "Official public text dump."
+
+[[resources]]
+id = "admin1_codes"
+origin = "official"
+url = "https://download.geonames.org/export/dump/admin1CodesASCII.txt"
+type = "file"
+version = "2026-06-11"
+access = "Direct public HTTP request."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/geonames_admin1_codes/geonames_admin1_codes.txt"
+notes = "Pinned public admin1 codes dump."
+
+[local_paths]
+downloads = "downloads/geonames_admin1_codes/"
+extracted = "extracted/geonames_admin1_codes/"
+filtered = "filtered/geonames_admin1_codes/"
+index = "index/geonames_admin1_codes/"
+samples = "samples/geonames_admin1_codes/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/geonames_admin1_codes/samples.jsonl"
+summary = "Download the GeoNames admin1 codes dump, parse tab-separated rows, and emit numeric metadata arrays."
+deterministic_notes = "Headerless source-order row retention with fixed column extraction."

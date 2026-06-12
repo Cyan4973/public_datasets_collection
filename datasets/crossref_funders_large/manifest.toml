@@ -1,0 +1,52 @@
+manifest_version = 1
+dataset_id = "crossref_funders_large"
+name = "Crossref Funders Large"
+description = "Funder metadata from a 1000-row Crossref funders result."
+homepage = "https://api.crossref.org/"
+
+[license]
+name = "Crossref Terms"
+spdx = "NOASSERTION"
+url = "https://www.crossref.org/"
+citation = "https://api.crossref.org/funders"
+notes = "Public Crossref API output."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public JSON response from the Crossref funders endpoint."
+usage_notes = "Promote only after fresh successful download."
+
+[[origins]]
+id = "official"
+name = "Crossref"
+url = "https://api.crossref.org/funders"
+type = "api"
+notes = "Official public endpoint."
+
+[[resources]]
+id = "funders"
+origin = "official"
+url = "https://api.crossref.org/funders?rows=1000"
+type = "api_query_result"
+version = "2026-06-11"
+access = "Direct public HTTP request."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/crossref_funders_large/crossref_funders_large.json"
+notes = "Pinned query parameters from the scout batch."
+
+[local_paths]
+downloads = "downloads/crossref_funders_large/"
+extracted = "extracted/crossref_funders_large/"
+filtered = "filtered/crossref_funders_large/"
+index = "index/crossref_funders_large/"
+samples = "samples/crossref_funders_large/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/crossref_funders_large/samples.jsonl"
+summary = "Download the pinned Crossref funders result, extract numeric and deterministic count metadata, and emit raw little-endian numeric samples."
+deterministic_notes = "Fixed query parameters, source-order row retention, fixed field extraction."

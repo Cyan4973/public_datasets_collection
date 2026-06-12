@@ -42,8 +42,6 @@ dataset_id = "ecb_fx_cad_eur_daily"
 series_key = "CAD.EUR"
 series_defs = [
     {"series_id": "ecb_fx_value_f32", "array_type": "f", "numeric_kind": "float", "bit_width": 32, "endianness": "little", "element_size_bytes": 4},
-    {"series_id": "obs_month_u8", "array_type": "B", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
-    {"series_id": "obs_day_u8", "array_type": "B", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
 ]
 for series in series_defs:
     series_dir = samples_root / series["series_id"]
@@ -57,8 +55,6 @@ stats_path = filtered_root / "year_stats.tsv"
 index_path = index_root / "samples.jsonl"
 index_records = []
 year_values = defaultdict(list)
-year_months = defaultdict(list)
-year_days = defaultdict(list)
 
 path = download_root / "cad_eur.csv"
 if not path.is_file():
@@ -103,8 +99,6 @@ with path.open("r", encoding="utf-8", newline="") as handle, stats_path.open("w"
         parsed.sort()
         for raw_date, value, obs_month, obs_day in parsed:
             year_values[year].append(value)
-            year_months[year].append(obs_month)
-            year_days[year].append(obs_day)
             kept_count += 1
             if start_date == "":
                 start_date = raw_date
@@ -114,8 +108,6 @@ with path.open("r", encoding="utf-8", newline="") as handle, stats_path.open("w"
 for year in sorted(year_values):
     payloads = {
         "ecb_fx_value_f32": year_values[year],
-        "obs_month_u8": year_months[year],
-        "obs_day_u8": year_days[year],
     }
     for series in series_defs:
         payload = array.array(series["array_type"], payloads[series["series_id"]])

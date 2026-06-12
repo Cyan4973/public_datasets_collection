@@ -84,20 +84,3 @@ sample_format = "raw homogeneous numeric array"
 sample_count = 0
 total_size_bytes = 0
 output_path = "samples/eurostat_male_unemployment_monthly/obs_year_u16/"
-
-[[series]]
-id = "obs_month_u8"
-description = "Observation months aligned to monthly male unemployment rate values."
-semantic_meaning = "Unsigned 8-bit months aligned 1:1 with retained Eurostat unemployment values."
-source_resources = ["eurostat_male_unemployment_monthly_country_subset"]
-filtered_input_path = "filtered/eurostat_male_unemployment_monthly/country_stats.tsv"
-filtering = "Keep rows accepted for unemployment_rate_f32."
-missing_value_policy = "Filter rows rejected by the unemployment_rate_f32 missing-value policy."
-conversion = "Write uint8 arrays aligned 1:1 with retained unemployment values."
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-sample_format = "raw homogeneous numeric array"
-sample_count = 0
-total_size_bytes = 0
-output_path = "samples/eurostat_male_unemployment_monthly/obs_month_u8/"

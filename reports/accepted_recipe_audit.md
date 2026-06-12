@@ -2,8 +2,8 @@
 
 Acceptance floor: at least `10000` numeric values total or at least `102400` bytes of generated sample payload.
 
-- `ok`: 128
-- `below_floor`: 253
+- `ok`: 127
+- `below_floor`: 254
 - `broken`: 0
 
 ## Below Floor
@@ -19,6 +19,7 @@ Acceptance floor: at least `10000` numeric values total or at least `102400` byt
 | `nominatim_berlin` | 6 | 34 | 6 |
 | `nobel_prizes` | 24 | 66 | 4 |
 | `frankfurter_usd_rates` | 30 | 240 | 1 |
+| `fred_real_gdp_quarterly` | 40 | 160 | 10 |
 | `ror_organizations` | 54 | 63 | 6 |
 | `swapi_people` | 60 | 110 | 6 |
 | `rubygems_search` | 60 | 480 | 2 |
@@ -29,7 +30,21 @@ Acceptance floor: at least `10000` numeric values total or at least `102400` byt
 | `rickandmorty_characters` | 100 | 240 | 5 |
 | `lobsters_hottest` | 100 | 350 | 4 |
 | `pokeapi_pokemon` | 100 | 400 | 1 |
-| `fred_real_gdp_quarterly` | 120 | 240 | 30 |
+| `fred_capacity_utilization_monthly` | 120 | 480 | 10 |
+| `fred_civilian_labor_force_monthly` | 120 | 480 | 10 |
+| `fred_consumer_sentiment_monthly` | 120 | 480 | 10 |
+| `fred_core_cpi_monthly` | 120 | 480 | 10 |
+| `fred_cpi_all_items_monthly` | 120 | 480 | 10 |
+| `fred_federal_funds_monthly` | 120 | 480 | 10 |
+| `fred_housing_starts_monthly` | 120 | 480 | 10 |
+| `fred_industrial_production_monthly` | 120 | 480 | 10 |
+| `fred_labor_force_participation_monthly` | 120 | 480 | 10 |
+| `fred_m2_money_stock_monthly` | 120 | 480 | 10 |
+| `fred_payroll_employment_monthly` | 120 | 480 | 10 |
+| `fred_pce_price_index_monthly` | 120 | 480 | 10 |
+| `fred_ppi_all_commodities_monthly` | 120 | 480 | 10 |
+| `fred_unemployment_level_monthly` | 120 | 480 | 10 |
+| `fred_unemployment_rate_monthly` | 120 | 480 | 10 |
 | `biorxiv_details` | 150 | 390 | 5 |
 | `dryad_search` | 160 | 600 | 8 |
 | `wikidata_sparql` | 200 | 600 | 2 |
@@ -47,21 +62,6 @@ Acceptance floor: at least `10000` numeric values total or at least `102400` byt
 | `weathergov_stations` | 300 | 2000 | 3 |
 | `openlibrary_subjects` | 305 | 692 | 6 |
 | `esco_occupations` | 355 | 639 | 5 |
-| `fred_capacity_utilization_monthly` | 360 | 720 | 30 |
-| `fred_civilian_labor_force_monthly` | 360 | 720 | 30 |
-| `fred_consumer_sentiment_monthly` | 360 | 720 | 30 |
-| `fred_core_cpi_monthly` | 360 | 720 | 30 |
-| `fred_cpi_all_items_monthly` | 360 | 720 | 30 |
-| `fred_federal_funds_monthly` | 360 | 720 | 30 |
-| `fred_housing_starts_monthly` | 360 | 720 | 30 |
-| `fred_industrial_production_monthly` | 360 | 720 | 30 |
-| `fred_labor_force_participation_monthly` | 360 | 720 | 30 |
-| `fred_m2_money_stock_monthly` | 360 | 720 | 30 |
-| `fred_payroll_employment_monthly` | 360 | 720 | 30 |
-| `fred_pce_price_index_monthly` | 360 | 720 | 30 |
-| `fred_ppi_all_commodities_monthly` | 360 | 720 | 30 |
-| `fred_unemployment_level_monthly` | 360 | 720 | 30 |
-| `fred_unemployment_rate_monthly` | 360 | 720 | 30 |
 | `gdc_projects` | 364 | 546 | 4 |
 | `orcid_search` | 390 | 780 | 4 |
 | `europe_pmc_search` | 400 | 800 | 4 |
@@ -74,6 +74,11 @@ Acceptance floor: at least `10000` numeric values total or at least `102400` byt
 | `cratesio_crates` | 400 | 2000 | 4 |
 | `hex_packages` | 400 | 2600 | 4 |
 | `osm_overpass_cafes` | 400 | 2600 | 4 |
+| `sec_companyfacts_assets_quarterly` | 454 | 2270 | 10 |
+| `sec_companyfacts_cash_and_equivalents_quarterly` | 454 | 2270 | 10 |
+| `sec_companyfacts_net_income_quarterly` | 454 | 2270 | 10 |
+| `sec_companyfacts_operating_income_quarterly` | 454 | 2270 | 10 |
+| `sec_companyfacts_stockholders_equity_quarterly` | 454 | 2270 | 10 |
 | `musicbrainz_recordings` | 476 | 1046 | 5 |
 | `musicbrainz_release_groups` | 491 | 982 | 5 |
 | `openfoodfacts_products` | 491 | 1870 | 5 |
@@ -91,6 +96,9 @@ Acceptance floor: at least `10000` numeric values total or at least `102400` byt
 | `hackernews_topstories` | 500 | 2000 | 1 |
 | `europeana_search` | 500 | 2300 | 5 |
 | `npm_search_packages` | 500 | 2600 | 5 |
+| `fred_fed_balance_sheet_weekly` | 521 | 2084 | 10 |
+| `fred_mortgage_30y_weekly` | 521 | 2084 | 10 |
+| `fred_initial_claims_weekly` | 522 | 2088 | 10 |
 | `crossref_works_jan_2024` | 588 | 3136 | 3 |
 | `gleif_lei_records` | 600 | 1200 | 6 |
 | `ooni_measurements` | 600 | 1500 | 6 |
@@ -108,11 +116,6 @@ Acceptance floor: at least `10000` numeric values total or at least `102400` byt
 | `owid_trade_co2_annual` | 680 | 2040 | 20 |
 | `owid_trade_co2_share_annual` | 680 | 2040 | 20 |
 | `world_bank_forest_area_percent_annual` | 680 | 3400 | 20 |
-| `sec_companyfacts_assets_quarterly` | 681 | 2497 | 15 |
-| `sec_companyfacts_cash_and_equivalents_quarterly` | 681 | 2497 | 15 |
-| `sec_companyfacts_net_income_quarterly` | 681 | 2497 | 15 |
-| `sec_companyfacts_operating_income_quarterly` | 681 | 2497 | 15 |
-| `sec_companyfacts_stockholders_equity_quarterly` | 681 | 2497 | 15 |
 | `world_bank_internet_users_percent_annual` | 688 | 3440 | 20 |
 | `world_bank_energy_use_per_capita_annual` | 692 | 3460 | 20 |
 | `itunes_search` | 697 | 3390 | 7 |
@@ -167,9 +170,6 @@ Acceptance floor: at least `10000` numeric values total or at least `102400` byt
 | `internetarchive_advancedsearch` | 1500 | 7000 | 3 |
 | `crossref_works_large_retry` | 1500 | 8000 | 3 |
 | `coinpaprika_exchanges` | 1530 | 5760 | 6 |
-| `fred_fed_balance_sheet_weekly` | 1563 | 3126 | 30 |
-| `fred_mortgage_30y_weekly` | 1563 | 3126 | 30 |
-| `fred_initial_claims_weekly` | 1566 | 3132 | 30 |
 | `openalex_institutions_large` | 1600 | 4600 | 8 |
 | `freetogame_games` | 1640 | 3280 | 4 |
 | `tvmaze_shows` | 1715 | 4655 | 7 |
@@ -186,14 +186,39 @@ Acceptance floor: at least `10000` numeric values total or at least `102400` byt
 | `npm_search_packages_large` | 2000 | 10250 | 8 |
 | `noaa_coops_stations` | 2107 | 7525 | 7 |
 | `nih_reporter_projects` | 2140 | 9416 | 5 |
+| `fred_sp500_daily` | 2162 | 8648 | 9 |
 | `geofabrik_index` | 2220 | 17760 | 4 |
 | `owid_cement_co2_annual` | 2310 | 6930 | 20 |
 | `disease_sh_countries` | 2310 | 14784 | 10 |
 | `openfda_device_event` | 2500 | 5500 | 5 |
 | `openfda_food_enforcement` | 2500 | 7500 | 5 |
+| `fred_treasury_10y_daily` | 2501 | 10004 | 10 |
+| `fred_treasury_2y_daily` | 2501 | 10004 | 10 |
+| `fred_treasury_30y_daily` | 2501 | 10004 | 10 |
+| `fred_wti_crude_daily` | 2505 | 10020 | 10 |
+| `ecb_fx_aud_eur_daily` | 2561 | 10244 | 10 |
+| `ecb_fx_cad_eur_daily` | 2561 | 10244 | 10 |
+| `ecb_fx_chf_eur_daily` | 2561 | 10244 | 10 |
+| `ecb_fx_czk_eur_daily` | 2561 | 10244 | 10 |
+| `ecb_fx_dkk_eur_daily` | 2561 | 10244 | 10 |
+| `ecb_fx_gbp_eur_daily` | 2561 | 10244 | 10 |
+| `ecb_fx_hkd_eur_daily` | 2561 | 10244 | 10 |
+| `ecb_fx_huf_eur_daily` | 2561 | 10244 | 10 |
+| `ecb_fx_jpy_eur_daily` | 2561 | 10244 | 10 |
+| `ecb_fx_krw_eur_daily` | 2561 | 10244 | 10 |
+| `ecb_fx_mxn_eur_daily` | 2561 | 10244 | 10 |
+| `ecb_fx_nok_eur_daily` | 2561 | 10244 | 10 |
+| `ecb_fx_nzd_eur_daily` | 2561 | 10244 | 10 |
+| `ecb_fx_pln_eur_daily` | 2561 | 10244 | 10 |
+| `ecb_fx_ron_eur_daily` | 2561 | 10244 | 10 |
+| `ecb_fx_sek_eur_daily` | 2561 | 10244 | 10 |
+| `ecb_fx_sgd_eur_daily` | 2561 | 10244 | 10 |
+| `ecb_fx_try_eur_daily` | 2561 | 10244 | 10 |
+| `ecb_fx_usd_eur_daily` | 2561 | 10244 | 10 |
 | `wikimedia_pageviews_daily` | 2562 | 10248 | 7 |
 | `rubygems_versions_large` | 2580 | 9288 | 5 |
 | `owid_co2_per_gdp_annual` | 2806 | 8418 | 20 |
+| `eurostat_retail_trade_volume_monthly` | 3048 | 9144 | 10 |
 | `owid_co2_including_luc_annual` | 3090 | 9270 | 20 |
 | `owid_gas_co2_annual` | 3092 | 9276 | 20 |
 | `chesscom_hikaru_2024_01` | 3135 | 8360 | 3 |
@@ -210,13 +235,18 @@ Acceptance floor: at least `10000` numeric values total or at least `102400` byt
 | `owid_methane_annual` | 3500 | 10500 | 20 |
 | `owid_nitrous_oxide_annual` | 3500 | 10500 | 20 |
 | `owid_total_ghg_annual` | 3500 | 10500 | 20 |
+| `eurostat_hicp_all_items_monthly` | 3600 | 10800 | 10 |
+| `eurostat_hicp_food_monthly` | 3600 | 10800 | 10 |
+| `eurostat_industrial_production_monthly` | 3768 | 11304 | 10 |
 | `europepmc_grants_large_retry` | 4000 | 8000 | 4 |
 | `huggingface_models_large` | 4000 | 13000 | 8 |
 | `taginfo_tags_popular` | 4000 | 19500 | 8 |
 | `taginfo_keys_all` | 4000 | 25500 | 8 |
 | `mitre_attack_enterprise` | 4290 | 5148 | 5 |
-| `eurostat_retail_trade_volume_monthly` | 4572 | 10668 | 15 |
 | `inspirehep_literature` | 4927 | 15854 | 5 |
+| `eurostat_female_unemployment_monthly` | 4930 | 14790 | 10 |
+| `eurostat_male_unemployment_monthly` | 4930 | 14790 | 10 |
+| `eurostat_unemployment_monthly` | 4930 | 14790 | 10 |
 | `usgs_water_sites_rdb` | 4992 | 36976 | 6 |
 | `crossref_funders_large` | 5000 | 10000 | 5 |
 | `sec_submissions_amd` | 5000 | 10000 | 5 |
@@ -224,43 +254,14 @@ Acceptance floor: at least `10000` numeric values total or at least `102400` byt
 | `sec_submissions_nvda` | 5010 | 16032 | 5 |
 | `dataone_solr` | 5039 | 25078 | 6 |
 | `dataone_solr_large_retry` | 5039 | 25078 | 6 |
-| `eurostat_hicp_all_items_monthly` | 5400 | 12600 | 15 |
-| `eurostat_hicp_food_monthly` | 5400 | 12600 | 15 |
-| `eurostat_industrial_production_monthly` | 5652 | 13188 | 15 |
 | `federalregister_documents_large` | 6000 | 9000 | 6 |
 | `openml_runs_large` | 6000 | 28000 | 6 |
 | `figshare_articles_large` | 6000 | 34000 | 6 |
-| `fred_sp500_daily` | 6486 | 12972 | 27 |
 | `jpl_cad_2024` | 6552 | 52416 | 4 |
 | `nasa_donki_flr` | 6768 | 16920 | 6 |
 | `openml_tasks_large` | 7000 | 26000 | 7 |
-| `eurostat_female_unemployment_monthly` | 7395 | 17255 | 15 |
-| `eurostat_male_unemployment_monthly` | 7395 | 17255 | 15 |
-| `eurostat_unemployment_monthly` | 7395 | 17255 | 15 |
-| `fred_treasury_10y_daily` | 7503 | 15006 | 30 |
-| `fred_treasury_2y_daily` | 7503 | 15006 | 30 |
-| `fred_treasury_30y_daily` | 7503 | 15006 | 30 |
-| `fred_wti_crude_daily` | 7515 | 15030 | 30 |
-| `ecb_fx_aud_eur_daily` | 7683 | 15366 | 30 |
-| `ecb_fx_cad_eur_daily` | 7683 | 15366 | 30 |
-| `ecb_fx_chf_eur_daily` | 7683 | 15366 | 30 |
-| `ecb_fx_czk_eur_daily` | 7683 | 15366 | 30 |
-| `ecb_fx_dkk_eur_daily` | 7683 | 15366 | 30 |
-| `ecb_fx_gbp_eur_daily` | 7683 | 15366 | 30 |
-| `ecb_fx_hkd_eur_daily` | 7683 | 15366 | 30 |
-| `ecb_fx_huf_eur_daily` | 7683 | 15366 | 30 |
-| `ecb_fx_jpy_eur_daily` | 7683 | 15366 | 30 |
-| `ecb_fx_krw_eur_daily` | 7683 | 15366 | 30 |
-| `ecb_fx_mxn_eur_daily` | 7683 | 15366 | 30 |
-| `ecb_fx_nok_eur_daily` | 7683 | 15366 | 30 |
-| `ecb_fx_nzd_eur_daily` | 7683 | 15366 | 30 |
-| `ecb_fx_pln_eur_daily` | 7683 | 15366 | 30 |
-| `ecb_fx_ron_eur_daily` | 7683 | 15366 | 30 |
-| `ecb_fx_sek_eur_daily` | 7683 | 15366 | 30 |
-| `ecb_fx_sgd_eur_daily` | 7683 | 15366 | 30 |
-| `ecb_fx_try_eur_daily` | 7683 | 15366 | 30 |
-| `ecb_fx_usd_eur_daily` | 7683 | 15366 | 30 |
 | `coinpaprika_tickers` | 8000 | 52000 | 4 |
 | `cisa_kev_catalog` | 8060 | 14508 | 5 |
+| `usgs_daily_values_large` | 8890 | 44450 | 14 |
 | `nasa_donki_cme` | 9072 | 24192 | 6 |
 

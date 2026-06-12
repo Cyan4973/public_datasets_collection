@@ -12,8 +12,6 @@ Selected countries:
 Series emitted:
 - `death_counts_u32`
 - `obs_year_u16`
-- `obs_month_u8`
-- `obs_day_u8`
 
 Run:
 

@@ -51,7 +51,6 @@ companies = [
 series_defs = [
     {"series_id": "cash_and_equivalents_i64", "numeric_kind": "int", "bit_width": 64, "endianness": "little", "element_size_bytes": 8},
     {"series_id": "obs_year_u16", "numeric_kind": "uint", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
-    {"series_id": "obs_quarter_u8", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
 ]
 
 def parse_int_value(raw: object) -> int:

@@ -43,7 +43,6 @@ countries = ["DE", "FR", "IT", "ES", "NL"]
 series_defs = [
     {"series_id": "retail_trade_volume_index_f32", "numeric_kind": "float", "bit_width": 32, "endianness": "little", "element_size_bytes": 4},
     {"series_id": "obs_year_u16", "numeric_kind": "uint", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
-    {"series_id": "obs_month_u8", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
 ]
 
 def parse_time_key(raw: str) -> tuple[int, int]:

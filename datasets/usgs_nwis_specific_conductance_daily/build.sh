@@ -26,8 +26,6 @@ dataset_id = "usgs_nwis_specific_conductance_daily"
 series_defs = [
  {"series_id":"usgs_specific_conductance_f64","array_type":"d","numeric_kind":"float","bit_width":64,"endianness":"little","element_size_bytes":8},
  {"series_id":"obs_year_u16","array_type":"H","numeric_kind":"uint","bit_width":16,"endianness":"little","element_size_bytes":2},
- {"series_id":"obs_month_u8","array_type":"B","numeric_kind":"uint","bit_width":8,"endianness":"little","element_size_bytes":1},
- {"series_id":"obs_day_u8","array_type":"B","numeric_kind":"uint","bit_width":8,"endianness":"little","element_size_bytes":1},
 ]
 for series in series_defs:
  series_dir = samples_root / series["series_id"]
@@ -45,7 +43,7 @@ stats_path = filtered_root / "site_year_stats.tsv"; index_path = index_root / "s
 with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
  writer = csv.writer(stats_file, delimiter="\t"); writer.writerow(["site_id","year","row_count","value_count","skipped_count","start_date","end_date","series_name"])
  for site_id in sorted(site_years):
-  value_series: list[float] = []; year_values: list[int] = []; month_values: list[int] = []; day_values: list[int] = []
+  value_series: list[float] = []; year_values: list[int] = []
   for year in sorted(site_years[site_id]):
    json_path = download_root / f"dv_{site_id}_{year}.json"
    payload = json.loads(json_path.read_text(encoding="utf-8"))
@@ -73,13 +71,13 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
     try: obs_year = int(pieces[0]); obs_month = int(pieces[1]); obs_day = int(pieces[2])
     except ValueError: skipped_count += 1; continue
     if obs_year < 0 or obs_year > 65535 or obs_month < 1 or obs_month > 12 or obs_day < 1 or obs_day > 31: skipped_count += 1; continue
-    value_series.append(value); year_values.append(obs_year); month_values.append(obs_month); day_values.append(obs_day); value_count += 1
+    value_series.append(value); year_values.append(obs_year); value_count += 1
     if first_date == "": first_date = date_part
     last_date = date_part
    writer.writerow([site_id, year, row_count, value_count, skipped_count, first_date, last_date, selected_series.get("name", "")])
   if not value_series: print(f"site {site_id}: no usable values, skipping sample output", flush=True); continue
   site_slug = f"site_{site_id}"
-  payloads = {"usgs_specific_conductance_f64": value_series, "obs_year_u16": year_values, "obs_month_u8": month_values, "obs_day_u8": day_values}
+  payloads = {"usgs_specific_conductance_f64": value_series, "obs_year_u16": year_values}
   for series in series_defs:
    arr = array.array(series["array_type"], payloads[series["series_id"]])
    if arr.itemsize > 1 and os.sys.byteorder != "little": arr.byteswap()

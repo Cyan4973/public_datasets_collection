@@ -57,8 +57,6 @@ dataset_id = "usgs_nwis_gage_height_daily"
 series_defs = [
     {"series_id": "usgs_gage_height_ft_f64", "array_type": "d", "numeric_kind": "float", "bit_width": 64, "endianness": "little", "element_size_bytes": 8},
     {"series_id": "obs_year_u16", "array_type": "H", "numeric_kind": "uint", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
-    {"series_id": "obs_month_u8", "array_type": "B", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
-    {"series_id": "obs_day_u8", "array_type": "B", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
 ]
 
 for series in series_defs:
@@ -90,8 +88,6 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
     for site_id in sorted(site_years):
         value_series: list[float] = []
         year_values: list[int] = []
-        month_values: list[int] = []
-        day_values: list[int] = []
 
         for year in sorted(site_years[site_id]):
             json_path = download_root / f"dv_{site_id}_{year}.json"
@@ -157,8 +153,6 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
 
                 value_series.append(value)
                 year_values.append(obs_year)
-                month_values.append(obs_month)
-                day_values.append(obs_day)
                 value_count += 1
                 if first_date == "":
                     first_date = date_part
@@ -174,8 +168,6 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
         payloads = {
             "usgs_gage_height_ft_f64": value_series,
             "obs_year_u16": year_values,
-            "obs_month_u8": month_values,
-            "obs_day_u8": day_values,
         }
 
         for series in series_defs:

@@ -49,5 +49,3 @@ Sites with no parameter-00300 data for a given year are skipped at build time.
 Series emitted by `build.sh`:
 - `usgs_dissolved_oxygen_f64` (`float64`, little-endian)
 - `obs_year_u16` (`uint16`, little-endian)
-- `obs_month_u8` (`uint8`)
-- `obs_day_u8` (`uint8`)

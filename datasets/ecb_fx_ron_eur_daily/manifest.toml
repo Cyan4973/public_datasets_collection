@@ -67,37 +67,3 @@ sample_format = "raw homogeneous numeric array"
 sample_count = 0
 total_size_bytes = 0
 output_path = "samples/ecb_fx_ron_eur_daily/ecb_fx_value_f32/"
-
-[[series]]
-id = "obs_month_u8"
-description = "Observation month values aligned to daily FX values."
-semantic_meaning = "Unsigned 8-bit months derived from retained ECB observation dates, one sample per year."
-source_resources = ["ecb_fx_ron_eur_daily_2015_2024"]
-filtered_input_path = "filtered/ecb_fx_ron_eur_daily/year_stats.tsv"
-filtering = "Keep rows accepted for ecb_fx_value_f32."
-missing_value_policy = "Filter rows rejected by the ecb_fx_value_f32 missing-value policy."
-conversion = "Parse retained month components as integers and write uint8 arrays aligned 1:1 with retained FX values."
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-sample_format = "raw homogeneous numeric array"
-sample_count = 0
-total_size_bytes = 0
-output_path = "samples/ecb_fx_ron_eur_daily/obs_month_u8/"
-
-[[series]]
-id = "obs_day_u8"
-description = "Observation day values aligned to daily FX values."
-semantic_meaning = "Unsigned 8-bit days derived from retained ECB observation dates, one sample per year."
-source_resources = ["ecb_fx_ron_eur_daily_2015_2024"]
-filtered_input_path = "filtered/ecb_fx_ron_eur_daily/year_stats.tsv"
-filtering = "Keep rows accepted for ecb_fx_value_f32."
-missing_value_policy = "Filter rows rejected by the ecb_fx_value_f32 missing-value policy."
-conversion = "Parse retained day components as integers and write uint8 arrays aligned 1:1 with retained FX values."
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-sample_format = "raw homogeneous numeric array"
-sample_count = 0
-total_size_bytes = 0
-output_path = "samples/ecb_fx_ron_eur_daily/obs_day_u8/"

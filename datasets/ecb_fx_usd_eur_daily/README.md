@@ -10,8 +10,6 @@ Selected scope:
 
 Series emitted by `build.sh`:
 - `ecb_fx_value_f32` (`float32`, little-endian)
-- `obs_month_u8` (`uint8`)
-- `obs_day_u8` (`uint8`)
 
 Notes:
 - Source data comes from the ECB Data Portal CSV API.

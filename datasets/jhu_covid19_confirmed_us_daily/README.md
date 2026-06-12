@@ -12,8 +12,6 @@ Selected states:
 Series emitted:
 - `confirmed_cases_u32`
 - `obs_year_u16`
-- `obs_month_u8`
-- `obs_day_u8`
 
 Run:
 

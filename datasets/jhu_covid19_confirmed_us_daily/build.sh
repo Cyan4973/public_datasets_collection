@@ -50,8 +50,6 @@ entities = [
 series_defs = [
     {"series_id": "confirmed_cases_u32", "array_type": "I", "numeric_kind": "uint", "bit_width": 32, "endianness": "little", "element_size_bytes": 4},
     {"series_id": "obs_year_u16", "array_type": "H", "numeric_kind": "uint", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
-    {"series_id": "obs_month_u8", "array_type": "B", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
-    {"series_id": "obs_day_u8", "array_type": "B", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
 ]
 for series in series_defs:
     series_dir = samples_root / series["series_id"]
@@ -95,8 +93,6 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
         matched_rows = country_rows.get(country_name, [])
         values = []
         years = []
-        months = []
-        days = []
         skipped_blank = 0
         skipped_parse = 0
         start_date = ""
@@ -127,8 +123,6 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
                 continue
             values.append(total)
             years.append(dt.year)
-            months.append(dt.month)
-            days.append(dt.day)
             iso_date = dt.strftime("%Y-%m-%d")
             if start_date == "":
                 start_date = iso_date
@@ -137,8 +131,6 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
         payloads = {
             "confirmed_cases_u32": values,
             "obs_year_u16": years,
-            "obs_month_u8": months,
-            "obs_day_u8": days,
         }
         for series in series_defs:
             payload = array.array(series["array_type"], payloads[series["series_id"]])

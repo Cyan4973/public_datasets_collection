@@ -25,8 +25,6 @@ payload=json.load(open(download_dir/"usgs_daily_values_large.json",encoding="utf
 series_defs={
   "usgs_value_f64":("float",64,"d"),
   "obs_year_u16":("uint",16,"H"),
-  "obs_month_u8":("uint",8,"B"),
-  "obs_day_u8":("uint",8,"B"),
 }
 for sid in series_defs:
     d=samples_dir/sid
@@ -44,7 +42,7 @@ for ts in payload["value"]["timeSeries"]:
             break
     if not rows:
         continue
-    values=[]; years=[]; months=[]; days=[]; skipped=0
+    values=[]; years=[]; skipped=0
     for row in rows:
         raw_value=str(row.get("value","")).strip()
         raw_date=str(row.get("dateTime","")).strip()
@@ -57,7 +55,7 @@ for ts in payload["value"]["timeSeries"]:
         except Exception:
             skipped += 1
             continue
-        values.append(value); years.append(y); months.append(m); days.append(d)
+        values.append(value); years.append(y)
     if not values:
         continue
     slug=re.sub(r"[^a-z0-9]+","_", ts.get("name","timeseries").lower()).strip("_")
@@ -65,8 +63,6 @@ for ts in payload["value"]["timeSeries"]:
     payloads={
       "usgs_value_f64":values,
       "obs_year_u16":years,
-      "obs_month_u8":months,
-      "obs_day_u8":days,
     }
     for sid,(kind,bits,code) in series_defs.items():
         out=samples_dir/sid/f"{slug}.bin"

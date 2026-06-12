@@ -47,8 +47,6 @@ Selected scope:
 Series emitted by `build.sh`:
 - `usgs_discharge_cfs_f64` (`float64`, little-endian)
 - `obs_year_u16` (`uint16`, little-endian)
-- `obs_month_u8` (`uint8`)
-- `obs_day_u8` (`uint8`)
 
 Notes:
 - Source data comes from the USGS NWIS daily values JSON API.
@@ -57,7 +55,6 @@ Notes:
   concatenates years in ascending order for each site.
 - For sites that expose multiple daily statistics, `build.sh` selects statistic
   code `00003` (`Mean`) for parameter `00060`.
-- `obs_year_u16`, `obs_month_u8`, and `obs_day_u8` are emitted only for rows
   with a parseable discharge value so the date arrays align 1:1 with discharge.
 - No padding, synthesis, interpolation, or quantization is applied.
 

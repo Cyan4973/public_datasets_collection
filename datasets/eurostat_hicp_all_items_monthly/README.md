@@ -12,7 +12,6 @@ Selected countries:
 Generated series:
 - `hicp_all_items_index_f32`
 - `obs_year_u16`
-- `obs_month_u8`
 
 Missing-value policy:
 - filter missing values from sparse Eurostat `value` payloads

@@ -67,37 +67,3 @@ sample_format = "raw homogeneous numeric array"
 sample_count = 0
 total_size_bytes = 0
 output_path = "samples/fred_capacity_utilization_monthly/fred_value_f32/"
-
-[[series]]
-id = "obs_month_u8"
-description = "Observation month values aligned to FRED values."
-semantic_meaning = "Unsigned 8-bit months derived from retained FRED observation dates, one sample per year."
-source_resources = ["fred_capacity_utilization_monthly_2015_2024"]
-filtered_input_path = "filtered/fred_capacity_utilization_monthly/year_stats.tsv"
-filtering = "Keep rows accepted for fred_value_f32."
-missing_value_policy = "Filter rows rejected by the fred_value_f32 missing-value policy."
-conversion = "Parse retained month components as integers and write uint8 arrays aligned 1:1 with retained FRED values."
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-sample_format = "raw homogeneous numeric array"
-sample_count = 0
-total_size_bytes = 0
-output_path = "samples/fred_capacity_utilization_monthly/obs_month_u8/"
-
-[[series]]
-id = "obs_day_u8"
-description = "Observation day values aligned to FRED values."
-semantic_meaning = "Unsigned 8-bit days derived from retained FRED observation dates, one sample per year."
-source_resources = ["fred_capacity_utilization_monthly_2015_2024"]
-filtered_input_path = "filtered/fred_capacity_utilization_monthly/year_stats.tsv"
-filtering = "Keep rows accepted for fred_value_f32."
-missing_value_policy = "Filter rows rejected by the fred_value_f32 missing-value policy."
-conversion = "Parse retained day components as integers and write uint8 arrays aligned 1:1 with retained FRED values."
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-sample_format = "raw homogeneous numeric array"
-sample_count = 0
-total_size_bytes = 0
-output_path = "samples/fred_capacity_utilization_monthly/obs_day_u8/"

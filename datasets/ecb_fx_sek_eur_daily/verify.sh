@@ -42,8 +42,6 @@ dataset_id = "ecb_fx_sek_eur_daily"
 series_key = "SEK.EUR"
 series_defs = [
     {"series_id": "ecb_fx_value_f32", "numeric_kind": "float", "bit_width": 32, "endianness": "little", "element_size_bytes": 4},
-    {"series_id": "obs_month_u8", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
-    {"series_id": "obs_day_u8", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
 ]
 stats_path = filtered_root / "year_stats.tsv"
 index_path = index_root / "samples.jsonl"

@@ -82,35 +82,3 @@ sample_format = "raw homogeneous numeric array"
 sample_count = 32
 total_size_bytes = 0
 output_path = "samples/usgs_nwis_streamflow_daily/obs_year_u16/"
-
-[[series]]
-id = "obs_month_u8"
-description = "Observation month values aligned to discharge."
-semantic_meaning = "Unsigned 8-bit observation months derived from retained USGS mean daily discharge row dates, one sample per site."
-source_resources = ["usgs_streamflow_2021_2023"]
-filtered_input_path = "filtered/usgs_nwis_streamflow_daily/site_year_stats.tsv"
-filtering = "Keep rows with parseable discharge values and parseable observation dates."
-conversion = "Parse the observation date month component as integer and write uint8 arrays aligned 1:1 with retained discharge values."
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-sample_format = "raw homogeneous numeric array"
-sample_count = 32
-total_size_bytes = 0
-output_path = "samples/usgs_nwis_streamflow_daily/obs_month_u8/"
-
-[[series]]
-id = "obs_day_u8"
-description = "Observation day-of-month values aligned to discharge."
-semantic_meaning = "Unsigned 8-bit observation days derived from retained USGS mean daily discharge row dates, one sample per site."
-source_resources = ["usgs_streamflow_2021_2023"]
-filtered_input_path = "filtered/usgs_nwis_streamflow_daily/site_year_stats.tsv"
-filtering = "Keep rows with parseable discharge values and parseable observation dates."
-conversion = "Parse the observation date day component as integer and write uint8 arrays aligned 1:1 with retained discharge values."
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-sample_format = "raw homogeneous numeric array"
-sample_count = 32
-total_size_bytes = 0
-output_path = "samples/usgs_nwis_streamflow_daily/obs_day_u8/"

@@ -43,7 +43,6 @@ countries = ["DE", "FR", "IT", "ES", "NL"]
 series_defs = [
     {"series_id": "retail_trade_volume_index_f32", "array_type": "f", "numeric_kind": "float", "bit_width": 32, "endianness": "little", "element_size_bytes": 4},
     {"series_id": "obs_year_u16", "array_type": "H", "numeric_kind": "uint", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
-    {"series_id": "obs_month_u8", "array_type": "B", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
 ]
 
 def parse_time_key(raw: str) -> tuple[int, int]:
@@ -97,7 +96,6 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
             raise SystemExit(f"missing geo category {country_code}")
         values = []
         years = []
-        months = []
         row_count = len(time_items)
         skipped_blank = 0
         skipped_parse = 0
@@ -128,7 +126,6 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
                 continue
             values.append(value)
             years.append(year)
-            months.append(month)
             period = f"{year:04d}-{month:02d}"
             if start_period == "":
                 start_period = period
@@ -137,7 +134,6 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
         payloads = {
             "retail_trade_volume_index_f32": values,
             "obs_year_u16": years,
-            "obs_month_u8": months,
         }
         for series in series_defs:
             payload_array = array.array(series["array_type"], payloads[series["series_id"]])

@@ -51,7 +51,6 @@ companies = [
 series_defs = [
     {"series_id": "net_income_i64", "array_type": "q", "numeric_kind": "int", "bit_width": 64, "endianness": "little", "element_size_bytes": 8},
     {"series_id": "obs_year_u16", "array_type": "H", "numeric_kind": "uint", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
-    {"series_id": "obs_quarter_u8", "array_type": "B", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
 ]
 
 def parse_int_value(raw: object) -> int:
@@ -119,14 +118,12 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
         ordered = sorted((year, quarter, data["val"]) for (year, quarter), data in selected.items())
         values = [value for year, quarter, value in ordered]
         years = [year for year, quarter, value in ordered]
-        quarters = [quarter for year, quarter, value in ordered]
-        start_period = f"{years[0]}Q{quarters[0]}" if ordered else ""
-        end_period = f"{years[-1]}Q{quarters[-1]}" if ordered else ""
+        start_period = f"{ordered[0][0]}Q{ordered[0][1]}" if ordered else ""
+        end_period = f"{ordered[-1][0]}Q{ordered[-1][1]}" if ordered else ""
         writer.writerow([company_id, cik, row_count, len(ordered), skipped_null, skipped_parse, start_period, end_period])
         payloads = {
             "net_income_i64": values,
             "obs_year_u16": years,
-            "obs_quarter_u8": quarters,
         }
         for series in series_defs:
             payload = array.array(series["array_type"], payloads[series["series_id"]])

@@ -12,7 +12,6 @@ Selected companies:
 Generated series:
 - `stockholders_equity_i64`
 - `obs_year_u16`
-- `obs_quarter_u8`
 
 Missing-value policy:
 - filter facts missing `fy`, `fp`, or `val`

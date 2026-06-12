@@ -84,37 +84,3 @@ sample_format = "raw homogeneous numeric array"
 sample_count = 0
 total_size_bytes = 0
 output_path = "samples/jhu_covid19_deaths_global_daily/obs_year_u16/"
-
-[[series]]
-id = "obs_month_u8"
-description = "Observation month values aligned to death counts."
-semantic_meaning = "Unsigned 8-bit months derived from retained source date columns."
-source_resources = ["jhu_covid19_deaths_global_csv"]
-filtered_input_path = "filtered/jhu_covid19_deaths_global_daily/country_stats.tsv"
-filtering = "Keep dates accepted for death_counts_u32."
-missing_value_policy = "Filter dates rejected by the death_counts_u32 missing-value policy."
-conversion = "Parse retained dates and write uint8 arrays aligned 1:1 with death_counts_u32."
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-sample_format = "raw homogeneous numeric array"
-sample_count = 0
-total_size_bytes = 0
-output_path = "samples/jhu_covid19_deaths_global_daily/obs_month_u8/"
-
-[[series]]
-id = "obs_day_u8"
-description = "Observation day values aligned to death counts."
-semantic_meaning = "Unsigned 8-bit day-of-month values derived from retained source date columns."
-source_resources = ["jhu_covid19_deaths_global_csv"]
-filtered_input_path = "filtered/jhu_covid19_deaths_global_daily/country_stats.tsv"
-filtering = "Keep dates accepted for death_counts_u32."
-missing_value_policy = "Filter dates rejected by the death_counts_u32 missing-value policy."
-conversion = "Parse retained dates and write uint8 arrays aligned 1:1 with death_counts_u32."
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-sample_format = "raw homogeneous numeric array"
-sample_count = 0
-total_size_bytes = 0
-output_path = "samples/jhu_covid19_deaths_global_daily/obs_day_u8/"

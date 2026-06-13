@@ -1,218 +1,222 @@
 # Accepted Recipe Audit
 
-Acceptance floor: at least `10000` numeric values total or at least `102400` bytes of generated sample payload.
+Acceptance floor: at least `10000` numeric values total or at least `102400` bytes of generated sample payload, plus median generated sample size at least `1000` values.
 
-- `ok`: 128
-- `below_floor`: 205
+- `ok`: 122
+- `below_floor`: 209
 - `broken`: 0
 
 ## Below Floor
 
-| dataset_id | total_values | total_sample_bytes | sample_rows |
-|---|---:|---:|---:|
-| `fred_real_gdp_quarterly` | 40 | 160 | 10 |
-| `rubygems_search` | 60 | 480 | 2 |
-| `fred_capacity_utilization_monthly` | 120 | 480 | 10 |
-| `fred_civilian_labor_force_monthly` | 120 | 480 | 10 |
-| `fred_consumer_sentiment_monthly` | 120 | 480 | 10 |
-| `fred_core_cpi_monthly` | 120 | 480 | 10 |
-| `fred_cpi_all_items_monthly` | 120 | 480 | 10 |
-| `fred_federal_funds_monthly` | 120 | 480 | 10 |
-| `fred_housing_starts_monthly` | 120 | 480 | 10 |
-| `fred_industrial_production_monthly` | 120 | 480 | 10 |
-| `fred_labor_force_participation_monthly` | 120 | 480 | 10 |
-| `fred_m2_money_stock_monthly` | 120 | 480 | 10 |
-| `fred_payroll_employment_monthly` | 120 | 480 | 10 |
-| `fred_pce_price_index_monthly` | 120 | 480 | 10 |
-| `fred_ppi_all_commodities_monthly` | 120 | 480 | 10 |
-| `fred_unemployment_level_monthly` | 120 | 480 | 10 |
-| `fred_unemployment_rate_monthly` | 120 | 480 | 10 |
-| `biorxiv_details` | 150 | 390 | 5 |
-| `dryad_search` | 160 | 600 | 8 |
-| `wikidata_sparql` | 200 | 600 | 2 |
-| `maven_central_search` | 200 | 1000 | 2 |
-| `internet_archive_metadata` | 200 | 1200 | 2 |
-| `packagist_packages` | 200 | 1200 | 2 |
-| `openbrewerydb_breweries` | 246 | 1640 | 3 |
-| `gutendex_books` | 256 | 576 | 8 |
-| `nasa_neows_feed` | 270 | 1305 | 6 |
-| `library_of_congress_items` | 276 | 1016 | 5 |
-| `anilist_media` | 295 | 837 | 6 |
-| `semanticscholar_papers` | 300 | 1000 | 3 |
-| `dockerhub_repositories` | 300 | 1300 | 3 |
-| `weathergov_stations` | 300 | 2000 | 3 |
-| `openlibrary_subjects` | 305 | 692 | 6 |
-| `esco_occupations` | 355 | 639 | 5 |
-| `orcid_search` | 390 | 780 | 4 |
-| `europe_pmc_search` | 400 | 800 | 4 |
-| `openlibrary_search` | 400 | 800 | 5 |
-| `wger_exercises` | 400 | 800 | 4 |
-| `arxiv_cs_recent` | 400 | 1200 | 4 |
-| `osf_preprints` | 400 | 1300 | 4 |
-| `stackexchange_top_questions_jan_2024` | 400 | 1400 | 4 |
-| `hn_algolia_search` | 400 | 1600 | 4 |
-| `cratesio_crates` | 400 | 2000 | 4 |
-| `hex_packages` | 400 | 2600 | 4 |
-| `osm_overpass_cafes` | 400 | 2600 | 4 |
-| `sec_companyfacts_assets_quarterly` | 454 | 2270 | 10 |
-| `sec_companyfacts_cash_and_equivalents_quarterly` | 454 | 2270 | 10 |
-| `sec_companyfacts_net_income_quarterly` | 454 | 2270 | 10 |
-| `sec_companyfacts_operating_income_quarterly` | 454 | 2270 | 10 |
-| `sec_companyfacts_stockholders_equity_quarterly` | 454 | 2270 | 10 |
-| `musicbrainz_recordings` | 476 | 1046 | 5 |
-| `musicbrainz_release_groups` | 491 | 982 | 5 |
-| `openfoodfacts_products` | 491 | 1870 | 5 |
-| `inaturalist_observations` | 495 | 1188 | 5 |
-| `openfda_drug_event` | 495 | 1683 | 5 |
-| `pokemontcg_cards` | 498 | 1071 | 6 |
-| `gbif_occurrence` | 498 | 2284 | 5 |
-| `treasury_avg_interest_rates` | 500 | 1000 | 5 |
-| `crossref_funders` | 500 | 1200 | 5 |
-| `medrxiv_details` | 500 | 1300 | 5 |
-| `artic_artworks_search` | 500 | 1400 | 5 |
-| `figshare_articles` | 500 | 1400 | 5 |
-| `nvd_cves_recent` | 500 | 1400 | 5 |
-| `nuget_search` | 500 | 1500 | 5 |
-| `europeana_search` | 500 | 2300 | 5 |
-| `npm_search_packages` | 500 | 2600 | 5 |
-| `fred_fed_balance_sheet_weekly` | 521 | 2084 | 10 |
-| `fred_mortgage_30y_weekly` | 521 | 2084 | 10 |
-| `fred_initial_claims_weekly` | 522 | 2088 | 10 |
-| `crossref_works_jan_2024` | 588 | 3136 | 3 |
-| `gleif_lei_records` | 600 | 1200 | 6 |
-| `ooni_measurements` | 600 | 1500 | 6 |
-| `crossref_members` | 600 | 1800 | 6 |
-| `datacite_dois` | 600 | 2000 | 6 |
-| `deezer_chart` | 600 | 2000 | 6 |
-| `openalex_works_2024_sample` | 600 | 2000 | 3 |
-| `openml_datasets` | 600 | 2000 | 6 |
-| `steamspy_top100in2weeks` | 600 | 2200 | 6 |
-| `openml_dataset_61` | 600 | 2400 | 4 |
-| `coingecko_top_markets` | 600 | 4200 | 6 |
-| `world_bank_access_to_electricity_percent_annual` | 638 | 3190 | 20 |
-| `world_bank_renewable_energy_consumption_percent_annual` | 640 | 3200 | 20 |
-| `owid_consumption_co2_annual` | 680 | 2040 | 20 |
-| `owid_trade_co2_annual` | 680 | 2040 | 20 |
-| `owid_trade_co2_share_annual` | 680 | 2040 | 20 |
-| `world_bank_forest_area_percent_annual` | 680 | 3400 | 20 |
-| `world_bank_internet_users_percent_annual` | 688 | 3440 | 20 |
-| `world_bank_energy_use_per_capita_annual` | 692 | 3460 | 20 |
-| `itunes_search` | 697 | 3390 | 7 |
-| `doaj_articles` | 700 | 1300 | 7 |
-| `huggingface_datasets` | 700 | 2200 | 7 |
-| `gitlab_projects` | 700 | 2800 | 7 |
-| `world_bank_unemployment_total_percent_annual` | 700 | 3500 | 20 |
-| `marine_regions_gazetteer` | 758 | 5264 | 8 |
-| `launchlibrary_upcoming` | 800 | 1900 | 8 |
-| `scryfall_cards` | 831 | 1848 | 5 |
-| `imf_gdp_growth_annual` | 832 | 2496 | 16 |
-| `imf_gdp_per_capita_usd_annual` | 832 | 2496 | 16 |
-| `imf_general_government_gross_debt_gdp_annual` | 832 | 2496 | 16 |
-| `imf_inflation_annual` | 832 | 2496 | 16 |
-| `imf_nominal_gdp_usd_annual` | 832 | 2496 | 16 |
-| `imf_population_annual` | 832 | 2496 | 16 |
-| `imf_unemployment_rate_annual` | 832 | 2496 | 16 |
-| `chembl_molecules` | 973 | 2043 | 10 |
-| `eia_petroleum_prices` | 988 | 3952 | 2 |
-| `gleif_lei_records_api` | 1000 | 1800 | 5 |
-| `arxiv_ai_recent` | 1000 | 2500 | 10 |
-| `gwas_catalog_studies` | 1000 | 2600 | 10 |
-| `pride_projects_search` | 1000 | 3200 | 10 |
-| `uniprot_human_reviewed_lengths` | 1000 | 4000 | 2 |
-| `uniprot_reviewed_human` | 1000 | 4000 | 2 |
-| `owid_flaring_co2_annual` | 1128 | 3384 | 20 |
-| `owid_energy_per_gdp_annual` | 1130 | 3390 | 20 |
-| `world_bank_population_density_annual` | 1134 | 5670 | 18 |
-| `worldbank_gdp_constant` | 1140 | 2660 | 6 |
-| `geoboundaries_all_adm0` | 1150 | 3680 | 5 |
-| `owid_energy_per_capita_annual` | 1168 | 3504 | 20 |
-| `owid_primary_energy_consumption_annual` | 1168 | 3504 | 20 |
-| `iris_seismon_events_fixed` | 1170 | 5330 | 9 |
-| `worldbank_population_total` | 1176 | 2744 | 6 |
-| `scryfall_default_cards` | 1225 | 2450 | 7 |
-| `world_bank_agricultural_land_percent_annual` | 1260 | 6300 | 20 |
-| `world_bank_birth_rate_annual` | 1300 | 6500 | 20 |
-| `world_bank_death_rate_annual` | 1300 | 6500 | 20 |
-| `world_bank_fertility_rate_annual` | 1300 | 6500 | 20 |
-| `world_bank_gdp_current_usd` | 1300 | 6500 | 20 |
-| `world_bank_gdp_per_capita_current_usd_annual` | 1300 | 6500 | 20 |
-| `world_bank_life_expectancy` | 1300 | 6500 | 20 |
-| `world_bank_population_total` | 1300 | 6500 | 20 |
-| `world_bank_urban_population_percent_annual` | 1300 | 6500 | 20 |
-| `openalex_authors_large` | 1400 | 3000 | 7 |
-| `gbif_occurrence_large` | 1499 | 5999 | 5 |
-| `plos_search` | 1500 | 3500 | 3 |
-| `ena_portal_search` | 1500 | 6000 | 3 |
-| `gbif_datasets` | 1500 | 6000 | 3 |
-| `internetarchive_advancedsearch` | 1500 | 7000 | 3 |
-| `crossref_works_large_retry` | 1500 | 8000 | 3 |
-| `coinpaprika_exchanges` | 1530 | 5760 | 6 |
-| `openalex_institutions_large` | 1600 | 4600 | 8 |
-| `tvmaze_shows` | 1715 | 4655 | 7 |
-| `openalex_sources_large` | 1800 | 5400 | 9 |
-| `europepmc_grants` | 1984 | 3968 | 4 |
-| `gdc_cases` | 2000 | 3500 | 4 |
-| `chembl_documents` | 2000 | 4000 | 4 |
-| `wikimedia_mostread` | 2000 | 6000 | 2 |
-| `npi_registry_ca` | 2000 | 7000 | 4 |
-| `nvd_cpe_match_feed` | 2000 | 7000 | 4 |
-| `dataone_solr_1000` | 2000 | 10000 | 2 |
-| `npm_search_packages_large` | 2000 | 10250 | 8 |
-| `nih_reporter_projects` | 2140 | 9416 | 5 |
-| `fred_sp500_daily` | 2162 | 8648 | 9 |
-| `geofabrik_index` | 2220 | 17760 | 4 |
-| `owid_cement_co2_annual` | 2310 | 6930 | 20 |
-| `disease_sh_countries` | 2310 | 14784 | 10 |
-| `openfda_device_event` | 2500 | 5500 | 5 |
-| `openfda_food_enforcement` | 2500 | 7500 | 5 |
-| `fred_treasury_10y_daily` | 2501 | 10004 | 10 |
-| `fred_treasury_2y_daily` | 2501 | 10004 | 10 |
-| `fred_treasury_30y_daily` | 2501 | 10004 | 10 |
-| `fred_wti_crude_daily` | 2505 | 10020 | 10 |
-| `wikimedia_pageviews_daily` | 2562 | 10248 | 7 |
-| `rubygems_versions_large` | 2580 | 9288 | 5 |
-| `owid_co2_per_gdp_annual` | 2806 | 8418 | 20 |
-| `eurostat_retail_trade_volume_monthly` | 3048 | 9144 | 10 |
-| `owid_co2_including_luc_annual` | 3090 | 9270 | 20 |
-| `owid_gas_co2_annual` | 3092 | 9276 | 20 |
-| `chesscom_hikaru_2024_01` | 3135 | 8360 | 3 |
-| `owid_oil_co2_annual` | 3214 | 9642 | 20 |
-| `owid_co2_annual` | 3374 | 10122 | 20 |
-| `owid_co2_per_capita_annual` | 3374 | 10122 | 20 |
-| `owid_coal_co2_annual` | 3374 | 10122 | 20 |
-| `openlibrary_editions` | 3479 | 6958 | 7 |
-| `owid_temperature_change_from_co2_annual` | 3480 | 10440 | 20 |
-| `eia_series_petroleum` | 3500 | 5500 | 7 |
-| `loc_photos_search_large` | 3500 | 8000 | 7 |
-| `smithsonian_search_large` | 3500 | 10000 | 7 |
-| `owid_land_use_change_co2_annual` | 3500 | 10500 | 20 |
-| `owid_methane_annual` | 3500 | 10500 | 20 |
-| `owid_nitrous_oxide_annual` | 3500 | 10500 | 20 |
-| `owid_total_ghg_annual` | 3500 | 10500 | 20 |
-| `eurostat_hicp_all_items_monthly` | 3600 | 10800 | 10 |
-| `eurostat_hicp_food_monthly` | 3600 | 10800 | 10 |
-| `eurostat_industrial_production_monthly` | 3768 | 11304 | 10 |
-| `europepmc_grants_large_retry` | 4000 | 8000 | 4 |
-| `huggingface_models_large` | 4000 | 13000 | 8 |
-| `taginfo_tags_popular` | 4000 | 19500 | 8 |
-| `taginfo_keys_all` | 4000 | 25500 | 8 |
-| `mitre_attack_enterprise` | 4290 | 5148 | 5 |
-| `inspirehep_literature` | 4927 | 15854 | 5 |
-| `eurostat_female_unemployment_monthly` | 4930 | 14790 | 10 |
-| `eurostat_male_unemployment_monthly` | 4930 | 14790 | 10 |
-| `eurostat_unemployment_monthly` | 4930 | 14790 | 10 |
-| `usgs_water_sites_rdb` | 4992 | 36976 | 6 |
-| `crossref_funders_large` | 5000 | 10000 | 5 |
-| `dataone_solr` | 5039 | 25078 | 6 |
-| `dataone_solr_large_retry` | 5039 | 25078 | 6 |
-| `federalregister_documents_large` | 6000 | 9000 | 6 |
-| `openml_runs_large` | 6000 | 28000 | 6 |
-| `figshare_articles_large` | 6000 | 34000 | 6 |
-| `jpl_cad_2024` | 6552 | 52416 | 4 |
-| `nasa_donki_flr` | 6768 | 16920 | 6 |
-| `openml_tasks_large` | 7000 | 26000 | 7 |
-| `coinpaprika_tickers` | 8000 | 52000 | 4 |
-| `cisa_kev_catalog` | 8060 | 14508 | 5 |
-| `usgs_daily_values_large` | 8890 | 44450 | 14 |
-| `nasa_donki_cme` | 9072 | 24192 | 6 |
+| dataset_id | total_values | total_sample_bytes | sample_rows | median_sample_value_count | median_sample_size_bytes | reasons |
+|---|---:|---:|---:|---:|---:|---|
+| `fred_real_gdp_quarterly` | 40 | 160 | 10 | 4 | 16 | `aggregate_floor,median_sample_floor` |
+| `rubygems_search` | 60 | 480 | 2 | 30 | 240 | `aggregate_floor,median_sample_floor` |
+| `fred_capacity_utilization_monthly` | 120 | 480 | 10 | 12 | 48 | `aggregate_floor,median_sample_floor` |
+| `fred_civilian_labor_force_monthly` | 120 | 480 | 10 | 12 | 48 | `aggregate_floor,median_sample_floor` |
+| `fred_consumer_sentiment_monthly` | 120 | 480 | 10 | 12 | 48 | `aggregate_floor,median_sample_floor` |
+| `fred_core_cpi_monthly` | 120 | 480 | 10 | 12 | 48 | `aggregate_floor,median_sample_floor` |
+| `fred_cpi_all_items_monthly` | 120 | 480 | 10 | 12 | 48 | `aggregate_floor,median_sample_floor` |
+| `fred_federal_funds_monthly` | 120 | 480 | 10 | 12 | 48 | `aggregate_floor,median_sample_floor` |
+| `fred_housing_starts_monthly` | 120 | 480 | 10 | 12 | 48 | `aggregate_floor,median_sample_floor` |
+| `fred_industrial_production_monthly` | 120 | 480 | 10 | 12 | 48 | `aggregate_floor,median_sample_floor` |
+| `fred_labor_force_participation_monthly` | 120 | 480 | 10 | 12 | 48 | `aggregate_floor,median_sample_floor` |
+| `fred_m2_money_stock_monthly` | 120 | 480 | 10 | 12 | 48 | `aggregate_floor,median_sample_floor` |
+| `fred_payroll_employment_monthly` | 120 | 480 | 10 | 12 | 48 | `aggregate_floor,median_sample_floor` |
+| `fred_pce_price_index_monthly` | 120 | 480 | 10 | 12 | 48 | `aggregate_floor,median_sample_floor` |
+| `fred_ppi_all_commodities_monthly` | 120 | 480 | 10 | 12 | 48 | `aggregate_floor,median_sample_floor` |
+| `fred_unemployment_level_monthly` | 120 | 480 | 10 | 12 | 48 | `aggregate_floor,median_sample_floor` |
+| `fred_unemployment_rate_monthly` | 120 | 480 | 10 | 12 | 48 | `aggregate_floor,median_sample_floor` |
+| `biorxiv_details` | 150 | 390 | 5 | 30 | 60 | `aggregate_floor,median_sample_floor` |
+| `dryad_search` | 160 | 600 | 8 | 20 | 80 | `aggregate_floor,median_sample_floor` |
+| `wikidata_sparql` | 200 | 600 | 2 | 100 | 300 | `aggregate_floor,median_sample_floor` |
+| `maven_central_search` | 200 | 1000 | 2 | 100 | 500 | `aggregate_floor,median_sample_floor` |
+| `internet_archive_metadata` | 200 | 1200 | 2 | 100 | 600 | `aggregate_floor,median_sample_floor` |
+| `packagist_packages` | 200 | 1200 | 2 | 100 | 600 | `aggregate_floor,median_sample_floor` |
+| `openbrewerydb_breweries` | 246 | 1640 | 3 | 82 | 656 | `aggregate_floor,median_sample_floor` |
+| `gutendex_books` | 256 | 576 | 8 | 32 | 64 | `aggregate_floor,median_sample_floor` |
+| `nasa_neows_feed` | 270 | 1305 | 6 | 45 | 180 | `aggregate_floor,median_sample_floor` |
+| `library_of_congress_items` | 276 | 1016 | 5 | 44 | 88 | `aggregate_floor,median_sample_floor` |
+| `anilist_media` | 295 | 837 | 6 | 49 | 147 | `aggregate_floor,median_sample_floor` |
+| `semanticscholar_papers` | 300 | 1000 | 3 | 100 | 400 | `aggregate_floor,median_sample_floor` |
+| `dockerhub_repositories` | 300 | 1300 | 3 | 100 | 400 | `aggregate_floor,median_sample_floor` |
+| `weathergov_stations` | 300 | 2000 | 3 | 100 | 800 | `aggregate_floor,median_sample_floor` |
+| `openlibrary_subjects` | 305 | 692 | 6 | 41 | 82 | `aggregate_floor,median_sample_floor` |
+| `esco_occupations` | 355 | 639 | 5 | 71 | 142 | `aggregate_floor,median_sample_floor` |
+| `orcid_search` | 390 | 780 | 4 | 100 | 200 | `aggregate_floor,median_sample_floor` |
+| `openlibrary_search` | 400 | 800 | 5 | 80 | 160 | `aggregate_floor,median_sample_floor` |
+| `europe_pmc_search` | 400 | 800 | 4 | 100 | 150 | `aggregate_floor,median_sample_floor` |
+| `wger_exercises` | 400 | 800 | 4 | 100 | 150 | `aggregate_floor,median_sample_floor` |
+| `arxiv_cs_recent` | 400 | 1200 | 4 | 100 | 300 | `aggregate_floor,median_sample_floor` |
+| `osf_preprints` | 400 | 1300 | 4 | 100 | 400 | `aggregate_floor,median_sample_floor` |
+| `stackexchange_top_questions_jan_2024` | 400 | 1400 | 4 | 100 | 400 | `aggregate_floor,median_sample_floor` |
+| `hn_algolia_search` | 400 | 1600 | 4 | 100 | 400 | `aggregate_floor,median_sample_floor` |
+| `cratesio_crates` | 400 | 2000 | 4 | 100 | 500 | `aggregate_floor,median_sample_floor` |
+| `hex_packages` | 400 | 2600 | 4 | 100 | 800 | `aggregate_floor,median_sample_floor` |
+| `osm_overpass_cafes` | 400 | 2600 | 4 | 100 | 800 | `aggregate_floor,median_sample_floor` |
+| `sec_companyfacts_assets_quarterly` | 454 | 2270 | 10 | 51 | 179 | `aggregate_floor,median_sample_floor` |
+| `sec_companyfacts_cash_and_equivalents_quarterly` | 454 | 2270 | 10 | 51 | 179 | `aggregate_floor,median_sample_floor` |
+| `sec_companyfacts_net_income_quarterly` | 454 | 2270 | 10 | 51 | 179 | `aggregate_floor,median_sample_floor` |
+| `sec_companyfacts_operating_income_quarterly` | 454 | 2270 | 10 | 51 | 179 | `aggregate_floor,median_sample_floor` |
+| `sec_companyfacts_stockholders_equity_quarterly` | 454 | 2270 | 10 | 51 | 179 | `aggregate_floor,median_sample_floor` |
+| `musicbrainz_recordings` | 476 | 1046 | 5 | 94 | 188 | `aggregate_floor,median_sample_floor` |
+| `musicbrainz_release_groups` | 491 | 982 | 5 | 100 | 200 | `aggregate_floor,median_sample_floor` |
+| `openfoodfacts_products` | 491 | 1870 | 5 | 98 | 392 | `aggregate_floor,median_sample_floor` |
+| `inaturalist_observations` | 495 | 1188 | 5 | 99 | 198 | `aggregate_floor,median_sample_floor` |
+| `openfda_drug_event` | 495 | 1683 | 5 | 99 | 198 | `aggregate_floor,median_sample_floor` |
+| `pokemontcg_cards` | 498 | 1071 | 6 | 81 | 130.5 | `aggregate_floor,median_sample_floor` |
+| `gbif_occurrence` | 498 | 2284 | 5 | 100 | 400 | `aggregate_floor,median_sample_floor` |
+| `treasury_avg_interest_rates` | 500 | 1000 | 5 | 100 | 200 | `aggregate_floor,median_sample_floor` |
+| `crossref_funders` | 500 | 1200 | 5 | 100 | 200 | `aggregate_floor,median_sample_floor` |
+| `medrxiv_details` | 500 | 1300 | 5 | 100 | 200 | `aggregate_floor,median_sample_floor` |
+| `artic_artworks_search` | 500 | 1400 | 5 | 100 | 200 | `aggregate_floor,median_sample_floor` |
+| `figshare_articles` | 500 | 1400 | 5 | 100 | 200 | `aggregate_floor,median_sample_floor` |
+| `nvd_cves_recent` | 500 | 1400 | 5 | 100 | 200 | `aggregate_floor,median_sample_floor` |
+| `nuget_search` | 500 | 1500 | 5 | 100 | 200 | `aggregate_floor,median_sample_floor` |
+| `europeana_search` | 500 | 2300 | 5 | 100 | 400 | `aggregate_floor,median_sample_floor` |
+| `npm_search_packages` | 500 | 2600 | 5 | 100 | 400 | `aggregate_floor,median_sample_floor` |
+| `fred_fed_balance_sheet_weekly` | 521 | 2084 | 10 | 52 | 208 | `aggregate_floor,median_sample_floor` |
+| `fred_mortgage_30y_weekly` | 521 | 2084 | 10 | 52 | 208 | `aggregate_floor,median_sample_floor` |
+| `fred_initial_claims_weekly` | 522 | 2088 | 10 | 52 | 208 | `aggregate_floor,median_sample_floor` |
+| `crossref_works_jan_2024` | 588 | 3136 | 3 | 196 | 784 | `aggregate_floor,median_sample_floor` |
+| `gleif_lei_records` | 600 | 1200 | 6 | 100 | 200 | `aggregate_floor,median_sample_floor` |
+| `ooni_measurements` | 600 | 1500 | 6 | 100 | 250 | `aggregate_floor,median_sample_floor` |
+| `crossref_members` | 600 | 1800 | 6 | 100 | 400 | `aggregate_floor,median_sample_floor` |
+| `datacite_dois` | 600 | 2000 | 6 | 100 | 400 | `aggregate_floor,median_sample_floor` |
+| `deezer_chart` | 600 | 2000 | 6 | 100 | 400 | `aggregate_floor,median_sample_floor` |
+| `openml_datasets` | 600 | 2000 | 6 | 100 | 400 | `aggregate_floor,median_sample_floor` |
+| `openalex_works_2024_sample` | 600 | 2000 | 3 | 200 | 800 | `aggregate_floor,median_sample_floor` |
+| `steamspy_top100in2weeks` | 600 | 2200 | 6 | 100 | 400 | `aggregate_floor,median_sample_floor` |
+| `openml_dataset_61` | 600 | 2400 | 4 | 150 | 600 | `aggregate_floor,median_sample_floor` |
+| `coingecko_top_markets` | 600 | 4200 | 6 | 100 | 800 | `aggregate_floor,median_sample_floor` |
+| `world_bank_access_to_electricity_percent_annual` | 638 | 3190 | 20 | 34 | 130 | `aggregate_floor,median_sample_floor` |
+| `world_bank_renewable_energy_consumption_percent_annual` | 640 | 3200 | 20 | 32 | 160 | `aggregate_floor,median_sample_floor` |
+| `owid_consumption_co2_annual` | 680 | 2040 | 20 | 34 | 102 | `aggregate_floor,median_sample_floor` |
+| `owid_trade_co2_annual` | 680 | 2040 | 20 | 34 | 102 | `aggregate_floor,median_sample_floor` |
+| `owid_trade_co2_share_annual` | 680 | 2040 | 20 | 34 | 102 | `aggregate_floor,median_sample_floor` |
+| `world_bank_forest_area_percent_annual` | 680 | 3400 | 20 | 34 | 170 | `aggregate_floor,median_sample_floor` |
+| `world_bank_internet_users_percent_annual` | 688 | 3440 | 20 | 35 | 155 | `aggregate_floor,median_sample_floor` |
+| `world_bank_energy_use_per_capita_annual` | 692 | 3460 | 20 | 35 | 171 | `aggregate_floor,median_sample_floor` |
+| `itunes_search` | 697 | 3390 | 7 | 100 | 400 | `aggregate_floor,median_sample_floor` |
+| `doaj_articles` | 700 | 1300 | 7 | 100 | 200 | `aggregate_floor,median_sample_floor` |
+| `huggingface_datasets` | 700 | 2200 | 7 | 100 | 400 | `aggregate_floor,median_sample_floor` |
+| `gitlab_projects` | 700 | 2800 | 7 | 100 | 400 | `aggregate_floor,median_sample_floor` |
+| `world_bank_unemployment_total_percent_annual` | 700 | 3500 | 20 | 35 | 175 | `aggregate_floor,median_sample_floor` |
+| `marine_regions_gazetteer` | 758 | 5264 | 8 | 93.5 | 736 | `aggregate_floor,median_sample_floor` |
+| `launchlibrary_upcoming` | 800 | 1900 | 8 | 100 | 200 | `aggregate_floor,median_sample_floor` |
+| `scryfall_cards` | 831 | 1848 | 5 | 164 | 164 | `aggregate_floor,median_sample_floor` |
+| `imf_gdp_growth_annual` | 832 | 2496 | 16 | 52 | 156 | `aggregate_floor,median_sample_floor` |
+| `imf_gdp_per_capita_usd_annual` | 832 | 2496 | 16 | 52 | 156 | `aggregate_floor,median_sample_floor` |
+| `imf_general_government_gross_debt_gdp_annual` | 832 | 2496 | 16 | 52 | 156 | `aggregate_floor,median_sample_floor` |
+| `imf_inflation_annual` | 832 | 2496 | 16 | 52 | 156 | `aggregate_floor,median_sample_floor` |
+| `imf_nominal_gdp_usd_annual` | 832 | 2496 | 16 | 52 | 156 | `aggregate_floor,median_sample_floor` |
+| `imf_population_annual` | 832 | 2496 | 16 | 52 | 156 | `aggregate_floor,median_sample_floor` |
+| `imf_unemployment_rate_annual` | 832 | 2496 | 16 | 52 | 156 | `aggregate_floor,median_sample_floor` |
+| `chembl_molecules` | 973 | 2043 | 10 | 97 | 145.5 | `aggregate_floor,median_sample_floor` |
+| `eia_petroleum_prices` | 988 | 3952 | 2 | 494 | 1976 | `aggregate_floor,median_sample_floor` |
+| `gleif_lei_records_api` | 1000 | 1800 | 5 | 200 | 400 | `aggregate_floor,median_sample_floor` |
+| `arxiv_ai_recent` | 1000 | 2500 | 10 | 100 | 200 | `aggregate_floor,median_sample_floor` |
+| `gwas_catalog_studies` | 1000 | 2600 | 10 | 100 | 200 | `aggregate_floor,median_sample_floor` |
+| `pride_projects_search` | 1000 | 3200 | 10 | 100 | 400 | `aggregate_floor,median_sample_floor` |
+| `uniprot_human_reviewed_lengths` | 1000 | 4000 | 2 | 500 | 2000 | `aggregate_floor,median_sample_floor` |
+| `uniprot_reviewed_human` | 1000 | 4000 | 2 | 500 | 2000 | `aggregate_floor,median_sample_floor` |
+| `owid_flaring_co2_annual` | 1128 | 3384 | 20 | 57.5 | 150 | `aggregate_floor,median_sample_floor` |
+| `owid_energy_per_gdp_annual` | 1130 | 3390 | 20 | 58 | 144 | `aggregate_floor,median_sample_floor` |
+| `world_bank_population_density_annual` | 1134 | 5670 | 18 | 63 | 315 | `aggregate_floor,median_sample_floor` |
+| `worldbank_gdp_constant` | 1140 | 2660 | 6 | 190 | 190 | `aggregate_floor,median_sample_floor` |
+| `geoboundaries_all_adm0` | 1150 | 3680 | 5 | 230 | 920 | `aggregate_floor,median_sample_floor` |
+| `owid_energy_per_capita_annual` | 1168 | 3504 | 20 | 60 | 148 | `aggregate_floor,median_sample_floor` |
+| `owid_primary_energy_consumption_annual` | 1168 | 3504 | 20 | 60 | 148 | `aggregate_floor,median_sample_floor` |
+| `iris_seismon_events_fixed` | 1170 | 5330 | 9 | 130 | 260 | `aggregate_floor,median_sample_floor` |
+| `worldbank_population_total` | 1176 | 2744 | 6 | 196 | 196 | `aggregate_floor,median_sample_floor` |
+| `scryfall_default_cards` | 1225 | 2450 | 7 | 175 | 175 | `aggregate_floor,median_sample_floor` |
+| `world_bank_agricultural_land_percent_annual` | 1260 | 6300 | 20 | 63 | 315 | `aggregate_floor,median_sample_floor` |
+| `world_bank_birth_rate_annual` | 1300 | 6500 | 20 | 65 | 325 | `aggregate_floor,median_sample_floor` |
+| `world_bank_death_rate_annual` | 1300 | 6500 | 20 | 65 | 325 | `aggregate_floor,median_sample_floor` |
+| `world_bank_fertility_rate_annual` | 1300 | 6500 | 20 | 65 | 325 | `aggregate_floor,median_sample_floor` |
+| `world_bank_gdp_current_usd` | 1300 | 6500 | 20 | 65 | 325 | `aggregate_floor,median_sample_floor` |
+| `world_bank_gdp_per_capita_current_usd_annual` | 1300 | 6500 | 20 | 65 | 325 | `aggregate_floor,median_sample_floor` |
+| `world_bank_life_expectancy` | 1300 | 6500 | 20 | 65 | 325 | `aggregate_floor,median_sample_floor` |
+| `world_bank_population_total` | 1300 | 6500 | 20 | 65 | 325 | `aggregate_floor,median_sample_floor` |
+| `world_bank_urban_population_percent_annual` | 1300 | 6500 | 20 | 65 | 325 | `aggregate_floor,median_sample_floor` |
+| `openalex_authors_large` | 1400 | 3000 | 7 | 200 | 400 | `aggregate_floor,median_sample_floor` |
+| `gbif_occurrence_large` | 1499 | 5999 | 5 | 300 | 600 | `aggregate_floor,median_sample_floor` |
+| `plos_search` | 1500 | 3500 | 3 | 500 | 1000 | `aggregate_floor,median_sample_floor` |
+| `ena_portal_search` | 1500 | 6000 | 3 | 500 | 1000 | `aggregate_floor,median_sample_floor` |
+| `gbif_datasets` | 1500 | 6000 | 3 | 500 | 1000 | `aggregate_floor,median_sample_floor` |
+| `internetarchive_advancedsearch` | 1500 | 7000 | 3 | 500 | 2000 | `aggregate_floor,median_sample_floor` |
+| `crossref_works_large_retry` | 1500 | 8000 | 3 | 500 | 2000 | `aggregate_floor,median_sample_floor` |
+| `coinpaprika_exchanges` | 1530 | 5760 | 6 | 255 | 960 | `aggregate_floor,median_sample_floor` |
+| `openalex_institutions_large` | 1600 | 4600 | 8 | 200 | 600 | `aggregate_floor,median_sample_floor` |
+| `tvmaze_shows` | 1715 | 4655 | 7 | 245 | 490 | `aggregate_floor,median_sample_floor` |
+| `openalex_sources_large` | 1800 | 5400 | 9 | 200 | 800 | `aggregate_floor,median_sample_floor` |
+| `europepmc_grants` | 1984 | 3968 | 4 | 496 | 992 | `aggregate_floor,median_sample_floor` |
+| `gdc_cases` | 2000 | 3500 | 4 | 500 | 500 | `aggregate_floor,median_sample_floor` |
+| `chembl_documents` | 2000 | 4000 | 4 | 500 | 1000 | `aggregate_floor,median_sample_floor` |
+| `wikimedia_mostread` | 2000 | 6000 | 2 | 1000 | 3000 | `aggregate_floor` |
+| `npi_registry_ca` | 2000 | 7000 | 4 | 500 | 1000 | `aggregate_floor,median_sample_floor` |
+| `nvd_cpe_match_feed` | 2000 | 7000 | 4 | 500 | 2000 | `aggregate_floor,median_sample_floor` |
+| `dataone_solr_1000` | 2000 | 10000 | 2 | 1000 | 5000 | `aggregate_floor` |
+| `npm_search_packages_large` | 2000 | 10250 | 8 | 250 | 1500 | `aggregate_floor,median_sample_floor` |
+| `nih_reporter_projects` | 2140 | 9416 | 5 | 428 | 856 | `aggregate_floor,median_sample_floor` |
+| `fred_sp500_daily` | 2162 | 8648 | 9 | 251 | 1004 | `aggregate_floor,median_sample_floor` |
+| `geofabrik_index` | 2220 | 17760 | 4 | 555 | 4440 | `aggregate_floor,median_sample_floor` |
+| `owid_cement_co2_annual` | 2310 | 6930 | 20 | 97 | 388 | `aggregate_floor,median_sample_floor` |
+| `disease_sh_countries` | 2310 | 14784 | 10 | 231 | 1848 | `aggregate_floor,median_sample_floor` |
+| `openfda_device_event` | 2500 | 5500 | 5 | 500 | 1000 | `aggregate_floor,median_sample_floor` |
+| `openfda_food_enforcement` | 2500 | 7500 | 5 | 500 | 2000 | `aggregate_floor,median_sample_floor` |
+| `fred_treasury_10y_daily` | 2501 | 10004 | 10 | 250 | 1000 | `aggregate_floor,median_sample_floor` |
+| `fred_treasury_2y_daily` | 2501 | 10004 | 10 | 250 | 1000 | `aggregate_floor,median_sample_floor` |
+| `fred_treasury_30y_daily` | 2501 | 10004 | 10 | 250 | 1000 | `aggregate_floor,median_sample_floor` |
+| `fred_wti_crude_daily` | 2505 | 10020 | 10 | 250.5 | 1002 | `aggregate_floor,median_sample_floor` |
+| `wikimedia_pageviews_daily` | 2562 | 10248 | 7 | 366 | 1464 | `aggregate_floor,median_sample_floor` |
+| `rubygems_versions_large` | 2580 | 9288 | 5 | 516 | 2064 | `aggregate_floor,median_sample_floor` |
+| `owid_co2_per_gdp_annual` | 2806 | 8418 | 20 | 140 | 373 | `aggregate_floor,median_sample_floor` |
+| `eurostat_retail_trade_volume_monthly` | 3048 | 9144 | 10 | 288 | 936 | `aggregate_floor,median_sample_floor` |
+| `owid_co2_including_luc_annual` | 3090 | 9270 | 20 | 163 | 395 | `aggregate_floor,median_sample_floor` |
+| `owid_gas_co2_annual` | 3092 | 9276 | 20 | 139.5 | 442 | `aggregate_floor,median_sample_floor` |
+| `chesscom_hikaru_2024_01` | 3135 | 8360 | 3 | 1045 | 2090 | `aggregate_floor` |
+| `owid_oil_co2_annual` | 3214 | 9642 | 20 | 148.5 | 450 | `aggregate_floor,median_sample_floor` |
+| `owid_co2_annual` | 3374 | 10122 | 20 | 163 | 450 | `aggregate_floor,median_sample_floor` |
+| `owid_co2_per_capita_annual` | 3374 | 10122 | 20 | 163 | 450 | `aggregate_floor,median_sample_floor` |
+| `owid_coal_co2_annual` | 3374 | 10122 | 20 | 163 | 450 | `aggregate_floor,median_sample_floor` |
+| `openlibrary_editions` | 3479 | 6958 | 7 | 497 | 994 | `aggregate_floor,median_sample_floor` |
+| `owid_temperature_change_from_co2_annual` | 3480 | 10440 | 20 | 174 | 522 | `aggregate_floor,median_sample_floor` |
+| `eia_series_petroleum` | 3500 | 5500 | 7 | 500 | 500 | `aggregate_floor,median_sample_floor` |
+| `loc_photos_search_large` | 3500 | 8000 | 7 | 500 | 1000 | `aggregate_floor,median_sample_floor` |
+| `smithsonian_search_large` | 3500 | 10000 | 7 | 500 | 1000 | `aggregate_floor,median_sample_floor` |
+| `owid_land_use_change_co2_annual` | 3500 | 10500 | 20 | 175 | 525 | `aggregate_floor,median_sample_floor` |
+| `owid_methane_annual` | 3500 | 10500 | 20 | 175 | 525 | `aggregate_floor,median_sample_floor` |
+| `owid_nitrous_oxide_annual` | 3500 | 10500 | 20 | 175 | 525 | `aggregate_floor,median_sample_floor` |
+| `owid_total_ghg_annual` | 3500 | 10500 | 20 | 175 | 525 | `aggregate_floor,median_sample_floor` |
+| `eurostat_hicp_all_items_monthly` | 3600 | 10800 | 10 | 360 | 1080 | `aggregate_floor,median_sample_floor` |
+| `eurostat_hicp_food_monthly` | 3600 | 10800 | 10 | 360 | 1080 | `aggregate_floor,median_sample_floor` |
+| `eurostat_industrial_production_monthly` | 3768 | 11304 | 10 | 396 | 984 | `aggregate_floor,median_sample_floor` |
+| `europepmc_grants_large_retry` | 4000 | 8000 | 4 | 1000 | 2000 | `aggregate_floor` |
+| `huggingface_models_large` | 4000 | 13000 | 8 | 500 | 1500 | `aggregate_floor,median_sample_floor` |
+| `taginfo_tags_popular` | 4000 | 19500 | 8 | 500 | 2500 | `aggregate_floor,median_sample_floor` |
+| `taginfo_keys_all` | 4000 | 25500 | 8 | 500 | 4000 | `aggregate_floor,median_sample_floor` |
+| `mitre_attack_enterprise` | 4290 | 5148 | 5 | 858 | 858 | `aggregate_floor,median_sample_floor` |
+| `inspirehep_literature` | 4927 | 15854 | 5 | 1000 | 4000 | `aggregate_floor` |
+| `eurostat_female_unemployment_monthly` | 4930 | 14790 | 10 | 520 | 1368 | `aggregate_floor,median_sample_floor` |
+| `eurostat_male_unemployment_monthly` | 4930 | 14790 | 10 | 520 | 1368 | `aggregate_floor,median_sample_floor` |
+| `eurostat_unemployment_monthly` | 4930 | 14790 | 10 | 520 | 1368 | `aggregate_floor,median_sample_floor` |
+| `usgs_water_sites_rdb` | 4992 | 36976 | 6 | 878 | 7024 | `aggregate_floor,median_sample_floor` |
+| `crossref_funders_large` | 5000 | 10000 | 5 | 1000 | 2000 | `aggregate_floor` |
+| `dataone_solr` | 5039 | 25078 | 6 | 1000 | 4000 | `aggregate_floor` |
+| `dataone_solr_large_retry` | 5039 | 25078 | 6 | 1000 | 4000 | `aggregate_floor` |
+| `federalregister_documents_large` | 6000 | 9000 | 6 | 1000 | 1500 | `aggregate_floor` |
+| `openml_runs_large` | 6000 | 28000 | 6 | 1000 | 4000 | `aggregate_floor` |
+| `figshare_articles_large` | 6000 | 34000 | 6 | 1000 | 6000 | `aggregate_floor` |
+| `jpl_cad_2024` | 6552 | 52416 | 4 | 1638 | 13104 | `aggregate_floor` |
+| `nasa_donki_flr` | 6768 | 16920 | 6 | 1128 | 2256 | `aggregate_floor` |
+| `openml_tasks_large` | 7000 | 26000 | 7 | 1000 | 4000 | `aggregate_floor` |
+| `coinpaprika_tickers` | 8000 | 52000 | 4 | 2000 | 16000 | `aggregate_floor` |
+| `cisa_kev_catalog` | 8060 | 14508 | 5 | 1612 | 3224 | `aggregate_floor` |
+| `usgs_daily_values_large` | 8890 | 44450 | 14 | 572 | 2971 | `aggregate_floor,median_sample_floor` |
+| `nasa_donki_cme` | 9072 | 24192 | 6 | 1512 | 4536 | `aggregate_floor` |
+| `usgs_nwis_ph_daily` | 17022 | 85110 | 22 | 943 | 2164 | `median_sample_floor` |
+| `usgs_nwis_dissolved_oxygen_daily` | 21996 | 109980 | 26 | 975 | 2178 | `median_sample_floor` |
+| `usgs_nwis_specific_conductance_daily` | 25810 | 129050 | 30 | 992 | 2187 | `median_sample_floor` |
+| `usgs_nwis_water_temperature_daily` | 32882 | 164410 | 36 | 999 | 3247 | `median_sample_floor` |
 

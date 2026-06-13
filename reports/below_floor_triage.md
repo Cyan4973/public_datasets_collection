@@ -73,13 +73,21 @@ Action:
 - examples that may be coherent: labor monthly, rates daily, macro monthly
 - do not collapse all FRED indicators into one mixed bundle
 
-### ECB FX single-pair recipes (`resolved`)
+### ECB FX single-pair recipes (`reopened`)
 
-This family has been consolidated into:
+This family was consolidated into:
 
 - `ecb_fx_eur_daily_matrix`
 
-The individual `ecb_fx_*_eur_daily` standalones are no longer part of the accepted set.
+That replacement was later rejected under the median-sample-size rule because the
+recipe used one yearly sample per currency pair, making all samples too small.
+The individual `ecb_fx_*_eur_daily` standalones are no longer part of the accepted
+set either.
+
+Action:
+- do not restore the old single-pair standalones
+- do not restore the yearly-sliced matrix recipe
+- retry only with a materially different ECB FX sample geometry if this family is revisited
 
 ### World Bank single-indicator recipes (`16`)
 

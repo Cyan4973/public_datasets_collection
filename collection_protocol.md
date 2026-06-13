@@ -82,6 +82,7 @@ Recipe evolution:
   - a successful local `build.sh`
   - a successful local `verify.sh`
   - meeting the repository usefulness floor of at least `10,000` numeric values total across the generated sample index or at least `100 KB` of total generated sample bytes
+  - meeting the sample-geometry floor of at least `1,000` median generated values per sample
 - If a staged recipe fails because of access, schema drift, source-path problems, or policy issues, it should be revised in `staging/` or recorded under `attempts/`. It should not be placed under `datasets/` until it has actually cleared the acceptance path above.
 - If `download.sh` changes materially, acceptance of the recipe requires a fresh user-run download pass with the updated script before commit. Material changes include modified source URLs, query parameters, selected station/site/resource subsets, payload validation rules, authentication-free access paths, or cache-acceptance rules.
 - If an initially selected upstream subset is only partially supported, the recipe may be narrowed to a working documented subset without being recorded as a failure, but the manifest, README, scripts, sample counts, and local verification outputs must all be updated to reflect the accepted subset before commit.
@@ -108,4 +109,5 @@ To be eligible, a dataset must be:
   - at least `10,000` numeric values total across the generated sample index, or
   - at least `100 KB` of total generated sample payload bytes across the generated sample index.
   Smaller outputs are not accepted as standalone recipes unless explicitly approved and documented as exceptions.
+- Avoid recipes that clear the aggregate floor only by multiplying tiny samples. Some small samples are acceptable, but the median generated sample size must be at least `1,000` values. A recipe whose sample-size distribution is mostly or entirely tiny is not acceptable even if its aggregate totals clear the repository floor.
 - Keep generated series bounded. As general guidance, the total size of a generated series should not exceed 1 GB, counting all samples in that series. There is no per-sample size limit during this collection stage. For larger resources, scripts may use documented filtering or processing to keep each generated series below the limit and avoid downloading or generating much more data than needed.

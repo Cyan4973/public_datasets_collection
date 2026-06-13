@@ -1,14 +1,17 @@
 # Cleanup Candidates
 
-Current acceptance floor: `10,000` values or `100 KB` total sample bytes.
+Current acceptance floor: `10,000` values or `100 KB` total sample bytes, plus `1,000` minimum median sample values.
 
 - source of truth: `reports/accepted_recipe_audit.tsv`
-- `ok`: `128`
-- `below_floor`: `205`
+- `ok`: `122`
+- `below_floor`: `209`
 - `broken`: `0`
 
 This file is the short operational queue. Detailed policy for family cleanup lives in
 `reports/below_floor_triage.md` and `reports/family_homogeneity_policy.md`.
+
+Some small samples are acceptable. What is no longer acceptable is a recipe whose
+typical sample is tiny and which reaches usefulness only by stacking many such samples.
 
 ## Hygiene Completed In This Pass
 
@@ -30,6 +33,11 @@ This file is the short operational queue. Detailed policy for family cleanup liv
 - remove `hackernews_topstories`
 - remove `nagerdate_holidays`
 - remove `noaa_swpc_planetary_k_index`
+
+## Median-Sample Removals
+
+- remove `ecb_fx_eur_daily_matrix`
+- remove `tourism_monthly_aus`
 
 ## Remove First: Tiny Non-Family Standalones
 

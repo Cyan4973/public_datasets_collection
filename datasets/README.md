@@ -63,6 +63,7 @@ Scaling guidance:
 - Keep one dataset per recipe directory. If one upstream source yields multiple distinct numeric outputs, model them as separate `series` entries in one manifest.
 - When widening or consolidating recipes, keep the result materially homogeneous. Sharing an API or portal is not enough. Group only series that share the same material type, cadence, and unit semantics.
 - An accepted recipe must meet the repository usefulness floor: at least `10,000` numeric values total across its generated sample index or at least `100 KB` of total generated sample payload bytes.
+- An accepted recipe must also meet the sample-geometry floor: median generated sample size at least `1,000` values. Some small samples are fine; a recipe whose typical sample is tiny is not.
 - Prefer stable upstream releases, snapshots, or explicitly versioned API parameters over unpinned "latest" endpoints.
 - Use deterministic file naming, sort order, and shard boundaries so two users can regenerate the same local outputs.
 - Keep committed metadata concise; put bulky inventories, row counts, or derived statistics in `verify.sh` output or generated local reports instead of expanding the manifest unnecessarily.

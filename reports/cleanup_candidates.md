@@ -4,7 +4,7 @@ Current acceptance floor: `10,000` values or `100 KB` total sample bytes.
 
 - source of truth: `reports/accepted_recipe_audit.tsv`
 - `ok`: `128`
-- `below_floor`: `217`
+- `below_floor`: `207`
 - `broken`: `0`
 
 This file is the short operational queue. Detailed policy for family cleanup lives in
@@ -16,23 +16,27 @@ This file is the short operational queue. Detailed policy for family cleanup liv
 - regenerate quality reports against currently accepted manifests only
 - drop stale references to already removed snapshot recipes from this queue
 
+## Step 2 Completed In This Pass
+
+- remove `pubchem_compound_properties`
+- remove `github_linux_repo_snapshot`
+- remove `pypi_requests_json`
+- remove `nobel_prizes`
+- remove `ror_organizations`
+- remove `metmuseum_objects`
+- remove `bls_cpi_series`
+- remove `jolpica_f1_results`
+- remove `pokeapi_pokemon`
+- remove `hackernews_topstories`
+
 ## Remove First: Tiny Non-Family Standalones
 
 These remain accepted but are so small that they are the easiest next removal batch.
 The common failure mode is a one-query, one-page, one-entity, or otherwise intrinsically
 thin recipe shape rather than a source-family problem.
 
-- `pubchem_compound_properties` — values=4, bytes=16, sample_rows=4
-- `github_linux_repo_snapshot` — values=6, bytes=24, sample_rows=6
-- `pypi_requests_json` — values=6, bytes=26, sample_rows=3
-- `nobel_prizes` — values=24, bytes=66, sample_rows=4
-- `ror_organizations` — values=54, bytes=63, sample_rows=6
 - `rubygems_search` — values=60, bytes=480, sample_rows=2
-- `metmuseum_objects` — values=70, bytes=280, sample_rows=1
 - `nagerdate_holidays` — values=85, bytes=102, sample_rows=5
-- `bls_cpi_series` — values=96, bytes=192, sample_rows=4
-- `jolpica_f1_results` — values=98, bytes=272, sample_rows=5
-- `pokeapi_pokemon` — values=100, bytes=400, sample_rows=1
 - `biorxiv_details` — values=150, bytes=390, sample_rows=5
 - `dryad_search` — values=160, bytes=600, sample_rows=8
 - `wikidata_sparql` — values=200, bytes=600, sample_rows=2
@@ -75,11 +79,10 @@ thin recipe shape rather than a source-family problem.
 - `figshare_articles` — values=500, bytes=1400, sample_rows=5
 - `nvd_cves_recent` — values=500, bytes=1400, sample_rows=5
 - `nuget_search` — values=500, bytes=1500, sample_rows=5
-- `hackernews_topstories` — values=500, bytes=2000, sample_rows=1
 - `europeana_search` — values=500, bytes=2300, sample_rows=5
 
 Count guide:
-- tiny non-family standalones with `<= 500` values: `56`
+- tiny non-family standalones with `<= 500` values: `46`
 - non-family below-floor recipes with `501-3999` values: `62`
 - non-family below-floor recipes with `>= 4000` values: `20`
 

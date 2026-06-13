@@ -1,16 +1,7 @@
 dataset_id	status	total_values	total_sample_bytes	sample_rows	has_index
-pubchem_compound_properties	below_floor	4	16	4	1
-github_linux_repo_snapshot	below_floor	6	24	6	1
-pypi_requests_json	below_floor	6	26	3	1
-nobel_prizes	below_floor	24	66	4	1
 fred_real_gdp_quarterly	below_floor	40	160	10	1
-ror_organizations	below_floor	54	63	6	1
 rubygems_search	below_floor	60	480	2	1
-metmuseum_objects	below_floor	70	280	1	1
 nagerdate_holidays	below_floor	85	102	5	1
-bls_cpi_series	below_floor	96	192	4	1
-jolpica_f1_results	below_floor	98	272	5	1
-pokeapi_pokemon	below_floor	100	400	1	1
 fred_capacity_utilization_monthly	below_floor	120	480	10	1
 fred_civilian_labor_force_monthly	below_floor	120	480	10	1
 fred_consumer_sentiment_monthly	below_floor	120	480	10	1
@@ -73,7 +64,6 @@ artic_artworks_search	below_floor	500	1400	5	1
 figshare_articles	below_floor	500	1400	5	1
 nvd_cves_recent	below_floor	500	1400	5	1
 nuget_search	below_floor	500	1500	5	1
-hackernews_topstories	below_floor	500	2000	1	1
 europeana_search	below_floor	500	2300	5	1
 npm_search_packages	below_floor	500	2600	5	1
 fred_fed_balance_sheet_weekly	below_floor	521	2084	10	1

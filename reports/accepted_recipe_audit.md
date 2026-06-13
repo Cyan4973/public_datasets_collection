@@ -3,25 +3,16 @@
 Acceptance floor: at least `10000` numeric values total or at least `102400` bytes of generated sample payload.
 
 - `ok`: 128
-- `below_floor`: 217
+- `below_floor`: 207
 - `broken`: 0
 
 ## Below Floor
 
 | dataset_id | total_values | total_sample_bytes | sample_rows |
 |---|---:|---:|---:|
-| `pubchem_compound_properties` | 4 | 16 | 4 |
-| `github_linux_repo_snapshot` | 6 | 24 | 6 |
-| `pypi_requests_json` | 6 | 26 | 3 |
-| `nobel_prizes` | 24 | 66 | 4 |
 | `fred_real_gdp_quarterly` | 40 | 160 | 10 |
-| `ror_organizations` | 54 | 63 | 6 |
 | `rubygems_search` | 60 | 480 | 2 |
-| `metmuseum_objects` | 70 | 280 | 1 |
 | `nagerdate_holidays` | 85 | 102 | 5 |
-| `bls_cpi_series` | 96 | 192 | 4 |
-| `jolpica_f1_results` | 98 | 272 | 5 |
-| `pokeapi_pokemon` | 100 | 400 | 1 |
 | `fred_capacity_utilization_monthly` | 120 | 480 | 10 |
 | `fred_civilian_labor_force_monthly` | 120 | 480 | 10 |
 | `fred_consumer_sentiment_monthly` | 120 | 480 | 10 |
@@ -84,7 +75,6 @@ Acceptance floor: at least `10000` numeric values total or at least `102400` byt
 | `figshare_articles` | 500 | 1400 | 5 |
 | `nvd_cves_recent` | 500 | 1400 | 5 |
 | `nuget_search` | 500 | 1500 | 5 |
-| `hackernews_topstories` | 500 | 2000 | 1 |
 | `europeana_search` | 500 | 2300 | 5 |
 | `npm_search_packages` | 500 | 2600 | 5 |
 | `fred_fed_balance_sheet_weekly` | 521 | 2084 | 10 |

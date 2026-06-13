@@ -3,7 +3,7 @@
 - constant or empty series are rejected
 - binary series with minority fraction below `0.001` are rejected unless explicitly justified
 
-- flagged series: 218
+- flagged series: 202
 
 | dataset_id | series_id | status | detail | value_count |
 |---|---|---|---|---:|
@@ -16,7 +16,6 @@
 | `arxiv_ai_recent` | `arxiv_ai_id_length` | constant | `constant_value=33` | 100 |
 | `biorxiv_details` | `biorxiv_details_date` | constant | `constant_value=1704067200` | 30 |
 | `biorxiv_details` | `biorxiv_details_version` | constant | `constant_value=1` | 30 |
-| `bls_cpi_series` | `bls_cpi_footnote_count` | constant | `constant_value=1` | 24 |
 | `chembl_molecules` | `chembl_black_box_warning` | constant | `constant_value=0` | 97 |
 | `chembl_molecules` | `chembl_chirality` | constant | `constant_value=-1` | 97 |
 | `chembl_molecules` | `chembl_max_phase` | constant | `constant_value=0` | 97 |
@@ -51,12 +50,6 @@
 | `gbif_occurrence_large` | `gbif_month` | constant | `constant_value=1` | 300 |
 | `gbif_occurrence_large` | `gbif_year` | constant | `constant_value=2026` | 300 |
 | `geoboundaries_all_adm0` | `geoboundaries_adm_unit_count` | constant | `constant_value=1` | 230 |
-| `github_linux_repo_snapshot` | `github_created_at` | constant | `constant_value=1315176492` | 1 |
-| `github_linux_repo_snapshot` | `github_forks_count` | constant | `constant_value=62723` | 1 |
-| `github_linux_repo_snapshot` | `github_repo_size_kib` | constant | `constant_value=6305253` | 1 |
-| `github_linux_repo_snapshot` | `github_stargazers_count` | constant | `constant_value=235744` | 1 |
-| `github_linux_repo_snapshot` | `github_subscribers_count` | constant | `constant_value=8309` | 1 |
-| `github_linux_repo_snapshot` | `github_updated_at` | constant | `constant_value=1780858629` | 1 |
 | `gitlab_projects` | `gitlab_forks_count` | constant | `constant_value=0` | 100 |
 | `gitlab_projects` | `gitlab_star_count` | constant | `constant_value=0` | 100 |
 | `gleif_lei_records` | `gleif_initial_registration_year` | constant | `constant_value=2026` | 100 |
@@ -176,9 +169,6 @@
 | `noaa_tides_water_level` | `noaa_tides_month_u8` | constant | `constant_value=1` | 7440 |
 | `noaa_tides_water_level` | `noaa_tides_q_length_u8` | constant | `constant_value=1` | 7440 |
 | `noaa_tides_water_level` | `noaa_tides_year_u16` | constant | `constant_value=2024` | 7440 |
-| `nobel_prizes` | `nobel_award_year` | constant | `constant_value=2024` | 6 |
-| `nobel_prizes` | `nobel_prize_amount` | constant | `constant_value=11000000` | 6 |
-| `nobel_prizes` | `nobel_prize_amount_adjusted` | constant | `constant_value=11000000` | 6 |
 | `nomis_employment` | `nomis_geography` | constant | `constant_value=2092957698` | 1545 |
 | `nomis_employment` | `nomis_item` | constant | `constant_value=1` | 1545 |
 | `nomis_employment` | `nomis_measure` | constant | `constant_value=20100` | 1545 |
@@ -198,12 +188,6 @@
 | `pride_projects_search` | `pride_project_labpi_count_u16` | constant | `constant_value=1` | 100 |
 | `pride_projects_search` | `pride_project_percentile_f32` | constant | `constant_value=0.0` | 100 |
 | `pride_projects_search` | `pride_project_submitter_count_u16` | constant | `constant_value=1` | 100 |
-| `pubchem_compound_properties` | `pubchem_cid` | constant | `constant_value=2244` | 1 |
-| `pubchem_compound_properties` | `pubchem_molecular_weight` | constant | `constant_value=180.16000366210938` | 1 |
-| `pubchem_compound_properties` | `pubchem_tpsa` | constant | `constant_value=63.599998474121094` | 1 |
-| `pubchem_compound_properties` | `pubchem_xlogp` | constant | `constant_value=1.2000000476837158` | 1 |
-| `pypi_requests_json` | `pypi_yanked` | constant | `constant_value=0` | 2 |
-| `ror_organizations` | `ror_location_count` | constant | `constant_value=1` | 9 |
 | `scryfall_cards` | `scryfall_multiverse_id_count` | constant | `constant_value=1` | 164 |
 | `scryfall_default_cards` | `scryfall_released_year_u16` | constant | `constant_value=2026` | 175 |
 | `steamspy_top100in2weeks` | `steamspy_average_forever` | constant | `constant_value=0` | 100 |

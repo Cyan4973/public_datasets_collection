@@ -9,6 +9,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DATA_ROOT = REPO_ROOT / ".data"
 INDEX_ROOT = DATA_ROOT / "index"
+DATASETS_ROOT = REPO_ROOT / "datasets"
 REPORTS_ROOT = REPO_ROOT / "reports"
 MINORITY_THRESHOLD = 0.001
 
@@ -51,8 +52,11 @@ def classify(values) -> tuple[str, str]:
 def main() -> int:
     REPORTS_ROOT.mkdir(parents=True, exist_ok=True)
     rows = []
-    for index_path in sorted(INDEX_ROOT.glob("*/samples.jsonl")):
-        dataset_id = index_path.parent.name
+    for manifest in sorted(DATASETS_ROOT.glob("*/manifest.toml")):
+        dataset_id = manifest.parent.name
+        index_path = INDEX_ROOT / dataset_id / "samples.jsonl"
+        if not index_path.exists():
+            continue
         for line in index_path.read_text(encoding="utf-8").splitlines():
             if not line.strip():
                 continue

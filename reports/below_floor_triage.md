@@ -2,7 +2,10 @@
 
 This report turns the remaining accepted `below_floor` set into cleanup actions.
 
-Current accepted audit baseline after the latest cleanup pass:
+This report is a policy-and-examples triage memo, not the exact live inventory.
+For current counts and the current accepted set, use `reports/accepted_recipe_audit.tsv`.
+
+Audit baseline when this triage memo was last refreshed:
 
 - `ok`: `128`
 - `below_floor`: `220`

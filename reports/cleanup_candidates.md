@@ -2,36 +2,37 @@
 
 Current acceptance floor: `10,000` values or `100 KB` total sample bytes.
 
-- broken: `2`
-- below_floor: `253`
+- source of truth: `reports/accepted_recipe_audit.tsv`
+- `ok`: `128`
+- `below_floor`: `217`
+- `broken`: `0`
 
-## Broken Remove Now
+This file is the short operational queue. Detailed policy for family cleanup lives in
+`reports/below_floor_triage.md` and `reports/family_homogeneity_policy.md`.
 
-- `eurostat_youth_unemployment_monthly` — values=0, bytes=0, sample_rows=15
-- `owid_renewables_share_energy_annual` — values=0, bytes=0, sample_rows=20
+## Hygiene Completed In This Pass
 
-## Below Floor Remove First
+- remove empty residual directories left behind by previously removed recipes
+- regenerate quality reports against currently accepted manifests only
+- drop stale references to already removed snapshot recipes from this queue
 
-- `open_notify_iss` — values=3, bytes=12, sample_rows=3
-- `pypistats_recent` — values=3, bytes=24, sample_rows=3
+## Remove First: Tiny Non-Family Standalones
+
+These remain accepted but are so small that they are the easiest next removal batch.
+The common failure mode is a one-query, one-page, one-entity, or otherwise intrinsically
+thin recipe shape rather than a source-family problem.
+
 - `pubchem_compound_properties` — values=4, bytes=16, sample_rows=4
 - `github_linux_repo_snapshot` — values=6, bytes=24, sample_rows=6
 - `pypi_requests_json` — values=6, bytes=26, sample_rows=3
-- `census_geocoder` — values=6, bytes=32, sample_rows=6
-- `nominatim_berlin` — values=6, bytes=34, sample_rows=6
 - `nobel_prizes` — values=24, bytes=66, sample_rows=4
-- `frankfurter_usd_rates` — values=30, bytes=240, sample_rows=1
 - `ror_organizations` — values=54, bytes=63, sample_rows=6
-- `swapi_people` — values=60, bytes=110, sample_rows=6
 - `rubygems_search` — values=60, bytes=480, sample_rows=2
 - `metmuseum_objects` — values=70, bytes=280, sample_rows=1
 - `nagerdate_holidays` — values=85, bytes=102, sample_rows=5
 - `bls_cpi_series` — values=96, bytes=192, sample_rows=4
 - `jolpica_f1_results` — values=98, bytes=272, sample_rows=5
-- `rickandmorty_characters` — values=100, bytes=240, sample_rows=5
-- `lobsters_hottest` — values=100, bytes=350, sample_rows=4
 - `pokeapi_pokemon` — values=100, bytes=400, sample_rows=1
-- `fred_real_gdp_quarterly` — values=120, bytes=240, sample_rows=30
 - `biorxiv_details` — values=150, bytes=390, sample_rows=5
 - `dryad_search` — values=160, bytes=600, sample_rows=8
 - `wikidata_sparql` — values=200, bytes=600, sample_rows=2
@@ -49,22 +50,6 @@ Current acceptance floor: `10,000` values or `100 KB` total sample bytes.
 - `weathergov_stations` — values=300, bytes=2000, sample_rows=3
 - `openlibrary_subjects` — values=305, bytes=692, sample_rows=6
 - `esco_occupations` — values=355, bytes=639, sample_rows=5
-- `fred_capacity_utilization_monthly` — values=360, bytes=720, sample_rows=30
-- `fred_civilian_labor_force_monthly` — values=360, bytes=720, sample_rows=30
-- `fred_consumer_sentiment_monthly` — values=360, bytes=720, sample_rows=30
-- `fred_core_cpi_monthly` — values=360, bytes=720, sample_rows=30
-- `fred_cpi_all_items_monthly` — values=360, bytes=720, sample_rows=30
-- `fred_federal_funds_monthly` — values=360, bytes=720, sample_rows=30
-- `fred_housing_starts_monthly` — values=360, bytes=720, sample_rows=30
-- `fred_industrial_production_monthly` — values=360, bytes=720, sample_rows=30
-- `fred_labor_force_participation_monthly` — values=360, bytes=720, sample_rows=30
-- `fred_m2_money_stock_monthly` — values=360, bytes=720, sample_rows=30
-- `fred_payroll_employment_monthly` — values=360, bytes=720, sample_rows=30
-- `fred_pce_price_index_monthly` — values=360, bytes=720, sample_rows=30
-- `fred_ppi_all_commodities_monthly` — values=360, bytes=720, sample_rows=30
-- `fred_unemployment_level_monthly` — values=360, bytes=720, sample_rows=30
-- `fred_unemployment_rate_monthly` — values=360, bytes=720, sample_rows=30
-- `gdc_projects` — values=364, bytes=546, sample_rows=4
 - `orcid_search` — values=390, bytes=780, sample_rows=4
 - `europe_pmc_search` — values=400, bytes=800, sample_rows=4
 - `openlibrary_search` — values=400, bytes=800, sample_rows=5
@@ -92,6 +77,38 @@ Current acceptance floor: `10,000` values or `100 KB` total sample bytes.
 - `nuget_search` — values=500, bytes=1500, sample_rows=5
 - `hackernews_topstories` — values=500, bytes=2000, sample_rows=1
 - `europeana_search` — values=500, bytes=2300, sample_rows=5
+
+Count guide:
+- tiny non-family standalones with `<= 500` values: `56`
+- non-family below-floor recipes with `501-3999` values: `62`
+- non-family below-floor recipes with `>= 4000` values: `20`
+
+## Family Cleanup Queue
+
+These are not obvious removals. They are fragmented source families that need either
+homogeneous consolidation or selective pruning.
+
+- `fred_*`: `24`
+- `world_bank_*`: `16`
+- `owid_*`: `20`
+- `imf_*`: `7`
+- `eurostat_*`: `7`
+- `sec_companyfacts_*`: `5`
+
+## Later: Rewrite / Expand
+
+These are below floor but may survive if materially widened without violating protocol.
+Representative examples:
+
+- `openml_tasks_large`
+- `dataone_solr`
+- `dataone_solr_large_retry`
+- `usgs_daily_values_large`
+- `nasa_donki_cme`
+- `nasa_donki_flr`
+- `coinpaprika_tickers`
+- `cisa_kev_catalog`
+- `jpl_cad_2024`
 
 ## Recently Fixed Degenerate Series
 

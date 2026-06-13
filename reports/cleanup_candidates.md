@@ -4,7 +4,7 @@ Current acceptance floor: `10,000` values or `100 KB` total sample bytes.
 
 - source of truth: `reports/accepted_recipe_audit.tsv`
 - `ok`: `128`
-- `below_floor`: `207`
+- `below_floor`: `205`
 - `broken`: `0`
 
 This file is the short operational queue. Detailed policy for family cleanup lives in
@@ -28,6 +28,8 @@ This file is the short operational queue. Detailed policy for family cleanup liv
 - remove `jolpica_f1_results`
 - remove `pokeapi_pokemon`
 - remove `hackernews_topstories`
+- remove `nagerdate_holidays`
+- remove `noaa_swpc_planetary_k_index`
 
 ## Remove First: Tiny Non-Family Standalones
 
@@ -36,7 +38,6 @@ The common failure mode is a one-query, one-page, one-entity, or otherwise intri
 thin recipe shape rather than a source-family problem.
 
 - `rubygems_search` — values=60, bytes=480, sample_rows=2
-- `nagerdate_holidays` — values=85, bytes=102, sample_rows=5
 - `biorxiv_details` — values=150, bytes=390, sample_rows=5
 - `dryad_search` — values=160, bytes=600, sample_rows=8
 - `wikidata_sparql` — values=200, bytes=600, sample_rows=2
@@ -44,7 +45,6 @@ thin recipe shape rather than a source-family problem.
 - `internet_archive_metadata` — values=200, bytes=1200, sample_rows=2
 - `packagist_packages` — values=200, bytes=1200, sample_rows=2
 - `openbrewerydb_breweries` — values=246, bytes=1640, sample_rows=3
-- `noaa_swpc_planetary_k_index` — values=252, bytes=693, sample_rows=4
 - `gutendex_books` — values=256, bytes=576, sample_rows=8
 - `nasa_neows_feed` — values=270, bytes=1305, sample_rows=6
 - `library_of_congress_items` — values=276, bytes=1016, sample_rows=5
@@ -82,7 +82,7 @@ thin recipe shape rather than a source-family problem.
 - `europeana_search` — values=500, bytes=2300, sample_rows=5
 
 Count guide:
-- tiny non-family standalones with `<= 500` values: `46`
+- tiny non-family standalones with `<= 500` values: `44`
 - non-family below-floor recipes with `501-3999` values: `62`
 - non-family below-floor recipes with `>= 4000` values: `20`
 

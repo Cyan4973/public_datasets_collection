@@ -3,7 +3,7 @@
 Acceptance floor: at least `10000` numeric values total or at least `102400` bytes of generated sample payload.
 
 - `ok`: 128
-- `below_floor`: 207
+- `below_floor`: 205
 - `broken`: 0
 
 ## Below Floor
@@ -12,7 +12,6 @@ Acceptance floor: at least `10000` numeric values total or at least `102400` byt
 |---|---:|---:|---:|
 | `fred_real_gdp_quarterly` | 40 | 160 | 10 |
 | `rubygems_search` | 60 | 480 | 2 |
-| `nagerdate_holidays` | 85 | 102 | 5 |
 | `fred_capacity_utilization_monthly` | 120 | 480 | 10 |
 | `fred_civilian_labor_force_monthly` | 120 | 480 | 10 |
 | `fred_consumer_sentiment_monthly` | 120 | 480 | 10 |
@@ -35,7 +34,6 @@ Acceptance floor: at least `10000` numeric values total or at least `102400` byt
 | `internet_archive_metadata` | 200 | 1200 | 2 |
 | `packagist_packages` | 200 | 1200 | 2 |
 | `openbrewerydb_breweries` | 246 | 1640 | 3 |
-| `noaa_swpc_planetary_k_index` | 252 | 693 | 4 |
 | `gutendex_books` | 256 | 576 | 8 |
 | `nasa_neows_feed` | 270 | 1305 | 6 |
 | `library_of_congress_items` | 276 | 1016 | 5 |

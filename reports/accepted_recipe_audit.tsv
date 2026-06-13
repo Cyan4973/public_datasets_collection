@@ -1,7 +1,6 @@
 dataset_id	status	total_values	total_sample_bytes	sample_rows	has_index
 fred_real_gdp_quarterly	below_floor	40	160	10	1
 rubygems_search	below_floor	60	480	2	1
-nagerdate_holidays	below_floor	85	102	5	1
 fred_capacity_utilization_monthly	below_floor	120	480	10	1
 fred_civilian_labor_force_monthly	below_floor	120	480	10	1
 fred_consumer_sentiment_monthly	below_floor	120	480	10	1
@@ -24,7 +23,6 @@ maven_central_search	below_floor	200	1000	2	1
 internet_archive_metadata	below_floor	200	1200	2	1
 packagist_packages	below_floor	200	1200	2	1
 openbrewerydb_breweries	below_floor	246	1640	3	1
-noaa_swpc_planetary_k_index	below_floor	252	693	4	1
 gutendex_books	below_floor	256	576	8	1
 nasa_neows_feed	below_floor	270	1305	6	1
 library_of_congress_items	below_floor	276	1016	5	1

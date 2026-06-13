@@ -3,7 +3,7 @@
 - constant or empty series are rejected
 - binary series with minority fraction below `0.001` are rejected unless explicitly justified
 
-- flagged series: 202
+- flagged series: 200
 
 | dataset_id | series_id | status | detail | value_count |
 |---|---|---|---|---:|
@@ -68,7 +68,6 @@
 | `library_of_congress_items` | `loc_resource_count` | constant | `constant_value=1` | 44 |
 | `metacpan_releases_search_large` | `metacpan_license_count` | constant | `constant_value=1` | 1000 |
 | `musicbrainz_recordings` | `musicbrainz_video_flag` | constant | `constant_value=0` | 94 |
-| `nagerdate_holidays` | `nagerdate_year` | constant | `constant_value=2024` | 17 |
 | `nasa_donki_cme` | `donki_cme_begin_year_u16` | constant | `constant_value=2024` | 1512 |
 | `nasa_donki_flr` | `donki_flr_begin_year` | constant | `constant_value=2024` | 1128 |
 | `nasa_donki_flr` | `donki_flr_end_year` | constant | `constant_value=2024` | 1128 |
@@ -165,7 +164,6 @@
 | `noaa_isd_lite` | `isd_slp` | constant | `constant_value=-9999` | 25960 |
 | `noaa_isd_lite` | `isd_slp` | constant | `constant_value=-9999` | 25915 |
 | `noaa_isd_lite` | `isd_wspd` | constant | `constant_value=-9999` | 17535 |
-| `noaa_swpc_planetary_k_index` | `swpc_station_count` | constant | `constant_value=8` | 63 |
 | `noaa_tides_water_level` | `noaa_tides_month_u8` | constant | `constant_value=1` | 7440 |
 | `noaa_tides_water_level` | `noaa_tides_q_length_u8` | constant | `constant_value=1` | 7440 |
 | `noaa_tides_water_level` | `noaa_tides_year_u16` | constant | `constant_value=2024` | 7440 |

@@ -57,12 +57,13 @@ build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/example_dataset/samples.jsonl"
 summary = "Download pinned upstream resources, extract or decode local files, filter to numeric content, and emit raw little-endian numeric samples."
-deterministic_notes = "Document pinned URLs, fixed parameters, payload-validation rules, sort order, shard policy, generated sample index fields, and any checksum or size validations. Accepted recipes should meet the repository floor of at least 10,000 total values or 100 KB of total generated sample bytes, should have median generated sample size at least 1,000 values, and verify.sh should reject constant or structurally degenerate series."
+deterministic_notes = "Document pinned URLs, fixed parameters, payload-validation rules, sort order, shard policy, generated sample index fields, and any checksum or size validations. Accepted recipes should meet the repository floor of at least 10,000 primary values or 100 KB of primary sample bytes, should have median primary sample size at least 1,000 values, and verify.sh should reject constant or structurally degenerate series."
 
 [[series]]
 id = "example_f32"
 description = "Example numeric measurements."
 semantic_meaning = "One homogeneous floating-point measurement stream extracted from the upstream dataset."
+role = "primary" # primary or auxiliary
 representation_class = "native_numeric" # native_numeric or derived_operational_numeric
 representation_notes = "If derived_operational_numeric, document the pinned transform and why the resulting numeric stream is a real machine-facing compression target rather than a synthetic local remap."
 source_resources = ["main_archive"]

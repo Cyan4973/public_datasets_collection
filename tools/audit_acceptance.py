@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import statistics
+import tomllib
 from pathlib import Path
 
 
@@ -16,14 +17,53 @@ MIN_VALUES = 10000
 MIN_SAMPLE_BYTES = 100 * 1024
 MIN_MEDIAN_SAMPLE_VALUES = 1000
 
+SERIES_ROLE_PRIMARY = "primary"
+SERIES_ROLE_AUXILIARY = "auxiliary"
+KNOWN_AUXILIARY_PREFIXES = (
+    "obs_year_",
+    "obs_month_",
+    "obs_day_",
+    "obs_hour_",
+    "obs_minute_",
+    "obs_second_",
+)
 
-def classify(total_values: int, total_bytes: int, sample_rows: int, median_sample_value_count: float) -> tuple[str, list[str]]:
-    if total_values == 0 or total_bytes == 0 or sample_rows == 0:
-        return "broken", ["missing_or_empty_index"]
+
+def infer_series_role(series_id: str) -> str:
+    if any(series_id.startswith(prefix) for prefix in KNOWN_AUXILIARY_PREFIXES):
+        return SERIES_ROLE_AUXILIARY
+    return SERIES_ROLE_PRIMARY
+
+
+def load_series_roles(manifest_path: Path) -> tuple[dict[str, str], list[str]]:
+    document = tomllib.loads(manifest_path.read_text(encoding="utf-8"))
+    roles: dict[str, str] = {}
+    inferred_auxiliary: list[str] = []
+    for series in document.get("series", []):
+        series_id = str(series.get("id", "")).strip()
+        if not series_id:
+            continue
+        role = str(series.get("role", "")).strip().lower()
+        if role not in {SERIES_ROLE_PRIMARY, SERIES_ROLE_AUXILIARY}:
+            role = infer_series_role(series_id)
+            if role == SERIES_ROLE_AUXILIARY:
+                inferred_auxiliary.append(series_id)
+        roles[series_id] = role
+    return roles, sorted(inferred_auxiliary)
+
+
+def classify(
+    primary_values: int,
+    primary_bytes: int,
+    primary_sample_rows: int,
+    median_primary_sample_value_count: float,
+) -> tuple[str, list[str]]:
+    if primary_sample_rows == 0:
+        return "broken", ["missing_primary_payload"]
     reasons = []
-    if total_values < MIN_VALUES and total_bytes < MIN_SAMPLE_BYTES:
+    if primary_values < MIN_VALUES and primary_bytes < MIN_SAMPLE_BYTES:
         reasons.append("aggregate_floor")
-    if median_sample_value_count < MIN_MEDIAN_SAMPLE_VALUES:
+    if median_primary_sample_value_count < MIN_MEDIAN_SAMPLE_VALUES:
         reasons.append("median_sample_floor")
     if reasons:
         return "below_floor", reasons
@@ -36,53 +76,81 @@ def format_stat(value: float) -> str:
     return f"{value:.1f}"
 
 
+def format_csv(values: list[str]) -> str:
+    return ",".join(values)
+
+
 def main() -> int:
     REPORTS_ROOT.mkdir(parents=True, exist_ok=True)
     rows = []
     for manifest in sorted(DATASETS_ROOT.glob("*/manifest.toml")):
         dataset_id = manifest.parent.name
         index_path = INDEX_ROOT / dataset_id / "samples.jsonl"
-        total_values = 0
-        total_bytes = 0
-        sample_rows = 0
-        sample_sizes = []
-        sample_value_counts = []
+        series_roles, inferred_auxiliary = load_series_roles(manifest)
+
+        primary_values = 0
+        primary_bytes = 0
+        primary_sample_rows = 0
+        primary_sizes = []
+        primary_value_counts = []
+
+        auxiliary_values = 0
+        auxiliary_bytes = 0
+        auxiliary_sample_rows = 0
+
         if index_path.exists():
             for line in index_path.read_text(encoding="utf-8").splitlines():
                 if not line.strip():
                     continue
                 obj = json.loads(line)
+                series_id = str(obj.get("series_id", "")).strip()
+                role = series_roles.get(series_id, infer_series_role(series_id))
                 value_count = int(obj.get("value_count", 0))
-                total_values += value_count
                 sample_size_bytes = int(obj.get("sample_size_bytes", 0))
-                total_bytes += sample_size_bytes
-                sample_rows += 1
-                sample_sizes.append(sample_size_bytes)
-                sample_value_counts.append(value_count)
-        median_sample_size_bytes = statistics.median(sample_sizes) if sample_sizes else 0
-        median_sample_value_count = statistics.median(sample_value_counts) if sample_value_counts else 0
-        status, failure_reasons = classify(total_values, total_bytes, sample_rows, median_sample_value_count)
+                if role == SERIES_ROLE_AUXILIARY:
+                    auxiliary_values += value_count
+                    auxiliary_bytes += sample_size_bytes
+                    auxiliary_sample_rows += 1
+                    continue
+                primary_values += value_count
+                primary_bytes += sample_size_bytes
+                primary_sample_rows += 1
+                primary_sizes.append(sample_size_bytes)
+                primary_value_counts.append(value_count)
+
+        median_primary_sample_size_bytes = statistics.median(primary_sizes) if primary_sizes else 0
+        median_primary_sample_value_count = statistics.median(primary_value_counts) if primary_value_counts else 0
+        status, failure_reasons = classify(
+            primary_values,
+            primary_bytes,
+            primary_sample_rows,
+            median_primary_sample_value_count,
+        )
         rows.append(
             {
                 "dataset_id": dataset_id,
                 "status": status,
-                "total_values": total_values,
-                "total_sample_bytes": total_bytes,
-                "sample_rows": sample_rows,
-                "median_sample_value_count": median_sample_value_count,
-                "median_sample_size_bytes": median_sample_size_bytes,
+                "primary_values": primary_values,
+                "primary_sample_bytes": primary_bytes,
+                "primary_sample_rows": primary_sample_rows,
+                "median_primary_sample_value_count": median_primary_sample_value_count,
+                "median_primary_sample_size_bytes": median_primary_sample_size_bytes,
+                "auxiliary_values": auxiliary_values,
+                "auxiliary_sample_bytes": auxiliary_bytes,
+                "auxiliary_sample_rows": auxiliary_sample_rows,
                 "has_index": index_path.exists(),
-                "failure_reasons": ",".join(failure_reasons),
+                "inferred_auxiliary_series": inferred_auxiliary,
+                "failure_reasons": failure_reasons,
             }
         )
 
     rows.sort(
         key=lambda row: (
             row["status"],
-            row["total_values"],
-            row["total_sample_bytes"],
-            row["median_sample_value_count"],
-            row["median_sample_size_bytes"],
+            row["primary_values"],
+            row["primary_sample_bytes"],
+            row["median_primary_sample_value_count"],
+            row["median_primary_sample_size_bytes"],
             row["dataset_id"],
         )
     )
@@ -90,11 +158,11 @@ def main() -> int:
     tsv_path = REPORTS_ROOT / "accepted_recipe_audit.tsv"
     with tsv_path.open("w", encoding="utf-8") as fh:
         fh.write(
-            "dataset_id\tstatus\ttotal_values\ttotal_sample_bytes\tsample_rows\tmedian_sample_value_count\tmedian_sample_size_bytes\thas_index\tfailure_reasons\n"
+            "dataset_id\tstatus\tprimary_values\tprimary_sample_bytes\tprimary_sample_rows\tmedian_primary_sample_value_count\tmedian_primary_sample_size_bytes\tauxiliary_values\tauxiliary_sample_bytes\tauxiliary_sample_rows\thas_index\tinferred_auxiliary_series\tfailure_reasons\n"
         )
         for row in rows:
             fh.write(
-                f"{row['dataset_id']}\t{row['status']}\t{row['total_values']}\t{row['total_sample_bytes']}\t{row['sample_rows']}\t{format_stat(row['median_sample_value_count'])}\t{format_stat(row['median_sample_size_bytes'])}\t{int(row['has_index'])}\t{row['failure_reasons']}\n"
+                f"{row['dataset_id']}\t{row['status']}\t{row['primary_values']}\t{row['primary_sample_bytes']}\t{row['primary_sample_rows']}\t{format_stat(row['median_primary_sample_value_count'])}\t{format_stat(row['median_primary_sample_size_bytes'])}\t{row['auxiliary_values']}\t{row['auxiliary_sample_bytes']}\t{row['auxiliary_sample_rows']}\t{int(row['has_index'])}\t{format_csv(row['inferred_auxiliary_series'])}\t{format_csv(row['failure_reasons'])}\n"
             )
 
     broken = [row for row in rows if row["status"] == "broken"]
@@ -105,29 +173,30 @@ def main() -> int:
     with md_path.open("w", encoding="utf-8") as fh:
         fh.write("# Accepted Recipe Audit\n\n")
         fh.write(
-            f"Acceptance floor: at least `{MIN_VALUES}` numeric values total or at least `{MIN_SAMPLE_BYTES}` bytes of generated sample payload, plus median generated sample size at least `{MIN_MEDIAN_SAMPLE_VALUES}` values.\n\n"
+            f"Acceptance floor: at least `{MIN_VALUES}` primary values total or at least `{MIN_SAMPLE_BYTES}` primary sample bytes, plus median primary sample size at least `{MIN_MEDIAN_SAMPLE_VALUES}` values.\n\n"
         )
+        fh.write("Auxiliary series do not count toward acceptance. When a manifest omits `role`, this audit currently infers `auxiliary` only for narrow calendar-helper names such as `obs_year_*`, `obs_month_*`, `obs_day_*`, and `obs_hour_*`.\n\n")
         fh.write(f"- `ok`: {len(ok)}\n")
         fh.write(f"- `below_floor`: {len(below)}\n")
         fh.write(f"- `broken`: {len(broken)}\n\n")
 
         if broken:
             fh.write("## Broken\n\n")
-            fh.write("| dataset_id | total_values | total_sample_bytes | sample_rows | median_sample_value_count | median_sample_size_bytes | reasons |\n")
-            fh.write("|---|---:|---:|---:|---:|---:|---|\n")
+            fh.write("| dataset_id | primary_values | primary_sample_bytes | primary_sample_rows | median_primary_sample_value_count | auxiliary_values | auxiliary_sample_rows | reasons |\n")
+            fh.write("|---|---:|---:|---:|---:|---:|---:|---|\n")
             for row in broken:
                 fh.write(
-                    f"| `{row['dataset_id']}` | {row['total_values']} | {row['total_sample_bytes']} | {row['sample_rows']} | {format_stat(row['median_sample_value_count'])} | {format_stat(row['median_sample_size_bytes'])} | `{row['failure_reasons']}` |\n"
+                    f"| `{row['dataset_id']}` | {row['primary_values']} | {row['primary_sample_bytes']} | {row['primary_sample_rows']} | {format_stat(row['median_primary_sample_value_count'])} | {row['auxiliary_values']} | {row['auxiliary_sample_rows']} | `{format_csv(row['failure_reasons'])}` |\n"
                 )
             fh.write("\n")
 
         if below:
             fh.write("## Below Floor\n\n")
-            fh.write("| dataset_id | total_values | total_sample_bytes | sample_rows | median_sample_value_count | median_sample_size_bytes | reasons |\n")
-            fh.write("|---|---:|---:|---:|---:|---:|---|\n")
+            fh.write("| dataset_id | primary_values | primary_sample_bytes | primary_sample_rows | median_primary_sample_value_count | auxiliary_values | auxiliary_sample_rows | reasons |\n")
+            fh.write("|---|---:|---:|---:|---:|---:|---:|---|\n")
             for row in below:
                 fh.write(
-                    f"| `{row['dataset_id']}` | {row['total_values']} | {row['total_sample_bytes']} | {row['sample_rows']} | {format_stat(row['median_sample_value_count'])} | {format_stat(row['median_sample_size_bytes'])} | `{row['failure_reasons']}` |\n"
+                    f"| `{row['dataset_id']}` | {row['primary_values']} | {row['primary_sample_bytes']} | {row['primary_sample_rows']} | {format_stat(row['median_primary_sample_value_count'])} | {row['auxiliary_values']} | {row['auxiliary_sample_rows']} | `{format_csv(row['failure_reasons'])}` |\n"
                 )
             fh.write("\n")
 

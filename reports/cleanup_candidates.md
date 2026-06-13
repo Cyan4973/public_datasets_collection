@@ -1,6 +1,6 @@
 # Cleanup Candidates
 
-Current acceptance floor: `10,000` values or `100 KB` total sample bytes, plus `1,000` minimum median sample values.
+Current acceptance floor: `10,000` primary values or `100 KB` primary sample bytes, plus `1,000` minimum median primary sample values.
 
 - source of truth: `reports/accepted_recipe_audit.tsv`
 - `ok`: `122`
@@ -11,7 +11,7 @@ This file is the short operational queue. Detailed policy for family cleanup liv
 `reports/below_floor_triage.md` and `reports/family_homogeneity_policy.md`.
 
 Some small samples are acceptable. What is no longer acceptable is a recipe whose
-typical sample is tiny and which reaches usefulness only by stacking many such samples.
+typical primary sample is tiny and which reaches usefulness only by stacking many such samples.
 
 ## Hygiene Completed In This Pass
 

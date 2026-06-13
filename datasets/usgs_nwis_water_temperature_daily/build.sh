@@ -33,12 +33,22 @@ for series in series_defs:
  series_dir.mkdir(parents=True, exist_ok=True)
 filtered_root.mkdir(parents=True, exist_ok=True); index_root.mkdir(parents=True, exist_ok=True)
 pat = re.compile(r"^dv_(\d+)_(\d{4})\.json$")
+plan_path = download_root / "download_plan.tsv"
+if not plan_path.is_file(): raise SystemExit(f"missing download plan: {plan_path}")
+planned_site_years: dict[str, list[int]] = {}
+with plan_path.open("r", encoding="utf-8") as plan_file:
+ for line in plan_file:
+  parts = line.strip().split("\t")
+  if len(parts) != 4: continue
+  site_id, year_str = parts[0], parts[1]
+  if not site_id or not year_str.isdigit(): continue
+  planned_site_years.setdefault(site_id, []).append(int(year_str))
 site_years: dict[str, list[int]] = {}
-for f in sorted(download_root.glob("dv_*_*.json")):
- m = pat.match(f.name)
- if not m: continue
- site_id, year = m.group(1), int(m.group(2))
- site_years.setdefault(site_id, []).append(year)
+for site_id, years in planned_site_years.items():
+ for year in sorted(set(years)):
+  json_path = download_root / f"dv_{site_id}_{year}.json"
+  if json_path.is_file():
+   site_years.setdefault(site_id, []).append(year)
 stats_path = filtered_root / "site_year_stats.tsv"; index_path = index_root / "samples.jsonl"; index_records = []
 with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
  writer = csv.writer(stats_file, delimiter="\t"); writer.writerow(["site_id","year","row_count","value_count","skipped_count","start_date","end_date","series_name"])

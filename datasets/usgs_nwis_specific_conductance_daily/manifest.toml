@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "usgs_nwis_specific_conductance_daily"
 name = "USGS NWIS Daily Specific Conductance"
-description = "USGS NWIS daily specific-conductance JSON extracts for 32 geographically diverse stream sites across the US, 2021-2023."
+description = "USGS NWIS daily specific-conductance JSON extracts for up to 50 deterministically selected active stream sites across the US, 2021-2024."
 homepage = "https://waterservices.usgs.gov/"
 [license]
 name = "U.S. Government Public Domain"
@@ -21,16 +21,16 @@ url = "https://waterservices.usgs.gov/nwis/dv/"
 type = "api"
 notes = "Public JSON service for historical daily observations by site and parameter code."
 [[resources]]
-id = "usgs_specific_conductance_2021_2023"
+id = "usgs_specific_conductance_selected_sites_2021_2024"
 origin = "usgs_nwis_dv_api"
 url = "https://waterservices.usgs.gov/nwis/dv/"
 type = "api_query_result"
-version = "2021-2023-two-sites-00095-json"
-access = "Site-year JSON queries with fixed sites, parameterCd=00095, startDT, endDT, format=json, and siteStatus=all."
+version = "2021-2024-selected-up-to-50-sites-00095-json"
+access = "Fixed active-stream site inventory queries plus site-year JSON queries for usable daily parameterCd=00095 sites found by a deterministic nationwide candidate scan, capped at 50 sites across 2021-2024."
 size_bytes = 0
 sha256 = ""
 local_path = "downloads/usgs_nwis_specific_conductance_daily/"
-notes = "One JSON file per site per year for the fixed two-site subset."
+notes = "Inventory queries derive a deterministic candidate pool from active stream sites with non-all-N instruments_cd values; one daily JSON file is kept per selected site per year."
 [local_paths]
 downloads = "downloads/usgs_nwis_specific_conductance_daily/"
 extracted = "extracted/usgs_nwis_specific_conductance_daily/"
@@ -42,13 +42,13 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/usgs_nwis_specific_conductance_daily/samples.jsonl"
-summary = "Download site-year USGS daily specific-conductance JSON files, select statistic code 00003 when multiple daily statistics are present, derive aligned date component arrays, and emit raw numeric arrays plus a machine-readable sample index."
-deterministic_notes = "Fixed 32-site list, fixed years 2021-2023, fixed parameterCd=00095, fixed API query parameters, explicit selection of statistic code 00003 when multiple daily statistics are present, preserved source observation order within each site-year file, concatenated years in ascending order per site, durable script logs under logs/usgs_nwis_specific_conductance_daily/, and generated sample index at index/usgs_nwis_specific_conductance_daily/samples.jsonl."
+summary = "Download fixed active-stream site inventory queries, derive a deterministic nationwide candidate pool, keep usable daily specific-conductance sites found across 2021-2024 up to a cap of 50, and emit raw numeric arrays plus a machine-readable sample index."
+deterministic_notes = "Fixed state inventory query list, fixed years 2021-2024, fixed parameterCd=00095, candidate sites restricted to active streams with non-all-N instruments_cd values, round-robin candidate ordering by state then site number, deterministic usable-site selection capped at 50 sites, explicit selection of statistic code 00003 when multiple daily statistics are present, build-time filtering to site-year files listed in the current download plan, preserved source observation order within each site-year file, concatenated years in ascending order per site, durable script logs under logs/usgs_nwis_specific_conductance_daily/, and generated sample index at index/usgs_nwis_specific_conductance_daily/samples.jsonl."
 [[series]]
 id = "usgs_specific_conductance_f64"
 description = "Daily specific-conductance values."
 semantic_meaning = "Float64 specific-conductance values from USGS parameter code 00095, one sample per site."
-source_resources = ["usgs_specific_conductance_2021_2023"]
+source_resources = ["usgs_specific_conductance_selected_sites_2021_2024"]
 filtered_input_path = "filtered/usgs_nwis_specific_conductance_daily/site_year_stats.tsv"
 filtering = "Keep rows with parseable specific-conductance values and parseable observation dates."
 conversion = "Parse the USGS value field as Python float and write IEEE-754 little-endian float64 arrays preserving source order after site-year concatenation."
@@ -56,14 +56,14 @@ numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
-sample_count = 15
+sample_count = 29
 total_size_bytes = 0
 output_path = "samples/usgs_nwis_specific_conductance_daily/usgs_specific_conductance_f64/"
 [[series]]
 id = "obs_year_u16"
 description = "Observation year values aligned to specific conductance."
 semantic_meaning = "Unsigned 16-bit observation years derived from retained USGS specific-conductance row dates, one sample per site."
-source_resources = ["usgs_specific_conductance_2021_2023"]
+source_resources = ["usgs_specific_conductance_selected_sites_2021_2024"]
 filtered_input_path = "filtered/usgs_nwis_specific_conductance_daily/site_year_stats.tsv"
 filtering = "Keep rows with parseable specific-conductance values and parseable observation dates."
 conversion = "Parse the observation date year component as integer and write little-endian uint16 arrays aligned 1:1 with retained specific-conductance values."
@@ -71,6 +71,6 @@ numeric_kind = "uint"
 bit_width = 16
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
-sample_count = 15
+sample_count = 29
 total_size_bytes = 0
 output_path = "samples/usgs_nwis_specific_conductance_daily/obs_year_u16/"

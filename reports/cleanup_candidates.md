@@ -4,7 +4,7 @@ Current acceptance floor: `10,000` primary values or `100 KB` primary sample byt
 
 - source of truth: `reports/accepted_recipe_audit.tsv`
 - `ok`: `122`
-- `below_floor`: `209`
+- `below_floor`: `200`
 - `broken`: `0`
 
 This file is the short operational queue. Detailed policy for family cleanup lives in
@@ -45,31 +45,22 @@ These remain accepted but are so small that they are the easiest next removal ba
 The common failure mode is a one-query, one-page, one-entity, or otherwise intrinsically
 thin recipe shape rather than a source-family problem.
 
-- `rubygems_search` — values=60, bytes=480, sample_rows=2
 - `biorxiv_details` — values=150, bytes=390, sample_rows=5
 - `dryad_search` — values=160, bytes=600, sample_rows=8
-- `wikidata_sparql` — values=200, bytes=600, sample_rows=2
-- `maven_central_search` — values=200, bytes=1000, sample_rows=2
 - `internet_archive_metadata` — values=200, bytes=1200, sample_rows=2
-- `packagist_packages` — values=200, bytes=1200, sample_rows=2
 - `openbrewerydb_breweries` — values=246, bytes=1640, sample_rows=3
 - `gutendex_books` — values=256, bytes=576, sample_rows=8
 - `nasa_neows_feed` — values=270, bytes=1305, sample_rows=6
 - `library_of_congress_items` — values=276, bytes=1016, sample_rows=5
 - `anilist_media` — values=295, bytes=837, sample_rows=6
-- `semanticscholar_papers` — values=300, bytes=1000, sample_rows=3
-- `dockerhub_repositories` — values=300, bytes=1300, sample_rows=3
 - `weathergov_stations` — values=300, bytes=2000, sample_rows=3
-- `openlibrary_subjects` — values=305, bytes=692, sample_rows=6
 - `esco_occupations` — values=355, bytes=639, sample_rows=5
 - `orcid_search` — values=390, bytes=780, sample_rows=4
 - `europe_pmc_search` — values=400, bytes=800, sample_rows=4
-- `openlibrary_search` — values=400, bytes=800, sample_rows=5
 - `wger_exercises` — values=400, bytes=800, sample_rows=4
 - `arxiv_cs_recent` — values=400, bytes=1200, sample_rows=4
 - `osf_preprints` — values=400, bytes=1300, sample_rows=4
 - `stackexchange_top_questions_jan_2024` — values=400, bytes=1400, sample_rows=4
-- `hn_algolia_search` — values=400, bytes=1600, sample_rows=4
 - `cratesio_crates` — values=400, bytes=2000, sample_rows=4
 - `hex_packages` — values=400, bytes=2600, sample_rows=4
 - `osm_overpass_cafes` — values=400, bytes=2600, sample_rows=4
@@ -90,7 +81,7 @@ thin recipe shape rather than a source-family problem.
 - `europeana_search` — values=500, bytes=2300, sample_rows=5
 
 Count guide:
-- tiny non-family standalones with `<= 500` values: `44`
+- tiny non-family standalones with `<= 500` values: `35`
 - non-family below-floor recipes with `501-3999` values: `62`
 - non-family below-floor recipes with `>= 4000` values: `20`
 

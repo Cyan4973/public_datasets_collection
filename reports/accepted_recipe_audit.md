@@ -5,7 +5,7 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 Auxiliary series do not count toward acceptance. When a manifest omits `role`, this audit currently infers `auxiliary` only for narrow calendar-helper names such as `obs_year_*`, `obs_month_*`, `obs_day_*`, and `obs_hour_*`.
 
 - `ok`: 122
-- `below_floor`: 209
+- `below_floor`: 200
 - `broken`: 0
 
 ## Below Floor
@@ -13,7 +13,6 @@ Auxiliary series do not count toward acceptance. When a manifest omits `role`, t
 | dataset_id | primary_values | primary_sample_bytes | primary_sample_rows | median_primary_sample_value_count | auxiliary_values | auxiliary_sample_rows | reasons |
 |---|---:|---:|---:|---:|---:|---:|---|
 | `fred_real_gdp_quarterly` | 40 | 160 | 10 | 4 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `rubygems_search` | 60 | 480 | 2 | 30 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_capacity_utilization_monthly` | 120 | 480 | 10 | 12 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_civilian_labor_force_monthly` | 120 | 480 | 10 | 12 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_consumer_sentiment_monthly` | 120 | 480 | 10 | 12 | 0 | 0 | `aggregate_floor,median_sample_floor` |
@@ -31,10 +30,7 @@ Auxiliary series do not count toward acceptance. When a manifest omits `role`, t
 | `fred_unemployment_rate_monthly` | 120 | 480 | 10 | 12 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `biorxiv_details` | 150 | 390 | 5 | 30 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `dryad_search` | 160 | 600 | 8 | 20 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `wikidata_sparql` | 200 | 600 | 2 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `maven_central_search` | 200 | 1000 | 2 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `internet_archive_metadata` | 200 | 1200 | 2 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `packagist_packages` | 200 | 1200 | 2 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `sec_companyfacts_assets_quarterly` | 227 | 1816 | 5 | 51 | 227 | 5 | `aggregate_floor,median_sample_floor` |
 | `sec_companyfacts_cash_and_equivalents_quarterly` | 227 | 1816 | 5 | 51 | 227 | 5 | `aggregate_floor,median_sample_floor` |
 | `sec_companyfacts_net_income_quarterly` | 227 | 1816 | 5 | 51 | 227 | 5 | `aggregate_floor,median_sample_floor` |
@@ -45,10 +41,7 @@ Auxiliary series do not count toward acceptance. When a manifest omits `role`, t
 | `nasa_neows_feed` | 270 | 1305 | 6 | 45 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `library_of_congress_items` | 276 | 1016 | 5 | 44 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `anilist_media` | 295 | 837 | 6 | 49 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `semanticscholar_papers` | 300 | 1000 | 3 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `dockerhub_repositories` | 300 | 1300 | 3 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `weathergov_stations` | 300 | 2000 | 3 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `openlibrary_subjects` | 305 | 692 | 6 | 41 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `world_bank_access_to_electricity_percent_annual` | 319 | 2552 | 10 | 34 | 319 | 10 | `aggregate_floor,median_sample_floor` |
 | `world_bank_renewable_energy_consumption_percent_annual` | 320 | 2560 | 10 | 32 | 320 | 10 | `aggregate_floor,median_sample_floor` |
 | `owid_consumption_co2_annual` | 340 | 1360 | 10 | 34 | 340 | 10 | `aggregate_floor,median_sample_floor` |
@@ -60,13 +53,11 @@ Auxiliary series do not count toward acceptance. When a manifest omits `role`, t
 | `world_bank_unemployment_total_percent_annual` | 350 | 2800 | 10 | 35 | 350 | 10 | `aggregate_floor,median_sample_floor` |
 | `esco_occupations` | 355 | 639 | 5 | 71 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `orcid_search` | 390 | 780 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `openlibrary_search` | 400 | 800 | 5 | 80 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `europe_pmc_search` | 400 | 800 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `wger_exercises` | 400 | 800 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `arxiv_cs_recent` | 400 | 1200 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `osf_preprints` | 400 | 1300 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `stackexchange_top_questions_jan_2024` | 400 | 1400 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `hn_algolia_search` | 400 | 1600 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `cratesio_crates` | 400 | 2000 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `hex_packages` | 400 | 2600 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `osm_overpass_cafes` | 400 | 2600 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |

@@ -1,6 +1,5 @@
 dataset_id	status	primary_values	primary_sample_bytes	primary_sample_rows	median_primary_sample_value_count	median_primary_sample_size_bytes	auxiliary_values	auxiliary_sample_bytes	auxiliary_sample_rows	has_index	inferred_auxiliary_series	failure_reasons
 fred_real_gdp_quarterly	below_floor	40	160	10	4	16	0	0	0	1		aggregate_floor,median_sample_floor
-rubygems_search	below_floor	60	480	2	30	240	0	0	0	1		aggregate_floor,median_sample_floor
 fred_capacity_utilization_monthly	below_floor	120	480	10	12	48	0	0	0	1		aggregate_floor,median_sample_floor
 fred_civilian_labor_force_monthly	below_floor	120	480	10	12	48	0	0	0	1		aggregate_floor,median_sample_floor
 fred_consumer_sentiment_monthly	below_floor	120	480	10	12	48	0	0	0	1		aggregate_floor,median_sample_floor
@@ -18,10 +17,7 @@ fred_unemployment_level_monthly	below_floor	120	480	10	12	48	0	0	0	1		aggregate_
 fred_unemployment_rate_monthly	below_floor	120	480	10	12	48	0	0	0	1		aggregate_floor,median_sample_floor
 biorxiv_details	below_floor	150	390	5	30	60	0	0	0	1		aggregate_floor,median_sample_floor
 dryad_search	below_floor	160	600	8	20	80	0	0	0	1		aggregate_floor,median_sample_floor
-wikidata_sparql	below_floor	200	600	2	100	300	0	0	0	1		aggregate_floor,median_sample_floor
-maven_central_search	below_floor	200	1000	2	100	500	0	0	0	1		aggregate_floor,median_sample_floor
 internet_archive_metadata	below_floor	200	1200	2	100	600	0	0	0	1		aggregate_floor,median_sample_floor
-packagist_packages	below_floor	200	1200	2	100	600	0	0	0	1		aggregate_floor,median_sample_floor
 sec_companyfacts_assets_quarterly	below_floor	227	1816	5	51	408	227	454	5	1	obs_year_u16	aggregate_floor,median_sample_floor
 sec_companyfacts_cash_and_equivalents_quarterly	below_floor	227	1816	5	51	408	227	454	5	1	obs_year_u16	aggregate_floor,median_sample_floor
 sec_companyfacts_net_income_quarterly	below_floor	227	1816	5	51	408	227	454	5	1	obs_year_u16	aggregate_floor,median_sample_floor
@@ -32,10 +28,7 @@ gutendex_books	below_floor	256	576	8	32	64	0	0	0	1		aggregate_floor,median_sampl
 nasa_neows_feed	below_floor	270	1305	6	45	180	0	0	0	1		aggregate_floor,median_sample_floor
 library_of_congress_items	below_floor	276	1016	5	44	88	0	0	0	1		aggregate_floor,median_sample_floor
 anilist_media	below_floor	295	837	6	49	147	0	0	0	1		aggregate_floor,median_sample_floor
-semanticscholar_papers	below_floor	300	1000	3	100	400	0	0	0	1		aggregate_floor,median_sample_floor
-dockerhub_repositories	below_floor	300	1300	3	100	400	0	0	0	1		aggregate_floor,median_sample_floor
 weathergov_stations	below_floor	300	2000	3	100	800	0	0	0	1		aggregate_floor,median_sample_floor
-openlibrary_subjects	below_floor	305	692	6	41	82	0	0	0	1		aggregate_floor,median_sample_floor
 world_bank_access_to_electricity_percent_annual	below_floor	319	2552	10	34	272	319	638	10	1	obs_year_u16	aggregate_floor,median_sample_floor
 world_bank_renewable_energy_consumption_percent_annual	below_floor	320	2560	10	32	256	320	640	10	1	obs_year_u16	aggregate_floor,median_sample_floor
 owid_consumption_co2_annual	below_floor	340	1360	10	34	136	340	680	10	1	obs_year_u16	aggregate_floor,median_sample_floor
@@ -47,13 +40,11 @@ world_bank_energy_use_per_capita_annual	below_floor	346	2768	10	35	280	346	692	1
 world_bank_unemployment_total_percent_annual	below_floor	350	2800	10	35	280	350	700	10	1	obs_year_u16	aggregate_floor,median_sample_floor
 esco_occupations	below_floor	355	639	5	71	142	0	0	0	1		aggregate_floor,median_sample_floor
 orcid_search	below_floor	390	780	4	100	200	0	0	0	1		aggregate_floor,median_sample_floor
-openlibrary_search	below_floor	400	800	5	80	160	0	0	0	1		aggregate_floor,median_sample_floor
 europe_pmc_search	below_floor	400	800	4	100	150	0	0	0	1		aggregate_floor,median_sample_floor
 wger_exercises	below_floor	400	800	4	100	150	0	0	0	1		aggregate_floor,median_sample_floor
 arxiv_cs_recent	below_floor	400	1200	4	100	300	0	0	0	1		aggregate_floor,median_sample_floor
 osf_preprints	below_floor	400	1300	4	100	400	0	0	0	1		aggregate_floor,median_sample_floor
 stackexchange_top_questions_jan_2024	below_floor	400	1400	4	100	400	0	0	0	1		aggregate_floor,median_sample_floor
-hn_algolia_search	below_floor	400	1600	4	100	400	0	0	0	1		aggregate_floor,median_sample_floor
 cratesio_crates	below_floor	400	2000	4	100	500	0	0	0	1		aggregate_floor,median_sample_floor
 hex_packages	below_floor	400	2600	4	100	800	0	0	0	1		aggregate_floor,median_sample_floor
 osm_overpass_cafes	below_floor	400	2600	4	100	800	0	0	0	1		aggregate_floor,median_sample_floor

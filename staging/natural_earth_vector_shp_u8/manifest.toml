@@ -1,0 +1,72 @@
+manifest_version = 1
+dataset_id = "natural_earth_vector_shp_u8"
+name = "Natural Earth Vector Shapefile Geometry Bytes"
+description = "Source ESRI Shapefile geometry bytes from selected Natural Earth 10m vector layers."
+homepage = "https://www.naturalearthdata.com/"
+
+[license]
+name = "Public Domain"
+spdx = "CC0-1.0"
+url = "https://www.naturalearthdata.com/about/terms-of-use/"
+citation = "Natural Earth."
+notes = "Natural Earth vector data are public domain."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Natural Earth public S3 downloads only."
+usage_notes = "Public cartographic vector data."
+
+[[origins]]
+id = "natural_earth"
+name = "Natural Earth downloads"
+url = "https://www.naturalearthdata.com/downloads/"
+type = "data_portal"
+notes = "Official Natural Earth vector data portal."
+
+[[resources]]
+id = "natural_earth_10m_vectors"
+origin = "natural_earth"
+url = "https://naturalearth.s3.amazonaws.com/"
+type = "zip_shapefile_collection"
+version = "10m"
+access = "Direct public S3 ZIP downloads."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/natural_earth_vector_shp_u8/zips/"
+notes = "Download script records the selected Natural Earth 10m layer ZIP URLs."
+
+[local_paths]
+downloads = "downloads/natural_earth_vector_shp_u8/"
+extracted = "extracted/natural_earth_vector_shp_u8/"
+filtered = "filtered/natural_earth_vector_shp_u8/"
+index = "index/natural_earth_vector_shp_u8/"
+samples = "samples/natural_earth_vector_shp_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/natural_earth_vector_shp_u8/samples.jsonl"
+summary = "Download selected Natural Earth 10m vector ZIPs, validate `.shp` headers, and emit one raw uint8 sample per geometry stream."
+deterministic_notes = "Build is local-only, preserves source `.shp` bytes unchanged, rejects malformed shapefile headers, and does not concatenate layers."
+
+[[series]]
+id = "natural_earth_10m_shp_geometry"
+description = "Natural Earth 10m `.shp` geometry file bytes."
+semantic_meaning = "Binary geometry records for coherent cartographic vector layers."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "ESRI Shapefile `.shp` files are byte-addressed binary geometry streams; the sample is the source geometry file payload."
+source_resources = ["natural_earth_10m_vectors"]
+filtered_input_path = "filtered/natural_earth_vector_shp_u8/ingest_stats.json"
+filtering = "Keep the `.shp` member from each selected Natural Earth 10m layer ZIP."
+missing_value_policy = "Malformed ZIPs, missing `.shp` members, invalid shapefile headers, or empty geometry streams are fatal."
+conversion = "Copy each source `.shp` file unchanged into one raw `.bin` sample."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 byte array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/natural_earth_vector_shp_u8/natural_earth_10m_shp_geometry/"

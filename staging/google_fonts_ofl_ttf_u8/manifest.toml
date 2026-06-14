@@ -1,0 +1,72 @@
+manifest_version = 1
+dataset_id = "google_fonts_ofl_ttf_u8"
+name = "Google Fonts OFL Font Binaries"
+description = "Source OpenType/TrueType font binary bytes from Open Font License families in the Google Fonts repository."
+homepage = "https://github.com/google/fonts"
+
+[license]
+name = "SIL Open Font License 1.1"
+spdx = "OFL-1.1"
+url = "https://openfontlicense.org/"
+citation = "Google Fonts repository."
+notes = "The recipe only keeps font files from the repository `ofl/` tree."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Google Fonts GitHub repository only."
+usage_notes = "Public open font binaries; preserve OFL attribution and reserved font names where applicable."
+
+[[origins]]
+id = "google_fonts"
+name = "Google Fonts GitHub repository"
+url = "https://github.com/google/fonts"
+type = "source_repository"
+notes = "Official Google Fonts repository."
+
+[[resources]]
+id = "ofl_font_files"
+origin = "google_fonts"
+url = "https://github.com/google/fonts/archive/refs/heads/main.zip"
+type = "source_archive"
+version = "main_at_user_download_time"
+access = "GitHub source archive download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/google_fonts_ofl_ttf_u8/fonts-main.zip"
+notes = "Download script extracts a bounded deterministic selection of font files from this local archive."
+
+[local_paths]
+downloads = "downloads/google_fonts_ofl_ttf_u8/"
+extracted = "extracted/google_fonts_ofl_ttf_u8/"
+filtered = "filtered/google_fonts_ofl_ttf_u8/"
+index = "index/google_fonts_ofl_ttf_u8/"
+samples = "samples/google_fonts_ofl_ttf_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/google_fonts_ofl_ttf_u8/samples.jsonl"
+summary = "Download a bounded deterministic selection of OFL font binaries, validate sfnt/OpenType headers, and emit one raw uint8 sample per font file."
+deterministic_notes = "Build is local-only, preserves downloaded font bytes unchanged, rejects malformed font headers, and does not concatenate fonts."
+
+[[series]]
+id = "google_fonts_ofl_font_binaries"
+description = "OpenType/TrueType font file bytes."
+semantic_meaning = "Source binary font programs and tables for OFL Google Fonts families."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Font files are byte-addressed machine-facing binary artifacts; the sample is the source file payload."
+source_resources = ["ofl_font_files"]
+filtered_input_path = "filtered/google_fonts_ofl_ttf_u8/ingest_stats.json"
+filtering = "Keep downloaded `.ttf` and `.otf` files from the Google Fonts `ofl/` tree."
+missing_value_policy = "Malformed font headers, duplicate paths, empty files, or missing downloads are fatal."
+conversion = "Copy each source font file unchanged into one raw `.bin` sample."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 byte array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/google_fonts_ofl_ttf_u8/google_fonts_ofl_font_binaries/"

@@ -1,0 +1,3 @@
+dataset_id	status	reasons	primary_samples	primary_values	primary_bytes	size_min	size_p10	size_p25	size_median	size_p75	size_p90	size_max	unique_sample_sizes	same_size_fraction	missing_files
+google_fonts_ofl_ttf_u8	ok	none	122	33876096	33876096	19596	42563.6	105248	205386	277120	425795.6	5772308	122	0.008197	0
+natural_earth_vector_shp_u8	ok	none	12	96390016	96390016	25104	47898.8	2063354	6986842	10233802	20350555.6	23766908	12	0.083333	0

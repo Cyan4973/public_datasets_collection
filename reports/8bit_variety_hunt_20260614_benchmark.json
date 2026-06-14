@@ -1,0 +1,38 @@
+[
+  {
+    "dataset_id": "google_fonts_ofl_ttf_u8",
+    "missing_files": 0,
+    "primary_bytes": 33876096,
+    "primary_samples": 122,
+    "primary_values": 33876096,
+    "reasons": [],
+    "same_size_fraction": 0.00819672131147541,
+    "size_max": 5772308,
+    "size_median": 205386.0,
+    "size_min": 19596,
+    "size_p10": 42563.600000000006,
+    "size_p25": 105248.0,
+    "size_p75": 277120.0,
+    "size_p90": 425795.6,
+    "status": "ok",
+    "unique_sample_sizes": 122
+  },
+  {
+    "dataset_id": "natural_earth_vector_shp_u8",
+    "missing_files": 0,
+    "primary_bytes": 96390016,
+    "primary_samples": 12,
+    "primary_values": 96390016,
+    "reasons": [],
+    "same_size_fraction": 0.08333333333333333,
+    "size_max": 23766908,
+    "size_median": 6986842.0,
+    "size_min": 25104,
+    "size_p10": 47898.80000000002,
+    "size_p25": 2063354.0,
+    "size_p75": 10233802.0,
+    "size_p90": 20350555.6,
+    "status": "ok",
+    "unique_sample_sizes": 12
+  }
+]

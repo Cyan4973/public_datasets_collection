@@ -67,6 +67,8 @@ def format_stat(value: float) -> str:
 
 
 def format_csv(values: list[str]) -> str:
+    if not values:
+        return "none"
     return ",".join(values)
 
 

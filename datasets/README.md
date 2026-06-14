@@ -10,6 +10,7 @@ Core acceptance rules:
 - no intrinsically thin scopes such as single entities, single snapshots, or arbitrary one-query slices
 - acceptance floors count only `role = "primary"` series
 - aggregate floor and median-sample floor must be met by primary payload, not helper metadata
+- sample boundaries must respect natural records; do not concatenate small records to pass the median-sample floor
 - claimed scope must match realized output
 
 Expected files:

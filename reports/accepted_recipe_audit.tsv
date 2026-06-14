@@ -1,329 +1,323 @@
 dataset_id	status	primary_values	primary_sample_bytes	primary_sample_rows	median_primary_sample_value_count	median_primary_sample_size_bytes	auxiliary_values	auxiliary_sample_bytes	auxiliary_sample_rows	has_index	inferred_auxiliary_series	failure_reasons
-fred_real_gdp_quarterly	below_floor	40	160	10	4	16	0	0	0	1		aggregate_floor,median_sample_floor
-fred_capacity_utilization_monthly	below_floor	120	480	10	12	48	0	0	0	1		aggregate_floor,median_sample_floor
-fred_civilian_labor_force_monthly	below_floor	120	480	10	12	48	0	0	0	1		aggregate_floor,median_sample_floor
-fred_consumer_sentiment_monthly	below_floor	120	480	10	12	48	0	0	0	1		aggregate_floor,median_sample_floor
-fred_core_cpi_monthly	below_floor	120	480	10	12	48	0	0	0	1		aggregate_floor,median_sample_floor
-fred_cpi_all_items_monthly	below_floor	120	480	10	12	48	0	0	0	1		aggregate_floor,median_sample_floor
-fred_federal_funds_monthly	below_floor	120	480	10	12	48	0	0	0	1		aggregate_floor,median_sample_floor
-fred_housing_starts_monthly	below_floor	120	480	10	12	48	0	0	0	1		aggregate_floor,median_sample_floor
-fred_industrial_production_monthly	below_floor	120	480	10	12	48	0	0	0	1		aggregate_floor,median_sample_floor
-fred_labor_force_participation_monthly	below_floor	120	480	10	12	48	0	0	0	1		aggregate_floor,median_sample_floor
-fred_m2_money_stock_monthly	below_floor	120	480	10	12	48	0	0	0	1		aggregate_floor,median_sample_floor
-fred_payroll_employment_monthly	below_floor	120	480	10	12	48	0	0	0	1		aggregate_floor,median_sample_floor
-fred_pce_price_index_monthly	below_floor	120	480	10	12	48	0	0	0	1		aggregate_floor,median_sample_floor
-fred_ppi_all_commodities_monthly	below_floor	120	480	10	12	48	0	0	0	1		aggregate_floor,median_sample_floor
-fred_unemployment_level_monthly	below_floor	120	480	10	12	48	0	0	0	1		aggregate_floor,median_sample_floor
-fred_unemployment_rate_monthly	below_floor	120	480	10	12	48	0	0	0	1		aggregate_floor,median_sample_floor
-biorxiv_details	below_floor	150	390	5	30	60	0	0	0	1		aggregate_floor,median_sample_floor
-dryad_search	below_floor	160	600	8	20	80	0	0	0	1		aggregate_floor,median_sample_floor
-internet_archive_metadata	below_floor	200	1200	2	100	600	0	0	0	1		aggregate_floor,median_sample_floor
-sec_companyfacts_assets_quarterly	below_floor	227	1816	5	51	408	0	0	0	1		aggregate_floor,median_sample_floor
-sec_companyfacts_cash_and_equivalents_quarterly	below_floor	227	1816	5	51	408	0	0	0	1		aggregate_floor,median_sample_floor
-sec_companyfacts_net_income_quarterly	below_floor	227	1816	5	51	408	0	0	0	1		aggregate_floor,median_sample_floor
-sec_companyfacts_operating_income_quarterly	below_floor	227	1816	5	51	408	0	0	0	1		aggregate_floor,median_sample_floor
-sec_companyfacts_stockholders_equity_quarterly	below_floor	227	1816	5	51	408	0	0	0	1		aggregate_floor,median_sample_floor
-openbrewerydb_breweries	below_floor	246	1640	3	82	656	0	0	0	1		aggregate_floor,median_sample_floor
-gutendex_books	below_floor	256	576	8	32	64	0	0	0	1		aggregate_floor,median_sample_floor
-nasa_neows_feed	below_floor	270	1305	6	45	180	0	0	0	1		aggregate_floor,median_sample_floor
-library_of_congress_items	below_floor	276	1016	5	44	88	0	0	0	1		aggregate_floor,median_sample_floor
-anilist_media	below_floor	295	837	6	49	147	0	0	0	1		aggregate_floor,median_sample_floor
-weathergov_stations	below_floor	300	2000	3	100	800	0	0	0	1		aggregate_floor,median_sample_floor
-world_bank_access_to_electricity_percent_annual	below_floor	319	2552	10	34	272	0	0	0	1		aggregate_floor,median_sample_floor
-world_bank_renewable_energy_consumption_percent_annual	below_floor	320	2560	10	32	256	0	0	0	1		aggregate_floor,median_sample_floor
-owid_consumption_co2_annual	below_floor	340	1360	10	34	136	0	0	0	1		aggregate_floor,median_sample_floor
-owid_trade_co2_annual	below_floor	340	1360	10	34	136	0	0	0	1		aggregate_floor,median_sample_floor
-owid_trade_co2_share_annual	below_floor	340	1360	10	34	136	0	0	0	1		aggregate_floor,median_sample_floor
-world_bank_forest_area_percent_annual	below_floor	340	2720	10	34	272	0	0	0	1		aggregate_floor,median_sample_floor
-world_bank_internet_users_percent_annual	below_floor	344	2752	10	35	280	0	0	0	1		aggregate_floor,median_sample_floor
-world_bank_energy_use_per_capita_annual	below_floor	346	2768	10	35	280	0	0	0	1		aggregate_floor,median_sample_floor
-world_bank_unemployment_total_percent_annual	below_floor	350	2800	10	35	280	0	0	0	1		aggregate_floor,median_sample_floor
-esco_occupations	below_floor	355	639	5	71	142	0	0	0	1		aggregate_floor,median_sample_floor
-orcid_search	below_floor	390	780	4	100	200	0	0	0	1		aggregate_floor,median_sample_floor
-europe_pmc_search	below_floor	400	800	4	100	150	0	0	0	1		aggregate_floor,median_sample_floor
-wger_exercises	below_floor	400	800	4	100	150	0	0	0	1		aggregate_floor,median_sample_floor
-arxiv_cs_recent	below_floor	400	1200	4	100	300	0	0	0	1		aggregate_floor,median_sample_floor
-osf_preprints	below_floor	400	1300	4	100	400	0	0	0	1		aggregate_floor,median_sample_floor
-stackexchange_top_questions_jan_2024	below_floor	400	1400	4	100	400	0	0	0	1		aggregate_floor,median_sample_floor
-cratesio_crates	below_floor	400	2000	4	100	500	0	0	0	1		aggregate_floor,median_sample_floor
-hex_packages	below_floor	400	2600	4	100	800	0	0	0	1		aggregate_floor,median_sample_floor
-osm_overpass_cafes	below_floor	400	2600	4	100	800	0	0	0	1		aggregate_floor,median_sample_floor
-imf_gdp_growth_annual	below_floor	416	1664	8	52	208	0	0	0	1		aggregate_floor,median_sample_floor
-imf_gdp_per_capita_usd_annual	below_floor	416	1664	8	52	208	0	0	0	1		aggregate_floor,median_sample_floor
-imf_general_government_gross_debt_gdp_annual	below_floor	416	1664	8	52	208	0	0	0	1		aggregate_floor,median_sample_floor
-imf_inflation_annual	below_floor	416	1664	8	52	208	0	0	0	1		aggregate_floor,median_sample_floor
-imf_nominal_gdp_usd_annual	below_floor	416	1664	8	52	208	0	0	0	1		aggregate_floor,median_sample_floor
-imf_population_annual	below_floor	416	1664	8	52	208	0	0	0	1		aggregate_floor,median_sample_floor
-imf_unemployment_rate_annual	below_floor	416	1664	8	52	208	0	0	0	1		aggregate_floor,median_sample_floor
-musicbrainz_recordings	below_floor	476	1046	5	94	188	0	0	0	1		aggregate_floor,median_sample_floor
-musicbrainz_release_groups	below_floor	491	982	5	100	200	0	0	0	1		aggregate_floor,median_sample_floor
-openfoodfacts_products	below_floor	491	1870	5	98	392	0	0	0	1		aggregate_floor,median_sample_floor
-inaturalist_observations	below_floor	495	1188	5	99	198	0	0	0	1		aggregate_floor,median_sample_floor
-openfda_drug_event	below_floor	495	1683	5	99	198	0	0	0	1		aggregate_floor,median_sample_floor
-pokemontcg_cards	below_floor	498	1071	6	81	130.5	0	0	0	1		aggregate_floor,median_sample_floor
-gbif_occurrence	below_floor	498	2284	5	100	400	0	0	0	1		aggregate_floor,median_sample_floor
-treasury_avg_interest_rates	below_floor	500	1000	5	100	200	0	0	0	1		aggregate_floor,median_sample_floor
-crossref_funders	below_floor	500	1200	5	100	200	0	0	0	1		aggregate_floor,median_sample_floor
-medrxiv_details	below_floor	500	1300	5	100	200	0	0	0	1		aggregate_floor,median_sample_floor
-artic_artworks_search	below_floor	500	1400	5	100	200	0	0	0	1		aggregate_floor,median_sample_floor
-figshare_articles	below_floor	500	1400	5	100	200	0	0	0	1		aggregate_floor,median_sample_floor
-nvd_cves_recent	below_floor	500	1400	5	100	200	0	0	0	1		aggregate_floor,median_sample_floor
-nuget_search	below_floor	500	1500	5	100	200	0	0	0	1		aggregate_floor,median_sample_floor
-npm_search_packages	below_floor	500	2600	5	100	400	0	0	0	1		aggregate_floor,median_sample_floor
-fred_fed_balance_sheet_weekly	below_floor	521	2084	10	52	208	0	0	0	1		aggregate_floor,median_sample_floor
-fred_mortgage_30y_weekly	below_floor	521	2084	10	52	208	0	0	0	1		aggregate_floor,median_sample_floor
-fred_initial_claims_weekly	below_floor	522	2088	10	52	208	0	0	0	1		aggregate_floor,median_sample_floor
-owid_flaring_co2_annual	below_floor	564	2256	10	57.5	230	0	0	0	1		aggregate_floor,median_sample_floor
-owid_energy_per_gdp_annual	below_floor	565	2260	10	58	232	0	0	0	1		aggregate_floor,median_sample_floor
-world_bank_population_density_annual	below_floor	567	4536	9	63	504	0	0	0	1		aggregate_floor,median_sample_floor
-owid_energy_per_capita_annual	below_floor	584	2336	10	60	240	0	0	0	1		aggregate_floor,median_sample_floor
-owid_primary_energy_consumption_annual	below_floor	584	2336	10	60	240	0	0	0	1		aggregate_floor,median_sample_floor
-crossref_works_jan_2024	below_floor	588	3136	3	196	784	0	0	0	1		aggregate_floor,median_sample_floor
-gleif_lei_records	below_floor	600	1200	6	100	200	0	0	0	1		aggregate_floor,median_sample_floor
-ooni_measurements	below_floor	600	1500	6	100	250	0	0	0	1		aggregate_floor,median_sample_floor
-crossref_members	below_floor	600	1800	6	100	400	0	0	0	1		aggregate_floor,median_sample_floor
-datacite_dois	below_floor	600	2000	6	100	400	0	0	0	1		aggregate_floor,median_sample_floor
-deezer_chart	below_floor	600	2000	6	100	400	0	0	0	1		aggregate_floor,median_sample_floor
-openml_datasets	below_floor	600	2000	6	100	400	0	0	0	1		aggregate_floor,median_sample_floor
-openalex_works_2024_sample	below_floor	600	2000	3	200	800	0	0	0	1		aggregate_floor,median_sample_floor
-steamspy_top100in2weeks	below_floor	600	2200	6	100	400	0	0	0	1		aggregate_floor,median_sample_floor
-openml_dataset_61	below_floor	600	2400	4	150	600	0	0	0	1		aggregate_floor,median_sample_floor
-coingecko_top_markets	below_floor	600	4200	6	100	800	0	0	0	1		aggregate_floor,median_sample_floor
-world_bank_agricultural_land_percent_annual	below_floor	630	5040	10	63	504	0	0	0	1		aggregate_floor,median_sample_floor
-world_bank_birth_rate_annual	below_floor	650	5200	10	65	520	0	0	0	1		aggregate_floor,median_sample_floor
-world_bank_death_rate_annual	below_floor	650	5200	10	65	520	0	0	0	1		aggregate_floor,median_sample_floor
-world_bank_fertility_rate_annual	below_floor	650	5200	10	65	520	0	0	0	1		aggregate_floor,median_sample_floor
-world_bank_gdp_current_usd	below_floor	650	5200	10	65	520	0	0	0	1		aggregate_floor,median_sample_floor
-world_bank_gdp_per_capita_current_usd_annual	below_floor	650	5200	10	65	520	0	0	0	1		aggregate_floor,median_sample_floor
-world_bank_life_expectancy	below_floor	650	5200	10	65	520	0	0	0	1		aggregate_floor,median_sample_floor
-world_bank_population_total	below_floor	650	5200	10	65	520	0	0	0	1		aggregate_floor,median_sample_floor
-world_bank_urban_population_percent_annual	below_floor	650	5200	10	65	520	0	0	0	1		aggregate_floor,median_sample_floor
-itunes_search	below_floor	697	3390	7	100	400	0	0	0	1		aggregate_floor,median_sample_floor
-doaj_articles	below_floor	700	1300	7	100	200	0	0	0	1		aggregate_floor,median_sample_floor
-huggingface_datasets	below_floor	700	2200	7	100	400	0	0	0	1		aggregate_floor,median_sample_floor
-gitlab_projects	below_floor	700	2800	7	100	400	0	0	0	1		aggregate_floor,median_sample_floor
-marine_regions_gazetteer	below_floor	758	5264	8	93.5	736	0	0	0	1		aggregate_floor,median_sample_floor
-launchlibrary_upcoming	below_floor	800	1900	8	100	200	0	0	0	1		aggregate_floor,median_sample_floor
-scryfall_cards	below_floor	831	1848	5	164	164	0	0	0	1		aggregate_floor,median_sample_floor
-chembl_molecules	below_floor	973	2043	10	97	145.5	0	0	0	1		aggregate_floor,median_sample_floor
-eia_petroleum_prices	below_floor	988	3952	2	494	1976	0	0	0	1		aggregate_floor,median_sample_floor
-gleif_lei_records_api	below_floor	1000	1800	5	200	400	0	0	0	1		aggregate_floor,median_sample_floor
-arxiv_ai_recent	below_floor	1000	2500	10	100	200	0	0	0	1		aggregate_floor,median_sample_floor
-gwas_catalog_studies	below_floor	1000	2600	10	100	200	0	0	0	1		aggregate_floor,median_sample_floor
-pride_projects_search	below_floor	1000	3200	10	100	400	0	0	0	1		aggregate_floor,median_sample_floor
-uniprot_human_reviewed_lengths	below_floor	1000	4000	2	500	2000	0	0	0	1		aggregate_floor,median_sample_floor
-uniprot_reviewed_human	below_floor	1000	4000	2	500	2000	0	0	0	1		aggregate_floor,median_sample_floor
-worldbank_gdp_constant	below_floor	1140	2660	6	190	190	0	0	0	1		aggregate_floor,median_sample_floor
-geoboundaries_all_adm0	below_floor	1150	3680	5	230	920	0	0	0	1		aggregate_floor,median_sample_floor
-owid_cement_co2_annual	below_floor	1155	4620	10	97	388	0	0	0	1		aggregate_floor,median_sample_floor
-iris_seismon_events_fixed	below_floor	1170	5330	9	130	260	0	0	0	1		aggregate_floor,median_sample_floor
-worldbank_population_total	below_floor	1176	2744	6	196	196	0	0	0	1		aggregate_floor,median_sample_floor
-scryfall_default_cards	below_floor	1225	2450	7	175	175	0	0	0	1		aggregate_floor,median_sample_floor
-openalex_authors_large	below_floor	1400	3000	7	200	400	0	0	0	1		aggregate_floor,median_sample_floor
-owid_co2_per_gdp_annual	below_floor	1403	5612	10	140	560	0	0	0	1		aggregate_floor,median_sample_floor
-gbif_occurrence_large	below_floor	1499	5999	5	300	600	0	0	0	1		aggregate_floor,median_sample_floor
-plos_search	below_floor	1500	3500	3	500	1000	0	0	0	1		aggregate_floor,median_sample_floor
-ena_portal_search	below_floor	1500	6000	3	500	1000	0	0	0	1		aggregate_floor,median_sample_floor
-gbif_datasets	below_floor	1500	6000	3	500	1000	0	0	0	1		aggregate_floor,median_sample_floor
-internetarchive_advancedsearch	below_floor	1500	7000	3	500	2000	0	0	0	1		aggregate_floor,median_sample_floor
-crossref_works_large_retry	below_floor	1500	8000	3	500	2000	0	0	0	1		aggregate_floor,median_sample_floor
-eurostat_retail_trade_volume_monthly	below_floor	1524	6096	5	288	1152	0	0	0	1		aggregate_floor,median_sample_floor
-coinpaprika_exchanges	below_floor	1530	5760	6	255	960	0	0	0	1		aggregate_floor,median_sample_floor
-owid_co2_including_luc_annual	below_floor	1545	6180	10	163	652	0	0	0	1		aggregate_floor,median_sample_floor
-owid_gas_co2_annual	below_floor	1546	6184	10	139.5	558	0	0	0	1		aggregate_floor,median_sample_floor
-openalex_institutions_large	below_floor	1600	4600	8	200	600	0	0	0	1		aggregate_floor,median_sample_floor
-owid_oil_co2_annual	below_floor	1607	6428	10	148.5	594	0	0	0	1		aggregate_floor,median_sample_floor
-owid_co2_annual	below_floor	1687	6748	10	163	652	0	0	0	1		aggregate_floor,median_sample_floor
-owid_co2_per_capita_annual	below_floor	1687	6748	10	163	652	0	0	0	1		aggregate_floor,median_sample_floor
-owid_coal_co2_annual	below_floor	1687	6748	10	163	652	0	0	0	1		aggregate_floor,median_sample_floor
-tvmaze_shows	below_floor	1715	4655	7	245	490	0	0	0	1		aggregate_floor,median_sample_floor
-owid_temperature_change_from_co2_annual	below_floor	1740	6960	10	174	696	0	0	0	1		aggregate_floor,median_sample_floor
-owid_land_use_change_co2_annual	below_floor	1750	7000	10	175	700	0	0	0	1		aggregate_floor,median_sample_floor
-owid_methane_annual	below_floor	1750	7000	10	175	700	0	0	0	1		aggregate_floor,median_sample_floor
-owid_nitrous_oxide_annual	below_floor	1750	7000	10	175	700	0	0	0	1		aggregate_floor,median_sample_floor
-owid_total_ghg_annual	below_floor	1750	7000	10	175	700	0	0	0	1		aggregate_floor,median_sample_floor
-openalex_sources_large	below_floor	1800	5400	9	200	800	0	0	0	1		aggregate_floor,median_sample_floor
-eurostat_hicp_all_items_monthly	below_floor	1800	7200	5	360	1440	0	0	0	1		aggregate_floor,median_sample_floor
-eurostat_hicp_food_monthly	below_floor	1800	7200	5	360	1440	0	0	0	1		aggregate_floor,median_sample_floor
-eurostat_industrial_production_monthly	below_floor	1884	7536	5	396	1584	0	0	0	1		aggregate_floor,median_sample_floor
-europepmc_grants	below_floor	1984	3968	4	496	992	0	0	0	1		aggregate_floor,median_sample_floor
-gdc_cases	below_floor	2000	3500	4	500	500	0	0	0	1		aggregate_floor,median_sample_floor
-chembl_documents	below_floor	2000	4000	4	500	1000	0	0	0	1		aggregate_floor,median_sample_floor
-wikimedia_mostread	below_floor	2000	6000	2	1000	3000	0	0	0	1		aggregate_floor
-npi_registry_ca	below_floor	2000	7000	4	500	1000	0	0	0	1		aggregate_floor,median_sample_floor
-nvd_cpe_match_feed	below_floor	2000	7000	4	500	2000	0	0	0	1		aggregate_floor,median_sample_floor
-dataone_solr_1000	below_floor	2000	10000	2	1000	5000	0	0	0	1		aggregate_floor
-npm_search_packages_large	below_floor	2000	10250	8	250	1500	0	0	0	1		aggregate_floor,median_sample_floor
-nih_reporter_projects	below_floor	2140	9416	5	428	856	0	0	0	1		aggregate_floor,median_sample_floor
-fred_sp500_daily	below_floor	2162	8648	9	251	1004	0	0	0	1		aggregate_floor,median_sample_floor
-geofabrik_index	below_floor	2220	17760	4	555	4440	0	0	0	1		aggregate_floor,median_sample_floor
-disease_sh_countries	below_floor	2310	14784	10	231	1848	0	0	0	1		aggregate_floor,median_sample_floor
-eurostat_female_unemployment_monthly	below_floor	2465	9860	5	520	2080	0	0	0	1		aggregate_floor,median_sample_floor
-eurostat_male_unemployment_monthly	below_floor	2465	9860	5	520	2080	0	0	0	1		aggregate_floor,median_sample_floor
-eurostat_unemployment_monthly	below_floor	2465	9860	5	520	2080	0	0	0	1		aggregate_floor,median_sample_floor
-openfda_device_event	below_floor	2500	5500	5	500	1000	0	0	0	1		aggregate_floor,median_sample_floor
-openfda_food_enforcement	below_floor	2500	7500	5	500	2000	0	0	0	1		aggregate_floor,median_sample_floor
-fred_treasury_10y_daily	below_floor	2501	10004	10	250	1000	0	0	0	1		aggregate_floor,median_sample_floor
-fred_treasury_2y_daily	below_floor	2501	10004	10	250	1000	0	0	0	1		aggregate_floor,median_sample_floor
-fred_treasury_30y_daily	below_floor	2501	10004	10	250	1000	0	0	0	1		aggregate_floor,median_sample_floor
-fred_wti_crude_daily	below_floor	2505	10020	10	250.5	1002	0	0	0	1		aggregate_floor,median_sample_floor
-wikimedia_pageviews_daily	below_floor	2562	10248	7	366	1464	0	0	0	1		aggregate_floor,median_sample_floor
-rubygems_versions_large	below_floor	2580	9288	5	516	2064	0	0	0	1		aggregate_floor,median_sample_floor
-chesscom_hikaru_2024_01	below_floor	3135	8360	3	1045	2090	0	0	0	1		aggregate_floor
-openlibrary_editions	below_floor	3479	6958	7	497	994	0	0	0	1		aggregate_floor,median_sample_floor
-eia_series_petroleum	below_floor	3500	5500	7	500	500	0	0	0	1		aggregate_floor,median_sample_floor
-loc_photos_search_large	below_floor	3500	8000	7	500	1000	0	0	0	1		aggregate_floor,median_sample_floor
-smithsonian_search_large	below_floor	3500	10000	7	500	1000	0	0	0	1		aggregate_floor,median_sample_floor
-europepmc_grants_large_retry	below_floor	4000	8000	4	1000	2000	0	0	0	1		aggregate_floor
-huggingface_models_large	below_floor	4000	13000	8	500	1500	0	0	0	1		aggregate_floor,median_sample_floor
-taginfo_tags_popular	below_floor	4000	19500	8	500	2500	0	0	0	1		aggregate_floor,median_sample_floor
-taginfo_keys_all	below_floor	4000	25500	8	500	4000	0	0	0	1		aggregate_floor,median_sample_floor
-mitre_attack_enterprise	below_floor	4290	5148	5	858	858	0	0	0	1		aggregate_floor,median_sample_floor
-usgs_daily_values_large	below_floor	4445	35560	7	572	4576	0	0	0	1		aggregate_floor,median_sample_floor
-inspirehep_literature	below_floor	4927	15854	5	1000	4000	0	0	0	1		aggregate_floor
-usgs_water_sites_rdb	below_floor	4992	36976	6	878	7024	0	0	0	1		aggregate_floor,median_sample_floor
-crossref_funders_large	below_floor	5000	10000	5	1000	2000	0	0	0	1		aggregate_floor
-dataone_solr	below_floor	5039	25078	6	1000	4000	0	0	0	1		aggregate_floor
-dataone_solr_large_retry	below_floor	5039	25078	6	1000	4000	0	0	0	1		aggregate_floor
-jhu_covid19_confirmed_global_daily	below_floor	5715	22860	5	1143	4572	0	0	0	1		aggregate_floor
-jhu_covid19_confirmed_us_daily	below_floor	5715	22860	5	1143	4572	0	0	0	1		aggregate_floor
-jhu_covid19_deaths_global_daily	below_floor	5715	22860	5	1143	4572	0	0	0	1		aggregate_floor
-jhu_covid19_deaths_us_daily	below_floor	5715	22860	5	1143	4572	0	0	0	1		aggregate_floor
-federalregister_documents_large	below_floor	6000	9000	6	1000	1500	0	0	0	1		aggregate_floor
-openml_runs_large	below_floor	6000	28000	6	1000	4000	0	0	0	1		aggregate_floor
-figshare_articles_large	below_floor	6000	34000	6	1000	6000	0	0	0	1		aggregate_floor
-jpl_cad_2024	below_floor	6552	52416	4	1638	13104	0	0	0	1		aggregate_floor
-nasa_donki_flr	below_floor	6768	16920	6	1128	2256	0	0	0	1		aggregate_floor
-openml_tasks_large	below_floor	7000	26000	7	1000	4000	0	0	0	1		aggregate_floor
-coinpaprika_tickers	below_floor	8000	52000	4	2000	16000	0	0	0	1		aggregate_floor
-cisa_kev_catalog	below_floor	8060	14508	5	1612	3224	0	0	0	1		aggregate_floor
-nasa_donki_cme	below_floor	9072	24192	6	1512	4536	0	0	0	1		aggregate_floor
-metacpan_releases_search_large	ok	10000	37000	10	1000	4000	0	0	0	1
-nomis_employment	ok	10815	26265	7	1545	3090	0	0	0	1
-met_biocollection_objects	ok	12281	49124	1	12281	49124	0	0	0	1
-usgs_nwis_gage_height_daily	ok	14567	116536	15	1080	8640	0	0	0	1
-geonames_admin1_codes	ok	15460	34785	4	3865	7730	0	0	0	1
-nasa_power_daily_climate	ok	16425	131400	15	1095	8760	0	0	0	1
-nasa_power_daily_humidity	ok	16425	131400	15	1095	8760	0	0	0	1
-nasa_power_daily_humidity_wind	ok	16425	131400	15	1095	8760	0	0	0	1
-nasa_power_daily_longwave_flux	ok	16425	131400	15	1095	8760	0	0	0	1
-nasa_power_daily_precip_solar	ok	16425	131400	15	1095	8760	0	0	0	1
-nasa_power_daily_precip_temperature	ok	16425	131400	15	1095	8760	0	0	0	1
-nasa_power_daily_solar_flux	ok	16425	131400	15	1095	8760	0	0	0	1
-nasa_power_daily_solar_temperature_extremes	ok	16425	131400	15	1095	8760	0	0	0	1
-nasa_power_daily_solar_wind	ok	16425	131400	15	1095	8760	0	0	0	1
-nasa_power_daily_surface_state	ok	16425	131400	15	1095	8760	0	0	0	1
-nasa_power_daily_temp_precip_humidity	ok	16425	131400	15	1095	8760	0	0	0	1
-nasa_power_daily_temperature_extremes	ok	16425	131400	15	1095	8760	0	0	0	1
-nasa_power_daily_temperature_humidity	ok	16425	131400	15	1095	8760	0	0	0	1
-nasa_power_daily_wind	ok	16425	131400	15	1095	8760	0	0	0	1
-usgs_nwis_dissolved_oxygen_daily	ok	16558	132464	15	1343	10744	0	0	0	1
-usgs_nwis_ph_daily	ok	17277	138216	16	1287.5	10300	0	0	0	1
-binance_ticker_24hr	ok	21564	115008	6	3594	14376	0	0	0	1
-openflights_airports	ok	23094	153960	3	7698	61584	0	0	0	1
-statsbomb_world_cup_final	ok	26802	44670	9	2978	2978	0	0	0	1
-nasa_eonet_events	ok	26820	80460	4	6705	10057.5	0	0	0	1
-usgs_nwis_streamflow_daily	ok	34304	274432	32	1095	8760	0	0	0	1
-usgs_nwis_specific_conductance_daily	ok	34889	279112	29	1406	11248	0	0	0	1
-ourworldindata_energy_mix	ok	38274	108443	6	6379	19137	0	0	0	1
-homebrew_formulae	ok	42045	84090	5	8409	16818	0	0	0	1
-opensky_states	ok	44580	178320	5	8536	34144	0	0	0	1
-expression_atlas_experiments	ok	45620	104926	10	4562	9124	0	0	0	1
-universities_domains_list	ok	51245	71743	5	10249	10249	0	0	0	1
-rhea_reactions	ok	55029	128401	3	18343	36686	0	0	0	1
-ourworldindata_co2_latest	ok	58768	293840	2	29384	146920	0	0	0	1
-noaa_tides_water_level	ok	59520	171120	8	7440	7440	0	0	0	1
-usgs_nwis_water_temperature_daily	ok	60459	483672	50	1427.5	11420	0	0	0	1
-usgs_quakes_month	ok	68900	374024	7	9842	39376	0	0	0	1
-uci_wine_quality	ok	77964	623712	24	3248.5	25988	0	0	0	1
-metmuseum_object_ids_large	ok	80220	320880	1	80220	320880	0	0	0	1
-usgs_fdsn_events_large	ok	84792	268508	6	14132	28264	0	0	0	1
-open_meteo_hourly_apparent_temperature	ok	87600	350400	5	17520	70080	0	0	0	1
-open_meteo_hourly_cloud_cover	ok	87600	350400	5	17520	70080	0	0	0	1
-open_meteo_hourly_dew_point	ok	87600	350400	5	17520	70080	0	0	0	1
-open_meteo_hourly_diffuse_radiation	ok	87600	350400	5	17520	70080	0	0	0	1
-open_meteo_hourly_direct_radiation	ok	87600	350400	5	17520	70080	0	0	0	1
-open_meteo_hourly_precipitation	ok	87600	350400	5	17520	70080	0	0	0	1
-open_meteo_hourly_pressure_msl	ok	87600	350400	5	17520	70080	0	0	0	1
-open_meteo_hourly_relative_humidity	ok	87600	350400	5	17520	70080	0	0	0	1
-open_meteo_hourly_shortwave_radiation	ok	87600	350400	5	17520	70080	0	0	0	1
-open_meteo_hourly_surface_pressure	ok	87600	350400	5	17520	70080	0	0	0	1
-open_meteo_hourly_temperature	ok	87600	350400	5	17520	70080	0	0	0	1
-open_meteo_hourly_vapour_pressure_deficit	ok	87600	350400	5	17520	70080	0	0	0	1
-open_meteo_hourly_wind	ok	87600	350400	5	17520	70080	0	0	0	1
-cran_packages	ok	95504	191008	4	23876	47752	0	0	0	1
-kegg_hsa_genes	ok	97008	315276	4	24252	97008	0	0	0	1
-noaa_ghcn_daily_wesd_by_station	ok	102894	205788	28	3114.5	6229	0	0	0	1
-worldclim_tavg_10m	ok	103680	414720	6	17280	69120	0	0	0	1
-reactome_events_hierarchy	ok	104345	271297	5	20869	41738	0	0	0	1
-noaa_ghcn_daily_tavg_by_station	ok	121079	242158	59	2588	5176	0	0	0	1
-bike_sharing_uci	ok	139032	399717	8	17379	52137	0	0	0	1
-noaa_ghcn_daily_tsun_by_station	ok	159967	319934	43	1191	2382	0	0	0	1
-seismic_waveform_i32	ok	168000	672000	12	12000	48000	0	0	0	1
-movielens_latest_small	ok	201672	806688	2	100836	403344	0	0	0	1
-geonames_cities5000	ok	206700	1378000	3	68900	551200	0	0	0	1
-geonames_postal_fixed	ok	207450	954270	5	41490	165960	0	0	0	1
-nasa_techport_projects	ok	227414	413480	11	20674	20674	0	0	0	1
-uci_statlog_landsat_satellite_u8	ok	231660	231660	2	115830	115830	6435	6435	2	1
-ourairports_airports	ok	241771	1651444	3	85545	684360	0	0	0	1
-who_atlas_gisah	ok	252140	806848	5	50428	100856	0	0	0	1
-noaa_ghcn_daily_wsfg_by_station	ok	266486	532972	40	7179	14358	0	0	0	1
-nyc_311_descriptor_u16	ok	287186	574372	3	100000	200000	0	0	0	1
-uci_letter_recognition_u8	ok	320000	320000	1	320000	320000	20000	20000	1	1
-noaa_coops_water_temperature	ok	346842	2774736	2	173421	1387368	0	0	0	1
-who_gho_observations	ok	348104	1435929	8	43513	130539	0	0	0	1
-uci_optdigits_u8	ok	359680	359680	2	179840	179840	5620	5620	2	1
-ghcnd_stations	ok	397497	1589988	3	132499	529996	0	0	0	1
-hgnc_complete_set_json	ok	404973	1034931	9	44997	89994	0	0	0	1
-noaa_coops_air_temperature	ok	525155	4201240	3	175044	1400352	0	0	0	1
-noaa_coops_air_pressure	ok	525156	4201248	3	175047	1400376	0	0	0	1
-usgs_sitefile_all_large	ok	542424	3254544	6	90404	723232	0	0	0	1
-noaa_ghcn_daily_awnd_by_station	ok	545792	1091584	57	9970	19940	0	0	0	1
-appliances_energy_uci	ok	552580	4420640	28	19735	157880	0	0	0	1
-sec_submissions_largecap_bundle	ok	579882	1932940	294	1001	4000	0	0	0	1
-gharchive_hourly_events_20240101_00	ok	614476	4301332	4	153619	1228952	0	0	0	1
-earthquake_usgs	ok	630753	4880874	50	14515	115292	0	0	0	1
-gdelt_events_avgtone_daily	ok	731884	2927536	7	107010	428040	0	0	0	1
-gdelt_events_goldstein_daily	ok	731884	2927536	7	107010	428040	0	0	0	1
-gdelt_events_nummentions_daily	ok	731884	2927536	7	107010	428040	0	0	0	1
-gdelt_events_numsources_daily	ok	731884	2927536	7	107010	428040	0	0	0	1
-uci_skin_segmentation_bgr_u8	ok	735171	735171	1	735171	735171	245057	245057	1	1
-noaa_coops_water_level	ok	876000	7008000	5	175200	1401600	0	0	0	1
-eeg_physionet	ok	1178880	2357760	30	39200	78400	0	0	0	1
-macrostrat_units	ok	1422259	5689036	11	129304	517216	0	0	0	1
-noaa_ghcn_daily_snwd_by_station	ok	1754123	3508246	59	28251	56502	0	0	0	1
-gas_sensor_array_drift_uci	ok	1794390	14257750	129	13910	111280	0	0	0	1
-tokens_bert_gutenberg	ok	2011943	4023886	12	113744.5	227489	0	0	0	1
-noaa_ghcn_daily_snow_by_station	ok	2077730	4155460	59	36089	72178	0	0	0	1
-tokens_t5_gutenberg	ok	2258811	4517622	12	125381.5	250763	0	0	0	1
-noaa_ghcn_daily_tmin_by_station	ok	2343685	4687370	59	41993	83986	0	0	0	1
-noaa_ghcn_daily_tmax_by_station	ok	2350732	4701464	59	41953	83906	0	0	0	1
-noaa_ghcn_daily_prcp_by_station	ok	2374291	4748582	59	41780	83560	0	0	0	1
-ptbxl_physionet	ok	2400000	9600000	200	12000	48000	0	0	0	1
-openf1_belgium_2023_car_data_native	ok	2526120	3368160	120	21051	21051	0	0	0	1
-ncbi_assembly_refseq_summary	ok	2614503	12549768	5	522939	2091756	0	0	0	1
-sensorless_drive_diagnosis_uci	ok	2866941	22525965	49	58509	468072	0	0	0	1
-imdb_title_ratings	ok	3358804	13435216	2	1679402	6717608	0	0	0	1
-citibike_2024_01_station_ids_u16	ok	3776170	7552340	16	180600	361200	0	0	0	1
-ncbi_gene_human	ok	4794554	19178216	4	1198638.5	4794554	0	0	0	1
-beijing_air_quality_uci	ok	5753775	46030200	180	32141.5	257132	0	0	0	1
-unicode_bmp_gutenberg	ok	8700484	17400968	12	490769	981538	0	0	0	1
-fsdd_spoken_digits	ok	10498424	20996848	3000	3358.5	6717	0	0	0	1
-har_smartphone_uci	ok	11864448	94915584	18	659136	5273088	0	0	0	1
-skadi_srtm_hgt	ok	12967201	25934402	67	194454	388908	0	0	0	1
-noaa_isd_lite	ok	13179732	23064531	552	26013	51830	0	0	0	1
-household_power_uci	ok	14344960	71724800	7	2049280	16394240	0	0	0	1
-ncbi_taxdump	ok	18084993	57095412	5	2840433	11361732	0	0	0	1
-chbmit_physionet	ok	24883200	49766400	66	368960	737920	0	0	0	1
-covertype_uci	ok	28469588	34279708	49	581012	581012	0	0	0	1
-wikimedia_clickstream_enwiki	ok	35605767	142423068	1	35605767	142423068	0	0	0	1
-yearpredictionmsd_uci	ok	46896395	186554890	91	515345	2061380	0	0	0	1
-electricity_load_diagrams_uci	ok	51894720	207578880	370	140256	561024	0	0	0	1
-fashion_mnist_images_u8	ok	54880000	54880000	2	27440000	27440000	70000	70000	2	1
-noaa_ndbc_stdmet_historical	ok	56949977	455599816	273	224130	1793040	0	0	0	1
-mitbih_arrhythmia_physionet	ok	62400000	124800000	96	650000	1300000	0	0	0	1
-geonames_allcountries	ok	67174535	322437768	5	13434907	53739628	0	0	0	1
-susy_uci	ok	95000000	365000000	19	5000000	20000000	0	0	0	1
-geonames_alternatenames	ok	113882214	246744797	6	18980369	28470553.5	0	0	0	1
-medmnist_pathmnist_images_u8	ok	252087360	252087360	3	23529408	23529408	0	0	0	1
-emnist_byclass_images_u8	ok	638375920	638375920	2	319187960	319187960	814255	814255	2	1
+fred_real_gdp_quarterly	below_floor	40	160	10	4	16	0	0	0	1	none	aggregate_floor,median_sample_floor
+fred_capacity_utilization_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor
+fred_civilian_labor_force_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor
+fred_consumer_sentiment_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor
+fred_core_cpi_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor
+fred_cpi_all_items_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor
+fred_federal_funds_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor
+fred_housing_starts_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor
+fred_industrial_production_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor
+fred_labor_force_participation_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor
+fred_m2_money_stock_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor
+fred_payroll_employment_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor
+fred_pce_price_index_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor
+fred_ppi_all_commodities_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor
+fred_unemployment_level_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor
+fred_unemployment_rate_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor
+biorxiv_details	below_floor	150	390	5	30	60	0	0	0	1	none	aggregate_floor,median_sample_floor
+dryad_search	below_floor	160	600	8	20	80	0	0	0	1	none	aggregate_floor,median_sample_floor
+internet_archive_metadata	below_floor	200	1200	2	100	600	0	0	0	1	none	aggregate_floor,median_sample_floor
+sec_companyfacts_assets_quarterly	below_floor	227	1816	5	51	408	0	0	0	1	none	aggregate_floor,median_sample_floor
+sec_companyfacts_cash_and_equivalents_quarterly	below_floor	227	1816	5	51	408	0	0	0	1	none	aggregate_floor,median_sample_floor
+sec_companyfacts_net_income_quarterly	below_floor	227	1816	5	51	408	0	0	0	1	none	aggregate_floor,median_sample_floor
+sec_companyfacts_operating_income_quarterly	below_floor	227	1816	5	51	408	0	0	0	1	none	aggregate_floor,median_sample_floor
+sec_companyfacts_stockholders_equity_quarterly	below_floor	227	1816	5	51	408	0	0	0	1	none	aggregate_floor,median_sample_floor
+openbrewerydb_breweries	below_floor	246	1640	3	82	656	0	0	0	1	none	aggregate_floor,median_sample_floor
+gutendex_books	below_floor	256	576	8	32	64	0	0	0	1	none	aggregate_floor,median_sample_floor
+nasa_neows_feed	below_floor	270	1305	6	45	180	0	0	0	1	none	aggregate_floor,median_sample_floor
+library_of_congress_items	below_floor	276	1016	5	44	88	0	0	0	1	none	aggregate_floor,median_sample_floor
+anilist_media	below_floor	295	837	6	49	147	0	0	0	1	none	aggregate_floor,median_sample_floor
+weathergov_stations	below_floor	300	2000	3	100	800	0	0	0	1	none	aggregate_floor,median_sample_floor
+world_bank_access_to_electricity_percent_annual	below_floor	319	2552	10	34	272	0	0	0	1	none	aggregate_floor,median_sample_floor
+world_bank_renewable_energy_consumption_percent_annual	below_floor	320	2560	10	32	256	0	0	0	1	none	aggregate_floor,median_sample_floor
+owid_consumption_co2_annual	below_floor	340	1360	10	34	136	0	0	0	1	none	aggregate_floor,median_sample_floor
+owid_trade_co2_annual	below_floor	340	1360	10	34	136	0	0	0	1	none	aggregate_floor,median_sample_floor
+owid_trade_co2_share_annual	below_floor	340	1360	10	34	136	0	0	0	1	none	aggregate_floor,median_sample_floor
+world_bank_forest_area_percent_annual	below_floor	340	2720	10	34	272	0	0	0	1	none	aggregate_floor,median_sample_floor
+world_bank_internet_users_percent_annual	below_floor	344	2752	10	35	280	0	0	0	1	none	aggregate_floor,median_sample_floor
+world_bank_energy_use_per_capita_annual	below_floor	346	2768	10	35	280	0	0	0	1	none	aggregate_floor,median_sample_floor
+world_bank_unemployment_total_percent_annual	below_floor	350	2800	10	35	280	0	0	0	1	none	aggregate_floor,median_sample_floor
+esco_occupations	below_floor	355	639	5	71	142	0	0	0	1	none	aggregate_floor,median_sample_floor
+orcid_search	below_floor	390	780	4	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
+europe_pmc_search	below_floor	400	800	4	100	150	0	0	0	1	none	aggregate_floor,median_sample_floor
+wger_exercises	below_floor	400	800	4	100	150	0	0	0	1	none	aggregate_floor,median_sample_floor
+arxiv_cs_recent	below_floor	400	1200	4	100	300	0	0	0	1	none	aggregate_floor,median_sample_floor
+osf_preprints	below_floor	400	1300	4	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
+stackexchange_top_questions_jan_2024	below_floor	400	1400	4	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
+cratesio_crates	below_floor	400	2000	4	100	500	0	0	0	1	none	aggregate_floor,median_sample_floor
+hex_packages	below_floor	400	2600	4	100	800	0	0	0	1	none	aggregate_floor,median_sample_floor
+osm_overpass_cafes	below_floor	400	2600	4	100	800	0	0	0	1	none	aggregate_floor,median_sample_floor
+imf_gdp_growth_annual	below_floor	416	1664	8	52	208	0	0	0	1	none	aggregate_floor,median_sample_floor
+imf_gdp_per_capita_usd_annual	below_floor	416	1664	8	52	208	0	0	0	1	none	aggregate_floor,median_sample_floor
+imf_general_government_gross_debt_gdp_annual	below_floor	416	1664	8	52	208	0	0	0	1	none	aggregate_floor,median_sample_floor
+imf_inflation_annual	below_floor	416	1664	8	52	208	0	0	0	1	none	aggregate_floor,median_sample_floor
+imf_nominal_gdp_usd_annual	below_floor	416	1664	8	52	208	0	0	0	1	none	aggregate_floor,median_sample_floor
+imf_population_annual	below_floor	416	1664	8	52	208	0	0	0	1	none	aggregate_floor,median_sample_floor
+imf_unemployment_rate_annual	below_floor	416	1664	8	52	208	0	0	0	1	none	aggregate_floor,median_sample_floor
+musicbrainz_recordings	below_floor	476	1046	5	94	188	0	0	0	1	none	aggregate_floor,median_sample_floor
+musicbrainz_release_groups	below_floor	491	982	5	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
+openfoodfacts_products	below_floor	491	1870	5	98	392	0	0	0	1	none	aggregate_floor,median_sample_floor
+inaturalist_observations	below_floor	495	1188	5	99	198	0	0	0	1	none	aggregate_floor,median_sample_floor
+openfda_drug_event	below_floor	495	1683	5	99	198	0	0	0	1	none	aggregate_floor,median_sample_floor
+pokemontcg_cards	below_floor	498	1071	6	81	130.5	0	0	0	1	none	aggregate_floor,median_sample_floor
+gbif_occurrence	below_floor	498	2284	5	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
+treasury_avg_interest_rates	below_floor	500	1000	5	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
+crossref_funders	below_floor	500	1200	5	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
+medrxiv_details	below_floor	500	1300	5	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
+artic_artworks_search	below_floor	500	1400	5	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
+figshare_articles	below_floor	500	1400	5	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
+nvd_cves_recent	below_floor	500	1400	5	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
+nuget_search	below_floor	500	1500	5	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
+npm_search_packages	below_floor	500	2600	5	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
+fred_fed_balance_sheet_weekly	below_floor	521	2084	10	52	208	0	0	0	1	none	aggregate_floor,median_sample_floor
+fred_mortgage_30y_weekly	below_floor	521	2084	10	52	208	0	0	0	1	none	aggregate_floor,median_sample_floor
+fred_initial_claims_weekly	below_floor	522	2088	10	52	208	0	0	0	1	none	aggregate_floor,median_sample_floor
+owid_flaring_co2_annual	below_floor	564	2256	10	57.5	230	0	0	0	1	none	aggregate_floor,median_sample_floor
+owid_energy_per_gdp_annual	below_floor	565	2260	10	58	232	0	0	0	1	none	aggregate_floor,median_sample_floor
+world_bank_population_density_annual	below_floor	567	4536	9	63	504	0	0	0	1	none	aggregate_floor,median_sample_floor
+owid_energy_per_capita_annual	below_floor	584	2336	10	60	240	0	0	0	1	none	aggregate_floor,median_sample_floor
+owid_primary_energy_consumption_annual	below_floor	584	2336	10	60	240	0	0	0	1	none	aggregate_floor,median_sample_floor
+crossref_works_jan_2024	below_floor	588	3136	3	196	784	0	0	0	1	none	aggregate_floor,median_sample_floor
+gleif_lei_records	below_floor	600	1200	6	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
+ooni_measurements	below_floor	600	1500	6	100	250	0	0	0	1	none	aggregate_floor,median_sample_floor
+crossref_members	below_floor	600	1800	6	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
+datacite_dois	below_floor	600	2000	6	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
+deezer_chart	below_floor	600	2000	6	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
+openml_datasets	below_floor	600	2000	6	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
+openalex_works_2024_sample	below_floor	600	2000	3	200	800	0	0	0	1	none	aggregate_floor,median_sample_floor
+steamspy_top100in2weeks	below_floor	600	2200	6	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
+openml_dataset_61	below_floor	600	2400	4	150	600	0	0	0	1	none	aggregate_floor,median_sample_floor
+coingecko_top_markets	below_floor	600	4200	6	100	800	0	0	0	1	none	aggregate_floor,median_sample_floor
+world_bank_agricultural_land_percent_annual	below_floor	630	5040	10	63	504	0	0	0	1	none	aggregate_floor,median_sample_floor
+world_bank_birth_rate_annual	below_floor	650	5200	10	65	520	0	0	0	1	none	aggregate_floor,median_sample_floor
+world_bank_death_rate_annual	below_floor	650	5200	10	65	520	0	0	0	1	none	aggregate_floor,median_sample_floor
+world_bank_fertility_rate_annual	below_floor	650	5200	10	65	520	0	0	0	1	none	aggregate_floor,median_sample_floor
+world_bank_gdp_current_usd	below_floor	650	5200	10	65	520	0	0	0	1	none	aggregate_floor,median_sample_floor
+world_bank_gdp_per_capita_current_usd_annual	below_floor	650	5200	10	65	520	0	0	0	1	none	aggregate_floor,median_sample_floor
+world_bank_life_expectancy	below_floor	650	5200	10	65	520	0	0	0	1	none	aggregate_floor,median_sample_floor
+world_bank_population_total	below_floor	650	5200	10	65	520	0	0	0	1	none	aggregate_floor,median_sample_floor
+world_bank_urban_population_percent_annual	below_floor	650	5200	10	65	520	0	0	0	1	none	aggregate_floor,median_sample_floor
+itunes_search	below_floor	697	3390	7	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
+doaj_articles	below_floor	700	1300	7	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
+huggingface_datasets	below_floor	700	2200	7	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
+gitlab_projects	below_floor	700	2800	7	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
+marine_regions_gazetteer	below_floor	758	5264	8	93.5	736	0	0	0	1	none	aggregate_floor,median_sample_floor
+launchlibrary_upcoming	below_floor	800	1900	8	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
+scryfall_cards	below_floor	831	1848	5	164	164	0	0	0	1	none	aggregate_floor,median_sample_floor
+chembl_molecules	below_floor	973	2043	10	97	145.5	0	0	0	1	none	aggregate_floor,median_sample_floor
+eia_petroleum_prices	below_floor	988	3952	2	494	1976	0	0	0	1	none	aggregate_floor,median_sample_floor
+gleif_lei_records_api	below_floor	1000	1800	5	200	400	0	0	0	1	none	aggregate_floor,median_sample_floor
+arxiv_ai_recent	below_floor	1000	2500	10	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
+gwas_catalog_studies	below_floor	1000	2600	10	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
+pride_projects_search	below_floor	1000	3200	10	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
+uniprot_human_reviewed_lengths	below_floor	1000	4000	2	500	2000	0	0	0	1	none	aggregate_floor,median_sample_floor
+uniprot_reviewed_human	below_floor	1000	4000	2	500	2000	0	0	0	1	none	aggregate_floor,median_sample_floor
+worldbank_gdp_constant	below_floor	1140	2660	6	190	190	0	0	0	1	none	aggregate_floor,median_sample_floor
+geoboundaries_all_adm0	below_floor	1150	3680	5	230	920	0	0	0	1	none	aggregate_floor,median_sample_floor
+owid_cement_co2_annual	below_floor	1155	4620	10	97	388	0	0	0	1	none	aggregate_floor,median_sample_floor
+iris_seismon_events_fixed	below_floor	1170	5330	9	130	260	0	0	0	1	none	aggregate_floor,median_sample_floor
+worldbank_population_total	below_floor	1176	2744	6	196	196	0	0	0	1	none	aggregate_floor,median_sample_floor
+scryfall_default_cards	below_floor	1225	2450	7	175	175	0	0	0	1	none	aggregate_floor,median_sample_floor
+openalex_authors_large	below_floor	1400	3000	7	200	400	0	0	0	1	none	aggregate_floor,median_sample_floor
+owid_co2_per_gdp_annual	below_floor	1403	5612	10	140	560	0	0	0	1	none	aggregate_floor,median_sample_floor
+gbif_occurrence_large	below_floor	1499	5999	5	300	600	0	0	0	1	none	aggregate_floor,median_sample_floor
+plos_search	below_floor	1500	3500	3	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
+ena_portal_search	below_floor	1500	6000	3	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
+gbif_datasets	below_floor	1500	6000	3	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
+internetarchive_advancedsearch	below_floor	1500	7000	3	500	2000	0	0	0	1	none	aggregate_floor,median_sample_floor
+crossref_works_large_retry	below_floor	1500	8000	3	500	2000	0	0	0	1	none	aggregate_floor,median_sample_floor
+eurostat_retail_trade_volume_monthly	below_floor	1524	6096	5	288	1152	0	0	0	1	none	aggregate_floor,median_sample_floor
+coinpaprika_exchanges	below_floor	1530	5760	6	255	960	0	0	0	1	none	aggregate_floor,median_sample_floor
+owid_co2_including_luc_annual	below_floor	1545	6180	10	163	652	0	0	0	1	none	aggregate_floor,median_sample_floor
+owid_gas_co2_annual	below_floor	1546	6184	10	139.5	558	0	0	0	1	none	aggregate_floor,median_sample_floor
+openalex_institutions_large	below_floor	1600	4600	8	200	600	0	0	0	1	none	aggregate_floor,median_sample_floor
+owid_oil_co2_annual	below_floor	1607	6428	10	148.5	594	0	0	0	1	none	aggregate_floor,median_sample_floor
+owid_co2_annual	below_floor	1687	6748	10	163	652	0	0	0	1	none	aggregate_floor,median_sample_floor
+owid_co2_per_capita_annual	below_floor	1687	6748	10	163	652	0	0	0	1	none	aggregate_floor,median_sample_floor
+owid_coal_co2_annual	below_floor	1687	6748	10	163	652	0	0	0	1	none	aggregate_floor,median_sample_floor
+tvmaze_shows	below_floor	1715	4655	7	245	490	0	0	0	1	none	aggregate_floor,median_sample_floor
+owid_temperature_change_from_co2_annual	below_floor	1740	6960	10	174	696	0	0	0	1	none	aggregate_floor,median_sample_floor
+owid_land_use_change_co2_annual	below_floor	1750	7000	10	175	700	0	0	0	1	none	aggregate_floor,median_sample_floor
+owid_methane_annual	below_floor	1750	7000	10	175	700	0	0	0	1	none	aggregate_floor,median_sample_floor
+owid_nitrous_oxide_annual	below_floor	1750	7000	10	175	700	0	0	0	1	none	aggregate_floor,median_sample_floor
+owid_total_ghg_annual	below_floor	1750	7000	10	175	700	0	0	0	1	none	aggregate_floor,median_sample_floor
+openalex_sources_large	below_floor	1800	5400	9	200	800	0	0	0	1	none	aggregate_floor,median_sample_floor
+eurostat_hicp_all_items_monthly	below_floor	1800	7200	5	360	1440	0	0	0	1	none	aggregate_floor,median_sample_floor
+eurostat_hicp_food_monthly	below_floor	1800	7200	5	360	1440	0	0	0	1	none	aggregate_floor,median_sample_floor
+eurostat_industrial_production_monthly	below_floor	1884	7536	5	396	1584	0	0	0	1	none	aggregate_floor,median_sample_floor
+europepmc_grants	below_floor	1984	3968	4	496	992	0	0	0	1	none	aggregate_floor,median_sample_floor
+gdc_cases	below_floor	2000	3500	4	500	500	0	0	0	1	none	aggregate_floor,median_sample_floor
+chembl_documents	below_floor	2000	4000	4	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
+wikimedia_mostread	below_floor	2000	6000	2	1000	3000	0	0	0	1	none	aggregate_floor
+npi_registry_ca	below_floor	2000	7000	4	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
+nvd_cpe_match_feed	below_floor	2000	7000	4	500	2000	0	0	0	1	none	aggregate_floor,median_sample_floor
+dataone_solr_1000	below_floor	2000	10000	2	1000	5000	0	0	0	1	none	aggregate_floor
+npm_search_packages_large	below_floor	2000	10250	8	250	1500	0	0	0	1	none	aggregate_floor,median_sample_floor
+nih_reporter_projects	below_floor	2140	9416	5	428	856	0	0	0	1	none	aggregate_floor,median_sample_floor
+fred_sp500_daily	below_floor	2162	8648	9	251	1004	0	0	0	1	none	aggregate_floor,median_sample_floor
+geofabrik_index	below_floor	2220	17760	4	555	4440	0	0	0	1	none	aggregate_floor,median_sample_floor
+disease_sh_countries	below_floor	2310	14784	10	231	1848	0	0	0	1	none	aggregate_floor,median_sample_floor
+eurostat_female_unemployment_monthly	below_floor	2465	9860	5	520	2080	0	0	0	1	none	aggregate_floor,median_sample_floor
+eurostat_male_unemployment_monthly	below_floor	2465	9860	5	520	2080	0	0	0	1	none	aggregate_floor,median_sample_floor
+eurostat_unemployment_monthly	below_floor	2465	9860	5	520	2080	0	0	0	1	none	aggregate_floor,median_sample_floor
+openfda_device_event	below_floor	2500	5500	5	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
+openfda_food_enforcement	below_floor	2500	7500	5	500	2000	0	0	0	1	none	aggregate_floor,median_sample_floor
+fred_treasury_10y_daily	below_floor	2501	10004	10	250	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
+fred_treasury_2y_daily	below_floor	2501	10004	10	250	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
+fred_treasury_30y_daily	below_floor	2501	10004	10	250	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
+fred_wti_crude_daily	below_floor	2505	10020	10	250.5	1002	0	0	0	1	none	aggregate_floor,median_sample_floor
+wikimedia_pageviews_daily	below_floor	2562	10248	7	366	1464	0	0	0	1	none	aggregate_floor,median_sample_floor
+rubygems_versions_large	below_floor	2580	9288	5	516	2064	0	0	0	1	none	aggregate_floor,median_sample_floor
+chesscom_hikaru_2024_01	below_floor	3135	8360	3	1045	2090	0	0	0	1	none	aggregate_floor
+openlibrary_editions	below_floor	3479	6958	7	497	994	0	0	0	1	none	aggregate_floor,median_sample_floor
+eia_series_petroleum	below_floor	3500	5500	7	500	500	0	0	0	1	none	aggregate_floor,median_sample_floor
+loc_photos_search_large	below_floor	3500	8000	7	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
+smithsonian_search_large	below_floor	3500	10000	7	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
+europepmc_grants_large_retry	below_floor	4000	8000	4	1000	2000	0	0	0	1	none	aggregate_floor
+huggingface_models_large	below_floor	4000	13000	8	500	1500	0	0	0	1	none	aggregate_floor,median_sample_floor
+taginfo_tags_popular	below_floor	4000	19500	8	500	2500	0	0	0	1	none	aggregate_floor,median_sample_floor
+taginfo_keys_all	below_floor	4000	25500	8	500	4000	0	0	0	1	none	aggregate_floor,median_sample_floor
+mitre_attack_enterprise	below_floor	4290	5148	5	858	858	0	0	0	1	none	aggregate_floor,median_sample_floor
+usgs_daily_values_large	below_floor	4445	35560	7	572	4576	0	0	0	1	none	aggregate_floor,median_sample_floor
+inspirehep_literature	below_floor	4927	15854	5	1000	4000	0	0	0	1	none	aggregate_floor
+usgs_water_sites_rdb	below_floor	4992	36976	6	878	7024	0	0	0	1	none	aggregate_floor,median_sample_floor
+crossref_funders_large	below_floor	5000	10000	5	1000	2000	0	0	0	1	none	aggregate_floor
+dataone_solr	below_floor	5039	25078	6	1000	4000	0	0	0	1	none	aggregate_floor
+dataone_solr_large_retry	below_floor	5039	25078	6	1000	4000	0	0	0	1	none	aggregate_floor
+jhu_covid19_confirmed_global_daily	below_floor	5715	22860	5	1143	4572	0	0	0	1	none	aggregate_floor
+jhu_covid19_confirmed_us_daily	below_floor	5715	22860	5	1143	4572	0	0	0	1	none	aggregate_floor
+jhu_covid19_deaths_global_daily	below_floor	5715	22860	5	1143	4572	0	0	0	1	none	aggregate_floor
+jhu_covid19_deaths_us_daily	below_floor	5715	22860	5	1143	4572	0	0	0	1	none	aggregate_floor
+federalregister_documents_large	below_floor	6000	9000	6	1000	1500	0	0	0	1	none	aggregate_floor
+openml_runs_large	below_floor	6000	28000	6	1000	4000	0	0	0	1	none	aggregate_floor
+figshare_articles_large	below_floor	6000	34000	6	1000	6000	0	0	0	1	none	aggregate_floor
+jpl_cad_2024	below_floor	6552	52416	4	1638	13104	0	0	0	1	none	aggregate_floor
+nasa_donki_flr	below_floor	6768	16920	6	1128	2256	0	0	0	1	none	aggregate_floor
+openml_tasks_large	below_floor	7000	26000	7	1000	4000	0	0	0	1	none	aggregate_floor
+coinpaprika_tickers	below_floor	8000	52000	4	2000	16000	0	0	0	1	none	aggregate_floor
+cisa_kev_catalog	below_floor	8060	14508	5	1612	3224	0	0	0	1	none	aggregate_floor
+nasa_donki_cme	below_floor	9072	24192	6	1512	4536	0	0	0	1	none	aggregate_floor
+metacpan_releases_search_large	ok	10000	37000	10	1000	4000	0	0	0	1	none	none
+nomis_employment	ok	10815	26265	7	1545	3090	0	0	0	1	none	none
+met_biocollection_objects	ok	12281	49124	1	12281	49124	0	0	0	1	none	none
+usgs_nwis_gage_height_daily	ok	14567	116536	15	1080	8640	0	0	0	1	none	none
+geonames_admin1_codes	ok	15460	34785	4	3865	7730	0	0	0	1	none	none
+nasa_power_daily_climate	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
+nasa_power_daily_humidity	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
+nasa_power_daily_humidity_wind	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
+nasa_power_daily_longwave_flux	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
+nasa_power_daily_precip_solar	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
+nasa_power_daily_precip_temperature	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
+nasa_power_daily_solar_flux	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
+nasa_power_daily_solar_temperature_extremes	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
+nasa_power_daily_solar_wind	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
+nasa_power_daily_surface_state	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
+nasa_power_daily_temp_precip_humidity	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
+nasa_power_daily_temperature_extremes	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
+nasa_power_daily_temperature_humidity	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
+nasa_power_daily_wind	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
+usgs_nwis_dissolved_oxygen_daily	ok	16558	132464	15	1343	10744	0	0	0	1	none	none
+usgs_nwis_ph_daily	ok	17277	138216	16	1287.5	10300	0	0	0	1	none	none
+binance_ticker_24hr	ok	21564	115008	6	3594	14376	0	0	0	1	none	none
+openflights_airports	ok	23094	153960	3	7698	61584	0	0	0	1	none	none
+statsbomb_world_cup_final	ok	26802	44670	9	2978	2978	0	0	0	1	none	none
+nasa_eonet_events	ok	26820	80460	4	6705	10057.5	0	0	0	1	none	none
+usgs_nwis_streamflow_daily	ok	34304	274432	32	1095	8760	0	0	0	1	none	none
+usgs_nwis_specific_conductance_daily	ok	34889	279112	29	1406	11248	0	0	0	1	none	none
+ourworldindata_energy_mix	ok	38274	108443	6	6379	19137	0	0	0	1	none	none
+homebrew_formulae	ok	42045	84090	5	8409	16818	0	0	0	1	none	none
+opensky_states	ok	44580	178320	5	8536	34144	0	0	0	1	none	none
+expression_atlas_experiments	ok	45620	104926	10	4562	9124	0	0	0	1	none	none
+universities_domains_list	ok	51245	71743	5	10249	10249	0	0	0	1	none	none
+rhea_reactions	ok	55029	128401	3	18343	36686	0	0	0	1	none	none
+ourworldindata_co2_latest	ok	58768	293840	2	29384	146920	0	0	0	1	none	none
+noaa_tides_water_level	ok	59520	171120	8	7440	7440	0	0	0	1	none	none
+usgs_nwis_water_temperature_daily	ok	60459	483672	50	1427.5	11420	0	0	0	1	none	none
+usgs_quakes_month	ok	68900	374024	7	9842	39376	0	0	0	1	none	none
+uci_wine_quality	ok	77964	623712	24	3248.5	25988	0	0	0	1	none	none
+metmuseum_object_ids_large	ok	80220	320880	1	80220	320880	0	0	0	1	none	none
+usgs_fdsn_events_large	ok	84792	268508	6	14132	28264	0	0	0	1	none	none
+open_meteo_hourly_apparent_temperature	ok	87600	350400	5	17520	70080	0	0	0	1	none	none
+open_meteo_hourly_cloud_cover	ok	87600	350400	5	17520	70080	0	0	0	1	none	none
+open_meteo_hourly_dew_point	ok	87600	350400	5	17520	70080	0	0	0	1	none	none
+open_meteo_hourly_diffuse_radiation	ok	87600	350400	5	17520	70080	0	0	0	1	none	none
+open_meteo_hourly_direct_radiation	ok	87600	350400	5	17520	70080	0	0	0	1	none	none
+open_meteo_hourly_precipitation	ok	87600	350400	5	17520	70080	0	0	0	1	none	none
+open_meteo_hourly_pressure_msl	ok	87600	350400	5	17520	70080	0	0	0	1	none	none
+open_meteo_hourly_relative_humidity	ok	87600	350400	5	17520	70080	0	0	0	1	none	none
+open_meteo_hourly_shortwave_radiation	ok	87600	350400	5	17520	70080	0	0	0	1	none	none
+open_meteo_hourly_surface_pressure	ok	87600	350400	5	17520	70080	0	0	0	1	none	none
+open_meteo_hourly_temperature	ok	87600	350400	5	17520	70080	0	0	0	1	none	none
+open_meteo_hourly_vapour_pressure_deficit	ok	87600	350400	5	17520	70080	0	0	0	1	none	none
+open_meteo_hourly_wind	ok	87600	350400	5	17520	70080	0	0	0	1	none	none
+cran_packages	ok	95504	191008	4	23876	47752	0	0	0	1	none	none
+kegg_hsa_genes	ok	97008	315276	4	24252	97008	0	0	0	1	none	none
+noaa_ghcn_daily_wesd_by_station	ok	102894	205788	28	3114.5	6229	0	0	0	1	none	none
+worldclim_tavg_10m	ok	103680	414720	6	17280	69120	0	0	0	1	none	none
+reactome_events_hierarchy	ok	104345	271297	5	20869	41738	0	0	0	1	none	none
+noaa_ghcn_daily_tavg_by_station	ok	121079	242158	59	2588	5176	0	0	0	1	none	none
+bike_sharing_uci	ok	139032	399717	8	17379	52137	0	0	0	1	none	none
+noaa_ghcn_daily_tsun_by_station	ok	159967	319934	43	1191	2382	0	0	0	1	none	none
+seismic_waveform_i32	ok	168000	672000	12	12000	48000	0	0	0	1	none	none
+movielens_latest_small	ok	201672	806688	2	100836	403344	0	0	0	1	none	none
+geonames_cities5000	ok	206700	1378000	3	68900	551200	0	0	0	1	none	none
+geonames_postal_fixed	ok	207450	954270	5	41490	165960	0	0	0	1	none	none
+nasa_techport_projects	ok	227414	413480	11	20674	20674	0	0	0	1	none	none
+ourairports_airports	ok	241771	1651444	3	85545	684360	0	0	0	1	none	none
+who_atlas_gisah	ok	252140	806848	5	50428	100856	0	0	0	1	none	none
+noaa_ghcn_daily_wsfg_by_station	ok	266486	532972	40	7179	14358	0	0	0	1	none	none
+nyc_311_descriptor_u16	ok	287186	574372	3	100000	200000	0	0	0	1	none	none
+noaa_coops_water_temperature	ok	346842	2774736	2	173421	1387368	0	0	0	1	none	none
+who_gho_observations	ok	348104	1435929	8	43513	130539	0	0	0	1	none	none
+ghcnd_stations	ok	397497	1589988	3	132499	529996	0	0	0	1	none	none
+hgnc_complete_set_json	ok	404973	1034931	9	44997	89994	0	0	0	1	none	none
+noaa_coops_air_temperature	ok	525155	4201240	3	175044	1400352	0	0	0	1	none	none
+noaa_coops_air_pressure	ok	525156	4201248	3	175047	1400376	0	0	0	1	none	none
+usgs_sitefile_all_large	ok	542424	3254544	6	90404	723232	0	0	0	1	none	none
+noaa_ghcn_daily_awnd_by_station	ok	545792	1091584	57	9970	19940	0	0	0	1	none	none
+appliances_energy_uci	ok	552580	4420640	28	19735	157880	0	0	0	1	none	none
+sec_submissions_largecap_bundle	ok	579882	1932940	294	1001	4000	0	0	0	1	none	none
+gharchive_hourly_events_20240101_00	ok	614476	4301332	4	153619	1228952	0	0	0	1	none	none
+earthquake_usgs	ok	630753	4880874	50	14515	115292	0	0	0	1	none	none
+gdelt_events_avgtone_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	none
+gdelt_events_goldstein_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	none
+gdelt_events_nummentions_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	none
+gdelt_events_numsources_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	none
+noaa_coops_water_level	ok	876000	7008000	5	175200	1401600	0	0	0	1	none	none
+eeg_physionet	ok	1178880	2357760	30	39200	78400	0	0	0	1	none	none
+macrostrat_units	ok	1422259	5689036	11	129304	517216	0	0	0	1	none	none
+noaa_ghcn_daily_snwd_by_station	ok	1754123	3508246	59	28251	56502	0	0	0	1	none	none
+gas_sensor_array_drift_uci	ok	1794390	14257750	129	13910	111280	0	0	0	1	none	none
+tokens_bert_gutenberg	ok	2011943	4023886	12	113744.5	227489	0	0	0	1	none	none
+noaa_ghcn_daily_snow_by_station	ok	2077730	4155460	59	36089	72178	0	0	0	1	none	none
+tokens_t5_gutenberg	ok	2258811	4517622	12	125381.5	250763	0	0	0	1	none	none
+noaa_ghcn_daily_tmin_by_station	ok	2343685	4687370	59	41993	83986	0	0	0	1	none	none
+noaa_ghcn_daily_tmax_by_station	ok	2350732	4701464	59	41953	83906	0	0	0	1	none	none
+noaa_ghcn_daily_prcp_by_station	ok	2374291	4748582	59	41780	83560	0	0	0	1	none	none
+ptbxl_physionet	ok	2400000	9600000	200	12000	48000	0	0	0	1	none	none
+openf1_belgium_2023_car_data_native	ok	2526120	3368160	120	21051	21051	0	0	0	1	none	none
+ncbi_assembly_refseq_summary	ok	2614503	12549768	5	522939	2091756	0	0	0	1	none	none
+sensorless_drive_diagnosis_uci	ok	2866941	22525965	49	58509	468072	0	0	0	1	none	none
+imdb_title_ratings	ok	3358804	13435216	2	1679402	6717608	0	0	0	1	none	none
+citibike_2024_01_station_ids_u16	ok	3776170	7552340	16	180600	361200	0	0	0	1	none	none
+ncbi_gene_human	ok	4794554	19178216	4	1198638.5	4794554	0	0	0	1	none	none
+beijing_air_quality_uci	ok	5753775	46030200	180	32141.5	257132	0	0	0	1	none	none
+unicode_bmp_gutenberg	ok	8700484	17400968	12	490769	981538	0	0	0	1	none	none
+fsdd_spoken_digits	ok	10498424	20996848	3000	3358.5	6717	0	0	0	1	none	none
+har_smartphone_uci	ok	11864448	94915584	18	659136	5273088	0	0	0	1	none	none
+skadi_srtm_hgt	ok	12967201	25934402	67	194454	388908	0	0	0	1	none	none
+noaa_isd_lite	ok	13179732	23064531	552	26013	51830	0	0	0	1	none	none
+household_power_uci	ok	14344960	71724800	7	2049280	16394240	0	0	0	1	none	none
+ncbi_taxdump	ok	18084993	57095412	5	2840433	11361732	0	0	0	1	none	none
+chbmit_physionet	ok	24883200	49766400	66	368960	737920	0	0	0	1	none	none
+covertype_uci	ok	28469588	34279708	49	581012	581012	0	0	0	1	none	none
+wikimedia_clickstream_enwiki	ok	35605767	142423068	1	35605767	142423068	0	0	0	1	none	none
+yearpredictionmsd_uci	ok	46896395	186554890	91	515345	2061380	0	0	0	1	none	none
+electricity_load_diagrams_uci	ok	51894720	207578880	370	140256	561024	0	0	0	1	none	none
+noaa_ndbc_stdmet_historical	ok	56949977	455599816	273	224130	1793040	0	0	0	1	none	none
+mitbih_arrhythmia_physionet	ok	62400000	124800000	96	650000	1300000	0	0	0	1	none	none
+geonames_allcountries	ok	67174535	322437768	5	13434907	53739628	0	0	0	1	none	none
+susy_uci	ok	95000000	365000000	19	5000000	20000000	0	0	0	1	none	none
+geonames_alternatenames	ok	113882214	246744797	6	18980369	28470553.5	0	0	0	1	none	none
+medmnist_pathmnist_images_u8	ok	252087360	252087360	3	23529408	23529408	0	0	0	1	none	none

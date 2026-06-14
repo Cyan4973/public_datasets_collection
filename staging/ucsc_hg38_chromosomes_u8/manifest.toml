@@ -1,0 +1,72 @@
+manifest_version = 1
+dataset_id = "ucsc_hg38_chromosomes_u8"
+name = "UCSC hg38 Primary Chromosome FASTA Bytes"
+description = "Native FASTA sequence-letter bytes for the primary hg38 chromosomes from the UCSC Genome Browser download."
+homepage = "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/"
+
+[license]
+name = "UCSC Genome Browser data use terms"
+spdx = "LicenseRef-UCSC-Genome-Browser"
+url = "https://genome.ucsc.edu/license/"
+citation = "The UCSC Genome Browser database: update 2024."
+notes = "Reference genome sequence data are publicly distributed by UCSC; downstream users must respect UCSC and assembly-provider attribution requirements."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official UCSC Genome Browser download only."
+usage_notes = "Reference genome sequence bytes are appropriate as public biological sequence material."
+
+[[origins]]
+id = "ucsc"
+name = "UCSC Genome Browser hg38 bigZips"
+url = "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/"
+type = "data_portal"
+notes = "Official UCSC bulk download endpoint for hg38."
+
+[[resources]]
+id = "hg38_fasta"
+origin = "ucsc"
+url = "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz"
+type = "gzip_fasta"
+version = "hg38"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/ucsc_hg38_chromosomes_u8/hg38.fa.gz"
+notes = "Gzip-compressed FASTA for the hg38 assembly."
+
+[local_paths]
+downloads = "downloads/ucsc_hg38_chromosomes_u8/"
+extracted = "extracted/ucsc_hg38_chromosomes_u8/"
+filtered = "filtered/ucsc_hg38_chromosomes_u8/"
+index = "index/ucsc_hg38_chromosomes_u8/"
+samples = "samples/ucsc_hg38_chromosomes_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/ucsc_hg38_chromosomes_u8/samples.jsonl"
+summary = "Validate the local hg38 FASTA gzip, keep primary chromosomes chr1-chr22/chrX/chrY/chrM, strip FASTA headers and line wrapping, and emit one raw uint8 sample per chromosome."
+deterministic_notes = "Build is local-only, preserves source sequence-letter bytes and chromosome order, rejects unexpected sequence symbols, and does not concatenate chromosomes."
+
+[[series]]
+id = "hg38_primary_chromosome_bases"
+description = "Primary hg38 chromosome sequence-letter bytes."
+semantic_meaning = "ASCII FASTA base symbols for each primary human reference chromosome."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "FASTA stores sequence symbols as source bytes; the recipe removes only container headers and line wrapping."
+source_resources = ["hg38_fasta"]
+filtered_input_path = "filtered/ucsc_hg38_chromosomes_u8/ingest_stats.json"
+filtering = "Keep chr1 through chr22, chrX, chrY, and chrM; ignore alternate, random, and unlocalized contigs."
+missing_value_policy = "Reference ambiguity symbols are preserved; malformed gzip, missing primary chromosomes, empty records, or unexpected non-IUPAC symbols are fatal."
+conversion = "Strip FASTA headers/newlines and write source sequence-letter bytes unchanged as one raw .bin sample per chromosome."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 byte array"
+sample_count = 25
+total_size_bytes = 0
+output_path = "samples/ucsc_hg38_chromosomes_u8/hg38_primary_chromosome_bases/"

@@ -1,4 +1,4 @@
 dataset_id	status	series_id	split	natural_record_kind	natural_record_count	natural_record_values	sample_values	sample_path
-medmnist_pathmnist_images_u8	ok	pathmnist_images	train	image	89996	2352	211670592	samples/medmnist_pathmnist_images_u8/pathmnist_images/train_images_u8.bin
-medmnist_pathmnist_images_u8	ok	pathmnist_images	val	image	10004	2352	23529408	samples/medmnist_pathmnist_images_u8/pathmnist_images/val_images_u8.bin
-medmnist_pathmnist_images_u8	ok	pathmnist_images	test	image	7180	2352	16887360	samples/medmnist_pathmnist_images_u8/pathmnist_images/test_images_u8.bin
+medmnist_pathmnist_images_u8	ok	pathmnist_images	train	image	89996	2352	211670592	samples/medmnist_pathmnist_images_u8/pathmnist_images/train
+medmnist_pathmnist_images_u8	ok	pathmnist_images	val	image	10004	2352	23529408	samples/medmnist_pathmnist_images_u8/pathmnist_images/val
+medmnist_pathmnist_images_u8	ok	pathmnist_images	test	image	7180	2352	16887360	samples/medmnist_pathmnist_images_u8/pathmnist_images/test

@@ -55,8 +55,8 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/medmnist_pathmnist_images_u8/samples.jsonl"
-summary = "Validate the local NPZ archive, stream-copy the train/val/test uint8 image arrays from NPY members, and write a samples.jsonl index."
-deterministic_notes = "Build is local-only, preserves upstream split order and NPY row-major layout, validates NPY dtype/shape/header, and rejects malformed or degenerate image payloads."
+summary = "Validate the local NPZ archive, emit one raw uint8 sample file per 28x28x3 image from the train/val/test NPY members, and write a samples.jsonl index."
+deterministic_notes = "Build is local-only, preserves upstream split order and NPY row-major layout, validates NPY dtype/shape/header, emits natural image records as physical samples, and rejects malformed or degenerate image payloads."
 
 [[series]]
 id = "pathmnist_images"
@@ -69,11 +69,11 @@ source_resources = ["pathmnist_npz"]
 filtered_input_path = "filtered/medmnist_pathmnist_images_u8/ingest_stats.json"
 filtering = "Keep train_images.npy, val_images.npy, and test_images.npy from the official NPZ archive."
 missing_value_policy = "NPY payload has no missing marker; malformed headers, wrong dtype, wrong shape, truncation, or extra bytes are fatal."
-conversion = "Strip ZIP/NPY containers and copy uint8 image bytes unchanged into raw .bin samples."
+conversion = "Strip ZIP/NPY containers and copy each 28x28x3 uint8 image unchanged into its own raw .bin sample."
 numeric_kind = "uint"
 bit_width = 8
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
-sample_count = 0
-total_size_bytes = 0
+sample_count = 107180
+total_size_bytes = 252087360
 output_path = "samples/medmnist_pathmnist_images_u8/pathmnist_images/"

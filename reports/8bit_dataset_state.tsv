@@ -1,2 +1,2 @@
 dataset_id	status	reasons	series_id	role	numeric_kind	bit_width	samples	values_total	bytes_total	min_values	median_values	max_values	min_bytes	median_bytes	max_bytes	missing_files	first_sample_path
-medmnist_pathmnist_images_u8	ok		pathmnist_images	primary	uint	8	3	252087360	252087360	16887360	23529408	211670592	16887360	23529408	211670592	0	samples/medmnist_pathmnist_images_u8/pathmnist_images/train_images_u8.bin
+medmnist_pathmnist_images_u8	ok		pathmnist_images	primary	uint	8	107180	252087360	252087360	2352	2352	2352	2352	2352	2352	0	samples/medmnist_pathmnist_images_u8/pathmnist_images/train/000000.bin

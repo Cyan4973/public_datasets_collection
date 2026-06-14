@@ -23,14 +23,11 @@ python3 - <<'PY'
 from __future__ import annotations
 
 import ast
-import hashlib
 import json
 import os
 import shutil
 import struct
 import zipfile
-from functools import reduce
-from operator import mul
 from pathlib import Path
 
 DATASET_ID = "medmnist_pathmnist_images_u8"
@@ -44,13 +41,6 @@ archive = download_dir / "pathmnist.npz"
 
 def rel(path: Path) -> str:
     return path.relative_to(data_root).as_posix()
-
-def sha256_file(path: Path) -> str:
-    h = hashlib.sha256()
-    with path.open("rb") as fh:
-        for chunk in iter(lambda: fh.read(1 << 20), b""):
-            h.update(chunk)
-    return h.hexdigest()
 
 def reset_dir(path: Path) -> None:
     if path.exists():
@@ -69,30 +59,60 @@ def read_npy_header(fh) -> dict:
         raise RuntimeError(f"unsupported NPY version {version}")
     return ast.literal_eval(fh.read(header_len).decode("latin1"))
 
-def copy_npy_u8(zf: zipfile.ZipFile, member: str, out: Path, expected_shape: tuple[int, ...]) -> dict:
-    expected_values = reduce(mul, expected_shape, 1)
-    remaining = expected_values
+def copy_npy_u8_records(zf: zipfile.ZipFile, member: str, out_dir: Path, expected_shape: tuple[int, ...]) -> tuple[dict, list[dict]]:
+    image_count, rows, cols, channels = expected_shape
+    record_values = rows * cols * channels
+    expected_values = image_count * record_values
     distinct = set()
     min_value = 255
     max_value = 0
-    with zf.open(member) as fh, out.open("wb") as dst:
+    sample_rows = []
+    out_dir.mkdir(parents=True, exist_ok=True)
+    with zf.open(member) as fh:
         header = read_npy_header(fh)
         if header.get("descr") != "|u1" or header.get("fortran_order") is not False or tuple(header.get("shape", ())) != expected_shape:
             raise RuntimeError(f"{member}: unexpected NPY header {header}")
-        while remaining:
-            chunk = fh.read(min(1 << 20, remaining))
-            if not chunk:
-                raise RuntimeError(f"{member}: truncated image payload")
-            dst.write(chunk)
-            distinct.update(chunk)
-            min_value = min(min_value, min(chunk))
-            max_value = max(max_value, max(chunk))
-            remaining -= len(chunk)
+        for image_index in range(image_count):
+            payload = fh.read(record_values)
+            if len(payload) != record_values:
+                raise RuntimeError(f"{member}: truncated image payload at image {image_index}")
+            distinct.update(payload)
+            min_value = min(min_value, min(payload))
+            max_value = max(max_value, max(payload))
+            out = out_dir / f"{image_index:06d}.bin"
+            out.write_bytes(payload)
+            sample_rows.append(
+                {
+                    "dataset_id": DATASET_ID,
+                    "series_id": "pathmnist_images",
+                    "sample_path": rel(out),
+                    "numeric_kind": "uint",
+                    "bit_width": 8,
+                    "endianness": "little",
+                    "element_size_bytes": 1,
+                    "sample_size_bytes": record_values,
+                    "value_count": record_values,
+                }
+            )
         if fh.read(1):
             raise RuntimeError(f"{member}: extra bytes after image payload")
     if len(distinct) < 2:
         raise RuntimeError(f"{member}: degenerate constant image payload")
-    return {"member": member, "file": rel(out), "shape": list(expected_shape), "values": expected_values, "bytes": expected_values, "min": min_value, "max": max_value, "distinct_values": len(distinct), "sha256": sha256_file(out)}
+    return (
+        {
+            "member": member,
+            "sample_dir": rel(out_dir),
+            "shape": list(expected_shape),
+            "images": image_count,
+            "record_values": record_values,
+            "values": expected_values,
+            "bytes": expected_values,
+            "min": min_value,
+            "max": max_value,
+            "distinct_values": len(distinct),
+        },
+        sample_rows,
+    )
 
 images_dir = samples_dir / "pathmnist_images"
 reset_dir(images_dir)
@@ -108,10 +128,10 @@ stats = {"dataset_id": DATASET_ID, "splits": []}
 rows = []
 with zipfile.ZipFile(archive) as zf:
     for split, member, shape in splits:
-        out = images_dir / f"{split}_images_u8.bin"
-        split_stats = copy_npy_u8(zf, member, out, shape)
+        out_dir = images_dir / split
+        split_stats, split_rows = copy_npy_u8_records(zf, member, out_dir, shape)
         stats["splits"].append({"split": split, "images": split_stats})
-        rows.append({"dataset_id": DATASET_ID, "series_id": "pathmnist_images", "sample_path": rel(out), "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1, "sample_size_bytes": out.stat().st_size, "value_count": out.stat().st_size})
+        rows.extend(split_rows)
 
 (filter_dir / "ingest_stats.json").write_text(json.dumps(stats, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 with (index_dir / "samples.jsonl").open("w", encoding="utf-8") as fh:

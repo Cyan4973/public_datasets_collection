@@ -41,7 +41,7 @@ def image_record_from_stats(dataset_id: str, stats: dict) -> list[dict]:
             {
                 "dataset_id": dataset_id,
                 "series_id": infer_primary_series_id(dataset_id),
-                "sample_path": image.get("file", ""),
+                "sample_path": image.get("file") or image.get("sample_dir", ""),
                 "split": split.get("split", ""),
                 "natural_record_kind": "image",
                 "natural_record_count": record_count,

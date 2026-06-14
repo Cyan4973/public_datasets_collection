@@ -47,6 +47,8 @@ def inspect(path: Path) -> tuple[int, int]:
 rows = [json.loads(line) for line in index_path.read_text(encoding="utf-8").splitlines() if line.strip()]
 primary_counts = []
 primary_bytes = 0
+expected_samples = 107180
+expected_sample_size = 28 * 28 * 3
 for row in rows:
     if row["dataset_id"] != DATASET_ID or row["numeric_kind"] != "uint" or row["bit_width"] != 8:
         raise SystemExit(f"unexpected row: {row}")
@@ -59,6 +61,8 @@ for row in rows:
     if distinct < 2:
         raise SystemExit(f"degenerate constant sample: {path}")
     if row["series_id"] in PRIMARY_SERIES:
+        if row["value_count"] != expected_sample_size:
+            raise SystemExit(f"unexpected image sample size: {row}")
         primary_counts.append(row["value_count"])
         primary_bytes += row["sample_size_bytes"]
 
@@ -70,7 +74,9 @@ if sum(primary_counts) < 10000:
     raise SystemExit("primary payload below 10,000-value floor")
 if statistics.median(primary_counts) < 1000:
     raise SystemExit("primary median sample size below floor")
+if len(primary_counts) != expected_samples:
+    raise SystemExit(f"unexpected primary sample count: {len(primary_counts)} expected {expected_samples}")
 
-print(f"verified_rows={len(rows)} primary_values={sum(primary_counts)} primary_bytes={primary_bytes}")
+print(f"verified_rows={len(rows)} primary_samples={len(primary_counts)} primary_values={sum(primary_counts)} primary_bytes={primary_bytes}")
 PY
 echo "[$(date -Is)] verify done dataset=$DATASET_ID"

@@ -6,12 +6,12 @@ Acceptance floor used by this report: at least `10000` primary values, at least 
 
 - status: `ok`
 - reasons: `none`
-- primary_samples: 3
+- primary_samples: 107180
 - primary_values: 252087360
 - primary_bytes: 252087360
-- primary_value_count_range: 16887360 / 23529408 / 211670592 min/median/max
-- primary_size_range_bytes: 16887360 / 23529408 / 211670592 min/median/max
+- primary_value_count_range: 2352 / 2352 / 2352 min/median/max
+- primary_size_range_bytes: 2352 / 2352 / 2352 min/median/max
 
 | series_id | role | kind | width | samples | values | bytes | value range min/median/max | byte range min/median/max | missing files |
 |---|---|---|---:|---:|---:|---:|---:|---:|---:|
-| `pathmnist_images` | primary | uint | 8 | 3 | 252087360 | 252087360 | 16887360 / 23529408 / 211670592 | 16887360 / 23529408 / 211670592 | 0 |
+| `pathmnist_images` | primary | uint | 8 | 107180 | 252087360 | 252087360 | 2352 / 2352 / 2352 | 2352 / 2352 / 2352 | 0 |

@@ -69,7 +69,6 @@ artic_artworks_search	below_floor	500	1400	5	100	200	0	0	0	1		aggregate_floor,me
 figshare_articles	below_floor	500	1400	5	100	200	0	0	0	1		aggregate_floor,median_sample_floor
 nvd_cves_recent	below_floor	500	1400	5	100	200	0	0	0	1		aggregate_floor,median_sample_floor
 nuget_search	below_floor	500	1500	5	100	200	0	0	0	1		aggregate_floor,median_sample_floor
-europeana_search	below_floor	500	2300	5	100	400	0	0	0	1		aggregate_floor,median_sample_floor
 npm_search_packages	below_floor	500	2600	5	100	400	0	0	0	1		aggregate_floor,median_sample_floor
 fred_fed_balance_sheet_weekly	below_floor	521	2084	10	52	208	0	0	0	1		aggregate_floor,median_sample_floor
 fred_mortgage_30y_weekly	below_floor	521	2084	10	52	208	0	0	0	1		aggregate_floor,median_sample_floor
@@ -234,9 +233,9 @@ universities_domains_list	ok	51245	71743	5	10249	10249	0	0	0	1
 ourworldindata_co2_latest	ok	58768	293840	2	29384	146920	0	0	0	1		
 noaa_tides_water_level	ok	59520	171120	8	7440	7440	0	0	0	1		
 usgs_nwis_water_temperature_daily	ok	60459	483672	50	1427.5	11420	0	0	0	1		
+usgs_quakes_month	ok	68900	374024	7	9842	39376	0	0	0	1		
 rhea_reactions	ok	73372	146744	4	18343	27514.5	0	0	0	1		
 uci_wine_quality	ok	77964	623712	24	3248.5	25988	0	0	0	1		
-usgs_quakes_month	ok	78744	383868	8	9843	39372	0	0	0	1		
 metmuseum_object_ids_large	ok	80220	320880	1	80220	320880	0	0	0	1		
 usgs_fdsn_events_large	ok	84792	268508	6	14132	28264	0	0	0	1		
 open_meteo_hourly_apparent_temperature	ok	87600	350400	5	17520	70080	0	0	0	1		

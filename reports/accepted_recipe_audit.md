@@ -5,7 +5,7 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 Auxiliary series do not count toward acceptance.
 
 - `ok`: 122
-- `below_floor`: 200
+- `below_floor`: 199
 - `broken`: 0
 
 ## Below Floor
@@ -82,7 +82,6 @@ Auxiliary series do not count toward acceptance.
 | `figshare_articles` | 500 | 1400 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `nvd_cves_recent` | 500 | 1400 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `nuget_search` | 500 | 1500 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `europeana_search` | 500 | 2300 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `npm_search_packages` | 500 | 2600 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_fed_balance_sheet_weekly` | 521 | 2084 | 10 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_mortgage_30y_weekly` | 521 | 2084 | 10 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |

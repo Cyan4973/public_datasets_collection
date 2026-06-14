@@ -3,7 +3,7 @@
 - constant or empty series are rejected
 - binary series with minority fraction below `0.001` are rejected unless explicitly justified
 
-- flagged series: 195
+- flagged series: 193
 
 | dataset_id | series_id | status | detail | value_count |
 |---|---|---|---|---:|
@@ -38,7 +38,6 @@
 | `esco_occupations` | `esco_broader_group_count` | constant | `constant_value=1` | 71 |
 | `esco_occupations` | `esco_preferred_label_count` | constant | `constant_value=28` | 71 |
 | `esco_occupations` | `esco_scheme_count` | constant | `constant_value=2` | 71 |
-| `europeana_search` | `europeana_index` | constant | `constant_value=0` | 100 |
 | `expression_atlas_experiments` | `atlas_project_count_u16` | constant | `constant_value=0` | 4562 |
 | `federalregister_documents_large` | `fedreg_publication_month` | constant | `constant_value=12` | 1000 |
 | `federalregister_documents_large` | `fedreg_publication_year` | constant | `constant_value=2024` | 1000 |
@@ -190,7 +189,6 @@
 | `steamspy_top100in2weeks` | `steamspy_average_forever` | constant | `constant_value=0` | 100 |
 | `steamspy_top100in2weeks` | `steamspy_userscore` | constant | `constant_value=0` | 100 |
 | `treasury_avg_interest_rates` | `treasury_record_fiscal_year` | constant | `constant_value=2026` | 100 |
-| `usgs_quakes_month` | `usgs_quake_tsunami` | constant | `constant_value=0` | 9844 |
 | `usgs_sitefile_all_large` | `usgs_state_cd_u16` | constant | `constant_value=6` | 90404 |
 | `world_bank_access_to_electricity_percent_annual` | `access_to_electricity_percent_f64` | constant | `constant_value=100.0` | 34 |
 | `world_bank_access_to_electricity_percent_annual` | `access_to_electricity_percent_f64` | constant | `constant_value=100.0` | 34 |

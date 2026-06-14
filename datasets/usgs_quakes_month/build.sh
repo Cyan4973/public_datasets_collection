@@ -24,7 +24,6 @@ meta = {
     'usgs_quake_mag': ('float', 32, 'f'),
     'usgs_quake_time_ms': ('uint', 64, 'Q'),
     'usgs_quake_sig': ('uint', 16, 'H'),
-    'usgs_quake_tsunami': ('uint', 8, 'B'),
     'usgs_quake_gap': ('float', 32, 'f'),
     'usgs_quake_lon': ('float', 64, 'd'),
     'usgs_quake_lat': ('float', 64, 'd'),
@@ -41,7 +40,6 @@ for row in obj:
         vals['usgs_quake_mag'].append(float(p['mag']))
         vals['usgs_quake_time_ms'].append(int(p['time']))
         vals['usgs_quake_sig'].append(int(p['sig']))
-        vals['usgs_quake_tsunami'].append(int(p['tsunami']))
         vals['usgs_quake_gap'].append(float(p['gap']))
         vals['usgs_quake_lon'].append(float(coords[0]))
         vals['usgs_quake_lat'].append(float(coords[1]))

@@ -4,7 +4,7 @@ Current acceptance floor: `10,000` primary values or `100 KB` primary sample byt
 
 - source of truth: `reports/accepted_recipe_audit.tsv`
 - `ok`: `122`
-- `below_floor`: `200`
+- `below_floor`: `199`
 - `broken`: `0`
 
 This file is the short operational queue. Detailed policy for family cleanup lives in
@@ -78,10 +78,9 @@ thin recipe shape rather than a source-family problem.
 - `figshare_articles` — values=500, bytes=1400, sample_rows=5
 - `nvd_cves_recent` — values=500, bytes=1400, sample_rows=5
 - `nuget_search` — values=500, bytes=1500, sample_rows=5
-- `europeana_search` — values=500, bytes=2300, sample_rows=5
 
 Count guide:
-- tiny non-family standalones with `<= 500` values: `35`
+- tiny non-family standalones with `<= 500` values: `34`
 - non-family below-floor recipes with `501-3999` values: `62`
 - non-family below-floor recipes with `>= 4000` values: `20`
 
@@ -120,5 +119,6 @@ Representative examples:
 - `gharchive_hourly_events_20240101_00`: dropped constant `gharchive_public`
 - `hgnc_complete_set_json`: dropped constant `hgnc_status_length_u8`
 - `universities_domains_list`: dropped constant `universities_alpha_two_code_length`
+- `usgs_quakes_month`: dropped constant `usgs_quake_tsunami`
 - `who_atlas_gisah`: dropped constant `who_gisah_spatial_dim_length_u8` and `who_gisah_data_source_length_u8`
 - `who_gho_observations`: dropped constant `who_gho_dim2_length_u8`

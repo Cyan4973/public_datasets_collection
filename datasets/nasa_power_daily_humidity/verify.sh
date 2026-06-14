@@ -27,9 +27,6 @@ stats_path = filtered_root / "location_parameter_year_stats.tsv"; index_path = i
 locations = ["san_francisco","phoenix","chicago","miami","anchorage"]; parameter_ids = ["RH2M","T2MDEW","ALLSKY_SFC_SW_DWN"]
 series_defs = [
  {"series_id":"power_value_f64","numeric_kind":"float","bit_width":64,"endianness":"little","element_size_bytes":8},
- {"series_id":"obs_year_u16","numeric_kind":"uint","bit_width":16,"endianness":"little","element_size_bytes":2},
- {"series_id":"obs_month_u8","numeric_kind":"uint","bit_width":8,"endianness":"little","element_size_bytes":1},
- {"series_id":"obs_day_u8","numeric_kind":"uint","bit_width":8,"endianness":"little","element_size_bytes":1},
 ]
 if failures_path.is_file() and failures_path.stat().st_size > 0: raise SystemExit(f"download failures recorded in {failures_path}")
 if not stats_path.is_file(): raise SystemExit(f"missing stats file: {stats_path}")

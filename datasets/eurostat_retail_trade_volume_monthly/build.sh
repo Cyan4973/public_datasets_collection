@@ -42,7 +42,6 @@ dataset_id = os.environ["DATASET_ID"]
 countries = ["DE", "FR", "IT", "ES", "NL"]
 series_defs = [
     {"series_id": "retail_trade_volume_index_f32", "array_type": "f", "numeric_kind": "float", "bit_width": 32, "endianness": "little", "element_size_bytes": 4},
-    {"series_id": "obs_year_u16", "array_type": "H", "numeric_kind": "uint", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
 ]
 
 def parse_time_key(raw: str) -> tuple[int, int]:
@@ -133,7 +132,6 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
         writer.writerow([country_code, row_count, len(values), skipped_blank, skipped_parse, start_period, end_period])
         payloads = {
             "retail_trade_volume_index_f32": values,
-            "obs_year_u16": years,
         }
         for series in series_defs:
             payload_array = array.array(series["array_type"], payloads[series["series_id"]])

@@ -43,7 +43,6 @@ indicator_id = "NGDPD"
 countries = ["USA", "CHN", "IND", "BRA", "DEU", "JPN", "MEX", "ZAF"]
 series_defs = [
     {"series_id": "nominal_gdp_usd_f32", "array_type": "f", "numeric_kind": "float", "bit_width": 32, "endianness": "little", "element_size_bytes": 4},
-    {"series_id": "obs_year_u16", "array_type": "H", "numeric_kind": "uint", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
 ]
 
 def year_map(node):
@@ -121,7 +120,7 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
         start_year = str(years[0]) if years else ""
         end_year = str(years[-1]) if years else ""
         writer.writerow([country_code, row_count, len(kept), skipped_null, skipped_parse, start_year, end_year])
-        payloads = {"nominal_gdp_usd_f32": values, "obs_year_u16": years}
+        payloads = {"nominal_gdp_usd_f32": values}
         for series in series_defs:
             payload_array = array.array(series["array_type"], payloads[series["series_id"]])
             if payload_array.itemsize > 1 and os.sys.byteorder != "little":

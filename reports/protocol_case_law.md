@@ -6,9 +6,8 @@ Use this file for examples, cleanup precedent, and recurring failure modes.
 
 ## Count Only Primary Payload
 
-- Calendar helpers such as `obs_year_u16`, `obs_month_u8`, `obs_day_u8`, and `obs_hour_u8` are auxiliary.
-- Alignment metadata, masks, bookkeeping arrays, and similar helper series may be stored when justified.
-- They must not help a recipe pass acceptance floors.
+- Calendar helpers such as `obs_year_u16`, `obs_month_u8`, `obs_day_u8`, and `obs_hour_u8` are not meaningful payload and should not be emitted as dataset series.
+- Alignment metadata, masks, bookkeeping arrays, and similar helper material must not help a recipe pass acceptance floors.
 
 ## Thin Scope Failures
 

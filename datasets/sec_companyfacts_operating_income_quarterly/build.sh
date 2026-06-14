@@ -50,7 +50,6 @@ companies = [
 ]
 series_defs = [
     {"series_id": "operating_income_i64", "array_type": "q", "numeric_kind": "int", "bit_width": 64, "endianness": "little", "element_size_bytes": 8},
-    {"series_id": "obs_year_u16", "array_type": "H", "numeric_kind": "uint", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
 ]
 
 def parse_int_value(raw: object) -> int:
@@ -123,7 +122,6 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
         writer.writerow([company_id, cik, row_count, len(ordered), skipped_null, skipped_parse, start_period, end_period])
         payloads = {
             "operating_income_i64": values,
-            "obs_year_u16": years,
         }
         for series in series_defs:
             payload = array.array(series["array_type"], payloads[series["series_id"]])

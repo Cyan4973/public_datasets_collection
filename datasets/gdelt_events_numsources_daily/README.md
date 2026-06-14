@@ -4,9 +4,6 @@ This recipe downloads a fixed seven-day subset of GDELT daily event exports and 
 
 Generated series:
 - `numsources_u32`
-- `obs_year_u16`
-- `obs_month_u8`
-- `obs_day_u8`
 
 Usage:
 

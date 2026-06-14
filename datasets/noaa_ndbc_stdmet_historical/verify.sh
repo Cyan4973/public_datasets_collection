@@ -73,10 +73,6 @@ station_ids = [
 element_ids = ["WDIR", "WSPD", "GST", "WVHT", "PRES", "ATMP", "WTMP"]
 series_defs = [
     {"series_id": "ndbc_value_f64", "numeric_kind": "float", "bit_width": 64, "endianness": "little", "element_size_bytes": 8},
-    {"series_id": "obs_year_u16", "numeric_kind": "uint", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
-    {"series_id": "obs_month_u8", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
-    {"series_id": "obs_day_u8", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
-    {"series_id": "obs_hour_u8", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
 ]
 
 if failures_path.is_file() and failures_path.stat().st_size > 0:
@@ -136,7 +132,10 @@ for station_id in station_ids:
                 if first in {"YR", "YYYY", "YY"}:
                     continue
 
-                header_map = {name: idx for idx, name in enumerate(header_tokens)}
+                header_map = {}
+                for idx, name in enumerate(header_tokens):
+                    if name not in header_map:
+                        header_map[name] = idx
                 year_col = "YYYY" if "YYYY" in header_map else "YY" if "YY" in header_map else None
                 if year_col is None:
                     raise SystemExit(f"missing year column in {path}")
@@ -146,7 +145,7 @@ for station_id in station_ids:
 
                 try:
                     obs_year = int(tokens[header_map[year_col]])
-                    if year_col == "YY":
+                    if year_col == "YY" and obs_year < 100:
                         obs_year += 1900 if obs_year >= 70 else 2000
                     obs_month = int(tokens[header_map["MM"]])
                     obs_day = int(tokens[header_map["DD"]])

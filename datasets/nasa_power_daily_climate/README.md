@@ -19,9 +19,6 @@ Selected scope:
 
 Series emitted by `build.sh`:
 - `power_value_f64` (`float64`, little-endian)
-- `obs_year_u16` (`uint16`, little-endian)
-- `obs_month_u8` (`uint8`)
-- `obs_day_u8` (`uint8`)
 
 Notes:
 - Source data comes from the NASA POWER daily point JSON API.

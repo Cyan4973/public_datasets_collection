@@ -42,7 +42,6 @@ indicator_id = "AG.LND.FRST.ZS"
 countries = ["USA", "CHN", "IND", "BRA", "DEU", "JPN", "NGA", "MEX", "FRA", "ZAF"]
 series_defs = [
     {"series_id": "forest_area_percent_f64", "numeric_kind": "float", "bit_width": 64, "endianness": "little", "element_size_bytes": 8},
-    {"series_id": "obs_year_u16", "numeric_kind": "uint", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
 ]
 stats_path = filtered_root / "country_stats.tsv"
 index_path = index_root / "samples.jsonl"

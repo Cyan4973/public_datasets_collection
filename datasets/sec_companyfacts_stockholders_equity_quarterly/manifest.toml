@@ -68,19 +68,3 @@ sample_count = 0
 total_size_bytes = 0
 output_path = "samples/sec_companyfacts_stockholders_equity_quarterly/stockholders_equity_i64/"
 
-[[series]]
-id = "obs_year_u16"
-description = "Observation year values aligned to quarterly StockholdersEquity facts."
-semantic_meaning = "Unsigned 16-bit fiscal years aligned to retained SEC quarterly StockholdersEquity values."
-source_resources = ["sec_companyfacts_stockholders_equity_quarterly_company_subset"]
-filtered_input_path = "filtered/sec_companyfacts_stockholders_equity_quarterly/company_stats.tsv"
-filtering = "Keep facts accepted for stockholders_equity_i64."
-missing_value_policy = "Filter facts rejected by the stockholders_equity_i64 missing-value policy."
-conversion = "Write little-endian uint16 arrays aligned 1:1 with retained StockholdersEquity values."
-numeric_kind = "uint"
-bit_width = 16
-endianness = "little"
-sample_format = "raw homogeneous numeric array"
-sample_count = 0
-total_size_bytes = 0
-output_path = "samples/sec_companyfacts_stockholders_equity_quarterly/obs_year_u16/"

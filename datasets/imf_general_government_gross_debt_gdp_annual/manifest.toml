@@ -68,19 +68,3 @@ sample_count = 0
 total_size_bytes = 0
 output_path = "samples/imf_general_government_gross_debt_gdp_annual/general_government_gross_debt_gdp_f32/"
 
-[[series]]
-id = "obs_year_u16"
-description = "Observation years aligned to annual general government gross debt GDP values."
-semantic_meaning = "Unsigned 16-bit years aligned 1:1 with retained IMF GGXWDG_NGDP values."
-source_resources = ["imf_general_government_gross_debt_gdp_annual_country_subset"]
-filtered_input_path = "filtered/imf_general_government_gross_debt_gdp_annual/country_stats.tsv"
-filtering = "Keep rows accepted for general_government_gross_debt_gdp_f32."
-missing_value_policy = "Filter rows rejected by the general_government_gross_debt_gdp_f32 missing-value policy."
-conversion = "Write little-endian uint16 arrays aligned 1:1 with retained IMF values."
-numeric_kind = "uint"
-bit_width = 16
-endianness = "little"
-sample_format = "raw homogeneous numeric array"
-sample_count = 0
-total_size_bytes = 0
-output_path = "samples/imf_general_government_gross_debt_gdp_annual/obs_year_u16/"

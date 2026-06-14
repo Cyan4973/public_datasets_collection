@@ -11,7 +11,6 @@ Selected states:
 
 Series emitted:
 - `death_counts_u32`
-- `obs_year_u16`
 
 Run:
 

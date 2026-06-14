@@ -11,7 +11,6 @@ Selected countries:
 
 Generated series:
 - `industrial_production_index_f32`
-- `obs_year_u16`
 
 Missing-value policy:
 - filter missing values from sparse Eurostat `value` payloads

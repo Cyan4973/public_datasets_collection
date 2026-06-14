@@ -16,7 +16,6 @@ Selected scope:
 
 Series emitted by `build.sh`:
 - `usgs_dissolved_oxygen_f64` (`float64`, little-endian)
-- `obs_year_u16` (`uint16`, little-endian)
 
 Current local build contents:
 - `15` sites with usable dissolved-oxygen samples

@@ -19,7 +19,6 @@ Selected scope:
 
 Series emitted by `build.sh`:
 - `population_density_f64` (`float64`, little-endian)
-- `obs_year_u16` (`uint16`, little-endian)
 
 Notes:
 - Source data comes from the World Bank indicator API.

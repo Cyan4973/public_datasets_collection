@@ -25,7 +25,6 @@ download_root = Path(os.environ["DOWNLOAD_ROOT"]); filtered_root = Path(os.envir
 dataset_id = "usgs_nwis_ph_daily"
 series_defs = [
  {"series_id":"usgs_ph_f64","array_type":"d","numeric_kind":"float","bit_width":64,"endianness":"little","element_size_bytes":8},
- {"series_id":"obs_year_u16","array_type":"H","numeric_kind":"uint","bit_width":16,"endianness":"little","element_size_bytes":2},
 ]
 for series in series_defs:
  series_dir = samples_root / series["series_id"]
@@ -87,7 +86,7 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
    writer.writerow([site_id, year, row_count, value_count, skipped_count, first_date, last_date, selected_series.get("name", "")])
   if not value_series: print(f"site {site_id}: no usable values, skipping sample output", flush=True); continue
   site_slug = f"site_{site_id}"
-  payloads = {"usgs_ph_f64": value_series, "obs_year_u16": year_values}
+  payloads = {"usgs_ph_f64": value_series}
   for series in series_defs:
    arr = array.array(series["array_type"], payloads[series["series_id"]])
    if arr.itemsize > 1 and os.sys.byteorder != "little": arr.byteswap()

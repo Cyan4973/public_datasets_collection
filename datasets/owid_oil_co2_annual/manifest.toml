@@ -68,19 +68,3 @@ sample_count = 0
 total_size_bytes = 0
 output_path = "samples/owid_oil_co2_annual/owid_value_f32/"
 
-[[series]]
-id = "obs_year_u16"
-description = "Observation year values aligned to OWID Oil CO2 values."
-semantic_meaning = "Unsigned 16-bit years aligned 1:1 with retained OWID Oil_CO2 values."
-source_resources = ["owid_co2_csv"]
-filtered_input_path = "filtered/owid_oil_co2_annual/country_stats.tsv"
-filtering = "Keep rows accepted for owid_value_f32."
-missing_value_policy = "Filter rows rejected by the owid_value_f32 missing-value policy."
-conversion = "Write little-endian uint16 year arrays aligned 1:1 with retained OWID Oil_CO2 values."
-numeric_kind = "uint"
-bit_width = 16
-endianness = "little"
-sample_format = "raw homogeneous numeric array"
-sample_count = 0
-total_size_bytes = 0
-output_path = "samples/owid_oil_co2_annual/obs_year_u16/"

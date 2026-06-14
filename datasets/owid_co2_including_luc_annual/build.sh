@@ -43,7 +43,6 @@ target_column = "co2_including_luc"
 countries = ["USA", "CHN", "IND", "BRA", "DEU", "JPN", "NGA", "MEX", "FRA", "ZAF"]
 series_defs = [
     {"series_id": "owid_value_f32", "array_type": "f", "numeric_kind": "float", "bit_width": 32, "endianness": "little", "element_size_bytes": 4},
-    {"series_id": "obs_year_u16", "array_type": "H", "numeric_kind": "uint", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
 ]
 for series in series_defs:
     series_dir = samples_root / series["series_id"]
@@ -107,7 +106,7 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
                 start_year = str(year)
             end_year = str(year)
         writer.writerow([country_code, row_count, len(values), skipped_blank, skipped_parse, start_year, end_year])
-        payloads = {"owid_value_f32": values, "obs_year_u16": years}
+        payloads = {"owid_value_f32": values}
         country_name = country_names.get(country_code, country_code)
         for series in series_defs:
             payload = array.array(series["array_type"], payloads[series["series_id"]])

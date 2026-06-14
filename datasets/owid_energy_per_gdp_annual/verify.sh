@@ -43,7 +43,6 @@ target_column = "energy_per_gdp"
 countries = ["USA", "CHN", "IND", "BRA", "DEU", "JPN", "NGA", "MEX", "FRA", "ZAF"]
 series_defs = [
     {"series_id": "owid_value_f32", "numeric_kind": "float", "bit_width": 32, "endianness": "little", "element_size_bytes": 4},
-    {"series_id": "obs_year_u16", "numeric_kind": "uint", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
 ]
 stats_path = filtered_root / "country_stats.tsv"
 index_path = index_root / "samples.jsonl"

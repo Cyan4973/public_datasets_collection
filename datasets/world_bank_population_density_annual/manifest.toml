@@ -68,19 +68,3 @@ sample_count = 9
 total_size_bytes = 0
 output_path = "samples/world_bank_population_density_annual/population_density_f64/"
 
-[[series]]
-id = "obs_year_u16"
-description = "Observation year values aligned to annual indicator values."
-semantic_meaning = "Unsigned 16-bit years derived from retained World Bank rows, one sample per country."
-source_resources = ["world_bank_population_density_annual_country_subset"]
-filtered_input_path = "filtered/world_bank_population_density_annual/country_stats.tsv"
-filtering = "Keep rows accepted for population_density_f64."
-missing_value_policy = "Filter rows rejected by the population_density_f64 missing-value policy."
-conversion = "Parse retained year strings as integers, sort by ascending year, and write little-endian uint16 arrays aligned 1:1 with retained values."
-numeric_kind = "uint"
-bit_width = 16
-endianness = "little"
-sample_format = "raw homogeneous numeric array"
-sample_count = 9
-total_size_bytes = 0
-output_path = "samples/world_bank_population_density_annual/obs_year_u16/"

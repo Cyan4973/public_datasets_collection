@@ -67,18 +67,3 @@ sample_count = 15
 total_size_bytes = 0
 output_path = "samples/usgs_nwis_gage_height_daily/usgs_gage_height_ft_f64/"
 
-[[series]]
-id = "obs_year_u16"
-description = "Observation year values aligned to gage height."
-semantic_meaning = "Unsigned 16-bit observation years derived from retained USGS gage-height row dates, one sample per site."
-source_resources = ["usgs_gage_height_2021_2023"]
-filtered_input_path = "filtered/usgs_nwis_gage_height_daily/site_year_stats.tsv"
-filtering = "Keep rows with parseable gage-height values and parseable observation dates."
-conversion = "Parse the observation date year component as integer and write little-endian uint16 arrays aligned 1:1 with retained gage-height values."
-numeric_kind = "uint"
-bit_width = 16
-endianness = "little"
-sample_format = "raw homogeneous numeric array"
-sample_count = 15
-total_size_bytes = 0
-output_path = "samples/usgs_nwis_gage_height_daily/obs_year_u16/"

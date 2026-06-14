@@ -16,7 +16,6 @@ Selected countries:
 
 Series emitted:
 - `primary_energy_consumption_f32`
-- `obs_year_u16`
 
 Run:
 

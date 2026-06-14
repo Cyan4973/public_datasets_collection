@@ -43,7 +43,6 @@ indicator_id = "LP"
 countries = ["USA", "CHN", "IND", "BRA", "DEU", "JPN", "MEX", "ZAF"]
 series_defs = [
     {"series_id": "population_f32", "numeric_kind": "float", "bit_width": 32, "endianness": "little", "element_size_bytes": 4},
-    {"series_id": "obs_year_u16", "numeric_kind": "uint", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
 ]
 
 def year_map(node):

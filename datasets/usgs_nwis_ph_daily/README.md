@@ -16,7 +16,6 @@ Selected scope:
 
 Series emitted by `build.sh`:
 - `usgs_ph_f64` (`float64`, little-endian)
-- `obs_year_u16` (`uint16`, little-endian)
 
 Current local build contents:
 - `16` sites with usable pH samples

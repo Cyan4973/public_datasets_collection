@@ -68,19 +68,3 @@ sample_count = 0
 total_size_bytes = 0
 output_path = "samples/jhu_covid19_confirmed_us_daily/confirmed_cases_u32/"
 
-[[series]]
-id = "obs_year_u16"
-description = "Observation year values aligned to confirmed counts."
-semantic_meaning = "Unsigned 16-bit years derived from retained source date columns."
-source_resources = ["jhu_covid19_confirmed_us_csv"]
-filtered_input_path = "filtered/jhu_covid19_confirmed_us_daily/state_stats.tsv"
-filtering = "Keep dates accepted for confirmed_cases_u32."
-missing_value_policy = "Filter dates rejected by the confirmed_cases_u32 missing-value policy."
-conversion = "Parse retained dates and write little-endian uint16 arrays aligned 1:1 with confirmed_cases_u32."
-numeric_kind = "uint"
-bit_width = 16
-endianness = "little"
-sample_format = "raw homogeneous numeric array"
-sample_count = 0
-total_size_bytes = 0
-output_path = "samples/jhu_covid19_confirmed_us_daily/obs_year_u16/"

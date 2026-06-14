@@ -11,7 +11,6 @@ Selected countries:
 
 Generated series:
 - `unemployment_rate_f32`
-- `obs_year_u16`
 
 Missing-value policy:
 - filter missing values from sparse Eurostat `value` payloads

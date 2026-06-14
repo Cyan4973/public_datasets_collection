@@ -19,19 +19,9 @@ MIN_MEDIAN_SAMPLE_VALUES = 1000
 
 SERIES_ROLE_PRIMARY = "primary"
 SERIES_ROLE_AUXILIARY = "auxiliary"
-KNOWN_AUXILIARY_PREFIXES = (
-    "obs_year_",
-    "obs_month_",
-    "obs_day_",
-    "obs_hour_",
-    "obs_minute_",
-    "obs_second_",
-)
 
 
 def infer_series_role(series_id: str) -> str:
-    if any(series_id.startswith(prefix) for prefix in KNOWN_AUXILIARY_PREFIXES):
-        return SERIES_ROLE_AUXILIARY
     return SERIES_ROLE_PRIMARY
 
 
@@ -175,7 +165,7 @@ def main() -> int:
         fh.write(
             f"Acceptance floor: at least `{MIN_VALUES}` primary values total or at least `{MIN_SAMPLE_BYTES}` primary sample bytes, plus median primary sample size at least `{MIN_MEDIAN_SAMPLE_VALUES}` values.\n\n"
         )
-        fh.write("Auxiliary series do not count toward acceptance. When a manifest omits `role`, this audit currently infers `auxiliary` only for narrow calendar-helper names such as `obs_year_*`, `obs_month_*`, `obs_day_*`, and `obs_hour_*`.\n\n")
+        fh.write("Auxiliary series do not count toward acceptance.\n\n")
         fh.write(f"- `ok`: {len(ok)}\n")
         fh.write(f"- `below_floor`: {len(below)}\n")
         fh.write(f"- `broken`: {len(broken)}\n\n")

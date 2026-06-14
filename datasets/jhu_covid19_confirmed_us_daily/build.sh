@@ -49,7 +49,6 @@ entities = [
 ]
 series_defs = [
     {"series_id": "confirmed_cases_u32", "array_type": "I", "numeric_kind": "uint", "bit_width": 32, "endianness": "little", "element_size_bytes": 4},
-    {"series_id": "obs_year_u16", "array_type": "H", "numeric_kind": "uint", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
 ]
 for series in series_defs:
     series_dir = samples_root / series["series_id"]
@@ -130,7 +129,6 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
         writer.writerow([entity_id, len(date_columns), len(values), skipped_blank, skipped_parse, start_date, end_date])
         payloads = {
             "confirmed_cases_u32": values,
-            "obs_year_u16": years,
         }
         for series in series_defs:
             payload = array.array(series["array_type"], payloads[series["series_id"]])

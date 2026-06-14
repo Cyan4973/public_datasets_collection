@@ -42,7 +42,6 @@ indicator_id = "EG.ELC.ACCS.ZS"
 countries = ["USA", "CHN", "IND", "BRA", "DEU", "JPN", "NGA", "MEX", "FRA", "ZAF"]
 series_defs = [
     {"series_id": "access_to_electricity_percent_f64", "array_type": "d", "numeric_kind": "float", "bit_width": 64, "endianness": "little", "element_size_bytes": 8},
-    {"series_id": "obs_year_u16", "array_type": "H", "numeric_kind": "uint", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
 ]
 for series in series_defs:
     series_dir = samples_root / series["series_id"]
@@ -98,7 +97,7 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
             if start_year == "":
                 start_year = str(year)
             end_year = str(year)
-        payloads = {"access_to_electricity_percent_f64": values, "obs_year_u16": years}
+        payloads = {"access_to_electricity_percent_f64": values}
         for series in series_defs:
             payload = array.array(series["array_type"], payloads[series["series_id"]])
             if payload.itemsize > 1 and os.sys.byteorder != "little":

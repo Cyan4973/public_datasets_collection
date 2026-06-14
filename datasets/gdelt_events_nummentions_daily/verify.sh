@@ -44,9 +44,6 @@ days = ["20240101", "20240102", "20240103", "20240104", "20240105", "20240106", 
 value_index = 31
 series_defs = [
     {"series_id": "nummentions_u32", "numeric_kind": "uint", "bit_width": 32, "endianness": "little", "element_size_bytes": 4},
-    {"series_id": "obs_year_u16", "numeric_kind": "uint", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
-    {"series_id": "obs_month_u8", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
-    {"series_id": "obs_day_u8", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
 ]
 
 stats_path = filtered_root / "day_stats.tsv"

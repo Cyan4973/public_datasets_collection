@@ -16,7 +16,6 @@ Selected countries:
 
 Series emitted:
 - `owid_value_f32`
-- `obs_year_u16`
 
 Run:
 

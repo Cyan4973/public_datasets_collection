@@ -24,7 +24,6 @@ download_dir=Path(os.environ["DOWNLOAD_DIR"]); filter_dir=Path(os.environ["FILTE
 payload=json.load(open(download_dir/"usgs_daily_values_large.json",encoding="utf-8"))
 series_defs={
   "usgs_value_f64":("float",64,"d"),
-  "obs_year_u16":("uint",16,"H"),
 }
 for sid in series_defs:
     d=samples_dir/sid
@@ -60,10 +59,7 @@ for ts in payload["value"]["timeSeries"]:
         continue
     slug=re.sub(r"[^a-z0-9]+","_", ts.get("name","timeseries").lower()).strip("_")
     stats.append({"sample_slug":slug,"rows_total":len(rows),"rows_kept":len(values),"rows_skipped":skipped})
-    payloads={
-      "usgs_value_f64":values,
-      "obs_year_u16":years,
-    }
+    payloads={"usgs_value_f64":values}
     for sid,(kind,bits,code) in series_defs.items():
         out=samples_dir/sid/f"{slug}.bin"
         with out.open("wb") as fh:

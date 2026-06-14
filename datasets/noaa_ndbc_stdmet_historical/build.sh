@@ -72,10 +72,6 @@ station_ids = [
 element_ids = ["WDIR", "WSPD", "GST", "WVHT", "PRES", "ATMP", "WTMP"]
 series_defs = [
     {"series_id": "ndbc_value_f64", "array_type": "d", "numeric_kind": "float", "bit_width": 64, "endianness": "little", "element_size_bytes": 8},
-    {"series_id": "obs_year_u16", "array_type": "H", "numeric_kind": "uint", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
-    {"series_id": "obs_month_u8", "array_type": "B", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
-    {"series_id": "obs_day_u8", "array_type": "B", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
-    {"series_id": "obs_hour_u8", "array_type": "B", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
 ]
 
 for series in series_defs:
@@ -235,10 +231,6 @@ for key in sorted(group_values):
     sample_slug = f"{station_id}_{element_id}"
     payloads = {
         "ndbc_value_f64": group_values[key],
-        "obs_year_u16": group_years[key],
-        "obs_month_u8": group_months[key],
-        "obs_day_u8": group_days[key],
-        "obs_hour_u8": group_hours[key],
     }
 
     for series in series_defs:

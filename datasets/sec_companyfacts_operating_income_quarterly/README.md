@@ -11,7 +11,6 @@ Selected companies:
 
 Generated series:
 - `operating_income_i64`
-- `obs_year_u16`
 
 Missing-value policy:
 - filter facts missing `fy`, `fp`, or `val`

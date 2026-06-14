@@ -56,7 +56,6 @@ dataset_id = "usgs_nwis_gage_height_daily"
 
 series_defs = [
     {"series_id": "usgs_gage_height_ft_f64", "array_type": "d", "numeric_kind": "float", "bit_width": 64, "endianness": "little", "element_size_bytes": 8},
-    {"series_id": "obs_year_u16", "array_type": "H", "numeric_kind": "uint", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
 ]
 
 for series in series_defs:
@@ -167,7 +166,6 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
         site_slug = f"site_{site_id}"
         payloads = {
             "usgs_gage_height_ft_f64": value_series,
-            "obs_year_u16": year_values,
         }
 
         for series in series_defs:

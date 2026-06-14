@@ -67,18 +67,3 @@ sample_count = 32
 total_size_bytes = 0
 output_path = "samples/usgs_nwis_streamflow_daily/usgs_discharge_cfs_f64/"
 
-[[series]]
-id = "obs_year_u16"
-description = "Observation year values aligned to discharge."
-semantic_meaning = "Unsigned 16-bit observation years derived from retained USGS mean daily discharge row dates, one sample per site."
-source_resources = ["usgs_streamflow_2021_2023"]
-filtered_input_path = "filtered/usgs_nwis_streamflow_daily/site_year_stats.tsv"
-filtering = "Keep rows with parseable discharge values and parseable observation dates."
-conversion = "Parse the observation date year component as integer and write little-endian uint16 arrays aligned 1:1 with retained discharge values."
-numeric_kind = "uint"
-bit_width = 16
-endianness = "little"
-sample_format = "raw homogeneous numeric array"
-sample_count = 32
-total_size_bytes = 0
-output_path = "samples/usgs_nwis_streamflow_daily/obs_year_u16/"

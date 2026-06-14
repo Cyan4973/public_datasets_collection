@@ -16,7 +16,6 @@ Selected scope:
 
 Series emitted by `build.sh`:
 - `usgs_specific_conductance_f64` (`float64`, little-endian)
-- `obs_year_u16` (`uint16`, little-endian)
 
 Current local build contents:
 - `29` sites with usable specific-conductance samples

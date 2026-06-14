@@ -43,10 +43,6 @@ parameter_id = "apparent_temperature"
 locations = ["san_francisco", "phoenix", "chicago", "miami", "anchorage"]
 series_defs = [
     {"series_id": "open_meteo_value_f32", "numeric_kind": "float", "bit_width": 32, "endianness": "little", "element_size_bytes": 4},
-    {"series_id": "obs_year_u16", "numeric_kind": "uint", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
-    {"series_id": "obs_month_u8", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
-    {"series_id": "obs_day_u8", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
-    {"series_id": "obs_hour_u8", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
 ]
 stats_path = filtered_root / "location_year_stats.tsv"
 index_path = index_root / "samples.jsonl"

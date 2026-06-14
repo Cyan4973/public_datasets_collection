@@ -14,7 +14,6 @@ Selected countries:
 
 Generated series:
 - `gdp_growth_f32`
-- `obs_year_u16`
 
 Missing-value policy:
 - filter rows missing numeric annual values

@@ -19,13 +19,16 @@ This repository stores reproducible recipes, not dataset payloads. Accepted reci
 5. Aggregate-only salvage is not acceptable.
    A recipe must reach the floor through materially sized primary samples, not by multiplying trivial ones. Current floor: at least `10,000` primary values total or at least `100 KB` primary sample bytes, plus median primary sample size at least `1,000` values.
 
-6. Sample boundaries must respect the natural record boundary.
+6. Dataset size must stay operationally bounded.
+   Accepted primary output must not exceed `1,000,000,000` bytes total. When the full upstream source is too large, the recipe must define a coherent bounded subset that can be downloaded, built, and validated directly without first fetching the oversized full source.
+
+7. Sample boundaries must respect the natural record boundary.
    A recipe must not concatenate many smaller natural records into large physical sample files to pass the median-sample floor. If the actual primary natural records are below the median floor, the recipe is below floor even when split-level, table-level, or archive-level concatenations are large.
 
-7. Claimed scope must match realized output.
+8. Claimed scope must match realized output.
    If a recipe claims `50` sites, `20` years, or some other coverage, the accepted output must actually realize that scope or be explicitly narrowed before acceptance.
 
-8. Accepted recipes must be public, permissively licensed, safe, and locally reproducible.
+9. Accepted recipes must be public, permissively licensed, safe, and locally reproducible.
    The user must have run the current `download.sh`, and the current `build.sh` and `verify.sh` must succeed against local files.
 
 ## Minimal Mechanics

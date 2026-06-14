@@ -29,6 +29,7 @@ from pathlib import Path
 
 DATASET_ID = "geofabrik_liechtenstein_osm_pbf_u8"
 SERIES_ID = "osm_pbf_primitive_blocks"
+MAX_PRIMARY_BYTES = 1_000_000_000
 repo_root = Path(os.environ["REPO_ROOT"])
 data_root = repo_root / os.environ["DATA_DIR"]
 index_path = Path(os.environ["INDEX_DIR"]) / "samples.jsonl"
@@ -50,6 +51,8 @@ if len(set(sizes)) < 2:
     raise SystemExit("all primitive-block samples have identical size")
 if sum(sizes) < 10000 or sum(sizes) < 100 * 1024:
     raise SystemExit("primary payload below aggregate floor")
+if sum(sizes) > MAX_PRIMARY_BYTES:
+    raise SystemExit(f"primary payload exceeds 1 GB cap: {sum(sizes)}")
 if statistics.median(sizes) < 1000:
     raise SystemExit("primary median sample size below floor")
 print(f"verified_rows={len(rows)} primary_samples={len(rows)} primary_values={sum(sizes)} primary_bytes={sum(sizes)} size_range={min(sizes)}/{int(statistics.median(sizes))}/{max(sizes)}")

@@ -29,6 +29,7 @@ from pathlib import Path
 
 DATASET_ID = "ncbi_refseq_viral_genomes_u8"
 SERIES_ID = "refseq_viral_genome_bases"
+MAX_PRIMARY_BYTES = 1_000_000_000
 ALLOWED = set(b"ACGTRYSWKMBDHVNacgtryswkmbdhvn")
 repo_root = Path(os.environ["REPO_ROOT"])
 data_root = repo_root / os.environ["DATA_DIR"]
@@ -54,6 +55,8 @@ if len(set(sizes)) < 2:
     raise SystemExit("all viral sequence samples have identical size")
 if sum(sizes) < 10000 or sum(sizes) < 100 * 1024:
     raise SystemExit("primary payload below aggregate floor")
+if sum(sizes) > MAX_PRIMARY_BYTES:
+    raise SystemExit(f"primary payload exceeds 1 GB cap: {sum(sizes)}")
 if statistics.median(sizes) < 1000:
     raise SystemExit(f"primary median sample size below floor: {statistics.median(sizes)}")
 print(f"verified_rows={len(rows)} primary_samples={len(rows)} primary_values={sum(sizes)} primary_bytes={sum(sizes)} size_range={min(sizes)}/{int(statistics.median(sizes))}/{max(sizes)}")

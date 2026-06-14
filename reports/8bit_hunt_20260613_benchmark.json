@@ -1,0 +1,38 @@
+[
+  {
+    "dataset_id": "ncbi_refseq_viral_genomes_u8",
+    "missing_files": 0,
+    "primary_bytes": 577707132,
+    "primary_samples": 19433,
+    "primary_values": 577707132,
+    "reasons": [],
+    "same_size_fraction": 0.0007718828796377296,
+    "size_max": 2473870,
+    "size_median": 6864,
+    "size_min": 136,
+    "size_p10": 1707.0,
+    "size_p25": 2750,
+    "size_p75": 39989,
+    "size_p90": 73739.39999999995,
+    "status": "ok",
+    "unique_sample_sizes": 13067
+  },
+  {
+    "dataset_id": "geofabrik_liechtenstein_osm_pbf_u8",
+    "missing_files": 0,
+    "primary_bytes": 7809486,
+    "primary_samples": 52,
+    "primary_values": 7809486,
+    "reasons": [],
+    "same_size_fraction": 0.019230769230769232,
+    "size_max": 688184,
+    "size_median": 102373.5,
+    "size_min": 39195,
+    "size_p10": 87686.9,
+    "size_p25": 94500.5,
+    "size_p75": 113444.75,
+    "size_p90": 400241.9999999996,
+    "status": "ok",
+    "unique_sample_sizes": 52
+  }
+]

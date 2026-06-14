@@ -5,7 +5,7 @@ import argparse
 import json
 import statistics
 import tomllib
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 
 
@@ -14,12 +14,34 @@ DEFAULT_DATA_DIR = ".data"
 MIN_VALUES = 10_000
 MIN_SAMPLE_BYTES = 100 * 1024
 MIN_MEDIAN_SAMPLE_VALUES = 1_000
+MAX_PRIMARY_BYTES = 1_000_000_000
 
 
 def fmt_num(value: float | int) -> str:
     if isinstance(value, float) and not value.is_integer():
         return f"{value:.1f}"
     return str(int(value))
+
+
+def percentile(values: list[int], pct: float) -> float | int:
+    if not values:
+        return 0
+    ordered = sorted(values)
+    if len(ordered) == 1:
+        return ordered[0]
+    position = (len(ordered) - 1) * pct
+    lower = int(position)
+    upper = min(lower + 1, len(ordered) - 1)
+    fraction = position - lower
+    if fraction == 0:
+        return ordered[lower]
+    return ordered[lower] + (ordered[upper] - ordered[lower]) * fraction
+
+
+def same_size_fraction(values: list[int]) -> float:
+    if not values:
+        return 0
+    return max(Counter(values).values()) / len(values)
 
 
 def load_manifest(recipe_dir: Path) -> dict:
@@ -77,11 +99,20 @@ def summarize_rows(rows: list[dict], roles: dict[str, str]) -> tuple[dict, list[
                 "values_total": values_total,
                 "bytes_total": bytes_total,
                 "min_values": min(counts) if counts else 0,
+                "p10_values": percentile(counts, 0.10),
+                "p25_values": percentile(counts, 0.25),
                 "median_values": statistics.median(counts) if counts else 0,
+                "p75_values": percentile(counts, 0.75),
+                "p90_values": percentile(counts, 0.90),
                 "max_values": max(counts) if counts else 0,
                 "min_bytes": min(sizes) if sizes else 0,
+                "p10_bytes": percentile(sizes, 0.10),
+                "p25_bytes": percentile(sizes, 0.25),
                 "median_bytes": statistics.median(sizes) if sizes else 0,
+                "p75_bytes": percentile(sizes, 0.75),
+                "p90_bytes": percentile(sizes, 0.90),
                 "max_bytes": max(sizes) if sizes else 0,
+                "same_size_fraction": same_size_fraction(sizes),
                 "first_sample_path": paths[0] if paths else "",
                 "missing_files": missing_files,
             }
@@ -98,6 +129,8 @@ def summarize_rows(rows: list[dict], roles: dict[str, str]) -> tuple[dict, list[
         reasons.append("byte_floor")
     if primary_median_values < MIN_MEDIAN_SAMPLE_VALUES:
         reasons.append("median_sample_floor")
+    if primary_bytes > MAX_PRIMARY_BYTES:
+        reasons.append("primary_size_cap")
     if any(series["missing_files"] for series in series_summaries):
         reasons.append("missing_sample_files")
     dataset_summary = {
@@ -105,11 +138,20 @@ def summarize_rows(rows: list[dict], roles: dict[str, str]) -> tuple[dict, list[
         "primary_bytes": primary_bytes,
         "primary_samples": len(primary_sample_value_counts),
         "primary_min_values": min(primary_sample_value_counts) if primary_sample_value_counts else 0,
+        "primary_p10_values": percentile(primary_sample_value_counts, 0.10),
+        "primary_p25_values": percentile(primary_sample_value_counts, 0.25),
         "primary_median_values": primary_median_values,
+        "primary_p75_values": percentile(primary_sample_value_counts, 0.75),
+        "primary_p90_values": percentile(primary_sample_value_counts, 0.90),
         "primary_max_values": max(primary_sample_value_counts) if primary_sample_value_counts else 0,
         "primary_min_bytes": min(primary_sample_sizes) if primary_sample_sizes else 0,
+        "primary_p10_bytes": percentile(primary_sample_sizes, 0.10),
+        "primary_p25_bytes": percentile(primary_sample_sizes, 0.25),
         "primary_median_bytes": primary_median_bytes,
+        "primary_p75_bytes": percentile(primary_sample_sizes, 0.75),
+        "primary_p90_bytes": percentile(primary_sample_sizes, 0.90),
         "primary_max_bytes": max(primary_sample_sizes) if primary_sample_sizes else 0,
+        "primary_same_size_fraction": same_size_fraction(primary_sample_sizes),
         "status": "ok" if not reasons else "needs_attention",
         "reasons": reasons,
     }
@@ -154,20 +196,20 @@ def write_reports(dataset_reports: list[dict], output_md: Path, output_tsv: Path
 
     with output_tsv.open("w", encoding="utf-8") as fh:
         fh.write(
-            "dataset_id\tstatus\treasons\tseries_id\trole\tnumeric_kind\tbit_width\tsamples\tvalues_total\tbytes_total\tmin_values\tmedian_values\tmax_values\tmin_bytes\tmedian_bytes\tmax_bytes\tmissing_files\tfirst_sample_path\n"
+            "dataset_id\tstatus\treasons\tseries_id\trole\tnumeric_kind\tbit_width\tsamples\tvalues_total\tbytes_total\tmin_values\tp10_values\tp25_values\tmedian_values\tp75_values\tp90_values\tmax_values\tmin_bytes\tp10_bytes\tp25_bytes\tmedian_bytes\tp75_bytes\tp90_bytes\tmax_bytes\tsame_size_fraction\tmissing_files\tfirst_sample_path\n"
         )
         for report in dataset_reports:
             dataset_id = report["dataset_id"]
             ds = report["dataset"]
             for series in report["series"]:
                 fh.write(
-                    f"{dataset_id}\t{ds['status']}\t{','.join(ds['reasons'])}\t{series['series_id']}\t{series['role']}\t{series['numeric_kind']}\t{series['bit_width']}\t{series['samples']}\t{series['values_total']}\t{series['bytes_total']}\t{series['min_values']}\t{fmt_num(series['median_values'])}\t{series['max_values']}\t{series['min_bytes']}\t{fmt_num(series['median_bytes'])}\t{series['max_bytes']}\t{series['missing_files']}\t{series['first_sample_path']}\n"
+                    f"{dataset_id}\t{ds['status']}\t{','.join(ds['reasons'])}\t{series['series_id']}\t{series['role']}\t{series['numeric_kind']}\t{series['bit_width']}\t{series['samples']}\t{series['values_total']}\t{series['bytes_total']}\t{series['min_values']}\t{fmt_num(series['p10_values'])}\t{fmt_num(series['p25_values'])}\t{fmt_num(series['median_values'])}\t{fmt_num(series['p75_values'])}\t{fmt_num(series['p90_values'])}\t{series['max_values']}\t{series['min_bytes']}\t{fmt_num(series['p10_bytes'])}\t{fmt_num(series['p25_bytes'])}\t{fmt_num(series['median_bytes'])}\t{fmt_num(series['p75_bytes'])}\t{fmt_num(series['p90_bytes'])}\t{series['max_bytes']}\t{series['same_size_fraction']:.6f}\t{series['missing_files']}\t{series['first_sample_path']}\n"
                 )
 
     with output_md.open("w", encoding="utf-8") as fh:
         fh.write("# Dataset State Report\n\n")
         fh.write(
-            f"Acceptance floor used by this report: at least `{MIN_VALUES}` primary values, at least `{MIN_SAMPLE_BYTES}` primary bytes, and median primary sample size at least `{MIN_MEDIAN_SAMPLE_VALUES}` values.\n\n"
+            f"Acceptance floor used by this report: at least `{MIN_VALUES}` primary values, at least `{MIN_SAMPLE_BYTES}` primary bytes, median primary sample size at least `{MIN_MEDIAN_SAMPLE_VALUES}` values, and primary output at most `{MAX_PRIMARY_BYTES}` bytes.\n\n"
         )
         for report in dataset_reports:
             dataset_id = report["dataset_id"]
@@ -182,13 +224,17 @@ def write_reports(dataset_reports: list[dict], output_md: Path, output_tsv: Path
                 f"- primary_value_count_range: {ds['primary_min_values']} / {fmt_num(ds['primary_median_values'])} / {ds['primary_max_values']} min/median/max\n"
             )
             fh.write(
-                f"- primary_size_range_bytes: {ds['primary_min_bytes']} / {fmt_num(ds['primary_median_bytes'])} / {ds['primary_max_bytes']} min/median/max\n\n"
+                f"- primary_size_range_bytes: {ds['primary_min_bytes']} / {fmt_num(ds['primary_median_bytes'])} / {ds['primary_max_bytes']} min/median/max\n"
             )
-            fh.write("| series_id | role | kind | width | samples | values | bytes | value range min/median/max | byte range min/median/max | missing files |\n")
-            fh.write("|---|---|---|---:|---:|---:|---:|---:|---:|---:|\n")
+            fh.write(
+                f"- primary_size_distribution_bytes: {ds['primary_min_bytes']} / {fmt_num(ds['primary_p10_bytes'])} / {fmt_num(ds['primary_p25_bytes'])} / {fmt_num(ds['primary_median_bytes'])} / {fmt_num(ds['primary_p75_bytes'])} / {fmt_num(ds['primary_p90_bytes'])} / {ds['primary_max_bytes']} min/p10/p25/median/p75/p90/max\n"
+            )
+            fh.write(f"- primary_same_size_fraction: {ds['primary_same_size_fraction']:.6f}\n\n")
+            fh.write("| series_id | role | kind | width | samples | values | bytes | value distribution min/p10/p25/median/p75/p90/max | byte distribution min/p10/p25/median/p75/p90/max | same-size fraction | missing files |\n")
+            fh.write("|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|\n")
             for series in report["series"]:
                 fh.write(
-                    f"| `{series['series_id']}` | {series['role']} | {series['numeric_kind']} | {series['bit_width']} | {series['samples']} | {series['values_total']} | {series['bytes_total']} | {series['min_values']} / {fmt_num(series['median_values'])} / {series['max_values']} | {series['min_bytes']} / {fmt_num(series['median_bytes'])} / {series['max_bytes']} | {series['missing_files']} |\n"
+                    f"| `{series['series_id']}` | {series['role']} | {series['numeric_kind']} | {series['bit_width']} | {series['samples']} | {series['values_total']} | {series['bytes_total']} | {series['min_values']} / {fmt_num(series['p10_values'])} / {fmt_num(series['p25_values'])} / {fmt_num(series['median_values'])} / {fmt_num(series['p75_values'])} / {fmt_num(series['p90_values'])} / {series['max_values']} | {series['min_bytes']} / {fmt_num(series['p10_bytes'])} / {fmt_num(series['p25_bytes'])} / {fmt_num(series['median_bytes'])} / {fmt_num(series['p75_bytes'])} / {fmt_num(series['p90_bytes'])} / {series['max_bytes']} | {series['same_size_fraction']:.6f} | {series['missing_files']} |\n"
                 )
             fh.write("\n")
 

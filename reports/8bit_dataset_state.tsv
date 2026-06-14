@@ -1,0 +1,14 @@
+dataset_id	status	reasons	series_id	role	numeric_kind	bit_width	samples	values_total	bytes_total	min_values	median_values	max_values	min_bytes	median_bytes	max_bytes	missing_files	first_sample_path
+emnist_byclass_images_u8	ok		emnist_byclass_images	primary	uint	8	2	638375920	638375920	91197232	319187960	547178688	91197232	319187960	547178688	0	samples/emnist_byclass_images_u8/emnist_byclass_images/train_images_u8.bin
+emnist_byclass_images_u8	ok		emnist_byclass_labels	auxiliary	uint	8	2	814255	814255	116323	407127.5	697932	116323	407127.5	697932	0	samples/emnist_byclass_images_u8/emnist_byclass_labels/train_labels_u8.bin
+fashion_mnist_images_u8	ok		fashion_mnist_images	primary	uint	8	2	54880000	54880000	7840000	27440000	47040000	7840000	27440000	47040000	0	samples/fashion_mnist_images_u8/fashion_mnist_images/train_images_u8.bin
+fashion_mnist_images_u8	ok		fashion_mnist_labels	auxiliary	uint	8	2	70000	70000	10000	35000	60000	10000	35000	60000	0	samples/fashion_mnist_images_u8/fashion_mnist_labels/train_labels_u8.bin
+medmnist_pathmnist_images_u8	ok		pathmnist_images	primary	uint	8	3	252087360	252087360	16887360	23529408	211670592	16887360	23529408	211670592	0	samples/medmnist_pathmnist_images_u8/pathmnist_images/train_images_u8.bin
+uci_letter_recognition_u8	ok		letter_labels_ascii	auxiliary	uint	8	1	20000	20000	20000	20000	20000	20000	20000	20000	0	samples/uci_letter_recognition_u8/letter_labels_ascii/letter_labels_ascii_u8.bin
+uci_letter_recognition_u8	ok		letter_ocr_features	primary	uint	8	1	320000	320000	320000	320000	320000	320000	320000	320000	0	samples/uci_letter_recognition_u8/letter_ocr_features/letter_ocr_features_u8.bin
+uci_optdigits_u8	ok		optdigits_features	primary	uint	8	2	359680	359680	115008	179840	244672	115008	179840	244672	0	samples/uci_optdigits_u8/optdigits_features/train_optdigits_features_u8.bin
+uci_optdigits_u8	ok		optdigits_labels	auxiliary	uint	8	2	5620	5620	1797	2810	3823	1797	2810	3823	0	samples/uci_optdigits_u8/optdigits_labels/train_optdigits_labels_u8.bin
+uci_skin_segmentation_bgr_u8	ok		skin_bgr_channels	primary	uint	8	1	735171	735171	735171	735171	735171	735171	735171	735171	0	samples/uci_skin_segmentation_bgr_u8/skin_bgr_channels/skin_bgr_channels_u8.bin
+uci_skin_segmentation_bgr_u8	ok		skin_binary_labels	auxiliary	uint	8	1	245057	245057	245057	245057	245057	245057	245057	245057	0	samples/uci_skin_segmentation_bgr_u8/skin_binary_labels/skin_binary_labels_u8.bin
+uci_statlog_landsat_satellite_u8	ok		landsat_class_labels	auxiliary	uint	8	2	6435	6435	2000	3217.5	4435	2000	3217.5	4435	0	samples/uci_statlog_landsat_satellite_u8/landsat_class_labels/train_landsat_class_labels_u8.bin
+uci_statlog_landsat_satellite_u8	ok		landsat_spectral_features	primary	uint	8	2	231660	231660	72000	115830	159660	72000	115830	159660	0	samples/uci_statlog_landsat_satellite_u8/landsat_spectral_features/train_landsat_spectral_features_u8.bin

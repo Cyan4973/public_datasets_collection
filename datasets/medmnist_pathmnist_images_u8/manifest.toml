@@ -1,0 +1,79 @@
+manifest_version = 1
+dataset_id = "medmnist_pathmnist_images_u8"
+name = "MedMNIST PathMNIST Images"
+description = "Native 8-bit RGB histopathology image pixels from the MedMNIST PathMNIST NPZ archive."
+homepage = "https://medmnist.com/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Yang, J. et al. MedMNIST v2 - A large-scale lightweight benchmark for 2D and 3D biomedical image classification. Scientific Data 2023."
+notes = "MedMNIST distributes PathMNIST through Zenodo with CC BY 4.0 metadata."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official MedMNIST/Zenodo archive only; no mirrors, leaks, or scraped personal content."
+usage_notes = "Public biomedical image benchmark appropriate for reproducible numeric dataset collection."
+
+[[origins]]
+id = "official"
+name = "MedMNIST"
+url = "https://medmnist.com/"
+type = "data_portal"
+notes = "Official MedMNIST dataset portal."
+
+[[origins]]
+id = "zenodo"
+name = "Zenodo MedMNIST v2 Record"
+url = "https://zenodo.org/records/10519652"
+type = "mirrorless_archive"
+notes = "Official MedMNIST release archive."
+
+[[resources]]
+id = "pathmnist_npz"
+origin = "zenodo"
+url = "https://zenodo.org/records/10519652/files/pathmnist.npz?download=1"
+type = "archive"
+version = "medmnist_v2"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/medmnist_pathmnist_images_u8/pathmnist.npz"
+notes = "NPZ archive containing train/val/test image and label arrays."
+
+[local_paths]
+downloads = "downloads/medmnist_pathmnist_images_u8/"
+extracted = "extracted/medmnist_pathmnist_images_u8/"
+filtered = "filtered/medmnist_pathmnist_images_u8/"
+index = "index/medmnist_pathmnist_images_u8/"
+samples = "samples/medmnist_pathmnist_images_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/medmnist_pathmnist_images_u8/samples.jsonl"
+summary = "Validate the local NPZ archive, stream-copy the train/val/test uint8 image arrays from NPY members, and write a samples.jsonl index."
+deterministic_notes = "Build is local-only, preserves upstream split order and NPY row-major layout, validates NPY dtype/shape/header, and rejects malformed or degenerate image payloads."
+
+[[series]]
+id = "pathmnist_images"
+description = "PathMNIST RGB image pixels."
+semantic_meaning = "Native 28x28 RGB histopathology image intensity values, row-major within each upstream split."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "NPY image arrays store native unsigned 8-bit RGB pixel intensities."
+source_resources = ["pathmnist_npz"]
+filtered_input_path = "filtered/medmnist_pathmnist_images_u8/ingest_stats.json"
+filtering = "Keep train_images.npy, val_images.npy, and test_images.npy from the official NPZ archive."
+missing_value_policy = "NPY payload has no missing marker; malformed headers, wrong dtype, wrong shape, truncation, or extra bytes are fatal."
+conversion = "Strip ZIP/NPY containers and copy uint8 image bytes unchanged into raw .bin samples."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/medmnist_pathmnist_images_u8/pathmnist_images/"

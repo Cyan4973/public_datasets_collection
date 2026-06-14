@@ -1,0 +1,92 @@
+manifest_version = 1
+dataset_id = "emnist_byclass_images_u8"
+name = "EMNIST ByClass Images"
+description = "Native 8-bit grayscale handwritten character image pixels from the EMNIST ByClass train and test IDX files."
+homepage = "https://www.nist.gov/itl/products-and-services/emnist-dataset"
+
+[license]
+name = "Public Domain"
+spdx = "LicenseRef-Public-Domain"
+url = "https://www.nist.gov/director/licensing"
+citation = "Cohen, G., Afshar, S., Tapson, J., and van Schaik, A. EMNIST: Extending MNIST to handwritten letters. IJCNN 2017."
+notes = "Distributed by NIST; NIST-created works are generally public domain in the United States."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NIST-hosted archive only; no mirrors, leaks, or scraped personal content."
+usage_notes = "Public handwritten character benchmark appropriate for reproducible numeric dataset collection."
+
+[[origins]]
+id = "official"
+name = "NIST EMNIST"
+url = "https://www.nist.gov/itl/products-and-services/emnist-dataset"
+type = "data_portal"
+notes = "Official NIST dataset page."
+
+[[resources]]
+id = "gzip_zip"
+origin = "official"
+url = "https://biometrics.nist.gov/cs_links/EMNIST/gzip.zip"
+type = "archive"
+version = "accessed_by_user"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/emnist_byclass_images_u8/gzip.zip"
+notes = "Official ZIP archive containing gzip-compressed IDX files for all EMNIST splits."
+
+[local_paths]
+downloads = "downloads/emnist_byclass_images_u8/"
+extracted = "extracted/emnist_byclass_images_u8/"
+filtered = "filtered/emnist_byclass_images_u8/"
+index = "index/emnist_byclass_images_u8/"
+samples = "samples/emnist_byclass_images_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/emnist_byclass_images_u8/samples.jsonl"
+summary = "Validate the official EMNIST archive, stream-decode ByClass IDX gzip members, emit train/test image pixels as raw uint8 arrays, and write labels as auxiliary alignment arrays."
+deterministic_notes = "Build is local-only, preserves upstream train/test order, validates ZIP members, IDX magic/count/shape, label ranges, and writes a samples.jsonl index."
+
+[[series]]
+id = "emnist_byclass_images"
+description = "EMNIST ByClass grayscale image pixels."
+semantic_meaning = "Native 28x28 grayscale handwritten character image intensity values, row-major within each upstream split."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "IDX image payload stores native unsigned 8-bit pixel intensities."
+source_resources = ["gzip_zip"]
+filtered_input_path = "filtered/emnist_byclass_images_u8/ingest_stats.json"
+filtering = "Keep the ByClass train and test image IDX members from the official archive."
+missing_value_policy = "IDX payload has no missing marker; malformed headers, truncated payloads, wrong counts, or wrong shapes are fatal."
+conversion = "Strip ZIP/gzip/IDX containers and copy pixel bytes unchanged into raw .bin samples."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/emnist_byclass_images_u8/emnist_byclass_images/"
+
+[[series]]
+id = "emnist_byclass_labels"
+description = "EMNIST ByClass class labels."
+semantic_meaning = "Native class labels aligned to the image samples."
+role = "auxiliary"
+representation_class = "native_numeric"
+representation_notes = "IDX label payload stores native unsigned 8-bit class IDs."
+source_resources = ["gzip_zip"]
+filtered_input_path = "filtered/emnist_byclass_images_u8/ingest_stats.json"
+filtering = "Keep the ByClass train and test label IDX members from the official archive."
+missing_value_policy = "Malformed headers, truncated payloads, count mismatches, or labels outside 0..61 are fatal."
+conversion = "Strip ZIP/gzip/IDX containers and copy label bytes unchanged into raw .bin samples."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/emnist_byclass_images_u8/emnist_byclass_labels/"

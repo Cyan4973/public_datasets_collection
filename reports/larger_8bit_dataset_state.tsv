@@ -1,0 +1,4 @@
+dataset_id	status	reasons	series_id	role	numeric_kind	bit_width	samples	values_total	bytes_total	min_values	median_values	max_values	min_bytes	median_bytes	max_bytes	missing_files	first_sample_path
+emnist_byclass_images_u8	ok		emnist_byclass_images	primary	uint	8	2	638375920	638375920	91197232	319187960	547178688	91197232	319187960	547178688	0	samples/emnist_byclass_images_u8/emnist_byclass_images/train_images_u8.bin
+emnist_byclass_images_u8	ok		emnist_byclass_labels	auxiliary	uint	8	2	814255	814255	116323	407127.5	697932	116323	407127.5	697932	0	samples/emnist_byclass_images_u8/emnist_byclass_labels/train_labels_u8.bin
+medmnist_pathmnist_images_u8	ok		pathmnist_images	primary	uint	8	3	252087360	252087360	16887360	23529408	211670592	16887360	23529408	211670592	0	samples/medmnist_pathmnist_images_u8/pathmnist_images/train_images_u8.bin

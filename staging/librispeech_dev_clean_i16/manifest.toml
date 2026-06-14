@@ -1,0 +1,73 @@
+manifest_version = 1
+dataset_id = "librispeech_dev_clean_i16"
+name = "LibriSpeech Dev-Clean PCM16"
+description = "Variable-length 16 kHz speech utterances from the public LibriSpeech dev-clean split, decoded from source FLAC into raw PCM16 samples."
+homepage = "https://www.openslr.org/12"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://www.openslr.org/12"
+citation = "Vassil Panayotov, Guoguo Chen, Daniel Povey, Sanjeev Khudanpur. LibriSpeech: an ASR corpus based on public domain audio books. ICASSP 2015."
+notes = "OpenSLR lists LibriSpeech under CC BY 4.0."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official OpenSLR LibriSpeech distribution."
+usage_notes = "Public speech corpus for ASR research; preserve LibriSpeech citation and license terms."
+
+[[origins]]
+id = "openslr_librispeech"
+name = "OpenSLR LibriSpeech"
+url = "https://www.openslr.org/12"
+type = "data_portal"
+notes = "Official LibriSpeech dataset page."
+
+[[resources]]
+id = "dev_clean_archive"
+origin = "openslr_librispeech"
+url = "https://www.openslr.org/resources/12/dev-clean.tar.gz"
+type = "source_archive"
+version = "dev-clean"
+access = "Direct public archive download."
+size_bytes = 337926286
+sha256 = ""
+md5 = "42e2234ba48799c1f50f24a7926300a1"
+local_path = "downloads/librispeech_dev_clean_i16/dev-clean.tar.gz"
+notes = "Archive contains FLAC utterances and transcript files for the dev-clean split."
+
+[local_paths]
+downloads = "downloads/librispeech_dev_clean_i16/"
+extracted = "extracted/librispeech_dev_clean_i16/"
+filtered = "filtered/librispeech_dev_clean_i16/"
+index = "index/librispeech_dev_clean_i16/"
+samples = "samples/librispeech_dev_clean_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/librispeech_dev_clean_i16/samples.jsonl"
+summary = "Download the LibriSpeech dev-clean archive, decode each source FLAC utterance into one raw int16 sample, and generate a machine-readable sample index."
+deterministic_notes = "Build is local-only after download, sorts FLAC paths, uses the source utterance boundary as the sample boundary, and does not concatenate utterances."
+
+[[series]]
+id = "librispeech_dev_clean_pcm16"
+description = "Per-utterance decoded PCM waveform."
+semantic_meaning = "Native speech waveform amplitude samples for each LibriSpeech dev-clean utterance."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source audio is distributed as losslessly compressed PCM; the emitted payload is the decoded native signed 16-bit waveform."
+source_resources = ["dev_clean_archive"]
+filtered_input_path = "filtered/librispeech_dev_clean_i16/ingest_stats.json"
+filtering = "Keep every `.flac` utterance under `LibriSpeech/dev-clean/`."
+missing_value_policy = "Missing archive, malformed FLAC files, decoder failures, empty utterances, or inconsistent raw output sizes are fatal."
+conversion = "Decode each FLAC to signed little-endian raw PCM16 without resampling or channel mixing."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous int16 array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/librispeech_dev_clean_i16/librispeech_dev_clean_pcm16/"

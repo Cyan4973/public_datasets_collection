@@ -1,0 +1,68 @@
+[
+  {
+    "dataset_id": "librispeech_dev_clean_i16",
+    "missing_files": 0,
+    "primary_bytes": 620675864,
+    "primary_samples": 2703,
+    "primary_values": 310337932,
+    "reasons": [],
+    "same_size_fraction": 0.002589715131335553,
+    "series": [
+      {
+        "bit_width": "16",
+        "bytes_total": 620675864,
+        "max_bytes": 1044640,
+        "median_bytes": 189440,
+        "min_bytes": 46240,
+        "numeric_kind": "int",
+        "role": "primary",
+        "same_size_fraction": 0.002589715131335553,
+        "samples": 2703,
+        "series_id": "librispeech_dev_clean_pcm16",
+        "values_total": 310337932
+      }
+    ],
+    "size_max": 1044640,
+    "size_median": 189440,
+    "size_min": 46240,
+    "size_p10": 87232.0,
+    "size_p25": 120320.0,
+    "size_p75": 296560.0,
+    "size_p90": 426528.0000000002,
+    "status": "ok",
+    "unique_sample_sizes": 1680
+  },
+  {
+    "dataset_id": "skadi_srtm_bay_area_hgt_i16",
+    "missing_files": 0,
+    "primary_bytes": 25934402,
+    "primary_samples": 1,
+    "primary_values": 12967201,
+    "reasons": [],
+    "same_size_fraction": 1.0,
+    "series": [
+      {
+        "bit_width": "16",
+        "bytes_total": 25934402,
+        "max_bytes": 25934402,
+        "median_bytes": 25934402,
+        "min_bytes": 25934402,
+        "numeric_kind": "int",
+        "role": "primary",
+        "same_size_fraction": 1.0,
+        "samples": 1,
+        "series_id": "skadi_srtm_n37w122_elevation_i16",
+        "values_total": 12967201
+      }
+    ],
+    "size_max": 25934402,
+    "size_median": 25934402,
+    "size_min": 25934402,
+    "size_p10": 25934402,
+    "size_p25": 25934402,
+    "size_p75": 25934402,
+    "size_p90": 25934402,
+    "status": "ok",
+    "unique_sample_sizes": 1
+  }
+]

@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "rhea_reactions"
 name = "Rhea Reactions"
-description = "Numeric identifiers and booleans extracted from the public Rhea reactions catalog."
+description = "Numeric reaction identifiers, transport flags, and ChEBI reference counts extracted from the public Rhea reactions catalog."
 
 [license]
 name = "CC BY 4.0"
@@ -32,14 +32,6 @@ representation_class = "derived_operational_numeric"
 missing_value_policy = "Rows missing numeric ids are filtered."
 numeric_kind = "uint"
 bit_width = 32
-endianness = "little"
-
-[[series]]
-id = "rhea_balanced"
-representation_class = "derived_operational_numeric"
-missing_value_policy = "Rows missing boolean flags are filtered."
-numeric_kind = "uint"
-bit_width = 8
 endianness = "little"
 
 [[series]]

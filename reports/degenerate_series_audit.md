@@ -3,7 +3,7 @@
 - constant or empty series are rejected
 - binary series with minority fraction below `0.001` are rejected unless explicitly justified
 
-- flagged series: 193
+- flagged series: 192
 
 | dataset_id | series_id | status | detail | value_count |
 |---|---|---|---|---:|
@@ -12,7 +12,6 @@
 | `noaa_ghcn_daily_wesd_by_station` | `ghcn_value_i16` | binary_sparse | `minority_fraction=0.00017109` | 5845 |
 | `noaa_ghcn_daily_wesd_by_station` | `ghcn_value_i16` | binary_sparse | `minority_fraction=0.00017109` | 5845 |
 | `noaa_isd_lite` | `isd_precip6h` | binary_sparse | `minority_fraction=0.00007704` | 25960 |
-| `rhea_reactions` | `rhea_balanced` | binary_sparse | `minority_fraction=0.00038162` | 18343 |
 | `arxiv_ai_recent` | `arxiv_ai_id_length` | constant | `constant_value=33` | 100 |
 | `biorxiv_details` | `biorxiv_details_date` | constant | `constant_value=1704067200` | 30 |
 | `biorxiv_details` | `biorxiv_details_version` | constant | `constant_value=1` | 30 |

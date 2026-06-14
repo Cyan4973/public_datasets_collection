@@ -21,18 +21,17 @@ from pathlib import Path
 repo_root=Path(os.environ["REPO_ROOT"]); data_root=repo_root/os.environ["DATA_DIR"]
 download_dir=Path(os.environ["DOWNLOAD_DIR"]); filter_dir=Path(os.environ["FILTER_DIR"]); index_dir=Path(os.environ["INDEX_DIR"]); samples_dir=Path(os.environ["SAMPLES_DIR"])
 src=json.load((download_dir/"rhea_reactions.json").open(encoding="utf-8"))
-series={"rhea_id":[],"rhea_balanced":[],"rhea_transport":[],"rhea_chebi_ref_count":[]}
+series={"rhea_id":[],"rhea_transport":[],"rhea_chebi_ref_count":[]}
 rows_total=0; rows_skipped=0
 for item in src["results"]:
     rows_total += 1
     try:
         series["rhea_id"].append(int(item["id"]))
-        series["rhea_balanced"].append(1 if item.get("balanced") else 0)
         series["rhea_transport"].append(1 if item.get("transport") else 0)
         series["rhea_chebi_ref_count"].append(len(re.findall(r'chebi:', item.get("htmlequation",""), flags=re.I)))
     except Exception:
         rows_skipped += 1
-meta={"rhea_id":("uint",32,"I"),"rhea_balanced":("uint",8,"B"),"rhea_transport":("uint",8,"B"),"rhea_chebi_ref_count":("uint",16,"H")}
+meta={"rhea_id":("uint",32,"I"),"rhea_transport":("uint",8,"B"),"rhea_chebi_ref_count":("uint",16,"H")}
 rows=[]
 for sid,values in series.items():
     out_dir=samples_dir/sid

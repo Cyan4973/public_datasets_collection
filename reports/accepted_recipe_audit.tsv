@@ -230,11 +230,11 @@ homebrew_formulae	ok	42045	84090	5	8409	16818	0	0	0	1
 opensky_states	ok	44580	178320	5	8536	34144	0	0	0	1		
 expression_atlas_experiments	ok	45620	104926	10	4562	9124	0	0	0	1		
 universities_domains_list	ok	51245	71743	5	10249	10249	0	0	0	1		
+rhea_reactions	ok	55029	128401	3	18343	36686	0	0	0	1		
 ourworldindata_co2_latest	ok	58768	293840	2	29384	146920	0	0	0	1		
 noaa_tides_water_level	ok	59520	171120	8	7440	7440	0	0	0	1		
 usgs_nwis_water_temperature_daily	ok	60459	483672	50	1427.5	11420	0	0	0	1		
 usgs_quakes_month	ok	68900	374024	7	9842	39376	0	0	0	1		
-rhea_reactions	ok	73372	146744	4	18343	27514.5	0	0	0	1		
 uci_wine_quality	ok	77964	623712	24	3248.5	25988	0	0	0	1		
 metmuseum_object_ids_large	ok	80220	320880	1	80220	320880	0	0	0	1		
 usgs_fdsn_events_large	ok	84792	268508	6	14132	28264	0	0	0	1		

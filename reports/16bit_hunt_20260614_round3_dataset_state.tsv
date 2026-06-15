@@ -1,0 +1,11 @@
+dataset_id	download_status	build_status	primary_samples	primary_bytes	min_sample_bytes	p25_sample_bytes	median_sample_bytes	p75_sample_bytes	max_sample_bytes	unique_sample_sizes	same_size_fraction	status
+tcia_nsclc_radiomics_ct_i16	ok	ok	933	489160704	524288	524288	524288	524288	524288	1	1.0	accepted_viable_but_fixed_size
+polyhaven_hdri_exr_f16	ok	failed	0	0	0	0	0	0	0	0	0	deferred_compressed_exr_needs_decoder
+nasa_aviris_classic_hyperspectral_i16	failed	not_run	0	0	0	0	0	0	0	0	0	failed_ftp_links_unusable
+smithsonian_openaccess_gltf_indices_u16	failed	not_run	0	0	0	0	0	0	0	0	0	failed_seed_http_403
+usgs_sidescan_sonar_tiff_u16	failed	not_run	0	0	0	0	0	0	0	0	0	failed_seed_http_404
+usgs_chirp_segy_i16	failed	not_run	0	0	0	0	0	0	0	0	0	failed_no_direct_payload_links
+nasa_pds_sharad_radargram_i16	failed	not_run	0	0	0	0	0	0	0	0	0	failed_no_direct_payload_links
+nasa_pds_crism_trdr_i16	failed	not_run	0	0	0	0	0	0	0	0	0	failed_no_direct_payload_links
+usgs_3dep_las_intensity_u16	failed	not_run	0	0	0	0	0	0	0	0	0	failed_no_direct_payload_links
+noaa_passive_acoustic_pcm16	failed	not_run	0	0	0	0	0	0	0	0	0	failed_no_direct_payload_links

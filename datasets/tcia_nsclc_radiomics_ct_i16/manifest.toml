@@ -1,0 +1,59 @@
+manifest_version = 1
+dataset_id = "tcia_nsclc_radiomics_ct_i16"
+name = "TCIA NSCLC Radiomics CT Int16"
+description = "Uncompressed 16-bit CT DICOM slice pixels from a bounded TCIA NSCLC-Radiomics series selection."
+homepage = "https://www.cancerimagingarchive.net/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://www.cancerimagingarchive.net/data-usage-policies-and-restrictions/"
+notes = "TCIA collections are distributed under TCIA data usage policies; NSCLC-Radiomics is listed by TCIA for public use with attribution."
+
+[[origins]]
+id = "tcia_nbia"
+name = "TCIA NBIA API"
+url = "https://services.cancerimagingarchive.net/nbia-api/services/v1"
+type = "public_api"
+
+[[resources]]
+id = "bounded_ct_series"
+origin = "tcia_nbia"
+type = "api_series_selection"
+local_path = "downloads/tcia_nsclc_radiomics_ct_i16/"
+notes = "Default collection is NSCLC-Radiomics; SERIES_LIMIT controls bounded series count."
+
+[local_paths]
+downloads = "downloads/tcia_nsclc_radiomics_ct_i16/"
+extracted = "extracted/tcia_nsclc_radiomics_ct_i16/"
+filtered = "filtered/tcia_nsclc_radiomics_ct_i16/"
+index = "index/tcia_nsclc_radiomics_ct_i16/"
+samples = "samples/tcia_nsclc_radiomics_ct_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/tcia_nsclc_radiomics_ct_i16/samples.jsonl"
+summary = "Extract one uncompressed native 16-bit DICOM CT pixel plane per slice."
+
+[[series]]
+id = "ct_slice_pixels_i16"
+description = "CT slice pixel planes."
+semantic_meaning = "Scanner CT image pixel values in source DICOM integer representation."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["bounded_ct_series"]
+missing_value_policy = "Compressed transfer syntaxes, non-16-bit images, multi-sample images, missing pixel data, or truncated pixel data are rejected."
+conversion = "Copy DICOM PixelData bytes unchanged for accepted uncompressed 16-bit slices."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw DICOM PixelData plane"
+sample_geometry = "2d_raster"
+sample_rank = 2
+sample_shape = [512, 512]
+sample_axes = ["y", "x"]
+sample_count = 933
+total_size_bytes = 489160704
+output_path = "samples/tcia_nsclc_radiomics_ct_i16/ct_slice_pixels_i16/"

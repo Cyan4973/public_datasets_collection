@@ -1,0 +1,75 @@
+manifest_version = 1
+dataset_id = "nasa_pds_magellan_sar_i16"
+name = "NASA PDS Magellan SAR Int16"
+description = "Magellan Venus radar mosaic image data records for later native 16-bit image extraction."
+homepage = "https://catalog.data.gov/dataset/mgn-v-rdrs-derived-mosaic-image-data-record-full-res-v1-0-c7816"
+
+[license]
+name = "NASA/PDS open data"
+spdx = "LicenseRef-NASA-PDS-Open-Data"
+url = "https://pds.nasa.gov/"
+citation = "NASA Planetary Data System Magellan RDRS mosaic image data records."
+notes = "NASA/PDS data are public science data; preserve mission and PDS attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NASA/PDS catalog via data.gov."
+usage_notes = "Planetary radar imagery."
+
+[[origins]]
+id = "data_gov_magellan_rdrs"
+name = "MGN V RDRS Derived Mosaic Image Data Record"
+url = "https://catalog.data.gov/dataset/mgn-v-rdrs-derived-mosaic-image-data-record-full-res-v1-0-c7816"
+type = "data_gov_catalog"
+notes = "Catalog package used for resource discovery."
+
+[[resources]]
+id = "catalog_resources"
+origin = "data_gov_magellan_rdrs"
+url = "https://catalog.data.gov/api/3/action/package_show?id=mgn-v-rdrs-derived-mosaic-image-data-record-full-res-v1-0-c7816"
+type = "catalog_selection"
+version = "catalog_at_user_download_time"
+access = "Download script fetches matching IMG/LBL/archive resources from the catalog record."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/nasa_pds_magellan_sar_i16/"
+notes = "Download-only candidate; build must reject non-16-bit or compressed-only products."
+
+[local_paths]
+downloads = "downloads/nasa_pds_magellan_sar_i16/"
+filtered = "filtered/nasa_pds_magellan_sar_i16/"
+index = "index/nasa_pds_magellan_sar_i16/"
+samples = "samples/nasa_pds_magellan_sar_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = ""
+verify_script = ""
+sample_index_path = "index/nasa_pds_magellan_sar_i16/samples.jsonl"
+summary = "Download bounded Magellan SAR resources for later PDS image parsing."
+deterministic_notes = "Catalog resources are selected in catalog order with FILE_LIMIT."
+
+[[series]]
+id = "magellan_sar_pixels_i16"
+description = "Magellan SAR mosaic image pixels."
+semantic_meaning = "Venus synthetic-aperture radar mosaic pixel samples."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Build must preserve native PDS image sample words after label parsing."
+source_resources = ["catalog_resources"]
+filtered_input_path = "filtered/nasa_pds_magellan_sar_i16/ingest_stats.json"
+filtering = "Admit only PDS image resources with 16-bit samples."
+missing_value_policy = "Missing catalog resources, malformed labels, non-16-bit samples, or compressed unsupported payloads are fatal."
+conversion = "To be implemented after local download validation."
+numeric_kind = "int"
+bit_width = 16
+endianness = "big"
+sample_format = "raw PDS image plane"
+sample_geometry = "2d_raster"
+sample_rank = 2
+sample_shape = []
+sample_axes = ["y", "x"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/nasa_pds_magellan_sar_i16/magellan_sar_pixels_i16/"

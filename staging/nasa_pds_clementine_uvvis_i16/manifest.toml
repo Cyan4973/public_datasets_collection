@@ -1,0 +1,75 @@
+manifest_version = 1
+dataset_id = "nasa_pds_clementine_uvvis_i16"
+name = "NASA PDS Clementine UVVIS Int16"
+description = "Clementine lunar UVVIS digital image model resources for later native 16-bit image extraction."
+homepage = "https://catalog.data.gov/dataset/clementine-uvvis-digital-image-model-1beff"
+
+[license]
+name = "NASA/PDS open data"
+spdx = "LicenseRef-NASA-PDS-Open-Data"
+url = "https://pds.nasa.gov/"
+citation = "NASA Planetary Data System Clementine UVVIS digital image model."
+notes = "NASA/PDS data are public science data; preserve mission and PDS attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NASA/PDS catalog via data.gov."
+usage_notes = "Planetary multispectral imagery."
+
+[[origins]]
+id = "data_gov_clementine_uvvis"
+name = "Clementine UVVIS Digital Image Model"
+url = "https://catalog.data.gov/dataset/clementine-uvvis-digital-image-model-1beff"
+type = "data_gov_catalog"
+notes = "Catalog package used for resource discovery."
+
+[[resources]]
+id = "catalog_resources"
+origin = "data_gov_clementine_uvvis"
+url = "https://catalog.data.gov/api/3/action/package_show?id=clementine-uvvis-digital-image-model-1beff"
+type = "catalog_selection"
+version = "catalog_at_user_download_time"
+access = "Download script fetches matching IMG/LBL/archive resources from the catalog record."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/nasa_pds_clementine_uvvis_i16/"
+notes = "Download-only candidate; build must reject non-16-bit products."
+
+[local_paths]
+downloads = "downloads/nasa_pds_clementine_uvvis_i16/"
+filtered = "filtered/nasa_pds_clementine_uvvis_i16/"
+index = "index/nasa_pds_clementine_uvvis_i16/"
+samples = "samples/nasa_pds_clementine_uvvis_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = ""
+verify_script = ""
+sample_index_path = "index/nasa_pds_clementine_uvvis_i16/samples.jsonl"
+summary = "Download bounded Clementine UVVIS resources for later PDS image parsing."
+deterministic_notes = "Catalog resources are selected in catalog order with FILE_LIMIT."
+
+[[series]]
+id = "clementine_uvvis_pixels_i16"
+description = "Clementine UVVIS image pixels."
+semantic_meaning = "Lunar multispectral UVVIS digital image model pixel samples."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Build must preserve native PDS image sample words after label parsing."
+source_resources = ["catalog_resources"]
+filtered_input_path = "filtered/nasa_pds_clementine_uvvis_i16/ingest_stats.json"
+filtering = "Admit only PDS image resources with 16-bit samples."
+missing_value_policy = "Missing catalog resources, malformed labels, non-16-bit samples, or compressed unsupported payloads are fatal."
+conversion = "To be implemented after local download validation."
+numeric_kind = "int"
+bit_width = 16
+endianness = "big"
+sample_format = "raw PDS image plane"
+sample_geometry = "2d_raster"
+sample_rank = 2
+sample_shape = []
+sample_axes = ["y", "x"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/nasa_pds_clementine_uvvis_i16/clementine_uvvis_pixels_i16/"

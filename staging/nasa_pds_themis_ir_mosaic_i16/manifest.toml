@@ -1,0 +1,75 @@
+manifest_version = 1
+dataset_id = "nasa_pds_themis_ir_mosaic_i16"
+name = "NASA PDS THEMIS IR Mosaic Int16"
+description = "Selected Mars THEMIS controlled thermal-infrared mosaic resources for later native 16-bit image extraction."
+homepage = "https://astrogeology.usgs.gov/search/?q=THEMIS%20Controlled%20Mosaic"
+
+[license]
+name = "NASA/PDS/USGS open data"
+spdx = "LicenseRef-NASA-PDS-USGS-Open-Data"
+url = "https://pds.nasa.gov/"
+citation = "NASA Mars Odyssey THEMIS controlled mosaic products via USGS Astropedia/PDS."
+notes = "NASA/PDS and USGS data are public science data; preserve mission, PDS, and USGS attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public planetary mosaic resources."
+usage_notes = "Planetary thermal-infrared imagery."
+
+[[origins]]
+id = "usgs_astropedia_themis"
+name = "USGS Astropedia THEMIS controlled mosaics"
+url = "https://astrogeology.usgs.gov/search/?q=THEMIS%20Controlled%20Mosaic"
+type = "public_data_portal"
+notes = "Public USGS/Astropedia product pages and resource download endpoints."
+
+[[resources]]
+id = "selected_themis_resources"
+origin = "usgs_astropedia_themis"
+url = "staging/nasa_pds_themis_ir_mosaic_i16/download.sh"
+type = "bounded_url_selection"
+version = "fixed_candidate_urls_20260615"
+access = "Download script fetches a bounded selected URL list."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/nasa_pds_themis_ir_mosaic_i16/"
+notes = "Download-only candidate; build must reject non-16-bit products."
+
+[local_paths]
+downloads = "downloads/nasa_pds_themis_ir_mosaic_i16/"
+filtered = "filtered/nasa_pds_themis_ir_mosaic_i16/"
+index = "index/nasa_pds_themis_ir_mosaic_i16/"
+samples = "samples/nasa_pds_themis_ir_mosaic_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = ""
+verify_script = ""
+sample_index_path = "index/nasa_pds_themis_ir_mosaic_i16/samples.jsonl"
+summary = "Download bounded THEMIS mosaic resources for later image parsing."
+deterministic_notes = "Download uses a fixed candidate URL list and FILE_LIMIT."
+
+[[series]]
+id = "themis_ir_mosaic_pixels_i16"
+description = "THEMIS IR controlled mosaic pixels."
+semantic_meaning = "Mars thermal-infrared controlled mosaic image pixel samples."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Build must preserve native image sample words after product format parsing."
+source_resources = ["selected_themis_resources"]
+filtered_input_path = "filtered/nasa_pds_themis_ir_mosaic_i16/ingest_stats.json"
+filtering = "Admit only image resources with 16-bit samples."
+missing_value_policy = "Missing resources, unsupported containers, non-16-bit samples, or malformed metadata are fatal."
+conversion = "To be implemented after local download validation."
+numeric_kind = "int"
+bit_width = 16
+endianness = "big"
+sample_format = "raw image plane"
+sample_geometry = "2d_raster"
+sample_rank = 2
+sample_shape = []
+sample_axes = ["y", "x"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/nasa_pds_themis_ir_mosaic_i16/themis_ir_mosaic_pixels_i16/"

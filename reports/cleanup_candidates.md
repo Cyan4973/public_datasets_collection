@@ -4,7 +4,7 @@ Current acceptance floor: `10,000` primary values or `100 KB` primary sample byt
 
 - source of truth: `reports/accepted_recipe_audit.tsv`
 - `ok`: `122`
-- `below_floor`: `201`
+- `below_floor`: `198`
 - `broken`: `0`
 
 This file is the short operational queue. Detailed policy for family cleanup lives in
@@ -45,8 +45,6 @@ These remain accepted but are so small that they are the easiest next removal ba
 The common failure mode is a one-query, one-page, one-entity, or otherwise intrinsically
 thin recipe shape rather than a source-family problem.
 
-- `biorxiv_details` — values=90, bytes=210, sample_rows=3
-- `dryad_search` — values=100, bytes=360, sample_rows=5
 - `esco_occupations` — values=142, bytes=213, sample_rows=2
 - `gutendex_books` — values=192, bytes=512, sample_rows=6
 - `internet_archive_metadata` — values=200, bytes=1200, sample_rows=2
@@ -90,7 +88,7 @@ thin recipe shape rather than a source-family problem.
 - `npm_search_packages` — values=500, bytes=2600, sample_rows=5
 
 Count guide:
-- tiny non-family standalones with `<= 500` values: `43`
+- tiny non-family standalones with `<= 500` values: `41`
 - non-family below-floor recipes with `501-3999` values: `55`
 - non-family below-floor recipes with `>= 4000` values: `24`
 
@@ -99,7 +97,7 @@ Count guide:
 These are not obvious removals. They are fragmented source families that need either
 homogeneous consolidation or selective pruning.
 
-- `fred_*`: `24`
+- `fred_*`: `23`
 - `world_bank_*`: `16`
 - `owid_*`: `20`
 - `imf_*`: `7`

@@ -5,16 +5,13 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 Auxiliary series do not count toward acceptance.
 
 - `ok`: 122
-- `below_floor`: 201
+- `below_floor`: 198
 - `broken`: 0
 
 ## Below Floor
 
 | dataset_id | primary_values | primary_sample_bytes | primary_sample_rows | median_primary_sample_value_count | auxiliary_values | auxiliary_sample_rows | reasons |
 |---|---:|---:|---:|---:|---:|---:|---|
-| `fred_real_gdp_quarterly` | 40 | 160 | 10 | 4 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `biorxiv_details` | 90 | 210 | 3 | 30 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `dryad_search` | 100 | 360 | 5 | 20 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_capacity_utilization_monthly` | 120 | 480 | 10 | 12 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_civilian_labor_force_monthly` | 120 | 480 | 10 | 12 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_consumer_sentiment_monthly` | 120 | 480 | 10 | 12 | 0 | 0 | `aggregate_floor,median_sample_floor` |

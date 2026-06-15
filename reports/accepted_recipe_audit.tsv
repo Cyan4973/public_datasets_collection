@@ -1,7 +1,4 @@
 dataset_id	status	primary_values	primary_sample_bytes	primary_sample_rows	median_primary_sample_value_count	median_primary_sample_size_bytes	auxiliary_values	auxiliary_sample_bytes	auxiliary_sample_rows	has_index	inferred_auxiliary_series	failure_reasons
-fred_real_gdp_quarterly	below_floor	40	160	10	4	16	0	0	0	1	none	aggregate_floor,median_sample_floor
-biorxiv_details	below_floor	90	210	3	30	60	0	0	0	1	none	aggregate_floor,median_sample_floor
-dryad_search	below_floor	100	360	5	20	40	0	0	0	1	none	aggregate_floor,median_sample_floor
 fred_capacity_utilization_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor
 fred_civilian_labor_force_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor
 fred_consumer_sentiment_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor

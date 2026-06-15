@@ -41,9 +41,8 @@ These should be removed before spending more effort expanding harder cases.
 
 These are not “bad sources.” They are bad recipe shapes. The current one-recipe-per-indicator split produces dozens of tiny accepted recipes. Some should become a smaller number of homogeneous family recipes. Others should be removed if no homogeneous consolidation makes sense.
 
-### FRED single-series recipes (`24`)
+### FRED single-series recipes (`23`)
 
-- `fred_real_gdp_quarterly`
 - `fred_capacity_utilization_monthly`
 - `fred_civilian_labor_force_monthly`
 - `fred_consumer_sentiment_monthly`
@@ -69,7 +68,7 @@ These are not “bad sources.” They are bad recipe shapes. The current one-rec
 - `fred_wti_crude_daily`
 
 Action:
-- replace with a few homogeneous FRED bundles rather than keep 24 thin standalones
+- replace with a few homogeneous FRED bundles rather than keep 23 thin standalones
 - examples that may be coherent: labor monthly, rates daily, macro monthly
 - do not collapse all FRED indicators into one mixed bundle
 
@@ -147,8 +146,6 @@ Representative examples:
 - `metmuseum_objects`
 - `bls_cpi_series`
 - `jolpica_f1_results`
-- `biorxiv_details`
-- `dryad_search`
 - `wikidata_sparql`
 - `maven_central_search`
 - `internet_archive_metadata`

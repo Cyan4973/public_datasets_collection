@@ -1,3 +1,4 @@
 .data/
 staging/*
 !staging/README.md
+__pycache__

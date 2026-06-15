@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "internetarchive_advancedsearch"
 name = "Internet Archive Advanced Search"
-description = "Numeric metadata streams from a fixed 500-row Internet Archive text search result."
+description = "Numeric metadata streams from a bounded 10,000-row Internet Archive text search result."
 homepage = "https://archive.org/advancedsearch.php"
 
 [license]
@@ -27,14 +27,14 @@ notes = "Official public endpoint."
 [[resources]]
 id = "search_result"
 origin = "official"
-url = "https://archive.org/advancedsearch.php?q=mediatype:texts&fl[]=downloads&fl[]=item_size&fl[]=week&rows=500&page=1&output=json"
+url = "https://archive.org/advancedsearch.php?q=mediatype:texts&fl[]=identifier&fl[]=downloads&fl[]=item_size&rows=10000&page=1&sort[]=identifierSorter+asc&output=json"
 type = "api_query_result"
 version = "2026-06-10"
 access = "Direct public HTTP request."
 size_bytes = 0
 sha256 = ""
 local_path = "downloads/internetarchive_advancedsearch/internetarchive_advancedsearch.json"
-notes = "Pinned query parameters from the scout batch."
+notes = "Bounded first 10,000 rows for text media, sorted by identifier for reproducibility."
 
 [local_paths]
 downloads = "downloads/internetarchive_advancedsearch/"
@@ -58,7 +58,8 @@ semantic_meaning = "Internet Archive downloads field."
 representation_class = "native_numeric"
 representation_notes = "Direct numeric metadata field from the fixed advanced search result."
 source_resources = ["search_result"]
-filtering = "Keep all docs from the pinned query that carry numeric downloads/item_size/week fields."
+role = "primary"
+filtering = "Keep all docs from the pinned query that carry identifier, downloads, and item_size fields."
 missing_value_policy = "Rows missing any required numeric field are skipped."
 conversion = "Parse JSON docs in response order and emit homogeneous raw little-endian numeric arrays."
 numeric_kind = "uint"
@@ -74,6 +75,7 @@ semantic_meaning = "Internet Archive item_size field."
 representation_class = "native_numeric"
 representation_notes = "Direct numeric metadata field from the fixed advanced search result."
 source_resources = ["search_result"]
+role = "primary"
 filtering = "Same retained row set as ia_downloads."
 missing_value_policy = "Rows missing any required numeric field are skipped."
 conversion = "Parse JSON docs in response order and emit homogeneous raw little-endian numeric arrays."

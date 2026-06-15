@@ -10,14 +10,14 @@ the upstream source is useless. The question is whether the current recipe can b
 extended into one coherent material without violating the protocol.
 
 Initial count before this removal pass: `41`
-Current pending count: `35`
+Current pending count: `34`
 
 ## Summary
 
 - repairable by straightforward pagination, cursoring, or bounded time windows: `23`
 - repairable only as a redesign/replacement because current query is arbitrary, ranked, or too narrow: `12`
-- removed in first pass: `6`
-- remaining repairable by straightforward pagination, cursoring, or bounded time windows: `23`
+- removed or superseded so far: `7`
+- remaining repairable by straightforward pagination, cursoring, or bounded time windows: `22`
 - remaining redesign/replacement candidates because current query is arbitrary, ranked, or too narrow: `12`
 
 ## Removed In First Pass
@@ -28,13 +28,17 @@ Current pending count: `35`
 - `esco_occupations`
 - `orcid_search`
 - `steamspy_top100in2weeks`
+- `internet_archive_metadata`
+
+## Repaired So Far
+
+- `internetarchive_advancedsearch`: extended to a bounded 10,000-row Internet Archive text metadata slice; now passes the floor.
 
 ## Per-Recipe Assessment
 
 | recipe | current shape | extension path | recommendation |
 |---|---|---|---|
 | `gutendex_books` | Gutendex `science` search first page, 6 series, 192 values | Paginate a coherent catalog slice, preferably all books or a stable subject/language subset. | Repairable as redesigned catalog recipe. |
-| `internet_archive_metadata` | Internet Archive `collection:texts`, page 1, 2 series, 200 values | Paginate `advancedsearch` pages for the same collection and fields. | Repairable by pagination. |
 | `library_of_congress_items` | LOC item listing, first 100 records, 4 series, 232 values | Use LOC pagination for a stable collection/search with the same fields. | Repairable by pagination if the chosen collection is coherent. |
 | `openbrewerydb_breweries` | Open Brewery DB first page, 3 series, 246 values | Page through brewery records. | Repairable by pagination, but numeric payload is weak. |
 | `nasa_neows_feed` | NASA NeoWs 7-day feed, 6 series, 270 values | NeoWs feed is date-windowed; extend by multiple contiguous windows. | Repairable by bounded time range. |
@@ -72,8 +76,8 @@ Current pending count: `35`
 ## Recommended Order
 
 1. Repair high-confidence pageable/time-windowed sources:
-   `internet_archive_metadata`, `nasa_neows_feed`, `arxiv_cs_recent`,
-   `chembl_molecules`, `europe_pmc_search`, `openalex_works_2024_sample`,
+   `nasa_neows_feed`, `arxiv_cs_recent`, `chembl_molecules`,
+   `europe_pmc_search`, `openalex_works_2024_sample`,
    `treasury_avg_interest_rates`, `openfda_drug_event`, `medrxiv_details`,
    `nvd_cves_recent`.
 2. Revisit medium-confidence catalog/search recipes only if the replacement

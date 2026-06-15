@@ -7,8 +7,8 @@ This is a policy-and-examples triage memo. The exact live inventory is
 
 Audit baseline when this triage memo was last refreshed:
 
-- `ok`: `122`
-- `below_floor`: `192`
+- `ok`: `123`
+- `below_floor`: `190`
 - `broken`: `0`
 
 The remaining below-floor set falls into three buckets:
@@ -25,12 +25,11 @@ one-entity, or otherwise intrinsically narrow, but some source APIs can be
 extended coherently. Per-recipe extension assessment lives in
 `reports/tiny_standalone_extension_triage.md`.
 
-Current count: `35`
+Current count: `34`
 
 | dataset_id | values | bytes | samples | median values | reasons |
 |---|---:|---:|---:|---:|---|
 | `gutendex_books` | 192 | 512 | 6 | 32 | `aggregate_floor,median_sample_floor` |
-| `internet_archive_metadata` | 200 | 1200 | 2 | 100 | `aggregate_floor,median_sample_floor` |
 | `library_of_congress_items` | 232 | 928 | 4 | 44 | `aggregate_floor,median_sample_floor` |
 | `openbrewerydb_breweries` | 246 | 1640 | 3 | 82 | `aggregate_floor,median_sample_floor` |
 | `nasa_neows_feed` | 270 | 1305 | 6 | 45 | `aggregate_floor,median_sample_floor` |

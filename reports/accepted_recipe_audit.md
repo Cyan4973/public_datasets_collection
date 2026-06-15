@@ -4,8 +4,8 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 122
-- `below_floor`: 192
+- `ok`: 123
+- `below_floor`: 190
 - `broken`: 0
 
 ## Below Floor
@@ -29,7 +29,6 @@ Auxiliary series do not count toward acceptance.
 | `fred_unemployment_rate_monthly` | 120 | 480 | 10 | 12 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `world_bank_access_to_electricity_percent_annual` | 183 | 1464 | 6 | 31.5 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `gutendex_books` | 192 | 512 | 6 | 32 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `internet_archive_metadata` | 200 | 1200 | 2 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `sec_companyfacts_assets_quarterly` | 227 | 1816 | 5 | 51 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `sec_companyfacts_cash_and_equivalents_quarterly` | 227 | 1816 | 5 | 51 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `sec_companyfacts_net_income_quarterly` | 227 | 1816 | 5 | 51 | 0 | 0 | `aggregate_floor,median_sample_floor` |
@@ -122,7 +121,6 @@ Auxiliary series do not count toward acceptance.
 | `uniprot_human_reviewed_lengths` | 1000 | 4000 | 2 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `uniprot_reviewed_human` | 1000 | 4000 | 2 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `ena_portal_search` | 1000 | 5000 | 2 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `internetarchive_advancedsearch` | 1000 | 6000 | 2 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `scryfall_default_cards` | 1050 | 2100 | 6 | 175 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_cement_co2_annual` | 1155 | 4620 | 10 | 97 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `iris_seismon_events_fixed` | 1170 | 5330 | 9 | 130 | 0 | 0 | `aggregate_floor,median_sample_floor` |

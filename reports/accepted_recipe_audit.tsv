@@ -16,7 +16,6 @@ fred_unemployment_level_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggreg
 fred_unemployment_rate_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor
 world_bank_access_to_electricity_percent_annual	below_floor	183	1464	6	31.5	252	0	0	0	1	none	aggregate_floor,median_sample_floor
 gutendex_books	below_floor	192	512	6	32	64	0	0	0	1	none	aggregate_floor,median_sample_floor
-internet_archive_metadata	below_floor	200	1200	2	100	600	0	0	0	1	none	aggregate_floor,median_sample_floor
 sec_companyfacts_assets_quarterly	below_floor	227	1816	5	51	408	0	0	0	1	none	aggregate_floor,median_sample_floor
 sec_companyfacts_cash_and_equivalents_quarterly	below_floor	227	1816	5	51	408	0	0	0	1	none	aggregate_floor,median_sample_floor
 sec_companyfacts_net_income_quarterly	below_floor	227	1816	5	51	408	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -109,7 +108,6 @@ eia_petroleum_prices	below_floor	988	3952	2	494	1976	0	0	0	1	none	aggregate_floo
 uniprot_human_reviewed_lengths	below_floor	1000	4000	2	500	2000	0	0	0	1	none	aggregate_floor,median_sample_floor
 uniprot_reviewed_human	below_floor	1000	4000	2	500	2000	0	0	0	1	none	aggregate_floor,median_sample_floor
 ena_portal_search	below_floor	1000	5000	2	500	2500	0	0	0	1	none	aggregate_floor,median_sample_floor
-internetarchive_advancedsearch	below_floor	1000	6000	2	500	3000	0	0	0	1	none	aggregate_floor,median_sample_floor
 scryfall_default_cards	below_floor	1050	2100	6	175	175	0	0	0	1	none	aggregate_floor,median_sample_floor
 owid_cement_co2_annual	below_floor	1155	4620	10	97	388	0	0	0	1	none	aggregate_floor,median_sample_floor
 iris_seismon_events_fixed	below_floor	1170	5330	9	130	260	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -210,6 +208,7 @@ nasa_power_daily_temperature_humidity	ok	16425	131400	15	1095	8760	0	0	0	1	none	
 nasa_power_daily_wind	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
 usgs_nwis_dissolved_oxygen_daily	ok	16558	132464	15	1343	10744	0	0	0	1	none	none
 usgs_nwis_ph_daily	ok	17277	138216	16	1287.5	10300	0	0	0	1	none	none
+internetarchive_advancedsearch	ok	20000	120000	2	10000	60000	0	0	0	1	none	none
 nasa_eonet_events	ok	20115	73755	3	6705	13410	0	0	0	1	none	none
 binance_ticker_24hr	ok	21564	115008	6	3594	14376	0	0	0	1	none	none
 openflights_airports	ok	23094	153960	3	7698	61584	0	0	0	1	none	none

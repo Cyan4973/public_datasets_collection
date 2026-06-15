@@ -1,0 +1,3 @@
+dataset_id	status	reasons	primary_samples	primary_values	primary_bytes	sample_geometry	size_min	size_p10	size_p25	size_median	size_p75	size_p90	size_max	unique_sample_sizes	same_size_fraction	missing_files
+dwd_radolan_rw_precip_i16	ok		192	155520000	311040000	2D raster 900x900	1620000	1620000.000000	1620000.000000	1620000.000000	1620000.000000	1620000.000000	1620000	1	1.000000	0
+nsynth_test_notes_i16	ok		4096	262144000	524288000	1D waveform 64000 frames @ 16000 Hz	128000	128000.000000	128000.000000	128000.000000	128000.000000	128000.000000	128000	1	1.000000	0

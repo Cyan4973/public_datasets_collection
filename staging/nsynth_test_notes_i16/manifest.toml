@@ -1,0 +1,76 @@
+manifest_version = 1
+dataset_id = "nsynth_test_notes_i16"
+name = "NSynth Test Notes PCM16"
+description = "Per-note musical instrument WAV waveforms from the NSynth test split, emitted as raw signed 16-bit PCM samples."
+homepage = "https://magenta.withgoogle.com/datasets/nsynth"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://magenta.withgoogle.com/datasets/nsynth"
+citation = "Jesse Engel et al. Neural Audio Synthesis of Musical Notes with WaveNet Autoencoders. NSynth dataset."
+notes = "NSynth dataset documentation states Creative Commons Attribution 4.0."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Magenta/Google NSynth dataset distribution."
+usage_notes = "Public musical note audio dataset; preserve NSynth citation and CC BY attribution."
+
+[[origins]]
+id = "magenta_nsynth"
+name = "Magenta NSynth Dataset"
+url = "https://magenta.withgoogle.com/datasets/nsynth"
+type = "data_portal"
+notes = "Official NSynth dataset page."
+
+[[resources]]
+id = "nsynth_test_archive"
+origin = "magenta_nsynth"
+url = "http://download.magenta.tensorflow.org/datasets/nsynth/nsynth-test.jsonwav.tar.gz"
+type = "source_archive"
+version = "test_split"
+access = "Direct public archive download."
+size_bytes = 349501546
+sha256 = ""
+local_path = "downloads/nsynth_test_notes_i16/nsynth-test.jsonwav.tar.gz"
+notes = "Archive contains JSON metadata and test-split WAV audio files."
+
+[local_paths]
+downloads = "downloads/nsynth_test_notes_i16/"
+extracted = "extracted/nsynth_test_notes_i16/"
+filtered = "filtered/nsynth_test_notes_i16/"
+index = "index/nsynth_test_notes_i16/"
+samples = "samples/nsynth_test_notes_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nsynth_test_notes_i16/samples.jsonl"
+summary = "Download the NSynth test archive, validate WAV files and metadata, emit one raw int16 PCM sample per note, and generate a sample index."
+deterministic_notes = "Build is local-only after download, sorts WAV paths, preserves note file boundaries, and does not concatenate notes."
+
+[[series]]
+id = "nsynth_test_note_pcm16"
+description = "Per-note NSynth waveform."
+semantic_meaning = "Native musical-instrument note waveform amplitude samples."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Source WAV files are 16-bit PCM note recordings; emitted payloads are the source PCM frames."
+source_resources = ["nsynth_test_archive"]
+filtered_input_path = "filtered/nsynth_test_notes_i16/ingest_stats.json"
+filtering = "Keep every `.wav` note file under the NSynth test archive audio directory."
+missing_value_policy = "Missing archive, malformed WAV files, non-mono/non-PCM16 files, empty notes, or missing metadata are fatal."
+conversion = "Read WAV PCM frames with Python's `wave` module and copy little-endian signed int16 frames unchanged."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous int16 array"
+sample_geometry = "1d_waveform"
+sample_rank = 1
+sample_shape = [64000]
+sample_axes = ["time"]
+sample_count = 4096
+total_size_bytes = 524288000
+output_path = "samples/nsynth_test_notes_i16/nsynth_test_note_pcm16/"

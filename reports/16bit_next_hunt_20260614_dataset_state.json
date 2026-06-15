@@ -1,0 +1,72 @@
+[
+  {
+    "dataset_id": "dwd_radolan_rw_precip_i16",
+    "missing_files": 0,
+    "primary_bytes": 311040000,
+    "primary_samples": 192,
+    "primary_values": 155520000,
+    "reasons": [],
+    "same_size_fraction": 1.0,
+    "sample_geometry": "2D raster 900x900",
+    "series": [
+      {
+        "bit_width": "16",
+        "bytes_total": 311040000,
+        "max_bytes": 1620000,
+        "median_bytes": 1620000.0,
+        "min_bytes": 1620000,
+        "numeric_kind": "uint",
+        "role": "primary",
+        "same_size_fraction": 1.0,
+        "sample_geometry": "2D raster 900x900",
+        "samples": 192,
+        "series_id": "dwd_radolan_rw_precip_words_u16",
+        "values_total": 155520000
+      }
+    ],
+    "size_max": 1620000,
+    "size_median": 1620000.0,
+    "size_min": 1620000,
+    "size_p10": 1620000.0,
+    "size_p25": 1620000.0,
+    "size_p75": 1620000.0,
+    "size_p90": 1620000.0,
+    "status": "ok",
+    "unique_sample_sizes": 1
+  },
+  {
+    "dataset_id": "nsynth_test_notes_i16",
+    "missing_files": 0,
+    "primary_bytes": 524288000,
+    "primary_samples": 4096,
+    "primary_values": 262144000,
+    "reasons": [],
+    "same_size_fraction": 1.0,
+    "sample_geometry": "1D waveform 64000 frames @ 16000 Hz",
+    "series": [
+      {
+        "bit_width": "16",
+        "bytes_total": 524288000,
+        "max_bytes": 128000,
+        "median_bytes": 128000.0,
+        "min_bytes": 128000,
+        "numeric_kind": "int",
+        "role": "primary",
+        "same_size_fraction": 1.0,
+        "sample_geometry": "1D waveform 64000 frames @ 16000 Hz",
+        "samples": 4096,
+        "series_id": "nsynth_test_note_pcm16",
+        "values_total": 262144000
+      }
+    ],
+    "size_max": 128000,
+    "size_median": 128000.0,
+    "size_min": 128000,
+    "size_p10": 128000.0,
+    "size_p25": 128000.0,
+    "size_p75": 128000.0,
+    "size_p90": 128000.0,
+    "status": "ok",
+    "unique_sample_sizes": 1
+  }
+]

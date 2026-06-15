@@ -6,7 +6,7 @@ The user ran `staging/source_variety_batch_20260615_16a/download.sh` twice. One 
 
 | dataset_id | state | local payload | action |
 |---|---:|---:|---|
-| `hf_smolllm2_135m_safetensors_f16` | built and verified | 269,030,016 primary bytes | keep |
+| `hf_smolllm2_135m_safetensors_f16` | promoted to `datasets/` and verified | 269,030,016 primary bytes | keep |
 | `nasa_sdo_aia_synoptic_fits_i16` | source discovery failed | 0 accepted bytes | needs alternate source |
 | `nasa_pds_magellan_sar_i16` | source discovery failed | 0 accepted bytes | needs alternate source |
 | `nasa_pds_messenger_mdis_basemap_i16` | source discovery failed | 0 accepted bytes | needs alternate source |
@@ -49,6 +49,9 @@ Most common sample sizes:
 | 56,623,104 | 1 |
 
 Natural boundary is tensor boundary. The build copies each safetensors tensor payload byte range unchanged into a separate sample.
+
+Promoted recipe: `datasets/hf_smolllm2_135m_safetensors_f16/`.
+Focused material report: `reports/hf_smolllm2_135m_safetensors_f16_state.md`.
 
 ## Failure Details
 

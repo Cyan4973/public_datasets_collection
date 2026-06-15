@@ -9,7 +9,19 @@ This round stages scripts only. No dataset payload has been downloaded by the ag
 | `librispeech_dev_clean_i16` | speech audio | losslessly compressed PCM speech decoded to signed int16 | one utterance | about 600-650 MB | requires `flac` or `ffmpeg` locally |
 | `skadi_srtm_bay_area_hgt_i16` | elevation raster | existing local SRTM HGT signed int16 row shards repaired to whole-tile form | one upstream HGT tile | 25,934,402 bytes | single-sample registration of existing material |
 
-## Commands For User Download
+## Promoted Candidate
+
+`librispeech_dev_clean_i16` has been promoted to:
+
+```bash
+datasets/librispeech_dev_clean_i16/download.sh
+datasets/librispeech_dev_clean_i16/build.sh
+datasets/librispeech_dev_clean_i16/verify.sh
+```
+
+Focused material report: `reports/librispeech_dev_clean_i16_state.md`.
+
+## Original Commands For User Download
 
 ```bash
 staging/librispeech_dev_clean_i16/download.sh

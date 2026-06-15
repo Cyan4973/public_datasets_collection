@@ -16,7 +16,15 @@ This is the download-script wave for the new 16-bit hunt. The agent did not down
 
 ## Commands
 
-Run the surviving active candidate:
+The surviving HF tensor candidate has been promoted to:
+
+```bash
+datasets/hf_smolllm2_135m_safetensors_f16/download.sh
+datasets/hf_smolllm2_135m_safetensors_f16/build.sh
+datasets/hf_smolllm2_135m_safetensors_f16/verify.sh
+```
+
+For historical retry of the original staged batch:
 
 ```bash
 staging/source_variety_batch_20260615_16a/download.sh
@@ -51,9 +59,10 @@ FILE_LIMIT=2 staging/nasa_pds_themis_ir_mosaic_i16/download.sh
 MAX_FILE_BYTES=300000000 staging/nasa_sdo_aia_synoptic_fits_i16/download.sh
 ```
 
-## State After First User Run
+## Final State Of Promoted Candidate
 
-`hf_smolllm2_135m_safetensors_f16` downloaded, built, and verified locally:
+`hf_smolllm2_135m_safetensors_f16` downloaded by the user, then built,
+verified, audited, and promoted to `datasets/`:
 
 | metric | value |
 |---|---:|
@@ -65,6 +74,8 @@ MAX_FILE_BYTES=300000000 staging/nasa_sdo_aia_synoptic_fits_i16/download.sh
 | sample size range | 1,152 to 56,623,104 bytes |
 | median sample size | 663,552 bytes |
 | most common size fraction | 0.330882 |
+
+Focused material report: `reports/hf_smolllm2_135m_safetensors_f16_state.md`.
 
 Failure triage is recorded in `reports/16bit_hunt_20260615_error_triage.md`. The catalog helper was tightened so data.gov page fallback only accepts direct data-file URLs and cannot silently accept HTML landing pages as samples.
 
@@ -79,4 +90,6 @@ The rerun confirmed that the SDO/data.gov and three PDS/data.gov candidates stil
 
 ## Expected Next Step
 
-After the user runs these scripts, inspect `.data/logs/<dataset_id>/download.latest.log` and `.data/downloads/<dataset_id>/download_inventory.json`, then decide which candidates deserve build/verify scripts.
+No further action is needed for the promoted HF tensor dataset. Remaining
+deferred candidates need alternate direct source URLs before another user-run
+download attempt.

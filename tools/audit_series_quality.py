@@ -16,6 +16,9 @@ MINORITY_THRESHOLD = 0.001
 FMT_MAP = {
     ("uint", 8): "B",
     ("int", 8): "b",
+    # For F16/BF16 degeneracy checks, raw 16-bit words are enough: constant
+    # payloads remain constant, and binary-sparse payloads remain binary-sparse.
+    ("float", 16): "H",
     ("uint", 16): "H",
     ("int", 16): "h",
     ("uint", 32): "I",
@@ -27,25 +30,29 @@ FMT_MAP = {
 }
 
 
-def load_values(sample_path: Path, kind: str, bit_width: int, value_count: int):
+def iter_values(sample_path: Path, kind: str, bit_width: int, value_count: int):
     fmt = FMT_MAP[(kind, bit_width)]
     raw = sample_path.read_bytes()
-    return struct.unpack("<" + fmt * value_count, raw)
+    expected_size = struct.calcsize(fmt) * value_count
+    if len(raw) != expected_size:
+        raise ValueError(f"size_mismatch actual={len(raw)} expected={expected_size}")
+    yield from (value[0] for value in struct.iter_unpack("<" + fmt, raw))
 
 
-def classify(values) -> tuple[str, str]:
-    if not values:
+def classify_sample(sample_path: Path, kind: str, bit_width: int, value_count: int) -> tuple[str, str]:
+    if value_count == 0:
         return "broken", "empty_series"
     counts = {}
-    for value in values:
+    for value in iter_values(sample_path, kind, bit_width, value_count):
         counts[value] = counts.get(value, 0) + 1
+        if len(counts) > 2:
+            return "ok", ""
     if len(counts) == 1:
         return "constant", f"constant_value={next(iter(counts))}"
-    if len(counts) == 2:
-        a, b = counts.values()
-        minority = min(a, b) / len(values)
-        if minority < MINORITY_THRESHOLD:
-            return "binary_sparse", f"minority_fraction={minority:.8f}"
+    a, b = counts.values()
+    minority = min(a, b) / value_count
+    if minority < MINORITY_THRESHOLD:
+        return "binary_sparse", f"minority_fraction={minority:.8f}"
     return "ok", ""
 
 
@@ -73,13 +80,15 @@ def main() -> int:
                     }
                 )
                 continue
-            values = load_values(
-                sample_path,
-                row["numeric_kind"],
-                row["bit_width"],
-                row["value_count"],
-            )
-            status, detail = classify(values)
+            try:
+                status, detail = classify_sample(
+                    sample_path,
+                    row["numeric_kind"],
+                    int(row["bit_width"]),
+                    int(row["value_count"]),
+                )
+            except (KeyError, ValueError) as error:
+                status, detail = "broken", str(error)
             rows.append(
                 {
                     "dataset_id": dataset_id,

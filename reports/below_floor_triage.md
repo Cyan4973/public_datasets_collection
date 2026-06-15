@@ -7,8 +7,8 @@ This is a policy-and-examples triage memo. The exact live inventory is
 
 Audit baseline when this triage memo was last refreshed:
 
-- `ok`: `123`
-- `below_floor`: `188`
+- `ok`: `124`
+- `below_floor`: `186`
 - `broken`: `0`
 
 The remaining below-floor set falls into three buckets:
@@ -25,7 +25,7 @@ one-entity, or otherwise intrinsically narrow, but some source APIs can be
 extended coherently. Per-recipe extension assessment lives in
 `reports/tiny_standalone_extension_triage.md`.
 
-Current count: `32`
+Current count: `30`
 
 | dataset_id | values | bytes | samples | median values | reasons |
 |---|---:|---:|---:|---:|---|
@@ -45,7 +45,6 @@ Current count: `32`
 | `gleif_lei_records` | 400 | 800 | 4 | 100 | `aggregate_floor,median_sample_floor` |
 | `hex_packages` | 400 | 2600 | 4 | 100 | `aggregate_floor,median_sample_floor` |
 | `ooni_measurements` | 400 | 1300 | 4 | 100 | `aggregate_floor,median_sample_floor` |
-| `openalex_works_2024_sample` | 400 | 1600 | 2 | 200 | `aggregate_floor,median_sample_floor` |
 | `osm_overpass_cafes` | 400 | 2600 | 4 | 100 | `aggregate_floor,median_sample_floor` |
 | `stackexchange_top_questions_jan_2024` | 400 | 1400 | 4 | 100 | `aggregate_floor,median_sample_floor` |
 | `treasury_avg_interest_rates` | 400 | 800 | 4 | 100 | `aggregate_floor,median_sample_floor` |
@@ -53,7 +52,6 @@ Current count: `32`
 | `musicbrainz_release_groups` | 491 | 982 | 5 | 100 | `aggregate_floor,median_sample_floor` |
 | `openfoodfacts_products` | 491 | 1870 | 5 | 98 | `aggregate_floor,median_sample_floor` |
 | `inaturalist_observations` | 495 | 1188 | 5 | 99 | `aggregate_floor,median_sample_floor` |
-| `openfda_drug_event` | 495 | 1683 | 5 | 99 | `aggregate_floor,median_sample_floor` |
 | `pokemontcg_cards` | 498 | 1071 | 6 | 81 | `aggregate_floor,median_sample_floor` |
 | `artic_artworks_search` | 500 | 1400 | 5 | 100 | `aggregate_floor,median_sample_floor` |
 | `gitlab_projects` | 500 | 2000 | 5 | 100 | `aggregate_floor,median_sample_floor` |

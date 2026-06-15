@@ -4,8 +4,8 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 123
-- `below_floor`: 188
+- `ok`: 124
+- `below_floor`: 186
 - `broken`: 0
 
 ## Below Floor
@@ -58,7 +58,6 @@ Auxiliary series do not count toward acceptance.
 | `datacite_dois` | 400 | 1200 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `ooni_measurements` | 400 | 1300 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `stackexchange_top_questions_jan_2024` | 400 | 1400 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `openalex_works_2024_sample` | 400 | 1600 | 2 | 200 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `cratesio_crates` | 400 | 2000 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `hex_packages` | 400 | 2600 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `osm_overpass_cafes` | 400 | 2600 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
@@ -72,7 +71,6 @@ Auxiliary series do not count toward acceptance.
 | `musicbrainz_release_groups` | 491 | 982 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `openfoodfacts_products` | 491 | 1870 | 5 | 98 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `inaturalist_observations` | 495 | 1188 | 5 | 99 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `openfda_drug_event` | 495 | 1683 | 5 | 99 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `pokemontcg_cards` | 498 | 1071 | 6 | 81 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `medrxiv_details` | 500 | 1300 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `artic_artworks_search` | 500 | 1400 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |

@@ -9,8 +9,8 @@ Source of truth:
 - git history through `f8ec8e1`
 
 Current audit baseline:
-- `ok`: `123`
-- `below_floor`: `188`
+- `ok`: `124`
+- `below_floor`: `186`
 - `broken`: `0`
 - degenerate findings: `5`, all `binary_sparse`
 - constant findings: `0`
@@ -20,9 +20,11 @@ Current audit baseline:
 - removed empty residual directories left behind by previously rejected, blocked, or superseded recipes
 - fixed report generation so quality audits cover currently accepted manifests
 - removed the first tiny-dataset batches, including accepted datasets with `<= 100` values
-- removed `8` tiny non-family standalones after extension triage
+- removed `10` tiny non-family standalones after extension triage
 - repaired `internetarchive_advancedsearch` from a 500-row below-floor slice to a 10,000-row accepted recipe
+- repaired `openalex_works_2024_sample` from a 200-work first page to a 20,000-work cursor-paginated table
 - removed `chembl_molecules` after public API pagination failed the larger single-file repair target
+- removed `openfda_drug_event` after bounded openFDA search returned HTTP 403 on the public repair route
 - removed `94` globally constant manifest series across `52` datasets
 - filtered `93` constant natural samples from otherwise non-constant series
 
@@ -43,7 +45,7 @@ Prune the smallest non-family below-floor standalones first.
 Priority target:
 - non-family recipes with `<= 500` total primary values
 - no credible path to floor without changing recipe identity
-- current count: `32`
+- current count: `30`
 
 ## Next: Family Cleanup
 

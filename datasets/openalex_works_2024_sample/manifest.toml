@@ -1,18 +1,18 @@
 manifest_version = 1
 dataset_id = "openalex_works_2024_sample"
 name = "OpenAlex Works 2024 Sample"
-description = "Pinned OpenAlex sample with native works count fields."
+description = "Bounded cursor-paginated OpenAlex 2024 works table with native date/count fields and stable per-work cardinalities."
 
 [license]
-name = "LicenseRef-OpenAlex"
-spdx = "LicenseRef-OpenAlex"
-url = "https://docs.openalex.org/"
+name = "CC0-1.0"
+spdx = "CC0-1.0"
+url = "https://docs.openalex.org/download-all-data/openalex-snapshot"
 
 [[resources]]
-id = "openalex_works_json"
-url = "https://api.openalex.org/works?filter=from_publication_date:2024-01-01,to_publication_date:2024-12-31&per-page=200"
-type = "api_response"
-local_path = "downloads/openalex_works_2024_sample/openalex_works_2024_sample.json"
+id = "openalex_works_2024_pages"
+url = "https://api.openalex.org/works?filter=from_publication_date:2024-01-01,to_publication_date:2024-12-31&per-page=200&cursor=*"
+type = "api_response_pages"
+local_path = "downloads/openalex_works_2024_sample/pages/"
 
 [local_paths]
 downloads = "downloads/openalex_works_2024_sample/"
@@ -27,18 +27,254 @@ verify_script = "verify.sh"
 sample_index_path = "index/openalex_works_2024_sample/samples.jsonl"
 
 [[series]]
-id = "openalex_cited_by_count"
+id = "openalex_publication_date"
+semantic_meaning = "Work publication date encoded as YYYYMMDD from the native publication_date field."
+role = "primary"
 representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered."
+missing_value_policy = "Rows missing a full publication_date are filtered."
+conversion = "Native ISO date string parsed to YYYYMMDD uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "openalex_cited_by_count"
+semantic_meaning = "Native OpenAlex cited_by_count for the work."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric count fields are filtered."
+conversion = "Native JSON integer stored as uint32."
 numeric_kind = "uint"
 bit_width = 32
 endianness = "little"
 
 [[series]]
 id = "openalex_referenced_works_count"
+semantic_meaning = "Native OpenAlex referenced_works_count for the work."
+role = "primary"
 representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered."
+missing_value_policy = "Rows missing numeric count fields are filtered."
+conversion = "Native JSON integer stored as uint32."
 numeric_kind = "uint"
 bit_width = 32
 endianness = "little"
 
+[[series]]
+id = "openalex_authorship_count"
+semantic_meaning = "Number of authorship records attached to the work."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Missing arrays are treated as empty arrays."
+conversion = "Stable JSON array cardinality stored as uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "openalex_location_count"
+semantic_meaning = "Number of location records attached to the work."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Missing arrays are treated as empty arrays."
+conversion = "Stable JSON array cardinality stored as uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "openalex_created_at"
+semantic_meaning = "OpenAlex metadata creation timestamp for the work."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing created_date are filtered."
+conversion = "Native ISO datetime parsed to Unix epoch seconds."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "openalex_updated_at"
+semantic_meaning = "OpenAlex metadata update timestamp for the work."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing updated_date are filtered."
+conversion = "Native ISO datetime parsed to Unix epoch seconds."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "openalex_countries_distinct_count"
+semantic_meaning = "Native count of distinct countries represented by the work's institutions."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric count fields are filtered."
+conversion = "Native JSON integer stored as uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "openalex_institutions_distinct_count"
+semantic_meaning = "Native count of distinct institutions represented by the work."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric count fields are filtered."
+conversion = "Native JSON integer stored as uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "openalex_locations_count"
+semantic_meaning = "Native OpenAlex locations_count for the work."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric count fields are filtered."
+conversion = "Native JSON integer stored as uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "openalex_fwci"
+semantic_meaning = "Native OpenAlex field-weighted citation impact metric."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric metric fields are filtered."
+conversion = "Native JSON number stored as float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "openalex_citation_normalized_percentile"
+semantic_meaning = "Native citation_normalized_percentile.value metric."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric metric fields are filtered."
+conversion = "Native JSON number stored as float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "openalex_primary_topic_score"
+semantic_meaning = "Native score for the primary OpenAlex topic assignment."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing a primary topic score are filtered."
+conversion = "Native JSON number stored as float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "openalex_has_fulltext"
+semantic_meaning = "Native OpenAlex has_fulltext boolean flag."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing boolean flags are filtered."
+conversion = "Native JSON boolean stored as uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "openalex_is_retracted"
+semantic_meaning = "Native OpenAlex is_retracted boolean flag."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing boolean flags are filtered."
+conversion = "Native JSON boolean stored as uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "openalex_citation_top_1_percent"
+semantic_meaning = "Native citation_normalized_percentile.is_in_top_1_percent flag."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing boolean metric flags are filtered."
+conversion = "Native JSON boolean stored as uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "openalex_citation_top_10_percent"
+semantic_meaning = "Native citation_normalized_percentile.is_in_top_10_percent flag."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing boolean metric flags are filtered."
+conversion = "Native JSON boolean stored as uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "openalex_cited_by_percentile_year_min"
+semantic_meaning = "Native cited_by_percentile_year.min value."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing percentile fields are filtered."
+conversion = "Native JSON integer stored as uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "openalex_indexed_in_count"
+semantic_meaning = "Number of index names attached to the work."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Missing arrays are treated as empty arrays."
+conversion = "Stable JSON array cardinality stored as uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "openalex_awards_count"
+semantic_meaning = "Number of award records attached to the work."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Missing arrays are treated as empty arrays."
+conversion = "Stable JSON array cardinality stored as uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "openalex_funders_count"
+semantic_meaning = "Number of funder records attached to the work."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Missing arrays are treated as empty arrays."
+conversion = "Stable JSON array cardinality stored as uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "openalex_counts_by_year_count"
+semantic_meaning = "Number of yearly citation-count records attached to the work."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Missing arrays are treated as empty arrays."
+conversion = "Stable JSON array cardinality stored as uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "openalex_related_works_count"
+semantic_meaning = "Number of related-work identifiers attached to the work."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Missing arrays are treated as empty arrays."
+conversion = "Stable JSON array cardinality stored as uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"

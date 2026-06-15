@@ -10,14 +10,14 @@ the upstream source is useless. The question is whether the current recipe can b
 extended into one coherent material without violating the protocol.
 
 Initial count before this removal pass: `41`
-Current pending count: `32`
+Current pending count: `30`
 
 ## Summary
 
 - repairable by straightforward pagination, cursoring, or bounded time windows: `23`
 - repairable only as a redesign/replacement because current query is arbitrary, ranked, or too narrow: `12`
-- removed or superseded so far: `9`
-- remaining repairable by straightforward pagination, cursoring, or bounded time windows: `20`
+- removed or superseded so far: `10`
+- remaining repairable by straightforward pagination, cursoring, or bounded time windows: `18`
 - remaining redesign/replacement candidates because current query is arbitrary, ranked, or too narrow: `12`
 
 ## Removed In First Pass
@@ -31,10 +31,12 @@ Current pending count: `32`
 - `internet_archive_metadata`
 - `nasa_neows_feed`
 - `chembl_molecules`
+- `openfda_drug_event`
 
 ## Repaired So Far
 
 - `internetarchive_advancedsearch`: extended to a bounded 10,000-row Internet Archive text metadata slice; now passes the floor.
+- `openalex_works_2024_sample`: extended to a bounded 20,000-work 2024 cursor-paginated OpenAlex table; now passes the floor with 460,000 primary values and 1,160,000 primary bytes.
 
 ## Per-Recipe Assessment
 
@@ -56,7 +58,6 @@ Current pending count: `32`
 | `gleif_lei_records` | GLEIF LEI records first page, 4 series, 400 values | LEI API is pageable. | Repairable by pagination, but review whether date/count fields are strong enough. |
 | `hex_packages` | Hex package search for `data`, 4 series, 400 values | Current endpoint/query is narrow; full package listing may be possible but must be confirmed. | Redesign before keeping. |
 | `ooni_measurements` | OONI measurements first page, 4 series, 400 values | Measurement API can be bounded by time/test/country and paged. | Repairable by explicit bounded scope. |
-| `openalex_works_2024_sample` | OpenAlex works 2024 first page, 2 series, 400 values | OpenAlex has cursor pagination for the same 2024 filter. | Repairable by cursor pagination. |
 | `osm_overpass_cafes` | Overpass cafes in one Berlin bounding box, 4 series, 400 values | Can widen to multiple tiles or a city/region, but current bbox is arbitrary and coordinates may be auxiliary. | Redesign before keeping. |
 | `stackexchange_top_questions_jan_2024` | Stack Exchange top-voted January questions, 4 series, 400 values | API pages, but `top` ranking is a bounded leaderboard, not source material. | Remove or redesign as all questions in a bounded time window. |
 | `treasury_avg_interest_rates` | Treasury fiscal API first page, 4 series, 400 values | Fiscal Data API supports pagination and stable table semantics. | Repairable by pagination. |
@@ -64,7 +65,6 @@ Current pending count: `32`
 | `musicbrainz_release_groups` | MusicBrainz release-group search for tag `data`, 5 series, 491 values | Query/tag is arbitrary; paging exists but material is weak. | Redesign or remove. |
 | `openfoodfacts_products` | Open Food Facts `chocolate` search first page, 5 series, 491 values | Product search is pageable; better as a stable category or full bounded product subset. | Repairable as redesigned category/catalog recipe. |
 | `inaturalist_observations` | iNaturalist recent observations first page, 5 series, 495 values | Observation API is pageable and can be bounded by date/place/taxon. | Repairable by explicit bounded scope. |
-| `openfda_drug_event` | openFDA drug event first page, 5 series, 495 values | openFDA supports `limit`/`skip`; can use bounded received-date windows. | Repairable by pagination/time scope. |
 | `pokemontcg_cards` | Pokemon TCG cards first page, 6 series, 498 values | API is pageable but domain is entertainment/card catalog; numeric market fields may be unstable. | Low-priority redesign or remove. |
 | `artic_artworks_search` | Art Institute search for `cat`, 5 series, 500 values | Search query is arbitrary; ArtIC artworks API can page all artworks with selected fields. | Repairable only as redesigned artworks catalog. |
 | `gitlab_projects` | GitLab public projects first page, 5 series, 500 values | GitLab API supports pagination. | Repairable by pagination, but public-project listing is volatile. |
@@ -77,8 +77,7 @@ Current pending count: `32`
 
 1. Repair high-confidence pageable/time-windowed sources:
    `arxiv_cs_recent`,
-   `europe_pmc_search`, `openalex_works_2024_sample`,
-   `treasury_avg_interest_rates`, `openfda_drug_event`, `medrxiv_details`,
+   `europe_pmc_search`, `treasury_avg_interest_rates`, `medrxiv_details`,
    `nvd_cves_recent`.
 2. Revisit medium-confidence catalog/search recipes only if the replacement
    scope can be made explicit and homogeneous.

@@ -45,7 +45,6 @@ arxiv_cs_recent	below_floor	400	1200	4	100	300	0	0	0	1	none	aggregate_floor,medi
 datacite_dois	below_floor	400	1200	4	100	300	0	0	0	1	none	aggregate_floor,median_sample_floor
 ooni_measurements	below_floor	400	1300	4	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
 stackexchange_top_questions_jan_2024	below_floor	400	1400	4	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
-openalex_works_2024_sample	below_floor	400	1600	2	200	800	0	0	0	1	none	aggregate_floor,median_sample_floor
 cratesio_crates	below_floor	400	2000	4	100	500	0	0	0	1	none	aggregate_floor,median_sample_floor
 hex_packages	below_floor	400	2600	4	100	800	0	0	0	1	none	aggregate_floor,median_sample_floor
 osm_overpass_cafes	below_floor	400	2600	4	100	800	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -59,7 +58,6 @@ imf_unemployment_rate_annual	below_floor	416	1664	8	52	208	0	0	0	1	none	aggregat
 musicbrainz_release_groups	below_floor	491	982	5	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
 openfoodfacts_products	below_floor	491	1870	5	98	392	0	0	0	1	none	aggregate_floor,median_sample_floor
 inaturalist_observations	below_floor	495	1188	5	99	198	0	0	0	1	none	aggregate_floor,median_sample_floor
-openfda_drug_event	below_floor	495	1683	5	99	198	0	0	0	1	none	aggregate_floor,median_sample_floor
 pokemontcg_cards	below_floor	498	1071	6	81	130.5	0	0	0	1	none	aggregate_floor,median_sample_floor
 medrxiv_details	below_floor	500	1300	5	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
 artic_artworks_search	below_floor	500	1400	5	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -261,6 +259,7 @@ who_gho_observations	ok	348104	1435929	8	43513	130539	0	0	0	1	none	none
 ghcnd_stations	ok	397497	1589988	3	132499	529996	0	0	0	1	none	none
 hgnc_complete_set_json	ok	404973	1034931	9	44997	89994	0	0	0	1	none	none
 usgs_sitefile_all_large	ok	452020	3073736	5	90404	723232	0	0	0	1	none	none
+openalex_works_2024_sample	ok	460000	1160000	23	20000	40000	0	0	0	1	none	none
 noaa_coops_air_temperature	ok	525155	4201240	3	175044	1400352	0	0	0	1	none	none
 noaa_coops_air_pressure	ok	525156	4201248	3	175047	1400376	0	0	0	1	none	none
 noaa_ghcn_daily_awnd_by_station	ok	545792	1091584	57	9970	19940	0	0	0	1	none	none

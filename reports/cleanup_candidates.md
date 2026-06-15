@@ -3,8 +3,8 @@
 Current acceptance floor: `10,000` primary values or `100 KB` primary sample bytes, plus `1,000` minimum median primary sample values.
 
 - source of truth: `reports/accepted_recipe_audit.tsv`
-- `ok`: `123`
-- `below_floor`: `188`
+- `ok`: `124`
+- `below_floor`: `186`
 - `broken`: `0`
 
 This file is the short operational queue. Detailed policy for family cleanup lives in
@@ -50,10 +50,12 @@ typical primary sample is tiny and which reaches usefulness only by stacking man
 - remove `internet_archive_metadata`
 - remove `nasa_neows_feed`
 - remove `chembl_molecules`
+- remove `openfda_drug_event`
 
 ## Tiny Standalone Repairs
 
 - repair `internetarchive_advancedsearch`
+- repair `openalex_works_2024_sample`
 
 ## Triage First: Tiny Non-Family Standalones
 
@@ -80,14 +82,12 @@ scope. Per-recipe assessment lives in
 - `datacite_dois` — values=400, bytes=1200, sample_rows=4
 - `ooni_measurements` — values=400, bytes=1300, sample_rows=4
 - `stackexchange_top_questions_jan_2024` — values=400, bytes=1400, sample_rows=4
-- `openalex_works_2024_sample` — values=400, bytes=1600, sample_rows=2
 - `cratesio_crates` — values=400, bytes=2000, sample_rows=4
 - `hex_packages` — values=400, bytes=2600, sample_rows=4
 - `osm_overpass_cafes` — values=400, bytes=2600, sample_rows=4
 - `musicbrainz_release_groups` — values=491, bytes=982, sample_rows=5
 - `openfoodfacts_products` — values=491, bytes=1870, sample_rows=5
 - `inaturalist_observations` — values=495, bytes=1188, sample_rows=5
-- `openfda_drug_event` — values=495, bytes=1683, sample_rows=5
 - `pokemontcg_cards` — values=498, bytes=1071, sample_rows=6
 - `medrxiv_details` — values=500, bytes=1300, sample_rows=5
 - `artic_artworks_search` — values=500, bytes=1400, sample_rows=5
@@ -97,7 +97,7 @@ scope. Per-recipe assessment lives in
 - `huggingface_datasets` — values=500, bytes=2000, sample_rows=5
 
 Count guide:
-- tiny non-family standalones with `<= 500` values: `32`
+- tiny non-family standalones with `<= 500` values: `30`
 - non-family below-floor recipes with `501-3999` values: `55`
 - non-family below-floor recipes with `>= 4000` values: `24`
 

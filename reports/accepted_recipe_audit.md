@@ -5,7 +5,7 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 Auxiliary series do not count toward acceptance.
 
 - `ok`: 123
-- `below_floor`: 190
+- `below_floor`: 188
 - `broken`: 0
 
 ## Below Floor
@@ -36,7 +36,6 @@ Auxiliary series do not count toward acceptance.
 | `sec_companyfacts_stockholders_equity_quarterly` | 227 | 1816 | 5 | 51 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `library_of_congress_items` | 232 | 928 | 4 | 44 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `openbrewerydb_breweries` | 246 | 1640 | 3 | 82 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `nasa_neows_feed` | 270 | 1305 | 6 | 45 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `anilist_media` | 295 | 837 | 6 | 49 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `gbif_occurrence` | 298 | 1984 | 3 | 99 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `nuget_search` | 300 | 1200 | 3 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
@@ -58,7 +57,6 @@ Auxiliary series do not count toward acceptance.
 | `arxiv_cs_recent` | 400 | 1200 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `datacite_dois` | 400 | 1200 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `ooni_measurements` | 400 | 1300 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `chembl_molecules` | 400 | 1400 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `stackexchange_top_questions_jan_2024` | 400 | 1400 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `openalex_works_2024_sample` | 400 | 1600 | 2 | 200 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `cratesio_crates` | 400 | 2000 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |

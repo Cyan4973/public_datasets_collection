@@ -10,14 +10,14 @@ the upstream source is useless. The question is whether the current recipe can b
 extended into one coherent material without violating the protocol.
 
 Initial count before this removal pass: `41`
-Current pending count: `34`
+Current pending count: `32`
 
 ## Summary
 
 - repairable by straightforward pagination, cursoring, or bounded time windows: `23`
 - repairable only as a redesign/replacement because current query is arbitrary, ranked, or too narrow: `12`
-- removed or superseded so far: `7`
-- remaining repairable by straightforward pagination, cursoring, or bounded time windows: `22`
+- removed or superseded so far: `9`
+- remaining repairable by straightforward pagination, cursoring, or bounded time windows: `20`
 - remaining redesign/replacement candidates because current query is arbitrary, ranked, or too narrow: `12`
 
 ## Removed In First Pass
@@ -29,6 +29,8 @@ Current pending count: `34`
 - `orcid_search`
 - `steamspy_top100in2weeks`
 - `internet_archive_metadata`
+- `nasa_neows_feed`
+- `chembl_molecules`
 
 ## Repaired So Far
 
@@ -41,7 +43,6 @@ Current pending count: `34`
 | `gutendex_books` | Gutendex `science` search first page, 6 series, 192 values | Paginate a coherent catalog slice, preferably all books or a stable subject/language subset. | Repairable as redesigned catalog recipe. |
 | `library_of_congress_items` | LOC item listing, first 100 records, 4 series, 232 values | Use LOC pagination for a stable collection/search with the same fields. | Repairable by pagination if the chosen collection is coherent. |
 | `openbrewerydb_breweries` | Open Brewery DB first page, 3 series, 246 values | Page through brewery records. | Repairable by pagination, but numeric payload is weak. |
-| `nasa_neows_feed` | NASA NeoWs 7-day feed, 6 series, 270 values | NeoWs feed is date-windowed; extend by multiple contiguous windows. | Repairable by bounded time range. |
 | `anilist_media` | AniList popular anime first page, 6 series, 295 values | GraphQL supports paging, but current popularity ranking is a moving ranked feed. | Redesign or remove; do not keep as a shallow top list. |
 | `gbif_occurrence` | GBIF occurrence search first page, 3 series, 298 values | Page through a coherent occurrence query or bounded taxon/geography subset. | Repairable by pagination if scope is explicit. |
 | `nuget_search` | NuGet search for `data`, 3 series, 300 values | Search supports paging, but query term is arbitrary; better source is a package catalog or curated broad query. | Redesign before keeping. |
@@ -49,7 +50,6 @@ Current pending count: `34`
 | `weathergov_stations` | Weather.gov station listing first page, 3 series, 300 values | Station endpoint is paginated. | Repairable by pagination; review primary vs auxiliary coordinate semantics. |
 | `musicbrainz_recordings` | MusicBrainz recording search for `love`, 4 series, 382 values | Query is arbitrary; MusicBrainz search paging exists but a keyword search is weak material. | Redesign or remove. |
 | `arxiv_cs_recent` | arXiv `cs.LG` recent feed, 4 series, 400 values | Extend by `start`/`max_results` and/or bounded submitted-date windows. | Repairable by bounded category/time scope. |
-| `chembl_molecules` | ChEMBL molecules first page, 4 series, 400 values | ChEMBL supports limit/offset pagination. | Repairable by pagination; review series after prior constant-column cleanup. |
 | `cratesio_crates` | crates.io search for `data`, 4 series, 400 values | Search paging exists, but query is arbitrary. | Redesign as broader crates catalog or remove. |
 | `datacite_dois` | DataCite DOI search for `machine learning`, 4 series, 400 values | DataCite supports pagination, but query term is arbitrary; a resource-type or provider scope would be cleaner. | Redesign before keeping. |
 | `europe_pmc_search` | Europe PMC January 2024 search page, 4 series, 400 values | Extend date range and paginate. | Repairable by bounded publication-date window. |
@@ -76,7 +76,7 @@ Current pending count: `34`
 ## Recommended Order
 
 1. Repair high-confidence pageable/time-windowed sources:
-   `nasa_neows_feed`, `arxiv_cs_recent`, `chembl_molecules`,
+   `arxiv_cs_recent`,
    `europe_pmc_search`, `openalex_works_2024_sample`,
    `treasury_avg_interest_rates`, `openfda_drug_event`, `medrxiv_details`,
    `nvd_cves_recent`.

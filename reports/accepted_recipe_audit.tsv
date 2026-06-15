@@ -23,7 +23,6 @@ sec_companyfacts_operating_income_quarterly	below_floor	227	1816	5	51	408	0	0	0	
 sec_companyfacts_stockholders_equity_quarterly	below_floor	227	1816	5	51	408	0	0	0	1	none	aggregate_floor,median_sample_floor
 library_of_congress_items	below_floor	232	928	4	44	220	0	0	0	1	none	aggregate_floor,median_sample_floor
 openbrewerydb_breweries	below_floor	246	1640	3	82	656	0	0	0	1	none	aggregate_floor,median_sample_floor
-nasa_neows_feed	below_floor	270	1305	6	45	180	0	0	0	1	none	aggregate_floor,median_sample_floor
 anilist_media	below_floor	295	837	6	49	147	0	0	0	1	none	aggregate_floor,median_sample_floor
 gbif_occurrence	below_floor	298	1984	3	99	792	0	0	0	1	none	aggregate_floor,median_sample_floor
 nuget_search	below_floor	300	1200	3	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -45,7 +44,6 @@ gleif_lei_records	below_floor	400	800	4	100	200	0	0	0	1	none	aggregate_floor,med
 arxiv_cs_recent	below_floor	400	1200	4	100	300	0	0	0	1	none	aggregate_floor,median_sample_floor
 datacite_dois	below_floor	400	1200	4	100	300	0	0	0	1	none	aggregate_floor,median_sample_floor
 ooni_measurements	below_floor	400	1300	4	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
-chembl_molecules	below_floor	400	1400	4	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
 stackexchange_top_questions_jan_2024	below_floor	400	1400	4	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
 openalex_works_2024_sample	below_floor	400	1600	2	200	800	0	0	0	1	none	aggregate_floor,median_sample_floor
 cratesio_crates	below_floor	400	2000	4	100	500	0	0	0	1	none	aggregate_floor,median_sample_floor

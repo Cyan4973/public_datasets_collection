@@ -8,7 +8,7 @@ This is a policy-and-examples triage memo. The exact live inventory is
 Audit baseline when this triage memo was last refreshed:
 
 - `ok`: `123`
-- `below_floor`: `190`
+- `below_floor`: `188`
 - `broken`: `0`
 
 The remaining below-floor set falls into three buckets:
@@ -25,14 +25,13 @@ one-entity, or otherwise intrinsically narrow, but some source APIs can be
 extended coherently. Per-recipe extension assessment lives in
 `reports/tiny_standalone_extension_triage.md`.
 
-Current count: `34`
+Current count: `32`
 
 | dataset_id | values | bytes | samples | median values | reasons |
 |---|---:|---:|---:|---:|---|
 | `gutendex_books` | 192 | 512 | 6 | 32 | `aggregate_floor,median_sample_floor` |
 | `library_of_congress_items` | 232 | 928 | 4 | 44 | `aggregate_floor,median_sample_floor` |
 | `openbrewerydb_breweries` | 246 | 1640 | 3 | 82 | `aggregate_floor,median_sample_floor` |
-| `nasa_neows_feed` | 270 | 1305 | 6 | 45 | `aggregate_floor,median_sample_floor` |
 | `anilist_media` | 295 | 837 | 6 | 49 | `aggregate_floor,median_sample_floor` |
 | `gbif_occurrence` | 298 | 1984 | 3 | 99 | `aggregate_floor,median_sample_floor` |
 | `nuget_search` | 300 | 1200 | 3 | 100 | `aggregate_floor,median_sample_floor` |
@@ -40,7 +39,6 @@ Current count: `34`
 | `weathergov_stations` | 300 | 2000 | 3 | 100 | `aggregate_floor,median_sample_floor` |
 | `musicbrainz_recordings` | 382 | 952 | 4 | 94 | `aggregate_floor,median_sample_floor` |
 | `arxiv_cs_recent` | 400 | 1200 | 4 | 100 | `aggregate_floor,median_sample_floor` |
-| `chembl_molecules` | 400 | 1400 | 4 | 100 | `aggregate_floor,median_sample_floor` |
 | `cratesio_crates` | 400 | 2000 | 4 | 100 | `aggregate_floor,median_sample_floor` |
 | `datacite_dois` | 400 | 1200 | 4 | 100 | `aggregate_floor,median_sample_floor` |
 | `europe_pmc_search` | 400 | 800 | 4 | 100 | `aggregate_floor,median_sample_floor` |

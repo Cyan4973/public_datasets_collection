@@ -4,7 +4,7 @@ Current acceptance floor: `10,000` primary values or `100 KB` primary sample byt
 
 - source of truth: `reports/accepted_recipe_audit.tsv`
 - `ok`: `123`
-- `below_floor`: `190`
+- `below_floor`: `188`
 - `broken`: `0`
 
 This file is the short operational queue. Detailed policy for family cleanup lives in
@@ -48,6 +48,12 @@ typical primary sample is tiny and which reaches usefulness only by stacking man
 - remove `orcid_search`
 - remove `steamspy_top100in2weeks`
 - remove `internet_archive_metadata`
+- remove `nasa_neows_feed`
+- remove `chembl_molecules`
+
+## Tiny Standalone Repairs
+
+- repair `internetarchive_advancedsearch`
 
 ## Triage First: Tiny Non-Family Standalones
 
@@ -60,7 +66,6 @@ scope. Per-recipe assessment lives in
 - `gutendex_books` — values=192, bytes=512, sample_rows=6
 - `library_of_congress_items` — values=232, bytes=928, sample_rows=4
 - `openbrewerydb_breweries` — values=246, bytes=1640, sample_rows=3
-- `nasa_neows_feed` — values=270, bytes=1305, sample_rows=6
 - `anilist_media` — values=295, bytes=837, sample_rows=6
 - `gbif_occurrence` — values=298, bytes=1984, sample_rows=3
 - `nuget_search` — values=300, bytes=1200, sample_rows=3
@@ -74,7 +79,6 @@ scope. Per-recipe assessment lives in
 - `arxiv_cs_recent` — values=400, bytes=1200, sample_rows=4
 - `datacite_dois` — values=400, bytes=1200, sample_rows=4
 - `ooni_measurements` — values=400, bytes=1300, sample_rows=4
-- `chembl_molecules` — values=400, bytes=1400, sample_rows=4
 - `stackexchange_top_questions_jan_2024` — values=400, bytes=1400, sample_rows=4
 - `openalex_works_2024_sample` — values=400, bytes=1600, sample_rows=2
 - `cratesio_crates` — values=400, bytes=2000, sample_rows=4
@@ -93,7 +97,7 @@ scope. Per-recipe assessment lives in
 - `huggingface_datasets` — values=500, bytes=2000, sample_rows=5
 
 Count guide:
-- tiny non-family standalones with `<= 500` values: `34`
+- tiny non-family standalones with `<= 500` values: `32`
 - non-family below-floor recipes with `501-3999` values: `55`
 - non-family below-floor recipes with `>= 4000` values: `24`
 

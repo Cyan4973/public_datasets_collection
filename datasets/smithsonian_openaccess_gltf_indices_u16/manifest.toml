@@ -1,0 +1,56 @@
+manifest_version = 1
+dataset_id = "smithsonian_openaccess_gltf_indices_u16"
+name = "Smithsonian Open Access glTF Indices UInt16"
+description = "CC0 3D scan mesh topology from Smithsonian Open Access GLB assets, restricted to native uint16 index accessors."
+homepage = "https://3d.si.edu/cc0"
+
+[license]
+name = "CC0 1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://3d.si.edu/cc0"
+notes = "Smithsonian Open Access 3D assets marked CC0."
+
+[[origins]]
+id = "smithsonian_openaccess_3d"
+name = "Smithsonian Open Access 3D"
+url = "https://3d.si.edu/cc0"
+type = "public_data_portal"
+
+[[resources]]
+id = "selected_glb_models"
+origin = "smithsonian_openaccess_3d"
+type = "bounded_url_selection"
+local_path = "downloads/smithsonian_openaccess_gltf_indices_u16/"
+notes = "Prefer SMITHSONIAN_GLTF_URLS_FILE with exact CC0 model URLs. Otherwise download.sh queries the Smithsonian Open Access API and extracts direct non-Draco .glb URLs from CC0 rows. ZIP discovery is disabled by default after validation showed most selected ZIPs were OBJ/STL or glTF-JSON packages."
+
+[local_paths]
+downloads = "downloads/smithsonian_openaccess_gltf_indices_u16/"
+extracted = "extracted/smithsonian_openaccess_gltf_indices_u16/"
+filtered = "filtered/smithsonian_openaccess_gltf_indices_u16/"
+index = "index/smithsonian_openaccess_gltf_indices_u16/"
+samples = "samples/smithsonian_openaccess_gltf_indices_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/smithsonian_openaccess_gltf_indices_u16/samples.jsonl"
+summary = "Extract one native uint16 mesh index accessor per GLB primitive index accessor."
+
+[[series]]
+id = "mesh_index_accessors_u16"
+description = "glTF mesh index accessors."
+semantic_meaning = "Triangle/primitive topology indices from 3D scan meshes."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["selected_glb_models"]
+missing_value_policy = "Malformed GLB files, archives with no GLB files, non-uint16 indices, strided accessors, sparse accessors, or truncated buffers are rejected."
+conversion = "Copy contiguous GLB buffer bytes for primitive index accessors with componentType UNSIGNED_SHORT after optional archive extraction."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw glTF accessor payload"
+sample_geometry = "1d_mesh_index_accessor"
+sample_count = 3
+total_size_bytes = 1799928
+output_path = "samples/smithsonian_openaccess_gltf_indices_u16/mesh_index_accessors_u16/"

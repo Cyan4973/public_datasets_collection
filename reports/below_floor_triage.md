@@ -7,7 +7,7 @@ This is a policy-and-examples triage memo. The exact live inventory is
 
 Audit baseline when this triage memo was last refreshed:
 
-- `ok`: `124`
+- `ok`: `125`
 - `below_floor`: `186`
 - `broken`: `0`
 

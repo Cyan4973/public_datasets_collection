@@ -61,6 +61,7 @@ def write_sample(
     row = {
         "dataset_id": dataset_id,
         "series_id": series_id,
+        "role": "primary",
         "sample_path": path.relative_to(data_root).as_posix(),
         "numeric_kind": numeric_kind,
         "bit_width": 16,

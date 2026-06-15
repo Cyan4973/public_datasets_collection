@@ -9,7 +9,7 @@ This staged round contains ten candidate recipes. No dataset payloads were downl
 | `nasa_aviris_classic_hyperspectral_i16` | airborne hyperspectral remote sensing | ENVI int16/uint16 cubes | AVIRIS seed page or `AVIRIS_URLS_FILE` | source page may not expose direct files |
 | `tcia_nsclc_radiomics_ct_i16` | medical CT imaging | uncompressed DICOM 16-bit planes | TCIA NBIA API | selected series may use compressed transfer syntax |
 | `polyhaven_hdri_exr_f16` | HDR environment imagery | OpenEXR HALF planes | Poly Haven API | local parser only accepts uncompressed HALF EXR |
-| `smithsonian_openaccess_gltf_indices_u16` | 3D scan topology | GLB uint16 index accessors | Smithsonian page or `SMITHSONIAN_GLTF_URLS_FILE` | portal may not expose direct `.glb` links |
+| `smithsonian_openaccess_gltf_indices_u16` | 3D scan topology | GLB uint16 index accessors | Smithsonian API discovery or `SMITHSONIAN_GLTF_URLS_FILE` | API may expose no direct `.glb` links; exact URL file is preferred |
 | `usgs_sidescan_sonar_tiff_u16` | marine sonar raster | uncompressed 16-bit TIFF | USGS/data.gov seed or `USGS_SIDESCAN_URLS_FILE` | many sonar mosaics are 8-bit or compressed |
 | `usgs_chirp_segy_i16` | marine seismic traces | SEG-Y format-code-3 traces | USGS seed pages or `USGS_CHIRP_SEGY_URLS_FILE` | some SEG-Y files may be float/32-bit |
 | `nasa_pds_sharad_radargram_i16` | planetary radargrams | PDS3 16-bit image payloads | PDS seed or `SHARAD_URLS_FILE` | exact product URLs may be needed |

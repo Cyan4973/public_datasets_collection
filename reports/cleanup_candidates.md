@@ -3,7 +3,7 @@
 Current acceptance floor: `10,000` primary values or `100 KB` primary sample bytes, plus `1,000` minimum median primary sample values.
 
 - source of truth: `reports/accepted_recipe_audit.tsv`
-- `ok`: `124`
+- `ok`: `125`
 - `below_floor`: `186`
 - `broken`: `0`
 

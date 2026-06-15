@@ -9,7 +9,7 @@ Source of truth:
 - git history through `f8ec8e1`
 
 Current audit baseline:
-- `ok`: `124`
+- `ok`: `125`
 - `below_floor`: `186`
 - `broken`: `0`
 - degenerate findings: `5`, all `binary_sparse`

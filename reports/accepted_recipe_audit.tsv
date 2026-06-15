@@ -14,7 +14,6 @@ fred_pce_price_index_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate
 fred_ppi_all_commodities_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor
 fred_unemployment_level_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor
 fred_unemployment_rate_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor
-esco_occupations	below_floor	142	213	2	71	106.5	0	0	0	1	none	aggregate_floor,median_sample_floor
 world_bank_access_to_electricity_percent_annual	below_floor	183	1464	6	31.5	252	0	0	0	1	none	aggregate_floor,median_sample_floor
 gutendex_books	below_floor	192	512	6	32	64	0	0	0	1	none	aggregate_floor,median_sample_floor
 internet_archive_metadata	below_floor	200	1200	2	100	600	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -28,7 +27,6 @@ openbrewerydb_breweries	below_floor	246	1640	3	82	656	0	0	0	1	none	aggregate_flo
 nasa_neows_feed	below_floor	270	1305	6	45	180	0	0	0	1	none	aggregate_floor,median_sample_floor
 anilist_media	below_floor	295	837	6	49	147	0	0	0	1	none	aggregate_floor,median_sample_floor
 gbif_occurrence	below_floor	298	1984	3	99	792	0	0	0	1	none	aggregate_floor,median_sample_floor
-figshare_articles	below_floor	300	1000	3	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
 nuget_search	below_floor	300	1200	3	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
 osf_preprints	below_floor	300	1200	3	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
 weathergov_stations	below_floor	300	2000	3	100	800	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -41,18 +39,15 @@ world_bank_internet_users_percent_annual	below_floor	344	2752	10	35	280	0	0	0	1	
 world_bank_energy_use_per_capita_annual	below_floor	346	2768	10	35	280	0	0	0	1	none	aggregate_floor,median_sample_floor
 world_bank_unemployment_total_percent_annual	below_floor	350	2800	10	35	280	0	0	0	1	none	aggregate_floor,median_sample_floor
 musicbrainz_recordings	below_floor	382	952	4	94	194	0	0	0	1	none	aggregate_floor,median_sample_floor
-orcid_search	below_floor	390	780	4	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
 europe_pmc_search	below_floor	400	800	4	100	150	0	0	0	1	none	aggregate_floor,median_sample_floor
 treasury_avg_interest_rates	below_floor	400	800	4	100	150	0	0	0	1	none	aggregate_floor,median_sample_floor
 wger_exercises	below_floor	400	800	4	100	150	0	0	0	1	none	aggregate_floor,median_sample_floor
 gleif_lei_records	below_floor	400	800	4	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
-crossref_funders	below_floor	400	1000	4	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
 arxiv_cs_recent	below_floor	400	1200	4	100	300	0	0	0	1	none	aggregate_floor,median_sample_floor
 datacite_dois	below_floor	400	1200	4	100	300	0	0	0	1	none	aggregate_floor,median_sample_floor
 ooni_measurements	below_floor	400	1300	4	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
 chembl_molecules	below_floor	400	1400	4	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
 stackexchange_top_questions_jan_2024	below_floor	400	1400	4	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
-steamspy_top100in2weeks	below_floor	400	1600	4	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
 openalex_works_2024_sample	below_floor	400	1600	2	200	800	0	0	0	1	none	aggregate_floor,median_sample_floor
 cratesio_crates	below_floor	400	2000	4	100	500	0	0	0	1	none	aggregate_floor,median_sample_floor
 hex_packages	below_floor	400	2600	4	100	800	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -75,7 +70,6 @@ nvd_cves_recent	below_floor	500	1400	5	100	200	0	0	0	1	none	aggregate_floor,medi
 pride_projects_search	below_floor	500	1600	5	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
 gitlab_projects	below_floor	500	2000	5	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
 huggingface_datasets	below_floor	500	2000	5	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
-npm_search_packages	below_floor	500	2600	5	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
 fred_fed_balance_sheet_weekly	below_floor	521	2084	10	52	208	0	0	0	1	none	aggregate_floor,median_sample_floor
 fred_mortgage_30y_weekly	below_floor	521	2084	10	52	208	0	0	0	1	none	aggregate_floor,median_sample_floor
 fred_initial_claims_weekly	below_floor	522	2088	10	52	208	0	0	0	1	none	aggregate_floor,median_sample_floor

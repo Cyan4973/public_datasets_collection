@@ -8,7 +8,7 @@ This is a policy-and-examples triage memo. The exact live inventory is
 Audit baseline when this triage memo was last refreshed:
 
 - `ok`: `122`
-- `below_floor`: `198`
+- `below_floor`: `192`
 - `broken`: `0`
 
 The remaining below-floor set falls into three buckets:
@@ -19,15 +19,16 @@ The remaining below-floor set falls into three buckets:
 
 ## Remove Next
 
-The clearest next removal candidates are the current non-family standalones with
-`<= 500` primary values. They remain accepted, but the recipe shape is too thin:
-one-query, one-page, one-entity, or otherwise intrinsically narrow.
+The current non-family standalones with `<= 500` primary values need
+repair-or-remove triage before deletion. Many are one-query, one-page,
+one-entity, or otherwise intrinsically narrow, but some source APIs can be
+extended coherently. Per-recipe extension assessment lives in
+`reports/tiny_standalone_extension_triage.md`.
 
-Current count: `41`
+Current count: `35`
 
 | dataset_id | values | bytes | samples | median values | reasons |
 |---|---:|---:|---:|---:|---|
-| `esco_occupations` | 142 | 213 | 2 | 71 | `aggregate_floor,median_sample_floor` |
 | `gutendex_books` | 192 | 512 | 6 | 32 | `aggregate_floor,median_sample_floor` |
 | `internet_archive_metadata` | 200 | 1200 | 2 | 100 | `aggregate_floor,median_sample_floor` |
 | `library_of_congress_items` | 232 | 928 | 4 | 44 | `aggregate_floor,median_sample_floor` |
@@ -35,16 +36,13 @@ Current count: `41`
 | `nasa_neows_feed` | 270 | 1305 | 6 | 45 | `aggregate_floor,median_sample_floor` |
 | `anilist_media` | 295 | 837 | 6 | 49 | `aggregate_floor,median_sample_floor` |
 | `gbif_occurrence` | 298 | 1984 | 3 | 99 | `aggregate_floor,median_sample_floor` |
-| `figshare_articles` | 300 | 1000 | 3 | 100 | `aggregate_floor,median_sample_floor` |
 | `nuget_search` | 300 | 1200 | 3 | 100 | `aggregate_floor,median_sample_floor` |
 | `osf_preprints` | 300 | 1200 | 3 | 100 | `aggregate_floor,median_sample_floor` |
 | `weathergov_stations` | 300 | 2000 | 3 | 100 | `aggregate_floor,median_sample_floor` |
 | `musicbrainz_recordings` | 382 | 952 | 4 | 94 | `aggregate_floor,median_sample_floor` |
-| `orcid_search` | 390 | 780 | 4 | 100 | `aggregate_floor,median_sample_floor` |
 | `arxiv_cs_recent` | 400 | 1200 | 4 | 100 | `aggregate_floor,median_sample_floor` |
 | `chembl_molecules` | 400 | 1400 | 4 | 100 | `aggregate_floor,median_sample_floor` |
 | `cratesio_crates` | 400 | 2000 | 4 | 100 | `aggregate_floor,median_sample_floor` |
-| `crossref_funders` | 400 | 1000 | 4 | 100 | `aggregate_floor,median_sample_floor` |
 | `datacite_dois` | 400 | 1200 | 4 | 100 | `aggregate_floor,median_sample_floor` |
 | `europe_pmc_search` | 400 | 800 | 4 | 100 | `aggregate_floor,median_sample_floor` |
 | `gleif_lei_records` | 400 | 800 | 4 | 100 | `aggregate_floor,median_sample_floor` |
@@ -53,7 +51,6 @@ Current count: `41`
 | `openalex_works_2024_sample` | 400 | 1600 | 2 | 200 | `aggregate_floor,median_sample_floor` |
 | `osm_overpass_cafes` | 400 | 2600 | 4 | 100 | `aggregate_floor,median_sample_floor` |
 | `stackexchange_top_questions_jan_2024` | 400 | 1400 | 4 | 100 | `aggregate_floor,median_sample_floor` |
-| `steamspy_top100in2weeks` | 400 | 1600 | 4 | 100 | `aggregate_floor,median_sample_floor` |
 | `treasury_avg_interest_rates` | 400 | 800 | 4 | 100 | `aggregate_floor,median_sample_floor` |
 | `wger_exercises` | 400 | 800 | 4 | 100 | `aggregate_floor,median_sample_floor` |
 | `musicbrainz_release_groups` | 491 | 982 | 5 | 100 | `aggregate_floor,median_sample_floor` |
@@ -65,11 +62,10 @@ Current count: `41`
 | `gitlab_projects` | 500 | 2000 | 5 | 100 | `aggregate_floor,median_sample_floor` |
 | `huggingface_datasets` | 500 | 2000 | 5 | 100 | `aggregate_floor,median_sample_floor` |
 | `medrxiv_details` | 500 | 1300 | 5 | 100 | `aggregate_floor,median_sample_floor` |
-| `npm_search_packages` | 500 | 2600 | 5 | 100 | `aggregate_floor,median_sample_floor` |
 | `nvd_cves_recent` | 500 | 1400 | 5 | 100 | `aggregate_floor,median_sample_floor` |
 | `pride_projects_search` | 500 | 1600 | 5 | 100 | `aggregate_floor,median_sample_floor` |
 
-These should be removed before spending more effort expanding harder cases.
+Use this table as the small-recipe queue, not as an automatic deletion list.
 
 ## Merge Or Replace Whole Families
 

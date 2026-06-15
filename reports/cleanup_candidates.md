@@ -4,7 +4,7 @@ Current acceptance floor: `10,000` primary values or `100 KB` primary sample byt
 
 - source of truth: `reports/accepted_recipe_audit.tsv`
 - `ok`: `122`
-- `below_floor`: `198`
+- `below_floor`: `192`
 - `broken`: `0`
 
 This file is the short operational queue. Detailed policy for family cleanup lives in
@@ -39,13 +39,23 @@ typical primary sample is tiny and which reaches usefulness only by stacking man
 - remove `ecb_fx_eur_daily_matrix`
 - remove `tourism_monthly_aus`
 
-## Remove First: Tiny Non-Family Standalones
+## Tiny Standalone Removals
 
-These remain accepted but are so small that they are the easiest next removal batch.
-The common failure mode is a one-query, one-page, one-entity, or otherwise intrinsically
-thin recipe shape rather than a source-family problem.
+- remove `figshare_articles`
+- remove `crossref_funders`
+- remove `npm_search_packages`
+- remove `esco_occupations`
+- remove `orcid_search`
+- remove `steamspy_top100in2weeks`
 
-- `esco_occupations` — values=142, bytes=213, sample_rows=2
+## Triage First: Tiny Non-Family Standalones
+
+These remain accepted but are so small that they need repair-or-remove triage.
+Do not remove them blindly: first check whether the upstream source can be
+extended by pagination, a bounded time range, or a broader coherent catalog
+scope. Per-recipe assessment lives in
+`reports/tiny_standalone_extension_triage.md`.
+
 - `gutendex_books` — values=192, bytes=512, sample_rows=6
 - `internet_archive_metadata` — values=200, bytes=1200, sample_rows=2
 - `library_of_congress_items` — values=232, bytes=928, sample_rows=4
@@ -53,24 +63,20 @@ thin recipe shape rather than a source-family problem.
 - `nasa_neows_feed` — values=270, bytes=1305, sample_rows=6
 - `anilist_media` — values=295, bytes=837, sample_rows=6
 - `gbif_occurrence` — values=298, bytes=1984, sample_rows=3
-- `figshare_articles` — values=300, bytes=1000, sample_rows=3
 - `nuget_search` — values=300, bytes=1200, sample_rows=3
 - `osf_preprints` — values=300, bytes=1200, sample_rows=3
 - `weathergov_stations` — values=300, bytes=2000, sample_rows=3
 - `musicbrainz_recordings` — values=382, bytes=952, sample_rows=4
-- `orcid_search` — values=390, bytes=780, sample_rows=4
 - `europe_pmc_search` — values=400, bytes=800, sample_rows=4
 - `gleif_lei_records` — values=400, bytes=800, sample_rows=4
 - `treasury_avg_interest_rates` — values=400, bytes=800, sample_rows=4
 - `wger_exercises` — values=400, bytes=800, sample_rows=4
-- `crossref_funders` — values=400, bytes=1000, sample_rows=4
 - `arxiv_cs_recent` — values=400, bytes=1200, sample_rows=4
 - `datacite_dois` — values=400, bytes=1200, sample_rows=4
 - `ooni_measurements` — values=400, bytes=1300, sample_rows=4
 - `chembl_molecules` — values=400, bytes=1400, sample_rows=4
 - `stackexchange_top_questions_jan_2024` — values=400, bytes=1400, sample_rows=4
 - `openalex_works_2024_sample` — values=400, bytes=1600, sample_rows=2
-- `steamspy_top100in2weeks` — values=400, bytes=1600, sample_rows=4
 - `cratesio_crates` — values=400, bytes=2000, sample_rows=4
 - `hex_packages` — values=400, bytes=2600, sample_rows=4
 - `osm_overpass_cafes` — values=400, bytes=2600, sample_rows=4
@@ -85,10 +91,9 @@ thin recipe shape rather than a source-family problem.
 - `pride_projects_search` — values=500, bytes=1600, sample_rows=5
 - `gitlab_projects` — values=500, bytes=2000, sample_rows=5
 - `huggingface_datasets` — values=500, bytes=2000, sample_rows=5
-- `npm_search_packages` — values=500, bytes=2600, sample_rows=5
 
 Count guide:
-- tiny non-family standalones with `<= 500` values: `41`
+- tiny non-family standalones with `<= 500` values: `35`
 - non-family below-floor recipes with `501-3999` values: `55`
 - non-family below-floor recipes with `>= 4000` values: `24`
 

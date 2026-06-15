@@ -5,7 +5,7 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 Auxiliary series do not count toward acceptance.
 
 - `ok`: 122
-- `below_floor`: 198
+- `below_floor`: 192
 - `broken`: 0
 
 ## Below Floor
@@ -27,7 +27,6 @@ Auxiliary series do not count toward acceptance.
 | `fred_ppi_all_commodities_monthly` | 120 | 480 | 10 | 12 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_unemployment_level_monthly` | 120 | 480 | 10 | 12 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_unemployment_rate_monthly` | 120 | 480 | 10 | 12 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `esco_occupations` | 142 | 213 | 2 | 71 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `world_bank_access_to_electricity_percent_annual` | 183 | 1464 | 6 | 31.5 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `gutendex_books` | 192 | 512 | 6 | 32 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `internet_archive_metadata` | 200 | 1200 | 2 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
@@ -41,7 +40,6 @@ Auxiliary series do not count toward acceptance.
 | `nasa_neows_feed` | 270 | 1305 | 6 | 45 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `anilist_media` | 295 | 837 | 6 | 49 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `gbif_occurrence` | 298 | 1984 | 3 | 99 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `figshare_articles` | 300 | 1000 | 3 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `nuget_search` | 300 | 1200 | 3 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `osf_preprints` | 300 | 1200 | 3 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `weathergov_stations` | 300 | 2000 | 3 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
@@ -54,18 +52,15 @@ Auxiliary series do not count toward acceptance.
 | `world_bank_energy_use_per_capita_annual` | 346 | 2768 | 10 | 35 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `world_bank_unemployment_total_percent_annual` | 350 | 2800 | 10 | 35 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `musicbrainz_recordings` | 382 | 952 | 4 | 94 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `orcid_search` | 390 | 780 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `europe_pmc_search` | 400 | 800 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `treasury_avg_interest_rates` | 400 | 800 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `wger_exercises` | 400 | 800 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `gleif_lei_records` | 400 | 800 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `crossref_funders` | 400 | 1000 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `arxiv_cs_recent` | 400 | 1200 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `datacite_dois` | 400 | 1200 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `ooni_measurements` | 400 | 1300 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `chembl_molecules` | 400 | 1400 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `stackexchange_top_questions_jan_2024` | 400 | 1400 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `steamspy_top100in2weeks` | 400 | 1600 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `openalex_works_2024_sample` | 400 | 1600 | 2 | 200 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `cratesio_crates` | 400 | 2000 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `hex_packages` | 400 | 2600 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
@@ -88,7 +83,6 @@ Auxiliary series do not count toward acceptance.
 | `pride_projects_search` | 500 | 1600 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `gitlab_projects` | 500 | 2000 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `huggingface_datasets` | 500 | 2000 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `npm_search_packages` | 500 | 2600 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_fed_balance_sheet_weekly` | 521 | 2084 | 10 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_mortgage_30y_weekly` | 521 | 2084 | 10 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_initial_claims_weekly` | 522 | 2088 | 10 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |

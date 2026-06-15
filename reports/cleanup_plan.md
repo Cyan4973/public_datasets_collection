@@ -1,42 +1,60 @@
 # Cleanup Plan
 
-Date: 2026-06-12
+Date: 2026-06-15
 
 Source of truth:
 - `reports/accepted_recipe_audit.tsv`
 - `reports/degenerate_series_audit.tsv`
 - `reports/family_homogeneity_policy.md`
-- git history through `9e2eda2`
+- git history through `f8ec8e1`
 
-## Step 1: Easy Hygiene Cleanup
+Current audit baseline:
+- `ok`: `122`
+- `below_floor`: `198`
+- `broken`: `0`
+- degenerate findings: `5`, all `binary_sparse`
+- constant findings: `0`
 
-- remove empty residual directories left behind by previously rejected, blocked, or superseded recipes
-- fix report generation so quality audits only cover currently accepted recipes
-- regenerate stale audit reports
-- refresh `reports/cleanup_candidates.md` so it matches the current audit baseline
+## Completed
 
-## Step 2: Easy Removal Batch
+- removed empty residual directories left behind by previously rejected, blocked, or superseded recipes
+- fixed report generation so quality audits cover currently accepted manifests
+- removed the first tiny-dataset batches, including accepted datasets with `<= 100` values
+- removed `94` globally constant manifest series across `52` datasets
+- filtered `93` constant natural samples from otherwise non-constant series
 
-- prune the smallest non-family below-floor standalones first
-- priority target: non-family recipes with `<= 500` total values and no credible path to floor without changing the recipe identity
+## Next: Sparse-Binary Policy
 
-## Step 3: Family Cleanup
+The degenerate audit now contains only sparse-binary findings. These are not
+constant samples, so they need a separate policy decision before removal.
 
-- resolve fragmented accepted families without violating homogeneity
-- priority families:
-  - `sec_companyfacts_*`
-  - `fred_*`
-  - `eurostat_*`
-  - `world_bank_*`
-  - `imf_*`
-  - `owid_*`
+Current sparse-binary rows:
+- `noaa_ghcn_daily_snwd_by_station`: `2`
+- `noaa_ghcn_daily_wesd_by_station`: `2`
+- `noaa_isd_lite`: `1`
 
-## Step 4: Rewrite / Expand Survivors
+## Next: Easy Removal Batch
 
-- revisit below-floor recipes that may be salvageable by widening pagination, time range, or entity coverage while staying reproducible and homogeneous
+Prune the smallest non-family below-floor standalones first.
 
-## Step 5: Constant-Series Cleanup
+Priority target:
+- non-family recipes with `<= 500` total primary values
+- no credible path to floor without changing recipe identity
+- current count: `41`
 
-- first prune globally constant accepted series listed in `reports/constant_series_cleanup.md`
-- filter or reject constant samples inside otherwise useful series, without removing the whole non-constant series
-- do not handle sparse-binary findings in this pass; those need separate policy and review
+## Next: Family Cleanup
+
+Resolve fragmented accepted families without violating homogeneity.
+
+Priority families:
+- `fred_*`: `23`
+- `world_bank_*`: `16`
+- `owid_*`: `20`
+- `imf_*`: `7`
+- `eurostat_*`: `7`
+- `sec_companyfacts_*`: `5`
+
+## Later: Rewrite / Expand Survivors
+
+Revisit below-floor recipes that may survive if widened materially by pagination,
+time range, or entity coverage while staying reproducible and homogeneous.

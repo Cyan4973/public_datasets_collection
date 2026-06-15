@@ -130,16 +130,24 @@ Representative examples:
 - `usgs_quakes_month`: dropped constant `usgs_quake_tsunami`
 - `who_atlas_gisah`: dropped constant `who_gisah_spatial_dim_length_u8` and `who_gisah_data_source_length_u8`
 - `who_gho_observations`: dropped constant `who_gho_dim2_length_u8`
+- constant cleanup: removed `94` globally constant manifest series and filtered `93` constant natural samples
 
-## Constant-Series Cleanup Queue
+## Completed Constant-Series Cleanup
 
 Dedicated constant-only queue: `reports/constant_series_cleanup.md`.
 
-Current scope excludes sparse-binary findings. The globally constant
-manifest-series batch is complete:
+Current constant-valued cleanup is complete:
 
 - removed globally constant manifest series: `94` across `52` datasets
+- filtered constant samples inside otherwise useful series: `93` samples
 - remaining globally constant manifest series: `0`
-- remaining constant findings are sample-level constants inside otherwise non-constant series
+- remaining constant findings in `reports/degenerate_series_audit.tsv`: `0`
 
-- constant samples inside otherwise useful series: filter or reject those samples without removing the whole series
+## Sparse-Binary Queue
+
+Current scope excludes sparse-binary findings. These are the only remaining
+degenerate audit rows and need a separate policy decision:
+
+- `noaa_ghcn_daily_snwd_by_station`: `2` sparse-binary samples
+- `noaa_ghcn_daily_wesd_by_station`: `2` sparse-binary samples
+- `noaa_isd_lite`: `1` sparse-binary sample

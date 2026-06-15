@@ -139,6 +139,7 @@ for series_id, _, _, _, _, _ in series_defs:
 
 filtered_root.mkdir(parents=True, exist_ok=True)
 row_counts_path = filtered_root / "station_row_counts.tsv"
+skipped_constants_path = filtered_root / "skipped_constant_samples.tsv"
 index_records: list[dict[str, object]] = []
 
 def parse_row(line: str) -> tuple[int, ...] | None:
@@ -154,9 +155,14 @@ def parse_row(line: str) -> tuple[int, ...] | None:
         return None
     return values
 
-with row_counts_path.open("w", encoding="ascii", newline="") as tsv_file:
+def is_constant(values) -> bool:
+    return bool(values) and all(value == values[0] for value in values)
+
+with row_counts_path.open("w", encoding="ascii", newline="") as tsv_file, skipped_constants_path.open("w", encoding="ascii", newline="") as skipped_file:
     writer = csv.writer(tsv_file, delimiter="\t")
+    skipped_writer = csv.writer(skipped_file, delimiter="\t")
     writer.writerow(["station_id", "station_slug", "row_count"])
+    skipped_writer.writerow(["station_id", "station_slug", "series_id", "value_count", "constant_value"])
 
     for station_id, slug in stations:
         arrays = {
@@ -218,6 +224,9 @@ with row_counts_path.open("w", encoding="ascii", newline="") as tsv_file:
         for series_id, _, _, _, _, _ in series_defs:
             out_path = samples_root / series_id / f"{slug}.bin"
             payload = arrays[series_id]
+            if is_constant(payload):
+                skipped_writer.writerow([station_id, slug, series_id, len(payload), payload[0]])
+                continue
             if payload.itemsize > 1 and os.sys.byteorder != "little":
                 payload.byteswap()
             with out_path.open("wb") as out_file:

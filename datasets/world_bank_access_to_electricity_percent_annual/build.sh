@@ -52,12 +52,18 @@ filtered_root.mkdir(parents=True, exist_ok=True)
 index_root.mkdir(parents=True, exist_ok=True)
 
 stats_path = filtered_root / "country_stats.tsv"
+skipped_constants_path = filtered_root / "skipped_constant_samples.tsv"
 index_path = index_root / "samples.jsonl"
 index_records = []
 
-with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
+def is_constant(values):
+    return bool(values) and all(value == values[0] for value in values)
+
+with stats_path.open("w", encoding="utf-8", newline="") as stats_file, skipped_constants_path.open("w", encoding="utf-8", newline="") as skipped_file:
     writer = csv.writer(stats_file, delimiter="\t")
+    skipped_writer = csv.writer(skipped_file, delimiter="\t")
     writer.writerow(["country_code", "row_count", "kept_count", "skipped_null_count", "skipped_parse_count", "start_year", "end_year"])
+    skipped_writer.writerow(["country_code", "series_id", "value_count", "constant_value"])
     for country_code in countries:
         path = download_root / f"{country_code}.json"
         if not path.is_file():
@@ -99,6 +105,9 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
             end_year = str(year)
         payloads = {"access_to_electricity_percent_f64": values}
         for series in series_defs:
+            if is_constant(payloads[series["series_id"]]):
+                skipped_writer.writerow([country_code, series["series_id"], len(payloads[series["series_id"]]), payloads[series["series_id"]][0]])
+                continue
             payload = array.array(series["array_type"], payloads[series["series_id"]])
             if payload.itemsize > 1 and os.sys.byteorder != "little":
                 payload.byteswap()

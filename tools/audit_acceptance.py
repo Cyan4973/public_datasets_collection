@@ -180,6 +180,8 @@ def main() -> int:
                 fh.write(
                     f"| `{row['dataset_id']}` | {row['primary_values']} | {row['primary_sample_bytes']} | {row['primary_sample_rows']} | {format_stat(row['median_primary_sample_value_count'])} | {row['auxiliary_values']} | {row['auxiliary_sample_rows']} | `{format_csv(row['failure_reasons'])}` |\n"
                 )
+
+        if broken and below:
             fh.write("\n")
 
         if below:
@@ -190,7 +192,6 @@ def main() -> int:
                 fh.write(
                     f"| `{row['dataset_id']}` | {row['primary_values']} | {row['primary_sample_bytes']} | {row['primary_sample_rows']} | {format_stat(row['median_primary_sample_value_count'])} | {row['auxiliary_values']} | {row['auxiliary_sample_rows']} | `{format_csv(row['failure_reasons'])}` |\n"
                 )
-            fh.write("\n")
 
     print(f"wrote {tsv_path}")
     print(f"wrote {md_path}")

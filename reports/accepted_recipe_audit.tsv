@@ -15,6 +15,7 @@ fred_ppi_all_commodities_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggre
 fred_unemployment_level_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor
 fred_unemployment_rate_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor
 esco_occupations	below_floor	142	213	2	71	106.5	0	0	0	1	none	aggregate_floor,median_sample_floor
+world_bank_access_to_electricity_percent_annual	below_floor	183	1464	6	31.5	252	0	0	0	1	none	aggregate_floor,median_sample_floor
 gutendex_books	below_floor	192	512	6	32	64	0	0	0	1	none	aggregate_floor,median_sample_floor
 internet_archive_metadata	below_floor	200	1200	2	100	600	0	0	0	1	none	aggregate_floor,median_sample_floor
 sec_companyfacts_assets_quarterly	below_floor	227	1816	5	51	408	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -31,7 +32,6 @@ figshare_articles	below_floor	300	1000	3	100	400	0	0	0	1	none	aggregate_floor,me
 nuget_search	below_floor	300	1200	3	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
 osf_preprints	below_floor	300	1200	3	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
 weathergov_stations	below_floor	300	2000	3	100	800	0	0	0	1	none	aggregate_floor,median_sample_floor
-world_bank_access_to_electricity_percent_annual	below_floor	319	2552	10	34	272	0	0	0	1	none	aggregate_floor,median_sample_floor
 world_bank_renewable_energy_consumption_percent_annual	below_floor	320	2560	10	32	256	0	0	0	1	none	aggregate_floor,median_sample_floor
 owid_consumption_co2_annual	below_floor	340	1360	10	34	136	0	0	0	1	none	aggregate_floor,median_sample_floor
 owid_trade_co2_annual	below_floor	340	1360	10	34	136	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -250,12 +250,12 @@ open_meteo_hourly_vapour_pressure_deficit	ok	87600	350400	5	17520	70080	0	0	0	1	
 open_meteo_hourly_wind	ok	87600	350400	5	17520	70080	0	0	0	1	none	none
 cran_packages	ok	95504	191008	4	23876	47752	0	0	0	1	none	none
 kegg_hsa_genes	ok	97008	315276	4	24252	97008	0	0	0	1	none	none
-noaa_ghcn_daily_wesd_by_station	ok	102894	205788	28	3114.5	6229	0	0	0	1	none	none
+noaa_ghcn_daily_wesd_by_station	ok	102494	204988	24	5845	11690	0	0	0	1	none	none
 worldclim_tavg_10m	ok	103680	414720	6	17280	69120	0	0	0	1	none	none
 reactome_events_hierarchy	ok	104345	271297	5	20869	41738	0	0	0	1	none	none
 noaa_ghcn_daily_tavg_by_station	ok	121079	242158	59	2588	5176	0	0	0	1	none	none
+noaa_ghcn_daily_tsun_by_station	ok	133376	266752	16	11347.5	22695	0	0	0	1	none	none
 bike_sharing_uci	ok	139032	399717	8	17379	52137	0	0	0	1	none	none
-noaa_ghcn_daily_tsun_by_station	ok	159967	319934	43	1191	2382	0	0	0	1	none	none
 seismic_waveform_i32	ok	168000	672000	12	12000	48000	0	0	0	1	none	none
 movielens_latest_small	ok	201672	806688	2	100836	403344	0	0	0	1	none	none
 geonames_cities5000	ok	206700	1378000	3	68900	551200	0	0	0	1	none	none
@@ -263,7 +263,7 @@ geonames_postal_fixed	ok	207450	954270	5	41490	165960	0	0	0	1	none	none
 nasa_techport_projects	ok	227414	413480	11	20674	20674	0	0	0	1	none	none
 ourairports_airports	ok	241771	1651444	3	85545	684360	0	0	0	1	none	none
 who_atlas_gisah	ok	252140	806848	5	50428	100856	0	0	0	1	none	none
-noaa_ghcn_daily_wsfg_by_station	ok	266486	532972	40	7179	14358	0	0	0	1	none	none
+noaa_ghcn_daily_wsfg_by_station	ok	266478	532956	33	8055	16110	0	0	0	1	none	none
 nyc_311_descriptor_u16	ok	287186	574372	3	100000	200000	0	0	0	1	none	none
 noaa_coops_water_temperature	ok	346842	2774736	2	173421	1387368	0	0	0	1	none	none
 who_gho_observations	ok	348104	1435929	8	43513	130539	0	0	0	1	none	none
@@ -284,7 +284,7 @@ gdelt_events_numsources_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	non
 noaa_coops_water_level	ok	876000	7008000	5	175200	1401600	0	0	0	1	none	none
 eeg_physionet	ok	1178880	2357760	30	39200	78400	0	0	0	1	none	none
 macrostrat_units	ok	1422259	5689036	11	129304	517216	0	0	0	1	none	none
-noaa_ghcn_daily_snwd_by_station	ok	1754123	3508246	59	28251	56502	0	0	0	1	none	none
+noaa_ghcn_daily_snwd_by_station	ok	1725872	3451744	58	28052.5	56105	0	0	0	1	none	none
 gas_sensor_array_drift_uci	ok	1794390	14257750	129	13910	111280	0	0	0	1	none	none
 tokens_bert_gutenberg	ok	2011943	4023886	12	113744.5	227489	0	0	0	1	none	none
 noaa_ghcn_daily_snow_by_station	ok	2077730	4155460	59	36089	72178	0	0	0	1	none	none
@@ -303,8 +303,8 @@ beijing_air_quality_uci	ok	5753775	46030200	180	32141.5	257132	0	0	0	1	none	none
 unicode_bmp_gutenberg	ok	8700484	17400968	12	490769	981538	0	0	0	1	none	none
 fsdd_spoken_digits	ok	10498424	20996848	3000	3358.5	6717	0	0	0	1	none	none
 har_smartphone_uci	ok	11864448	94915584	18	659136	5273088	0	0	0	1	none	none
+noaa_isd_lite	ok	12103704	20912475	502	26015	51830	0	0	0	1	none	none
 skadi_srtm_hgt	ok	12967201	25934402	67	194454	388908	0	0	0	1	none	none
-noaa_isd_lite	ok	13179732	23064531	552	26013	51830	0	0	0	1	none	none
 household_power_uci	ok	14344960	71724800	7	2049280	16394240	0	0	0	1	none	none
 ncbi_taxdump	ok	18084993	57095412	5	2840433	11361732	0	0	0	1	none	none
 chbmit_physionet	ok	24883200	49766400	66	368960	737920	0	0	0	1	none	none

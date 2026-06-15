@@ -28,6 +28,7 @@ Auxiliary series do not count toward acceptance.
 | `fred_unemployment_level_monthly` | 120 | 480 | 10 | 12 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_unemployment_rate_monthly` | 120 | 480 | 10 | 12 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `esco_occupations` | 142 | 213 | 2 | 71 | 0 | 0 | `aggregate_floor,median_sample_floor` |
+| `world_bank_access_to_electricity_percent_annual` | 183 | 1464 | 6 | 31.5 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `gutendex_books` | 192 | 512 | 6 | 32 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `internet_archive_metadata` | 200 | 1200 | 2 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `sec_companyfacts_assets_quarterly` | 227 | 1816 | 5 | 51 | 0 | 0 | `aggregate_floor,median_sample_floor` |
@@ -44,7 +45,6 @@ Auxiliary series do not count toward acceptance.
 | `nuget_search` | 300 | 1200 | 3 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `osf_preprints` | 300 | 1200 | 3 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `weathergov_stations` | 300 | 2000 | 3 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `world_bank_access_to_electricity_percent_annual` | 319 | 2552 | 10 | 34 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `world_bank_renewable_energy_consumption_percent_annual` | 320 | 2560 | 10 | 32 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_consumption_co2_annual` | 340 | 1360 | 10 | 34 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_trade_co2_annual` | 340 | 1360 | 10 | 34 | 0 | 0 | `aggregate_floor,median_sample_floor` |

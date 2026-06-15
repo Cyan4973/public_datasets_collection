@@ -44,18 +44,28 @@ series_defs = [
     {"series_id": "access_to_electricity_percent_f64", "numeric_kind": "float", "bit_width": 64, "endianness": "little", "element_size_bytes": 8},
 ]
 stats_path = filtered_root / "country_stats.tsv"
+skipped_constants_path = filtered_root / "skipped_constant_samples.tsv"
 index_path = index_root / "samples.jsonl"
 failures_path = download_root / "download_failures.tsv"
 if failures_path.is_file() and failures_path.stat().st_size > 0:
     raise SystemExit(f"download failures recorded in {failures_path}")
 if not stats_path.is_file():
     raise SystemExit(f"missing stats file: {stats_path}")
+if not skipped_constants_path.is_file():
+    raise SystemExit(f"missing skipped constants file: {skipped_constants_path}")
 if not index_path.is_file():
     raise SystemExit(f"missing sample index: {index_path}")
 with stats_path.open("r", encoding="utf-8", newline="") as handle:
     stats_rows = list(csv.DictReader(handle, delimiter="\t"))
 stats_by_country = {row["country_code"]: row for row in stats_rows}
+with skipped_constants_path.open("r", encoding="utf-8", newline="") as handle:
+    skipped_constant_rows = list(csv.DictReader(handle, delimiter="\t"))
+skipped_constants_by_key = {(row["series_id"], row["country_code"]): row for row in skipped_constant_rows}
 expected_records = {}
+expected_skipped_constants = {}
+
+def is_constant(values):
+    return bool(values) and all(value == values[0] for value in values)
 
 for country_code in countries:
     path = download_root / f"{country_code}.json"
@@ -91,6 +101,7 @@ for country_code in countries:
     if parsed:
         start_year = str(parsed[0][0])
         end_year = str(parsed[-1][0])
+    values = [value for _, value in parsed]
     stats_row = stats_by_country.get(country_code)
     if stats_row is None:
         raise SystemExit(f"missing stats row for {country_code}")
@@ -102,6 +113,16 @@ for country_code in countries:
     value_count = kept_count
     for series in series_defs:
         sample_path = samples_root / series["series_id"] / f"{country_code}.bin"
+        if is_constant(values):
+            if sample_path.exists():
+                raise SystemExit(f"constant sample was not skipped: {sample_path}")
+            expected_skipped_constants[(series["series_id"], country_code)] = {
+                "country_code": country_code,
+                "series_id": series["series_id"],
+                "value_count": str(value_count),
+                "constant_value": str(values[0]),
+            }
+            continue
         if not sample_path.is_file():
             raise SystemExit(f"missing sample file: {sample_path}")
         sample_size_bytes = sample_path.stat().st_size
@@ -136,11 +157,18 @@ with index_path.open("r", encoding="utf-8") as handle:
         index_records[key] = record
 if set(index_records) != set(expected_records):
     raise SystemExit(f"sample index keys do not match samples: index={len(index_records)} expected={len(expected_records)}")
+if set(skipped_constants_by_key) != set(expected_skipped_constants):
+    raise SystemExit(f"skipped constant keys do not match raw data: skipped={len(skipped_constants_by_key)} expected={len(expected_skipped_constants)}")
 for key, expected in expected_records.items():
     record = index_records[key]
     for field, expected_value in expected.items():
         if record.get(field) != expected_value:
             raise SystemExit(f"index mismatch for {key} field {field}: {record.get(field)!r} != {expected_value!r}")
+for key, expected in expected_skipped_constants.items():
+    row = skipped_constants_by_key[key]
+    for field, expected_value in expected.items():
+        if row.get(field) != expected_value:
+            raise SystemExit(f"skipped constant mismatch for {key} field {field}: {row.get(field)!r} != {expected_value!r}")
 print("verified raw inventory, generated sample sizes, stats, and sample index")
 PY
 

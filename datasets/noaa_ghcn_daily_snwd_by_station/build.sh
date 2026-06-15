@@ -124,12 +124,18 @@ filtered_root.mkdir(parents=True, exist_ok=True)
 index_root.mkdir(parents=True, exist_ok=True)
 
 stats_path = filtered_root / "station_year_stats.tsv"
+skipped_constants_path = filtered_root / "skipped_constant_samples.tsv"
 index_path = index_root / "samples.jsonl"
 index_records = []
 
-with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
+def is_constant(values):
+    return bool(values) and all(value == values[0] for value in values)
+
+with stats_path.open("w", encoding="utf-8", newline="") as stats_file, skipped_constants_path.open("w", encoding="utf-8", newline="") as skipped_file:
     writer = csv.writer(stats_file, delimiter="\t")
+    skipped_writer = csv.writer(skipped_file, delimiter="\t")
     writer.writerow(["station_id", "year", "row_count", "kept_count", "skipped_quality_count", "skipped_parse_count", "start_date", "end_date"])
+    skipped_writer.writerow(["station_id", "series_id", "value_count", "constant_value"])
     for station_id in station_ids:
         value_series = []
         csv_path = download_root / f"{station_id}.csv.gz"
@@ -174,6 +180,9 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
             bucket = per_year[year]
             writer.writerow([station_id, year, bucket["row_count"], bucket["kept_count"], bucket["skipped_quality_count"], bucket["skipped_parse_count"], bucket["start_date"], bucket["end_date"]])
         if not value_series:
+            continue
+        if is_constant(value_series):
+            skipped_writer.writerow([station_id, "ghcn_value_i16", len(value_series), value_series[0]])
             continue
         payloads = {"ghcn_value_i16": value_series}
         for series in series_defs:

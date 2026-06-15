@@ -38,6 +38,7 @@ samples_root = Path(os.environ["SAMPLES_ROOT"])
 data_root = samples_root.parent.parent
 
 stats_path = filtered_root / "station_year_stats.tsv"
+skipped_constants_path = filtered_root / "skipped_constant_samples.tsv"
 index_path = index_root / "samples.jsonl"
 failures_path = download_root / "download_failures.tsv"
 station_ids = [
@@ -135,6 +136,8 @@ if failures_path.is_file() and failures_path.stat().st_size > 0:
     raise SystemExit(f"download failures recorded in {failures_path}")
 if not stats_path.is_file():
     raise SystemExit(f"missing stats file: {stats_path}")
+if not skipped_constants_path.is_file():
+    raise SystemExit(f"missing skipped constants file: {skipped_constants_path}")
 if not index_path.is_file():
     raise SystemExit(f"missing sample index: {index_path}")
 
@@ -150,7 +153,14 @@ if stations_path.is_file():
 with stats_path.open("r", encoding="utf-8", newline="") as handle:
     stats_rows = list(csv.DictReader(handle, delimiter="\t"))
 stats_by_key = {(row["station_id"], row["year"]): row for row in stats_rows}
+with skipped_constants_path.open("r", encoding="utf-8", newline="") as handle:
+    skipped_constant_rows = list(csv.DictReader(handle, delimiter="\t"))
+skipped_constants_by_key = {(row["series_id"], row["station_id"]): row for row in skipped_constant_rows}
 expected_records = {}
+expected_skipped_constants = {}
+
+def is_constant(values):
+    return bool(values) and all(value == values[0] for value in values)
 
 for station_id in station_ids:
     csv_path = download_root / f"{station_id}.csv.gz"
@@ -159,6 +169,7 @@ for station_id in station_ids:
     if csv_path.stat().st_size <= 0:
         raise SystemExit(f"empty raw station file: {csv_path}")
     total_values = 0
+    value_series = []
     per_year = {}
     with gzip.open(csv_path, "rt", encoding="utf-8", newline="") as handle:
         reader = csv.reader(handle)
@@ -189,6 +200,7 @@ for station_id in station_ids:
                 bucket["skipped_parse_count"] += 1
                 continue
             total_values += 1
+            value_series.append(value)
             if bucket["start_date"] == "":
                 bucket["start_date"] = raw_date
             bucket["end_date"] = raw_date
@@ -206,6 +218,18 @@ for station_id in station_ids:
         if stats_row["end_date"] != bucket["end_date"]:
             raise SystemExit(f"end date mismatch for {station_id} {year}: stats={stats_row['end_date']!r} raw={bucket['end_date']!r}")
     if total_values == 0:
+        continue
+    if is_constant(value_series):
+        for series in series_defs:
+            sample_path = samples_root / series["series_id"] / f"{station_id}.bin"
+            if sample_path.exists():
+                raise SystemExit(f"constant sample was not skipped: {sample_path}")
+            expected_skipped_constants[(series["series_id"], station_id)] = {
+                "station_id": station_id,
+                "series_id": series["series_id"],
+                "value_count": str(total_values),
+                "constant_value": str(value_series[0]),
+            }
         continue
     for series in series_defs:
         sample_path = samples_root / series["series_id"] / f"{station_id}.bin"
@@ -244,11 +268,18 @@ with index_path.open("r", encoding="utf-8") as handle:
         index_records[key] = record
 if set(index_records) != set(expected_records):
     raise SystemExit(f"sample index keys do not match samples: index={len(index_records)} expected={len(expected_records)}")
+if set(skipped_constants_by_key) != set(expected_skipped_constants):
+    raise SystemExit(f"skipped constant keys do not match raw data: skipped={len(skipped_constants_by_key)} expected={len(expected_skipped_constants)}")
 for key, expected in expected_records.items():
     record = index_records[key]
     for field, expected_value in expected.items():
         if record.get(field) != expected_value:
             raise SystemExit(f"index mismatch for {key} field {field}: {record.get(field)!r} != {expected_value!r}")
+for key, expected in expected_skipped_constants.items():
+    row = skipped_constants_by_key[key]
+    for field, expected_value in expected.items():
+        if row.get(field) != expected_value:
+            raise SystemExit(f"skipped constant mismatch for {key} field {field}: {row.get(field)!r} != {expected_value!r}")
 print("verified raw inventory, generated sample sizes, stats, and sample index")
 PY
 

@@ -14,14 +14,16 @@ The current degenerate audit is sample-row based. A flagged row can mean either:
 ## Summary
 
 - completed globally constant manifest-series removals: `94` series across `52` datasets
+- completed constant-sample filters: `93` samples in `10` dataset/series pairs across `6` datasets
+- remaining constant findings in `reports/degenerate_series_audit.tsv`: `0`
 - remaining globally constant manifest series: `0`
-- remaining partial constant-sample cases: `10` dataset/series pairs across `6` datasets
-- sparse-binary cases: out of scope for this pass
+- sparse-binary cases remaining: `5` rows, out of scope for this pass
 
-Acceptance impact after rebuilding affected local indexes:
+Acceptance impact across constant cleanup:
 
-- `metacpan_releases_search_large` moved from `ok` to `below_floor`
-- `nomis_employment` moved from `ok` to `below_floor`
+- global series removal moved `metacpan_releases_search_large` from `ok` to `below_floor`
+- global series removal moved `nomis_employment` from `ok` to `below_floor`
+- constant-sample filtering caused no additional status regressions; affected GHCN and ISD recipes remain `ok`, and `world_bank_access_to_electricity_percent_annual` remains `below_floor`
 
 ## Completed Removal: Globally Constant Series
 
@@ -126,11 +128,11 @@ material statistics, manifests where present, and verification expectations.
 | `worldbank_population_total` | `worldbank_population_decimal_u8` | `uint8` | 1 | 196 | 196 | `0` |
 | `worldbank_population_total` | `worldbank_population_indicator_name_length_u8` | `uint8` | 1 | 196 | 196 | `17` |
 
-## Filter Target: Constant Samples Inside Non-Constant Series
+## Completed Filtering: Constant Samples Inside Non-Constant Series
 
 These are not whole-series removals. The listed series contains useful
-non-constant samples, but some indexed samples are constant and should be
-filtered at build time or rejected by verify.
+non-constant samples, but some indexed samples were constant. They are now
+filtered at build time and verified through `skipped_constant_samples.tsv`.
 
 | dataset_id | series_id | kind | constant samples | constant values / total values | constant values seen |
 |---|---|---|---:|---:|---|

@@ -6,7 +6,5 @@ Source URL:
 Pinned output fields:
 - `datacite_publication_year`
 - `datacite_citation_count`
-- `datacite_view_count`
-- `datacite_download_count`
 - `datacite_reference_count`
 - `datacite_version_count`

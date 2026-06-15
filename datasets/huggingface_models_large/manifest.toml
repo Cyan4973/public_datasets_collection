@@ -81,11 +81,3 @@ missing_value_policy = "Rows missing numeric fields are filtered."
 numeric_kind = "uint"
 bit_width = 8
 endianness = "little"
-
-[[series]]
-id = "hf_model_private"
-representation_class = "derived_operational_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered."
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"

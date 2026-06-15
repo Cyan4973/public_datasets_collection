@@ -22,7 +22,7 @@ repo_root=Path(os.environ['REPO_ROOT']); data_root=repo_root/os.environ['DATA_DI
 download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTER_DIR']); index_dir=Path(os.environ['INDEX_DIR']); samples_dir=Path(os.environ['SAMPLES_DIR'])
 obj=json.load(open(download_dir/"figshare_articles.json",encoding='utf-8'))
 items=obj
-meta={"figshare_article_id": ("uint", 32, "I"), "figshare_defined_type": ("uint", 16, "H"), "figshare_group_id": ("uint", 32, "I"), "figshare_published_year": ("uint", 16, "H"), "figshare_created_year": ("uint", 16, "H")}
+meta={"figshare_article_id": ("uint", 32, "I"), "figshare_defined_type": ("uint", 16, "H"), "figshare_group_id": ("uint", 32, "I")}
 vals={sid:[] for sid in meta}
 skipped=0
 for sid in vals:
@@ -34,8 +34,6 @@ for row in items:
         vals["figshare_article_id"].append(int(row["id"]))
         vals["figshare_defined_type"].append(int(row["defined_type"]))
         vals["figshare_group_id"].append(int(row["group_id"]))
-        vals["figshare_published_year"].append(int(row["published_date"][:4]))
-        vals["figshare_created_year"].append(int(row["created_date"][:4]))
     except Exception:
         skipped += 1
 rows=[]

@@ -26,7 +26,6 @@ meta={
     "scryfall_edhrec_rank": ("uint", 32, "I"),
     "scryfall_color_identity_count": ("uint", 8, "B"),
     "scryfall_games_count": ("uint", 8, "B"),
-    "scryfall_multiverse_id_count": ("uint", 8, "B"),
 }
 vals={sid:[] for sid in meta}
 skipped=0
@@ -40,7 +39,6 @@ for row in items:
         vals["scryfall_edhrec_rank"].append(int(row["edhrec_rank"]))
         vals["scryfall_color_identity_count"].append(len(row.get("color_identity") or []))
         vals["scryfall_games_count"].append(len(row.get("games") or []))
-        vals["scryfall_multiverse_id_count"].append(len(row.get("multiverse_ids") or []))
     except Exception:
         skipped += 1
 rows=[]

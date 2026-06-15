@@ -34,15 +34,6 @@ sample_format = "raw_homogeneous_array"
 missing_value_policy = "missing_edhrec_rank_preserved_as_zero"
 
 [[series]]
-id = "scryfall_released_year_u16"
-path = "samples/scryfall_default_cards/scryfall_released_year_u16/cards.bin"
-numeric_kind = "uint"
-bit_width = 16
-endianness = "little"
-sample_format = "raw_homogeneous_array"
-missing_value_policy = "filtered_rows_with_invalid_numeric_card_fields"
-
-[[series]]
 id = "scryfall_released_month_u8"
 path = "samples/scryfall_default_cards/scryfall_released_month_u8/cards.bin"
 numeric_kind = "uint"

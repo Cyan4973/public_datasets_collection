@@ -21,7 +21,7 @@ from pathlib import Path
 repo_root = Path(os.environ["REPO_ROOT"]); data_root = repo_root / os.environ["DATA_DIR"]
 download_dir = Path(os.environ["DOWNLOAD_DIR"]); filter_dir = Path(os.environ["FILTER_DIR"]); index_dir = Path(os.environ["INDEX_DIR"]); samples_dir = Path(os.environ["SAMPLES_DIR"])
 results = json.load(open(download_dir / "openalex_works_2024_sample.json", encoding="utf-8"))["results"]
-defs={"openalex_cited_by_count":("I","cited_by_count"),"openalex_publication_year":("H","publication_year"),"openalex_referenced_works_count":("I","referenced_works_count")}
+defs={"openalex_cited_by_count":("I","cited_by_count"),"openalex_referenced_works_count":("I","referenced_works_count")}
 vals={sid:[] for sid in defs}; skipped=0
 for sid in defs:
     d=samples_dir/sid
@@ -30,11 +30,10 @@ for sid in defs:
 for item in results:
     try:
         vals["openalex_cited_by_count"].append(int(item["cited_by_count"]))
-        vals["openalex_publication_year"].append(int(item["publication_year"]))
         vals["openalex_referenced_works_count"].append(int(item["referenced_works_count"]))
     except Exception:
         skipped += 1
-rows=[]; meta={"openalex_cited_by_count":("uint",32,"I"),"openalex_publication_year":("uint",16,"H"),"openalex_referenced_works_count":("uint",32,"I")}
+rows=[]; meta={"openalex_cited_by_count":("uint",32,"I"),"openalex_referenced_works_count":("uint",32,"I")}
 for sid,values in vals.items():
     kind,bits,code=meta[sid]
     out=samples_dir/sid/f"{sid}_{kind}{bits}_n{len(values):06d}.bin"

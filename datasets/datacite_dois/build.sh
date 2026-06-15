@@ -23,7 +23,7 @@ download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTE
 obj=json.load(open(download_dir/"datacite_dois.json",encoding='utf-8'))
 
 items=obj["data"]
-meta={"datacite_publication_year": ["uint", 16, "H"], "datacite_citation_count": ["uint", 32, "I"], "datacite_view_count": ["uint", 32, "I"], "datacite_download_count": ["uint", 32, "I"], "datacite_reference_count": ["uint", 32, "I"], "datacite_version_count": ["uint", 16, "H"]}
+meta={"datacite_publication_year": ["uint", 16, "H"], "datacite_citation_count": ["uint", 32, "I"], "datacite_reference_count": ["uint", 32, "I"], "datacite_version_count": ["uint", 16, "H"]}
 vals={sid:[] for sid in meta}
 skipped=0
 for sid in vals:
@@ -35,8 +35,6 @@ for row in items:
         a=row["attributes"]
         vals["datacite_publication_year"].append(int(a["publicationYear"]))
         vals["datacite_citation_count"].append(int(a.get("citationCount",0)))
-        vals["datacite_view_count"].append(int(a.get("viewCount",0)))
-        vals["datacite_download_count"].append(int(a.get("downloadCount",0)))
         vals["datacite_reference_count"].append(int(a.get("referenceCount",0)))
         vals["datacite_version_count"].append(int(a.get("versionCount",0)))
     except Exception:

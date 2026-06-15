@@ -26,7 +26,6 @@ meta = {
     'openalex_inst_h_index': ('uint', 32, 'I'),
     'openalex_inst_i10_index': ('uint', 32, 'I'),
     'openalex_inst_repo_count': ('uint', 16, 'H'),
-    'openalex_inst_topic_count': ('uint', 16, 'H'),
     'openalex_inst_role_count': ('uint', 8, 'B'),
     'openalex_inst_assoc_count': ('uint', 16, 'H'),
 }
@@ -43,7 +42,6 @@ for row in obj:
         vals['openalex_inst_h_index'].append(int(stats.get('h_index') or 0))
         vals['openalex_inst_i10_index'].append(int(stats.get('i10_index') or 0))
         vals['openalex_inst_repo_count'].append(len(row.get('repositories') or []))
-        vals['openalex_inst_topic_count'].append(len(row.get('topics') or []))
         vals['openalex_inst_role_count'].append(len(row.get('roles') or []))
         vals['openalex_inst_assoc_count'].append(len(row.get('associated_institutions') or []))
     except Exception:

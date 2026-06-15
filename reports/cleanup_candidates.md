@@ -4,7 +4,7 @@ Current acceptance floor: `10,000` primary values or `100 KB` primary sample byt
 
 - source of truth: `reports/accepted_recipe_audit.tsv`
 - `ok`: `122`
-- `below_floor`: `199`
+- `below_floor`: `201`
 - `broken`: `0`
 
 This file is the short operational queue. Detailed policy for family cleanup lives in
@@ -45,44 +45,54 @@ These remain accepted but are so small that they are the easiest next removal ba
 The common failure mode is a one-query, one-page, one-entity, or otherwise intrinsically
 thin recipe shape rather than a source-family problem.
 
-- `biorxiv_details` — values=150, bytes=390, sample_rows=5
-- `dryad_search` — values=160, bytes=600, sample_rows=8
+- `biorxiv_details` — values=90, bytes=210, sample_rows=3
+- `dryad_search` — values=100, bytes=360, sample_rows=5
+- `esco_occupations` — values=142, bytes=213, sample_rows=2
+- `gutendex_books` — values=192, bytes=512, sample_rows=6
 - `internet_archive_metadata` — values=200, bytes=1200, sample_rows=2
+- `library_of_congress_items` — values=232, bytes=928, sample_rows=4
 - `openbrewerydb_breweries` — values=246, bytes=1640, sample_rows=3
-- `gutendex_books` — values=256, bytes=576, sample_rows=8
 - `nasa_neows_feed` — values=270, bytes=1305, sample_rows=6
-- `library_of_congress_items` — values=276, bytes=1016, sample_rows=5
 - `anilist_media` — values=295, bytes=837, sample_rows=6
+- `gbif_occurrence` — values=298, bytes=1984, sample_rows=3
+- `figshare_articles` — values=300, bytes=1000, sample_rows=3
+- `nuget_search` — values=300, bytes=1200, sample_rows=3
+- `osf_preprints` — values=300, bytes=1200, sample_rows=3
 - `weathergov_stations` — values=300, bytes=2000, sample_rows=3
-- `esco_occupations` — values=355, bytes=639, sample_rows=5
+- `musicbrainz_recordings` — values=382, bytes=952, sample_rows=4
 - `orcid_search` — values=390, bytes=780, sample_rows=4
 - `europe_pmc_search` — values=400, bytes=800, sample_rows=4
+- `gleif_lei_records` — values=400, bytes=800, sample_rows=4
+- `treasury_avg_interest_rates` — values=400, bytes=800, sample_rows=4
 - `wger_exercises` — values=400, bytes=800, sample_rows=4
+- `crossref_funders` — values=400, bytes=1000, sample_rows=4
 - `arxiv_cs_recent` — values=400, bytes=1200, sample_rows=4
-- `osf_preprints` — values=400, bytes=1300, sample_rows=4
+- `datacite_dois` — values=400, bytes=1200, sample_rows=4
+- `ooni_measurements` — values=400, bytes=1300, sample_rows=4
+- `chembl_molecules` — values=400, bytes=1400, sample_rows=4
 - `stackexchange_top_questions_jan_2024` — values=400, bytes=1400, sample_rows=4
+- `openalex_works_2024_sample` — values=400, bytes=1600, sample_rows=2
+- `steamspy_top100in2weeks` — values=400, bytes=1600, sample_rows=4
 - `cratesio_crates` — values=400, bytes=2000, sample_rows=4
 - `hex_packages` — values=400, bytes=2600, sample_rows=4
 - `osm_overpass_cafes` — values=400, bytes=2600, sample_rows=4
-- `musicbrainz_recordings` — values=476, bytes=1046, sample_rows=5
 - `musicbrainz_release_groups` — values=491, bytes=982, sample_rows=5
 - `openfoodfacts_products` — values=491, bytes=1870, sample_rows=5
 - `inaturalist_observations` — values=495, bytes=1188, sample_rows=5
 - `openfda_drug_event` — values=495, bytes=1683, sample_rows=5
 - `pokemontcg_cards` — values=498, bytes=1071, sample_rows=6
-- `gbif_occurrence` — values=498, bytes=2284, sample_rows=5
-- `treasury_avg_interest_rates` — values=500, bytes=1000, sample_rows=5
-- `crossref_funders` — values=500, bytes=1200, sample_rows=5
 - `medrxiv_details` — values=500, bytes=1300, sample_rows=5
 - `artic_artworks_search` — values=500, bytes=1400, sample_rows=5
-- `figshare_articles` — values=500, bytes=1400, sample_rows=5
 - `nvd_cves_recent` — values=500, bytes=1400, sample_rows=5
-- `nuget_search` — values=500, bytes=1500, sample_rows=5
+- `pride_projects_search` — values=500, bytes=1600, sample_rows=5
+- `gitlab_projects` — values=500, bytes=2000, sample_rows=5
+- `huggingface_datasets` — values=500, bytes=2000, sample_rows=5
+- `npm_search_packages` — values=500, bytes=2600, sample_rows=5
 
 Count guide:
-- tiny non-family standalones with `<= 500` values: `34`
-- non-family below-floor recipes with `501-3999` values: `62`
-- non-family below-floor recipes with `>= 4000` values: `20`
+- tiny non-family standalones with `<= 500` values: `43`
+- non-family below-floor recipes with `501-3999` values: `55`
+- non-family below-floor recipes with `>= 4000` values: `24`
 
 ## Family Cleanup Queue
 
@@ -122,3 +132,16 @@ Representative examples:
 - `usgs_quakes_month`: dropped constant `usgs_quake_tsunami`
 - `who_atlas_gisah`: dropped constant `who_gisah_spatial_dim_length_u8` and `who_gisah_data_source_length_u8`
 - `who_gho_observations`: dropped constant `who_gho_dim2_length_u8`
+
+## Constant-Series Cleanup Queue
+
+Dedicated constant-only queue: `reports/constant_series_cleanup.md`.
+
+Current scope excludes sparse-binary findings. The globally constant
+manifest-series batch is complete:
+
+- removed globally constant manifest series: `94` across `52` datasets
+- remaining globally constant manifest series: `0`
+- remaining constant findings are sample-level constants inside otherwise non-constant series
+
+- constant samples inside otherwise useful series: filter or reject those samples without removing the whole series

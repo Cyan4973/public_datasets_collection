@@ -24,8 +24,6 @@ items=list(json.load(open(download_dir/'steamspy_top100in2weeks.json', encoding=
 meta={
  'steamspy_positive': ('uint', 32, 'I'),
  'steamspy_negative': ('uint', 32, 'I'),
- 'steamspy_userscore': ('uint', 16, 'H'),
- 'steamspy_average_forever': ('uint', 32, 'I'),
  'steamspy_ccu': ('uint', 32, 'I'),
  'steamspy_price': ('uint', 32, 'I'),
 }
@@ -38,8 +36,6 @@ for row in items:
  try:
   vals['steamspy_positive'].append(int(row['positive']))
   vals['steamspy_negative'].append(int(row['negative']))
-  vals['steamspy_userscore'].append(int(row['userscore']))
-  vals['steamspy_average_forever'].append(int(row['average_forever']))
   vals['steamspy_ccu'].append(int(row['ccu']))
   vals['steamspy_price'].append(int(row['price']))
  except Exception:

@@ -21,7 +21,7 @@ from pathlib import Path
 repo_root=Path(os.environ["REPO_ROOT"]); data_root=repo_root/os.environ["DATA_DIR"]
 download_dir=Path(os.environ["DOWNLOAD_DIR"]); filter_dir=Path(os.environ["FILTER_DIR"]); index_dir=Path(os.environ["INDEX_DIR"]); samples_dir=Path(os.environ["SAMPLES_DIR"])
 recs=json.load(open(download_dir/"recordings.json",encoding='utf-8'))["recordings"]
-vals={"musicbrainz_score":[],"musicbrainz_length_ms":[],"musicbrainz_release_count":[],"musicbrainz_isrc_count":[],"musicbrainz_video_flag":[]}; skipped=0
+vals={"musicbrainz_score":[],"musicbrainz_length_ms":[],"musicbrainz_release_count":[],"musicbrainz_isrc_count":[]}; skipped=0
 for sid in vals:
     d=samples_dir/sid
     if d.exists(): shutil.rmtree(d)
@@ -32,10 +32,9 @@ for row in recs:
         vals["musicbrainz_length_ms"].append(int(row["length"]))
         vals["musicbrainz_release_count"].append(len(row.get("releases",[])))
         vals["musicbrainz_isrc_count"].append(len(row.get("isrcs",[]) or []))
-        vals["musicbrainz_video_flag"].append(1 if row.get("video") else 0)
     except Exception:
         skipped += 1
-meta={"musicbrainz_score":("uint",16,"H"),"musicbrainz_length_ms":("uint",32,"I"),"musicbrainz_release_count":("uint",16,"H"),"musicbrainz_isrc_count":("uint",16,"H"),"musicbrainz_video_flag":("uint",8,"B")}
+meta={"musicbrainz_score":("uint",16,"H"),"musicbrainz_length_ms":("uint",32,"I"),"musicbrainz_release_count":("uint",16,"H"),"musicbrainz_isrc_count":("uint",16,"H")}
 rows=[]
 for sid,values in vals.items():
     kind,bits,code=meta[sid]

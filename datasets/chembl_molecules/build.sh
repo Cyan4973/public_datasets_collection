@@ -24,7 +24,7 @@ download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTE
 obj=json.load(open(download_dir/"chembl_molecules.json",encoding='utf-8'))
 
 items=obj["molecules"]
-meta={"chembl_first_approval": ["uint", 16, "H"], "chembl_max_phase": ["uint", 8, "B"], "chembl_chirality": ["int", 16, "h"], "chembl_black_box_warning": ["uint", 8, "B"], "chembl_oral": ["uint", 8, "B"], "chembl_parenteral": ["uint", 8, "B"], "chembl_topical": ["uint", 8, "B"], "chembl_full_mwt": ["float", 32, "f"], "chembl_alogp": ["float", 32, "f"], "chembl_psa": ["float", 32, "f"]}
+meta={"chembl_first_approval": ["uint", 16, "H"], "chembl_full_mwt": ["float", 32, "f"], "chembl_alogp": ["float", 32, "f"], "chembl_psa": ["float", 32, "f"]}
 vals={sid:[] for sid in meta}
 skipped=0
 for sid in vals:
@@ -35,12 +35,6 @@ for row in items:
     try:
         props=row.get("molecule_properties") or {}
         vals["chembl_first_approval"].append(int(row["first_approval"] or 0))
-        vals["chembl_max_phase"].append(int(row["max_phase"] or 0))
-        vals["chembl_chirality"].append(int(row["chirality"]))
-        vals["chembl_black_box_warning"].append(int(row["black_box_warning"]))
-        vals["chembl_oral"].append(1 if row.get("oral") else 0)
-        vals["chembl_parenteral"].append(1 if row.get("parenteral") else 0)
-        vals["chembl_topical"].append(1 if row.get("topical") else 0)
         vals["chembl_full_mwt"].append(float(props.get("full_mwt") or 0.0))
         vals["chembl_alogp"].append(float(props.get("alogp") or 0.0))
         vals["chembl_psa"].append(float(props.get("psa") or 0.0))

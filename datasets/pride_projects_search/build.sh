@@ -23,15 +23,10 @@ repo_root=Path(os.environ['REPO_ROOT']); data_root=repo_root/os.environ['DATA_DI
 download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTER_DIR']); index_dir=Path(os.environ['INDEX_DIR']); samples_dir=Path(os.environ['SAMPLES_DIR'])
 rows_in=json.load(open(download_dir/'pride_projects.json', encoding='utf-8'))
 meta={
- 'pride_project_download_count_u32':('uint',32,'I'),
- 'pride_project_avg_downloads_per_file_f32':('float',32,'f'),
- 'pride_project_percentile_f32':('float',32,'f'),
  'pride_project_title_length_u16':('uint',16,'H'),
  'pride_project_description_length_u32':('uint',32,'I'),
  'pride_project_submission_date_u32':('uint',32,'I'),
  'pride_project_publication_date_u32':('uint',32,'I'),
- 'pride_project_submitter_count_u16':('uint',16,'H'),
- 'pride_project_labpi_count_u16':('uint',16,'H'),
  'pride_project_organism_count_u16':('uint',16,'H'),
 }
 vals={sid:[] for sid in meta}
@@ -44,15 +39,10 @@ def day_ts(s:str)->int:
  return calendar.timegm(datetime.strptime(s[:10], '%Y-%m-%d').utctimetuple())
 for row in rows_in:
  try:
-  vals['pride_project_download_count_u32'].append(int(row.get('downloadCount') or 0))
-  vals['pride_project_avg_downloads_per_file_f32'].append(float(row.get('avgDownloadsPerFile') or 0))
-  vals['pride_project_percentile_f32'].append(float(row.get('percentile') or 0))
   vals['pride_project_title_length_u16'].append(len(row.get('title') or ''))
   vals['pride_project_description_length_u32'].append(len(row.get('projectDescription') or ''))
   vals['pride_project_submission_date_u32'].append(day_ts(row.get('submissionDate') or '1970-01-01'))
   vals['pride_project_publication_date_u32'].append(day_ts(row.get('publicationDate') or '1970-01-01'))
-  vals['pride_project_submitter_count_u16'].append(len(row.get('submitters') or []))
-  vals['pride_project_labpi_count_u16'].append(len(row.get('labPIs') or []))
   vals['pride_project_organism_count_u16'].append(len(row.get('organisms') or []))
  except Exception:
   rows_skipped += 1

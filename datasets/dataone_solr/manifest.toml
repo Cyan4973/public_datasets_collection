@@ -65,11 +65,3 @@ missing_value_policy = "Rows missing numeric fields are filtered for that series
 numeric_kind = "uint"
 bit_width = 64
 endianness = "little"
-
-[[series]]
-id = "dataone_is_public"
-representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered for that series."
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"

@@ -23,7 +23,6 @@ docs=json.load(open(download_dir/"internetarchive_advancedsearch.json",encoding=
 meta={
   "ia_downloads":("uint",32,"I"),
   "ia_item_size_bytes":("uint",64,"Q"),
-  "ia_week":("uint",16,"H"),
 }
 vals={sid:[] for sid in meta}
 skipped=0
@@ -35,7 +34,6 @@ for row in docs:
     try:
         vals["ia_downloads"].append(int(row["downloads"]))
         vals["ia_item_size_bytes"].append(int(row["item_size"]))
-        vals["ia_week"].append(int(row["week"]))
     except Exception:
         skipped += 1
 rows=[]

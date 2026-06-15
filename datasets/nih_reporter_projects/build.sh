@@ -28,7 +28,6 @@ samples_dir = Path(os.environ['SAMPLES_DIR'])
 series_defs = [
     {'series_id': 'nih_award_amount_u64', 'array_type': 'Q', 'numeric_kind': 'uint', 'bit_width': 64, 'endianness': 'little', 'element_size_bytes': 8},
     {'series_id': 'nih_direct_cost_amount_u64', 'array_type': 'Q', 'numeric_kind': 'uint', 'bit_width': 64, 'endianness': 'little', 'element_size_bytes': 8},
-    {'series_id': 'nih_fiscal_year_u16', 'array_type': 'H', 'numeric_kind': 'uint', 'bit_width': 16, 'endianness': 'little', 'element_size_bytes': 2},
     {'series_id': 'nih_project_start_year_u16', 'array_type': 'H', 'numeric_kind': 'uint', 'bit_width': 16, 'endianness': 'little', 'element_size_bytes': 2},
     {'series_id': 'nih_project_end_year_u16', 'array_type': 'H', 'numeric_kind': 'uint', 'bit_width': 16, 'endianness': 'little', 'element_size_bytes': 2},
 ]
@@ -54,7 +53,6 @@ for row in rows:
         continue
     vals['nih_award_amount_u64'].append(award)
     vals['nih_direct_cost_amount_u64'].append(direct)
-    vals['nih_fiscal_year_u16'].append(fiscal_year)
     vals['nih_project_start_year_u16'].append(start_year)
     vals['nih_project_end_year_u16'].append(end_year)
     kept += 1

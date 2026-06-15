@@ -43,22 +43,6 @@ bit_width = 64
 endianness = "little"
 
 [[series]]
-id = "gbif_year"
-representation_class = "native_numeric"
-missing_value_policy = "Rows missing required numeric fields are filtered."
-numeric_kind = "uint"
-bit_width = 16
-endianness = "little"
-
-[[series]]
-id = "gbif_month"
-representation_class = "native_numeric"
-missing_value_policy = "Rows missing required numeric fields are filtered."
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-
-[[series]]
 id = "gbif_day"
 representation_class = "native_numeric"
 missing_value_policy = "Rows missing required numeric fields are filtered."

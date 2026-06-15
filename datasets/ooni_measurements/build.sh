@@ -22,7 +22,7 @@ repo_root=Path(os.environ['REPO_ROOT']); data_root=repo_root/os.environ['DATA_DI
 download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTER_DIR']); index_dir=Path(os.environ['INDEX_DIR']); samples_dir=Path(os.environ['SAMPLES_DIR'])
 obj=json.load(open(download_dir/"ooni_measurements.json",encoding='utf-8'))
 items=obj["results"]
-meta={"ooni_anomaly": ("uint", 8, "B"), "ooni_confirmed": ("uint", 8, "B"), "ooni_failure": ("uint", 8, "B"), "ooni_probe_asn": ("uint", 32, "I"), "ooni_measurement_unix": ("uint", 32, "I"), "ooni_blocking_general_score": ("float", 32, "f")}
+meta={"ooni_anomaly": ("uint", 8, "B"), "ooni_probe_asn": ("uint", 32, "I"), "ooni_measurement_unix": ("uint", 32, "I"), "ooni_blocking_general_score": ("float", 32, "f")}
 vals={sid:[] for sid in meta}
 skipped=0
 for sid in vals:
@@ -35,8 +35,6 @@ for row in items:
         asn = int(str(row["probe_asn"]).replace("AS", ""))
         ts = int(datetime.fromisoformat(row["measurement_start_time"].replace("Z", "+00:00")).timestamp())
         vals["ooni_anomaly"].append(1 if row["anomaly"] else 0)
-        vals["ooni_confirmed"].append(1 if row["confirmed"] else 0)
-        vals["ooni_failure"].append(1 if row["failure"] else 0)
         vals["ooni_probe_asn"].append(asn)
         vals["ooni_measurement_unix"].append(ts)
         vals["ooni_blocking_general_score"].append(float(row["scores"]["blocking_general"]))

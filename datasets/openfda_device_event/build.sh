@@ -22,8 +22,6 @@ repo_root=Path(os.environ['REPO_ROOT']); data_root=repo_root/os.environ['DATA_DI
 download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTER_DIR']); index_dir=Path(os.environ['INDEX_DIR']); samples_dir=Path(os.environ['SAMPLES_DIR'])
 series_defs=[
  {'series_id':'openfda_device_event_date_received_ymd_u32','array_type':'I','numeric_kind':'uint','bit_width':32,'endianness':'little','element_size_bytes':4},
- {'series_id':'openfda_device_event_devices_in_event_u16','array_type':'H','numeric_kind':'uint','bit_width':16,'endianness':'little','element_size_bytes':2},
- {'series_id':'openfda_device_event_patients_in_event_u16','array_type':'H','numeric_kind':'uint','bit_width':16,'endianness':'little','element_size_bytes':2},
  {'series_id':'openfda_device_event_mdr_text_count_u16','array_type':'H','numeric_kind':'uint','bit_width':16,'endianness':'little','element_size_bytes':2},
  {'series_id':'openfda_device_event_adverse_flag_u8','array_type':'B','numeric_kind':'uint','bit_width':8,'endianness':'little','element_size_bytes':1},
 ]
@@ -41,8 +39,6 @@ for row in rows:
         skipped += 1
         continue
     vals['openfda_device_event_date_received_ymd_u32'].append(date_received)
-    vals['openfda_device_event_devices_in_event_u16'].append(int(row.get('number_devices_in_event') or 0))
-    vals['openfda_device_event_patients_in_event_u16'].append(int(row.get('number_patients_in_event') or 0))
     vals['openfda_device_event_mdr_text_count_u16'].append(len(row.get('mdr_text', [])) if isinstance(row.get('mdr_text', []), list) else 0)
     vals['openfda_device_event_adverse_flag_u8'].append(1 if row.get('adverse_event_flag') == 'Y' else 0)
     kept += 1

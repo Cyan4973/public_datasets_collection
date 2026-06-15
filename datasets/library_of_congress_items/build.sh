@@ -22,7 +22,7 @@ from pathlib import Path
 repo_root=Path(os.environ["REPO_ROOT"]); data_root=repo_root/os.environ["DATA_DIR"]
 download_dir=Path(os.environ["DOWNLOAD_DIR"]); filter_dir=Path(os.environ["FILTER_DIR"]); index_dir=Path(os.environ["INDEX_DIR"]); samples_dir=Path(os.environ["SAMPLES_DIR"])
 results=json.load(open(download_dir/"items.json",encoding='utf-8'))["results"]
-vals={"loc_extract_timestamp":[],"loc_numeric_shelf_id":[],"loc_resource_count":[],"loc_resource_files_sum":[],"loc_resource_segments_sum":[]}; skipped=0
+vals={"loc_extract_timestamp":[],"loc_numeric_shelf_id":[],"loc_resource_files_sum":[],"loc_resource_segments_sum":[]}; skipped=0
 for sid in vals:
     d=samples_dir/sid
     if d.exists(): shutil.rmtree(d)
@@ -34,12 +34,11 @@ for row in results:
         resources=row.get("resources",[]) or []
         vals["loc_extract_timestamp"].append(ts(row["extract_timestamp"]))
         vals["loc_numeric_shelf_id"].append(int(row["numeric_shelf_id"]))
-        vals["loc_resource_count"].append(len(resources))
         vals["loc_resource_files_sum"].append(sum(int(r.get("files",0)) for r in resources))
         vals["loc_resource_segments_sum"].append(sum(int(r.get("segments",0)) for r in resources))
     except Exception:
         skipped += 1
-meta={"loc_extract_timestamp":("uint",32,"I"),"loc_numeric_shelf_id":("uint",64,"Q"),"loc_resource_count":("uint",16,"H"),"loc_resource_files_sum":("uint",16,"H"),"loc_resource_segments_sum":("uint",16,"H")}
+meta={"loc_extract_timestamp":("uint",32,"I"),"loc_numeric_shelf_id":("uint",64,"Q"),"loc_resource_files_sum":("uint",16,"H"),"loc_resource_segments_sum":("uint",16,"H")}
 rows=[]
 for sid,values in vals.items():
     kind,bits,code=meta[sid]

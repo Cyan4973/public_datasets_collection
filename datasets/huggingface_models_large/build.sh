@@ -30,7 +30,6 @@ meta = {
     'hf_model_siblings_count': ('uint', 16, 'H'),
     'hf_model_tags_count': ('uint', 16, 'H'),
     'hf_model_gated': ('uint', 8, 'B'),
-    'hf_model_private': ('uint', 8, 'B'),
 }
 vals = {k: [] for k in meta}; skipped = 0
 for sid in vals:
@@ -46,7 +45,6 @@ for row in obj:
         vals['hf_model_siblings_count'].append(len(row.get('siblings') or []))
         vals['hf_model_tags_count'].append(len(row.get('tags') or []))
         vals['hf_model_gated'].append(1 if row.get('gated') else 0)
-        vals['hf_model_private'].append(1 if row.get('private') else 0)
     except Exception:
         skipped += 1
 rows = []

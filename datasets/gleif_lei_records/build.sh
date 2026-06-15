@@ -22,7 +22,7 @@ repo_root=Path(os.environ['REPO_ROOT']); data_root=repo_root/os.environ['DATA_DI
 download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTER_DIR']); index_dir=Path(os.environ['INDEX_DIR']); samples_dir=Path(os.environ['SAMPLES_DIR'])
 obj=json.load(open(download_dir/"gleif_lei_records.json",encoding='utf-8'))
 items=obj["data"]
-meta={"gleif_entity_creation_year": ("uint", 16, "H"), "gleif_initial_registration_year": ("uint", 16, "H"), "gleif_next_renewal_year": ("uint", 16, "H"), "gleif_other_names_count": ("uint", 16, "H"), "gleif_address_line_count": ("uint", 16, "H"), "gleif_other_validation_authority_count": ("uint", 16, "H")}
+meta={"gleif_entity_creation_year": ("uint", 16, "H"), "gleif_other_names_count": ("uint", 16, "H"), "gleif_address_line_count": ("uint", 16, "H"), "gleif_other_validation_authority_count": ("uint", 16, "H")}
 vals={sid:[] for sid in meta}
 skipped=0
 for sid in vals:
@@ -35,8 +35,6 @@ for row in items:
         entity = attrs["entity"]
         reg = attrs["registration"]
         vals["gleif_entity_creation_year"].append(int(entity["creationDate"][:4]))
-        vals["gleif_initial_registration_year"].append(int(reg["initialRegistrationDate"][:4]))
-        vals["gleif_next_renewal_year"].append(int(reg["nextRenewalDate"][:4]) if reg.get("nextRenewalDate") else 0)
         vals["gleif_other_names_count"].append(len(entity.get("otherNames", [])))
         vals["gleif_address_line_count"].append(len(entity["legalAddress"].get("addressLines", [])))
         vals["gleif_other_validation_authority_count"].append(len(reg.get("otherValidationAuthorities", [])))

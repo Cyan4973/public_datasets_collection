@@ -30,10 +30,7 @@ rows_in = json.load(open(download_dir / "worldbank_gdp_constant.json", encoding=
 meta = {
     "worldbank_gdp_value_f64": ("float", 64, "d"),
     "worldbank_gdp_year_u16": ("uint", 16, "H"),
-    "worldbank_gdp_country_iso_length_u8": ("uint", 8, "B"),
     "worldbank_gdp_country_name_length_u8": ("uint", 8, "B"),
-    "worldbank_gdp_indicator_name_length_u8": ("uint", 8, "B"),
-    "worldbank_gdp_decimal_u8": ("uint", 8, "B"),
 }
 vals = {sid: [] for sid in meta}
 for sid in vals:
@@ -52,10 +49,7 @@ for row in rows_in:
             continue
         vals["worldbank_gdp_value_f64"].append(float(value))
         vals["worldbank_gdp_year_u16"].append(int(row["date"]))
-        vals["worldbank_gdp_country_iso_length_u8"].append(len(row.get("countryiso3code", "")))
         vals["worldbank_gdp_country_name_length_u8"].append(len((row.get("country") or {}).get("value", "")))
-        vals["worldbank_gdp_indicator_name_length_u8"].append(len((row.get("indicator") or {}).get("value", "")))
-        vals["worldbank_gdp_decimal_u8"].append(int(row.get("decimal") or 0))
     except Exception:
         rows_skipped += 1
 

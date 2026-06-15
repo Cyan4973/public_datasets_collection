@@ -17,7 +17,7 @@ from pathlib import Path
 repo_root=Path(sys.argv[1]); data_dir=sys.argv[2]; filter_dir=Path(sys.argv[3]); index_dir=Path(sys.argv[4])
 stats=json.load((filter_dir/"ingest_stats.json").open())
 rows=[json.loads(line) for line in (index_dir/"samples.jsonl").open()]
-assert len(rows) == 7
+assert len(rows) == 4
 assert stats["rows_total"] == 1545
 for row in rows:
     sample=repo_root/data_dir/row["sample_path"]

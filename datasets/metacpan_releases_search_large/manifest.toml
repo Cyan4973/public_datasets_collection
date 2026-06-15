@@ -67,14 +67,6 @@ bit_width = 16
 endianness = "little"
 
 [[series]]
-id = "metacpan_license_count"
-representation_class = "derived_operational_numeric"
-missing_value_policy = "Rows missing list fields are filtered."
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-
-[[series]]
 id = "metacpan_tests_pass"
 representation_class = "derived_operational_numeric"
 missing_value_policy = "Rows missing test fields are filtered."

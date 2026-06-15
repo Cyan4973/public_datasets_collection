@@ -22,7 +22,6 @@ download_dir = Path(os.environ['DOWNLOAD_DIR']); filter_dir = Path(os.environ['F
 obj = json.load(open(download_dir / 'geoboundaries_all_adm0.json', encoding='utf-8'))
 meta = {
     'geoboundaries_boundary_year': ('uint', 16, 'H'),
-    'geoboundaries_adm_unit_count': ('uint', 16, 'H'),
     'geoboundaries_mean_vertices': ('float', 32, 'f'),
     'geoboundaries_mean_perimeter_km': ('float', 32, 'f'),
     'geoboundaries_mean_area_sqkm': ('float', 32, 'f'),
@@ -35,7 +34,6 @@ for sid in vals:
 for row in obj:
     try:
         vals['geoboundaries_boundary_year'].append(int(float(row['boundaryYearRepresented'])))
-        vals['geoboundaries_adm_unit_count'].append(int(float(row['admUnitCount'])))
         vals['geoboundaries_mean_vertices'].append(float(row['meanVertices']))
         vals['geoboundaries_mean_perimeter_km'].append(float(row['meanPerimeterLengthKM']))
         vals['geoboundaries_mean_area_sqkm'].append(float(row['meanAreaSqKM']))

@@ -24,10 +24,6 @@ items=json.load(open(download_dir/'nasa_donki_flr.json', encoding='utf-8'))
 meta={
  'donki_flr_active_region_num': ('uint', 32, 'I'),
  'donki_flr_class_magnitude': ('float', 32, 'f'),
- 'donki_flr_begin_year': ('uint', 16, 'H'),
- 'donki_flr_peak_year': ('uint', 16, 'H'),
- 'donki_flr_end_year': ('uint', 16, 'H'),
- 'donki_flr_instrument_count': ('uint', 8, 'B'),
 }
 vals={sid:[] for sid in meta}; skipped=0
 for sid in vals:
@@ -40,10 +36,6 @@ for row in items:
   mag=float(cls[1:])
   vals['donki_flr_active_region_num'].append(int(row['activeRegionNum'] or 0))
   vals['donki_flr_class_magnitude'].append(mag)
-  vals['donki_flr_begin_year'].append(int((row['beginTime'] or '')[:4]))
-  vals['donki_flr_peak_year'].append(int((row['peakTime'] or '')[:4]))
-  vals['donki_flr_end_year'].append(int((row['endTime'] or '')[:4]))
-  vals['donki_flr_instrument_count'].append(len(row.get('instruments') or []))
  except Exception:
   skipped += 1
 rows=[]

@@ -19,7 +19,7 @@ from pathlib import Path
 root = Path(os.environ["REPO_ROOT"]) / os.environ["DATA_DIR"]
 stats = json.loads((Path(os.environ["FILTER_DIR"]) / "ingest_stats.json").read_text())
 rows = [json.loads(line) for line in (Path(os.environ["INDEX_DIR"]) / "samples.jsonl").read_text().splitlines() if line.strip()]
-if len(rows) != 6:
+if len(rows) != 3:
     raise SystemExit(f"unexpected row count {len(rows)}")
 for row in rows:
     p = root / row["sample_path"]

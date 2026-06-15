@@ -22,7 +22,7 @@ repo_root=Path(os.environ['REPO_ROOT']); data_root=repo_root/os.environ['DATA_DI
 download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTER_DIR']); index_dir=Path(os.environ['INDEX_DIR']); samples_dir=Path(os.environ['SAMPLES_DIR'])
 obj=json.load(open(download_dir/"crossref_funders.json",encoding='utf-8'))
 items=obj["message"]["items"]
-meta={"crossref_funder_id_numeric": ("uint", 32, "I"), "crossref_alt_names_count": ("uint", 16, "H"), "crossref_replaces_count": ("uint", 16, "H"), "crossref_replaced_by_count": ("uint", 16, "H"), "crossref_tokens_count": ("uint", 16, "H")}
+meta={"crossref_funder_id_numeric": ("uint", 32, "I"), "crossref_alt_names_count": ("uint", 16, "H"), "crossref_replaces_count": ("uint", 16, "H"), "crossref_tokens_count": ("uint", 16, "H")}
 vals={sid:[] for sid in meta}
 skipped=0
 for sid in vals:
@@ -34,7 +34,6 @@ for row in items:
         vals["crossref_funder_id_numeric"].append(int(row["id"].split('/')[-1]))
         vals["crossref_alt_names_count"].append(len(row.get("alt-names", [])))
         vals["crossref_replaces_count"].append(len(row.get("replaces", [])))
-        vals["crossref_replaced_by_count"].append(len(row.get("replaced-by", [])))
         vals["crossref_tokens_count"].append(len(row.get("tokens", [])))
     except Exception:
         skipped += 1

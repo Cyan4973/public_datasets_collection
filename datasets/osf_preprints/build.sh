@@ -22,7 +22,7 @@ repo_root=Path(os.environ['REPO_ROOT']); data_root=repo_root/os.environ['DATA_DI
 download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTER_DIR']); index_dir=Path(os.environ['INDEX_DIR']); samples_dir=Path(os.environ['SAMPLES_DIR'])
 obj=json.load(open(download_dir/"osf_preprints.json",encoding='utf-8'))
 items=obj["data"]
-meta={"osf_created_unix": ("uint", 32, "I"), "osf_modified_unix": ("uint", 32, "I"), "osf_published_unix": ("uint", 32, "I"), "osf_public": ("uint", 8, "B")}
+meta={"osf_created_unix": ("uint", 32, "I"), "osf_modified_unix": ("uint", 32, "I"), "osf_published_unix": ("uint", 32, "I")}
 vals={sid:[] for sid in meta}
 skipped=0
 for sid in vals:
@@ -36,7 +36,6 @@ for row in items:
         vals["osf_created_unix"].append(int(datetime.fromisoformat(attrs["date_created"]).timestamp()))
         vals["osf_modified_unix"].append(int(datetime.fromisoformat(attrs["date_modified"]).timestamp()))
         vals["osf_published_unix"].append(int(datetime.fromisoformat(attrs["date_published"]).timestamp()))
-        vals["osf_public"].append(1 if attrs["public"] else 0)
     except Exception:
         skipped += 1
 rows=[]

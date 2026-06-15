@@ -25,24 +25,6 @@ sample_format = "raw_homogeneous_array"
 missing_value_policy = "filtered_rows_with_invalid_received_dates"
 
 [[series]]
-id = "openfda_device_event_devices_in_event_u16"
-path = "samples/openfda_device_event/openfda_device_event_devices_in_event_u16/events.bin"
-numeric_kind = "uint"
-bit_width = 16
-endianness = "little"
-sample_format = "raw_homogeneous_array"
-missing_value_policy = "missing_device_counts_preserved_as_zero"
-
-[[series]]
-id = "openfda_device_event_patients_in_event_u16"
-path = "samples/openfda_device_event/openfda_device_event_patients_in_event_u16/events.bin"
-numeric_kind = "uint"
-bit_width = 16
-endianness = "little"
-sample_format = "raw_homogeneous_array"
-missing_value_policy = "missing_patient_counts_preserved_as_zero"
-
-[[series]]
 id = "openfda_device_event_mdr_text_count_u16"
 path = "samples/openfda_device_event/openfda_device_event_mdr_text_count_u16/events.bin"
 numeric_kind = "uint"

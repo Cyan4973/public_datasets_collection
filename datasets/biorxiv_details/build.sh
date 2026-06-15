@@ -23,7 +23,7 @@ download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTE
 obj=json.load(open(download_dir/'biorxiv_details.json',encoding='utf-8'))
 items=obj['collection']
 def day_ts(s): return calendar.timegm(datetime.strptime(s,'%Y-%m-%d').utctimetuple())
-meta={'biorxiv_details_date':['uint',32,'I'],'biorxiv_details_version':['uint',16,'H'],'biorxiv_details_author_count':['uint',16,'H'],'biorxiv_details_abstract_length':['uint',32,'I'],'biorxiv_details_published_flag':['uint',8,'B']}
+meta={'biorxiv_details_author_count':['uint',16,'H'],'biorxiv_details_abstract_length':['uint',32,'I'],'biorxiv_details_published_flag':['uint',8,'B']}
 vals={sid:[] for sid in meta}; skipped=0
 for sid in vals:
     d=samples_dir/sid
@@ -32,8 +32,6 @@ for sid in vals:
 for row in items:
     try:
         authors=[a for a in row.get('authors','').split(';') if a.strip()]
-        vals['biorxiv_details_date'].append(day_ts(row['date']))
-        vals['biorxiv_details_version'].append(int(row['version']))
         vals['biorxiv_details_author_count'].append(len(authors))
         vals['biorxiv_details_abstract_length'].append(len(row.get('abstract','')))
         vals['biorxiv_details_published_flag'].append(0 if row.get('published') == 'NA' else 1)

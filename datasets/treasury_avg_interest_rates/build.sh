@@ -21,7 +21,7 @@ from pathlib import Path
 repo_root=Path(os.environ["REPO_ROOT"]); data_root=repo_root/os.environ["DATA_DIR"]
 download_dir=Path(os.environ["DOWNLOAD_DIR"]); filter_dir=Path(os.environ["FILTER_DIR"]); index_dir=Path(os.environ["INDEX_DIR"]); samples_dir=Path(os.environ["SAMPLES_DIR"])
 data=json.load(open(download_dir/"avg_interest_rates.json",encoding='utf-8'))["data"]
-vals={"treasury_avg_interest_rate_amt":[],"treasury_record_fiscal_year":[],"treasury_record_calendar_year":[],"treasury_record_calendar_month":[],"treasury_record_calendar_day":[]}
+vals={"treasury_avg_interest_rate_amt":[],"treasury_record_calendar_year":[],"treasury_record_calendar_month":[],"treasury_record_calendar_day":[]}
 for sid in vals:
     d=samples_dir/sid
     if d.exists(): shutil.rmtree(d)
@@ -30,13 +30,12 @@ skipped=0
 for row in data:
     try:
         vals["treasury_avg_interest_rate_amt"].append(float(row["avg_interest_rate_amt"]))
-        vals["treasury_record_fiscal_year"].append(int(row["record_fiscal_year"]))
         vals["treasury_record_calendar_year"].append(int(row["record_calendar_year"]))
         vals["treasury_record_calendar_month"].append(int(row["record_calendar_month"]))
         vals["treasury_record_calendar_day"].append(int(row["record_calendar_day"]))
     except Exception:
         skipped += 1
-meta={"treasury_avg_interest_rate_amt":("float",32,"f"),"treasury_record_fiscal_year":("uint",16,"H"),"treasury_record_calendar_year":("uint",16,"H"),"treasury_record_calendar_month":("uint",8,"B"),"treasury_record_calendar_day":("uint",8,"B")}
+meta={"treasury_avg_interest_rate_amt":("float",32,"f"),"treasury_record_calendar_year":("uint",16,"H"),"treasury_record_calendar_month":("uint",8,"B"),"treasury_record_calendar_day":("uint",8,"B")}
 rows=[]
 for sid,values in vals.items():
     kind,bits,code=meta[sid]

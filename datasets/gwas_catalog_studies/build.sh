@@ -31,10 +31,8 @@ obj = json.load(open(download_dir / "gwas_catalog_studies.json", encoding="utf-8
 rows_in = obj["_embedded"][next(iter(obj["_embedded"].keys()))]
 meta = {
     "gwas_snp_count_u32": ("uint", 32, "I"),
-    "gwas_accession_length_u16": ("uint", 16, "H"),
     "gwas_platform_count_u16": ("uint", 16, "H"),
     "gwas_ancestry_count_u16": ("uint", 16, "H"),
-    "gwas_genotyping_tech_count_u16": ("uint", 16, "H"),
     "gwas_trait_length_u16": ("uint", 16, "H"),
     "gwas_initial_sample_size_length_u16": ("uint", 16, "H"),
     "gwas_replication_sample_size_length_u16": ("uint", 16, "H"),
@@ -63,10 +61,8 @@ for row in rows_in:
         pub = row.get("publicationInfo") or {}
         trait = row.get("diseaseTrait") or {}
         vals["gwas_snp_count_u32"].append(int(row.get("snpCount") or 0))
-        vals["gwas_accession_length_u16"].append(len(row.get("accessionId") or ""))
         vals["gwas_platform_count_u16"].append(len(row.get("platforms") or []))
         vals["gwas_ancestry_count_u16"].append(len(row.get("ancestries") or []))
-        vals["gwas_genotyping_tech_count_u16"].append(len(row.get("genotypingTechnologies") or []))
         vals["gwas_trait_length_u16"].append(len(trait.get("trait") or ""))
         vals["gwas_initial_sample_size_length_u16"].append(len(row.get("initialSampleSize") or ""))
         vals["gwas_replication_sample_size_length_u16"].append(len(row.get("replicationSampleSize") or ""))

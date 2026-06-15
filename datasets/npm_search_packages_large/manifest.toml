@@ -162,19 +162,3 @@ bit_width = 16
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
 output_path = "samples/npm_search_packages_large/npm_keywords_count/"
-
-[[series]]
-id = "npm_insecure_flag"
-description = "Insecure flag per package."
-semantic_meaning = "npm search result flags.insecure field as uint8."
-representation_class = "derived_operational_numeric"
-representation_notes = "Pinned machine-facing registry metadata field preserved directly as a numeric flag."
-source_resources = ["search_result"]
-filtering = "Same retained row set as npm_downloads_monthly."
-missing_value_policy = "Rows missing required numeric fields are skipped."
-conversion = "Emit raw little-endian uint8 arrays."
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-sample_format = "raw homogeneous numeric array"
-output_path = "samples/npm_search_packages_large/npm_insecure_flag/"

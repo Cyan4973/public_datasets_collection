@@ -25,8 +25,6 @@ meta = {
     'fedreg_agencies_count': ('uint', 8, 'B'),
     'fedreg_title_length': ('uint', 16, 'H'),
     'fedreg_abstract_length': ('uint', 16, 'H'),
-    'fedreg_publication_year': ('uint', 16, 'H'),
-    'fedreg_publication_month': ('uint', 8, 'B'),
     'fedreg_publication_day': ('uint', 8, 'B'),
 }
 vals = {k: [] for k in meta}; skipped = 0
@@ -40,8 +38,6 @@ for row in obj:
         vals['fedreg_agencies_count'].append(len(row.get('agencies') or []))
         vals['fedreg_title_length'].append(len(row.get('title') or ''))
         vals['fedreg_abstract_length'].append(len(row.get('abstract') or ''))
-        vals['fedreg_publication_year'].append(dt.year)
-        vals['fedreg_publication_month'].append(dt.month)
         vals['fedreg_publication_day'].append(dt.day)
     except Exception:
         skipped += 1

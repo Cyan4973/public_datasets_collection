@@ -35,7 +35,6 @@ meta = {
     "atlas_kingdom_length_u8": ("uint", 8, "B"),
     "atlas_number_of_assays_u16": ("uint", 16, "H"),
     "atlas_factor_count_u16": ("uint", 16, "H"),
-    "atlas_project_count_u16": ("uint", 16, "H"),
     "atlas_raw_type_length_u16": ("uint", 16, "H"),
     "atlas_experiment_type_length_u16": ("uint", 16, "H"),
     "atlas_load_date_u32": ("uint", 32, "I"),
@@ -61,7 +60,6 @@ for row in rows_in:
         vals["atlas_kingdom_length_u8"].append(len(row.get("kingdom") or ""))
         vals["atlas_number_of_assays_u16"].append(int(row.get("numberOfAssays") or 0))
         vals["atlas_factor_count_u16"].append(len(row.get("experimentalFactors") or []))
-        vals["atlas_project_count_u16"].append(len(row.get("experimentProjects") or []))
         vals["atlas_raw_type_length_u16"].append(len(row.get("rawExperimentType") or ""))
         vals["atlas_experiment_type_length_u16"].append(len(row.get("experimentType") or ""))
         vals["atlas_load_date_u32"].append(day_ts(row.get("loadDate") or "01-01-1970"))

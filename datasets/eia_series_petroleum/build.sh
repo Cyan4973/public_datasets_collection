@@ -29,12 +29,10 @@ samples_dir = Path(os.environ["SAMPLES_DIR"])
 data = json.load(open(download_dir / "eia_series_petroleum.json", encoding="utf-8"))["response"]["data"]
 vals = {
     "eia_petroleum_value": [],
-    "eia_petroleum_period_year": [],
     "eia_petroleum_period_month": [],
     "eia_petroleum_period_day": [],
     "eia_petroleum_area_name_length": [],
     "eia_petroleum_product_name_length": [],
-    "eia_petroleum_process_name_length": [],
 }
 skipped = 0
 
@@ -48,23 +46,19 @@ for row in data:
     try:
         year_s, month_s, day_s = row["period"].split("-")
         vals["eia_petroleum_value"].append(float(row["value"]))
-        vals["eia_petroleum_period_year"].append(int(year_s))
         vals["eia_petroleum_period_month"].append(int(month_s))
         vals["eia_petroleum_period_day"].append(int(day_s))
         vals["eia_petroleum_area_name_length"].append(len(row["area-name"]))
         vals["eia_petroleum_product_name_length"].append(len(row["product-name"]))
-        vals["eia_petroleum_process_name_length"].append(len(row["process-name"]))
     except Exception:
         skipped += 1
 
 meta = {
     "eia_petroleum_value": ("float", 32, "f"),
-    "eia_petroleum_period_year": ("uint", 16, "H"),
     "eia_petroleum_period_month": ("uint", 8, "B"),
     "eia_petroleum_period_day": ("uint", 8, "B"),
     "eia_petroleum_area_name_length": ("uint", 8, "B"),
     "eia_petroleum_product_name_length": ("uint", 8, "B"),
-    "eia_petroleum_process_name_length": ("uint", 8, "B"),
 }
 
 rows = []

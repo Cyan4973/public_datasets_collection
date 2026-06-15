@@ -34,15 +34,6 @@ sample_format = "raw_homogeneous_array"
 missing_value_policy = "filtered_rows_with_missing_direct_cost_amount"
 
 [[series]]
-id = "nih_fiscal_year_u16"
-path = "samples/nih_reporter_projects/nih_fiscal_year_u16/projects.bin"
-numeric_kind = "uint"
-bit_width = 16
-endianness = "little"
-sample_format = "raw_homogeneous_array"
-missing_value_policy = "filtered_rows_with_missing_fiscal_year"
-
-[[series]]
 id = "nih_project_start_year_u16"
 path = "samples/nih_reporter_projects/nih_project_start_year_u16/projects.bin"
 numeric_kind = "uint"

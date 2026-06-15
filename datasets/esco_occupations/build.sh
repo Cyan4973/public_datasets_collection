@@ -22,7 +22,7 @@ repo_root=Path(os.environ['REPO_ROOT']); data_root=repo_root/os.environ['DATA_DI
 download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTER_DIR']); index_dir=Path(os.environ['INDEX_DIR']); samples_dir=Path(os.environ['SAMPLES_DIR'])
 obj=json.load(open(download_dir/"esco_occupations.json",encoding='utf-8'))
 items=obj["_embedded"]["results"]
-meta={"esco_code_major": ("uint", 16, "H"), "esco_code_minor": ("uint", 8, "B"), "esco_preferred_label_count": ("uint", 16, "H"), "esco_scheme_count": ("uint", 16, "H"), "esco_broader_group_count": ("uint", 16, "H")}
+meta={"esco_code_major": ("uint", 16, "H"), "esco_code_minor": ("uint", 8, "B")}
 vals={sid:[] for sid in meta}
 skipped=0
 for sid in vals:
@@ -34,9 +34,6 @@ for row in items:
         major, minor = row["code"].split('.')
         vals["esco_code_major"].append(int(major))
         vals["esco_code_minor"].append(int(minor))
-        vals["esco_preferred_label_count"].append(len(row.get("preferredLabel", {})))
-        vals["esco_scheme_count"].append(len(row.get("isInScheme", [])))
-        vals["esco_broader_group_count"].append(len(row.get("broaderIscoGroup", [])))
     except Exception:
         skipped += 1
 rows=[]

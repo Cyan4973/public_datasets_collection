@@ -25,24 +25,6 @@ sample_format = "raw_homogeneous_array"
 missing_value_policy = "filtered_rows_with_invalid_required_dates"
 
 [[series]]
-id = "gleif_initial_registration_year_u16"
-path = "samples/gleif_lei_records_api/gleif_initial_registration_year_u16/records.bin"
-numeric_kind = "uint"
-bit_width = 16
-endianness = "little"
-sample_format = "raw_homogeneous_array"
-missing_value_policy = "filtered_rows_with_invalid_required_dates"
-
-[[series]]
-id = "gleif_next_renewal_year_u16"
-path = "samples/gleif_lei_records_api/gleif_next_renewal_year_u16/records.bin"
-numeric_kind = "uint"
-bit_width = 16
-endianness = "little"
-sample_format = "raw_homogeneous_array"
-missing_value_policy = "filtered_rows_with_invalid_required_dates"
-
-[[series]]
 id = "gleif_other_names_count_u16"
 path = "samples/gleif_lei_records_api/gleif_other_names_count_u16/records.bin"
 numeric_kind = "uint"

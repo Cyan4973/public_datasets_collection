@@ -24,9 +24,7 @@ items=json.load(open(download_dir/"nuget_search.json", encoding='utf-8'))["data"
 meta={
     "nuget_total_downloads": ("uint", 64, "Q"),
     "nuget_version_count": ("uint", 16, "H"),
-    "nuget_author_count": ("uint", 16, "H"),
     "nuget_owner_count": ("uint", 16, "H"),
-    "nuget_package_type_count": ("uint", 8, "B"),
 }
 vals={sid:[] for sid in meta}
 skipped=0
@@ -38,9 +36,7 @@ for row in items:
     try:
         vals["nuget_total_downloads"].append(int(row["totalDownloads"]))
         vals["nuget_version_count"].append(len(row["versions"]))
-        vals["nuget_author_count"].append(len(row.get("authors") or []))
         vals["nuget_owner_count"].append(len(row.get("owners") or []))
-        vals["nuget_package_type_count"].append(len(row.get("packageTypes") or []))
     except Exception:
         skipped += 1
 rows=[]

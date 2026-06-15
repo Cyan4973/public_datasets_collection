@@ -6,8 +6,6 @@ Pinned source: `https://api.ooni.io/api/v1/measurements?limit=100`
 
 Selected series:
 - `ooni_anomaly`
-- `ooni_confirmed`
-- `ooni_failure`
 - `ooni_probe_asn`
 - `ooni_measurement_unix`
 - `ooni_blocking_general_score`

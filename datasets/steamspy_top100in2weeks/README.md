@@ -5,8 +5,6 @@ Pinned SteamSpy top-100-in-two-weeks snapshot.
 Selected series:
 - `steamspy_positive`
 - `steamspy_negative`
-- `steamspy_userscore`
-- `steamspy_average_forever`
 - `steamspy_ccu`
 - `steamspy_price`
 

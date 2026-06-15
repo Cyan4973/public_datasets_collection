@@ -21,7 +21,7 @@ from pathlib import Path
 repo_root=Path(os.environ["REPO_ROOT"]); data_root=repo_root/os.environ["DATA_DIR"]
 download_dir=Path(os.environ["DOWNLOAD_DIR"]); filter_dir=Path(os.environ["FILTER_DIR"]); index_dir=Path(os.environ["INDEX_DIR"]); samples_dir=Path(os.environ["SAMPLES_DIR"])
 results=json.load(open(download_dir/"occurrence.json",encoding='utf-8'))["results"]
-vals={"gbif_taxon_key":[],"gbif_year":[],"gbif_month":[],"gbif_decimal_latitude":[],"gbif_decimal_longitude":[]}; skipped=0
+vals={"gbif_taxon_key":[],"gbif_decimal_latitude":[],"gbif_decimal_longitude":[]}; skipped=0
 for sid in vals:
     d=samples_dir/sid
     if d.exists(): shutil.rmtree(d)
@@ -29,13 +29,11 @@ for sid in vals:
 for row in results:
     try:
         vals["gbif_taxon_key"].append(int(row["taxonKey"]))
-        vals["gbif_year"].append(int(row["year"]))
-        vals["gbif_month"].append(int(row["month"]))
         vals["gbif_decimal_latitude"].append(float(row["decimalLatitude"]))
         vals["gbif_decimal_longitude"].append(float(row["decimalLongitude"]))
     except Exception:
         skipped += 1
-meta={"gbif_taxon_key":("uint",32,"I"),"gbif_year":("uint",16,"H"),"gbif_month":("uint",8,"B"),"gbif_decimal_latitude":("float",64,"d"),"gbif_decimal_longitude":("float",64,"d")}
+meta={"gbif_taxon_key":("uint",32,"I"),"gbif_decimal_latitude":("float",64,"d"),"gbif_decimal_longitude":("float",64,"d")}
 rows=[]
 for sid,values in vals.items():
     kind,bits,code=meta[sid]

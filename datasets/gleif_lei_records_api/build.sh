@@ -23,8 +23,6 @@ repo_root=Path(os.environ['REPO_ROOT']); data_root=repo_root/os.environ['DATA_DI
 download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTER_DIR']); index_dir=Path(os.environ['INDEX_DIR']); samples_dir=Path(os.environ['SAMPLES_DIR'])
 series_defs=[
  {'series_id':'gleif_creation_year_u16','array_type':'H','numeric_kind':'uint','bit_width':16,'endianness':'little','element_size_bytes':2},
- {'series_id':'gleif_initial_registration_year_u16','array_type':'H','numeric_kind':'uint','bit_width':16,'endianness':'little','element_size_bytes':2},
- {'series_id':'gleif_next_renewal_year_u16','array_type':'H','numeric_kind':'uint','bit_width':16,'endianness':'little','element_size_bytes':2},
  {'series_id':'gleif_other_names_count_u16','array_type':'H','numeric_kind':'uint','bit_width':16,'endianness':'little','element_size_bytes':2},
  {'series_id':'gleif_address_line_count_u8','array_type':'B','numeric_kind':'uint','bit_width':8,'endianness':'little','element_size_bytes':1},
 ]
@@ -47,8 +45,6 @@ for row in rows:
         skipped += 1
         continue
     vals['gleif_creation_year_u16'].append(creation)
-    vals['gleif_initial_registration_year_u16'].append(initial)
-    vals['gleif_next_renewal_year_u16'].append(renewal)
     vals['gleif_other_names_count_u16'].append(len(entity.get('otherNames', [])))
     vals['gleif_address_line_count_u8'].append(len(entity.get('legalAddress', {}).get('addressLines', [])))
     kept += 1

@@ -35,14 +35,6 @@ bit_width = 32
 endianness = "little"
 
 [[series]]
-id = "openalex_publication_year"
-representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered."
-numeric_kind = "uint"
-bit_width = 16
-endianness = "little"
-
-[[series]]
 id = "openalex_referenced_works_count"
 representation_class = "native_numeric"
 missing_value_policy = "Rows missing numeric fields are filtered."

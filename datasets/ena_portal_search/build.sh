@@ -22,7 +22,6 @@ repo_root=Path(os.environ['REPO_ROOT']); data_root=repo_root/os.environ['DATA_DI
 download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTER_DIR']); index_dir=Path(os.environ['INDEX_DIR']); samples_dir=Path(os.environ['SAMPLES_DIR'])
 series_defs=[
  {'series_id':'ena_base_count_u64','array_type':'Q','numeric_kind':'uint','bit_width':64,'endianness':'little','element_size_bytes':8},
- {'series_id':'ena_collection_year_u16','array_type':'H','numeric_kind':'uint','bit_width':16,'endianness':'little','element_size_bytes':2},
  {'series_id':'ena_scientific_name_length_u16','array_type':'H','numeric_kind':'uint','bit_width':16,'endianness':'little','element_size_bytes':2},
 ]
 for s in series_defs:
@@ -42,7 +41,6 @@ for row in rows:
     collection=row.get('collection_date') or ''
     year=int(collection[:4]) if len(collection) >= 4 and collection[:4].isdigit() else 0
     vals['ena_base_count_u64'].append(base_count)
-    vals['ena_collection_year_u16'].append(year)
     vals['ena_scientific_name_length_u16'].append(sci_len)
     kept += 1
 with (filter_dir/'stats.tsv').open('w', encoding='utf-8', newline='') as f:

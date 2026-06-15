@@ -27,7 +27,6 @@ samples_dir = Path(os.environ['SAMPLES_DIR'])
 series_defs = [
     {'series_id': 'scryfall_cmc_f32', 'kind': 'float32', 'numeric_kind': 'float', 'bit_width': 32, 'endianness': 'little', 'element_size_bytes': 4},
     {'series_id': 'scryfall_edhrec_rank_u32', 'array_type': 'I', 'numeric_kind': 'uint', 'bit_width': 32, 'endianness': 'little', 'element_size_bytes': 4},
-    {'series_id': 'scryfall_released_year_u16', 'array_type': 'H', 'numeric_kind': 'uint', 'bit_width': 16, 'endianness': 'little', 'element_size_bytes': 2},
     {'series_id': 'scryfall_released_month_u8', 'array_type': 'B', 'numeric_kind': 'uint', 'bit_width': 8, 'endianness': 'little', 'element_size_bytes': 1},
     {'series_id': 'scryfall_games_count_u8', 'array_type': 'B', 'numeric_kind': 'uint', 'bit_width': 8, 'endianness': 'little', 'element_size_bytes': 1},
     {'series_id': 'scryfall_color_count_u8', 'array_type': 'B', 'numeric_kind': 'uint', 'bit_width': 8, 'endianness': 'little', 'element_size_bytes': 1},
@@ -58,7 +57,6 @@ for row in rows:
         continue
     vals['scryfall_cmc_f32'].append(cmc)
     vals['scryfall_edhrec_rank_u32'].append(edhrec)
-    vals['scryfall_released_year_u16'].append(year)
     vals['scryfall_released_month_u8'].append(month)
     vals['scryfall_games_count_u8'].append(games_count)
     vals['scryfall_color_count_u8'].append(color_count)

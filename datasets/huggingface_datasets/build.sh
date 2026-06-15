@@ -23,7 +23,7 @@ download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTE
 obj=json.load(open(download_dir/'huggingface_datasets.json',encoding='utf-8'))
 def ts(s):
     return calendar.timegm(datetime.strptime(s[:19],'%Y-%m-%dT%H:%M:%S').utctimetuple())
-meta={'hf_dataset_downloads':['uint',32,'I'],'hf_dataset_likes':['uint',32,'I'],'hf_dataset_trending_score':['uint',32,'I'],'hf_dataset_private':['uint',8,'B'],'hf_dataset_disabled':['uint',8,'B'],'hf_dataset_created_at':['uint',32,'I'],'hf_dataset_last_modified_at':['uint',32,'I']}
+meta={'hf_dataset_downloads':['uint',32,'I'],'hf_dataset_likes':['uint',32,'I'],'hf_dataset_trending_score':['uint',32,'I'],'hf_dataset_created_at':['uint',32,'I'],'hf_dataset_last_modified_at':['uint',32,'I']}
 vals={sid:[] for sid in meta}; skipped=0
 for sid in vals:
     d=samples_dir/sid
@@ -34,8 +34,6 @@ for row in obj:
         vals['hf_dataset_downloads'].append(int(row['downloads']))
         vals['hf_dataset_likes'].append(int(row['likes']))
         vals['hf_dataset_trending_score'].append(int(row.get('trendingScore') or 0))
-        vals['hf_dataset_private'].append(1 if row.get('private') else 0)
-        vals['hf_dataset_disabled'].append(1 if row.get('disabled') else 0)
         vals['hf_dataset_created_at'].append(ts(row['createdAt']))
         vals['hf_dataset_last_modified_at'].append(ts(row['lastModified']))
     except Exception:

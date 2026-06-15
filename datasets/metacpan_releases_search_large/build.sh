@@ -20,7 +20,7 @@ from pathlib import Path
 repo_root=Path(os.environ['REPO_ROOT']); data_root=repo_root/os.environ['DATA_DIR']
 download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTER_DIR']); index_dir=Path(os.environ['INDEX_DIR']); samples_dir=Path(os.environ['SAMPLES_DIR'])
 obj=json.load(open(download_dir/'metacpan_releases_search_large.json',encoding='utf-8'))['hits']['hits']
-meta={'metacpan_version_numified':('float',64,'d'),'metacpan_stat_size':('uint',32,'I'),'metacpan_stat_mtime':('uint',32,'I'),'metacpan_dependency_count':('uint',16,'H'),'metacpan_provides_count':('uint',16,'H'),'metacpan_license_count':('uint',8,'B'),'metacpan_tests_pass':('uint',32,'I'),'metacpan_tests_fail':('uint',32,'I'),'metacpan_tests_na':('uint',32,'I'),'metacpan_tests_unknown':('uint',32,'I')}
+meta={'metacpan_version_numified':('float',64,'d'),'metacpan_stat_size':('uint',32,'I'),'metacpan_stat_mtime':('uint',32,'I'),'metacpan_dependency_count':('uint',16,'H'),'metacpan_provides_count':('uint',16,'H'),'metacpan_tests_pass':('uint',32,'I'),'metacpan_tests_fail':('uint',32,'I'),'metacpan_tests_na':('uint',32,'I'),'metacpan_tests_unknown':('uint',32,'I')}
 vals={k:[] for k in meta}; skipped=0
 for sid in vals:
  d=samples_dir/sid
@@ -34,7 +34,6 @@ for row in obj:
   vals['metacpan_stat_mtime'].append(int(stat.get('mtime') or 0))
   vals['metacpan_dependency_count'].append(len(s.get('dependency') or []))
   vals['metacpan_provides_count'].append(len(s.get('provides') or []))
-  vals['metacpan_license_count'].append(len(s.get('license') or []))
   vals['metacpan_tests_pass'].append(int(tests.get('pass') or 0))
   vals['metacpan_tests_fail'].append(int(tests.get('fail') or 0))
   vals['metacpan_tests_na'].append(int(tests.get('na') or 0))

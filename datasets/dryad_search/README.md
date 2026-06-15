@@ -9,6 +9,3 @@ Pinned output fields:
 - `dryad_version_number`
 - `dryad_author_count`
 - `dryad_funder_count`
-- `dryad_view_count`
-- `dryad_download_count`
-- `dryad_citation_count`

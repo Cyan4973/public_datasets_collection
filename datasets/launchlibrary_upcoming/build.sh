@@ -22,7 +22,7 @@ repo_root=Path(os.environ['REPO_ROOT']); data_root=repo_root/os.environ['DATA_DI
 download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTER_DIR']); index_dir=Path(os.environ['INDEX_DIR']); samples_dir=Path(os.environ['SAMPLES_DIR'])
 obj=json.load(open(download_dir/'launchlibrary_upcoming.json',encoding='utf-8'))
 def ts(s): return calendar.timegm(datetime.strptime(s[:19],'%Y-%m-%dT%H:%M:%S').utctimetuple())
-meta={'launchlib_net':['uint',32,'I'],'launchlib_window_start':['uint',32,'I'],'launchlib_window_end':['uint',32,'I'],'launchlib_probability':['uint',8,'B'],'launchlib_webcast_live':['uint',8,'B'],'launchlib_agency_attempt_count':['uint',16,'H'],'launchlib_pad_attempt_count':['uint',16,'H'],'launchlib_status_id':['uint',8,'B']}
+meta={'launchlib_net':['uint',32,'I'],'launchlib_window_start':['uint',32,'I'],'launchlib_window_end':['uint',32,'I'],'launchlib_probability':['uint',8,'B'],'launchlib_agency_attempt_count':['uint',16,'H'],'launchlib_pad_attempt_count':['uint',16,'H'],'launchlib_status_id':['uint',8,'B']}
 vals={sid:[] for sid in meta}; skipped=0
 for sid in vals:
     d=samples_dir/sid
@@ -34,7 +34,6 @@ for row in obj['results']:
         vals['launchlib_window_start'].append(ts(row['window_start']))
         vals['launchlib_window_end'].append(ts(row['window_end']))
         vals['launchlib_probability'].append(int(row.get('probability') or 0))
-        vals['launchlib_webcast_live'].append(1 if row.get('webcast_live') else 0)
         vals['launchlib_agency_attempt_count'].append(int(row.get('agency_launch_attempt_count') or 0))
         vals['launchlib_pad_attempt_count'].append(int(row.get('pad_launch_attempt_count') or 0))
         vals['launchlib_status_id'].append(int((row.get('status') or {}).get('id') or 0))

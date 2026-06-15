@@ -23,8 +23,6 @@ obj = json.load(open(download_dir / 'gbif_occurrence_large.json', encoding='utf-
 meta = {
     'gbif_latitude': ('float', 64, 'd'),
     'gbif_longitude': ('float', 64, 'd'),
-    'gbif_year': ('uint', 16, 'H'),
-    'gbif_month': ('uint', 8, 'B'),
     'gbif_day': ('uint', 8, 'B'),
 }
 vals = {k: [] for k in meta}; skipped = 0
@@ -36,8 +34,6 @@ for row in obj:
     try:
         vals['gbif_latitude'].append(float(row['decimalLatitude']))
         vals['gbif_longitude'].append(float(row['decimalLongitude']))
-        vals['gbif_year'].append(int(row['year']))
-        vals['gbif_month'].append(int(row['month']))
         vals['gbif_day'].append(int(row['day']))
     except Exception:
         skipped += 1

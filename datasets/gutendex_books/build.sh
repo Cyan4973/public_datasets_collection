@@ -21,7 +21,7 @@ repo_root=Path(os.environ['REPO_ROOT']); data_root=repo_root/os.environ['DATA_DI
 download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTER_DIR']); index_dir=Path(os.environ['INDEX_DIR']); samples_dir=Path(os.environ['SAMPLES_DIR'])
 obj=json.load(open(download_dir/'gutendex_books.json',encoding='utf-8'))
 items=obj['results']
-meta={'gutendex_book_id':['uint',32,'I'],'gutendex_download_count':['uint',32,'I'],'gutendex_author_count':['uint',16,'H'],'gutendex_bookshelf_count':['uint',16,'H'],'gutendex_language_count':['uint',8,'B'],'gutendex_subject_count':['uint',16,'H'],'gutendex_translator_count':['uint',16,'H'],'gutendex_copyright':['uint',8,'B']}
+meta={'gutendex_book_id':['uint',32,'I'],'gutendex_download_count':['uint',32,'I'],'gutendex_author_count':['uint',16,'H'],'gutendex_bookshelf_count':['uint',16,'H'],'gutendex_subject_count':['uint',16,'H'],'gutendex_translator_count':['uint',16,'H']}
 vals={sid:[] for sid in meta}; skipped=0
 for sid in vals:
     d=samples_dir/sid
@@ -33,10 +33,8 @@ for row in items:
         vals['gutendex_download_count'].append(int(row['download_count']))
         vals['gutendex_author_count'].append(len(row.get('authors',[])))
         vals['gutendex_bookshelf_count'].append(len(row.get('bookshelves',[])))
-        vals['gutendex_language_count'].append(len(row.get('languages',[])))
         vals['gutendex_subject_count'].append(len(row.get('subjects',[])))
         vals['gutendex_translator_count'].append(len(row.get('translators',[])))
-        vals['gutendex_copyright'].append(1 if row.get('copyright') else 0)
     except Exception:
         skipped += 1
 rows=[]

@@ -23,7 +23,6 @@ src, filtered_dir, samples_dir, index_dir = sys.argv[1:5]
 payload = json.load(open(src, encoding="utf-8"))
 rows = payload.get("matchStrings", [])
 series = {
-    "nvd_cpe_created_at_u32": [],
     "nvd_cpe_last_modified_at_u32": [],
     "nvd_cpe_cpe_last_modified_at_u32": [],
     "nvd_cpe_match_count_u16": [],
@@ -43,14 +42,12 @@ for wrap in rows:
         match_count = len(m.get("matches", []))
     except Exception:
         continue
-    series["nvd_cpe_created_at_u32"].append(created)
     series["nvd_cpe_last_modified_at_u32"].append(last_modified)
     series["nvd_cpe_cpe_last_modified_at_u32"].append(cpe_last_modified)
     series["nvd_cpe_match_count_u16"].append(match_count)
     rows_kept += 1
 
 meta = {
-    "nvd_cpe_created_at_u32": ("I", "uint", 32),
     "nvd_cpe_last_modified_at_u32": ("I", "uint", 32),
     "nvd_cpe_cpe_last_modified_at_u32": ("I", "uint", 32),
     "nvd_cpe_match_count_u16": ("H", "uint", 16),

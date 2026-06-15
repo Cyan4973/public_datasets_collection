@@ -23,7 +23,7 @@ download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTE
 obj=json.load(open(download_dir/"dryad_search.json",encoding='utf-8'))
 
 items=obj["_embedded"][next(iter(obj["_embedded"]))]
-meta={"dryad_dataset_id": ["uint", 32, "I"], "dryad_storage_size": ["uint", 64, "Q"], "dryad_version_number": ["uint", 16, "H"], "dryad_author_count": ["uint", 16, "H"], "dryad_funder_count": ["uint", 16, "H"], "dryad_view_count": ["uint", 32, "I"], "dryad_download_count": ["uint", 32, "I"], "dryad_citation_count": ["uint", 32, "I"]}
+meta={"dryad_dataset_id": ["uint", 32, "I"], "dryad_storage_size": ["uint", 64, "Q"], "dryad_version_number": ["uint", 16, "H"], "dryad_author_count": ["uint", 16, "H"], "dryad_funder_count": ["uint", 16, "H"]}
 vals={sid:[] for sid in meta}
 skipped=0
 for sid in vals:
@@ -38,9 +38,6 @@ for row in items:
         vals["dryad_version_number"].append(int(row["versionNumber"]))
         vals["dryad_author_count"].append(len(row.get("authors",[])))
         vals["dryad_funder_count"].append(len(row.get("funders",[])))
-        vals["dryad_view_count"].append(int(m.get("views",0)))
-        vals["dryad_download_count"].append(int(m.get("downloads",0)))
-        vals["dryad_citation_count"].append(int(m.get("citations",0)))
     except Exception:
         skipped += 1
 rows=[]

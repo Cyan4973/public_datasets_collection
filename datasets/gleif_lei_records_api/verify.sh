@@ -17,7 +17,7 @@ import csv, json, os
 from pathlib import Path
 root=Path(os.environ['REPO_ROOT'])/os.environ['DATA_DIR']
 rows=[json.loads(line) for line in (Path(os.environ['INDEX_DIR'])/'samples.jsonl').read_text().splitlines() if line.strip()]
-if len(rows) != 5: raise SystemExit(f'unexpected row count {len(rows)}')
+if len(rows) != 3: raise SystemExit(f'unexpected row count {len(rows)}')
 for row in rows:
     p=root/row['sample_path']
     if not p.is_file(): raise SystemExit(f'missing sample {row['sample_path']}')

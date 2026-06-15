@@ -22,7 +22,7 @@ from pathlib import Path
 repo_root=Path(os.environ["REPO_ROOT"]); data_root=repo_root/os.environ["DATA_DIR"]
 download_dir=Path(os.environ["DOWNLOAD_DIR"]); filter_dir=Path(os.environ["FILTER_DIR"]); index_dir=Path(os.environ["INDEX_DIR"]); samples_dir=Path(os.environ["SAMPLES_DIR"])
 src=json.load((download_dir/"dataone_solr.json").open(encoding="utf-8"))
-series={k:[] for k in ["dataone_size","dataone_number_replicas","dataone_date_uploaded","dataone_update_date","dataone_date_modified","dataone_is_public"]}
+series={k:[] for k in ["dataone_size","dataone_number_replicas","dataone_date_uploaded","dataone_update_date","dataone_date_modified"]}
 skipped={k:0 for k in series}
 def ts32(s:str)->int:
     return calendar.timegm(datetime.strptime(s[:19], "%Y-%m-%dT%H:%M:%S").utctimetuple())
@@ -35,13 +35,10 @@ for row in src["response"]["docs"]:
         "dataone_date_uploaded": row.get("dateUploaded"),
         "dataone_update_date": row.get("updateDate"),
         "dataone_date_modified": row.get("dateModified"),
-        "dataone_is_public": row.get("isPublic"),
     }
     for sid,val in vals.items():
         try:
-            if sid == "dataone_is_public":
-                series[sid].append(1 if val else 0)
-            elif sid == "dataone_size":
+            if sid == "dataone_size":
                 series[sid].append(int(val))
             elif sid == "dataone_number_replicas":
                 series[sid].append(int(val))
@@ -51,7 +48,7 @@ for row in src["response"]["docs"]:
                 series[sid].append(ts32(val))
         except Exception:
             skipped[sid]+=1
-meta={"dataone_size":("uint",64,"Q"),"dataone_number_replicas":("uint",16,"H"),"dataone_date_uploaded":("uint",32,"I"),"dataone_update_date":("uint",32,"I"),"dataone_date_modified":("uint",64,"Q"),"dataone_is_public":("uint",8,"B")}
+meta={"dataone_size":("uint",64,"Q"),"dataone_number_replicas":("uint",16,"H"),"dataone_date_uploaded":("uint",32,"I"),"dataone_update_date":("uint",32,"I"),"dataone_date_modified":("uint",64,"Q")}
 rows=[]
 for sid,values in series.items():
     out_dir=samples_dir/sid

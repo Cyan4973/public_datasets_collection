@@ -22,7 +22,7 @@ repo_root=Path(os.environ['REPO_ROOT']); data_root=repo_root/os.environ['DATA_DI
 download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTER_DIR']); index_dir=Path(os.environ['INDEX_DIR']); samples_dir=Path(os.environ['SAMPLES_DIR'])
 obj=json.load(open(download_dir/'gitlab_projects.json',encoding='utf-8'))
 def ts(s): return calendar.timegm(datetime.strptime(s[:19],'%Y-%m-%dT%H:%M:%S').utctimetuple())
-meta={'gitlab_project_id':['uint',64,'Q'],'gitlab_forks_count':['uint',32,'I'],'gitlab_star_count':['uint',32,'I'],'gitlab_created_at':['uint',32,'I'],'gitlab_last_activity_at':['uint',32,'I'],'gitlab_topic_count':['uint',16,'H'],'gitlab_tag_count':['uint',16,'H']}
+meta={'gitlab_project_id':['uint',64,'Q'],'gitlab_created_at':['uint',32,'I'],'gitlab_last_activity_at':['uint',32,'I'],'gitlab_topic_count':['uint',16,'H'],'gitlab_tag_count':['uint',16,'H']}
 vals={sid:[] for sid in meta}; skipped=0
 for sid in vals:
     d=samples_dir/sid
@@ -31,8 +31,6 @@ for sid in vals:
 for row in obj:
     try:
         vals['gitlab_project_id'].append(int(row['id']))
-        vals['gitlab_forks_count'].append(int(row.get('forks_count') or 0))
-        vals['gitlab_star_count'].append(int(row.get('star_count') or 0))
         vals['gitlab_created_at'].append(ts(row['created_at']))
         vals['gitlab_last_activity_at'].append(ts(row['last_activity_at']))
         vals['gitlab_topic_count'].append(len(row.get('topics',[])))

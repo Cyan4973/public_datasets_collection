@@ -29,7 +29,6 @@ meta={
   "npm_score_final":("float",64,"d"),
   "npm_maintainers_count":("uint",16,"H"),
   "npm_keywords_count":("uint",16,"H"),
-  "npm_insecure_flag":("uint",8,"B"),
 }
 vals={sid:[] for sid in meta}
 skipped=0
@@ -47,7 +46,6 @@ for row in items:
         vals["npm_score_final"].append(float(row["score"]["final"]))
         vals["npm_maintainers_count"].append(len(pkg.get("maintainers", [])))
         vals["npm_keywords_count"].append(len(pkg.get("keywords", [])))
-        vals["npm_insecure_flag"].append(int(row.get("flags", {}).get("insecure", 0)))
     except Exception:
         skipped += 1
 rows=[]

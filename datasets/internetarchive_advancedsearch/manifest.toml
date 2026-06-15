@@ -82,19 +82,3 @@ bit_width = 64
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
 output_path = "samples/internetarchive_advancedsearch/ia_item_size_bytes/"
-
-[[series]]
-id = "ia_week"
-description = "Per-document week field."
-semantic_meaning = "Internet Archive week field from the search result."
-representation_class = "native_numeric"
-representation_notes = "Direct numeric metadata field from the fixed advanced search result."
-source_resources = ["search_result"]
-filtering = "Same retained row set as ia_downloads."
-missing_value_policy = "Rows missing any required numeric field are skipped."
-conversion = "Parse JSON docs in response order and emit homogeneous raw little-endian numeric arrays."
-numeric_kind = "uint"
-bit_width = 16
-endianness = "little"
-sample_format = "raw homogeneous numeric array"
-output_path = "samples/internetarchive_advancedsearch/ia_week/"

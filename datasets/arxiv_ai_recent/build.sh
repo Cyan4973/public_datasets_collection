@@ -39,7 +39,6 @@ vals = {
     "arxiv_ai_summary_length": [],
     "arxiv_ai_comment_length": [],
     "arxiv_ai_primary_category_length": [],
-    "arxiv_ai_id_length": [],
 }
 skipped = 0
 
@@ -80,7 +79,6 @@ for e in entries:
         vals["arxiv_ai_summary_length"].append(len(summary))
         vals["arxiv_ai_comment_length"].append(len(comment))
         vals["arxiv_ai_primary_category_length"].append(len(primary))
-        vals["arxiv_ai_id_length"].append(len(entry_id))
     except Exception:
         skipped += 1
 
@@ -94,7 +92,6 @@ meta = {
     "arxiv_ai_summary_length": ("uint", 32, "I"),
     "arxiv_ai_comment_length": ("uint", 16, "H"),
     "arxiv_ai_primary_category_length": ("uint", 8, "B"),
-    "arxiv_ai_id_length": ("uint", 16, "H"),
 }
 
 rows = []

@@ -28,7 +28,6 @@ meta={
   "usgs_site_no_u64":("uint",64,"Q"),
   "usgs_dec_lat_f64":("float",64,"d"),
   "usgs_dec_long_f64":("float",64,"d"),
-  "usgs_state_cd_u16":("uint",16,"H"),
   "usgs_county_cd_u16":("uint",16,"H"),
   "usgs_huc_cd_u64":("uint",64,"Q"),
 }
@@ -60,7 +59,6 @@ for line in src.open():
     vals["usgs_site_no_u64"].append(site_no)
     vals["usgs_dec_lat_f64"].append(dec_lat)
     vals["usgs_dec_long_f64"].append(dec_long)
-    vals["usgs_state_cd_u16"].append(state_cd)
     vals["usgs_county_cd_u16"].append(county_cd)
     vals["usgs_huc_cd_u64"].append(huc_cd)
     rows_kept += 1

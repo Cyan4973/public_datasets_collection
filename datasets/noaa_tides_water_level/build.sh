@@ -24,12 +24,9 @@ rows = json.load(open(src)).get("data", [])
 series = {
     "noaa_tides_level_f64": ("d", [], "float", 64),
     "noaa_tides_sigma_f64": ("d", [], "float", 64),
-    "noaa_tides_year_u16": ("H", [], "uint", 16),
-    "noaa_tides_month_u8": ("B", [], "uint", 8),
     "noaa_tides_day_u8": ("B", [], "uint", 8),
     "noaa_tides_hour_u8": ("B", [], "uint", 8),
     "noaa_tides_minute_u8": ("B", [], "uint", 8),
-    "noaa_tides_q_length_u8": ("B", [], "uint", 8),
 }
 kept = 0
 for r in rows:
@@ -41,12 +38,9 @@ for r in rows:
         continue
     series["noaa_tides_level_f64"][1].append(level)
     series["noaa_tides_sigma_f64"][1].append(sigma)
-    series["noaa_tides_year_u16"][1].append(dt.year)
-    series["noaa_tides_month_u8"][1].append(dt.month)
     series["noaa_tides_day_u8"][1].append(dt.day)
     series["noaa_tides_hour_u8"][1].append(dt.hour)
     series["noaa_tides_minute_u8"][1].append(dt.minute)
-    series["noaa_tides_q_length_u8"][1].append(len(r.get("q") or ""))
     kept += 1
 
 index_path = os.path.join(index_dir, "samples.jsonl")

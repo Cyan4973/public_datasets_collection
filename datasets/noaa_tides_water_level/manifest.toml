@@ -27,20 +27,6 @@ endianness = "little"
 sample_format = "raw"
 
 [[series]]
-id = "noaa_tides_year_u16"
-numeric_kind = "uint"
-bit_width = 16
-endianness = "little"
-sample_format = "raw"
-
-[[series]]
-id = "noaa_tides_month_u8"
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-sample_format = "raw"
-
-[[series]]
 id = "noaa_tides_day_u8"
 numeric_kind = "uint"
 bit_width = 8
@@ -56,13 +42,6 @@ sample_format = "raw"
 
 [[series]]
 id = "noaa_tides_minute_u8"
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-sample_format = "raw"
-
-[[series]]
-id = "noaa_tides_q_length_u8"
 numeric_kind = "uint"
 bit_width = 8
 endianness = "little"

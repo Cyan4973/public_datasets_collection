@@ -25,15 +25,6 @@ sample_format = "raw_homogeneous_array"
 missing_value_policy = "filtered_malformed_rows"
 
 [[series]]
-id = "ena_collection_year_u16"
-path = "samples/ena_portal_search/ena_collection_year_u16/runs.bin"
-numeric_kind = "uint"
-bit_width = 16
-endianness = "little"
-sample_format = "raw_homogeneous_array"
-missing_value_policy = "missing_collection_year_preserved_as_zero"
-
-[[series]]
 id = "ena_scientific_name_length_u16"
 path = "samples/ena_portal_search/ena_scientific_name_length_u16/runs.bin"
 numeric_kind = "uint"

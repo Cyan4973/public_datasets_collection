@@ -18,7 +18,6 @@ import json, os, struct, sys
 src, filtered_dir, samples_dir, index_dir = sys.argv[1:5]
 rows = json.load(open(src, encoding='utf-8'))
 series = {
- 'donki_cme_begin_year_u16': ('H', [], 'uint', 16),
  'donki_cme_active_region_num_u32': ('I', [], 'uint', 32),
  'donki_cme_instrument_count_u8': ('B', [], 'uint', 8),
  'donki_cme_analysis_count_u8': ('B', [], 'uint', 8),
@@ -33,7 +32,6 @@ for r in rows:
     analyses = r.get('cmeAnalyses') or []
     first = analyses[0] if analyses else {}
     speed = first.get('speed'); half = first.get('halfAngle')
-    series['donki_cme_begin_year_u16'][1].append(int(begin[:4]))
     series['donki_cme_active_region_num_u32'][1].append(int(r.get('activeRegionNum') or 0))
     series['donki_cme_instrument_count_u8'][1].append(min(len(r.get('instruments') or []), 255))
     series['donki_cme_analysis_count_u8'][1].append(min(len(analyses), 255))

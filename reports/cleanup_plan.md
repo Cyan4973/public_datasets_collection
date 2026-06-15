@@ -35,6 +35,8 @@ Source of truth:
 
 - revisit below-floor recipes that may be salvageable by widening pagination, time range, or entity coverage while staying reproducible and homogeneous
 
-## Step 5: Degenerate-Series Cleanup
+## Step 5: Constant-Series Cleanup
 
-- after the floor backlog is reduced, prune remaining constant and ultra-sparse accepted series that still violate the protocol's quality rules
+- first prune globally constant accepted series listed in `reports/constant_series_cleanup.md`
+- filter or reject constant samples inside otherwise useful series, without removing the whole non-constant series
+- do not handle sparse-binary findings in this pass; those need separate policy and review

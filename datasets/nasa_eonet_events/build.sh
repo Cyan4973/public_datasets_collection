@@ -21,7 +21,7 @@ from pathlib import Path
 repo_root = Path(os.environ["REPO_ROOT"]); data_root = repo_root / os.environ["DATA_DIR"]
 download_dir = Path(os.environ["DOWNLOAD_DIR"]); filter_dir = Path(os.environ["FILTER_DIR"]); index_dir = Path(os.environ["INDEX_DIR"]); samples_dir = Path(os.environ["SAMPLES_DIR"])
 events = json.load(open(download_dir / "eonet_events.json", encoding="utf-8"))["events"]
-vals={"eonet_geometry_count":[],"eonet_categories_count":[],"eonet_sources_count":[],"eonet_first_geometry_timestamp":[]}; skipped=0
+vals={"eonet_geometry_count":[],"eonet_sources_count":[],"eonet_first_geometry_timestamp":[]}; skipped=0
 for sid in vals:
     d=samples_dir/sid
     if d.exists(): shutil.rmtree(d)
@@ -31,12 +31,11 @@ def parse_ts(s:str)->int:
 for event in events:
     try:
         vals["eonet_geometry_count"].append(len(event["geometry"]))
-        vals["eonet_categories_count"].append(len(event["categories"]))
         vals["eonet_sources_count"].append(len(event["sources"]))
         vals["eonet_first_geometry_timestamp"].append(parse_ts(event["geometry"][0]["date"]))
     except Exception:
         skipped += 1
-rows=[]; meta={"eonet_geometry_count":("uint",16,"H"),"eonet_categories_count":("uint",8,"B"),"eonet_sources_count":("uint",8,"B"),"eonet_first_geometry_timestamp":("uint",64,"Q")}
+rows=[]; meta={"eonet_geometry_count":("uint",16,"H"),"eonet_sources_count":("uint",8,"B"),"eonet_first_geometry_timestamp":("uint",64,"Q")}
 for sid,values in vals.items():
     kind,bits,code=meta[sid]
     out=samples_dir/sid/f"{sid}_{kind}{bits}_n{len(values):06d}.bin"

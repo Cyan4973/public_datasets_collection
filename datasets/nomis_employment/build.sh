@@ -21,22 +21,19 @@ from pathlib import Path
 repo_root=Path(os.environ["REPO_ROOT"]); data_root=repo_root/os.environ["DATA_DIR"]
 download_dir=Path(os.environ["DOWNLOAD_DIR"]); filter_dir=Path(os.environ["FILTER_DIR"]); index_dir=Path(os.environ["INDEX_DIR"]); samples_dir=Path(os.environ["SAMPLES_DIR"])
 src=json.load((download_dir/"nomis_employment.json").open(encoding="utf-8"))
-series={k:[] for k in ["nomis_obs_value","nomis_geography","nomis_sex","nomis_item","nomis_measure","nomis_year","nomis_month"]}
+series={k:[] for k in ["nomis_obs_value","nomis_sex","nomis_year","nomis_month"]}
 skipped={k:0 for k in series}
 for row in src["obs"]:
     vals={
         "nomis_obs_value": row["obs_value"]["value"],
-        "nomis_geography": row["geography"]["value"],
         "nomis_sex": row["sex"]["value"],
-        "nomis_item": row["item"]["value"],
-        "nomis_measure": row["measures"]["value"],
     }
     y,m = row["time"]["value"].split("-")
     vals["nomis_year"]=y; vals["nomis_month"]=m
     for sid,val in vals.items():
         try: series[sid].append(int(val))
         except Exception: skipped[sid]+=1
-meta={"nomis_obs_value":("uint",32,"I"),"nomis_geography":("uint",32,"I"),"nomis_sex":("uint",8,"B"),"nomis_item":("uint",8,"B"),"nomis_measure":("uint",32,"I"),"nomis_year":("uint",16,"H"),"nomis_month":("uint",8,"B")}
+meta={"nomis_obs_value":("uint",32,"I"),"nomis_sex":("uint",8,"B"),"nomis_year":("uint",16,"H"),"nomis_month":("uint",8,"B")}
 rows=[]
 for sid,values in series.items():
     out_dir=samples_dir/sid

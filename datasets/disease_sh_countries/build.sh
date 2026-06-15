@@ -20,7 +20,7 @@ from pathlib import Path
 repo_root=Path(os.environ['REPO_ROOT']); data_root=repo_root/os.environ['DATA_DIR']
 download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTER_DIR']); index_dir=Path(os.environ['INDEX_DIR']); samples_dir=Path(os.environ['SAMPLES_DIR'])
 obj=json.load(open(download_dir/'disease_sh_countries.json',encoding='utf-8'))
-meta={'disease_cases':['uint',64,'Q'],'disease_deaths':['uint',64,'Q'],'disease_recovered':['uint',64,'Q'],'disease_tests':['uint',64,'Q'],'disease_population':['uint',64,'Q'],'disease_today_cases':['uint',32,'I'],'disease_today_deaths':['uint',32,'I'],'disease_updated':['uint',64,'Q'],'disease_country_lat':['float',32,'f'],'disease_country_lon':['float',32,'f']}
+meta={'disease_cases':['uint',64,'Q'],'disease_deaths':['uint',64,'Q'],'disease_recovered':['uint',64,'Q'],'disease_tests':['uint',64,'Q'],'disease_population':['uint',64,'Q'],'disease_updated':['uint',64,'Q'],'disease_country_lat':['float',32,'f'],'disease_country_lon':['float',32,'f']}
 vals={sid:[] for sid in meta}; skipped=0
 for sid in vals:
     d=samples_dir/sid
@@ -34,8 +34,6 @@ for row in obj:
         vals['disease_recovered'].append(int(row['recovered']))
         vals['disease_tests'].append(int(row['tests']))
         vals['disease_population'].append(int(row['population']))
-        vals['disease_today_cases'].append(int(row['todayCases']))
-        vals['disease_today_deaths'].append(int(row['todayDeaths']))
         vals['disease_updated'].append(int(row['updated']))
         vals['disease_country_lat'].append(float(ci.get('lat') or 0.0))
         vals['disease_country_lon'].append(float(ci.get('long') or 0.0))

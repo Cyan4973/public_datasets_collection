@@ -9,7 +9,6 @@ Selected series:
 - `atlas_kingdom_length_u8`
 - `atlas_number_of_assays_u16`
 - `atlas_factor_count_u16`
-- `atlas_project_count_u16`
 - `atlas_raw_type_length_u16`
 - `atlas_experiment_type_length_u16`
 - `atlas_load_date_u32`

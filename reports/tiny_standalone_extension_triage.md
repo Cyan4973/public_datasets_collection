@@ -10,14 +10,14 @@ the upstream source is useless. The question is whether the current recipe can b
 extended into one coherent material without violating the protocol.
 
 Initial count before this removal pass: `41`
-Current pending count: `28`
+Current pending count: `27`
 
 ## Summary
 
 - repairable by straightforward pagination, cursoring, or bounded time windows: `23`
 - repairable only as a redesign/replacement because current query is arbitrary, ranked, or too narrow: `12`
-- removed or superseded so far: `10`
-- remaining repairable by straightforward pagination, cursoring, or bounded time windows: `16`
+- removed or superseded so far: `11`
+- remaining repairable by straightforward pagination, cursoring, or bounded time windows: `15`
 - remaining redesign/replacement candidates because current query is arbitrary, ranked, or too narrow: `12`
 
 ## Removed In First Pass
@@ -32,6 +32,7 @@ Current pending count: `28`
 - `nasa_neows_feed`
 - `chembl_molecules`
 - `openfda_drug_event`
+- `treasury_avg_interest_rates`
 
 ## Repaired So Far
 
@@ -62,7 +63,6 @@ Current pending count: `28`
 | `ooni_measurements` | OONI measurements first page, 4 series, 400 values | Measurement API can be bounded by time/test/country and paged. | Repairable by explicit bounded scope. |
 | `osm_overpass_cafes` | Overpass cafes in one Berlin bounding box, 4 series, 400 values | Can widen to multiple tiles or a city/region, but current bbox is arbitrary and coordinates may be auxiliary. | Redesign before keeping. |
 | `stackexchange_top_questions_jan_2024` | Stack Exchange top-voted January questions, 4 series, 400 values | API pages, but `top` ranking is a bounded leaderboard, not source material. | Remove or redesign as all questions in a bounded time window. |
-| `treasury_avg_interest_rates` | Treasury fiscal API first page, 4 series, 400 values | Fiscal Data API supports pagination and stable table semantics. | Repairable by pagination. |
 | `wger_exercises` | wger exercise listing first page, 4 series, 400 values | API pagination can cover the exercise corpus, but numeric density is weak. | Repairable but low priority. |
 | `musicbrainz_release_groups` | MusicBrainz release-group search for tag `data`, 5 series, 491 values | Query/tag is arbitrary; paging exists but material is weak. | Redesign or remove. |
 | `openfoodfacts_products` | Open Food Facts `chocolate` search first page, 5 series, 491 values | Product search is pageable; better as a stable category or full bounded product subset. | Repairable as redesigned category/catalog recipe. |
@@ -77,6 +77,6 @@ Current pending count: `28`
 
 1. Repair high-confidence pageable/time-windowed sources:
    `arxiv_cs_recent`,
-   `europe_pmc_search`, `treasury_avg_interest_rates`.
+   `europe_pmc_search`.
 2. Revisit medium-confidence catalog/search recipes only if the replacement
    scope can be made explicit and homogeneous.

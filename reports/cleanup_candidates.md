@@ -4,7 +4,7 @@ Current acceptance floor: `10,000` primary values or `100 KB` primary sample byt
 
 - source of truth: `reports/accepted_recipe_audit.tsv`
 - `ok`: `131`
-- `below_floor`: `184`
+- `below_floor`: `183`
 - `broken`: `0`
 
 This file is the short operational queue. Detailed policy for family cleanup lives in
@@ -51,6 +51,7 @@ typical primary sample is tiny and which reaches usefulness only by stacking man
 - remove `nasa_neows_feed`
 - remove `chembl_molecules`
 - remove `openfda_drug_event`
+- remove `treasury_avg_interest_rates`
 
 ## Tiny Standalone Repairs
 
@@ -78,7 +79,6 @@ scope. Per-recipe assessment lives in
 - `musicbrainz_recordings` — values=382, bytes=952, sample_rows=4
 - `europe_pmc_search` — values=400, bytes=800, sample_rows=4
 - `gleif_lei_records` — values=400, bytes=800, sample_rows=4
-- `treasury_avg_interest_rates` — values=400, bytes=800, sample_rows=4
 - `wger_exercises` — values=400, bytes=800, sample_rows=4
 - `arxiv_cs_recent` — values=400, bytes=1200, sample_rows=4
 - `datacite_dois` — values=400, bytes=1200, sample_rows=4
@@ -97,7 +97,7 @@ scope. Per-recipe assessment lives in
 - `huggingface_datasets` — values=500, bytes=2000, sample_rows=5
 
 Count guide:
-- tiny non-family standalones with `<= 500` values: `28`
+- tiny non-family standalones with `<= 500` values: `27`
 - non-family below-floor recipes with `501-3999` values: `55`
 - non-family below-floor recipes with `>= 4000` values: `24`
 

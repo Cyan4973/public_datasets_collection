@@ -1,0 +1,75 @@
+manifest_version = 1
+dataset_id = "nasa_pds_themis_ir_mosaic_u8"
+name = "NASA PDS THEMIS IR Mosaic Uint8"
+description = "Selected Mars THEMIS controlled thermal-infrared mosaic rasters stored as native unsigned 8-bit pixel samples."
+homepage = "https://astrogeology.usgs.gov/search/?q=THEMIS%20Controlled%20Mosaic"
+
+[license]
+name = "NASA/PDS/USGS open data"
+spdx = "LicenseRef-NASA-PDS-USGS-Open-Data"
+url = "https://pds.nasa.gov/"
+citation = "NASA Mars Odyssey THEMIS controlled mosaic products via USGS Astropedia/PDS."
+notes = "NASA/PDS and USGS data are public science data; preserve mission, PDS, and USGS attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public planetary mosaic resources."
+usage_notes = "Planetary thermal-infrared imagery."
+
+[[origins]]
+id = "usgs_astropedia_themis"
+name = "USGS Astropedia THEMIS controlled mosaics"
+url = "https://astrogeology.usgs.gov/search/?q=THEMIS%20Controlled%20Mosaic"
+type = "public_data_portal"
+notes = "Public USGS/Astropedia product pages and resource download endpoints."
+
+[[resources]]
+id = "selected_themis_mosaics"
+origin = "usgs_astropedia_themis"
+url = "datasets/nasa_pds_themis_ir_mosaic_u8/download.sh"
+type = "bounded_url_selection"
+version = "direct_two_mosaics_20260615"
+access = "Download script fetches two fixed direct TIFF URLs and validates TIFF headers as uncompressed single-band uint8 rasters."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/nasa_pds_themis_ir_mosaic_u8/"
+notes = "Default selection is two 100 m/pixel THEMIS controlled IR mosaics, keeping primary output below 1 GB."
+
+[local_paths]
+downloads = "downloads/nasa_pds_themis_ir_mosaic_u8/"
+filtered = "filtered/nasa_pds_themis_ir_mosaic_u8/"
+index = "index/nasa_pds_themis_ir_mosaic_u8/"
+samples = "samples/nasa_pds_themis_ir_mosaic_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_pds_themis_ir_mosaic_u8/samples.jsonl"
+summary = "Download two fixed uint8 TIFF mosaics and extract one native pixel-plane sample per mosaic."
+deterministic_notes = "Fixed direct TIFF URLs, uncompressed single-band TIFF validation, 1 GB total cap, and no image concatenation."
+
+[[series]]
+id = "themis_ir_mosaic_pixels_u8"
+description = "THEMIS controlled IR mosaic pixel planes."
+semantic_meaning = "Mars thermal-infrared controlled mosaic image pixel values."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source TIFF/PDS labels define the raster as unsigned 8-bit pixels; the build preserves source pixel bytes unchanged and omits TIFF/PDS metadata."
+source_resources = ["selected_themis_mosaics"]
+filtered_input_path = "filtered/nasa_pds_themis_ir_mosaic_u8/ingest_stats.json"
+filtering = "Keep only uncompressed single-band TIFF images with label-confirmed uint8 pixels."
+missing_value_policy = "Missing labels, non-8-bit labels, compressed TIFF, multisample TIFF, malformed strip tables, truncated strips, empty rasters, and constant rasters are rejected."
+conversion = "Copy each source TIFF pixel strip payload unchanged into one raw uint8 sample per mosaic."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw TIFF pixel plane"
+sample_geometry = "2d_raster"
+sample_rank = 2
+sample_shape = []
+sample_axes = ["y", "x"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/nasa_pds_themis_ir_mosaic_u8/themis_ir_mosaic_pixels_u8/"

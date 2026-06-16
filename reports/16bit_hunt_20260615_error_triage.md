@@ -12,7 +12,7 @@ The user ran `staging/source_variety_batch_20260615_16a/download.sh` twice. One 
 | `nasa_pds_messenger_mdis_basemap_i16` | source discovery failed | 0 accepted bytes | needs alternate source |
 | `nasa_pds_clementine_uvvis_i16` | source discovery failed | 0 accepted bytes | needs alternate source |
 | `noaa_nexrad_level2_moments_i16` | deferred | 0 accepted bytes | needs exact object keys or alternate listing |
-| `nasa_pds_themis_ir_mosaic_i16` | deferred | 0 accepted bytes | needs product pages exposing direct data-file links |
+| `nasa_pds_themis_ir_mosaic_i16` | rejected | 0 accepted bytes | exact product pages worked, but tested mosaics are native 8-bit |
 
 ## Verified Dataset: `hf_smolllm2_135m_safetensors_f16`
 
@@ -67,7 +67,7 @@ Focused material report: `reports/hf_smolllm2_135m_safetensors_f16_state.md`.
 | `nasa_pds_messenger_mdis_basemap_i16` | `883d5` | `d5a6e` |
 | `nasa_pds_clementine_uvvis_i16` | `9f307` | `1beff` |
 
-`nasa_pds_themis_ir_mosaic_i16` failed because the selected direct USGS resource URL returned HTTP 404. The script no longer treats product pages as payloads; it fetches selected product pages, extracts direct data-file links, and fails if none are found.
+`nasa_pds_themis_ir_mosaic_i16` first failed because the selected direct USGS resource URL returned HTTP 404. A later exact-product-page run found real payload URLs and downloaded two 452 MiB TIFF mosaics, but both are native unsigned 8-bit rasters, not 16-bit products. Their PDS/ISIS labels report `SAMPLE_BITS = 8` / `Type = UnsignedByte`, so this candidate is rejected for the 16-bit collection. The material was salvaged into `datasets/nasa_pds_themis_ir_mosaic_u8`, which built and verified locally as a bounded 8-bit raster recipe with `2` samples and `948,687,484` primary bytes. The `_i16` download script now preflights small labels first and rejects non-16-bit THEMIS products before downloading large TIFF payloads.
 
 ## Rerun Commands
 
@@ -82,7 +82,6 @@ To explicitly retry the deferred sources:
 ```bash
 INCLUDE_DEFERRED=1 staging/source_variety_batch_20260615_16a/download.sh
 NEXRAD_KEYS_FILE=/path/to/nexrad_keys.txt staging/noaa_nexrad_level2_moments_i16/download.sh
-staging/nasa_pds_themis_ir_mosaic_i16/download.sh
 ```
 
-The SDO/PDS candidates should not be rerun without alternate source URLs; the current catalog paths have failed with no acceptable direct payload links.
+The SDO/PDS candidates should not be rerun without alternate source URLs; the current catalog paths have failed with no acceptable direct payload links. THEMIS should not be rerun for the 16-bit hunt unless a different product class has label-confirmed 16-bit samples.

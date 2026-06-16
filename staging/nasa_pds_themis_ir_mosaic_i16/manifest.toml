@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "nasa_pds_themis_ir_mosaic_i16"
-name = "NASA PDS THEMIS IR Mosaic Int16"
-description = "Selected Mars THEMIS controlled thermal-infrared mosaic resources for later native 16-bit image extraction."
+name = "NASA PDS THEMIS IR Mosaic Int16 Candidate"
+description = "Guarded Mars THEMIS controlled thermal-infrared mosaic recipe. Tested default resources are native 8-bit and rejected for the 16-bit collection."
 homepage = "https://astrogeology.usgs.gov/search/?q=THEMIS%20Controlled%20Mosaic"
 
 [license]
@@ -29,12 +29,12 @@ id = "selected_themis_resources"
 origin = "usgs_astropedia_themis"
 url = "staging/nasa_pds_themis_ir_mosaic_i16/download.sh"
 type = "bounded_url_selection"
-version = "fixed_candidate_urls_20260615"
-access = "Download script fetches a bounded selected URL list."
+version = "label_preflight_20260615"
+access = "Download script fetches bounded product pages and small labels first, then downloads image payloads only if labels prove 16-bit samples."
 size_bytes = 0
 sha256 = ""
 local_path = "downloads/nasa_pds_themis_ir_mosaic_i16/"
-notes = "Download-only candidate; build must reject non-16-bit products."
+notes = "Default tested THEMIS controlled mosaics are native 8-bit unsigned-byte rasters. Keep this recipe only as a guarded preflight if a different THEMIS product class is selected later."
 
 [local_paths]
 downloads = "downloads/nasa_pds_themis_ir_mosaic_i16/"
@@ -47,8 +47,8 @@ download_script = "download.sh"
 build_script = ""
 verify_script = ""
 sample_index_path = "index/nasa_pds_themis_ir_mosaic_i16/samples.jsonl"
-summary = "Download bounded THEMIS mosaic resources for later image parsing."
-deterministic_notes = "Download uses a fixed candidate URL list and FILE_LIMIT."
+summary = "Preflight bounded THEMIS mosaic labels and reject non-16-bit products before large payload download."
+deterministic_notes = "Download uses a fixed product-page list, FILE_LIMIT, and label bit-depth preflight."
 
 [[series]]
 id = "themis_ir_mosaic_pixels_i16"

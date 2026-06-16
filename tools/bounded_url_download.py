@@ -64,11 +64,17 @@ def fetch_text(url: str, timeout: int) -> str:
 
 
 def discover_from_seed(seed_url: str, suffixes: tuple[str, ...], timeout: int) -> list[str]:
-    html = fetch_text(seed_url, timeout)
+    try:
+        html = fetch_text(seed_url, timeout)
+    except Exception as exc:
+        print(f"warning: seed fetch failed: {seed_url}: {exc}", file=sys.stderr)
+        return []
     parser = LinkParser()
     parser.feed(html)
     urls: list[str] = []
-    for href in parser.links:
+    candidates = list(parser.links)
+    candidates.extend(re.findall(r"https?://[^\s\"'<>]+", html))
+    for href in candidates:
         full = urllib.parse.urljoin(seed_url, href)
         if urllib.parse.urlparse(full).scheme not in {"http", "https"}:
             continue

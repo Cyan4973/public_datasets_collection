@@ -1,3 +1,2 @@
 dataset_id	status	reasons	primary_samples	primary_values	primary_bytes	size_min	size_p10	size_p25	size_median	size_p75	size_p90	size_max	unique_sample_sizes	same_size_fraction	missing_files
 librispeech_dev_clean_i16	ok		2703	310337932	620675864	46240	87232.000000	120320.000000	189440	296560.000000	426528.000000	1044640	1680	0.002590	0
-skadi_srtm_bay_area_hgt_i16	ok		1	12967201	25934402	25934402	25934402	25934402	25934402	25934402	25934402	25934402	1	1.000000	0

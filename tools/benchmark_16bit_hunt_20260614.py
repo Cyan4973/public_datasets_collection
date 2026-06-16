@@ -15,7 +15,6 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DATASET_IDS = [
     "librispeech_dev_clean_i16",
-    "skadi_srtm_bay_area_hgt_i16",
 ]
 MIN_VALUES = 10_000
 MIN_BYTES = 100 * 1024

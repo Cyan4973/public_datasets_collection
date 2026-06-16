@@ -59,7 +59,6 @@ musicbrainz_release_groups	below_floor	491	982	5	100	200	0	0	0	1	none	aggregate_
 openfoodfacts_products	below_floor	491	1870	5	98	392	0	0	0	1	none	aggregate_floor,median_sample_floor
 inaturalist_observations	below_floor	495	1188	5	99	198	0	0	0	1	none	aggregate_floor,median_sample_floor
 pokemontcg_cards	below_floor	498	1071	6	81	130.5	0	0	0	1	none	aggregate_floor,median_sample_floor
-medrxiv_details	below_floor	500	1300	5	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
 artic_artworks_search	below_floor	500	1400	5	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
 pride_projects_search	below_floor	500	1600	5	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
 gitlab_projects	below_floor	500	2000	5	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -220,6 +219,7 @@ rhea_reactions	ok	55029	128401	3	18343	36686	0	0	0	1	none	none
 ourworldindata_co2_latest	ok	58768	293840	2	29384	146920	0	0	0	1	none	none
 usgs_nwis_water_temperature_daily	ok	60459	483672	50	1427.5	11420	0	0	0	1	none	none
 usgs_quakes_month	ok	68900	374024	7	9842	39376	0	0	0	1	none	none
+medrxiv_details	ok	77615	186276	5	15523	31046	15523	62092	1	1	none	none
 uci_wine_quality	ok	77964	623712	24	3248.5	25988	0	0	0	1	none	none
 metmuseum_object_ids_large	ok	80220	320880	1	80220	320880	0	0	0	1	none	none
 usgs_fdsn_events_large	ok	84792	268508	6	14132	28264	0	0	0	1	none	none

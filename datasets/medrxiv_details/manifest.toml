@@ -1,7 +1,40 @@
 manifest_version = 1
 dataset_id = "medrxiv_details"
-name = "Medrxiv Details"
-description = "Pinned medrxiv preprint detail feed for January 2024."
+name = "medRxiv Details 2024"
+description = "Bounded full-year 2024 medRxiv preprint details with native version, author-count, abstract-length, title-length, and institution-length metadata."
+homepage = "https://api.biorxiv.org/"
+
+[license]
+name = "medRxiv API public metadata"
+spdx = "LicenseRef-medRxiv-API"
+url = "https://www.medrxiv.org/about/FAQ"
+citation = "medRxiv preprint metadata API."
+notes = "The recipe uses public medRxiv metadata only; individual preprints have their own licenses."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public preprint metadata from the medRxiv details API."
+usage_notes = "Scholarly metadata; no full-text payloads are downloaded."
+
+[[origins]]
+id = "medrxiv_details_api"
+name = "medRxiv details API"
+url = "https://api.medrxiv.org/details/medrxiv/"
+type = "public_api"
+notes = "Cursor-paginated public metadata endpoint."
+
+[[resources]]
+id = "medrxiv_details_2024_pages"
+origin = "medrxiv_details_api"
+url = "datasets/medrxiv_details/download.sh"
+type = "bounded_api_pagination"
+version = "2024_monthly_windows_cursor_pages"
+access = "Download script pages each 2024 month using the medRxiv details cursor."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/medrxiv_details/"
+notes = "Bounded to 2024 medRxiv records. The downloader validates each JSON page and rejects output below the repair floor."
 
 [local_paths]
 downloads = "downloads/medrxiv_details/"
@@ -14,3 +47,149 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/medrxiv_details/samples.jsonl"
+summary = "Download 2024 medRxiv details pages, deduplicate by DOI/version, sort by version date, and emit native numeric metadata sequences."
+deterministic_notes = "Fixed year, fixed monthly windows, fixed cursor pagination, deduplication by DOI/version, sorted output by date/DOI/version, and primary payload excludes date alignment metadata."
+
+[[series]]
+id = "medrxiv_details_version"
+description = "Preprint version numbers."
+semantic_meaning = "medRxiv version integer for each DOI/version record."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Version is a native medRxiv metadata field."
+source_resources = ["medrxiv_details_2024_pages"]
+filtered_input_path = "filtered/medrxiv_details/ingest_stats.json"
+filtering = "Malformed rows missing DOI, version, or date are skipped."
+missing_value_policy = "Rows missing required DOI/version/date are skipped."
+conversion = "Parse version as uint16 and write one little-endian sequence sorted by date, DOI, and version."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw uint16 sequence"
+sample_geometry = "sequence"
+sample_rank = 1
+sample_shape = []
+sample_axes = ["preprint_version_sorted_by_date"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/medrxiv_details/medrxiv_details_version/"
+
+[[series]]
+id = "medrxiv_details_author_count"
+description = "Author counts per preprint version."
+semantic_meaning = "Number of semicolon-delimited authors in each medRxiv metadata record."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Count is directly derived from the source authors field."
+source_resources = ["medrxiv_details_2024_pages"]
+filtered_input_path = "filtered/medrxiv_details/ingest_stats.json"
+filtering = "Malformed rows missing DOI, version, or date are skipped."
+missing_value_policy = "Missing authors are represented as count 0."
+conversion = "Count source authors and write one little-endian uint16 sequence sorted by date, DOI, and version."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw uint16 sequence"
+sample_geometry = "sequence"
+sample_rank = 1
+sample_shape = []
+sample_axes = ["preprint_version_sorted_by_date"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/medrxiv_details/medrxiv_details_author_count/"
+
+[[series]]
+id = "medrxiv_details_abstract_length"
+description = "Abstract lengths per preprint version."
+semantic_meaning = "Length in source characters of each medRxiv abstract field."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "String length is a stable machine-facing metadata representation used directly for compression training."
+source_resources = ["medrxiv_details_2024_pages"]
+filtered_input_path = "filtered/medrxiv_details/ingest_stats.json"
+filtering = "Malformed rows missing DOI, version, or date are skipped."
+missing_value_policy = "Missing abstract is represented as length 0."
+conversion = "Count source abstract characters and write one little-endian uint32 sequence sorted by date, DOI, and version."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw uint32 sequence"
+sample_geometry = "sequence"
+sample_rank = 1
+sample_shape = []
+sample_axes = ["preprint_version_sorted_by_date"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/medrxiv_details/medrxiv_details_abstract_length/"
+
+[[series]]
+id = "medrxiv_details_title_length"
+description = "Title lengths per preprint version."
+semantic_meaning = "Length in source characters of each medRxiv title field."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "String length is a stable machine-facing metadata representation used directly for compression training."
+source_resources = ["medrxiv_details_2024_pages"]
+filtered_input_path = "filtered/medrxiv_details/ingest_stats.json"
+filtering = "Malformed rows missing DOI, version, or date are skipped."
+missing_value_policy = "Missing title is represented as length 0."
+conversion = "Count source title characters and write one little-endian uint16 sequence sorted by date, DOI, and version."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw uint16 sequence"
+sample_geometry = "sequence"
+sample_rank = 1
+sample_shape = []
+sample_axes = ["preprint_version_sorted_by_date"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/medrxiv_details/medrxiv_details_title_length/"
+
+[[series]]
+id = "medrxiv_details_corresponding_institution_length"
+description = "Corresponding institution field lengths per preprint version."
+semantic_meaning = "Length in source characters of each medRxiv corresponding-author institution field."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "String length is a stable machine-facing metadata representation used directly for compression training."
+source_resources = ["medrxiv_details_2024_pages"]
+filtered_input_path = "filtered/medrxiv_details/ingest_stats.json"
+filtering = "Malformed rows missing DOI, version, or date are skipped."
+missing_value_policy = "Missing corresponding institution is represented as length 0."
+conversion = "Count source institution-field characters and write one little-endian uint16 sequence sorted by date, DOI, and version."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw uint16 sequence"
+sample_geometry = "sequence"
+sample_rank = 1
+sample_shape = []
+sample_axes = ["preprint_version_sorted_by_date"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/medrxiv_details/medrxiv_details_corresponding_institution_length/"
+
+[[series]]
+id = "medrxiv_details_date"
+description = "Preprint version dates."
+semantic_meaning = "medRxiv version date converted to Unix epoch seconds."
+role = "auxiliary"
+representation_class = "native_numeric"
+representation_notes = "Date preserves alignment and sort order but does not count toward acceptance."
+source_resources = ["medrxiv_details_2024_pages"]
+filtered_input_path = "filtered/medrxiv_details/ingest_stats.json"
+filtering = "Malformed rows missing DOI, version, or date are skipped."
+missing_value_policy = "Rows missing required DOI/version/date are skipped."
+conversion = "Parse YYYY-MM-DD date and write one little-endian uint32 sequence sorted by date, DOI, and version."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw uint32 sequence"
+sample_geometry = "sequence"
+sample_rank = 1
+sample_shape = []
+sample_axes = ["preprint_version_sorted_by_date"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/medrxiv_details/medrxiv_details_date/"

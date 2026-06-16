@@ -4,8 +4,8 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 130
-- `below_floor`: 185
+- `ok`: 131
+- `below_floor`: 184
 - `broken`: 0
 
 ## Below Floor
@@ -72,7 +72,6 @@ Auxiliary series do not count toward acceptance.
 | `openfoodfacts_products` | 491 | 1870 | 5 | 98 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `inaturalist_observations` | 495 | 1188 | 5 | 99 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `pokemontcg_cards` | 498 | 1071 | 6 | 81 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `medrxiv_details` | 500 | 1300 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `artic_artworks_search` | 500 | 1400 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `pride_projects_search` | 500 | 1600 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `gitlab_projects` | 500 | 2000 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |

@@ -10,14 +10,14 @@ the upstream source is useless. The question is whether the current recipe can b
 extended into one coherent material without violating the protocol.
 
 Initial count before this removal pass: `41`
-Current pending count: `29`
+Current pending count: `28`
 
 ## Summary
 
 - repairable by straightforward pagination, cursoring, or bounded time windows: `23`
 - repairable only as a redesign/replacement because current query is arbitrary, ranked, or too narrow: `12`
 - removed or superseded so far: `10`
-- remaining repairable by straightforward pagination, cursoring, or bounded time windows: `17`
+- remaining repairable by straightforward pagination, cursoring, or bounded time windows: `16`
 - remaining redesign/replacement candidates because current query is arbitrary, ranked, or too narrow: `12`
 
 ## Removed In First Pass
@@ -38,6 +38,7 @@ Current pending count: `29`
 - `internetarchive_advancedsearch`: extended to a bounded 10,000-row Internet Archive text metadata slice; now passes the floor.
 - `openalex_works_2024_sample`: extended to a bounded 20,000-work 2024 cursor-paginated OpenAlex table; now passes the floor with 460,000 primary values and 1,160,000 primary bytes.
 - `nvd_cves_recent`: extended to bounded full-year 2024 NVD API pagination; now passes the floor with 244,224 primary values and 651,264 primary bytes.
+- `medrxiv_details`: extended to bounded full-year 2024 medRxiv details pagination; now passes the floor with 77,615 primary values and 186,276 primary bytes.
 
 ## Per-Recipe Assessment
 
@@ -70,13 +71,12 @@ Current pending count: `29`
 | `artic_artworks_search` | Art Institute search for `cat`, 5 series, 500 values | Search query is arbitrary; ArtIC artworks API can page all artworks with selected fields. | Repairable only as redesigned artworks catalog. |
 | `gitlab_projects` | GitLab public projects first page, 5 series, 500 values | GitLab API supports pagination. | Repairable by pagination, but public-project listing is volatile. |
 | `huggingface_datasets` | Hugging Face datasets first page, 5 series, 500 values | API has listing/pagination/cursor options, but volatility and license fields need review. | Repairable by pagination if reproducibility is controlled. |
-| `medrxiv_details` | medRxiv January 2024 first page, 5 series, 500 values | medRxiv API supports interval/cursor; extend date window and cursor. | Repairable by bounded time range. |
 | `pride_projects_search` | PRIDE project search for `proteomics`, 5 series, 500 values | Search endpoint has page/pageSize; proteomics scope is plausible but still query-based. | Repairable with explicit scope and pagination. |
 
 ## Recommended Order
 
 1. Repair high-confidence pageable/time-windowed sources:
    `arxiv_cs_recent`,
-   `europe_pmc_search`, `treasury_avg_interest_rates`, `medrxiv_details`.
+   `europe_pmc_search`, `treasury_avg_interest_rates`.
 2. Revisit medium-confidence catalog/search recipes only if the replacement
    scope can be made explicit and homogeneous.

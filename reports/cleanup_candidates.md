@@ -3,8 +3,8 @@
 Current acceptance floor: `10,000` primary values or `100 KB` primary sample bytes, plus `1,000` minimum median primary sample values.
 
 - source of truth: `reports/accepted_recipe_audit.tsv`
-- `ok`: `131`
-- `below_floor`: `183`
+- `ok`: `132`
+- `below_floor`: `182`
 - `broken`: `0`
 
 This file is the short operational queue. Detailed policy for family cleanup lives in
@@ -59,6 +59,7 @@ typical primary sample is tiny and which reaches usefulness only by stacking man
 - repair `openalex_works_2024_sample`
 - repair `nvd_cves_recent`
 - repair `medrxiv_details`
+- repair `europe_pmc_search`
 
 ## Triage First: Tiny Non-Family Standalones
 
@@ -77,7 +78,6 @@ scope. Per-recipe assessment lives in
 - `osf_preprints` — values=300, bytes=1200, sample_rows=3
 - `weathergov_stations` — values=300, bytes=2000, sample_rows=3
 - `musicbrainz_recordings` — values=382, bytes=952, sample_rows=4
-- `europe_pmc_search` — values=400, bytes=800, sample_rows=4
 - `gleif_lei_records` — values=400, bytes=800, sample_rows=4
 - `wger_exercises` — values=400, bytes=800, sample_rows=4
 - `arxiv_cs_recent` — values=400, bytes=1200, sample_rows=4
@@ -97,7 +97,7 @@ scope. Per-recipe assessment lives in
 - `huggingface_datasets` — values=500, bytes=2000, sample_rows=5
 
 Count guide:
-- tiny non-family standalones with `<= 500` values: `27`
+- tiny non-family standalones with `<= 500` values: `26`
 - non-family below-floor recipes with `501-3999` values: `55`
 - non-family below-floor recipes with `>= 4000` values: `24`
 

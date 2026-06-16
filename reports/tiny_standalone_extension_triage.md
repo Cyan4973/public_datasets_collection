@@ -10,14 +10,14 @@ the upstream source is useless. The question is whether the current recipe can b
 extended into one coherent material without violating the protocol.
 
 Initial count before this removal pass: `41`
-Current pending count: `27`
+Current pending count: `26`
 
 ## Summary
 
 - repairable by straightforward pagination, cursoring, or bounded time windows: `23`
 - repairable only as a redesign/replacement because current query is arbitrary, ranked, or too narrow: `12`
 - removed or superseded so far: `11`
-- remaining repairable by straightforward pagination, cursoring, or bounded time windows: `15`
+- remaining repairable by straightforward pagination, cursoring, or bounded time windows: `14`
 - remaining redesign/replacement candidates because current query is arbitrary, ranked, or too narrow: `12`
 
 ## Removed In First Pass
@@ -40,6 +40,7 @@ Current pending count: `27`
 - `openalex_works_2024_sample`: extended to a bounded 20,000-work 2024 cursor-paginated OpenAlex table; now passes the floor with 460,000 primary values and 1,160,000 primary bytes.
 - `nvd_cves_recent`: extended to bounded full-year 2024 NVD API pagination; now passes the floor with 244,224 primary values and 651,264 primary bytes.
 - `medrxiv_details`: extended to bounded full-year 2024 medRxiv details pagination; now passes the floor with 77,615 primary values and 186,276 primary bytes.
+- `europe_pmc_search`: extended to a bounded January 2024 Europe PMC cursor-paginated search; now passes the floor with 1,127,748 primary values and 2,631,412 primary bytes.
 
 ## Per-Recipe Assessment
 
@@ -57,7 +58,6 @@ Current pending count: `27`
 | `arxiv_cs_recent` | arXiv `cs.LG` recent feed, 4 series, 400 values | Extend by `start`/`max_results` and/or bounded submitted-date windows. | Repairable by bounded category/time scope. |
 | `cratesio_crates` | crates.io search for `data`, 4 series, 400 values | Search paging exists, but query is arbitrary. | Redesign as broader crates catalog or remove. |
 | `datacite_dois` | DataCite DOI search for `machine learning`, 4 series, 400 values | DataCite supports pagination, but query term is arbitrary; a resource-type or provider scope would be cleaner. | Redesign before keeping. |
-| `europe_pmc_search` | Europe PMC January 2024 search page, 4 series, 400 values | Extend date range and paginate. | Repairable by bounded publication-date window. |
 | `gleif_lei_records` | GLEIF LEI records first page, 4 series, 400 values | LEI API is pageable. | Repairable by pagination, but review whether date/count fields are strong enough. |
 | `hex_packages` | Hex package search for `data`, 4 series, 400 values | Current endpoint/query is narrow; full package listing may be possible but must be confirmed. | Redesign before keeping. |
 | `ooni_measurements` | OONI measurements first page, 4 series, 400 values | Measurement API can be bounded by time/test/country and paged. | Repairable by explicit bounded scope. |
@@ -76,7 +76,6 @@ Current pending count: `27`
 ## Recommended Order
 
 1. Repair high-confidence pageable/time-windowed sources:
-   `arxiv_cs_recent`,
-   `europe_pmc_search`.
+   `arxiv_cs_recent`.
 2. Revisit medium-confidence catalog/search recipes only if the replacement
    scope can be made explicit and homogeneous.

@@ -4,8 +4,8 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 131
-- `below_floor`: 183
+- `ok`: 132
+- `below_floor`: 182
 - `broken`: 0
 
 ## Below Floor
@@ -50,7 +50,6 @@ Auxiliary series do not count toward acceptance.
 | `world_bank_energy_use_per_capita_annual` | 346 | 2768 | 10 | 35 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `world_bank_unemployment_total_percent_annual` | 350 | 2800 | 10 | 35 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `musicbrainz_recordings` | 382 | 952 | 4 | 94 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `europe_pmc_search` | 400 | 800 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `wger_exercises` | 400 | 800 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `gleif_lei_records` | 400 | 800 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `arxiv_cs_recent` | 400 | 1200 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |

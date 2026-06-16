@@ -1,7 +1,40 @@
 manifest_version = 1
 dataset_id = "europe_pmc_search"
 name = "Europe PMC Search"
-description = "Pinned Europe PMC search response with publication year and citation fields."
+description = "Bounded January 2024 Europe PMC search metadata table with publication dates, citation counts, author counts, publication-type counts, title lengths, full-text id counts, and journal-title lengths."
+homepage = "https://europepmc.org/RestfulWebService"
+
+[license]
+name = "Europe PMC open metadata"
+spdx = "LicenseRef-Europe-PMC-Open-Metadata"
+url = "https://europepmc.org/About"
+citation = "Europe PMC, EMBL-EBI."
+notes = "Europe PMC provides public bibliographic metadata through its REST API. Preserve source attribution and original record identifiers."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public scholarly bibliographic metadata from the official Europe PMC REST API."
+usage_notes = "Operational bibliographic metadata suitable for reproducible numeric dataset collection; no article full text is downloaded."
+
+[[origins]]
+id = "europe_pmc_api"
+name = "Europe PMC REST Search API"
+url = "https://www.ebi.ac.uk/europepmc/webservices/rest/search"
+type = "public_api"
+notes = "Public cursor-paginated search endpoint."
+
+[[resources]]
+id = "europe_pmc_january_2024_search_pages"
+origin = "europe_pmc_api"
+url = "datasets/europe_pmc_search/download.sh"
+type = "bounded_api_pagination"
+version = "FIRST_PDATE_2024-01-01_to_2024-01-31_pageSize_1000"
+access = "Download script walks Europe PMC cursorMark pages for FIRST_PDATE:[2024-01-01 TO 2024-01-31], resultType=lite, format=json."
+size_bytes = 147787058
+sha256 = ""
+local_path = "downloads/europe_pmc_search/"
+notes = "The downloader validates page structure, record count, duplicate source/id keys, minimum records, and a 300 MB source cap."
 
 [local_paths]
 downloads = "downloads/europe_pmc_search/"
@@ -14,4 +47,173 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/europe_pmc_search/samples.jsonl"
+summary = "Download all cursor pages for January 2024 Europe PMC first-publication-date search, deduplicate by source/id, sort by firstPublicationDate/source/id, and emit one homogeneous sequence per numeric metadata field."
+deterministic_notes = "Fixed date window, fixed query, fixed page size, cache-aware cursor pagination, no network access during build, sorted output by firstPublicationDate/source/id, durable logs under logs/europe_pmc_search/, and generated sample index at index/europe_pmc_search/samples.jsonl."
 
+[[series]]
+id = "europepmc_first_publication_date"
+description = "First-publication dates for retained Europe PMC records."
+semantic_meaning = "Europe PMC firstPublicationDate converted to Unix epoch seconds at UTC midnight."
+role = "auxiliary"
+representation_class = "native_numeric"
+representation_notes = "Publication date is native Europe PMC metadata; epoch conversion is deterministic and preserves date order."
+source_resources = ["europe_pmc_january_2024_search_pages"]
+filtered_input_path = "filtered/europe_pmc_search/ingest_stats.json"
+filtering = "Malformed records missing source/id or firstPublicationDate are skipped; duplicate source/id records are deduplicated by final observed page entry."
+missing_value_policy = "firstPublicationDate is required for retention."
+conversion = "Parse YYYY-MM-DD date and write little-endian uint32 sequence sorted by firstPublicationDate/source/id."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw uint32 sequence"
+sample_geometry = "sequence"
+sample_rank = 1
+sample_shape = []
+sample_axes = ["publication_sorted_by_first_publication_date"]
+sample_count = 1
+total_size_bytes = 751832
+output_path = "samples/europe_pmc_search/europepmc_first_publication_date/"
+
+[[series]]
+id = "europepmc_cited_by_count"
+description = "Europe PMC citation counts."
+semantic_meaning = "citedByCount metadata value per retained publication record."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Count is a native numeric field in Europe PMC lite search results."
+source_resources = ["europe_pmc_january_2024_search_pages"]
+filtered_input_path = "filtered/europe_pmc_search/ingest_stats.json"
+filtering = "Malformed records missing source/id or firstPublicationDate are skipped."
+missing_value_policy = "Missing citedByCount is represented as 0."
+conversion = "Parse citedByCount as integer and write little-endian uint32 sequence sorted by firstPublicationDate/source/id."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw uint32 sequence"
+sample_geometry = "sequence"
+sample_rank = 1
+sample_shape = []
+sample_axes = ["publication_sorted_by_first_publication_date"]
+sample_count = 1
+total_size_bytes = 751832
+output_path = "samples/europe_pmc_search/europepmc_cited_by_count/"
+
+[[series]]
+id = "europepmc_author_count"
+description = "Author counts parsed from authorString."
+semantic_meaning = "Number of comma-separated author entries in the Europe PMC authorString field."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "Stable count derived from a machine-facing metadata field; no arbitrary categorical remap is introduced."
+source_resources = ["europe_pmc_january_2024_search_pages"]
+filtered_input_path = "filtered/europe_pmc_search/ingest_stats.json"
+filtering = "Malformed records missing source/id or firstPublicationDate are skipped."
+missing_value_policy = "Missing authorString is represented as count 0."
+conversion = "Split authorString on commas, count non-empty parts, and write little-endian uint16 sequence sorted by firstPublicationDate/source/id."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw uint16 sequence"
+sample_geometry = "sequence"
+sample_rank = 1
+sample_shape = []
+sample_axes = ["publication_sorted_by_first_publication_date"]
+sample_count = 1
+total_size_bytes = 375916
+output_path = "samples/europe_pmc_search/europepmc_author_count/"
+
+[[series]]
+id = "europepmc_title_length"
+description = "Title lengths."
+semantic_meaning = "Character length of the Europe PMC title field for each retained record."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "Stable length metric derived from a public metadata string field."
+source_resources = ["europe_pmc_january_2024_search_pages"]
+filtered_input_path = "filtered/europe_pmc_search/ingest_stats.json"
+filtering = "Malformed records missing source/id or firstPublicationDate are skipped."
+missing_value_policy = "Missing title is represented as length 0."
+conversion = "Count Python string code points and write little-endian uint16 sequence sorted by firstPublicationDate/source/id."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw uint16 sequence"
+sample_geometry = "sequence"
+sample_rank = 1
+sample_shape = []
+sample_axes = ["publication_sorted_by_first_publication_date"]
+sample_count = 1
+total_size_bytes = 375916
+output_path = "samples/europe_pmc_search/europepmc_title_length/"
+
+[[series]]
+id = "europepmc_pub_type_count"
+description = "Publication-type counts."
+semantic_meaning = "Number of semicolon-separated publication-type labels in the Europe PMC pubType field."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "Stable count derived from the machine-facing pubType metadata field."
+source_resources = ["europe_pmc_january_2024_search_pages"]
+filtered_input_path = "filtered/europe_pmc_search/ingest_stats.json"
+filtering = "Malformed records missing source/id or firstPublicationDate are skipped."
+missing_value_policy = "Missing pubType is represented as count 0."
+conversion = "Split pubType on semicolons, count non-empty labels, and write little-endian uint16 sequence sorted by firstPublicationDate/source/id."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw uint16 sequence"
+sample_geometry = "sequence"
+sample_rank = 1
+sample_shape = []
+sample_axes = ["publication_sorted_by_first_publication_date"]
+sample_count = 1
+total_size_bytes = 375916
+output_path = "samples/europe_pmc_search/europepmc_pub_type_count/"
+
+[[series]]
+id = "europepmc_fulltext_id_count"
+description = "Full-text id counts."
+semantic_meaning = "Number of fullTextId entries attached to each retained Europe PMC record."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Count is directly derived from Europe PMC's structured fullTextIdList field."
+source_resources = ["europe_pmc_january_2024_search_pages"]
+filtered_input_path = "filtered/europe_pmc_search/ingest_stats.json"
+filtering = "Malformed records missing source/id or firstPublicationDate are skipped."
+missing_value_policy = "Missing fullTextIdList is represented as count 0."
+conversion = "Count fullTextId entries and write little-endian uint16 sequence sorted by firstPublicationDate/source/id."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw uint16 sequence"
+sample_geometry = "sequence"
+sample_rank = 1
+sample_shape = []
+sample_axes = ["publication_sorted_by_first_publication_date"]
+sample_count = 1
+total_size_bytes = 375916
+output_path = "samples/europe_pmc_search/europepmc_fulltext_id_count/"
+
+[[series]]
+id = "europepmc_journal_title_length"
+description = "Journal-title lengths."
+semantic_meaning = "Character length of the Europe PMC journalTitle field for each retained record."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "Stable length metric derived from a public metadata string field."
+source_resources = ["europe_pmc_january_2024_search_pages"]
+filtered_input_path = "filtered/europe_pmc_search/ingest_stats.json"
+filtering = "Malformed records missing source/id or firstPublicationDate are skipped."
+missing_value_policy = "Missing journalTitle is represented as length 0."
+conversion = "Count Python string code points and write little-endian uint16 sequence sorted by firstPublicationDate/source/id."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw uint16 sequence"
+sample_geometry = "sequence"
+sample_rank = 1
+sample_shape = []
+sample_axes = ["publication_sorted_by_first_publication_date"]
+sample_count = 1
+total_size_bytes = 375916
+output_path = "samples/europe_pmc_search/europepmc_journal_title_length/"

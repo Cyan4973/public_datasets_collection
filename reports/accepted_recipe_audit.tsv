@@ -61,7 +61,6 @@ inaturalist_observations	below_floor	495	1188	5	99	198	0	0	0	1	none	aggregate_fl
 pokemontcg_cards	below_floor	498	1071	6	81	130.5	0	0	0	1	none	aggregate_floor,median_sample_floor
 medrxiv_details	below_floor	500	1300	5	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
 artic_artworks_search	below_floor	500	1400	5	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
-nvd_cves_recent	below_floor	500	1400	5	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
 pride_projects_search	below_floor	500	1600	5	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
 gitlab_projects	below_floor	500	2000	5	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
 huggingface_datasets	below_floor	500	2000	5	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -251,6 +250,7 @@ geonames_cities5000	ok	206700	1378000	3	68900	551200	0	0	0	1	none	none
 geonames_postal_fixed	ok	207450	954270	5	41490	165960	0	0	0	1	none	none
 nasa_techport_projects	ok	227414	413480	11	20674	20674	0	0	0	1	none	none
 ourairports_airports	ok	241771	1651444	3	85545	684360	0	0	0	1	none	none
+nvd_cves_recent	ok	244224	651264	6	40704	81408	0	0	0	1	none	none
 who_atlas_gisah	ok	252140	806848	5	50428	100856	0	0	0	1	none	none
 noaa_ghcn_daily_wsfg_by_station	ok	266478	532956	33	8055	16110	0	0	0	1	none	none
 nyc_311_descriptor_u16	ok	287186	574372	3	100000	200000	0	0	0	1	none	none
@@ -311,4 +311,6 @@ geonames_alternatenames	ok	113882214	246744797	6	18980369	28470553.5	0	0	0	1	non
 hf_smolllm2_135m_safetensors_f16	ok	134515008	269030016	272	331776	663552	0	0	0	1	none	none
 tcia_nsclc_radiomics_ct_i16	ok	244580352	489160704	933	262144	524288	0	0	0	1	none	none
 medmnist_pathmnist_images_u8	ok	252087360	252087360	107180	2352	2352	0	0	0	1	none	none
+sentinel2_l2a_reflectance_cogs_u16	ok	308098800	616197600	6	30140100	60280200	0	0	0	1	none	none
 librispeech_dev_clean_i16	ok	310337932	620675864	2703	94720	189440	0	0	0	1	none	none
+nasa_pds_themis_ir_mosaic_u8	ok	948687484	948687484	2	474343742	474343742	0	0	0	1	none	none

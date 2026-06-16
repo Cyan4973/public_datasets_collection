@@ -3,8 +3,8 @@
 Current acceptance floor: `10,000` primary values or `100 KB` primary sample bytes, plus `1,000` minimum median primary sample values.
 
 - source of truth: `reports/accepted_recipe_audit.tsv`
-- `ok`: `125`
-- `below_floor`: `186`
+- `ok`: `130`
+- `below_floor`: `185`
 - `broken`: `0`
 
 This file is the short operational queue. Detailed policy for family cleanup lives in
@@ -56,6 +56,7 @@ typical primary sample is tiny and which reaches usefulness only by stacking man
 
 - repair `internetarchive_advancedsearch`
 - repair `openalex_works_2024_sample`
+- repair `nvd_cves_recent`
 
 ## Triage First: Tiny Non-Family Standalones
 
@@ -91,13 +92,12 @@ scope. Per-recipe assessment lives in
 - `pokemontcg_cards` — values=498, bytes=1071, sample_rows=6
 - `medrxiv_details` — values=500, bytes=1300, sample_rows=5
 - `artic_artworks_search` — values=500, bytes=1400, sample_rows=5
-- `nvd_cves_recent` — values=500, bytes=1400, sample_rows=5
 - `pride_projects_search` — values=500, bytes=1600, sample_rows=5
 - `gitlab_projects` — values=500, bytes=2000, sample_rows=5
 - `huggingface_datasets` — values=500, bytes=2000, sample_rows=5
 
 Count guide:
-- tiny non-family standalones with `<= 500` values: `30`
+- tiny non-family standalones with `<= 500` values: `29`
 - non-family below-floor recipes with `501-3999` values: `55`
 - non-family below-floor recipes with `>= 4000` values: `24`
 

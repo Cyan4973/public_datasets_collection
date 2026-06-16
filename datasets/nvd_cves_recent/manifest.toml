@@ -1,7 +1,40 @@
 manifest_version = 1
 dataset_id = "nvd_cves_recent"
 name = "NVD CVEs Recent"
-description = "Pinned NVD recent-CVE response with native timestamp and metadata-count fields."
+description = "Bounded 2024 NVD CVE metadata table with native timestamps, CVSS scores, CWE ids, reference counts, and CPE match counts."
+homepage = "https://nvd.nist.gov/vuln/data-feeds"
+
+[license]
+name = "NIST public data"
+spdx = "LicenseRef-NIST-Public-Data"
+url = "https://www.nist.gov/open/license"
+citation = "National Vulnerability Database, National Institute of Standards and Technology."
+notes = "NIST-authored data is generally public domain; cite NVD/NIST as the source."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public vulnerability metadata published by NIST NVD."
+usage_notes = "Operational security metadata; not exploit code or private data."
+
+[[origins]]
+id = "nvd_api"
+name = "NVD CVE API 2.0"
+url = "https://services.nvd.nist.gov/rest/json/cves/2.0"
+type = "public_api"
+notes = "Anonymous public API; optional NVD_API_KEY may be supplied only to improve rate limits."
+
+[[resources]]
+id = "nvd_cves_2024_paginated"
+origin = "nvd_api"
+url = "datasets/nvd_cves_recent/download.sh"
+type = "bounded_api_pagination"
+version = "2024_monthly_windows_results_per_page_2000"
+access = "Download script pages each 2024 month with pubStartDate/pubEndDate and startIndex."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/nvd_cves_recent/"
+notes = "Default downloader is intentionally polite: one-year bounded scope, monthly windows, cache-aware pages, and 6-second delay between fresh anonymous API requests."
 
 [local_paths]
 downloads = "downloads/nvd_cves_recent/"
@@ -14,4 +47,149 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/nvd_cves_recent/samples.jsonl"
+summary = "Download all 2024 NVD CVE API pages, deduplicate by CVE id, sort by publication timestamp, and emit one native numeric sequence per CVE field."
+deterministic_notes = "Fixed year, fixed monthly windows, fixed page size, sorted output by published timestamp and CVE id, no row concatenation beyond one natural field sequence per homogeneous CVE metadata field."
 
+[[series]]
+id = "nvd_published_at"
+description = "CVE publication timestamps."
+semantic_meaning = "NVD CVE published datetime converted to Unix epoch seconds."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Timestamp is native NVD metadata; conversion is deterministic seconds since Unix epoch."
+source_resources = ["nvd_cves_2024_paginated"]
+filtered_input_path = "filtered/nvd_cves_recent/ingest_stats.json"
+filtering = "Malformed CVE entries missing ids or required timestamps are skipped."
+missing_value_policy = "Required timestamps must be present; missing optional CVSS/CWE/CPE values use 0 sentinel in their own series."
+conversion = "Parse ISO timestamp and write little-endian uint32 sequence sorted by CVE publication time."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw uint32 sequence"
+sample_geometry = "sequence"
+sample_rank = 1
+sample_shape = []
+sample_axes = ["cve_sorted_by_published"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/nvd_cves_recent/nvd_published_at/"
+
+[[series]]
+id = "nvd_last_modified_at"
+description = "CVE last-modified timestamps."
+semantic_meaning = "NVD CVE lastModified datetime converted to Unix epoch seconds."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Timestamp is native NVD metadata; conversion is deterministic seconds since Unix epoch."
+source_resources = ["nvd_cves_2024_paginated"]
+filtered_input_path = "filtered/nvd_cves_recent/ingest_stats.json"
+filtering = "Malformed CVE entries missing ids or required timestamps are skipped."
+missing_value_policy = "Required timestamps must be present."
+conversion = "Parse ISO timestamp and write little-endian uint32 sequence sorted by CVE publication time."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw uint32 sequence"
+sample_geometry = "sequence"
+sample_rank = 1
+sample_shape = []
+sample_axes = ["cve_sorted_by_published"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/nvd_cves_recent/nvd_last_modified_at/"
+
+[[series]]
+id = "nvd_reference_count"
+description = "Reference URL counts per CVE."
+semantic_meaning = "Number of NVD reference entries attached to each CVE."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Count is directly derived from the NVD references array."
+source_resources = ["nvd_cves_2024_paginated"]
+filtered_input_path = "filtered/nvd_cves_recent/ingest_stats.json"
+filtering = "Malformed CVE entries missing ids or required timestamps are skipped."
+missing_value_policy = "Missing references are represented as count 0."
+conversion = "Count reference entries and write little-endian uint16 sequence sorted by CVE publication time."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw uint16 sequence"
+sample_geometry = "sequence"
+sample_rank = 1
+sample_shape = []
+sample_axes = ["cve_sorted_by_published"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/nvd_cves_recent/nvd_reference_count/"
+
+[[series]]
+id = "nvd_cvss_base_score_x10"
+description = "Primary CVSS base scores scaled by 10."
+semantic_meaning = "First available NVD CVSS baseScore, preferring v4.0, v3.1, v3.0, then v2, scaled to integer tenths."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "CVSS base score is native vulnerability metadata; scaling to integer tenths preserves the published one-decimal score."
+source_resources = ["nvd_cves_2024_paginated"]
+filtered_input_path = "filtered/nvd_cves_recent/ingest_stats.json"
+filtering = "Malformed CVE entries missing ids or required timestamps are skipped."
+missing_value_policy = "Missing CVSS metrics are represented as 0."
+conversion = "Scale CVSS baseScore by 10 and write little-endian uint16 sequence sorted by CVE publication time."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw uint16 sequence"
+sample_geometry = "sequence"
+sample_rank = 1
+sample_shape = []
+sample_axes = ["cve_sorted_by_published"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/nvd_cves_recent/nvd_cvss_base_score_x10/"
+
+[[series]]
+id = "nvd_primary_cwe_id"
+description = "Primary numeric CWE identifier per CVE."
+semantic_meaning = "First numeric CWE id listed by NVD for each CVE."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "CWE ids are standard machine-facing weakness identifiers; non-numeric noinfo/other cases use sentinel 0."
+source_resources = ["nvd_cves_2024_paginated"]
+filtered_input_path = "filtered/nvd_cves_recent/ingest_stats.json"
+filtering = "Malformed CVE entries missing ids or required timestamps are skipped."
+missing_value_policy = "Missing or non-numeric CWE values are represented as 0."
+conversion = "Parse CWE-NNN identifiers and write little-endian uint16 sequence sorted by CVE publication time."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw uint16 sequence"
+sample_geometry = "sequence"
+sample_rank = 1
+sample_shape = []
+sample_axes = ["cve_sorted_by_published"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/nvd_cves_recent/nvd_primary_cwe_id/"
+
+[[series]]
+id = "nvd_cpe_match_count"
+description = "CPE match counts per CVE."
+semantic_meaning = "Number of CPE match entries in each CVE configuration tree."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Count is derived from the NVD machine-readable configuration tree."
+source_resources = ["nvd_cves_2024_paginated"]
+filtered_input_path = "filtered/nvd_cves_recent/ingest_stats.json"
+filtering = "Malformed CVE entries missing ids or required timestamps are skipped."
+missing_value_policy = "Missing configurations are represented as count 0."
+conversion = "Count cpeMatch entries recursively and write little-endian uint16 sequence sorted by CVE publication time."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw uint16 sequence"
+sample_geometry = "sequence"
+sample_rank = 1
+sample_shape = []
+sample_axes = ["cve_sorted_by_published"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/nvd_cves_recent/nvd_cpe_match_count/"

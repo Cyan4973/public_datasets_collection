@@ -1,0 +1,33 @@
+{
+  "dataset_id": "gwosc_event_strain_f32",
+  "default_resources": [
+    {
+      "id": "GW150914_H1_32s_4k",
+      "event": "GW150914",
+      "detector": "H1",
+      "local_name": "H-H1_LOSC_4_V2-1126259446-32.txt.gz",
+      "expected_values": 131072,
+      "sample_rate_hz": 4096,
+      "duration_seconds": 32,
+      "gps_start": 1126259446,
+      "urls": [
+        "https://www.gw-openscience.org/GW150914data/H-H1_LOSC_4_V2-1126259446-32.txt.gz",
+        "https://gwosc.org/GW150914data/H-H1_LOSC_4_V2-1126259446-32.txt.gz"
+      ]
+    },
+    {
+      "id": "GW150914_L1_32s_4k",
+      "event": "GW150914",
+      "detector": "L1",
+      "local_name": "L-L1_LOSC_4_V2-1126259446-32.txt.gz",
+      "expected_values": 131072,
+      "sample_rate_hz": 4096,
+      "duration_seconds": 32,
+      "gps_start": 1126259446,
+      "urls": [
+        "https://www.gw-openscience.org/GW150914data/L-L1_LOSC_4_V2-1126259446-32.txt.gz",
+        "https://gwosc.org/GW150914data/L-L1_LOSC_4_V2-1126259446-32.txt.gz"
+      ]
+    }
+  ]
+}

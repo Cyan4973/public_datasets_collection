@@ -1,0 +1,74 @@
+manifest_version = 1
+dataset_id = "gwosc_event_strain_f32"
+name = "GWOSC Event Detector Strain"
+description = "Public GWOSC gravitational-wave event detector strain text files converted to little-endian float32 samples."
+homepage = "https://gwosc.org/"
+
+[license]
+name = "GWOSC public open data terms"
+spdx = "LicenseRef-GWOSC-Open-Data"
+url = "https://gwosc.org/"
+citation = "Gravitational Wave Open Science Center. LIGO Scientific Collaboration, Virgo Collaboration, and KAGRA Collaboration public event strain data."
+notes = "GWOSC distributes public gravitational-wave open data with attribution and citation requirements. Preserve GWOSC/LIGO/Virgo/KAGRA attribution and source URLs."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official GWOSC public event strain releases only."
+usage_notes = "Scientific detector strain time-series data for reproducible numeric dataset collection."
+
+[[origins]]
+id = "gwosc"
+name = "Gravitational Wave Open Science Center"
+url = "https://gwosc.org/"
+type = "public_archive"
+notes = "Official public archive for LIGO/Virgo/KAGRA open gravitational-wave data."
+
+[[resources]]
+id = "selected_event_strain_text_gzip"
+origin = "gwosc"
+url = "https://www.gw-openscience.org/GW150914data/"
+type = "archive_subset"
+version = "fixed_exact_seed"
+access = "Direct public HTTPS downloads of selected .txt.gz event strain files; optional exact URL extension via GWOSC_URLS_FILE."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/gwosc_event_strain_f32/"
+notes = "Default seed contains exact GW150914 H1/L1 32-second 4096 Hz text strain resources. Download validation rejects non-gzip, HTML, malformed, non-finite, tiny, or constant-prefix payloads."
+
+[local_paths]
+downloads = "downloads/gwosc_event_strain_f32/"
+filtered = "filtered/gwosc_event_strain_f32/"
+index = "index/gwosc_event_strain_f32/"
+samples = "samples/gwosc_event_strain_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/gwosc_event_strain_f32/samples.jsonl"
+summary = "Download selected GWOSC text-gzip strain segments, parse one decimal strain value per source row, and emit one float32 sample per detector-event segment."
+deterministic_notes = "Default download uses exact pinned URLs and exact expected sample counts. Build is local-only, preserves one detector-event segment per sample, rejects malformed or non-finite values, and emits geometry metadata for trainer selection."
+
+[[series]]
+id = "detector_strain_f32"
+description = "GWOSC event detector strain time-series segments."
+semantic_meaning = "Dimensionless calibrated gravitational-wave detector strain around public GWOSC events."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Source files are GWOSC numeric text strain samples. The recipe stores parsed strain values as IEEE little-endian float32 for bounded numeric training material."
+source_resources = ["selected_event_strain_text_gzip"]
+filtered_input_path = "filtered/gwosc_event_strain_f32/ingest_stats.json"
+filtering = "Keep configured event-detector text gzip resources that parse as one finite numeric strain value per data row and satisfy the sample-size floor."
+missing_value_policy = "Reject malformed rows, multi-column rows, non-finite values, missing files, and constant-prefix files. No imputation or row dropping is performed."
+conversion = "Parse each text strain value as a finite decimal float and write one little-endian float32 array per source detector-event segment."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "1d_detector_strain_timeseries"
+sample_rank = 1
+sample_axes = ["time"]
+sample_count = 2
+total_size_bytes = 1048576
+output_path = "samples/gwosc_event_strain_f32/detector_strain_f32/"

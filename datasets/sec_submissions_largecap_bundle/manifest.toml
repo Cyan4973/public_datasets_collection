@@ -1,13 +1,40 @@
 manifest_version = 1
 dataset_id = "sec_submissions_largecap_bundle"
 name = "SEC Submissions Large-Cap Bundle"
-description = "Pinned SEC recent submissions metadata for 49 large-cap issuers, emitted as homogeneous filing-metadata series."
+description = "Pinned SEC recent submissions metadata for 49 large-cap issuers, emitted as homogeneous filing-metadata arrays."
+homepage = "https://www.sec.gov/edgar/sec-api-documentation"
 
 [license]
-name = "SEC Terms"
-spdx = "NOASSERTION"
-url = "https://www.sec.gov/"
-notes = "Public SEC submissions output."
+name = "U.S. Government Work"
+spdx = "LicenseRef-USGov"
+url = "https://www.usa.gov/government-works"
+citation = "U.S. Securities and Exchange Commission submissions JSON API."
+notes = "SEC filings and submissions metadata are public. Respect SEC access policy and user-agent requirements."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official SEC submissions JSON only."
+usage_notes = "Public corporate filing metadata suitable for numeric dataset collection."
+
+[[origins]]
+id = "sec_submissions"
+name = "SEC Submissions API"
+url = "https://data.sec.gov/submissions/"
+type = "api"
+notes = "Per-issuer JSON submissions API keyed by zero-padded CIK."
+
+[[resources]]
+id = "sec_largecap_submission_json"
+origin = "sec_submissions"
+url = "https://data.sec.gov/submissions/"
+type = "api_query_result"
+version = "49-largecap-issuer-subset"
+access = "Fixed CIK list in issuers.tsv; one public submissions JSON payload per issuer."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/sec_submissions_largecap_bundle/"
+notes = "Download validation requires a JSON payload with filings.recent.accessionNumber."
 
 [local_paths]
 downloads = "downloads/sec_submissions_largecap_bundle/"
@@ -20,4 +47,138 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/sec_submissions_largecap_bundle/samples.jsonl"
-summary = "Download 50 pinned SEC submissions JSON payloads and emit homogeneous filing-metadata arrays."
+summary = "Download 49 pinned SEC submissions JSON payloads and emit homogeneous filing-metadata arrays."
+deterministic_notes = "Fixed issuer list, fixed filings.recent columns, source row order, local form-code codebook, and one issuer-column array per natural sample."
+
+[[series]]
+id = "sec_submission_form_code"
+description = "Categorical SEC filing form codes."
+semantic_meaning = "Local stable integer code for the SEC form string in each issuer's filings.recent table."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "The source form field is categorical text; the recipe emits a deterministic codebook under filtered/sec_submissions_largecap_bundle/form_codebook.tsv."
+source_resources = ["sec_largecap_submission_json"]
+filtered_input_path = "filtered/sec_submissions_largecap_bundle/issuer_stats.tsv"
+filtering = "Keep rows with parseable filing date, acceptance timestamp, form code, size, and XBRL flags."
+missing_value_policy = "Rows with malformed required fields are skipped and counted in issuer_stats.tsv."
+conversion = "Encode sorted distinct form strings as little-endian uint16 codes."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "sec_submission_recent_table_column_by_issuer"
+sample_rank = 1
+sample_axes = ["filing"]
+sample_count = 49
+total_size_bytes = 193294
+output_path = "samples/sec_submissions_largecap_bundle/sec_submission_form_code/"
+
+[[series]]
+id = "sec_submission_size"
+description = "SEC filing document size values."
+semantic_meaning = "Filing size field from each issuer's filings.recent table."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["sec_largecap_submission_json"]
+filtered_input_path = "filtered/sec_submissions_largecap_bundle/issuer_stats.tsv"
+filtering = "Keep rows with parseable filing date, acceptance timestamp, form code, size, and XBRL flags."
+missing_value_policy = "Rows with malformed required fields are skipped and counted in issuer_stats.tsv."
+conversion = "Parse source integer size as little-endian uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "sec_submission_recent_table_column_by_issuer"
+sample_rank = 1
+sample_axes = ["filing"]
+sample_count = 49
+total_size_bytes = 386588
+output_path = "samples/sec_submissions_largecap_bundle/sec_submission_size/"
+
+[[series]]
+id = "sec_submission_acceptance_timestamp"
+description = "SEC filing acceptance timestamps."
+semantic_meaning = "UTC Unix timestamp parsed from each filing's acceptanceDateTime."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["sec_largecap_submission_json"]
+filtered_input_path = "filtered/sec_submissions_largecap_bundle/issuer_stats.tsv"
+filtering = "Keep rows with parseable filing date, acceptance timestamp, form code, size, and XBRL flags."
+missing_value_policy = "Rows with malformed required fields are skipped and counted in issuer_stats.tsv."
+conversion = "Parse ISO-like SEC acceptanceDateTime values as little-endian uint64 Unix seconds."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "sec_submission_recent_table_column_by_issuer"
+sample_rank = 1
+sample_axes = ["filing"]
+sample_count = 49
+total_size_bytes = 773176
+output_path = "samples/sec_submissions_largecap_bundle/sec_submission_acceptance_timestamp/"
+
+[[series]]
+id = "sec_submission_xbrl_flag"
+description = "SEC filing XBRL flags."
+semantic_meaning = "Binary isXBRL indicator from each issuer's filings.recent table."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["sec_largecap_submission_json"]
+filtered_input_path = "filtered/sec_submissions_largecap_bundle/issuer_stats.tsv"
+filtering = "Keep rows with parseable filing date, acceptance timestamp, form code, size, and XBRL flags."
+missing_value_policy = "Rows with malformed required fields are skipped and counted in issuer_stats.tsv."
+conversion = "Parse source flag as little-endian uint8 0/1 values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "sec_submission_recent_table_column_by_issuer"
+sample_rank = 1
+sample_axes = ["filing"]
+sample_count = 49
+total_size_bytes = 96647
+output_path = "samples/sec_submissions_largecap_bundle/sec_submission_xbrl_flag/"
+
+[[series]]
+id = "sec_submission_inline_xbrl_flag"
+description = "SEC filing inline XBRL flags."
+semantic_meaning = "Binary isInlineXBRL indicator from each issuer's filings.recent table."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["sec_largecap_submission_json"]
+filtered_input_path = "filtered/sec_submissions_largecap_bundle/issuer_stats.tsv"
+filtering = "Keep rows with parseable filing date, acceptance timestamp, form code, size, and XBRL flags."
+missing_value_policy = "Rows with malformed required fields are skipped and counted in issuer_stats.tsv."
+conversion = "Parse source flag as little-endian uint8 0/1 values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "sec_submission_recent_table_column_by_issuer"
+sample_rank = 1
+sample_axes = ["filing"]
+sample_count = 49
+total_size_bytes = 96647
+output_path = "samples/sec_submissions_largecap_bundle/sec_submission_inline_xbrl_flag/"
+
+[[series]]
+id = "sec_submission_filing_date_ordinal"
+description = "SEC filing dates."
+semantic_meaning = "Date ordinal parsed from each filing's filingDate."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["sec_largecap_submission_json"]
+filtered_input_path = "filtered/sec_submissions_largecap_bundle/issuer_stats.tsv"
+filtering = "Keep rows with parseable filing date, acceptance timestamp, form code, size, and XBRL flags."
+missing_value_policy = "Rows with malformed required fields are skipped and counted in issuer_stats.tsv."
+conversion = "Parse YYYY-MM-DD filingDate values to proleptic Gregorian ordinal and store as little-endian uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "sec_submission_recent_table_column_by_issuer"
+sample_rank = 1
+sample_axes = ["filing"]
+sample_count = 49
+total_size_bytes = 386588
+output_path = "samples/sec_submissions_largecap_bundle/sec_submission_filing_date_ordinal/"

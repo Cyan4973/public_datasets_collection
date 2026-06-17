@@ -13,7 +13,7 @@ LATEST_LOG="$LOG_DIR/download.latest.log"
 FAIL_TSV="$DOWNLOAD_DIR/download_failures.tsv"
 exec > >(tee "$LOG_FILE" "$LATEST_LOG") 2>&1
 
-ISSUERS_FILE="${ISSUERS_FILE_OVERRIDE:-$REPO_ROOT/staging/sec_submissions_largecap_bundle/issuers.tsv}"
+ISSUERS_FILE="${ISSUERS_FILE_OVERRIDE:-$REPO_ROOT/datasets/sec_submissions_largecap_bundle/issuers.tsv}"
 USER_AGENT="${SEC_USER_AGENT:-openzl-public-datasets/1.0 contact=local}"
 FORCE_DOWNLOAD="${FORCE_DOWNLOAD:-0}"
 failure_count=0
@@ -67,4 +67,3 @@ done <"$ISSUERS_FILE"
 
 echo "[$(date -Is)] download done dataset=$DATASET_ID failure_count=$failure_count"
 exit "$failure_count"
-

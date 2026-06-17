@@ -7,8 +7,8 @@ This is a policy-and-examples triage memo. The exact live inventory is
 
 Audit baseline when this triage memo was last refreshed:
 
-- `ok`: `132`
-- `below_floor`: `182`
+- `ok`: `144`
+- `below_floor`: `177`
 - `broken`: `0`
 
 The remaining below-floor set falls into three buckets:
@@ -96,11 +96,12 @@ Action:
 - replace with a few homogeneous Eurostat bundles where possible
 - avoid mixing unrelated monthly materials just because they come from Eurostat
 
-### SEC companyfacts single-metric recipes (`5`)
+### SEC companyfacts single-metric recipes (`resolved`)
 
-Action:
-- replace with a coherent multi-metric companyfacts recipe only if the selected metrics remain part of one interpretable financial-statement material group
-- otherwise split into a small number of homogeneous bundles or remove the weakest standalones
+Resolved by removing the five below-floor companyfacts single-metric accepted
+recipes. The retained SEC financial-fact representative is
+`sec_fsd_2024q1_q4_numeric_values_i64`, which uses official quarterly SEC
+Financial Statement Data Sets `num.txt` tables and passes the current floors.
 
 ## Rewrite / Expand Scope
 

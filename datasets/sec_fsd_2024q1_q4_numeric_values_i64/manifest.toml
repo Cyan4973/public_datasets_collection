@@ -62,8 +62,11 @@ numeric_kind = "int"
 bit_width = 64
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
-sample_count = 0
-total_size_bytes = 0
+sample_geometry = "quarterly_sec_num_table_unit_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 4
+total_size_bytes = 86682288
 output_path = "samples/sec_fsd_2024q1_q4_numeric_values_i64/usd_value_i64/"
 
 [[series]]
@@ -80,6 +83,9 @@ numeric_kind = "int"
 bit_width = 64
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
-sample_count = 0
-total_size_bytes = 0
+sample_geometry = "quarterly_sec_num_table_unit_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 4
+total_size_bytes = 7782568
 output_path = "samples/sec_fsd_2024q1_q4_numeric_values_i64/shares_value_i64/"

@@ -16,11 +16,6 @@ fred_unemployment_level_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggreg
 fred_unemployment_rate_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor
 world_bank_access_to_electricity_percent_annual	below_floor	183	1464	6	31.5	252	0	0	0	1	none	aggregate_floor,median_sample_floor
 gutendex_books	below_floor	192	512	6	32	64	0	0	0	1	none	aggregate_floor,median_sample_floor
-sec_companyfacts_assets_quarterly	below_floor	227	1816	5	51	408	0	0	0	1	none	aggregate_floor,median_sample_floor
-sec_companyfacts_cash_and_equivalents_quarterly	below_floor	227	1816	5	51	408	0	0	0	1	none	aggregate_floor,median_sample_floor
-sec_companyfacts_net_income_quarterly	below_floor	227	1816	5	51	408	0	0	0	1	none	aggregate_floor,median_sample_floor
-sec_companyfacts_operating_income_quarterly	below_floor	227	1816	5	51	408	0	0	0	1	none	aggregate_floor,median_sample_floor
-sec_companyfacts_stockholders_equity_quarterly	below_floor	227	1816	5	51	408	0	0	0	1	none	aggregate_floor,median_sample_floor
 library_of_congress_items	below_floor	232	928	4	44	220	0	0	0	1	none	aggregate_floor,median_sample_floor
 openbrewerydb_breweries	below_floor	246	1640	3	82	656	0	0	0	1	none	aggregate_floor,median_sample_floor
 anilist_media	below_floor	295	837	6	49	147	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -250,6 +245,7 @@ nasa_techport_projects	ok	227414	413480	11	20674	20674	0	0	0	1	none	none
 ourairports_airports	ok	241771	1651444	3	85545	684360	0	0	0	1	none	none
 nvd_cves_recent	ok	244224	651264	6	40704	81408	0	0	0	1	none	none
 who_atlas_gisah	ok	252140	806848	5	50428	100856	0	0	0	1	none	none
+gwosc_event_strain_f32	ok	262144	1048576	2	131072	524288	0	0	0	1	none	none
 noaa_ghcn_daily_wsfg_by_station	ok	266478	532956	33	8055	16110	0	0	0	1	none	none
 nyc_311_descriptor_u16	ok	287186	574372	3	100000	200000	0	0	0	1	none	none
 noaa_coops_water_temperature	ok	346842	2774736	2	173421	1387368	0	0	0	1	none	none
@@ -274,6 +270,7 @@ noaa_coops_water_level	ok	876000	7008000	5	175200	1401600	0	0	0	1	none	none
 smithsonian_openaccess_gltf_indices_u16	ok	899964	1799928	3	299988	599976	0	0	0	1	none	none
 europe_pmc_search	ok	1127748	2631412	6	187958	375916	187958	751832	1	1	none	none
 eeg_physionet	ok	1178880	2357760	30	39200	78400	0	0	0	1	none	none
+census_acs_pums_ca_person_2023_i64	ok	1265252	10122016	4	334276	2674208	0	0	0	1	none	none
 macrostrat_units	ok	1422259	5689036	11	129304	517216	0	0	0	1	none	none
 noaa_ghcn_daily_snwd_by_station	ok	1725872	3451744	58	28052.5	56105	0	0	0	1	none	none
 gas_sensor_array_drift_uci	ok	1794390	14257750	129	13910	111280	0	0	0	1	none	none
@@ -293,10 +290,12 @@ citibike_2024_01_station_ids_u16	ok	3776170	7552340	16	180600	361200	0	0	0	1	non
 ncbi_gene_human	ok	4794554	19178216	4	1198638.5	4794554	0	0	0	1	none	none
 beijing_air_quality_uci	ok	5753775	46030200	180	32141.5	257132	0	0	0	1	none	none
 binance_usdm_futures_bookticker_btc_eth_2024_w01	ok	7355408	58843264	8	919426	7355408	0	0	0	1	none	none
+citibike_2024_01_trip_geocoords_f64	ok	7527984	60223872	8	940998	7527984	0	0	0	1	none	none
 unicode_bmp_gutenberg	ok	8700484	17400968	12	490769	981538	0	0	0	1	none	none
 fsdd_spoken_digits	ok	10498424	20996848	3000	3358.5	6717	0	0	0	1	none	none
 noaa_ndbc_wave_spectral_density_f64	ok	11719309	93754472	24	427159.5	3417276	0	0	0	1	none	none
 binance_usdm_futures_1m_klines_2024_q1	ok	11793600	89107200	270	44640	357120	2620800	20966400	60	1	none	none
+sec_fsd_2024q1_q4_numeric_values_i64	ok	11808107	94464856	8	1379016.5	11032132	0	0	0	1	none	none
 har_smartphone_uci	ok	11864448	94915584	18	659136	5273088	0	0	0	1	none	none
 noaa_isd_lite	ok	12103704	20912475	502	26015	51830	0	0	0	1	none	none
 skadi_srtm_hgt	ok	12967201	25934402	1	12967201	25934402	0	0	0	1	none	none

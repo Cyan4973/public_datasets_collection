@@ -9,8 +9,8 @@ Source of truth:
 - git history through `f8ec8e1`
 
 Current audit baseline:
-- `ok`: `125`
-- `below_floor`: `186`
+- `ok`: `144`
+- `below_floor`: `177`
 - `broken`: `0`
 - degenerate findings: `5`, all `binary_sparse`
 - constant findings: `0`
@@ -27,6 +27,7 @@ Current audit baseline:
 - removed `openfda_drug_event` after bounded openFDA search returned HTTP 403 on the public repair route
 - removed `94` globally constant manifest series across `52` datasets
 - filtered `93` constant natural samples from otherwise non-constant series
+- removed five below-floor SEC companyfacts single-metric recipes after accepting the broader SEC FSD replacement
 
 ## Next: Sparse-Binary Policy
 
@@ -57,7 +58,6 @@ Priority families:
 - `owid_*`: `20`
 - `imf_*`: `7`
 - `eurostat_*`: `7`
-- `sec_companyfacts_*`: `5`
 
 ## Later: Rewrite / Expand Survivors
 

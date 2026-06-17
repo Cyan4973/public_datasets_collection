@@ -13,13 +13,14 @@ LOG_FILE="$LOG_DIR/verify.$RUN_TS.log"
 LATEST_LOG="$LOG_DIR/verify.latest.log"
 exec > >(tee "$LOG_FILE" "$LATEST_LOG") 2>&1
 export REPO_ROOT DATA_DIR FILTER_DIR INDEX_DIR
-export ISSUERS_FILE="${ISSUERS_FILE_OVERRIDE:-$REPO_ROOT/staging/sec_submissions_largecap_bundle/issuers.tsv}"
+export ISSUERS_FILE="${ISSUERS_FILE_OVERRIDE:-$REPO_ROOT/datasets/sec_submissions_largecap_bundle/issuers.tsv}"
 
 python3 - <<'PY'
 from __future__ import annotations
 import csv
 import json
 import os
+import statistics
 from pathlib import Path
 
 repo_root = Path(os.environ["REPO_ROOT"])
@@ -75,12 +76,36 @@ for row in rows:
         )
     if not (data_root / row["sample_path"]).exists():
         raise SystemExit(f"missing sample file: {row['sample_path']}")
+    if row.get("role") != "primary":
+        raise SystemExit(f"missing primary role for {issuer} {series_id}")
+    if row.get("sample_geometry") != "sec_submission_recent_table_column_by_issuer":
+        raise SystemExit(f"bad sample geometry for {issuer} {series_id}")
+    if row.get("sample_rank") != 1 or row.get("sample_shape") != [stats[issuer]]:
+        raise SystemExit(f"bad sample shape for {issuer} {series_id}")
+    if row.get("sample_axes") != ["filing"]:
+        raise SystemExit(f"bad sample axes for {issuer} {series_id}")
 
 codebook = filter_dir / "form_codebook.tsv"
 if not codebook.exists() or codebook.stat().st_size == 0:
     raise SystemExit("missing form codebook")
 
-print(f"verified issuers={len(expected_issuers)} rows={sum(stats.values())} index_rows={len(rows)}")
+value_counts = [int(row["value_count"]) for row in rows]
+total_values = sum(value_counts)
+total_bytes = sum(int(row["sample_size_bytes"]) for row in rows)
+median_values = statistics.median(value_counts)
+if total_values < 10_000:
+    raise SystemExit(f"below value floor: {total_values}")
+if total_bytes < 102_400:
+    raise SystemExit(f"below byte floor: {total_bytes}")
+if median_values < 1_000:
+    raise SystemExit(f"below median sample floor: {median_values}")
+if total_bytes > 1_000_000_000:
+    raise SystemExit(f"above output cap: {total_bytes}")
+
+print(
+    f"verified issuers={len(expected_issuers)} rows={sum(stats.values())} "
+    f"index_rows={len(rows)} total_values={total_values} total_bytes={total_bytes}"
+)
 PY
 
 echo "[$(date -Is)] verify done dataset=$DATASET_ID"

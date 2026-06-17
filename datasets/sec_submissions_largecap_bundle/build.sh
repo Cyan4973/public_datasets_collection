@@ -15,7 +15,7 @@ LOG_FILE="$LOG_DIR/build.$RUN_TS.log"
 LATEST_LOG="$LOG_DIR/build.latest.log"
 exec > >(tee "$LOG_FILE" "$LATEST_LOG") 2>&1
 export REPO_ROOT DATA_DIR DOWNLOAD_DIR FILTER_DIR INDEX_DIR SAMPLES_DIR
-export ISSUERS_FILE="${ISSUERS_FILE_OVERRIDE:-$REPO_ROOT/staging/sec_submissions_largecap_bundle/issuers.tsv}"
+export ISSUERS_FILE="${ISSUERS_FILE_OVERRIDE:-$REPO_ROOT/datasets/sec_submissions_largecap_bundle/issuers.tsv}"
 
 python3 - <<'PY'
 from __future__ import annotations
@@ -123,6 +123,7 @@ with (filter_dir / "issuer_stats.tsv").open("w", encoding="utf-8", newline="") a
             records.append({
                 "dataset_id": "sec_submissions_largecap_bundle",
                 "series_id": s["series_id"],
+                "role": "primary",
                 "sample_path": out.relative_to(data_root).as_posix(),
                 "numeric_kind": s["numeric_kind"],
                 "bit_width": s["bit_width"],
@@ -130,6 +131,10 @@ with (filter_dir / "issuer_stats.tsv").open("w", encoding="utf-8", newline="") a
                 "element_size_bytes": s["element_size_bytes"],
                 "sample_size_bytes": out.stat().st_size,
                 "value_count": len(vals[s["series_id"]]),
+                "sample_geometry": "sec_submission_recent_table_column_by_issuer",
+                "sample_rank": 1,
+                "sample_shape": [len(vals[s["series_id"]])],
+                "sample_axes": ["filing"],
                 "issuer": issuer,
                 "cik": cik,
             })
@@ -143,4 +148,3 @@ if not records:
 PY
 
 echo "[$(date -Is)] build done dataset=$DATASET_ID"
-

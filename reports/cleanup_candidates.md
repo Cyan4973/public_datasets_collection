@@ -3,8 +3,8 @@
 Current acceptance floor: `10,000` primary values or `100 KB` primary sample bytes, plus `1,000` minimum median primary sample values.
 
 - source of truth: `reports/accepted_recipe_audit.tsv`
-- `ok`: `132`
-- `below_floor`: `182`
+- `ok`: `144`
+- `below_floor`: `177`
 - `broken`: `0`
 
 This file is the short operational queue. Detailed policy for family cleanup lives in
@@ -61,6 +61,10 @@ typical primary sample is tiny and which reaches usefulness only by stacking man
 - repair `medrxiv_details`
 - repair `europe_pmc_search`
 
+## Family Cleanup Completed
+
+- remove below-floor `sec_companyfacts_*` single-metric recipes after accepting `sec_fsd_2024q1_q4_numeric_values_i64`
+
 ## Triage First: Tiny Non-Family Standalones
 
 These remain accepted but are so small that they need repair-or-remove triage.
@@ -111,7 +115,6 @@ homogeneous consolidation or selective pruning.
 - `owid_*`: `20`
 - `imf_*`: `7`
 - `eurostat_*`: `7`
-- `sec_companyfacts_*`: `5`
 
 ## Later: Rewrite / Expand
 

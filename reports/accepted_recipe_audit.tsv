@@ -269,6 +269,7 @@ gdelt_events_avgtone_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	none
 gdelt_events_goldstein_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	none
 gdelt_events_nummentions_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	none
 gdelt_events_numsources_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	none
+binance_usdm_futures_bookdepth_btc_eth_2024_w01	ok	806360	6450880	28	28800	230400	806360	6450880	28	1	none	none
 noaa_coops_water_level	ok	876000	7008000	5	175200	1401600	0	0	0	1	none	none
 smithsonian_openaccess_gltf_indices_u16	ok	899964	1799928	3	299988	599976	0	0	0	1	none	none
 europe_pmc_search	ok	1127748	2631412	6	187958	375916	187958	751832	1	1	none	none
@@ -290,6 +291,7 @@ imdb_title_ratings	ok	3358804	13435216	2	1679402	6717608	0	0	0	1	none	none
 citibike_2024_01_station_ids_u16	ok	3776170	7552340	16	180600	361200	0	0	0	1	none	none
 ncbi_gene_human	ok	4794554	19178216	4	1198638.5	4794554	0	0	0	1	none	none
 beijing_air_quality_uci	ok	5753775	46030200	180	32141.5	257132	0	0	0	1	none	none
+binance_usdm_futures_bookticker_btc_eth_2024_w01	ok	7355408	58843264	8	919426	7355408	0	0	0	1	none	none
 unicode_bmp_gutenberg	ok	8700484	17400968	12	490769	981538	0	0	0	1	none	none
 fsdd_spoken_digits	ok	10498424	20996848	3000	3358.5	6717	0	0	0	1	none	none
 binance_usdm_futures_1m_klines_2024_q1	ok	11793600	89107200	270	44640	357120	2620800	20966400	60	1	none	none

@@ -1,0 +1,9 @@
+{
+  "dataset_id": "binance_usdm_futures_bookdepth_btc_eth_2024_w01",
+  "kind": "bookDepth",
+  "market_path": "futures/um",
+  "sample_axis": "order_book_depth_rows",
+  "symbols": ["BTCUSDT", "ETHUSDT"],
+  "start_date": "2024-01-01",
+  "end_date": "2024-01-07"
+}

@@ -513,6 +513,39 @@ def pds_value(text: str, key: str) -> str | None:
     return match.group(1).strip().strip('"')
 
 
+def pds_tuple_ints(text: str | None) -> list[int]:
+    if not text:
+        return []
+    return [int(token) for token in re.findall(r"[-+]?\d+", text)]
+
+
+def pds_pointer(value: str | None) -> tuple[str, int]:
+    if not value:
+        return "", 1
+    value = value.strip()
+    if value.startswith("("):
+        parts = [part.strip().strip('"') for part in value.strip("()").split(",")]
+        file_name = parts[0] if parts else ""
+        record_index = int(parts[1]) if len(parts) > 1 and parts[1].isdigit() else 1
+        return file_name, record_index
+    if value.startswith('"'):
+        return value.strip('"'), 1
+    if value.isdigit():
+        return "", int(value)
+    return "", 1
+
+
+def pds_payload_source(label: Path, file_name: str) -> Path | None:
+    source = label.parent / file_name if file_name else label.with_suffix(".img")
+    if source.exists():
+        return source
+    for suffix in (".img", ".IMG", ".dat", ".DAT", ".qub", ".QUB"):
+        candidate = label.with_suffix(suffix)
+        if candidate.exists():
+            return candidate
+    return None
+
+
 def build_pds(paths: list[Path], args: argparse.Namespace, data_root: Path, out_dir: Path, rows: list[dict[str, Any]]) -> None:
     labels = [p for p in paths if p.name.lower().endswith((".lbl", ".xml"))]
     for label in labels:
@@ -524,44 +557,48 @@ def build_pds(paths: list[Path], args: argparse.Namespace, data_root: Path, out_
                 continue
             # PDS4 products vary too much to parse safely without exact product-class handling.
             continue
+
+        object_kind = ""
+        sample_type = ""
+        shape: list[int] = []
+        axes: list[str] = []
+        pointer_value = ""
         try:
             lines = int((pds_value(text, "LINES") or "0").split()[0])
             line_samples = int((pds_value(text, "LINE_SAMPLES") or "0").split()[0])
             bands = int((pds_value(text, "BANDS") or "1").split()[0])
             bits = int((pds_value(text, "SAMPLE_BITS") or "0").split()[0])
         except Exception:
-            continue
-        sample_type = (pds_value(text, "SAMPLE_TYPE") or "").upper()
-        if bits != 16 or lines <= 0 or line_samples <= 0:
+            lines = line_samples = bands = bits = 0
+        if bits == 16 and lines > 0 and line_samples > 0:
+            object_kind = "image"
+            sample_type = (pds_value(text, "SAMPLE_TYPE") or "").upper()
+            shape = [lines, line_samples, bands] if bands > 1 else [lines, line_samples]
+            axes = ["line", "sample", "band"] if bands > 1 else ["line", "sample"]
+            pointer_value = pds_value(text, "^IMAGE") or ""
+
+        core_items = pds_tuple_ints(pds_value(text, "CORE_ITEMS"))
+        core_item_bytes = int((pds_value(text, "CORE_ITEM_BYTES") or "0").split()[0] or "0")
+        if not object_kind and len(core_items) >= 3 and core_item_bytes == 2:
+            object_kind = "qube"
+            sample_type = (pds_value(text, "CORE_ITEM_TYPE") or "").upper()
+            shape = core_items[:3]
+            axis_names = re.findall(r'"?([A-Za-z_]+)"?', pds_value(text, "AXIS_NAME") or "")
+            axes = [name.lower() for name in axis_names[:3]] if len(axis_names) >= 3 else ["sample", "band", "line"]
+            pointer_value = pds_value(text, "^QUBE") or ""
+
+        if not object_kind or not shape or any(dim <= 0 for dim in shape):
             continue
         endian = "little" if "LSB" in sample_type or "PC_" in sample_type else "big"
         numeric = "uint" if "UNSIGNED" in sample_type else "int"
-        pointer = pds_value(text, "^IMAGE") or pds_value(text, "^QUBE") or ""
-        file_name = ""
-        record_index = 1
-        if pointer.startswith("("):
-            inner = pointer.strip("()")
-            parts = [p.strip().strip('"') for p in inner.split(",")]
-            file_name = parts[0]
-            if len(parts) > 1 and parts[1].isdigit():
-                record_index = int(parts[1])
-        elif pointer.startswith('"'):
-            file_name = pointer.strip('"')
-        elif pointer.isdigit():
-            record_index = int(pointer)
-        source = label.parent / file_name if file_name else label.with_suffix(".img")
-        if not source.exists():
-            for suffix in (".img", ".IMG", ".dat", ".DAT"):
-                candidate = label.with_suffix(suffix)
-                if candidate.exists():
-                    source = candidate
-                    break
-        if not source.exists():
+        file_name, record_index = pds_pointer(pointer_value)
+        source = pds_payload_source(label, file_name)
+        if not source:
             continue
         record_bytes = int((pds_value(text, "RECORD_BYTES") or "0").split()[0] or "0")
         offset = max(record_index - 1, 0) * record_bytes if record_bytes else 0
         data = source.read_bytes()
-        expected = lines * line_samples * bands * 2
+        expected = math.prod(shape) * 2
         payload = data[offset : offset + expected]
         if len(payload) != expected:
             continue
@@ -576,10 +613,10 @@ def build_pds(paths: list[Path], args: argparse.Namespace, data_root: Path, out_
             payload=payload,
             numeric_kind=numeric,
             endianness=endian,
-            geometry="3d_cube" if bands > 1 else "2d_raster",
-            shape=[lines, line_samples, bands] if bands > 1 else [lines, line_samples],
-            axes=["line", "sample", "band"] if bands > 1 else ["line", "sample"],
-            extra={"container_format": "pds3", "sample_type": sample_type},
+            geometry="3d_cube" if len(shape) == 3 else "2d_raster",
+            shape=shape,
+            axes=axes,
+            extra={"container_format": "pds3", "pds_object": object_kind, "sample_type": sample_type},
         )
 
 

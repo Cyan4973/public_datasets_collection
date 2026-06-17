@@ -280,6 +280,7 @@ gas_sensor_array_drift_uci	ok	1794390	14257750	129	13910	111280	0	0	0	1	none	non
 tokens_bert_gutenberg	ok	2011943	4023886	12	113744.5	227489	0	0	0	1	none	none
 noaa_ghcn_daily_snow_by_station	ok	2077730	4155460	59	36089	72178	0	0	0	1	none	none
 tokens_t5_gutenberg	ok	2258811	4517622	12	125381.5	250763	0	0	0	1	none	none
+nist_matrix_market_sparse_matrices	ok	2300385	12268720	57	15100	71428	0	0	0	1	none	none
 noaa_ghcn_daily_tmin_by_station	ok	2343685	4687370	59	41993	83986	0	0	0	1	none	none
 noaa_ghcn_daily_tmax_by_station	ok	2350732	4701464	59	41953	83906	0	0	0	1	none	none
 noaa_ghcn_daily_prcp_by_station	ok	2374291	4748582	59	41780	83560	0	0	0	1	none	none

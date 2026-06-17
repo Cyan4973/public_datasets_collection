@@ -1,0 +1,39 @@
+{
+  "dataset_id": "nist_matrix_market_sparse_matrices",
+  "seed_urls": [
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc1/",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc2/",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc3/",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/econaus/"
+  ],
+  "exact_urls": [
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc1/bcsstk01.mtx.gz",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc1/bcsstk02.mtx.gz",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc1/bcsstk03.mtx.gz",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc1/bcsstk04.mtx.gz",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc1/bcsstk05.mtx.gz",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc1/bcsstk06.mtx.gz",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc1/bcsstk07.mtx.gz",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc1/bcsstk08.mtx.gz",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc1/bcsstk09.mtx.gz",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc1/bcsstk10.mtx.gz",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc1/bcsstk11.mtx.gz",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc1/bcsstk12.mtx.gz",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc1/bcsstk13.mtx.gz",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc2/bcsstk14.mtx.gz",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc2/bcsstk15.mtx.gz",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc2/bcsstk16.mtx.gz",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc2/bcsstk17.mtx.gz",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc2/bcsstk18.mtx.gz",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc3/bcsstk19.mtx.gz",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc3/bcsstk20.mtx.gz",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc3/bcsstk21.mtx.gz",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc3/bcsstk22.mtx.gz",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc3/bcsstk23.mtx.gz",
+    "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc3/bcsstk24.mtx.gz"
+  ],
+  "max_files": 24,
+  "max_file_bytes": 250000000,
+  "max_source_bytes": 1000000000,
+  "min_stored_entries_per_matrix": 1000
+}

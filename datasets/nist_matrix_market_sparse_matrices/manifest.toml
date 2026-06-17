@@ -1,0 +1,120 @@
+manifest_version = 1
+dataset_id = "nist_matrix_market_sparse_matrices"
+name = "NIST Matrix Market Sparse Matrices"
+description = "Public NIST Matrix Market sparse coordinate matrices preserved as stored coordinate/value arrays."
+homepage = "https://math.nist.gov/MatrixMarket/"
+
+[license]
+name = "U.S. Government Public Domain"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://www.nist.gov/open/license"
+citation = "NIST Matrix Market sparse matrix collection."
+notes = "NIST data products are U.S. government public-domain material unless otherwise noted. Preserve source attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public NIST Matrix Market archive only."
+usage_notes = "Public sparse matrix benchmark data."
+
+[[origins]]
+id = "nist_matrix_market"
+name = "NIST Matrix Market"
+url = "https://math.nist.gov/MatrixMarket/"
+type = "public_archive"
+notes = "Public sparse matrix archive in Matrix Market exchange format."
+
+[[resources]]
+id = "selected_matrix_market_coordinate_files"
+origin = "nist_matrix_market"
+url = "https://math.nist.gov/pub/MatrixMarket2/"
+type = "archive_subset"
+version = "Harwell-Boeing-bcsstk02-24-filtered"
+access = "Download bounded .mtx.gz files from pinned exact NIST URLs, or exact URLs supplied via MATRIX_MARKET_URLS_FILE."
+size_bytes = 6282603
+sha256 = ""
+local_path = "downloads/nist_matrix_market_sparse_matrices/"
+notes = "Download validation kept 21 Matrix Market coordinate files; build skipped two duplicate decompressed matrices and emitted 19 unique matrices."
+
+[local_paths]
+downloads = "downloads/nist_matrix_market_sparse_matrices/"
+filtered = "filtered/nist_matrix_market_sparse_matrices/"
+index = "index/nist_matrix_market_sparse_matrices/"
+samples = "samples/nist_matrix_market_sparse_matrices/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nist_matrix_market_sparse_matrices/samples.jsonl"
+summary = "Download bounded NIST Matrix Market sparse coordinate files and emit native stored row, column, and value arrays per matrix."
+deterministic_notes = "Fixed exact candidate URLs, bounded resource count and byte caps, no network access during build, no symmetric expansion, duplicate decompressed matrices skipped, and sample boundaries follow stored matrix attribute arrays."
+
+[[series]]
+id = "row_index_u32"
+description = "Stored Matrix Market row coordinate arrays."
+semantic_meaning = "One-based row indices for stored sparse matrix entries, preserving source order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Matrix Market coordinate rows are native sparse-matrix source fields, not generated dense-grid helper coordinates."
+source_resources = ["selected_matrix_market_coordinate_files"]
+filtered_input_path = "filtered/nist_matrix_market_sparse_matrices/ingest_stats.json"
+filtering = "Reject malformed Matrix Market headers, unsupported storage types, unsupported fields, out-of-bounds coordinates, matrices below the entry floor, and duplicate decompressed matrices."
+missing_value_policy = "Sparse missing cells are structural zeros and are not materialized; malformed stored entries reject the source matrix."
+conversion = "Parse decimal one-based row coordinates to little-endian uint32 arrays without renumbering."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous row-coordinate arrays by sparse matrix"
+sample_geometry = "sparse_coordinate_matrix_attribute"
+sample_rank = 1
+sample_axes = ["stored_entry"]
+sample_count = 19
+total_size_bytes = 3067180
+output_path = "samples/nist_matrix_market_sparse_matrices/row_index_u32/"
+
+[[series]]
+id = "col_index_u32"
+description = "Stored Matrix Market column coordinate arrays."
+semantic_meaning = "One-based column indices for stored sparse matrix entries, preserving source order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Matrix Market coordinate columns are native sparse-matrix source fields, not generated dense-grid helper coordinates."
+source_resources = ["selected_matrix_market_coordinate_files"]
+filtered_input_path = "filtered/nist_matrix_market_sparse_matrices/ingest_stats.json"
+filtering = "Reject malformed Matrix Market headers, unsupported storage types, unsupported fields, out-of-bounds coordinates, matrices below the entry floor, and duplicate decompressed matrices."
+missing_value_policy = "Sparse missing cells are structural zeros and are not materialized; malformed stored entries reject the source matrix."
+conversion = "Parse decimal one-based column coordinates to little-endian uint32 arrays without renumbering."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous column-coordinate arrays by sparse matrix"
+sample_geometry = "sparse_coordinate_matrix_attribute"
+sample_rank = 1
+sample_axes = ["stored_entry"]
+sample_count = 19
+total_size_bytes = 3067180
+output_path = "samples/nist_matrix_market_sparse_matrices/col_index_u32/"
+
+[[series]]
+id = "entry_value_f64"
+description = "Stored Matrix Market real-valued entry arrays."
+semantic_meaning = "Stored real sparse matrix values, preserving source coordinate-entry order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Matrix Market real entry values are native numeric source fields; values alone pass the collection floor without counting row/column coordinate arrays."
+source_resources = ["selected_matrix_market_coordinate_files"]
+filtered_input_path = "filtered/nist_matrix_market_sparse_matrices/ingest_stats.json"
+filtering = "Emit only for Matrix Market files whose field type is real."
+missing_value_policy = "Sparse missing cells are structural zeros and are not materialized; malformed stored values reject the source matrix."
+conversion = "Parse decimal real values to little-endian float64 arrays."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous sparse-entry value arrays by matrix"
+sample_geometry = "sparse_coordinate_matrix_attribute"
+sample_rank = 1
+sample_axes = ["stored_entry"]
+sample_count = 19
+total_size_bytes = 6134360
+output_path = "samples/nist_matrix_market_sparse_matrices/entry_value_f64/"

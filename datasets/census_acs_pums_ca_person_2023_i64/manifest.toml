@@ -1,0 +1,121 @@
+manifest_version = 1
+dataset_id = "census_acs_pums_ca_person_2023_i64"
+name = "Census ACS PUMS California Person Microdata 2023"
+description = "U.S. Census ACS 2023 1-year California person public-use microdata income, weight, and work-duration columns as int64."
+homepage = "https://www.census.gov/programs-surveys/acs/microdata.html"
+
+[license]
+name = "U.S. Government Work"
+spdx = "LicenseRef-USGov"
+url = "https://www.usa.gov/government-works"
+citation = "U.S. Census Bureau American Community Survey Public Use Microdata Sample 2023 1-year."
+notes = "Federal public data; ACS PUMS has disclosure avoidance and public-use release constraints already applied upstream."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official public-use Census PUMS archive only."
+usage_notes = "Public microdata, not raw confidential census returns."
+
+[[origins]]
+id = "census_acs_pums"
+name = "U.S. Census ACS PUMS"
+url = "https://www2.census.gov/programs-surveys/acs/data/pums/2023/1-Year/"
+type = "file_download"
+
+[[resources]]
+id = "pums_ca_person_2023"
+origin = "census_acs_pums"
+url = "https://www2.census.gov/programs-surveys/acs/data/pums/2023/1-Year/csv_pca.zip"
+type = "zip_archive"
+version = "2023 ACS 1-year California person file"
+access = "Direct public Census download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/census_acs_pums_ca_person_2023_i64/csv_pca.zip"
+
+[local_paths]
+downloads = "downloads/census_acs_pums_ca_person_2023_i64/"
+filtered = "filtered/census_acs_pums_ca_person_2023_i64/"
+index = "index/census_acs_pums_ca_person_2023_i64/"
+samples = "samples/census_acs_pums_ca_person_2023_i64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/census_acs_pums_ca_person_2023_i64/samples.jsonl"
+summary = "Download the California ACS PUMS person ZIP, validate required columns, and emit selected integer microdata columns as little-endian int64 arrays."
+deterministic_notes = "Fixed state/year archive, person CSV member order, source row order, and fixed column names."
+
+[[series]]
+id = "person_weight_i64"
+role = "primary"
+description = "Person weight."
+semantic_meaning = "ACS PWGTP person weight column."
+representation_class = "native_numeric"
+source_resources = ["pums_ca_person_2023"]
+filtering = "Keep parseable integral cells for this column."
+missing_value_policy = "Blank and malformed cells are dropped for the affected column only."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/census_acs_pums_ca_person_2023_i64/person_weight_i64/"
+
+[[series]]
+id = "personal_income_i64"
+role = "primary"
+description = "Personal income."
+semantic_meaning = "ACS PINCP personal income column."
+representation_class = "native_numeric"
+source_resources = ["pums_ca_person_2023"]
+filtering = "Keep parseable integral cells for this column."
+missing_value_policy = "Blank and malformed cells are dropped for the affected column only."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/census_acs_pums_ca_person_2023_i64/personal_income_i64/"
+
+[[series]]
+id = "wage_income_i64"
+role = "primary"
+description = "Wage or salary income."
+semantic_meaning = "ACS WAGP wage or salary income column."
+representation_class = "native_numeric"
+source_resources = ["pums_ca_person_2023"]
+filtering = "Keep parseable integral cells for this column."
+missing_value_policy = "Blank and malformed cells are dropped for the affected column only."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/census_acs_pums_ca_person_2023_i64/wage_income_i64/"
+
+[[series]]
+id = "weeks_worked_i64"
+role = "primary"
+description = "Weeks worked."
+semantic_meaning = "ACS WKWN weeks worked column."
+representation_class = "native_numeric"
+source_resources = ["pums_ca_person_2023"]
+filtering = "Keep parseable integral cells for this column."
+missing_value_policy = "Blank and malformed cells are dropped for the affected column only."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/census_acs_pums_ca_person_2023_i64/weeks_worked_i64/"

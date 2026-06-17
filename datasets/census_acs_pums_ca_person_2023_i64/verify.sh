@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+DATA_DIR="${DATA_DIR:-.data}"
+DATASET_ID="census_acs_pums_ca_person_2023_i64"
+LOG_DIR="$REPO_ROOT/$DATA_DIR/logs/$DATASET_ID"
+mkdir -p "$LOG_DIR"
+
+RUN_TS="$(date +%Y%m%d_%H%M%S)"
+LOG_FILE="$LOG_DIR/verify.$RUN_TS.log"
+LATEST_LOG="$LOG_DIR/verify.latest.log"
+exec > >(tee "$LOG_FILE" "$LATEST_LOG") 2>&1
+
+echo "[$(date -Is)] verify start dataset=$DATASET_ID"
+python3 "$REPO_ROOT/tools/numeric64_hunt_recipes.py" verify "$DATASET_ID" --repo-root "$REPO_ROOT" --data-dir "$DATA_DIR"
+echo "[$(date -Is)] verify done dataset=$DATASET_ID"

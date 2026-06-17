@@ -1,0 +1,85 @@
+manifest_version = 1
+dataset_id = "sec_fsd_2024q1_q4_numeric_values_i64"
+name = "SEC Financial Statement Data Sets 2024 Numeric Values"
+description = "Official SEC quarterly Financial Statement Data Sets numeric fact values for 2024, split into USD and shares int64 streams."
+homepage = "https://www.sec.gov/dera/data/financial-statement-data-sets"
+
+[license]
+name = "U.S. Government Work"
+spdx = "LicenseRef-USGov"
+url = "https://www.usa.gov/government-works"
+citation = "U.S. Securities and Exchange Commission Financial Statement Data Sets."
+notes = "SEC data is public U.S. government material; respect SEC access policy and user-agent requirements."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official SEC quarterly Financial Statement Data Sets only."
+usage_notes = "Public corporate filing fact table values."
+
+[[origins]]
+id = "sec_fsd"
+name = "SEC Financial Statement Data Sets"
+url = "https://www.sec.gov/dera/data/financial-statement-data-sets"
+type = "file_download"
+
+[[resources]]
+id = "sec_fsd_2024_quarters"
+origin = "sec_fsd"
+url = "https://www.sec.gov/files/dera/data/financial-statement-data-sets/"
+type = "zip_archive"
+version = "2024q1..2024q4"
+access = "Four fixed quarterly ZIP downloads."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/sec_fsd_2024q1_q4_numeric_values_i64/"
+
+[local_paths]
+downloads = "downloads/sec_fsd_2024q1_q4_numeric_values_i64/"
+filtered = "filtered/sec_fsd_2024q1_q4_numeric_values_i64/"
+index = "index/sec_fsd_2024q1_q4_numeric_values_i64/"
+samples = "samples/sec_fsd_2024q1_q4_numeric_values_i64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/sec_fsd_2024q1_q4_numeric_values_i64/samples.jsonl"
+summary = "Download fixed SEC quarterly ZIPs, validate num.txt, and emit integral USD and shares value streams as little-endian int64 arrays."
+deterministic_notes = "Fixed 2024 quarter list, fixed num.txt member, source row order, integral-value filter only, and fixed unit split."
+
+[[series]]
+id = "usd_value_i64"
+role = "primary"
+description = "SEC numeric fact values with unit USD."
+semantic_meaning = "Integral `value` cells from quarterly SEC num.txt rows where uom is USD."
+representation_class = "native_numeric"
+source_resources = ["sec_fsd_2024_quarters"]
+filtering = "Keep rows with uom=USD and value parseable as an in-range signed 64-bit integer."
+missing_value_policy = "Rows with blank, malformed, non-integral, or out-of-range values are dropped."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values in source row order."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sec_fsd_2024q1_q4_numeric_values_i64/usd_value_i64/"
+
+[[series]]
+id = "shares_value_i64"
+role = "primary"
+description = "SEC numeric fact values with unit shares."
+semantic_meaning = "Integral `value` cells from quarterly SEC num.txt rows where uom is shares."
+representation_class = "native_numeric"
+source_resources = ["sec_fsd_2024_quarters"]
+filtering = "Keep rows with uom=shares and value parseable as an in-range signed 64-bit integer."
+missing_value_policy = "Rows with blank, malformed, non-integral, or out-of-range values are dropped."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values in source row order."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sec_fsd_2024q1_q4_numeric_values_i64/shares_value_i64/"

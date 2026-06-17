@@ -1,0 +1,20 @@
+{
+  "dataset_id": "binance_usdm_futures_1m_klines_2024_q1",
+  "kind": "klines",
+  "market_path": "futures/um",
+  "interval": "1m",
+  "sample_axis": "one_minute_futures_kline_rows",
+  "symbols": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "BNBUSDT",
+    "SOLUSDT",
+    "XRPUSDT",
+    "ADAUSDT",
+    "DOGEUSDT",
+    "LINKUSDT",
+    "LTCUSDT",
+    "AVAXUSDT"
+  ],
+  "months": ["2024-01", "2024-02", "2024-03"]
+}

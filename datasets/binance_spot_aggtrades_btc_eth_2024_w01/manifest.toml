@@ -1,0 +1,191 @@
+manifest_version = 1
+dataset_id = "binance_spot_aggtrades_btc_eth_2024_w01"
+name = "Binance Spot Aggregate Trades BTC/ETH 2024 Week 01"
+description = "Bounded Binance spot aggregate trade archive for BTCUSDT and ETHUSDT during the first week of 2024."
+homepage = "https://data.binance.vision/"
+
+[license]
+name = "Binance public market data terms"
+spdx = "LicenseRef-Binance-Public-Market-Data-Terms"
+url = "https://data.binance.vision/"
+citation = "Binance public data archive."
+notes = "Public Binance historical market-data archive. Use according to Binance public data and website terms."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Binance public-data archive only."
+usage_notes = "Public aggregate market trades; no account, user, or private order data."
+
+[[origins]]
+id = "binance_public_data"
+name = "Binance Public Data"
+url = "https://data.binance.vision/"
+type = "public_archive"
+notes = "Official static archive for historical Binance market data ZIP files."
+
+[[resources]]
+id = "spot_aggtrades_btc_eth_2024_w01"
+origin = "binance_public_data"
+url = "https://data.binance.vision/"
+type = "bounded_archive_subset"
+version = "2024-01-01_to_2024-01-07_BTCUSDT_ETHUSDT"
+access = "Download script fetches fixed daily aggregate-trade ZIP files from data.binance.vision."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/binance_spot_aggtrades_btc_eth_2024_w01/"
+notes = "Expected 14 daily ZIP resources."
+
+[local_paths]
+downloads = "downloads/binance_spot_aggtrades_btc_eth_2024_w01/"
+filtered = "filtered/binance_spot_aggtrades_btc_eth_2024_w01/"
+index = "index/binance_spot_aggtrades_btc_eth_2024_w01/"
+samples = "samples/binance_spot_aggtrades_btc_eth_2024_w01/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/binance_spot_aggtrades_btc_eth_2024_w01/samples.jsonl"
+summary = "Fetch fixed spot daily aggTrade ZIPs, parse native price and quantity columns as primary samples, and keep ids/timestamps/flags as auxiliary alignment metadata."
+deterministic_notes = "Fixed symbols, fixed date window, no network access during build, and sample boundaries follow symbol-day field sequences."
+
+[[series]]
+id = "agg_trade_id"
+description = "Aggregate trade identifier for each spot aggregate-trade row."
+semantic_meaning = "Aggregate trade identifier for each spot aggregate-trade row."
+role = "auxiliary"
+representation_class = "native_numeric"
+representation_notes = "Native numeric Binance aggregate-trade CSV field parsed without synthetic remapping."
+source_resources = ["spot_aggtrades_btc_eth_2024_w01"]
+filtered_input_path = "filtered/binance_spot_aggtrades_btc_eth_2024_w01/ingest_stats.json"
+filtering = "Rows with malformed aggregate-trade numeric fields are skipped consistently across emitted fields."
+missing_value_policy = "Required numeric fields must parse; malformed rows are skipped."
+conversion = "Parse integer CSV aggregate trade id to little-endian uint64 arrays."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric arrays by symbol-day field"
+sample_count = 14
+total_size_bytes = 107831136
+output_path = "samples/binance_spot_aggtrades_btc_eth_2024_w01/agg_trade_id/"
+
+[[series]]
+id = "price"
+description = "Aggregate trade price for each spot aggregate-trade row."
+semantic_meaning = "Aggregate trade price for each spot aggregate-trade row."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Native numeric Binance aggregate-trade CSV field parsed without synthetic remapping."
+source_resources = ["spot_aggtrades_btc_eth_2024_w01"]
+filtered_input_path = "filtered/binance_spot_aggtrades_btc_eth_2024_w01/ingest_stats.json"
+filtering = "Rows with malformed aggregate-trade numeric fields are skipped consistently across emitted fields."
+missing_value_policy = "Required numeric fields must parse; malformed rows are skipped."
+conversion = "Parse decimal CSV price to little-endian float64 arrays."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric arrays by symbol-day field"
+sample_count = 14
+total_size_bytes = 107831136
+output_path = "samples/binance_spot_aggtrades_btc_eth_2024_w01/price/"
+
+[[series]]
+id = "quantity"
+description = "Aggregate trade quantity for each spot aggregate-trade row."
+semantic_meaning = "Aggregate trade quantity for each spot aggregate-trade row."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Native numeric Binance aggregate-trade CSV field parsed without synthetic remapping."
+source_resources = ["spot_aggtrades_btc_eth_2024_w01"]
+filtered_input_path = "filtered/binance_spot_aggtrades_btc_eth_2024_w01/ingest_stats.json"
+filtering = "Rows with malformed aggregate-trade numeric fields are skipped consistently across emitted fields."
+missing_value_policy = "Required numeric fields must parse; malformed rows are skipped."
+conversion = "Parse decimal CSV quantity to little-endian float64 arrays."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric arrays by symbol-day field"
+sample_count = 14
+total_size_bytes = 107831136
+output_path = "samples/binance_spot_aggtrades_btc_eth_2024_w01/quantity/"
+
+[[series]]
+id = "first_trade_id"
+description = "First raw trade id included in the aggregate trade for each spot aggregate-trade row."
+semantic_meaning = "First raw trade id included in the aggregate trade for each spot aggregate-trade row."
+role = "auxiliary"
+representation_class = "native_numeric"
+representation_notes = "Native numeric Binance aggregate-trade CSV field parsed without synthetic remapping."
+source_resources = ["spot_aggtrades_btc_eth_2024_w01"]
+filtered_input_path = "filtered/binance_spot_aggtrades_btc_eth_2024_w01/ingest_stats.json"
+filtering = "Rows with malformed aggregate-trade numeric fields are skipped consistently across emitted fields."
+missing_value_policy = "Required numeric fields must parse; malformed rows are skipped."
+conversion = "Parse integer CSV first trade id to little-endian uint64 arrays."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric arrays by symbol-day field"
+sample_count = 14
+total_size_bytes = 107831136
+output_path = "samples/binance_spot_aggtrades_btc_eth_2024_w01/first_trade_id/"
+
+[[series]]
+id = "last_trade_id"
+description = "Last raw trade id included in the aggregate trade for each spot aggregate-trade row."
+semantic_meaning = "Last raw trade id included in the aggregate trade for each spot aggregate-trade row."
+role = "auxiliary"
+representation_class = "native_numeric"
+representation_notes = "Native numeric Binance aggregate-trade CSV field parsed without synthetic remapping."
+source_resources = ["spot_aggtrades_btc_eth_2024_w01"]
+filtered_input_path = "filtered/binance_spot_aggtrades_btc_eth_2024_w01/ingest_stats.json"
+filtering = "Rows with malformed aggregate-trade numeric fields are skipped consistently across emitted fields."
+missing_value_policy = "Required numeric fields must parse; malformed rows are skipped."
+conversion = "Parse integer CSV last trade id to little-endian uint64 arrays."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric arrays by symbol-day field"
+sample_count = 14
+total_size_bytes = 107831136
+output_path = "samples/binance_spot_aggtrades_btc_eth_2024_w01/last_trade_id/"
+
+[[series]]
+id = "transact_time_ms"
+description = "Aggregate trade transaction timestamp in Unix milliseconds for each spot aggregate-trade row."
+semantic_meaning = "Aggregate trade transaction timestamp in Unix milliseconds for each spot aggregate-trade row."
+role = "auxiliary"
+representation_class = "native_numeric"
+representation_notes = "Native numeric Binance aggregate-trade CSV field parsed without synthetic remapping."
+source_resources = ["spot_aggtrades_btc_eth_2024_w01"]
+filtered_input_path = "filtered/binance_spot_aggtrades_btc_eth_2024_w01/ingest_stats.json"
+filtering = "Rows with malformed aggregate-trade numeric fields are skipped consistently across emitted fields."
+missing_value_policy = "Required numeric fields must parse; malformed rows are skipped."
+conversion = "Parse integer CSV transaction time to little-endian uint64 arrays."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric arrays by symbol-day field"
+sample_count = 14
+total_size_bytes = 107831136
+output_path = "samples/binance_spot_aggtrades_btc_eth_2024_w01/transact_time_ms/"
+
+[[series]]
+id = "buyer_maker"
+description = "Buyer-maker side flag for each spot aggregate-trade row."
+semantic_meaning = "Buyer-maker side flag for each spot aggregate-trade row."
+role = "auxiliary"
+representation_class = "native_numeric"
+representation_notes = "Native numeric Binance aggregate-trade CSV field parsed without synthetic remapping."
+source_resources = ["spot_aggtrades_btc_eth_2024_w01"]
+filtered_input_path = "filtered/binance_spot_aggtrades_btc_eth_2024_w01/ingest_stats.json"
+filtering = "Rows with malformed aggregate-trade numeric fields are skipped consistently across emitted fields."
+missing_value_policy = "Required numeric fields must parse; malformed rows are skipped."
+conversion = "Parse CSV boolean buyer-maker flag to little-endian uint8 arrays with false=0 and true=1."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric arrays by symbol-day field"
+sample_count = 14
+total_size_bytes = 13478892
+output_path = "samples/binance_spot_aggtrades_btc_eth_2024_w01/buyer_maker/"

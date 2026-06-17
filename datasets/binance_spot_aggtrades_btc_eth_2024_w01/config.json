@@ -1,0 +1,9 @@
+{
+  "dataset_id": "binance_spot_aggtrades_btc_eth_2024_w01",
+  "kind": "aggTrades",
+  "market_path": "spot",
+  "sample_axis": "aggregate_trade_rows",
+  "symbols": ["BTCUSDT", "ETHUSDT"],
+  "start_date": "2024-01-01",
+  "end_date": "2024-01-07"
+}

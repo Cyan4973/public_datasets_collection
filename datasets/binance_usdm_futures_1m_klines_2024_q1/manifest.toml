@@ -1,0 +1,271 @@
+manifest_version = 1
+dataset_id = "binance_usdm_futures_1m_klines_2024_q1"
+name = "Binance USD-M Futures 1m Klines 2024 Q1"
+description = "Bounded Binance USD-M futures one-minute OHLCV kline archive for ten liquid USDT contracts during 2024 Q1."
+homepage = "https://data.binance.vision/"
+
+[license]
+name = "Binance public market data terms"
+spdx = "LicenseRef-Binance-Public-Market-Data-Terms"
+url = "https://data.binance.vision/"
+citation = "Binance public data archive."
+notes = "Public Binance historical market-data archive. Use according to Binance public data and website terms."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Binance public-data archive only."
+usage_notes = "Public market data; no account, user, or private order data."
+
+[[origins]]
+id = "binance_public_data"
+name = "Binance Public Data"
+url = "https://data.binance.vision/"
+type = "public_archive"
+notes = "Official static archive for historical Binance market data ZIP files."
+
+[[resources]]
+id = "usdm_futures_1m_klines_2024_q1"
+origin = "binance_public_data"
+url = "https://data.binance.vision/"
+type = "bounded_archive_subset"
+version = "2024-01_to_2024-03_10_symbols_1m"
+access = "Download script fetches fixed monthly kline ZIP files from data.binance.vision."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/binance_usdm_futures_1m_klines_2024_q1/"
+notes = "Expected 30 monthly ZIP resources."
+
+[local_paths]
+downloads = "downloads/binance_usdm_futures_1m_klines_2024_q1/"
+filtered = "filtered/binance_usdm_futures_1m_klines_2024_q1/"
+index = "index/binance_usdm_futures_1m_klines_2024_q1/"
+samples = "samples/binance_usdm_futures_1m_klines_2024_q1/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/binance_usdm_futures_1m_klines_2024_q1/samples.jsonl"
+summary = "Fetch fixed USD-M futures monthly 1m kline ZIPs, parse native numeric OHLCV columns, and emit one sequence sample per contract-month-field."
+deterministic_notes = "Fixed symbols, fixed months, fixed interval, no network access during build, and sample boundaries follow contract-month field sequences."
+
+[[series]]
+id = "open_time_ms"
+description = "Opening timestamp in Unix milliseconds for each USD-M futures one-minute kline row."
+semantic_meaning = "Opening timestamp in Unix milliseconds for each USD-M futures one-minute kline row."
+role = "auxiliary"
+representation_class = "native_numeric"
+representation_notes = "Native numeric Binance kline CSV field parsed without synthetic remapping."
+source_resources = ["usdm_futures_1m_klines_2024_q1"]
+filtered_input_path = "filtered/binance_usdm_futures_1m_klines_2024_q1/ingest_stats.json"
+filtering = "Rows with malformed numeric kline fields are skipped consistently across emitted fields."
+missing_value_policy = "Required numeric fields must parse; malformed rows are skipped."
+conversion = "Parse integer CSV open time to little-endian uint64 arrays."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric arrays by symbol-month field"
+sample_count = 30
+total_size_bytes = 10483200
+output_path = "samples/binance_usdm_futures_1m_klines_2024_q1/open_time_ms/"
+
+[[series]]
+id = "open_price"
+description = "Open price for each USD-M futures one-minute kline row."
+semantic_meaning = "Open price for each USD-M futures one-minute kline row."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Native numeric Binance kline CSV field parsed without synthetic remapping."
+source_resources = ["usdm_futures_1m_klines_2024_q1"]
+filtered_input_path = "filtered/binance_usdm_futures_1m_klines_2024_q1/ingest_stats.json"
+filtering = "Rows with malformed numeric kline fields are skipped consistently across emitted fields."
+missing_value_policy = "Required numeric fields must parse; malformed rows are skipped."
+conversion = "Parse decimal CSV open price to little-endian float64 arrays."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric arrays by symbol-month field"
+sample_count = 30
+total_size_bytes = 10483200
+output_path = "samples/binance_usdm_futures_1m_klines_2024_q1/open_price/"
+
+[[series]]
+id = "high_price"
+description = "High price for each USD-M futures one-minute kline row."
+semantic_meaning = "High price for each USD-M futures one-minute kline row."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Native numeric Binance kline CSV field parsed without synthetic remapping."
+source_resources = ["usdm_futures_1m_klines_2024_q1"]
+filtered_input_path = "filtered/binance_usdm_futures_1m_klines_2024_q1/ingest_stats.json"
+filtering = "Rows with malformed numeric kline fields are skipped consistently across emitted fields."
+missing_value_policy = "Required numeric fields must parse; malformed rows are skipped."
+conversion = "Parse decimal CSV high price to little-endian float64 arrays."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric arrays by symbol-month field"
+sample_count = 30
+total_size_bytes = 10483200
+output_path = "samples/binance_usdm_futures_1m_klines_2024_q1/high_price/"
+
+[[series]]
+id = "low_price"
+description = "Low price for each USD-M futures one-minute kline row."
+semantic_meaning = "Low price for each USD-M futures one-minute kline row."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Native numeric Binance kline CSV field parsed without synthetic remapping."
+source_resources = ["usdm_futures_1m_klines_2024_q1"]
+filtered_input_path = "filtered/binance_usdm_futures_1m_klines_2024_q1/ingest_stats.json"
+filtering = "Rows with malformed numeric kline fields are skipped consistently across emitted fields."
+missing_value_policy = "Required numeric fields must parse; malformed rows are skipped."
+conversion = "Parse decimal CSV low price to little-endian float64 arrays."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric arrays by symbol-month field"
+sample_count = 30
+total_size_bytes = 10483200
+output_path = "samples/binance_usdm_futures_1m_klines_2024_q1/low_price/"
+
+[[series]]
+id = "close_price"
+description = "Close price for each USD-M futures one-minute kline row."
+semantic_meaning = "Close price for each USD-M futures one-minute kline row."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Native numeric Binance kline CSV field parsed without synthetic remapping."
+source_resources = ["usdm_futures_1m_klines_2024_q1"]
+filtered_input_path = "filtered/binance_usdm_futures_1m_klines_2024_q1/ingest_stats.json"
+filtering = "Rows with malformed numeric kline fields are skipped consistently across emitted fields."
+missing_value_policy = "Required numeric fields must parse; malformed rows are skipped."
+conversion = "Parse decimal CSV close price to little-endian float64 arrays."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric arrays by symbol-month field"
+sample_count = 30
+total_size_bytes = 10483200
+output_path = "samples/binance_usdm_futures_1m_klines_2024_q1/close_price/"
+
+[[series]]
+id = "base_volume"
+description = "Base-asset traded volume for each USD-M futures one-minute kline row."
+semantic_meaning = "Base-asset traded volume for each USD-M futures one-minute kline row."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Native numeric Binance kline CSV field parsed without synthetic remapping."
+source_resources = ["usdm_futures_1m_klines_2024_q1"]
+filtered_input_path = "filtered/binance_usdm_futures_1m_klines_2024_q1/ingest_stats.json"
+filtering = "Rows with malformed numeric kline fields are skipped consistently across emitted fields."
+missing_value_policy = "Required numeric fields must parse; malformed rows are skipped."
+conversion = "Parse decimal CSV base volume to little-endian float64 arrays."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric arrays by symbol-month field"
+sample_count = 30
+total_size_bytes = 10483200
+output_path = "samples/binance_usdm_futures_1m_klines_2024_q1/base_volume/"
+
+[[series]]
+id = "close_time_ms"
+description = "Closing timestamp in Unix milliseconds for each USD-M futures one-minute kline row."
+semantic_meaning = "Closing timestamp in Unix milliseconds for each USD-M futures one-minute kline row."
+role = "auxiliary"
+representation_class = "native_numeric"
+representation_notes = "Native numeric Binance kline CSV field parsed without synthetic remapping."
+source_resources = ["usdm_futures_1m_klines_2024_q1"]
+filtered_input_path = "filtered/binance_usdm_futures_1m_klines_2024_q1/ingest_stats.json"
+filtering = "Rows with malformed numeric kline fields are skipped consistently across emitted fields."
+missing_value_policy = "Required numeric fields must parse; malformed rows are skipped."
+conversion = "Parse integer CSV close time to little-endian uint64 arrays."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric arrays by symbol-month field"
+sample_count = 30
+total_size_bytes = 10483200
+output_path = "samples/binance_usdm_futures_1m_klines_2024_q1/close_time_ms/"
+
+[[series]]
+id = "quote_volume"
+description = "Quote-asset traded volume for each USD-M futures one-minute kline row."
+semantic_meaning = "Quote-asset traded volume for each USD-M futures one-minute kline row."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Native numeric Binance kline CSV field parsed without synthetic remapping."
+source_resources = ["usdm_futures_1m_klines_2024_q1"]
+filtered_input_path = "filtered/binance_usdm_futures_1m_klines_2024_q1/ingest_stats.json"
+filtering = "Rows with malformed numeric kline fields are skipped consistently across emitted fields."
+missing_value_policy = "Required numeric fields must parse; malformed rows are skipped."
+conversion = "Parse decimal CSV quote volume to little-endian float64 arrays."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric arrays by symbol-month field"
+sample_count = 30
+total_size_bytes = 10483200
+output_path = "samples/binance_usdm_futures_1m_klines_2024_q1/quote_volume/"
+
+[[series]]
+id = "trade_count"
+description = "Trade count for each USD-M futures one-minute kline row."
+semantic_meaning = "Trade count for each USD-M futures one-minute kline row."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Native numeric Binance kline CSV field parsed without synthetic remapping."
+source_resources = ["usdm_futures_1m_klines_2024_q1"]
+filtered_input_path = "filtered/binance_usdm_futures_1m_klines_2024_q1/ingest_stats.json"
+filtering = "Rows with malformed numeric kline fields are skipped consistently across emitted fields."
+missing_value_policy = "Required numeric fields must parse; malformed rows are skipped."
+conversion = "Parse integer CSV trade count to little-endian uint32 arrays."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric arrays by symbol-month field"
+sample_count = 30
+total_size_bytes = 5241600
+output_path = "samples/binance_usdm_futures_1m_klines_2024_q1/trade_count/"
+
+[[series]]
+id = "taker_buy_base_volume"
+description = "Taker-buy base-asset volume for each USD-M futures one-minute kline row."
+semantic_meaning = "Taker-buy base-asset volume for each USD-M futures one-minute kline row."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Native numeric Binance kline CSV field parsed without synthetic remapping."
+source_resources = ["usdm_futures_1m_klines_2024_q1"]
+filtered_input_path = "filtered/binance_usdm_futures_1m_klines_2024_q1/ingest_stats.json"
+filtering = "Rows with malformed numeric kline fields are skipped consistently across emitted fields."
+missing_value_policy = "Required numeric fields must parse; malformed rows are skipped."
+conversion = "Parse decimal CSV taker-buy base volume to little-endian float64 arrays."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric arrays by symbol-month field"
+sample_count = 30
+total_size_bytes = 10483200
+output_path = "samples/binance_usdm_futures_1m_klines_2024_q1/taker_buy_base_volume/"
+
+[[series]]
+id = "taker_buy_quote_volume"
+description = "Taker-buy quote-asset volume for each USD-M futures one-minute kline row."
+semantic_meaning = "Taker-buy quote-asset volume for each USD-M futures one-minute kline row."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Native numeric Binance kline CSV field parsed without synthetic remapping."
+source_resources = ["usdm_futures_1m_klines_2024_q1"]
+filtered_input_path = "filtered/binance_usdm_futures_1m_klines_2024_q1/ingest_stats.json"
+filtering = "Rows with malformed numeric kline fields are skipped consistently across emitted fields."
+missing_value_policy = "Required numeric fields must parse; malformed rows are skipped."
+conversion = "Parse decimal CSV taker-buy quote volume to little-endian float64 arrays."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric arrays by symbol-month field"
+sample_count = 30
+total_size_bytes = 10483200
+output_path = "samples/binance_usdm_futures_1m_klines_2024_q1/taker_buy_quote_volume/"

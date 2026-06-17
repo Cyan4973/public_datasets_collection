@@ -1,0 +1,74 @@
+manifest_version = 1
+dataset_id = "noaa_ndbc_wave_spectral_density_f64"
+name = "NOAA NDBC Wave Spectral Density"
+description = "Bounded NOAA NDBC historical spectral wave density grids for selected ocean buoys."
+homepage = "https://www.ndbc.noaa.gov/data/historical/swden/"
+
+[license]
+name = "U.S. Government Public Domain"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://www.ndbc.noaa.gov/"
+citation = "NOAA National Data Buoy Center historical spectral wave density archives."
+notes = "NOAA NDBC data are public U.S. government works. Preserve attribution and source provenance."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NOAA NDBC historical archive only."
+usage_notes = "Public-domain ocean wave spectral observations."
+
+[[origins]]
+id = "noaa_ndbc_swden"
+name = "NOAA NDBC Historical Spectral Wave Density"
+url = "https://www.ndbc.noaa.gov/data/historical/swden/"
+type = "archive"
+notes = "Public historical spectral wave density text archives by station and year."
+
+[[resources]]
+id = "ndbc_swden_station_year_subset"
+origin = "noaa_ndbc_swden"
+url = "https://www.ndbc.noaa.gov/data/historical/swden/"
+type = "archive_subset"
+version = "2021-2023-8stations"
+access = "Fixed station-year .txt.gz downloads from the NDBC historical swden archive."
+size_bytes = 13558316
+sha256 = ""
+local_path = "downloads/noaa_ndbc_wave_spectral_density_f64/"
+notes = "One gzip-compressed whitespace-delimited spectral-density text file per selected station-year."
+
+[local_paths]
+downloads = "downloads/noaa_ndbc_wave_spectral_density_f64/"
+filtered = "filtered/noaa_ndbc_wave_spectral_density_f64/"
+index = "index/noaa_ndbc_wave_spectral_density_f64/"
+samples = "samples/noaa_ndbc_wave_spectral_density_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_ndbc_wave_spectral_density_f64/samples.jsonl"
+summary = "Download selected NDBC historical spectral-density archives, parse native frequency-bin grids, and emit one time-by-frequency float64 sample per station-year."
+deterministic_notes = "Fixed station list, fixed year window, fixed NDBC swden product, no network access during build, and sample boundaries follow station-year spectral grids."
+
+[[series]]
+id = "wave_spectral_density"
+description = "NDBC spectral wave density grids."
+semantic_meaning = "Float64 spectral wave density values over retained timestamps and native NDBC frequency bins."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Native numeric NDBC spectral-density columns parsed without synthetic remapping."
+source_resources = ["ndbc_swden_station_year_subset"]
+filtered_input_path = "filtered/noaa_ndbc_wave_spectral_density_f64/ingest_stats.json"
+filtering = "Rows with malformed values or NDBC missing sentinels in any frequency bin are skipped."
+missing_value_policy = "Required frequency-bin values must parse and must not be NDBC missing sentinels; malformed rows are skipped."
+conversion = "Parse decimal spectral-density columns to little-endian float64 arrays preserving source row and frequency-bin order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric arrays by station-year grid"
+sample_geometry = "grid"
+sample_rank = 2
+sample_axes = ["time", "frequency_hz"]
+sample_count = 24
+total_size_bytes = 93754472
+output_path = "samples/noaa_ndbc_wave_spectral_density_f64/wave_spectral_density/"

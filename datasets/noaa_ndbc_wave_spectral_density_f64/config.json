@@ -1,0 +1,16 @@
+{
+  "dataset_id": "noaa_ndbc_wave_spectral_density_f64",
+  "product_dir": "swden",
+  "file_suffix": "w",
+  "stations": [
+    "41002",
+    "41004",
+    "42001",
+    "42002",
+    "46002",
+    "46042",
+    "46047",
+    "51001"
+  ],
+  "years": [2021, 2022, 2023]
+}

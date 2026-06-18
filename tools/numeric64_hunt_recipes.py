@@ -102,18 +102,6 @@ DATASETS = {
             "end_longitude_f64": ("float", 64, "d", 8),
         },
     },
-    "usdot_bts_ontime_2024_q1_f64": {
-        "kind": "bts",
-        "geometry": "flight_month_table_column",
-        "series": {
-            "departure_delay_minutes_f64": ("float", 64, "d", 8),
-            "arrival_delay_minutes_f64": ("float", 64, "d", 8),
-            "air_time_minutes_f64": ("float", 64, "d", 8),
-            "taxi_out_minutes_f64": ("float", 64, "d", 8),
-            "taxi_in_minutes_f64": ("float", 64, "d", 8),
-            "distance_miles_f64": ("float", 64, "d", 8),
-        },
-    },
     "census_acs_pums_ca_person_2023_i64": {
         "kind": "pums",
         "geometry": "person_microdata_table_column",
@@ -352,52 +340,6 @@ def build_citibike(dataset_id: str, ps: dict[str, Path], cfg: dict) -> dict:
     }
 
 
-def build_bts(dataset_id: str, ps: dict[str, Path], cfg: dict) -> dict:
-    archives = sorted(ps["downloads"].glob("*.zip"))
-    if not archives:
-        raise SystemExit(f"missing BTS zip files under {ps['downloads']}")
-    series_map = {
-        "departure_delay_minutes_f64": "DepDelayMinutes",
-        "arrival_delay_minutes_f64": "ArrDelayMinutes",
-        "air_time_minutes_f64": "AirTime",
-        "taxi_out_minutes_f64": "TaxiOut",
-        "taxi_in_minutes_f64": "TaxiIn",
-        "distance_miles_f64": "Distance",
-    }
-    rows: list[dict] = []
-    resource_stats = []
-    for archive in archives:
-        for member, reader in iter_zip_csv(archive):
-            arrays = {sid: array("d") for sid in series_map}
-            total_rows = kept_by_series = {sid: 0 for sid in series_map}
-            missing = {sid: 0 for sid in series_map}
-            header = reader.fieldnames or []
-            absent = [col for col in series_map.values() if col not in header]
-            if absent:
-                raise SystemExit(f"{archive}:{member}: missing BTS columns {absent}")
-            for record in reader:
-                total_rows += 1
-                for sid, col in series_map.items():
-                    value = parse_float(record.get(col, ""))
-                    if value is None:
-                        missing[sid] += 1
-                    else:
-                        arrays[sid].append(value)
-                        kept_by_series[sid] += 1
-            for sid, values in arrays.items():
-                kind, width, _code, elem = cfg["series"][sid]
-                add_sample(ps, dataset_id, rows, sid, kind, width, elem, values, member, cfg["geometry"])
-            resource_stats.append(
-                {"archive": archive.name, "member": member, "total_rows": total_rows, "kept_by_series": kept_by_series, "missing_by_series": missing}
-            )
-    return {
-        "dataset_id": dataset_id,
-        "source_bytes": sum(p.stat().st_size for p in archives),
-        "resources": resource_stats,
-        "sample_rows": rows,
-    }
-
-
 def build_pums(dataset_id: str, ps: dict[str, Path], cfg: dict) -> dict:
     archives = sorted(ps["downloads"].glob("*.zip"))
     if not archives:
@@ -530,7 +472,6 @@ def build_sec_fsd(dataset_id: str, ps: dict[str, Path], cfg: dict) -> dict:
 
 BUILDERS = {
     "citibike": build_citibike,
-    "bts": build_bts,
     "pums": build_pums,
     "sec_fsd": build_sec_fsd,
 }

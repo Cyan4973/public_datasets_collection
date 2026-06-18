@@ -1,3 +1,3 @@
 dataset_id	status	primary_samples	primary_values	primary_bytes	median_primary_sample_values	accepted_series	notes
-sec_fsd_2024q1_q4_numeric_values_i64	accepted_verified	8	11808107	94464856	1379016.5	usd_value_i64,shares_value_i64	Official SEC FSD 2024 quarterly num.txt value columns restricted to USD and shares.
+sec_fsd_2015q1_2024q4_numeric_values_i64	accepted_verified	787	22524021	180192168	16419	20 selected tag/uom streams	Official SEC FSD 2015q1-2024q4 quarterly num.txt value columns restricted to exact homogeneous SEC tag/uom pairs.
 sec_submissions_largecap_bundle	accepted_verified	245	483235	1739646	1001	sec_submission_size,sec_submission_acceptance_timestamp,sec_submission_xbrl_flag,sec_submission_inline_xbrl_flag,sec_submission_filing_date_ordinal	Tracked 49-issuer SEC submissions metadata bundle; local categorical form-code remap removed.

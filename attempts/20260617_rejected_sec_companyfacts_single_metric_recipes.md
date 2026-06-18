@@ -17,7 +17,7 @@ multiply tiny issuer-fact quarterly natural samples and would not repair the
 median natural-sample floor. A multi-metric companyfacts bundle was also
 rejected in the 64-bit unfinished audit for the same reason.
 
-Replacement: keep `sec_fsd_2024q1_q4_numeric_values_i64` as the SEC financial
+Replacement: keep `sec_fsd_2015q1_2024q4_numeric_values_i64` as the SEC financial
 statement numeric fact representative. It uses official SEC Financial Statement
-Data Sets quarterly `num.txt` tables and validated at `11,808,107` primary
-values and `94,464,856` primary bytes.
+Data Sets quarterly `num.txt` tables and validated at `22,524,021` primary
+values and `180,192,168` primary bytes.

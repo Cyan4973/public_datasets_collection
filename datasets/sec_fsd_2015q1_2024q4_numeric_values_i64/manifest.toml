@@ -1,0 +1,470 @@
+manifest_version = 1
+dataset_id = "sec_fsd_2015q1_2024q4_numeric_values_i64"
+name = "SEC Financial Statement Data Sets 2015q1-2024q4 Numeric Values"
+description = "Official SEC quarterly Financial Statement Data Sets numeric fact values for selected high-volume homogeneous tag/unit streams."
+homepage = "https://www.sec.gov/dera/data/financial-statement-data-sets"
+
+[license]
+name = "U.S. Government Work"
+spdx = "LicenseRef-USGov"
+url = "https://www.usa.gov/government-works"
+citation = "U.S. Securities and Exchange Commission Financial Statement Data Sets."
+notes = "SEC data is public U.S. government material; respect SEC access policy and user-agent requirements."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official SEC quarterly Financial Statement Data Sets only."
+usage_notes = "Public corporate filing fact table values."
+
+[[origins]]
+id = "sec_fsd"
+name = "SEC Financial Statement Data Sets"
+url = "https://www.sec.gov/dera/data/financial-statement-data-sets"
+type = "file_download"
+
+[[resources]]
+id = "sec_fsd_2015q1_2024q4_quarters"
+origin = "sec_fsd"
+url = "https://www.sec.gov/files/dera/data/financial-statement-data-sets/"
+type = "zip_archive"
+version = "2015q1..2024q4"
+access = "Forty fixed quarterly ZIP downloads."
+size_bytes = 3795297731
+sha256 = ""
+local_path = "downloads/sec_fsd_2015q1_2024q4_numeric_values_i64/"
+notes = "Build keeps only selected high-volume homogeneous tag/uom streams."
+
+[local_paths]
+downloads = "downloads/sec_fsd_2015q1_2024q4_numeric_values_i64/"
+filtered = "filtered/sec_fsd_2015q1_2024q4_numeric_values_i64/"
+index = "index/sec_fsd_2015q1_2024q4_numeric_values_i64/"
+samples = "samples/sec_fsd_2015q1_2024q4_numeric_values_i64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/sec_fsd_2015q1_2024q4_numeric_values_i64/samples.jsonl"
+summary = "Download fixed SEC quarterly ZIPs, validate num.txt, and emit selected high-volume tag/unit value streams as little-endian int64 arrays."
+deterministic_notes = "Fixed 2015q1 through 2024q4 quarter list, fixed selected SEC tags, fixed unit split, source row order within each tag/unit/quarter stream, integral-value filter only, and one quarterly tag/unit value column per natural sample. Build rejects missing or extra SEC quarterly ZIP files."
+
+[[series]]
+id = "sec_fsd_shares_common_stock_shares_authorized_i64"
+role = "primary"
+description = "SEC numeric fact values for CommonStockSharesAuthorized with unit SHARES."
+semantic_meaning = "Integral value cells from quarterly SEC num.txt rows where tag is CommonStockSharesAuthorized and uom is SHARES."
+representation_class = "native_numeric"
+source_resources = ["sec_fsd_2015q1_2024q4_quarters"]
+filtering = "Keep rows with this exact tag/uom and value parseable as an in-range signed 64-bit integer."
+missing_value_policy = "Rows with blank, malformed, non-integral, or out-of-range values are dropped. Other tags or units are outside this series."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values in source row order."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "quarterly_sec_num_table_tag_unit_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 40
+total_size_bytes = 4903080
+output_path = "samples/sec_fsd_2015q1_2024q4_numeric_values_i64/sec_fsd_shares_common_stock_shares_authorized_i64/"
+
+[[series]]
+id = "sec_fsd_shares_common_stock_shares_issued_i64"
+role = "primary"
+description = "SEC numeric fact values for CommonStockSharesIssued with unit SHARES."
+semantic_meaning = "Integral value cells from quarterly SEC num.txt rows where tag is CommonStockSharesIssued and uom is SHARES."
+representation_class = "native_numeric"
+source_resources = ["sec_fsd_2015q1_2024q4_quarters"]
+filtering = "Keep rows with this exact tag/uom and value parseable as an in-range signed 64-bit integer."
+missing_value_policy = "Rows with blank, malformed, non-integral, or out-of-range values are dropped. Other tags or units are outside this series."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values in source row order."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "quarterly_sec_num_table_tag_unit_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 40
+total_size_bytes = 5468584
+output_path = "samples/sec_fsd_2015q1_2024q4_numeric_values_i64/sec_fsd_shares_common_stock_shares_issued_i64/"
+
+[[series]]
+id = "sec_fsd_shares_common_stock_shares_outstanding_i64"
+role = "primary"
+description = "SEC numeric fact values for CommonStockSharesOutstanding with unit SHARES."
+semantic_meaning = "Integral value cells from quarterly SEC num.txt rows where tag is CommonStockSharesOutstanding and uom is SHARES."
+representation_class = "native_numeric"
+source_resources = ["sec_fsd_2015q1_2024q4_quarters"]
+filtering = "Keep rows with this exact tag/uom and value parseable as an in-range signed 64-bit integer."
+missing_value_policy = "Rows with blank, malformed, non-integral, or out-of-range values are dropped. Other tags or units are outside this series."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values in source row order."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "quarterly_sec_num_table_tag_unit_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 40
+total_size_bytes = 6639472
+output_path = "samples/sec_fsd_2015q1_2024q4_numeric_values_i64/sec_fsd_shares_common_stock_shares_outstanding_i64/"
+
+[[series]]
+id = "sec_fsd_shares_investment_owned_balance_shares_i64"
+role = "primary"
+description = "SEC numeric fact values for InvestmentOwnedBalanceShares with unit SHARES."
+semantic_meaning = "Integral value cells from quarterly SEC num.txt rows where tag is InvestmentOwnedBalanceShares and uom is SHARES."
+representation_class = "native_numeric"
+source_resources = ["sec_fsd_2015q1_2024q4_quarters"]
+filtering = "Keep rows with this exact tag/uom and value parseable as an in-range signed 64-bit integer."
+missing_value_policy = "Rows with blank, malformed, non-integral, or out-of-range values are dropped. Other tags or units are outside this series."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values in source row order."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "quarterly_sec_num_table_tag_unit_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 40
+total_size_bytes = 613160
+output_path = "samples/sec_fsd_2015q1_2024q4_numeric_values_i64/sec_fsd_shares_investment_owned_balance_shares_i64/"
+
+[[series]]
+id = "sec_fsd_shares_preferred_stock_shares_authorized_i64"
+role = "primary"
+description = "SEC numeric fact values for PreferredStockSharesAuthorized with unit SHARES."
+semantic_meaning = "Integral value cells from quarterly SEC num.txt rows where tag is PreferredStockSharesAuthorized and uom is SHARES."
+representation_class = "native_numeric"
+source_resources = ["sec_fsd_2015q1_2024q4_quarters"]
+filtering = "Keep rows with this exact tag/uom and value parseable as an in-range signed 64-bit integer."
+missing_value_policy = "Rows with blank, malformed, non-integral, or out-of-range values are dropped. Other tags or units are outside this series."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values in source row order."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "quarterly_sec_num_table_tag_unit_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 40
+total_size_bytes = 3266880
+output_path = "samples/sec_fsd_2015q1_2024q4_numeric_values_i64/sec_fsd_shares_preferred_stock_shares_authorized_i64/"
+
+[[series]]
+id = "sec_fsd_shares_preferred_stock_shares_outstanding_i64"
+role = "primary"
+description = "SEC numeric fact values for PreferredStockSharesOutstanding with unit SHARES."
+semantic_meaning = "Integral value cells from quarterly SEC num.txt rows where tag is PreferredStockSharesOutstanding and uom is SHARES."
+representation_class = "native_numeric"
+source_resources = ["sec_fsd_2015q1_2024q4_quarters"]
+filtering = "Keep rows with this exact tag/uom and value parseable as an in-range signed 64-bit integer."
+missing_value_policy = "Rows with blank, malformed, non-integral, or out-of-range values are dropped. Other tags or units are outside this series."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values in source row order."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "quarterly_sec_num_table_tag_unit_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 40
+total_size_bytes = 2681032
+output_path = "samples/sec_fsd_2015q1_2024q4_numeric_values_i64/sec_fsd_shares_preferred_stock_shares_outstanding_i64/"
+
+[[series]]
+id = "sec_fsd_shares_shares_outstanding_i64"
+role = "primary"
+description = "SEC numeric fact values for SharesOutstanding with unit SHARES."
+semantic_meaning = "Integral value cells from quarterly SEC num.txt rows where tag is SharesOutstanding and uom is SHARES."
+representation_class = "native_numeric"
+source_resources = ["sec_fsd_2015q1_2024q4_quarters"]
+filtering = "Keep rows with this exact tag/uom and value parseable as an in-range signed 64-bit integer."
+missing_value_policy = "Rows with blank, malformed, non-integral, or out-of-range values are dropped. Other tags or units are outside this series."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values in source row order."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "quarterly_sec_num_table_tag_unit_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 40
+total_size_bytes = 5284152
+output_path = "samples/sec_fsd_2015q1_2024q4_numeric_values_i64/sec_fsd_shares_shares_outstanding_i64/"
+
+[[series]]
+id = "sec_fsd_shares_stock_issued_during_period_shares_new_issues_i64"
+role = "primary"
+description = "SEC numeric fact values for StockIssuedDuringPeriodSharesNewIssues with unit SHARES."
+semantic_meaning = "Integral value cells from quarterly SEC num.txt rows where tag is StockIssuedDuringPeriodSharesNewIssues and uom is SHARES."
+representation_class = "native_numeric"
+source_resources = ["sec_fsd_2015q1_2024q4_quarters"]
+filtering = "Keep rows with this exact tag/uom and value parseable as an in-range signed 64-bit integer."
+missing_value_policy = "Rows with blank, malformed, non-integral, or out-of-range values are dropped. Other tags or units are outside this series."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values in source row order."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "quarterly_sec_num_table_tag_unit_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 40
+total_size_bytes = 2585448
+output_path = "samples/sec_fsd_2015q1_2024q4_numeric_values_i64/sec_fsd_shares_stock_issued_during_period_shares_new_issues_i64/"
+
+[[series]]
+id = "sec_fsd_shares_weighted_average_number_of_diluted_shares_outstanding_i64"
+role = "primary"
+description = "SEC numeric fact values for WeightedAverageNumberOfDilutedSharesOutstanding with unit SHARES."
+semantic_meaning = "Integral value cells from quarterly SEC num.txt rows where tag is WeightedAverageNumberOfDilutedSharesOutstanding and uom is SHARES."
+representation_class = "native_numeric"
+source_resources = ["sec_fsd_2015q1_2024q4_quarters"]
+filtering = "Keep rows with this exact tag/uom and value parseable as an in-range signed 64-bit integer."
+missing_value_policy = "Rows with blank, malformed, non-integral, or out-of-range values are dropped. Other tags or units are outside this series."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values in source row order."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "quarterly_sec_num_table_tag_unit_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 40
+total_size_bytes = 4251392
+output_path = "samples/sec_fsd_2015q1_2024q4_numeric_values_i64/sec_fsd_shares_weighted_average_number_of_diluted_shares_outstanding_i64/"
+
+[[series]]
+id = "sec_fsd_shares_weighted_average_number_of_shares_outstanding_basic_i64"
+role = "primary"
+description = "SEC numeric fact values for WeightedAverageNumberOfSharesOutstandingBasic with unit SHARES."
+semantic_meaning = "Integral value cells from quarterly SEC num.txt rows where tag is WeightedAverageNumberOfSharesOutstandingBasic and uom is SHARES."
+representation_class = "native_numeric"
+source_resources = ["sec_fsd_2015q1_2024q4_quarters"]
+filtering = "Keep rows with this exact tag/uom and value parseable as an in-range signed 64-bit integer."
+missing_value_policy = "Rows with blank, malformed, non-integral, or out-of-range values are dropped. Other tags or units are outside this series."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values in source row order."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "quarterly_sec_num_table_tag_unit_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 40
+total_size_bytes = 4527656
+output_path = "samples/sec_fsd_2015q1_2024q4_numeric_values_i64/sec_fsd_shares_weighted_average_number_of_shares_outstanding_basic_i64/"
+
+[[series]]
+id = "sec_fsd_usd_assets_i64"
+role = "primary"
+description = "SEC numeric fact values for Assets with unit USD."
+semantic_meaning = "Integral value cells from quarterly SEC num.txt rows where tag is Assets and uom is USD."
+representation_class = "native_numeric"
+source_resources = ["sec_fsd_2015q1_2024q4_quarters"]
+filtering = "Keep rows with this exact tag/uom and value parseable as an in-range signed 64-bit integer."
+missing_value_policy = "Rows with blank, malformed, non-integral, or out-of-range values are dropped. Other tags or units are outside this series."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values in source row order."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "quarterly_sec_num_table_tag_unit_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 40
+total_size_bytes = 10175720
+output_path = "samples/sec_fsd_2015q1_2024q4_numeric_values_i64/sec_fsd_usd_assets_i64/"
+
+[[series]]
+id = "sec_fsd_usd_investment_owned_at_cost_i64"
+role = "primary"
+description = "SEC numeric fact values for InvestmentOwnedAtCost with unit USD."
+semantic_meaning = "Integral value cells from quarterly SEC num.txt rows where tag is InvestmentOwnedAtCost and uom is USD."
+representation_class = "native_numeric"
+source_resources = ["sec_fsd_2015q1_2024q4_quarters"]
+filtering = "Keep rows with this exact tag/uom and value parseable as an in-range signed 64-bit integer."
+missing_value_policy = "Rows with blank, malformed, non-integral, or out-of-range values are dropped. Other tags or units are outside this series."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values in source row order."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "quarterly_sec_num_table_tag_unit_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 40
+total_size_bytes = 5456536
+output_path = "samples/sec_fsd_2015q1_2024q4_numeric_values_i64/sec_fsd_usd_investment_owned_at_cost_i64/"
+
+[[series]]
+id = "sec_fsd_usd_investment_owned_at_fair_value_i64"
+role = "primary"
+description = "SEC numeric fact values for InvestmentOwnedAtFairValue with unit USD."
+semantic_meaning = "Integral value cells from quarterly SEC num.txt rows where tag is InvestmentOwnedAtFairValue and uom is USD."
+representation_class = "native_numeric"
+source_resources = ["sec_fsd_2015q1_2024q4_quarters"]
+filtering = "Keep rows with this exact tag/uom and value parseable as an in-range signed 64-bit integer."
+missing_value_policy = "Rows with blank, malformed, non-integral, or out-of-range values are dropped. Other tags or units are outside this series."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values in source row order."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "quarterly_sec_num_table_tag_unit_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 40
+total_size_bytes = 6718640
+output_path = "samples/sec_fsd_2015q1_2024q4_numeric_values_i64/sec_fsd_usd_investment_owned_at_fair_value_i64/"
+
+[[series]]
+id = "sec_fsd_usd_investment_owned_balance_principal_amount_i64"
+role = "primary"
+description = "SEC numeric fact values for InvestmentOwnedBalancePrincipalAmount with unit USD."
+semantic_meaning = "Integral value cells from quarterly SEC num.txt rows where tag is InvestmentOwnedBalancePrincipalAmount and uom is USD."
+representation_class = "native_numeric"
+source_resources = ["sec_fsd_2015q1_2024q4_quarters"]
+filtering = "Keep rows with this exact tag/uom and value parseable as an in-range signed 64-bit integer."
+missing_value_policy = "Rows with blank, malformed, non-integral, or out-of-range values are dropped. Other tags or units are outside this series."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values in source row order."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "quarterly_sec_num_table_tag_unit_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 40
+total_size_bytes = 3921976
+output_path = "samples/sec_fsd_2015q1_2024q4_numeric_values_i64/sec_fsd_usd_investment_owned_balance_principal_amount_i64/"
+
+[[series]]
+id = "sec_fsd_usd_net_income_loss_i64"
+role = "primary"
+description = "SEC numeric fact values for NetIncomeLoss with unit USD."
+semantic_meaning = "Integral value cells from quarterly SEC num.txt rows where tag is NetIncomeLoss and uom is USD."
+representation_class = "native_numeric"
+source_resources = ["sec_fsd_2015q1_2024q4_quarters"]
+filtering = "Keep rows with this exact tag/uom and value parseable as an in-range signed 64-bit integer."
+missing_value_policy = "Rows with blank, malformed, non-integral, or out-of-range values are dropped. Other tags or units are outside this series."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values in source row order."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "quarterly_sec_num_table_tag_unit_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 40
+total_size_bytes = 17273624
+output_path = "samples/sec_fsd_2015q1_2024q4_numeric_values_i64/sec_fsd_usd_net_income_loss_i64/"
+
+[[series]]
+id = "sec_fsd_usd_operating_income_loss_i64"
+role = "primary"
+description = "SEC numeric fact values for OperatingIncomeLoss with unit USD."
+semantic_meaning = "Integral value cells from quarterly SEC num.txt rows where tag is OperatingIncomeLoss and uom is USD."
+representation_class = "native_numeric"
+source_resources = ["sec_fsd_2015q1_2024q4_quarters"]
+filtering = "Keep rows with this exact tag/uom and value parseable as an in-range signed 64-bit integer."
+missing_value_policy = "Rows with blank, malformed, non-integral, or out-of-range values are dropped. Other tags or units are outside this series."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values in source row order."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "quarterly_sec_num_table_tag_unit_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 40
+total_size_bytes = 11550208
+output_path = "samples/sec_fsd_2015q1_2024q4_numeric_values_i64/sec_fsd_usd_operating_income_loss_i64/"
+
+[[series]]
+id = "sec_fsd_usd_revenue_from_contract_with_customer_excluding_assessed_tax_i64"
+role = "primary"
+description = "SEC numeric fact values for RevenueFromContractWithCustomerExcludingAssessedTax with unit USD."
+semantic_meaning = "Integral value cells from quarterly SEC num.txt rows where tag is RevenueFromContractWithCustomerExcludingAssessedTax and uom is USD."
+representation_class = "native_numeric"
+source_resources = ["sec_fsd_2015q1_2024q4_quarters"]
+filtering = "Keep rows with this exact tag/uom and value parseable as an in-range signed 64-bit integer."
+missing_value_policy = "Rows with blank, malformed, non-integral, or out-of-range values are dropped. Other tags or units are outside this series."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values in source row order."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "quarterly_sec_num_table_tag_unit_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 27
+total_size_bytes = 19906872
+output_path = "samples/sec_fsd_2015q1_2024q4_numeric_values_i64/sec_fsd_usd_revenue_from_contract_with_customer_excluding_assessed_tax_i64/"
+
+[[series]]
+id = "sec_fsd_usd_revenues_i64"
+role = "primary"
+description = "SEC numeric fact values for Revenues with unit USD."
+semantic_meaning = "Integral value cells from quarterly SEC num.txt rows where tag is Revenues and uom is USD."
+representation_class = "native_numeric"
+source_resources = ["sec_fsd_2015q1_2024q4_quarters"]
+filtering = "Keep rows with this exact tag/uom and value parseable as an in-range signed 64-bit integer."
+missing_value_policy = "Rows with blank, malformed, non-integral, or out-of-range values are dropped. Other tags or units are outside this series."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values in source row order."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "quarterly_sec_num_table_tag_unit_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 40
+total_size_bytes = 14122040
+output_path = "samples/sec_fsd_2015q1_2024q4_numeric_values_i64/sec_fsd_usd_revenues_i64/"
+
+[[series]]
+id = "sec_fsd_usd_stockholders_equity_i64"
+role = "primary"
+description = "SEC numeric fact values for StockholdersEquity with unit USD."
+semantic_meaning = "Integral value cells from quarterly SEC num.txt rows where tag is StockholdersEquity and uom is USD."
+representation_class = "native_numeric"
+source_resources = ["sec_fsd_2015q1_2024q4_quarters"]
+filtering = "Keep rows with this exact tag/uom and value parseable as an in-range signed 64-bit integer."
+missing_value_policy = "Rows with blank, malformed, non-integral, or out-of-range values are dropped. Other tags or units are outside this series."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values in source row order."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "quarterly_sec_num_table_tag_unit_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 40
+total_size_bytes = 32256008
+output_path = "samples/sec_fsd_2015q1_2024q4_numeric_values_i64/sec_fsd_usd_stockholders_equity_i64/"
+
+[[series]]
+id = "sec_fsd_usd_stockholders_equity_including_portion_attributable_to_noncontrolling_interest_i64"
+role = "primary"
+description = "SEC numeric fact values for StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest with unit USD."
+semantic_meaning = "Integral value cells from quarterly SEC num.txt rows where tag is StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest and uom is USD."
+representation_class = "native_numeric"
+source_resources = ["sec_fsd_2015q1_2024q4_quarters"]
+filtering = "Keep rows with this exact tag/uom and value parseable as an in-range signed 64-bit integer."
+missing_value_policy = "Rows with blank, malformed, non-integral, or out-of-range values are dropped. Other tags or units are outside this series."
+conversion = "Parse decimal integer text as signed 64-bit little-endian values in source row order."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "quarterly_sec_num_table_tag_unit_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 40
+total_size_bytes = 18589688
+output_path = "samples/sec_fsd_2015q1_2024q4_numeric_values_i64/sec_fsd_usd_stockholders_equity_including_portion_attributable_to_noncontrolling_interest_i64/"

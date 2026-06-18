@@ -19,6 +19,67 @@ MIN_PRIMARY_BYTES = 100 * 1024
 MIN_MEDIAN_VALUES = 1_000
 MAX_PRIMARY_BYTES = 1_000_000_000
 
+SEC_FSD_10Y_QUARTERS = [
+    f"{year}q{quarter}"
+    for year in range(2015, 2025)
+    for quarter in range(1, 5)
+]
+
+SEC_FSD_TAGS = {
+    "USD": [
+        "StockholdersEquity",
+        "InvestmentOwnedAtFairValue",
+        "RevenueFromContractWithCustomerExcludingAssessedTax",
+        "InvestmentOwnedAtCost",
+        "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+        "InvestmentOwnedBalancePrincipalAmount",
+        "NetIncomeLoss",
+        "Revenues",
+        "OperatingIncomeLoss",
+        "Assets",
+    ],
+    "SHARES": [
+        "CommonStockSharesOutstanding",
+        "SharesOutstanding",
+        "WeightedAverageNumberOfSharesOutstandingBasic",
+        "CommonStockSharesIssued",
+        "WeightedAverageNumberOfDilutedSharesOutstanding",
+        "CommonStockSharesAuthorized",
+        "StockIssuedDuringPeriodSharesNewIssues",
+        "PreferredStockSharesAuthorized",
+        "InvestmentOwnedBalanceShares",
+        "PreferredStockSharesOutstanding",
+    ],
+}
+
+
+def snake_tag(text: str) -> str:
+    out = []
+    prev_is_lower_or_digit = False
+    for ch in text:
+        if ch.isupper() and prev_is_lower_or_digit:
+            out.append("_")
+        if ch.isalnum():
+            out.append(ch.lower())
+            prev_is_lower_or_digit = ch.islower() or ch.isdigit()
+        else:
+            if out and out[-1] != "_":
+                out.append("_")
+            prev_is_lower_or_digit = False
+    return "".join(out).strip("_")
+
+
+def sec_fsd_series_id(unit: str, tag: str) -> str:
+    return f"sec_fsd_{unit.lower()}_{snake_tag(tag)}_i64"
+
+
+def sec_fsd_series_map() -> dict[str, tuple[str, int, str, int]]:
+    return {
+        sec_fsd_series_id(unit, tag): ("int", 64, "q", 8)
+        for unit, tags in SEC_FSD_TAGS.items()
+        for tag in tags
+    }
+
 
 DATASETS = {
     "citibike_2024_01_trip_geocoords_f64": {
@@ -53,13 +114,12 @@ DATASETS = {
             "weeks_worked_i64": ("int", 64, "q", 8),
         },
     },
-    "sec_fsd_2024q1_q4_numeric_values_i64": {
+    "sec_fsd_2015q1_2024q4_numeric_values_i64": {
         "kind": "sec_fsd",
-        "geometry": "quarterly_sec_num_table_unit_column",
-        "series": {
-            "usd_value_i64": ("int", 64, "q", 8),
-            "shares_value_i64": ("int", 64, "q", 8),
-        },
+        "geometry": "quarterly_sec_num_table_tag_unit_column",
+        "series": sec_fsd_series_map(),
+        "sec_fsd_quarters": SEC_FSD_10Y_QUARTERS,
+        "sec_fsd_tags": SEC_FSD_TAGS,
     },
 }
 
@@ -329,9 +389,20 @@ def build_pums(dataset_id: str, ps: dict[str, Path], cfg: dict) -> dict:
 
 
 def build_sec_fsd(dataset_id: str, ps: dict[str, Path], cfg: dict) -> dict:
-    archives = sorted(ps["downloads"].glob("*.zip"))
-    if not archives:
-        raise SystemExit(f"missing SEC FSD zip files under {ps['downloads']}")
+    expected_archives = [f"{quarter}.zip" for quarter in cfg["sec_fsd_quarters"]]
+    archives_by_name = {path.name: path for path in ps["downloads"].glob("*.zip")}
+    missing = [name for name in expected_archives if name not in archives_by_name]
+    unexpected = sorted(set(archives_by_name) - set(expected_archives))
+    if missing:
+        raise SystemExit(f"missing SEC FSD zip files under {ps['downloads']}: {missing}")
+    if unexpected:
+        raise SystemExit(f"unexpected SEC FSD zip files under {ps['downloads']}: {unexpected}")
+    archives = [archives_by_name[name] for name in expected_archives]
+    selected = {
+        (unit, tag): sec_fsd_series_id(unit, tag)
+        for unit, tags in cfg["sec_fsd_tags"].items()
+        for tag in tags
+    }
     rows: list[dict] = []
     resource_stats = []
     for archive in archives:
@@ -340,28 +411,32 @@ def build_sec_fsd(dataset_id: str, ps: dict[str, Path], cfg: dict) -> dict:
             if not members:
                 raise SystemExit(f"{archive}: no SEC num member")
             for member in members:
-                arrays = {"usd_value_i64": array("q"), "shares_value_i64": array("q")}
-                total_rows = skipped = 0
+                arrays = {series_id: array("q") for series_id in selected.values()}
+                total_rows = skipped_non_integral = skipped_unselected = 0
                 with zf.open(member) as fh:
                     text = (line.decode("utf-8", errors="replace") for line in fh)
                     reader = csv.DictReader(text, delimiter="\t")
                     header = reader.fieldnames or []
-                    for col in ("uom", "value"):
+                    for col in ("tag", "uom", "value"):
                         if col not in header:
                             raise SystemExit(f"{archive}:{member}: missing SEC column {col}")
                     for record in reader:
                         total_rows += 1
                         value = parse_int(record.get("value", ""))
                         if value is None:
-                            skipped += 1
+                            skipped_non_integral += 1
                             continue
                         uom = (record.get("uom") or "").strip().upper()
-                        if uom == "USD":
-                            arrays["usd_value_i64"].append(value)
-                        elif uom == "SHARES":
-                            arrays["shares_value_i64"].append(value)
+                        tag = (record.get("tag") or "").strip()
+                        series_id = selected.get((uom, tag))
+                        if series_id is None:
+                            skipped_unselected += 1
+                            continue
+                        arrays[series_id].append(value)
                 quarter = archive.stem.lower()
-                for sid, values in arrays.items():
+                kept_by_series = {}
+                for (unit, tag), sid in selected.items():
+                    values = arrays[sid]
                     kind, width, _code, elem = cfg["series"][sid]
                     add_sample(
                         ps,
@@ -374,16 +449,17 @@ def build_sec_fsd(dataset_id: str, ps: dict[str, Path], cfg: dict) -> dict:
                         values,
                         f"{quarter}_{member}",
                         cfg["geometry"],
-                        {"quarter": quarter},
+                        {"quarter": quarter, "sec_tag": tag, "uom": unit},
                     )
+                    kept_by_series[sid] = len(values)
                 resource_stats.append(
                     {
                         "archive": archive.name,
                         "member": member,
                         "total_rows": total_rows,
-                        "skipped_non_integral_or_missing": skipped,
-                        "usd_values": len(arrays["usd_value_i64"]),
-                        "shares_values": len(arrays["shares_value_i64"]),
+                        "skipped_non_integral_or_missing": skipped_non_integral,
+                        "skipped_unselected_tag_or_unit": skipped_unselected,
+                        "kept_by_series": kept_by_series,
                     }
                 )
     return {

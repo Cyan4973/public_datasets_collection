@@ -100,7 +100,7 @@ Action:
 
 Resolved by removing the five below-floor companyfacts single-metric accepted
 recipes. The retained SEC financial-fact representative is
-`sec_fsd_2024q1_q4_numeric_values_i64`, which uses official quarterly SEC
+`sec_fsd_2015q1_2024q4_numeric_values_i64`, which uses official quarterly SEC
 Financial Statement Data Sets `num.txt` tables and passes the current floors.
 
 ## Rewrite / Expand Scope

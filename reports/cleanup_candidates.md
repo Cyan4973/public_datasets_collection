@@ -63,7 +63,7 @@ typical primary sample is tiny and which reaches usefulness only by stacking man
 
 ## Family Cleanup Completed
 
-- remove below-floor `sec_companyfacts_*` single-metric recipes after accepting `sec_fsd_2024q1_q4_numeric_values_i64`
+- remove below-floor `sec_companyfacts_*` single-metric recipes after accepting `sec_fsd_2015q1_2024q4_numeric_values_i64`
 
 ## Triage First: Tiny Non-Family Standalones
 

@@ -22,5 +22,8 @@ a different symbolic-music source would be needed.
 ## Local Logs
 
 - `.data/logs/google_fonts_ofl_ttf_u8/download.latest.log`
-- `.data/logs/mutopia_midi_files_u8/download.latest.log`
 - `.data/logs/natural_earth_vector_shp_u8/download.latest.log`
+
+The generated Mutopia `.data` failure artifacts were later removed after the
+candidate was recorded as rejected in
+`attempts/20260614_rejected_mutopia_midi_files_u8.md`.

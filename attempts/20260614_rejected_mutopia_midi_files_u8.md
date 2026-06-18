@@ -10,7 +10,10 @@ Reason:
 - The current recipe shape therefore cannot produce Standard MIDI File samples.
 - A different official Mutopia endpoint or a different symbolic-music source would be required.
 
-Local evidence:
+Cleanup status:
 
-- `.data/downloads/mutopia_midi_files_u8/MutopiaProject-master.zip`
-- `.data/logs/mutopia_midi_files_u8/download.latest.log`
+- Rejection evidence is preserved in `reports/8bit_variety_hunt_20260614_errors.md`.
+- The empty `staging/mutopia_midi_files_u8/` directory was removed.
+- Generated failed-download artifacts under `.data/*/mutopia_midi_files_u8/`
+  were removed after rejection so future audits do not treat the candidate as
+  unfinished local work.

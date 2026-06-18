@@ -44,7 +44,6 @@ with issuers_file.open(encoding="utf-8") as fh:
         issuers.append((row["issuer"], row["cik"]))
 
 series_defs = [
-    {"series_id": "sec_submission_form_code", "array_type": "H", "numeric_kind": "uint", "bit_width": 16, "endianness": "little", "element_size_bytes": 2},
     {"series_id": "sec_submission_size", "array_type": "I", "numeric_kind": "uint", "bit_width": 32, "endianness": "little", "element_size_bytes": 4},
     {"series_id": "sec_submission_acceptance_timestamp", "array_type": "Q", "numeric_kind": "uint", "bit_width": 64, "endianness": "little", "element_size_bytes": 8},
     {"series_id": "sec_submission_xbrl_flag", "array_type": "B", "numeric_kind": "uint", "bit_width": 8, "endianness": "little", "element_size_bytes": 1},
@@ -52,30 +51,22 @@ series_defs = [
     {"series_id": "sec_submission_filing_date_ordinal", "array_type": "I", "numeric_kind": "uint", "bit_width": 32, "endianness": "little", "element_size_bytes": 4},
 ]
 
+if samples_dir.exists():
+    shutil.rmtree(samples_dir)
+samples_dir.mkdir(parents=True, exist_ok=True)
+(filter_dir / "form_codebook.tsv").unlink(missing_ok=True)
+
 for s in series_defs:
     d = samples_dir / s["series_id"]
-    if d.exists():
-        shutil.rmtree(d)
     d.mkdir(parents=True, exist_ok=True)
 
 payloads = {}
-all_forms: set[str] = set()
 for issuer, cik in issuers:
     path = download_dir / f"{issuer}.json"
     if not path.exists():
         raise SystemExit(f"missing download payload for {issuer}: {path}")
     obj = json.load(open(path, encoding="utf-8"))
     payloads[issuer] = obj
-    for form in obj["filings"]["recent"].get("form", []):
-        if form:
-            all_forms.add(str(form))
-
-form_code = {form: idx + 1 for idx, form in enumerate(sorted(all_forms))}
-with (filter_dir / "form_codebook.tsv").open("w", encoding="utf-8", newline="") as fh:
-    w = csv.writer(fh, delimiter="\t")
-    w.writerow(["form", "code"])
-    for form, code in form_code.items():
-        w.writerow([form, code])
 
 records = []
 with (filter_dir / "issuer_stats.tsv").open("w", encoding="utf-8", newline="") as fh:
@@ -100,8 +91,8 @@ with (filter_dir / "issuer_stats.tsv").open("w", encoding="utf-8", newline="") a
             try:
                 dt_filed = datetime.strptime(filing_date, "%Y-%m-%d").date()
                 accepted_dt = datetime.strptime(acceptance, "%Y-%m-%dT%H:%M:%S.000Z").replace(tzinfo=timezone.utc)
-                code = form_code[str(form or "")]
-                vals["sec_submission_form_code"].append(code)
+                if not str(form or "").strip():
+                    raise ValueError("missing form")
                 vals["sec_submission_size"].append(int(size))
                 vals["sec_submission_acceptance_timestamp"].append(int(accepted_dt.timestamp()))
                 vals["sec_submission_xbrl_flag"].append(1 if int(is_xbrl) else 0)

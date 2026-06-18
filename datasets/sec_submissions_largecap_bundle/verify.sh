@@ -30,7 +30,6 @@ index_dir = Path(os.environ["INDEX_DIR"])
 issuers_file = Path(os.environ["ISSUERS_FILE"])
 
 expected_series = {
-    "sec_submission_form_code": 2,
     "sec_submission_size": 4,
     "sec_submission_acceptance_timestamp": 8,
     "sec_submission_xbrl_flag": 1,
@@ -84,10 +83,6 @@ for row in rows:
         raise SystemExit(f"bad sample shape for {issuer} {series_id}")
     if row.get("sample_axes") != ["filing"]:
         raise SystemExit(f"bad sample axes for {issuer} {series_id}")
-
-codebook = filter_dir / "form_codebook.tsv"
-if not codebook.exists() or codebook.stat().st_size == 0:
-    raise SystemExit("missing form codebook")
 
 value_counts = [int(row["value_count"]) for row in rows]
 total_values = sum(value_counts)

@@ -15,7 +15,6 @@ Pinned scope:
 - natural sample boundary: one issuer-column filing-metadata array
 
 Selected numeric series:
-- `sec_submission_form_code`
 - `sec_submission_size`
 - `sec_submission_acceptance_timestamp`
 - `sec_submission_xbrl_flag`

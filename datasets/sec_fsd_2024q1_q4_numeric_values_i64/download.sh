@@ -22,7 +22,7 @@ echo "[$(date -Is)] download start dataset=$DATASET_ID"
 
 BASE_URL="https://www.sec.gov/files/dera/data/financial-statement-data-sets"
 FILES=(2024q1.zip 2024q2.zip 2024q3.zip 2024q4.zip)
-USER_AGENT="${SEC_USER_AGENT:-openzl-public-datasets/1.0 contact@example.invalid}"
+USER_AGENT="${SEC_USER_AGENT:-openzl-public-datasets/1.0 contact=local}"
 
 for name in "${FILES[@]}"; do
   url="$BASE_URL/$name"

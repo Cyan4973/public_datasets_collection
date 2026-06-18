@@ -254,11 +254,11 @@ ghcnd_stations	ok	397497	1589988	3	132499	529996	0	0	0	1	none	none
 hgnc_complete_set_json	ok	404973	1034931	9	44997	89994	0	0	0	1	none	none
 usgs_sitefile_all_large	ok	452020	3073736	5	90404	723232	0	0	0	1	none	none
 openalex_works_2024_sample	ok	460000	1160000	23	20000	40000	0	0	0	1	none	none
+sec_submissions_largecap_bundle	ok	483235	1739646	245	1001	4000	0	0	0	1	none	none
 noaa_coops_air_temperature	ok	525155	4201240	3	175044	1400352	0	0	0	1	none	none
 noaa_coops_air_pressure	ok	525156	4201248	3	175047	1400376	0	0	0	1	none	none
 noaa_ghcn_daily_awnd_by_station	ok	545792	1091584	57	9970	19940	0	0	0	1	none	none
 appliances_energy_uci	ok	552580	4420640	28	19735	157880	0	0	0	1	none	none
-sec_submissions_largecap_bundle	ok	579882	1932940	294	1001	4000	0	0	0	1	none	none
 gharchive_hourly_events_20240101_00	ok	614476	4301332	4	153619	1228952	0	0	0	1	none	none
 earthquake_usgs	ok	630753	4880874	50	14515	115292	0	0	0	1	none	none
 gdelt_events_avgtone_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	none

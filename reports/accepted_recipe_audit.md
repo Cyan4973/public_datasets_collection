@@ -4,8 +4,8 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 146
-- `below_floor`: 174
+- `ok`: 147
+- `below_floor`: 173
 - `broken`: 0
 
 ## Below Floor
@@ -28,7 +28,6 @@ Auxiliary series do not count toward acceptance.
 | `fred_unemployment_level_monthly` | 120 | 480 | 10 | 12 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_unemployment_rate_monthly` | 120 | 480 | 10 | 12 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `world_bank_access_to_electricity_percent_annual` | 183 | 1464 | 6 | 31.5 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `gutendex_books` | 192 | 512 | 6 | 32 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `library_of_congress_items` | 232 | 928 | 4 | 44 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `openbrewerydb_breweries` | 246 | 1640 | 3 | 82 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `anilist_media` | 295 | 837 | 6 | 49 | 0 | 0 | `aggregate_floor,median_sample_floor` |

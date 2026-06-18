@@ -10,14 +10,14 @@ the upstream source is useless. The question is whether the current recipe can b
 extended into one coherent material without violating the protocol.
 
 Initial count before this removal pass: `41`
-Current pending count: `24`
+Current pending count: `23`
 
 ## Summary
 
 - repairable by straightforward pagination, cursoring, or bounded time windows: `23`
 - repairable only as a redesign/replacement because current query is arbitrary, ranked, or too narrow: `12`
 - removed or superseded so far: `11`
-- remaining repairable by straightforward pagination, cursoring, or bounded time windows: `12`
+- remaining repairable by straightforward pagination, cursoring, or bounded time windows: `11`
 - remaining redesign/replacement candidates because current query is arbitrary, ranked, or too narrow: `12`
 
 ## Removed In First Pass
@@ -43,12 +43,12 @@ Current pending count: `24`
 - `europe_pmc_search`: extended to a bounded January 2024 Europe PMC cursor-paginated search; now passes the floor with 1,127,748 primary values and 2,631,412 primary bytes.
 - `arxiv_cs_recent`: replaced by `arxiv_cs_lg_2024q1_metadata`, a bounded arXiv `cs.LG` 2024 Q1 submitted-date window; now passes the floor with 38,360 primary values and 115,080 primary bytes.
 - `gbif_occurrence`: replaced by `gbif_occurrence_2024_coordinate_sample`, a bounded January 2024 GBIF coordinate-bearing occurrence sample; now passes the floor with 95,952 primary values and 527,736 primary bytes.
+- `gutendex_books`: replaced by `gutendex_catalog_books`, the full Gutendex catalog in ascending order; now passes the floor with 203,883 primary values and 565,180 primary bytes.
 
 ## Per-Recipe Assessment
 
 | recipe | current shape | extension path | recommendation |
 |---|---|---|---|
-| `gutendex_books` | Gutendex `science` search first page, 6 series, 192 values | Paginate a coherent catalog slice, preferably all books or a stable subject/language subset. | Repairable as redesigned catalog recipe. |
 | `library_of_congress_items` | LOC item listing, first 100 records, 4 series, 232 values | Use LOC pagination for a stable collection/search with the same fields. | Repairable by pagination if the chosen collection is coherent. |
 | `openbrewerydb_breweries` | Open Brewery DB first page, 3 series, 246 values | Page through brewery records. | Repairable by pagination, but numeric payload is weak. |
 | `anilist_media` | AniList popular anime first page, 6 series, 295 values | GraphQL supports paging, but current popularity ranking is a moving ranked feed. | Redesign or remove; do not keep as a shallow top list. |

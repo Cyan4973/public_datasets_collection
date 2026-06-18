@@ -1,0 +1,134 @@
+manifest_version = 1
+dataset_id = "gutendex_catalog_books"
+name = "Gutendex Catalog Books"
+description = "Full Gutendex book catalog native download-count and author-year numeric metadata."
+homepage = "https://gutendex.com/"
+
+[license]
+name = "Gutendex / Project Gutenberg Metadata"
+spdx = "LicenseRef-Gutendex-Public-Metadata"
+url = "https://gutendex.com/"
+citation = "Gutendex public API over Project Gutenberg catalog metadata."
+notes = "Gutendex exposes public Project Gutenberg catalog metadata. This recipe stores numeric metadata only, not book text payloads."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public bibliographic metadata from Gutendex."
+usage_notes = "Book catalog numeric metadata for compression training."
+
+[[origins]]
+id = "gutendex"
+name = "Gutendex"
+url = "https://gutendex.com/books/"
+type = "api"
+
+[[resources]]
+id = "full_catalog_pages"
+origin = "gutendex"
+url = "https://gutendex.com/books/?sort=ascending&page={page}"
+type = "json_pages"
+version = "current"
+access = "Follow Gutendex paginated catalog pages in ascending order until `next` is null."
+size_bytes = 177091176
+sha256 = ""
+local_path = "downloads/gutendex_catalog_books/"
+notes = "download.sh writes download_inventory.json with page count, row count, source bytes, and observed API count."
+
+[local_paths]
+downloads = "downloads/gutendex_catalog_books/"
+filtered = "filtered/gutendex_catalog_books/"
+index = "index/gutendex_catalog_books/"
+samples = "samples/gutendex_catalog_books/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/gutendex_catalog_books/samples.jsonl"
+summary = "Download the full Gutendex catalog pages, deduplicate books by native ID, and emit selected native numeric fields as little-endian arrays."
+deterministic_notes = "Fixed sort=ascending query, page traversal via API next links, deduplication by book ID, deterministic book-ID sort, and separate natural samples for book-table and author-record columns."
+
+[[series]]
+id = "gutendex_download_count_u32"
+role = "primary"
+description = "Gutendex book download counts."
+semantic_meaning = "Native `download_count` field for each retained Gutendex book record."
+representation_class = "native_numeric"
+source_resources = ["full_catalog_pages"]
+filtering = "Keep records with valid non-negative integer book ID and download_count."
+missing_value_policy = "Book records missing download_count are dropped from this series."
+conversion = "Store download_count as unsigned 32-bit little-endian integer."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "gutendex_book_table_column"
+sample_rank = 1
+sample_axes = ["book"]
+sample_count = 1
+total_size_bytes = 314828
+output_path = "samples/gutendex_catalog_books/gutendex_download_count_u32/"
+
+[[series]]
+id = "gutendex_author_birth_year_i16"
+role = "primary"
+description = "Gutendex author birth years."
+semantic_meaning = "Native `birth_year` field from nested Gutendex author records."
+representation_class = "native_numeric"
+source_resources = ["full_catalog_pages"]
+filtering = "Keep author records with integer birth_year and death_year so the author-year streams are aligned."
+missing_value_policy = "Author records missing either birth_year or death_year are dropped from author-year series."
+conversion = "Store birth_year as signed 16-bit little-endian integer."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "gutendex_author_record_column"
+sample_rank = 1
+sample_axes = ["book_author_record"]
+sample_count = 1
+total_size_bytes = 125176
+output_path = "samples/gutendex_catalog_books/gutendex_author_birth_year_i16/"
+
+[[series]]
+id = "gutendex_author_death_year_i16"
+role = "primary"
+description = "Gutendex author death years."
+semantic_meaning = "Native `death_year` field from nested Gutendex author records."
+representation_class = "native_numeric"
+source_resources = ["full_catalog_pages"]
+filtering = "Keep author records with integer birth_year and death_year so the author-year streams are aligned."
+missing_value_policy = "Author records missing either birth_year or death_year are dropped from author-year series."
+conversion = "Store death_year as signed 16-bit little-endian integer."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "gutendex_author_record_column"
+sample_rank = 1
+sample_axes = ["book_author_record"]
+sample_count = 1
+total_size_bytes = 125176
+output_path = "samples/gutendex_catalog_books/gutendex_author_death_year_i16/"
+
+[[series]]
+id = "gutendex_book_id_u32"
+role = "auxiliary"
+description = "Gutendex book IDs."
+semantic_meaning = "Native Gutendex `id` for each retained book record."
+representation_class = "native_numeric"
+source_resources = ["full_catalog_pages"]
+filtering = "Keep records with valid non-negative integer book ID."
+missing_value_policy = "Book records missing ID are dropped."
+conversion = "Store book ID as unsigned 32-bit little-endian integer."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "gutendex_book_table_column"
+sample_rank = 1
+sample_axes = ["book"]
+sample_count = 1
+total_size_bytes = 314828
+output_path = "samples/gutendex_catalog_books/gutendex_book_id_u32/"

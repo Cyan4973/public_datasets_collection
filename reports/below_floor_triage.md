@@ -7,8 +7,8 @@ This is a policy-and-examples triage memo. The exact live inventory is
 
 Audit baseline when this triage memo was last refreshed:
 
-- `ok`: `144`
-- `below_floor`: `177`
+- `ok`: `145`
+- `below_floor`: `176`
 - `broken`: `0`
 
 The remaining below-floor set falls into three buckets:
@@ -25,7 +25,7 @@ one-entity, or otherwise intrinsically narrow, but some source APIs can be
 extended coherently. Per-recipe extension assessment lives in
 `reports/tiny_standalone_extension_triage.md`.
 
-Current count: `26`
+Current count: `25`
 
 | dataset_id | values | bytes | samples | median values | reasons |
 |---|---:|---:|---:|---:|---|
@@ -38,7 +38,6 @@ Current count: `26`
 | `osf_preprints` | 300 | 1200 | 3 | 100 | `aggregate_floor,median_sample_floor` |
 | `weathergov_stations` | 300 | 2000 | 3 | 100 | `aggregate_floor,median_sample_floor` |
 | `musicbrainz_recordings` | 382 | 952 | 4 | 94 | `aggregate_floor,median_sample_floor` |
-| `arxiv_cs_recent` | 400 | 1200 | 4 | 100 | `aggregate_floor,median_sample_floor` |
 | `cratesio_crates` | 400 | 2000 | 4 | 100 | `aggregate_floor,median_sample_floor` |
 | `datacite_dois` | 400 | 1200 | 4 | 100 | `aggregate_floor,median_sample_floor` |
 | `gleif_lei_records` | 400 | 800 | 4 | 100 | `aggregate_floor,median_sample_floor` |

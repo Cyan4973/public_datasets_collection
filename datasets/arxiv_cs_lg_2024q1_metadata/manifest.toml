@@ -1,0 +1,134 @@
+manifest_version = 1
+dataset_id = "arxiv_cs_lg_2024q1_metadata"
+name = "arXiv cs.LG 2024 Q1 Metadata"
+description = "Bounded arXiv API metadata for cs.LG submissions in 2024 Q1."
+homepage = "https://info.arxiv.org/help/api/index.html"
+
+[license]
+name = "arXiv API Terms"
+spdx = "LicenseRef-arXiv-API"
+url = "https://info.arxiv.org/help/api/tou.html"
+citation = "arXiv.org e-print archive API."
+notes = "Metadata is public through the arXiv API; respect arXiv API rate limits and terms."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public scholarly metadata from arXiv API Atom feeds."
+usage_notes = "Numeric metadata columns derived from public arXiv entries."
+
+[[origins]]
+id = "arxiv_api"
+name = "arXiv API"
+url = "https://export.arxiv.org/api/query"
+type = "api"
+
+[[resources]]
+id = "arxiv_cs_lg_2024q1_pages"
+origin = "arxiv_api"
+url = "https://export.arxiv.org/api/query?search_query=cat:cs.LG+AND+submittedDate:[202401010000+TO+202403312359]"
+type = "atom_xml_pages"
+version = "2024q1"
+access = "Paged arXiv API requests with a fixed category and submitted-date window."
+size_bytes = 22194401
+sha256 = ""
+local_path = "downloads/arxiv_cs_lg_2024q1_metadata/"
+notes = "Download script pages by start/max_results and validates Atom entries."
+
+[local_paths]
+downloads = "downloads/arxiv_cs_lg_2024q1_metadata/"
+filtered = "filtered/arxiv_cs_lg_2024q1_metadata/"
+index = "index/arxiv_cs_lg_2024q1_metadata/"
+samples = "samples/arxiv_cs_lg_2024q1_metadata/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/arxiv_cs_lg_2024q1_metadata/samples.jsonl"
+summary = "Download fixed arXiv cs.LG 2024 Q1 Atom pages, deduplicate entries by id, and emit metadata columns as little-endian unsigned arrays."
+deterministic_notes = "Fixed category, fixed submitted-date window, ascending submitted-date sort, fixed page size, deduplication by arXiv id, and source entry order by published timestamp then id."
+
+[[series]]
+id = "arxiv_cs_lg_published_at_u32"
+role = "primary"
+description = "arXiv entry published timestamps."
+semantic_meaning = "Unix seconds parsed from each Atom entry published timestamp."
+representation_class = "native_numeric"
+source_resources = ["arxiv_cs_lg_2024q1_pages"]
+filtering = "Keep entries with valid id, published timestamp, updated timestamp, author elements, and category elements."
+missing_value_policy = "Entries missing required metadata or timestamps are dropped."
+conversion = "Parse UTC Atom timestamp to unsigned 32-bit Unix seconds, little-endian."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "arxiv_metadata_table_column"
+sample_rank = 1
+sample_axes = ["entry"]
+sample_count = 1
+total_size_bytes = 38360
+output_path = "samples/arxiv_cs_lg_2024q1_metadata/arxiv_cs_lg_published_at_u32/"
+
+[[series]]
+id = "arxiv_cs_lg_updated_at_u32"
+role = "primary"
+description = "arXiv entry updated timestamps."
+semantic_meaning = "Unix seconds parsed from each Atom entry updated timestamp."
+representation_class = "native_numeric"
+source_resources = ["arxiv_cs_lg_2024q1_pages"]
+filtering = "Keep entries with valid id, published timestamp, updated timestamp, author elements, and category elements."
+missing_value_policy = "Entries missing required metadata or timestamps are dropped."
+conversion = "Parse UTC Atom timestamp to unsigned 32-bit Unix seconds, little-endian."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "arxiv_metadata_table_column"
+sample_rank = 1
+sample_axes = ["entry"]
+sample_count = 1
+total_size_bytes = 38360
+output_path = "samples/arxiv_cs_lg_2024q1_metadata/arxiv_cs_lg_updated_at_u32/"
+
+[[series]]
+id = "arxiv_cs_lg_author_count_u16"
+role = "primary"
+description = "arXiv entry author counts."
+semantic_meaning = "Number of Atom author elements in each arXiv entry."
+representation_class = "native_numeric"
+source_resources = ["arxiv_cs_lg_2024q1_pages"]
+filtering = "Keep entries with valid id, published timestamp, updated timestamp, author elements, and category elements."
+missing_value_policy = "Entries missing required metadata or timestamps are dropped."
+conversion = "Count author elements and store as unsigned 16-bit little-endian integers."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "arxiv_metadata_table_column"
+sample_rank = 1
+sample_axes = ["entry"]
+sample_count = 1
+total_size_bytes = 19180
+output_path = "samples/arxiv_cs_lg_2024q1_metadata/arxiv_cs_lg_author_count_u16/"
+
+[[series]]
+id = "arxiv_cs_lg_category_count_u16"
+role = "primary"
+description = "arXiv entry category counts."
+semantic_meaning = "Number of Atom category elements in each arXiv entry."
+representation_class = "native_numeric"
+source_resources = ["arxiv_cs_lg_2024q1_pages"]
+filtering = "Keep entries with valid id, published timestamp, updated timestamp, author elements, and category elements."
+missing_value_policy = "Entries missing required metadata or timestamps are dropped."
+conversion = "Count category elements and store as unsigned 16-bit little-endian integers."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "arxiv_metadata_table_column"
+sample_rank = 1
+sample_axes = ["entry"]
+sample_count = 1
+total_size_bytes = 19180
+output_path = "samples/arxiv_cs_lg_2024q1_metadata/arxiv_cs_lg_category_count_u16/"

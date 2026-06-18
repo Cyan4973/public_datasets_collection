@@ -10,14 +10,14 @@ the upstream source is useless. The question is whether the current recipe can b
 extended into one coherent material without violating the protocol.
 
 Initial count before this removal pass: `41`
-Current pending count: `26`
+Current pending count: `25`
 
 ## Summary
 
 - repairable by straightforward pagination, cursoring, or bounded time windows: `23`
 - repairable only as a redesign/replacement because current query is arbitrary, ranked, or too narrow: `12`
 - removed or superseded so far: `11`
-- remaining repairable by straightforward pagination, cursoring, or bounded time windows: `14`
+- remaining repairable by straightforward pagination, cursoring, or bounded time windows: `13`
 - remaining redesign/replacement candidates because current query is arbitrary, ranked, or too narrow: `12`
 
 ## Removed In First Pass
@@ -41,6 +41,7 @@ Current pending count: `26`
 - `nvd_cves_recent`: extended to bounded full-year 2024 NVD API pagination; now passes the floor with 244,224 primary values and 651,264 primary bytes.
 - `medrxiv_details`: extended to bounded full-year 2024 medRxiv details pagination; now passes the floor with 77,615 primary values and 186,276 primary bytes.
 - `europe_pmc_search`: extended to a bounded January 2024 Europe PMC cursor-paginated search; now passes the floor with 1,127,748 primary values and 2,631,412 primary bytes.
+- `arxiv_cs_recent`: replaced by `arxiv_cs_lg_2024q1_metadata`, a bounded arXiv `cs.LG` 2024 Q1 submitted-date window; now passes the floor with 38,360 primary values and 115,080 primary bytes.
 
 ## Per-Recipe Assessment
 
@@ -55,7 +56,6 @@ Current pending count: `26`
 | `osf_preprints` | OSF preprints first page, 3 timestamp series, 300 values | API pagination can widen to a stable preprint corpus. | Repairable by pagination. |
 | `weathergov_stations` | Weather.gov station listing first page, 3 series, 300 values | Station endpoint is paginated. | Repairable by pagination; review primary vs auxiliary coordinate semantics. |
 | `musicbrainz_recordings` | MusicBrainz recording search for `love`, 4 series, 382 values | Query is arbitrary; MusicBrainz search paging exists but a keyword search is weak material. | Redesign or remove. |
-| `arxiv_cs_recent` | arXiv `cs.LG` recent feed, 4 series, 400 values | Extend by `start`/`max_results` and/or bounded submitted-date windows. | Repairable by bounded category/time scope. |
 | `cratesio_crates` | crates.io search for `data`, 4 series, 400 values | Search paging exists, but query is arbitrary. | Redesign as broader crates catalog or remove. |
 | `datacite_dois` | DataCite DOI search for `machine learning`, 4 series, 400 values | DataCite supports pagination, but query term is arbitrary; a resource-type or provider scope would be cleaner. | Redesign before keeping. |
 | `gleif_lei_records` | GLEIF LEI records first page, 4 series, 400 values | LEI API is pageable. | Repairable by pagination, but review whether date/count fields are strong enough. |
@@ -75,7 +75,8 @@ Current pending count: `26`
 
 ## Recommended Order
 
-1. Repair high-confidence pageable/time-windowed sources:
-   `arxiv_cs_recent`.
+1. Repair remaining high-confidence pageable/time-windowed sources such as
+   `osf_preprints`, `gbif_occurrence`, `weathergov_stations`, and
+   `inaturalist_observations`.
 2. Revisit medium-confidence catalog/search recipes only if the replacement
    scope can be made explicit and homogeneous.

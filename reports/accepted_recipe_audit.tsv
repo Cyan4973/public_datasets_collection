@@ -34,7 +34,6 @@ world_bank_unemployment_total_percent_annual	below_floor	350	2800	10	35	280	0	0	
 musicbrainz_recordings	below_floor	382	952	4	94	194	0	0	0	1	none	aggregate_floor,median_sample_floor
 wger_exercises	below_floor	400	800	4	100	150	0	0	0	1	none	aggregate_floor,median_sample_floor
 gleif_lei_records	below_floor	400	800	4	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
-arxiv_cs_recent	below_floor	400	1200	4	100	300	0	0	0	1	none	aggregate_floor,median_sample_floor
 datacite_dois	below_floor	400	1200	4	100	300	0	0	0	1	none	aggregate_floor,median_sample_floor
 ooni_measurements	below_floor	400	1300	4	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
 stackexchange_top_questions_jan_2024	below_floor	400	1400	4	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -204,6 +203,7 @@ usgs_nwis_streamflow_daily	ok	34304	274432	32	1095	8760	0	0	0	1	none	none
 usgs_nwis_specific_conductance_daily	ok	34889	279112	29	1406	11248	0	0	0	1	none	none
 noaa_tides_water_level	ok	37200	141360	5	7440	7440	0	0	0	1	none	none
 ourworldindata_energy_mix	ok	38274	108443	6	6379	19137	0	0	0	1	none	none
+arxiv_cs_lg_2024q1_metadata	ok	38360	115080	4	9590	28770	0	0	0	1	none	none
 expression_atlas_experiments	ok	41058	95802	9	4562	9124	0	0	0	1	none	none
 homebrew_formulae	ok	42045	84090	5	8409	16818	0	0	0	1	none	none
 opensky_states	ok	44580	178320	5	8536	34144	0	0	0	1	none	none

@@ -4,8 +4,8 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 145
-- `below_floor`: 176
+- `ok`: 146
+- `below_floor`: 174
 - `broken`: 0
 
 ## Below Floor
@@ -32,7 +32,6 @@ Auxiliary series do not count toward acceptance.
 | `library_of_congress_items` | 232 | 928 | 4 | 44 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `openbrewerydb_breweries` | 246 | 1640 | 3 | 82 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `anilist_media` | 295 | 837 | 6 | 49 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `gbif_occurrence` | 298 | 1984 | 3 | 99 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `nuget_search` | 300 | 1200 | 3 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `osf_preprints` | 300 | 1200 | 3 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `weathergov_stations` | 300 | 2000 | 3 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
@@ -100,7 +99,6 @@ Auxiliary series do not count toward acceptance.
 | `launchlibrary_upcoming` | 700 | 1800 | 7 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `marine_regions_gazetteer` | 758 | 5264 | 8 | 93.5 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `gwas_catalog_studies` | 800 | 2200 | 8 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `gbif_occurrence_large` | 899 | 5099 | 3 | 300 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `arxiv_ai_recent` | 900 | 2300 | 9 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `geoboundaries_all_adm0` | 920 | 3220 | 4 | 230 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `eia_petroleum_prices` | 988 | 3952 | 2 | 494 | 0 | 0 | `aggregate_floor,median_sample_floor` |

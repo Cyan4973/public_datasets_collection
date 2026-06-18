@@ -18,6 +18,9 @@ The current degenerate audit is sample-row based. A flagged row can mean either:
 - remaining constant findings in `reports/degenerate_series_audit.tsv`: `0`
 - remaining globally constant manifest series: `0`
 - sparse-binary cases remaining: `5` rows, out of scope for this pass
+- legacy `gbif_occurrence` and `gbif_occurrence_large` constant findings are no
+  longer current accepted-recipe issues; both recipes were superseded by
+  `gbif_occurrence_2024_coordinate_sample`
 
 Acceptance impact across constant cleanup:
 

@@ -19,7 +19,6 @@ gutendex_books	below_floor	192	512	6	32	64	0	0	0	1	none	aggregate_floor,median_s
 library_of_congress_items	below_floor	232	928	4	44	220	0	0	0	1	none	aggregate_floor,median_sample_floor
 openbrewerydb_breweries	below_floor	246	1640	3	82	656	0	0	0	1	none	aggregate_floor,median_sample_floor
 anilist_media	below_floor	295	837	6	49	147	0	0	0	1	none	aggregate_floor,median_sample_floor
-gbif_occurrence	below_floor	298	1984	3	99	792	0	0	0	1	none	aggregate_floor,median_sample_floor
 nuget_search	below_floor	300	1200	3	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
 osf_preprints	below_floor	300	1200	3	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
 weathergov_stations	below_floor	300	2000	3	100	800	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -87,7 +86,6 @@ doaj_articles	below_floor	700	1300	7	100	200	0	0	0	1	none	aggregate_floor,median
 launchlibrary_upcoming	below_floor	700	1800	7	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
 marine_regions_gazetteer	below_floor	758	5264	8	93.5	736	0	0	0	1	none	aggregate_floor,median_sample_floor
 gwas_catalog_studies	below_floor	800	2200	8	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
-gbif_occurrence_large	below_floor	899	5099	3	300	2400	0	0	0	1	none	aggregate_floor,median_sample_floor
 arxiv_ai_recent	below_floor	900	2300	9	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
 geoboundaries_all_adm0	below_floor	920	3220	4	230	920	0	0	0	1	none	aggregate_floor,median_sample_floor
 eia_petroleum_prices	below_floor	988	3952	2	494	1976	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -230,6 +228,7 @@ open_meteo_hourly_temperature	ok	87600	350400	5	17520	70080	0	0	0	1	none	none
 open_meteo_hourly_vapour_pressure_deficit	ok	87600	350400	5	17520	70080	0	0	0	1	none	none
 open_meteo_hourly_wind	ok	87600	350400	5	17520	70080	0	0	0	1	none	none
 cran_packages	ok	95504	191008	4	23876	47752	0	0	0	1	none	none
+gbif_occurrence_2024_coordinate_sample	ok	95952	527736	8	11994	47976	0	0	0	1	none	none
 kegg_hsa_genes	ok	97008	315276	4	24252	97008	0	0	0	1	none	none
 noaa_ghcn_daily_wesd_by_station	ok	102494	204988	24	5845	11690	0	0	0	1	none	none
 worldclim_tavg_10m	ok	103680	414720	6	17280	69120	0	0	0	1	none	none

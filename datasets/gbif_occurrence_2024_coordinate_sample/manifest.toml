@@ -1,0 +1,218 @@
+manifest_version = 1
+dataset_id = "gbif_occurrence_2024_coordinate_sample"
+name = "GBIF Occurrence 2024 Coordinate Sample"
+description = "Bounded GBIF occurrence coordinate sample from January 2024."
+homepage = "https://www.gbif.org/developer/occurrence"
+
+[license]
+name = "GBIF API Terms"
+spdx = "CC-BY-4.0"
+url = "https://www.gbif.org/terms"
+citation = "GBIF.org occurrence API."
+notes = "GBIF occurrence records carry source dataset licenses; this recipe uses public API metadata and cites GBIF as source."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public biodiversity occurrence metadata from GBIF."
+usage_notes = "Numeric occurrence table columns for compression training."
+
+[[origins]]
+id = "gbif_occurrence_api"
+name = "GBIF Occurrence API"
+url = "https://api.gbif.org/v1/occurrence/search"
+type = "api"
+
+[[resources]]
+id = "gbif_occurrence_2024_january_pages"
+origin = "gbif_occurrence_api"
+url = "https://api.gbif.org/v1/occurrence/search?hasCoordinate=true&occurrenceStatus=PRESENT&eventDate=2024-01-01,2024-01-31"
+type = "json_pages"
+version = "2024-01"
+access = "First 40 GBIF occurrence API pages for a fixed event-date window."
+size_bytes = 74358810
+sha256 = ""
+local_path = "downloads/gbif_occurrence_2024_coordinate_sample/"
+notes = "Download script pages by fixed offset/limit plan and validates occurrence results. This is a bounded sample, not the complete January 2024 GBIF occurrence window."
+
+[local_paths]
+downloads = "downloads/gbif_occurrence_2024_coordinate_sample/"
+filtered = "filtered/gbif_occurrence_2024_coordinate_sample/"
+index = "index/gbif_occurrence_2024_coordinate_sample/"
+samples = "samples/gbif_occurrence_2024_coordinate_sample/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/gbif_occurrence_2024_coordinate_sample/samples.jsonl"
+summary = "Download a fixed bounded GBIF occurrence search page sample, deduplicate by occurrence key, and emit selected variable numeric columns as little-endian arrays."
+deterministic_notes = "Fixed hasCoordinate/status/date filters, fixed 40-page offset plan, GBIF API page size 300, deduplication by GBIF occurrence key, and deterministic sort by key."
+
+[[series]]
+id = "gbif_occurrence_key_u64"
+role = "primary"
+description = "GBIF occurrence keys."
+semantic_meaning = "GBIF occurrence `key` for each retained occurrence record."
+representation_class = "native_numeric"
+source_resources = ["gbif_occurrence_2024_january_pages"]
+filtering = "Keep records with valid occurrence key, taxon hierarchy keys, latitude, and longitude."
+missing_value_policy = "Records missing required numeric fields are dropped."
+conversion = "Store GBIF occurrence key as unsigned 64-bit little-endian integer."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "gbif_occurrence_table_column"
+sample_rank = 1
+sample_axes = ["occurrence"]
+sample_count = 1
+total_size_bytes = 95952
+output_path = "samples/gbif_occurrence_2024_coordinate_sample/gbif_occurrence_key_u64/"
+
+[[series]]
+id = "gbif_taxon_key_u32"
+role = "primary"
+description = "GBIF taxon keys."
+semantic_meaning = "GBIF `taxonKey` for each retained occurrence record."
+representation_class = "native_numeric"
+source_resources = ["gbif_occurrence_2024_january_pages"]
+filtering = "Keep records with valid occurrence key, taxon hierarchy keys, latitude, and longitude."
+missing_value_policy = "Records missing required numeric fields are dropped."
+conversion = "Store taxonKey as unsigned 32-bit little-endian integer."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "gbif_occurrence_table_column"
+sample_rank = 1
+sample_axes = ["occurrence"]
+sample_count = 1
+total_size_bytes = 47976
+output_path = "samples/gbif_occurrence_2024_coordinate_sample/gbif_taxon_key_u32/"
+
+[[series]]
+id = "gbif_kingdom_key_u32"
+role = "primary"
+description = "GBIF kingdom keys."
+semantic_meaning = "GBIF `kingdomKey` for each retained occurrence record."
+representation_class = "native_numeric"
+source_resources = ["gbif_occurrence_2024_january_pages"]
+filtering = "Keep records with valid occurrence key, taxon hierarchy keys, latitude, and longitude."
+missing_value_policy = "Records missing required numeric fields are dropped."
+conversion = "Store kingdomKey as unsigned 32-bit little-endian integer."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "gbif_occurrence_table_column"
+sample_rank = 1
+sample_axes = ["occurrence"]
+sample_count = 1
+total_size_bytes = 47976
+output_path = "samples/gbif_occurrence_2024_coordinate_sample/gbif_kingdom_key_u32/"
+
+[[series]]
+id = "gbif_phylum_key_u32"
+role = "primary"
+description = "GBIF phylum keys."
+semantic_meaning = "GBIF `phylumKey` for each retained occurrence record."
+representation_class = "native_numeric"
+source_resources = ["gbif_occurrence_2024_january_pages"]
+filtering = "Keep records with valid occurrence key, taxon hierarchy keys, latitude, and longitude."
+missing_value_policy = "Records missing required numeric fields are dropped."
+conversion = "Store phylumKey as unsigned 32-bit little-endian integer."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "gbif_occurrence_table_column"
+sample_rank = 1
+sample_axes = ["occurrence"]
+sample_count = 1
+total_size_bytes = 47976
+output_path = "samples/gbif_occurrence_2024_coordinate_sample/gbif_phylum_key_u32/"
+
+[[series]]
+id = "gbif_class_key_u32"
+role = "primary"
+description = "GBIF class keys."
+semantic_meaning = "GBIF `classKey` for each retained occurrence record."
+representation_class = "native_numeric"
+source_resources = ["gbif_occurrence_2024_january_pages"]
+filtering = "Keep records with valid occurrence key, taxon hierarchy keys, latitude, and longitude."
+missing_value_policy = "Records missing required numeric fields are dropped."
+conversion = "Store classKey as unsigned 32-bit little-endian integer."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "gbif_occurrence_table_column"
+sample_rank = 1
+sample_axes = ["occurrence"]
+sample_count = 1
+total_size_bytes = 47976
+output_path = "samples/gbif_occurrence_2024_coordinate_sample/gbif_class_key_u32/"
+
+[[series]]
+id = "gbif_order_key_u32"
+role = "primary"
+description = "GBIF order keys."
+semantic_meaning = "GBIF `orderKey` for each retained occurrence record."
+representation_class = "native_numeric"
+source_resources = ["gbif_occurrence_2024_january_pages"]
+filtering = "Keep records with valid occurrence key, taxon hierarchy keys, latitude, and longitude."
+missing_value_policy = "Records missing required numeric fields are dropped."
+conversion = "Store orderKey as unsigned 32-bit little-endian integer."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "gbif_occurrence_table_column"
+sample_rank = 1
+sample_axes = ["occurrence"]
+sample_count = 1
+total_size_bytes = 47976
+output_path = "samples/gbif_occurrence_2024_coordinate_sample/gbif_order_key_u32/"
+
+[[series]]
+id = "gbif_decimal_latitude_f64"
+role = "primary"
+description = "GBIF decimal latitudes."
+semantic_meaning = "Decimal latitude for each retained coordinate-bearing occurrence record."
+representation_class = "native_numeric"
+source_resources = ["gbif_occurrence_2024_january_pages"]
+filtering = "Keep records with valid occurrence key, taxon hierarchy keys, latitude, and longitude."
+missing_value_policy = "Records missing required numeric fields are dropped."
+conversion = "Store decimalLatitude as 64-bit little-endian float."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "gbif_occurrence_table_column"
+sample_rank = 1
+sample_axes = ["occurrence"]
+sample_count = 1
+total_size_bytes = 95952
+output_path = "samples/gbif_occurrence_2024_coordinate_sample/gbif_decimal_latitude_f64/"
+
+[[series]]
+id = "gbif_decimal_longitude_f64"
+role = "primary"
+description = "GBIF decimal longitudes."
+semantic_meaning = "Decimal longitude for each retained coordinate-bearing occurrence record."
+representation_class = "native_numeric"
+source_resources = ["gbif_occurrence_2024_january_pages"]
+filtering = "Keep records with valid occurrence key, taxon hierarchy keys, latitude, and longitude."
+missing_value_policy = "Records missing required numeric fields are dropped."
+conversion = "Store decimalLongitude as 64-bit little-endian float."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "gbif_occurrence_table_column"
+sample_rank = 1
+sample_axes = ["occurrence"]
+sample_count = 1
+total_size_bytes = 95952
+output_path = "samples/gbif_occurrence_2024_coordinate_sample/gbif_decimal_longitude_f64/"

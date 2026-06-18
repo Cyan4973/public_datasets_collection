@@ -18,6 +18,8 @@ MIN_PRIMARY_VALUES = 10_000
 MIN_PRIMARY_BYTES = 100 * 1024
 MIN_MEDIAN_VALUES = 1_000
 MAX_PRIMARY_BYTES = 1_000_000_000
+CITIBIKE_FULL_YEAR_SOFT_PRIMARY_BYTES = 1_000_000_000
+CITIBIKE_FULL_YEAR_MAX_PRIMARY_BYTES = 2_000_000_000
 
 SEC_FSD_10Y_QUARTERS = [
     f"{year}q{quarter}"
@@ -52,6 +54,11 @@ SEC_FSD_TAGS = {
     ],
 }
 
+CITIBIKE_2024_ARCHIVES = [
+    f"2024{month:02d}-citibike-tripdata.zip"
+    for month in range(1, 13)
+]
+
 
 def snake_tag(text: str) -> str:
     out = []
@@ -82,9 +89,12 @@ def sec_fsd_series_map() -> dict[str, tuple[str, int, str, int]]:
 
 
 DATASETS = {
-    "citibike_2024_01_trip_geocoords_f64": {
+    "citibike_2024_trip_geocoords_f64": {
         "kind": "citibike",
-        "geometry": "trip_table_column",
+        "geometry": "trip_month_table_column",
+        "expected_archives": CITIBIKE_2024_ARCHIVES,
+        "soft_primary_bytes": CITIBIKE_FULL_YEAR_SOFT_PRIMARY_BYTES,
+        "max_primary_bytes": CITIBIKE_FULL_YEAR_MAX_PRIMARY_BYTES,
         "series": {
             "start_latitude_f64": ("float", 64, "d", 8),
             "start_longitude_f64": ("float", 64, "d", 8),
@@ -255,7 +265,18 @@ def iter_zip_csv(zip_path: Path):
 
 
 def build_citibike(dataset_id: str, ps: dict[str, Path], cfg: dict) -> dict:
-    archives = sorted(ps["downloads"].glob("*.zip"))
+    archives_by_name = {path.name: path for path in ps["downloads"].glob("*.zip")}
+    expected_archives = cfg.get("expected_archives")
+    if expected_archives:
+        missing = [name for name in expected_archives if name not in archives_by_name]
+        unexpected = sorted(set(archives_by_name) - set(expected_archives))
+        if missing:
+            raise SystemExit(f"missing Citi Bike zip files under {ps['downloads']}: {missing}")
+        if unexpected:
+            raise SystemExit(f"unexpected Citi Bike zip files under {ps['downloads']}: {unexpected}")
+        archives = [archives_by_name[name] for name in expected_archives]
+    else:
+        archives = sorted(archives_by_name.values())
     if not archives:
         raise SystemExit(f"missing Citi Bike zip under {ps['downloads']}")
     series_map = {
@@ -270,19 +291,56 @@ def build_citibike(dataset_id: str, ps: dict[str, Path], cfg: dict) -> dict:
     for archive in archives:
         for member, reader in iter_zip_csv(archive):
             arrays = {sid: array("d") for sid in series_map}
+            member_total_rows = member_kept_rows = member_skipped_rows = 0
+            header = reader.fieldnames or []
+            absent = [col for col in series_map.values() if col not in header]
+            if absent:
+                raise SystemExit(f"{archive}:{member}: missing Citi Bike columns {absent}")
             for record in reader:
                 total_rows += 1
+                member_total_rows += 1
                 parsed = {sid: parse_float(record.get(col, "")) for sid, col in series_map.items()}
                 if any(value is None for value in parsed.values()):
                     skipped_rows += 1
+                    member_skipped_rows += 1
+                    continue
+                if not (
+                    -90.0 <= parsed["start_latitude_f64"] <= 90.0
+                    and -90.0 <= parsed["end_latitude_f64"] <= 90.0
+                    and -180.0 <= parsed["start_longitude_f64"] <= 180.0
+                    and -180.0 <= parsed["end_longitude_f64"] <= 180.0
+                ):
+                    skipped_rows += 1
+                    member_skipped_rows += 1
                     continue
                 for sid, value in parsed.items():
                     arrays[sid].append(float(value))
                 kept_rows += 1
+                member_kept_rows += 1
             for sid, values in arrays.items():
                 kind, width, _code, elem = cfg["series"][sid]
-                add_sample(ps, dataset_id, rows, sid, kind, width, elem, values, member, cfg["geometry"])
-            resource_stats.append({"archive": archive.name, "member": member, "kept_rows": kept_rows, "total_rows": total_rows})
+                add_sample(
+                    ps,
+                    dataset_id,
+                    rows,
+                    sid,
+                    kind,
+                    width,
+                    elem,
+                    values,
+                    member,
+                    cfg["geometry"],
+                    {"source_archive": archive.name},
+                )
+            resource_stats.append(
+                {
+                    "archive": archive.name,
+                    "member": member,
+                    "kept_rows": member_kept_rows,
+                    "skipped_rows": member_skipped_rows,
+                    "total_rows": member_total_rows,
+                }
+            )
     return {
         "dataset_id": dataset_id,
         "source_bytes": sum(p.stat().st_size for p in archives),
@@ -478,7 +536,7 @@ BUILDERS = {
 }
 
 
-def summarize_and_write(dataset_id: str, ps: dict[str, Path], stats: dict) -> None:
+def summarize_and_write(dataset_id: str, ps: dict[str, Path], cfg: dict, stats: dict) -> None:
     rows = stats.pop("sample_rows")
     if not rows:
         raise SystemExit("no samples built")
@@ -493,8 +551,10 @@ def summarize_and_write(dataset_id: str, ps: dict[str, Path], stats: dict) -> No
         raise SystemExit(f"primary bytes below floor: {primary_bytes}")
     if median_values < MIN_MEDIAN_VALUES:
         raise SystemExit(f"median primary sample values below floor: {median_values}")
-    if primary_bytes > MAX_PRIMARY_BYTES:
-        raise SystemExit(f"primary bytes exceed cap: {primary_bytes}")
+    soft_primary_bytes = int(cfg.get("soft_primary_bytes", MAX_PRIMARY_BYTES))
+    max_primary_bytes = int(cfg.get("max_primary_bytes", MAX_PRIMARY_BYTES))
+    if primary_bytes > max_primary_bytes:
+        raise SystemExit(f"primary bytes exceed hard cap: {primary_bytes} > {max_primary_bytes}")
 
     stats.update(
         {
@@ -504,6 +564,9 @@ def summarize_and_write(dataset_id: str, ps: dict[str, Path], stats: dict) -> No
             "median_primary_values": median_values,
             "min_primary_values": min(counts),
             "max_primary_values": max(counts),
+            "soft_primary_bytes": soft_primary_bytes,
+            "max_primary_bytes": max_primary_bytes,
+            "exceeds_soft_primary_bytes": primary_bytes > soft_primary_bytes,
         }
     )
     (ps["index"] / "samples.jsonl").write_text(
@@ -515,6 +578,8 @@ def summarize_and_write(dataset_id: str, ps: dict[str, Path], stats: dict) -> No
         f"built_samples={len(rows)} primary_values={primary_values} "
         f"primary_bytes={primary_bytes} median_values={median_values}"
     )
+    if primary_bytes > soft_primary_bytes:
+        print(f"warning_primary_bytes_exceed_soft_limit={primary_bytes}>{soft_primary_bytes}")
 
 
 def build(dataset_id: str, repo_root: Path, data_dir: str) -> None:
@@ -524,7 +589,7 @@ def build(dataset_id: str, repo_root: Path, data_dir: str) -> None:
     ps = paths(repo_root, data_dir, dataset_id)
     reset_output(ps)
     stats = BUILDERS[cfg["kind"]](dataset_id, ps, cfg)
-    summarize_and_write(dataset_id, ps, stats)
+    summarize_and_write(dataset_id, ps, cfg, stats)
 
 
 def decode_prefix(path: Path, code: str, count: int):
@@ -591,13 +656,17 @@ def verify(dataset_id: str, repo_root: Path, data_dir: str) -> None:
         raise SystemExit(f"primary bytes below floor: {primary_bytes}")
     if median_values < MIN_MEDIAN_VALUES:
         raise SystemExit(f"median primary sample values below floor: {median_values}")
-    if primary_bytes > MAX_PRIMARY_BYTES:
-        raise SystemExit(f"primary bytes exceed cap: {primary_bytes}")
+    soft_primary_bytes = int(cfg.get("soft_primary_bytes", MAX_PRIMARY_BYTES))
+    max_primary_bytes = int(cfg.get("max_primary_bytes", MAX_PRIMARY_BYTES))
+    if primary_bytes > max_primary_bytes:
+        raise SystemExit(f"primary bytes exceed hard cap: {primary_bytes} > {max_primary_bytes}")
     print(
         f"verified_samples={len(rows)} primary_values={primary_values} "
         f"primary_bytes={primary_bytes} median_values={median_values} "
         f"source_bytes={stats.get('source_bytes', 0)}"
     )
+    if primary_bytes > soft_primary_bytes:
+        print(f"warning_primary_bytes_exceed_soft_limit={primary_bytes}>{soft_primary_bytes}")
 
 
 def main() -> int:

@@ -3,7 +3,7 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 DATA_DIR="${DATA_DIR:-.data}"
-DATASET_ID="citibike_2024_01_trip_geocoords_f64"
+DATASET_ID="citibike_2024_trip_geocoords_f64"
 LOG_DIR="$REPO_ROOT/$DATA_DIR/logs/$DATASET_ID"
 mkdir -p "$LOG_DIR"
 

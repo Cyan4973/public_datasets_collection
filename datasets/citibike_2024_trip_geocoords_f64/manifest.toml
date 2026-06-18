@@ -1,0 +1,134 @@
+manifest_version = 1
+dataset_id = "citibike_2024_trip_geocoords_f64"
+name = "Citi Bike 2024 Trip Geocoordinates"
+description = "Full-year 2024 Citi Bike tripdata native trip-level start/end latitude and longitude streams."
+homepage = "https://citibikenyc.com/system-data"
+
+[license]
+name = "LicenseRef-Citi-Bike-System-Data"
+spdx = "LicenseRef-Citi-Bike-System-Data"
+url = "https://citibikenyc.com/system-data"
+citation = "Citi Bike NYC system data tripdata archives for January through December 2024."
+notes = "Same public source/license scope as the existing accepted Citi Bike recipes."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official public Citi Bike tripdata ZIP archives only."
+usage_notes = "Trip-level public operational mobility data."
+
+[[origins]]
+id = "citibike"
+name = "Citi Bike NYC System Data"
+url = "https://citibikenyc.com/system-data"
+type = "data_portal"
+
+[[resources]]
+id = "monthly_2024_zips"
+origin = "citibike"
+url = "https://s3.amazonaws.com/tripdata/{YYYYMM}-citibike-tripdata.zip"
+type = "zip_archive_set"
+version = "2024"
+access = "Twelve exact monthly archives, 202401 through 202412, from the official public tripdata bucket."
+size_bytes = 8660856550
+sha256 = ""
+local_path = "downloads/citibike_2024_trip_geocoords_f64/"
+notes = "download.sh writes download_inventory.json with per-archive byte counts, SHA-256 hashes, and CSV member counts after local acquisition."
+
+[local_paths]
+downloads = "downloads/citibike_2024_trip_geocoords_f64/"
+filtered = "filtered/citibike_2024_trip_geocoords_f64/"
+index = "index/citibike_2024_trip_geocoords_f64/"
+samples = "samples/citibike_2024_trip_geocoords_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/citibike_2024_trip_geocoords_f64/samples.jsonl"
+summary = "Validate the full 2024 Citi Bike monthly ZIP set and emit native start/end latitude and longitude columns as little-endian float64 arrays."
+deterministic_notes = "Fixed archive names, official S3 URLs, CSV member order, source row order, fixed column names, per-member sample boundaries, validation of the complete expected archive set, 1 GB soft primary-output warning, and 2 GB hard guard."
+
+[[series]]
+id = "start_latitude_f64"
+role = "primary"
+description = "Trip start latitude."
+semantic_meaning = "Native start_lat field from Citi Bike trip rows."
+representation_class = "native_numeric"
+source_resources = ["monthly_2024_zips"]
+filtering = "Keep rows with all four geocoordinate fields parseable as finite floats within valid latitude/longitude ranges."
+missing_value_policy = "Rows missing any start/end latitude/longitude field are dropped."
+conversion = "Parse decimal text as IEEE-754 float64 and write little-endian arrays in source row order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "trip_month_table_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 50
+total_size_bytes = 353326784
+output_path = "samples/citibike_2024_trip_geocoords_f64/start_latitude_f64/"
+
+[[series]]
+id = "start_longitude_f64"
+role = "primary"
+description = "Trip start longitude."
+semantic_meaning = "Native start_lng field from Citi Bike trip rows."
+representation_class = "native_numeric"
+source_resources = ["monthly_2024_zips"]
+filtering = "Keep rows with all four geocoordinate fields parseable as finite floats within valid latitude/longitude ranges."
+missing_value_policy = "Rows missing any start/end latitude/longitude field are dropped."
+conversion = "Parse decimal text as IEEE-754 float64 and write little-endian arrays in source row order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "trip_month_table_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 50
+total_size_bytes = 353326784
+output_path = "samples/citibike_2024_trip_geocoords_f64/start_longitude_f64/"
+
+[[series]]
+id = "end_latitude_f64"
+role = "primary"
+description = "Trip end latitude."
+semantic_meaning = "Native end_lat field from Citi Bike trip rows."
+representation_class = "native_numeric"
+source_resources = ["monthly_2024_zips"]
+filtering = "Keep rows with all four geocoordinate fields parseable as finite floats within valid latitude/longitude ranges."
+missing_value_policy = "Rows missing any start/end latitude/longitude field are dropped."
+conversion = "Parse decimal text as IEEE-754 float64 and write little-endian arrays in source row order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "trip_month_table_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 50
+total_size_bytes = 353326784
+output_path = "samples/citibike_2024_trip_geocoords_f64/end_latitude_f64/"
+
+[[series]]
+id = "end_longitude_f64"
+role = "primary"
+description = "Trip end longitude."
+semantic_meaning = "Native end_lng field from Citi Bike trip rows."
+representation_class = "native_numeric"
+source_resources = ["monthly_2024_zips"]
+filtering = "Keep rows with all four geocoordinate fields parseable as finite floats within valid latitude/longitude ranges."
+missing_value_policy = "Rows missing any start/end latitude/longitude field are dropped."
+conversion = "Parse decimal text as IEEE-754 float64 and write little-endian arrays in source row order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "trip_month_table_column"
+sample_rank = 1
+sample_axes = ["row"]
+sample_count = 50
+total_size_bytes = 353326784
+output_path = "samples/citibike_2024_trip_geocoords_f64/end_longitude_f64/"

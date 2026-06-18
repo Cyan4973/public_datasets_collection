@@ -10,14 +10,14 @@ the upstream source is useless. The question is whether the current recipe can b
 extended into one coherent material without violating the protocol.
 
 Initial count before this removal pass: `41`
-Current pending count: `22`
+Current pending count: `21`
 
 ## Summary
 
 - repairable by straightforward pagination, cursoring, or bounded time windows: `23`
 - repairable only as a redesign/replacement because current query is arbitrary, ranked, or too narrow: `12`
 - removed or superseded so far: `11`
-- remaining repairable by straightforward pagination, cursoring, or bounded time windows: `10`
+- remaining repairable by straightforward pagination, cursoring, or bounded time windows: `9`
 - remaining redesign/replacement candidates because current query is arbitrary, ranked, or too narrow: `12`
 
 ## Removed In First Pass
@@ -45,6 +45,7 @@ Current pending count: `22`
 - `gbif_occurrence`: replaced by `gbif_occurrence_2024_coordinate_sample`, a bounded January 2024 GBIF coordinate-bearing occurrence sample; now passes the floor with 95,952 primary values and 527,736 primary bytes.
 - `gutendex_books`: replaced by `gutendex_catalog_books`, the full Gutendex catalog in ascending order; now passes the floor with 203,883 primary values and 565,180 primary bytes.
 - `library_of_congress_items`: extended to a bounded 15,000-record LOC item result prefix; now passes the floor with 66,380 primary values and 264,316 primary bytes.
+- `osf_preprints`: extended to a bounded 20,000-record OSF preprint corpus; now passes the floor with 59,997 primary values and 239,988 primary bytes.
 
 ## Per-Recipe Assessment
 
@@ -53,7 +54,6 @@ Current pending count: `22`
 | `openbrewerydb_breweries` | Open Brewery DB first page, 3 series, 246 values | Page through brewery records. | Repairable by pagination, but numeric payload is weak. |
 | `anilist_media` | AniList popular anime first page, 6 series, 295 values | GraphQL supports paging, but current popularity ranking is a moving ranked feed. | Redesign or remove; do not keep as a shallow top list. |
 | `nuget_search` | NuGet search for `data`, 3 series, 300 values | Search supports paging, but query term is arbitrary; better source is a package catalog or curated broad query. | Redesign before keeping. |
-| `osf_preprints` | OSF preprints first page, 3 timestamp series, 300 values | API pagination can widen to a stable preprint corpus. | Repairable by pagination. |
 | `weathergov_stations` | Weather.gov station listing first page, 3 series, 300 values | Station endpoint is paginated. | Repairable by pagination; review primary vs auxiliary coordinate semantics. |
 | `musicbrainz_recordings` | MusicBrainz recording search for `love`, 4 series, 382 values | Query is arbitrary; MusicBrainz search paging exists but a keyword search is weak material. | Redesign or remove. |
 | `cratesio_crates` | crates.io search for `data`, 4 series, 400 values | Search paging exists, but query is arbitrary. | Redesign as broader crates catalog or remove. |
@@ -76,6 +76,6 @@ Current pending count: `22`
 ## Recommended Order
 
 1. Repair remaining high-confidence pageable/time-windowed sources such as
-   `osf_preprints`, `weathergov_stations`, and `inaturalist_observations`.
+   `weathergov_stations` and `inaturalist_observations`.
 2. Revisit medium-confidence catalog/search recipes only if the replacement
    scope can be made explicit and homogeneous.

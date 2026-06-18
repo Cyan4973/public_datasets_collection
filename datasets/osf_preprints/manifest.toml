@@ -1,7 +1,31 @@
 manifest_version = 1
 dataset_id = "osf_preprints"
-name = "OSF Preprints Snapshot"
-description = "Pinned OSF preprints page with timestamp and publication flags."
+name = "OSF Preprints Timestamp Corpus"
+description = "Bounded paginated OSF preprint metadata corpus with native lifecycle timestamp fields."
+
+[license]
+name = "OSF API Terms"
+spdx = "LicenseRef-OSF-API"
+url = "https://developer.osf.io/"
+notes = "Recipe uses public OSF preprint metadata exposed by the OSF JSON:API. Selected output contains only numeric timestamp metadata."
+
+[[origins]]
+id = "osf_preprints_api"
+name = "OSF Preprints API"
+url = "https://api.osf.io/v2/preprints/"
+type = "api"
+
+[[resources]]
+id = "osf_preprints_pages"
+origin = "osf_preprints_api"
+url = "https://api.osf.io/v2/preprints/?page[size]={page_size}"
+type = "json_api_pages"
+version = "Fixed bounded page traversal; default target 20,000 records with page size 100."
+access = "Public HTTPS JSON endpoint."
+size_bytes = 101963776
+sha256 = ""
+local_path = "downloads/osf_preprints/osf_preprints_page_*.json"
+notes = "Validated local run downloaded 200 pages, 20,000 source records, and 101,963,776 source bytes. build.sh skipped one duplicate record and retained 19,999 aligned timestamp records."
 
 [local_paths]
 downloads = "downloads/osf_preprints/"
@@ -14,3 +38,68 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/osf_preprints/samples.jsonl"
+summary = "Download a bounded paginated OSF preprint corpus, then emit one uint32 Unix-timestamp sample per selected lifecycle timestamp field."
+deterministic_notes = "The endpoint and page size are fixed; source result ordering is preserved by following API next links until the target record count or endpoint exhaustion."
+
+[[series]]
+id = "osf_created_unix_u32"
+role = "primary"
+description = "OSF preprint creation timestamp."
+semantic_meaning = "Unix timestamp parsed from the OSF preprint attributes.date_created field."
+representation_class = "native_numeric"
+source_resources = ["osf_preprints_pages"]
+filtering = "Keep records where created, modified, and published timestamps are all present and parseable."
+missing_value_policy = "Records missing any selected timestamp are dropped as a record unit."
+conversion = "Parse ISO timestamp and store as unsigned 32-bit little-endian seconds."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "osf_preprint_record_timestamp_field"
+sample_rank = 1
+sample_axes = ["preprint_record"]
+sample_count = 1
+total_size_bytes = 79996
+output_path = "samples/osf_preprints/osf_created_unix_u32/"
+
+[[series]]
+id = "osf_modified_unix_u32"
+role = "primary"
+description = "OSF preprint modification timestamp."
+semantic_meaning = "Unix timestamp parsed from the OSF preprint attributes.date_modified field."
+representation_class = "native_numeric"
+source_resources = ["osf_preprints_pages"]
+filtering = "Keep records where created, modified, and published timestamps are all present and parseable."
+missing_value_policy = "Records missing any selected timestamp are dropped as a record unit."
+conversion = "Parse ISO timestamp and store as unsigned 32-bit little-endian seconds."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "osf_preprint_record_timestamp_field"
+sample_rank = 1
+sample_axes = ["preprint_record"]
+sample_count = 1
+total_size_bytes = 79996
+output_path = "samples/osf_preprints/osf_modified_unix_u32/"
+
+[[series]]
+id = "osf_published_unix_u32"
+role = "primary"
+description = "OSF preprint publication timestamp."
+semantic_meaning = "Unix timestamp parsed from the OSF preprint attributes.date_published field."
+representation_class = "native_numeric"
+source_resources = ["osf_preprints_pages"]
+filtering = "Keep records where created, modified, and published timestamps are all present and parseable."
+missing_value_policy = "Records missing any selected timestamp are dropped as a record unit."
+conversion = "Parse ISO timestamp and store as unsigned 32-bit little-endian seconds."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "osf_preprint_record_timestamp_field"
+sample_rank = 1
+sample_axes = ["preprint_record"]
+sample_count = 1
+total_size_bytes = 79996
+output_path = "samples/osf_preprints/osf_published_unix_u32/"

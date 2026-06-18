@@ -3,8 +3,8 @@
 Current acceptance floor: `10,000` primary values or `100 KB` primary sample bytes, plus `1,000` minimum median primary sample values.
 
 - source of truth: `reports/accepted_recipe_audit.tsv`
-- `ok`: `147`
-- `below_floor`: `173`
+- `ok`: `148`
+- `below_floor`: `172`
 - `broken`: `0`
 
 This file is the short operational queue. Detailed policy for family cleanup lives in
@@ -63,6 +63,7 @@ typical primary sample is tiny and which reaches usefulness only by stacking man
 - repair `arxiv_cs_recent`
 - repair `gbif_occurrence`
 - repair `gutendex_books`
+- repair `library_of_congress_items`
 
 ## Family Cleanup Completed
 
@@ -76,7 +77,6 @@ extended by pagination, a bounded time range, or a broader coherent catalog
 scope. Per-recipe assessment lives in
 `reports/tiny_standalone_extension_triage.md`.
 
-- `library_of_congress_items` — values=232, bytes=928, sample_rows=4
 - `openbrewerydb_breweries` — values=246, bytes=1640, sample_rows=3
 - `anilist_media` — values=295, bytes=837, sample_rows=6
 - `nuget_search` — values=300, bytes=1200, sample_rows=3
@@ -101,7 +101,7 @@ scope. Per-recipe assessment lives in
 - `huggingface_datasets` — values=500, bytes=2000, sample_rows=5
 
 Count guide:
-- tiny non-family standalones with `<= 500` values: `23`
+- tiny non-family standalones with `<= 500` values: `22`
 - non-family below-floor recipes with `501-3999` values: `55`
 - non-family below-floor recipes with `>= 4000` values: `24`
 

@@ -1,7 +1,31 @@
 manifest_version = 1
 dataset_id = "library_of_congress_items"
 name = "Library of Congress Items"
-description = "Pinned Library of Congress item search with native record and resource-count fields."
+description = "Bounded Library of Congress item-search catalog metadata with native timestamp, identifier, date, and resource-count fields."
+
+[license]
+name = "Library of Congress public data"
+spdx = "LicenseRef-LOC-Public"
+url = "https://www.loc.gov/legal/"
+notes = "Recipe uses LOC public item-search metadata. Individual catalog records may include rights notes for described works; selected output contains only numeric metadata fields."
+
+[[origins]]
+id = "loc_items"
+name = "Library of Congress item search"
+url = "https://www.loc.gov/items/?fo=json"
+type = "api"
+
+[[resources]]
+id = "loc_items_pages"
+origin = "loc_items"
+url = "https://www.loc.gov/items/?fo=json&c={per_page}&sp={page}"
+type = "json_api_pages"
+version = "Fixed page prefix; default 150 pages of 100 records."
+access = "Public HTTPS JSON endpoint."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/library_of_congress_items/items_page_*.json"
+notes = "download.sh validates every page and writes download_inventory.json. Validated repair uses 150 pages, 15,000 source records, and 75,957,159 source bytes."
 
 [local_paths]
 downloads = "downloads/library_of_congress_items/"
@@ -14,4 +38,110 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/library_of_congress_items/samples.jsonl"
+summary = "Download a bounded prefix of LOC item-search JSON pages, then emit one numeric sample per selected metadata field."
+deterministic_notes = "Fixed endpoint, fixed page count and page size; source result ordering is preserved."
 
+[[series]]
+id = "loc_extract_timestamp_u32"
+role = "primary"
+description = "LOC extract timestamp."
+semantic_meaning = "Unix timestamp parsed from the LOC result extract_timestamp field."
+representation_class = "native_numeric"
+source_resources = ["loc_items_pages"]
+filtering = "Keep parseable timestamps in uint32 range."
+missing_value_policy = "Missing or unparsable timestamps are dropped for this series only."
+conversion = "Parse ISO timestamp and store as unsigned 32-bit little-endian seconds."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "loc_item_result_field"
+sample_rank = 1
+sample_axes = ["catalog_result"]
+sample_count = 1
+total_size_bytes = 60000
+output_path = "samples/library_of_congress_items/loc_extract_timestamp_u32/"
+
+[[series]]
+id = "loc_numeric_shelf_id_u64"
+role = "primary"
+description = "Numeric shelf identifier."
+semantic_meaning = "LOC numeric_shelf_id field where present."
+representation_class = "native_numeric"
+source_resources = ["loc_items_pages"]
+filtering = "Keep parseable unsigned integer shelf identifiers."
+missing_value_policy = "Missing identifiers are dropped for this series only."
+conversion = "Store as unsigned 64-bit little-endian integers."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "loc_item_result_field"
+sample_rank = 1
+sample_axes = ["catalog_result"]
+sample_count = 1
+total_size_bytes = 55408
+output_path = "samples/library_of_congress_items/loc_numeric_shelf_id_u64/"
+
+[[series]]
+id = "loc_resource_files_sum_u32"
+role = "primary"
+description = "Resource file count sum."
+semantic_meaning = "Sum of LOC resource files counts for each item result."
+representation_class = "native_numeric"
+source_resources = ["loc_items_pages"]
+filtering = "Missing per-resource files counts contribute zero; one value is emitted per result."
+missing_value_policy = "Rows without resource file counts emit zero, preserving the source count semantics."
+conversion = "Store as unsigned 32-bit little-endian integers."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "loc_item_result_field"
+sample_rank = 1
+sample_axes = ["catalog_result"]
+sample_count = 1
+total_size_bytes = 60000
+output_path = "samples/library_of_congress_items/loc_resource_files_sum_u32/"
+
+[[series]]
+id = "loc_resource_segments_sum_u32"
+role = "primary"
+description = "Resource segment count sum."
+semantic_meaning = "Sum of LOC resource segments counts for each item result."
+representation_class = "native_numeric"
+source_resources = ["loc_items_pages"]
+filtering = "Missing per-resource segments counts contribute zero; one value is emitted per result."
+missing_value_policy = "Rows without resource segment counts emit zero, preserving the source count semantics."
+conversion = "Store as unsigned 32-bit little-endian integers."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "loc_item_result_field"
+sample_rank = 1
+sample_axes = ["catalog_result"]
+sample_count = 1
+total_size_bytes = 60000
+output_path = "samples/library_of_congress_items/loc_resource_segments_sum_u32/"
+
+[[series]]
+id = "loc_item_date_year_u16"
+role = "primary"
+description = "Item date year."
+semantic_meaning = "First parseable four-digit year from LOC item date fields."
+representation_class = "native_numeric"
+source_resources = ["loc_items_pages"]
+filtering = "Keep years in 0..3000."
+missing_value_policy = "Rows without a parseable year are dropped for this series only."
+conversion = "Store as unsigned 16-bit little-endian integers."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "loc_item_result_field"
+sample_rank = 1
+sample_axes = ["catalog_result"]
+sample_count = 1
+total_size_bytes = 28908
+output_path = "samples/library_of_congress_items/loc_item_date_year_u16/"

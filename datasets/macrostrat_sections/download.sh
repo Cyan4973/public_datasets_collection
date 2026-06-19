@@ -6,7 +6,7 @@ DATA_DIR="${DATA_DIR:-.data}"
 DATASET_ID="macrostrat_sections"
 LOG_DIR="$REPO_ROOT/$DATA_DIR/logs/$DATASET_ID"
 DOWNLOAD_DIR="$REPO_ROOT/$DATA_DIR/downloads/$DATASET_ID"
-STAGING_FILE="$REPO_ROOT/$DATA_DIR/downloads/macrostrat_more_numeric_sources/macrostrat_sections_long.json"
+PROBE_CACHE_FILE="$REPO_ROOT/$DATA_DIR/downloads/macrostrat_more_numeric_sources/macrostrat_sections_long.json"
 mkdir -p "$LOG_DIR" "$DOWNLOAD_DIR"
 
 RUN_TS="$(date +%Y%m%d_%H%M%S)"
@@ -23,9 +23,9 @@ echo "[$(date -Is)] download start dataset=$DATASET_ID"
 
 if [[ -s "$OUT" && "${FORCE_DOWNLOAD:-0}" != "1" ]]; then
   echo "cache_hit path=$OUT"
-elif [[ -s "$STAGING_FILE" && "${FORCE_DOWNLOAD:-0}" != "1" ]]; then
-  cp "$STAGING_FILE" "$OUT"
-  echo "seeded_from_staging path=$STAGING_FILE"
+elif [[ -s "$PROBE_CACHE_FILE" && "${FORCE_DOWNLOAD:-0}" != "1" ]]; then
+  cp "$PROBE_CACHE_FILE" "$OUT"
+  echo "seeded_from_probe_cache path=$PROBE_CACHE_FILE"
 else
   rm -f "$OUT.tmp"
   if ! curl --globoff --fail --location --show-error --retry 4 --retry-delay 3 --retry-all-errors \

@@ -16,3 +16,8 @@ When working autonomously:
 - briefly state what you are changing and keep moving
 - never download datasets yourself; write download scripts for the user to run
 - process dataset contents only after the user confirms local files are present
+
+Before committing:
+- run `python3 tools/check_repo_hygiene.py`
+- run `git diff --cached --check`
+- never force-add ignored paths such as `staging/*` or `.data/*`

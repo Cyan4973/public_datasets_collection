@@ -1,0 +1,229 @@
+manifest_version = 1
+dataset_id = "macrostrat_columns"
+name = "Macrostrat Columns"
+description = "Macrostrat stratigraphic column summary numeric fields from the public columns API."
+
+[license]
+name = "CC BY 4.0"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+
+[[origins]]
+id = "macrostrat_api"
+name = "Macrostrat API"
+url = "https://macrostrat.org/api/columns?response=long"
+type = "api"
+
+[[resources]]
+id = "macrostrat_columns_long_json"
+origin = "macrostrat_api"
+url = "https://macrostrat.org/api/columns?response=long"
+type = "json_api_response"
+access = "Public HTTPS JSON endpoint."
+size_bytes = 5228161
+sha256 = ""
+local_path = "downloads/macrostrat_columns/macrostrat_columns.json"
+notes = "Validated local run used 3,462 column records and 5,228,161 source bytes."
+
+[local_paths]
+downloads = "downloads/macrostrat_columns/"
+filtered = "filtered/macrostrat_columns/"
+index = "index/macrostrat_columns/"
+samples = "samples/macrostrat_columns/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/macrostrat_columns/samples.jsonl"
+summary = "Emit one primary numeric sample per selected Macrostrat column summary field."
+deterministic_notes = "Fixed API endpoint; source order is preserved."
+
+[[series]]
+id = "macrostrat_column_t_age_f32"
+role = "primary"
+description = "Column top age."
+semantic_meaning = "Top geologic age for each Macrostrat column."
+representation_class = "native_numeric"
+source_resources = ["macrostrat_columns_long_json"]
+filtering = "Keep parseable numeric values."
+missing_value_policy = "Missing or unparsable values are dropped for this field only."
+conversion = "Store as little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "macrostrat_column_table_field"
+sample_rank = 1
+sample_axes = ["column"]
+sample_count = 1
+total_size_bytes = 13840
+output_path = "samples/macrostrat_columns/macrostrat_column_t_age_f32/"
+
+[[series]]
+id = "macrostrat_column_b_age_f32"
+role = "primary"
+description = "Column bottom age."
+semantic_meaning = "Bottom geologic age for each Macrostrat column."
+representation_class = "native_numeric"
+source_resources = ["macrostrat_columns_long_json"]
+filtering = "Keep parseable numeric values."
+missing_value_policy = "Missing or unparsable values are dropped for this field only."
+conversion = "Store as little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "macrostrat_column_table_field"
+sample_rank = 1
+sample_axes = ["column"]
+sample_count = 1
+total_size_bytes = 13844
+output_path = "samples/macrostrat_columns/macrostrat_column_b_age_f32/"
+
+[[series]]
+id = "macrostrat_column_area_f32"
+role = "primary"
+description = "Column area."
+semantic_meaning = "Mapped area for each Macrostrat column."
+representation_class = "native_numeric"
+source_resources = ["macrostrat_columns_long_json"]
+filtering = "Keep parseable numeric values."
+missing_value_policy = "Missing or unparsable values are dropped for this field only."
+conversion = "Store as little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "macrostrat_column_table_field"
+sample_rank = 1
+sample_axes = ["column"]
+sample_count = 1
+total_size_bytes = 13848
+output_path = "samples/macrostrat_columns/macrostrat_column_area_f32/"
+
+[[series]]
+id = "macrostrat_column_max_thick_f32"
+role = "primary"
+description = "Column maximum thickness."
+semantic_meaning = "Maximum reported stratigraphic thickness for each Macrostrat column."
+representation_class = "native_numeric"
+source_resources = ["macrostrat_columns_long_json"]
+filtering = "Keep parseable numeric values."
+missing_value_policy = "Missing or unparsable values are dropped for this field only."
+conversion = "Store as little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "macrostrat_column_table_field"
+sample_rank = 1
+sample_axes = ["column"]
+sample_count = 1
+total_size_bytes = 13848
+output_path = "samples/macrostrat_columns/macrostrat_column_max_thick_f32/"
+
+[[series]]
+id = "macrostrat_column_max_min_thick_f32"
+role = "primary"
+description = "Column maximum of minimum thickness."
+semantic_meaning = "Macrostrat max_min_thick field for each column."
+representation_class = "native_numeric"
+source_resources = ["macrostrat_columns_long_json"]
+filtering = "Keep parseable numeric values."
+missing_value_policy = "Missing or unparsable values are dropped for this field only."
+conversion = "Store as little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "macrostrat_column_table_field"
+sample_rank = 1
+sample_axes = ["column"]
+sample_count = 1
+total_size_bytes = 13848
+output_path = "samples/macrostrat_columns/macrostrat_column_max_min_thick_f32/"
+
+[[series]]
+id = "macrostrat_column_min_min_thick_f32"
+role = "primary"
+description = "Column minimum of minimum thickness."
+semantic_meaning = "Macrostrat min_min_thick field for each column."
+representation_class = "native_numeric"
+source_resources = ["macrostrat_columns_long_json"]
+filtering = "Keep parseable numeric values."
+missing_value_policy = "Missing or unparsable values are dropped for this field only."
+conversion = "Store as little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "macrostrat_column_table_field"
+sample_rank = 1
+sample_axes = ["column"]
+sample_count = 1
+total_size_bytes = 13848
+output_path = "samples/macrostrat_columns/macrostrat_column_min_min_thick_f32/"
+
+[[series]]
+id = "macrostrat_column_pbdb_collections_u32"
+role = "primary"
+description = "Column PBDB collection count."
+semantic_meaning = "Number of linked PBDB collections for each Macrostrat column."
+representation_class = "native_numeric"
+source_resources = ["macrostrat_columns_long_json"]
+filtering = "Keep parseable unsigned integer values."
+missing_value_policy = "Missing or unparsable values are dropped for this field only."
+conversion = "Store as little-endian uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "macrostrat_column_table_field"
+sample_rank = 1
+sample_axes = ["column"]
+sample_count = 1
+total_size_bytes = 13848
+output_path = "samples/macrostrat_columns/macrostrat_column_pbdb_collections_u32/"
+
+[[series]]
+id = "macrostrat_column_section_count_u32"
+role = "primary"
+description = "Column section count."
+semantic_meaning = "Number of sections reported for each Macrostrat column."
+representation_class = "native_numeric"
+source_resources = ["macrostrat_columns_long_json"]
+filtering = "Keep parseable unsigned integer values."
+missing_value_policy = "Missing or unparsable values are dropped for this field only."
+conversion = "Store as little-endian uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "macrostrat_column_table_field"
+sample_rank = 1
+sample_axes = ["column"]
+sample_count = 1
+total_size_bytes = 13848
+output_path = "samples/macrostrat_columns/macrostrat_column_section_count_u32/"
+
+[[series]]
+id = "macrostrat_column_unit_count_u32"
+role = "primary"
+description = "Column unit count."
+semantic_meaning = "Number of units reported for each Macrostrat column."
+representation_class = "native_numeric"
+source_resources = ["macrostrat_columns_long_json"]
+filtering = "Keep parseable unsigned integer values."
+missing_value_policy = "Missing or unparsable values are dropped for this field only."
+conversion = "Store as little-endian uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "macrostrat_column_table_field"
+sample_rank = 1
+sample_axes = ["column"]
+sample_count = 1
+total_size_bytes = 13848
+output_path = "samples/macrostrat_columns/macrostrat_column_unit_count_u32/"

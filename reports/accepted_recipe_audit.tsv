@@ -193,6 +193,7 @@ nasa_eonet_events	ok	20115	73755	3	6705	13410	0	0	0	1	none	none
 binance_ticker_24hr	ok	21564	115008	6	3594	14376	0	0	0	1	none	none
 openflights_airports	ok	23094	153960	3	7698	61584	0	0	0	1	none	none
 statsbomb_world_cup_final	ok	26802	44670	9	2978	2978	0	0	0	1	none	none
+macrostrat_columns	ok	31155	124620	9	3462	13848	0	0	0	1	none	none
 usgs_nwis_streamflow_daily	ok	34304	274432	32	1095	8760	0	0	0	1	none	none
 usgs_nwis_specific_conductance_daily	ok	34889	279112	29	1406	11248	0	0	0	1	none	none
 noaa_tides_water_level	ok	37200	141360	5	7440	7440	0	0	0	1	none	none
@@ -208,6 +209,7 @@ osf_preprints	ok	59997	239988	3	19999	79996	0	0	0	1	none	none
 ooni_measurements	ok	60000	240000	3	20000	80000	0	0	0	1	none	none
 usgs_nwis_water_temperature_daily	ok	60459	483672	50	1427.5	11420	0	0	0	1	none	none
 library_of_congress_items	ok	66380	264316	5	15000	60000	0	0	0	1	none	none
+macrostrat_sections	ok	67885	271540	6	11315	45260	0	0	0	1	none	none
 usgs_quakes_month	ok	68900	374024	7	9842	39376	0	0	0	1	none	none
 medrxiv_details	ok	77615	186276	5	15523	31046	15523	62092	1	1	none	none
 uci_wine_quality	ok	77964	623712	24	3248.5	25988	0	0	0	1	none	none
@@ -270,7 +272,7 @@ smithsonian_openaccess_gltf_indices_u16	ok	899964	1799928	3	299988	599976	0	0	0	
 europe_pmc_search	ok	1127748	2631412	6	187958	375916	187958	751832	1	1	none	none
 eeg_physionet	ok	1178880	2357760	30	39200	78400	0	0	0	1	none	none
 census_acs_pums_ca_person_2023_i64	ok	1265252	10122016	4	334276	2674208	0	0	0	1	none	none
-macrostrat_units	ok	1422259	5689036	11	129304	517216	0	0	0	1	none	none
+macrostrat_units	ok	1422089	5688356	11	129262	517048	0	0	0	1	none	none
 noaa_ghcn_daily_snwd_by_station	ok	1725872	3451744	58	28052.5	56105	0	0	0	1	none	none
 gas_sensor_array_drift_uci	ok	1794390	14257750	129	13910	111280	0	0	0	1	none	none
 tokens_bert_gutenberg	ok	2011943	4023886	12	113744.5	227489	0	0	0	1	none	none

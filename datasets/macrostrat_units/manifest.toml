@@ -1,18 +1,29 @@
 manifest_version = 1
 dataset_id = "macrostrat_units"
 name = "Macrostrat Units"
-description = "Numeric stratigraphic unit fields from the public Macrostrat units API."
+description = "Macrostrat stratigraphic unit geology and paleontology numeric fields from the public units API."
 
 [license]
 name = "CC BY 4.0"
 spdx = "CC-BY-4.0"
 url = "https://creativecommons.org/licenses/by/4.0/"
 
+[[origins]]
+id = "macrostrat_api"
+name = "Macrostrat API"
+url = "https://macrostrat.org/api/units?response=long"
+type = "api"
+
 [[resources]]
 id = "macrostrat_units_json"
+origin = "macrostrat_api"
 url = "https://macrostrat.org/api/units?response=long"
-type = "api_response"
+type = "json_api_response"
+access = "Public HTTPS JSON endpoint."
+size_bytes = 404092601
+sha256 = ""
 local_path = "downloads/macrostrat_units/macrostrat_units.json"
+notes = "Validated local source has 129,304 unit records and 404,092,601 source bytes. Legacy ID and coordinate outputs are intentionally removed from this recipe."
 
 [local_paths]
 downloads = "downloads/macrostrat_units/"
@@ -25,91 +36,236 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/macrostrat_units/samples.jsonl"
+summary = "Emit one primary numeric sample per selected Macrostrat unit geology or paleontology field."
+deterministic_notes = "Fixed API endpoint; source order is preserved."
 
 [[series]]
-id = "macrostrat_unit_id"
+id = "macrostrat_unit_t_age_f32"
+role = "primary"
+description = "Unit top age."
+semantic_meaning = "Top geologic age for each Macrostrat unit."
 representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered for that series."
+source_resources = ["macrostrat_units_json"]
+filtering = "Keep parseable numeric values."
+missing_value_policy = "Missing or unparsable values are dropped for this field only."
+conversion = "Store as little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "macrostrat_unit_table_field"
+sample_rank = 1
+sample_axes = ["unit"]
+sample_count = 1
+total_size_bytes = 517044
+output_path = "samples/macrostrat_units/macrostrat_unit_t_age_f32/"
+
+[[series]]
+id = "macrostrat_unit_b_age_f32"
+role = "primary"
+description = "Unit bottom age."
+semantic_meaning = "Bottom geologic age for each Macrostrat unit."
+representation_class = "native_numeric"
+source_resources = ["macrostrat_units_json"]
+filtering = "Keep parseable numeric values."
+missing_value_policy = "Missing or unparsable values are dropped for this field only."
+conversion = "Store as little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "macrostrat_unit_table_field"
+sample_rank = 1
+sample_axes = ["unit"]
+sample_count = 1
+total_size_bytes = 517048
+output_path = "samples/macrostrat_units/macrostrat_unit_b_age_f32/"
+
+[[series]]
+id = "macrostrat_unit_t_interval_age_f32"
+role = "primary"
+description = "Unit top interval age."
+semantic_meaning = "Top interval boundary age associated with each Macrostrat unit."
+representation_class = "native_numeric"
+source_resources = ["macrostrat_units_json"]
+filtering = "Keep parseable numeric values."
+missing_value_policy = "Missing or unparsable values are dropped for this field only."
+conversion = "Store as little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "macrostrat_unit_table_field"
+sample_rank = 1
+sample_axes = ["unit"]
+sample_count = 1
+total_size_bytes = 517044
+output_path = "samples/macrostrat_units/macrostrat_unit_t_interval_age_f32/"
+
+[[series]]
+id = "macrostrat_unit_b_interval_age_f32"
+role = "primary"
+description = "Unit bottom interval age."
+semantic_meaning = "Bottom interval boundary age associated with each Macrostrat unit."
+representation_class = "native_numeric"
+source_resources = ["macrostrat_units_json"]
+filtering = "Keep parseable numeric values."
+missing_value_policy = "Missing or unparsable values are dropped for this field only."
+conversion = "Store as little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "macrostrat_unit_table_field"
+sample_rank = 1
+sample_axes = ["unit"]
+sample_count = 1
+total_size_bytes = 517048
+output_path = "samples/macrostrat_units/macrostrat_unit_b_interval_age_f32/"
+
+[[series]]
+id = "macrostrat_unit_t_interval_position_f32"
+role = "primary"
+description = "Unit top interval position."
+semantic_meaning = "Proportional position of the unit top within its geologic interval."
+representation_class = "native_numeric"
+source_resources = ["macrostrat_units_json"]
+filtering = "Keep parseable numeric values."
+missing_value_policy = "Missing or unparsable values are dropped for this field only."
+conversion = "Store as little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "macrostrat_unit_table_field"
+sample_rank = 1
+sample_axes = ["unit"]
+sample_count = 1
+total_size_bytes = 517044
+output_path = "samples/macrostrat_units/macrostrat_unit_t_interval_position_f32/"
+
+[[series]]
+id = "macrostrat_unit_b_interval_position_f32"
+role = "primary"
+description = "Unit bottom interval position."
+semantic_meaning = "Proportional position of the unit bottom within its geologic interval."
+representation_class = "native_numeric"
+source_resources = ["macrostrat_units_json"]
+filtering = "Keep parseable numeric values."
+missing_value_policy = "Missing or unparsable values are dropped for this field only."
+conversion = "Store as little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "macrostrat_unit_table_field"
+sample_rank = 1
+sample_axes = ["unit"]
+sample_count = 1
+total_size_bytes = 517048
+output_path = "samples/macrostrat_units/macrostrat_unit_b_interval_position_f32/"
+
+[[series]]
+id = "macrostrat_unit_max_thick_f32"
+role = "primary"
+description = "Unit maximum thickness."
+semantic_meaning = "Maximum reported stratigraphic thickness for each Macrostrat unit."
+representation_class = "native_numeric"
+source_resources = ["macrostrat_units_json"]
+filtering = "Keep parseable numeric values."
+missing_value_policy = "Missing or unparsable values are dropped for this field only."
+conversion = "Store as little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "macrostrat_unit_table_field"
+sample_rank = 1
+sample_axes = ["unit"]
+sample_count = 1
+total_size_bytes = 517216
+output_path = "samples/macrostrat_units/macrostrat_unit_max_thick_f32/"
+
+[[series]]
+id = "macrostrat_unit_min_thick_f32"
+role = "primary"
+description = "Unit minimum thickness."
+semantic_meaning = "Minimum reported stratigraphic thickness for each Macrostrat unit."
+representation_class = "native_numeric"
+source_resources = ["macrostrat_units_json"]
+filtering = "Keep parseable numeric values."
+missing_value_policy = "Missing or unparsable values are dropped for this field only."
+conversion = "Store as little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "macrostrat_unit_table_field"
+sample_rank = 1
+sample_axes = ["unit"]
+sample_count = 1
+total_size_bytes = 517216
+output_path = "samples/macrostrat_units/macrostrat_unit_min_thick_f32/"
+
+[[series]]
+id = "macrostrat_unit_column_area_f32"
+role = "primary"
+description = "Unit column area."
+semantic_meaning = "Mapped area of the column associated with each Macrostrat unit."
+representation_class = "native_numeric"
+source_resources = ["macrostrat_units_json"]
+filtering = "Keep parseable numeric values."
+missing_value_policy = "Missing or unparsable values are dropped for this field only."
+conversion = "Store as little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "macrostrat_unit_table_field"
+sample_rank = 1
+sample_axes = ["unit"]
+sample_count = 1
+total_size_bytes = 517216
+output_path = "samples/macrostrat_units/macrostrat_unit_column_area_f32/"
+
+[[series]]
+id = "macrostrat_unit_pbdb_collections_u32"
+role = "primary"
+description = "Unit PBDB collection count."
+semantic_meaning = "Number of linked PBDB collections for each Macrostrat unit."
+representation_class = "native_numeric"
+source_resources = ["macrostrat_units_json"]
+filtering = "Keep parseable unsigned integer values."
+missing_value_policy = "Missing or unparsable values are dropped for this field only."
+conversion = "Store as little-endian uint32."
 numeric_kind = "uint"
 bit_width = 32
 endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "macrostrat_unit_table_field"
+sample_rank = 1
+sample_axes = ["unit"]
+sample_count = 1
+total_size_bytes = 517216
+output_path = "samples/macrostrat_units/macrostrat_unit_pbdb_collections_u32/"
 
 [[series]]
-id = "macrostrat_section_id"
+id = "macrostrat_unit_pbdb_occurrences_u32"
+role = "primary"
+description = "Unit PBDB occurrence count."
+semantic_meaning = "Number of linked PBDB occurrences for each Macrostrat unit."
 representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered for that series."
+source_resources = ["macrostrat_units_json"]
+filtering = "Keep parseable unsigned integer values."
+missing_value_policy = "Missing or unparsable values are dropped for this field only."
+conversion = "Store as little-endian uint32."
 numeric_kind = "uint"
 bit_width = 32
 endianness = "little"
-
-[[series]]
-id = "macrostrat_col_id"
-representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered for that series."
-numeric_kind = "uint"
-bit_width = 32
-endianness = "little"
-
-[[series]]
-id = "macrostrat_t_age"
-representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered for that series."
-numeric_kind = "float"
-bit_width = 32
-endianness = "little"
-
-[[series]]
-id = "macrostrat_b_age"
-representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered for that series."
-numeric_kind = "float"
-bit_width = 32
-endianness = "little"
-
-[[series]]
-id = "macrostrat_max_thick"
-representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered for that series."
-numeric_kind = "float"
-bit_width = 32
-endianness = "little"
-
-[[series]]
-id = "macrostrat_min_thick"
-representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered for that series."
-numeric_kind = "float"
-bit_width = 32
-endianness = "little"
-
-[[series]]
-id = "macrostrat_pbdb_collections"
-representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered for that series."
-numeric_kind = "uint"
-bit_width = 32
-endianness = "little"
-
-[[series]]
-id = "macrostrat_pbdb_occurrences"
-representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered for that series."
-numeric_kind = "uint"
-bit_width = 32
-endianness = "little"
-
-[[series]]
-id = "macrostrat_clat"
-representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered for that series."
-numeric_kind = "float"
-bit_width = 32
-endianness = "little"
-
-[[series]]
-id = "macrostrat_clng"
-representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered for that series."
-numeric_kind = "float"
-bit_width = 32
-endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "macrostrat_unit_table_field"
+sample_rank = 1
+sample_axes = ["unit"]
+sample_count = 1
+total_size_bytes = 517216
+output_path = "samples/macrostrat_units/macrostrat_unit_pbdb_occurrences_u32/"

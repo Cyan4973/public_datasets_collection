@@ -3,7 +3,7 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 DATA_DIR="${DATA_DIR:-.data}"
-DATASET_ID="macrostrat_units"
+DATASET_ID="macrostrat_sections"
 LOG_DIR="$REPO_ROOT/$DATA_DIR/logs/$DATASET_ID"
 DOWNLOAD_DIR="$REPO_ROOT/$DATA_DIR/downloads/$DATASET_ID"
 FILTER_DIR="$REPO_ROOT/$DATA_DIR/filtered/$DATASET_ID"
@@ -36,7 +36,7 @@ filter_dir = Path(os.environ["FILTER_DIR"])
 index_dir = Path(os.environ["INDEX_DIR"])
 samples_dir = Path(os.environ["SAMPLES_DIR"])
 
-src = json.loads((download_dir / "macrostrat_units.json").read_text(encoding="utf-8"))
+src = json.loads((download_dir / "macrostrat_sections.json").read_text(encoding="utf-8"))
 rows_src = src["success"]["data"]
 
 for path in (filter_dir, index_dir, samples_dir):
@@ -45,17 +45,12 @@ for path in (filter_dir, index_dir, samples_dir):
     path.mkdir(parents=True, exist_ok=True)
 
 spec = {
-    "macrostrat_unit_t_age_f32": ("t_age", "float", 32, "f"),
-    "macrostrat_unit_b_age_f32": ("b_age", "float", 32, "f"),
-    "macrostrat_unit_t_interval_age_f32": ("t_int_age", "float", 32, "f"),
-    "macrostrat_unit_b_interval_age_f32": ("b_int_age", "float", 32, "f"),
-    "macrostrat_unit_t_interval_position_f32": ("t_prop", "float", 32, "f"),
-    "macrostrat_unit_b_interval_position_f32": ("b_prop", "float", 32, "f"),
-    "macrostrat_unit_max_thick_f32": ("max_thick", "float", 32, "f"),
-    "macrostrat_unit_min_thick_f32": ("min_thick", "float", 32, "f"),
-    "macrostrat_unit_column_area_f32": ("col_area", "float", 32, "f"),
-    "macrostrat_unit_pbdb_collections_u32": ("pbdb_collections", "uint", 32, "I"),
-    "macrostrat_unit_pbdb_occurrences_u32": ("pbdb_occurrences", "uint", 32, "I"),
+    "macrostrat_section_t_age_f32": ("t_age", "float", 32, "f"),
+    "macrostrat_section_b_age_f32": ("b_age", "float", 32, "f"),
+    "macrostrat_section_area_f32": ("col_area", "float", 32, "f"),
+    "macrostrat_section_max_thick_f32": ("max_thick", "float", 32, "f"),
+    "macrostrat_section_min_thick_f32": ("min_thick", "float", 32, "f"),
+    "macrostrat_section_pbdb_collections_u32": ("pbdb_collections", "uint", 32, "I"),
 }
 values = {series_id: [] for series_id in spec}
 skipped = {series_id: 0 for series_id in spec}
@@ -93,11 +88,11 @@ for series_id, (source_field, kind, bits, code) in spec.items():
             "element_size_bytes": bits // 8,
             "sample_size_bytes": out.stat().st_size,
             "value_count": len(vals),
-            "sample_geometry": "macrostrat_unit_table_field",
+            "sample_geometry": "macrostrat_section_table_field",
             "sample_rank": 1,
             "sample_shape": [len(vals)],
-            "sample_axes": ["unit"],
-            "source_name": "macrostrat_units_response_long",
+            "sample_axes": ["section"],
+            "source_name": "macrostrat_sections_response_long",
         }
     )
 
@@ -107,20 +102,13 @@ stats = {
     "dataset_id": dataset_id,
     "rows_total": len(rows_src),
     "rows_skipped_by_series": skipped,
-    "removed_legacy_outputs": [
-        "macrostrat_unit_id",
-        "macrostrat_section_id",
-        "macrostrat_col_id",
-        "macrostrat_clat",
-        "macrostrat_clng",
-    ],
     "primary_samples": len(sample_rows),
     "primary_values": sum(counts),
     "primary_bytes": sum(sizes),
     "median_primary_values": statistics.median(counts),
     "min_primary_values": min(counts),
     "max_primary_values": max(counts),
-    "source_bytes": (download_dir / "macrostrat_units.json").stat().st_size,
+    "source_bytes": (download_dir / "macrostrat_sections.json").stat().st_size,
 }
 if stats["primary_values"] < 10_000:
     raise SystemExit(f"primary values below floor: {stats['primary_values']}")

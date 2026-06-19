@@ -3,7 +3,7 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 DATA_DIR="${DATA_DIR:-.data}"
-DATASET_ID="macrostrat_units"
+DATASET_ID="macrostrat_sections"
 LOG_DIR="$REPO_ROOT/$DATA_DIR/logs/$DATASET_ID"
 FILTER_DIR="$REPO_ROOT/$DATA_DIR/filtered/$DATASET_ID"
 INDEX_DIR="$REPO_ROOT/$DATA_DIR/index/$DATASET_ID"
@@ -31,23 +31,17 @@ dataset_id = os.environ["DATASET_ID"]
 rows = [json.loads(line) for line in (Path(os.environ["INDEX_DIR"]) / "samples.jsonl").read_text(encoding="utf-8").splitlines() if line.strip()]
 stats = json.loads((Path(os.environ["FILTER_DIR"]) / "ingest_stats.json").read_text(encoding="utf-8"))
 allowed = {
-    "macrostrat_unit_t_age_f32": ("float", 32, 4, "f"),
-    "macrostrat_unit_b_age_f32": ("float", 32, 4, "f"),
-    "macrostrat_unit_t_interval_age_f32": ("float", 32, 4, "f"),
-    "macrostrat_unit_b_interval_age_f32": ("float", 32, 4, "f"),
-    "macrostrat_unit_t_interval_position_f32": ("float", 32, 4, "f"),
-    "macrostrat_unit_b_interval_position_f32": ("float", 32, 4, "f"),
-    "macrostrat_unit_max_thick_f32": ("float", 32, 4, "f"),
-    "macrostrat_unit_min_thick_f32": ("float", 32, 4, "f"),
-    "macrostrat_unit_column_area_f32": ("float", 32, 4, "f"),
-    "macrostrat_unit_pbdb_collections_u32": ("uint", 32, 4, "I"),
-    "macrostrat_unit_pbdb_occurrences_u32": ("uint", 32, 4, "I"),
+    "macrostrat_section_t_age_f32": ("float", 32, 4, "f"),
+    "macrostrat_section_b_age_f32": ("float", 32, 4, "f"),
+    "macrostrat_section_area_f32": ("float", 32, 4, "f"),
+    "macrostrat_section_max_thick_f32": ("float", 32, 4, "f"),
+    "macrostrat_section_min_thick_f32": ("float", 32, 4, "f"),
+    "macrostrat_section_pbdb_collections_u32": ("uint", 32, 4, "I"),
 }
 if stats.get("dataset_id") != dataset_id:
     raise SystemExit("stats dataset mismatch")
 if len(rows) != len(allowed):
     raise SystemExit(f"unexpected sample row count: {len(rows)}")
-
 counts = []
 sizes = []
 for row in rows:
@@ -70,7 +64,6 @@ for row in rows:
         raise SystemExit(f"globally constant sample rejected: {row['sample_path']}")
     counts.append(count)
     sizes.append(size)
-
 primary_values = sum(counts)
 primary_bytes = sum(sizes)
 median_values = statistics.median(counts)

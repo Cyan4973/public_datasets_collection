@@ -1,6 +1,8 @@
 # Macrostrat More Sources State
 
-Staging probe: `staging/macrostrat_more_numeric_sources/download.sh`
+Expansion probe attempted additional Macrostrat API endpoints. Accepted
+resources were promoted to dataset recipes; rejected and failed probes are
+documented here to avoid repeating the same dead ends.
 
 ## Successful Resources
 

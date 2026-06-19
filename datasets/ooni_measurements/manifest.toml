@@ -1,7 +1,31 @@
 manifest_version = 1
 dataset_id = "ooni_measurements"
-name = "OONI Measurements Snapshot"
-description = "Pinned OONI measurements page with boolean flags, ASN, timestamps, and scores."
+name = "OONI Web Connectivity Measurements"
+description = "Bounded January 2024 OONI web_connectivity measurement-list corpus with native measurement time, probe ASN, and blocking score fields."
+
+[license]
+name = "OONI Data Policy"
+spdx = "LicenseRef-OONI-Data"
+url = "https://ooni.org/about/data-policy/"
+notes = "Recipe uses public OONI measurement-list metadata. Selected output contains only numeric measurement metadata fields."
+
+[[origins]]
+id = "ooni_api"
+name = "OONI API"
+url = "https://api.ooni.io/api/v1/measurements"
+type = "api"
+
+[[resources]]
+id = "ooni_measurement_pages"
+origin = "ooni_api"
+url = "https://api.ooni.io/api/v1/measurements?test_name=web_connectivity&since=2024-01-01T00%3A00%3A00Z&until=2024-02-01T00%3A00%3A00Z&limit={limit}&offset={offset}"
+type = "json_api_pages"
+version = "Fixed January 2024 web_connectivity time window; default target 20,000 records with limit 1,000."
+access = "Public HTTPS JSON endpoint."
+size_bytes = 14124960
+sha256 = ""
+local_path = "downloads/ooni_measurements/ooni_measurements_page_*.json"
+notes = "Validated local run downloaded 20 pages, 20,000 source records, and 14,124,960 source bytes. build.sh retained 20,000 aligned measurements."
 
 [local_paths]
 downloads = "downloads/ooni_measurements/"
@@ -14,3 +38,68 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/ooni_measurements/samples.jsonl"
+summary = "Download a bounded OONI web_connectivity measurement-list window, then emit one numeric sample per selected measurement field."
+deterministic_notes = "Fixed test name, fixed time window, fixed page limit, and offset pagination; source ordering is preserved."
+
+[[series]]
+id = "ooni_measurement_unix_u32"
+role = "primary"
+description = "OONI measurement start timestamp."
+semantic_meaning = "Unix timestamp parsed from measurement_start_time for each retained OONI web_connectivity measurement."
+representation_class = "native_numeric"
+source_resources = ["ooni_measurement_pages"]
+filtering = "Keep records where measurement start time, probe ASN, and blocking_general score are all present and parseable."
+missing_value_policy = "Records missing any selected field are dropped as a record unit."
+conversion = "Parse ISO timestamp and store as unsigned 32-bit little-endian seconds."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "ooni_web_connectivity_measurement_field"
+sample_rank = 1
+sample_axes = ["measurement"]
+sample_count = 1
+total_size_bytes = 80000
+output_path = "samples/ooni_measurements/ooni_measurement_unix_u32/"
+
+[[series]]
+id = "ooni_probe_asn_u32"
+role = "primary"
+description = "OONI probe autonomous system number."
+semantic_meaning = "Probe ASN reported for each retained OONI web_connectivity measurement."
+representation_class = "native_numeric"
+source_resources = ["ooni_measurement_pages"]
+filtering = "Keep records where measurement start time, probe ASN, and blocking_general score are all present and parseable."
+missing_value_policy = "Records missing any selected field are dropped as a record unit."
+conversion = "Strip optional AS prefix and store as unsigned 32-bit little-endian integer."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "ooni_web_connectivity_measurement_field"
+sample_rank = 1
+sample_axes = ["measurement"]
+sample_count = 1
+total_size_bytes = 80000
+output_path = "samples/ooni_measurements/ooni_probe_asn_u32/"
+
+[[series]]
+id = "ooni_blocking_general_score_f32"
+role = "primary"
+description = "OONI general blocking score."
+semantic_meaning = "scores.blocking_general value reported for each retained OONI web_connectivity measurement."
+representation_class = "native_numeric"
+source_resources = ["ooni_measurement_pages"]
+filtering = "Keep records where measurement start time, probe ASN, and blocking_general score are all present and parseable."
+missing_value_policy = "Records missing any selected field are dropped as a record unit."
+conversion = "Store as little-endian float32 in the observed OONI ordinal score range 0..3."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "ooni_web_connectivity_measurement_field"
+sample_rank = 1
+sample_axes = ["measurement"]
+sample_count = 1
+total_size_bytes = 80000
+output_path = "samples/ooni_measurements/ooni_blocking_general_score_f32/"

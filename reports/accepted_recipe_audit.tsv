@@ -31,7 +31,6 @@ musicbrainz_recordings	below_floor	382	952	4	94	194	0	0	0	1	none	aggregate_floor
 wger_exercises	below_floor	400	800	4	100	150	0	0	0	1	none	aggregate_floor,median_sample_floor
 gleif_lei_records	below_floor	400	800	4	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
 datacite_dois	below_floor	400	1200	4	100	300	0	0	0	1	none	aggregate_floor,median_sample_floor
-ooni_measurements	below_floor	400	1300	4	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
 stackexchange_top_questions_jan_2024	below_floor	400	1400	4	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
 cratesio_crates	below_floor	400	2000	4	100	500	0	0	0	1	none	aggregate_floor,median_sample_floor
 hex_packages	below_floor	400	2600	4	100	800	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -206,6 +205,7 @@ universities_domains_list	ok	51245	71743	5	10249	10249	0	0	0	1	none	none
 rhea_reactions	ok	55029	128401	3	18343	36686	0	0	0	1	none	none
 ourworldindata_co2_latest	ok	58768	293840	2	29384	146920	0	0	0	1	none	none
 osf_preprints	ok	59997	239988	3	19999	79996	0	0	0	1	none	none
+ooni_measurements	ok	60000	240000	3	20000	80000	0	0	0	1	none	none
 usgs_nwis_water_temperature_daily	ok	60459	483672	50	1427.5	11420	0	0	0	1	none	none
 library_of_congress_items	ok	66380	264316	5	15000	60000	0	0	0	1	none	none
 usgs_quakes_month	ok	68900	374024	7	9842	39376	0	0	0	1	none	none

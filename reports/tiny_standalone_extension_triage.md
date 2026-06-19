@@ -10,14 +10,14 @@ the upstream source is useless. The question is whether the current recipe can b
 extended into one coherent material without violating the protocol.
 
 Initial count before this removal pass: `41`
-Current pending count: `21`
+Current pending count: `20`
 
 ## Summary
 
 - repairable by straightforward pagination, cursoring, or bounded time windows: `23`
 - repairable only as a redesign/replacement because current query is arbitrary, ranked, or too narrow: `12`
 - removed or superseded so far: `11`
-- remaining repairable by straightforward pagination, cursoring, or bounded time windows: `9`
+- remaining repairable by straightforward pagination, cursoring, or bounded time windows: `8`
 - remaining redesign/replacement candidates because current query is arbitrary, ranked, or too narrow: `12`
 
 ## Removed In First Pass
@@ -46,6 +46,7 @@ Current pending count: `21`
 - `gutendex_books`: replaced by `gutendex_catalog_books`, the full Gutendex catalog in ascending order; now passes the floor with 203,883 primary values and 565,180 primary bytes.
 - `library_of_congress_items`: extended to a bounded 15,000-record LOC item result prefix; now passes the floor with 66,380 primary values and 264,316 primary bytes.
 - `osf_preprints`: extended to a bounded 20,000-record OSF preprint corpus; now passes the floor with 59,997 primary values and 239,988 primary bytes.
+- `ooni_measurements`: replaced the latest-page snapshot with a bounded January 2024 OONI `web_connectivity` measurement window; now passes the floor with 60,000 primary values and 240,000 primary bytes.
 
 ## Per-Recipe Assessment
 
@@ -60,7 +61,6 @@ Current pending count: `21`
 | `datacite_dois` | DataCite DOI search for `machine learning`, 4 series, 400 values | DataCite supports pagination, but query term is arbitrary; a resource-type or provider scope would be cleaner. | Redesign before keeping. |
 | `gleif_lei_records` | GLEIF LEI records first page, 4 series, 400 values | LEI API is pageable. | Repairable by pagination, but review whether date/count fields are strong enough. |
 | `hex_packages` | Hex package search for `data`, 4 series, 400 values | Current endpoint/query is narrow; full package listing may be possible but must be confirmed. | Redesign before keeping. |
-| `ooni_measurements` | OONI measurements first page, 4 series, 400 values | Measurement API can be bounded by time/test/country and paged. | Repairable by explicit bounded scope. |
 | `osm_overpass_cafes` | Overpass cafes in one Berlin bounding box, 4 series, 400 values | Can widen to multiple tiles or a city/region, but current bbox is arbitrary and coordinates may be auxiliary. | Redesign before keeping. |
 | `stackexchange_top_questions_jan_2024` | Stack Exchange top-voted January questions, 4 series, 400 values | API pages, but `top` ranking is a bounded leaderboard, not source material. | Remove or redesign as all questions in a bounded time window. |
 | `wger_exercises` | wger exercise listing first page, 4 series, 400 values | API pagination can cover the exercise corpus, but numeric density is weak. | Repairable but low priority. |

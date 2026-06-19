@@ -3,8 +3,8 @@
 Current acceptance floor: `10,000` primary values or `100 KB` primary sample bytes, plus `1,000` minimum median primary sample values.
 
 - source of truth: `reports/accepted_recipe_audit.tsv`
-- `ok`: `149`
-- `below_floor`: `171`
+- `ok`: `150`
+- `below_floor`: `170`
 - `broken`: `0`
 
 This file is the short operational queue. Detailed policy for family cleanup lives in
@@ -65,6 +65,7 @@ typical primary sample is tiny and which reaches usefulness only by stacking man
 - repair `gutendex_books`
 - repair `library_of_congress_items`
 - repair `osf_preprints`
+- repair `ooni_measurements`
 
 ## Family Cleanup Completed
 
@@ -86,7 +87,6 @@ scope. Per-recipe assessment lives in
 - `gleif_lei_records` — values=400, bytes=800, sample_rows=4
 - `wger_exercises` — values=400, bytes=800, sample_rows=4
 - `datacite_dois` — values=400, bytes=1200, sample_rows=4
-- `ooni_measurements` — values=400, bytes=1300, sample_rows=4
 - `stackexchange_top_questions_jan_2024` — values=400, bytes=1400, sample_rows=4
 - `cratesio_crates` — values=400, bytes=2000, sample_rows=4
 - `hex_packages` — values=400, bytes=2600, sample_rows=4
@@ -101,7 +101,7 @@ scope. Per-recipe assessment lives in
 - `huggingface_datasets` — values=500, bytes=2000, sample_rows=5
 
 Count guide:
-- tiny non-family standalones with `<= 500` values: `21`
+- tiny non-family standalones with `<= 500` values: `20`
 - non-family below-floor recipes with `501-3999` values: `55`
 - non-family below-floor recipes with `>= 4000` values: `24`
 

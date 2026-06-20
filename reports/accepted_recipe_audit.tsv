@@ -160,11 +160,11 @@ jhu_covid19_deaths_us_daily	below_floor	5715	22860	5	1143	4572	0	0	0	1	none	aggr
 openml_runs_large	below_floor	6000	28000	6	1000	4000	0	0	0	1	none	aggregate_floor
 figshare_articles_large	below_floor	6000	34000	6	1000	6000	0	0	0	1	none	aggregate_floor
 nomis_employment	below_floor	6180	12360	4	1545	2317.5	0	0	0	1	none	aggregate_floor
-jpl_cad_2024	below_floor	6552	52416	4	1638	13104	0	0	0	1	none	aggregate_floor
 openml_tasks_large	below_floor	7000	26000	7	1000	4000	0	0	0	1	none	aggregate_floor
 nasa_donki_cme	below_floor	7560	21168	5	1512	6048	0	0	0	1	none	aggregate_floor
 coinpaprika_tickers	below_floor	8000	52000	4	2000	16000	0	0	0	1	none	aggregate_floor
 cisa_kev_catalog	below_floor	8060	14508	5	1612	3224	0	0	0	1	none	aggregate_floor
+jpl_cad_2024	ok	11466	91728	7	1638	13104	0	0	0	1	none	none
 met_biocollection_objects	ok	12281	49124	1	12281	49124	0	0	0	1	none	none
 usgs_nwis_gage_height_daily	ok	14567	116536	15	1080	8640	0	0	0	1	none	none
 geonames_admin1_codes	ok	15460	34785	4	3865	7730	0	0	0	1	none	none

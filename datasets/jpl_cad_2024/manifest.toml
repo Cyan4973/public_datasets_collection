@@ -1,21 +1,44 @@
 manifest_version = 1
 dataset_id = "jpl_cad_2024"
 name = "JPL Small-Body Close Approaches 2024"
-description = "Pinned JPL CAD response with native close-approach numeric fields."
+description = "JPL/CNEOS close-approach data for 2024, one column sample per native close-approach numeric field."
+homepage = "https://ssd-api.jpl.nasa.gov/doc/cad.html"
 
 [license]
 name = "LicenseRef-JPL"
 spdx = "LicenseRef-JPL"
 url = "https://ssd-api.jpl.nasa.gov/"
+citation = "NASA/JPL Center for Near-Earth Object Studies (CNEOS) close-approach data API."
+notes = "Public NASA/JPL SSD/CNEOS API output."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public JSON response from the JPL SSD/CNEOS cad.api endpoint for the 2024 date window."
+usage_notes = "Promote only after fresh successful download, build, and verify."
+
+[[origins]]
+id = "official"
+name = "JPL SSD/CNEOS"
+url = "https://ssd-api.jpl.nasa.gov/cad.api"
+type = "api"
+notes = "Official public close-approach data endpoint."
 
 [[resources]]
 id = "cad_2024_json"
+origin = "official"
 url = "https://ssd-api.jpl.nasa.gov/cad.api?date-min=2024-01-01&date-max=2024-12-31&sort=date&fullname=true"
 type = "api_response"
+version = "2024"
+access = "Single public HTTP request for the 2024 close-approach table."
+size_bytes = 0
+sha256 = ""
 local_path = "downloads/jpl_cad_2024/cad_2024.json"
+notes = "All small-body close approaches with date in 2024."
 
 [local_paths]
 downloads = "downloads/jpl_cad_2024/"
+extracted = "extracted/jpl_cad_2024/"
 filtered = "filtered/jpl_cad_2024/"
 index = "index/jpl_cad_2024/"
 samples = "samples/jpl_cad_2024/"
@@ -25,36 +48,82 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/jpl_cad_2024/samples.jsonl"
+summary = "Download the JPL CAD 2024 close-approach table and emit one raw little-endian float64 sample per native numeric field across all close-approach rows."
+deterministic_notes = "Fixed endpoint and 2024 date window, fixed field extraction, atomic per-row parsing (malformed rows dropped), and a generated sample index."
 
 [[series]]
 id = "jpl_cad_jd"
+semantic_meaning = "Close-approach time as Julian date."
+role = "primary"
 representation_class = "native_numeric"
-missing_value_policy = "Malformed rows are fatal."
+missing_value_policy = "Malformed rows are dropped."
+conversion = "Native CAD numeric string parsed to float64."
 numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 
 [[series]]
 id = "jpl_cad_dist"
+semantic_meaning = "Nominal close-approach distance (au)."
+role = "primary"
 representation_class = "native_numeric"
-missing_value_policy = "Malformed rows are fatal."
+missing_value_policy = "Malformed rows are dropped."
+conversion = "Native CAD numeric string parsed to float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "jpl_cad_dist_min"
+semantic_meaning = "Minimum (3-sigma) close-approach distance (au)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Malformed rows are dropped."
+conversion = "Native CAD numeric string parsed to float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "jpl_cad_dist_max"
+semantic_meaning = "Maximum (3-sigma) close-approach distance (au)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Malformed rows are dropped."
+conversion = "Native CAD numeric string parsed to float64."
 numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 
 [[series]]
 id = "jpl_cad_v_rel"
+semantic_meaning = "Velocity relative to the approached body at close approach (km/s)."
+role = "primary"
 representation_class = "native_numeric"
-missing_value_policy = "Malformed rows are fatal."
+missing_value_policy = "Malformed rows are dropped."
+conversion = "Native CAD numeric string parsed to float64."
 numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 
 [[series]]
 id = "jpl_cad_v_inf"
+semantic_meaning = "Velocity relative to a massless body (km/s)."
+role = "primary"
 representation_class = "native_numeric"
-missing_value_policy = "Malformed rows are fatal."
+missing_value_policy = "Malformed rows are dropped."
+conversion = "Native CAD numeric string parsed to float64."
 numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 
+[[series]]
+id = "jpl_cad_h"
+semantic_meaning = "Absolute magnitude H of the small body."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Malformed rows are dropped."
+conversion = "Native CAD numeric string parsed to float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"

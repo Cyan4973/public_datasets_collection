@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import heapq
 import json
 import os
 import shutil
@@ -67,7 +68,13 @@ FIELD_ALIASES = {
     "best_bid_qty": ["best_bid_qty", "bid_qty", "bidqty", "bid_quantity", "B"],
     "best_ask_price": ["best_ask_price", "ask_price", "askprice", "a"],
     "best_ask_qty": ["best_ask_qty", "ask_qty", "askqty", "ask_quantity", "A"],
-    "transaction_time_ms": ["transaction_time", "transaction_time_ms", "transact_time", "transact_time_ms", "T"],
+    "transaction_time_ms": [
+        "transaction_time",
+        "transaction_time_ms",
+        "transact_time",
+        "transact_time_ms",
+        "T",
+    ],
     "event_time_ms": ["event_time", "event_time_ms", "E"],
     "timestamp_ms": ["timestamp", "timestamp_ms", "time", "T"],
     "percentage": ["percentage", "percent", "level"],
@@ -221,7 +228,9 @@ def validate_zip(path: Path, kind: str) -> int:
         raise SystemExit(f"missing or empty ZIP: {path}")
     fields = fields_for_kind(kind)
     expected_cols = max(int(spec[4]) for spec in fields.values()) + 1
-    max_validation_rows = int(os.environ.get("MAX_DOWNLOAD_VALIDATION_ROWS", MAX_DOWNLOAD_VALIDATION_ROWS))
+    max_validation_rows = int(
+        os.environ.get("MAX_DOWNLOAD_VALIDATION_ROWS", MAX_DOWNLOAD_VALIDATION_ROWS)
+    )
     rows = 0
     valid_rows = 0
     stop = False
@@ -241,7 +250,9 @@ def validate_zip(path: Path, kind: str) -> int:
                         index_map = maybe_header
                         continue
                     rows += 1
-                    if len(row) < (max(index_map.values()) + 1 if index_map else expected_cols):
+                    if len(row) < (
+                        max(index_map.values()) + 1 if index_map else expected_cols
+                    ):
                         continue
                     try:
                         parse_field_row(row, fields, index_map)
@@ -254,7 +265,9 @@ def validate_zip(path: Path, kind: str) -> int:
             if stop:
                 break
     if rows <= 1 or valid_rows <= 1:
-        raise SystemExit(f"ZIP has too few parseable CSV rows: {path} rows={rows} valid_rows={valid_rows}")
+        raise SystemExit(
+            f"ZIP has too few parseable CSV rows: {path} rows={rows} valid_rows={valid_rows}"
+        )
     return rows
 
 
@@ -271,7 +284,9 @@ def cmd_download(cfg: dict) -> None:
     with plan_path.open("w", encoding="utf-8") as fh:
         fh.write("symbol\tperiod\tlocal_name\turl\n")
         for item in selected:
-            fh.write(f"{item['symbol']}\t{item['period']}\t{item['local_name']}\t{item['url']}\n")
+            fh.write(
+                f"{item['symbol']}\t{item['period']}\t{item['local_name']}\t{item['url']}\n"
+            )
 
     records = []
     source_bytes = 0
@@ -283,23 +298,30 @@ def cmd_download(cfg: dict) -> None:
             tmp = target.with_suffix(target.suffix + ".tmp")
             tmp.unlink(missing_ok=True)
             print(f"fetch {item['url']}")
-            subprocess.run(
-                [
-                    "curl",
-                    "--globoff",
-                    "-fL",
-                    "--retry",
-                    "3",
-                    "--retry-delay",
-                    "5",
-                    "-A",
-                    "openzl-public-datasets/1.0",
-                    "-o",
-                    str(tmp),
-                    item["url"],
-                ],
-                check=True,
-            )
+            try:
+                subprocess.run(
+                    [
+                        "curl",
+                        "--globoff",
+                        "-fL",
+                        "--retry",
+                        "3",
+                        "--retry-delay",
+                        "5",
+                        "-A",
+                        "openzl-public-datasets/1.0",
+                        "-o",
+                        str(tmp),
+                        item["url"],
+                    ],
+                    check=True,
+                )
+            except subprocess.CalledProcessError as exc:
+                tmp.unlink(missing_ok=True)
+                if cfg.get("skip_missing_resources"):
+                    print(f"skip_missing {item['local_name']} curl_rc={exc.returncode}")
+                    continue
+                raise
             tmp.replace(target)
         row_count = validate_zip(target, cfg["kind"])
         print(f"validated {item['local_name']} checked_rows={row_count}")
@@ -317,12 +339,18 @@ def cmd_download(cfg: dict) -> None:
         "source_bytes": source_bytes,
         "records": records,
     }
-    inventory_path.write_text(json.dumps(inventory, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    inventory_path.write_text(
+        json.dumps(inventory, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     with inventory_tsv.open("w", encoding="utf-8") as fh:
         fh.write("symbol\tperiod\tlocal_name\tsource_bytes\tvalidated_rows\n")
         for row in records:
-            fh.write(f"{row['symbol']}\t{row['period']}\t{row['local_name']}\t{row['source_bytes']}\t{row['validated_rows']}\n")
-    print(f"semantic_validation=ok resources={len(records)} source_bytes={source_bytes}")
+            fh.write(
+                f"{row['symbol']}\t{row['period']}\t{row['local_name']}\t{row['source_bytes']}\t{row['validated_rows']}\n"
+            )
+    print(
+        f"semantic_validation=ok resources={len(records)} source_bytes={source_bytes}"
+    )
 
 
 def new_array(code: str) -> array:
@@ -333,7 +361,9 @@ def append_value(values: array, kind: str, code: str, raw: str) -> None:
     values.append(parse_scalar(kind, code, raw))
 
 
-def parse_field_row(row: list[str], fields: dict, index_map: dict[str, int] | None) -> dict:
+def parse_field_row(
+    row: list[str], fields: dict, index_map: dict[str, int] | None
+) -> dict:
     parsed = {}
     for sid, (_role, kind, _bits, code, fallback_idx) in fields.items():
         idx = index_map[sid] if index_map else fallback_idx
@@ -352,7 +382,9 @@ def read_csv_rows(zip_path: Path):
     with zipfile.ZipFile(zip_path) as zf:
         names = [name for name in zf.namelist() if not name.endswith("/")]
         if len(names) != 1:
-            raise SystemExit(f"expected one CSV per ZIP, got {len(names)} in {zip_path}")
+            raise SystemExit(
+                f"expected one CSV per ZIP, got {len(names)} in {zip_path}"
+            )
         with zf.open(names[0]) as raw_fh:
             for raw in raw_fh:
                 line = raw.strip()
@@ -360,51 +392,105 @@ def read_csv_rows(zip_path: Path):
                     yield line.split(b",")
 
 
-def build_one_resource(cfg: dict, zip_path: Path, record: dict, fields: dict) -> tuple[list[dict], int]:
+def build_one_resource(
+    cfg: dict, zip_path: Path, record: dict, fields: dict
+) -> tuple[list[dict], int]:
     paths = repo_paths(cfg)
     data_root = paths["data_root"]
     samples_dir = paths["samples_dir"]
     dataset_id = cfg["dataset_id"]
-    values = {sid: new_array(code) for sid, (_role, _kind, _bits, code, _idx) in fields.items()}
+    values = {
+        sid: new_array(code)
+        for sid, (_role, _kind, _bits, code, _idx) in fields.items()
+    }
     skipped = 0
     accepted = 0
-    max_rows = int(cfg.get("max_rows_per_resource_by_symbol", {}).get(record["symbol"], cfg.get("max_rows_per_resource", 0)) or 0)
+    max_rows = int(
+        cfg.get("max_rows_per_resource_by_symbol", {}).get(
+            record["symbol"], cfg.get("max_rows_per_resource", 0)
+        )
+        or 0
+    )
     max_time_span_ms = int(float(cfg.get("max_time_span_seconds", 0) or 0) * 1000)
     time_filter_index = int(cfg.get("time_filter_index", 6))
     first_time_ms = None
     expected_cols = max(int(spec[4]) for spec in fields.values()) + 1
     index_map = None
 
-    for row in read_csv_rows(zip_path):
-        if not row:
-            continue
-        maybe_header = header_index(row, fields)
-        if maybe_header:
-            index_map = maybe_header
-            continue
-        if len(row) < (max(index_map.values()) + 1 if index_map else expected_cols):
-            skipped += 1
-            continue
-        if max_time_span_ms:
+    order_by_time = bool(cfg.get("order_by_time"))
+    if order_by_time and max_rows:
+        # Native row order is unreliable on some daily files (interleaved time
+        # streams), so select the earliest max_rows rows by event time. A bounded
+        # max-heap keyed on -time keeps memory at O(max_rows) over a full scan.
+        heap: list[tuple] = []
+        counter = 0
+        prev_time = None
+        monotonic = True
+        for row in read_csv_rows(zip_path):
+            if not row:
+                continue
+            maybe_header = header_index(row, fields)
+            if maybe_header:
+                index_map = maybe_header
+                continue
+            if len(row) < (max(index_map.values()) + 1 if index_map else expected_cols):
+                skipped += 1
+                continue
             try:
                 time_ms = int(row[time_filter_index])
+                parsed = parse_field_row(row, fields, index_map)
             except Exception:
                 skipped += 1
                 continue
-            if first_time_ms is None:
-                first_time_ms = time_ms
-            if time_ms >= first_time_ms + max_time_span_ms:
+            if prev_time is not None and time_ms < prev_time:
+                monotonic = False
+            prev_time = time_ms
+            entry = (-time_ms, counter, tuple(parsed[sid] for sid in fields))
+            counter += 1
+            if len(heap) < max_rows:
+                heapq.heappush(heap, entry)
+            elif time_ms < -heap[0][0]:
+                heapq.heapreplace(heap, entry)
+            # Fast path: a file that is time-sorted so far already has its earliest
+            # max_rows rows in hand; no need to scan the rest.
+            if monotonic and len(heap) >= max_rows:
                 break
-        try:
-            parsed = parse_field_row(row, fields, index_map)
-        except Exception:
-            skipped += 1
-            continue
-        for sid, value in parsed.items():
-            values[sid].append(value)
-        accepted += 1
-        if max_rows and accepted >= max_rows:
-            break
+        for _neg_time, _counter, vals_tuple in sorted(
+            heap, key=lambda e: (-e[0], e[1])
+        ):
+            for sid, value in zip(fields, vals_tuple):
+                values[sid].append(value)
+    else:
+        for row in read_csv_rows(zip_path):
+            if not row:
+                continue
+            maybe_header = header_index(row, fields)
+            if maybe_header:
+                index_map = maybe_header
+                continue
+            if len(row) < (max(index_map.values()) + 1 if index_map else expected_cols):
+                skipped += 1
+                continue
+            if max_time_span_ms:
+                try:
+                    time_ms = int(row[time_filter_index])
+                except Exception:
+                    skipped += 1
+                    continue
+                if first_time_ms is None:
+                    first_time_ms = time_ms
+                if time_ms >= first_time_ms + max_time_span_ms:
+                    break
+            try:
+                parsed = parse_field_row(row, fields, index_map)
+            except Exception:
+                skipped += 1
+                continue
+            for sid, value in parsed.items():
+                values[sid].append(value)
+            accepted += 1
+            if max_rows and accepted >= max_rows:
+                break
 
     sample_rows = []
     sample_tag = f"{record['symbol']}_{record['period']}".replace("-", "")
@@ -415,7 +501,11 @@ def build_one_resource(cfg: dict, zip_path: Path, record: dict, fields: dict) ->
     if cfg["kind"] == "bookDepth" and values["timestamp_ms"] and values["percentage"]:
         timestamps = len(set(values["timestamp_ms"]))
         levels = len(set(values["percentage"]))
-        if timestamps > 1 and levels > 1 and len(values["depth"]) == timestamps * levels:
+        if (
+            timestamps > 1
+            and levels > 1
+            and len(values["depth"]) == timestamps * levels
+        ):
             geometry = "grid"
             rank = 2
             shape = [timestamps, levels]
@@ -459,7 +549,9 @@ def cmd_build(cfg: dict) -> None:
     samples_dir = paths["samples_dir"]
     inventory_path = download_dir / "download_inventory.json"
     if not inventory_path.exists():
-        raise SystemExit(f"missing download inventory: {inventory_path}; run download.sh first")
+        raise SystemExit(
+            f"missing download inventory: {inventory_path}; run download.sh first"
+        )
     inventory = json.loads(inventory_path.read_text(encoding="utf-8"))
     records = inventory.get("records", [])
     if not records:
@@ -481,7 +573,10 @@ def cmd_build(cfg: dict) -> None:
         rows, skipped_rows = build_one_resource(cfg, zip_path, record, fields)
         all_rows.extend(rows)
         skipped += skipped_rows
-        print(f"built_resource {record['local_name']} samples={len(rows)} skipped_rows={skipped_rows}", flush=True)
+        print(
+            f"built_resource {record['local_name']} samples={len(rows)} skipped_rows={skipped_rows}",
+            flush=True,
+        )
 
     primary_rows = [row for row in all_rows if row["role"] == "primary"]
     primary_values = sum(int(row["value_count"]) for row in primary_rows)
@@ -509,7 +604,9 @@ def cmd_build(cfg: dict) -> None:
         "primary_bytes": primary_bytes,
         "median_primary_values": int(median_values),
     }
-    (filter_dir / "ingest_stats.json").write_text(json.dumps(stats, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    (filter_dir / "ingest_stats.json").write_text(
+        json.dumps(stats, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     with (index_dir / "samples.jsonl").open("w", encoding="utf-8") as fh:
         for row in all_rows:
             fh.write(json.dumps(row, sort_keys=True) + "\n")
@@ -544,12 +641,18 @@ def cmd_verify(cfg: dict) -> None:
         raise SystemExit(f"missing sample index: {index_path}")
     if not stats_path.exists():
         raise SystemExit(f"missing ingest stats: {stats_path}")
-    rows = [json.loads(line) for line in index_path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    rows = [
+        json.loads(line)
+        for line in index_path.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
     stats = json.loads(stats_path.read_text(encoding="utf-8"))
     fields = fields_for_kind(cfg["kind"])
     expected_series = set(fields)
     if {row["series_id"] for row in rows} != expected_series:
-        raise SystemExit(f"unexpected series set: {sorted({row['series_id'] for row in rows})}")
+        raise SystemExit(
+            f"unexpected series set: {sorted({row['series_id'] for row in rows})}"
+        )
 
     primary_sizes = []
     primary_counts = []
@@ -564,20 +667,29 @@ def cmd_verify(cfg: dict) -> None:
         if not path.is_file():
             raise SystemExit(f"missing sample: {row['sample_path']}")
         expected_size = int(row["value_count"]) * int(row["element_size_bytes"])
-        if path.stat().st_size != int(row["sample_size_bytes"]) or path.stat().st_size != expected_size:
+        if (
+            path.stat().st_size != int(row["sample_size_bytes"])
+            or path.stat().st_size != expected_size
+        ):
             raise SystemExit(f"size mismatch: {row['sample_path']}")
-        if row.get("sample_geometry") not in {"sequence", "grid"} or int(row.get("sample_rank", 0)) not in {1, 2}:
+        if row.get("sample_geometry") not in {"sequence", "grid"} or int(
+            row.get("sample_rank", 0)
+        ) not in {1, 2}:
             raise SystemExit(f"unexpected sample geometry: {row}")
         if role == "primary":
             if not nonconstant_prefix(path, code, int(row["value_count"])):
-                raise SystemExit(f"constant primary prefix rejected: {row['sample_path']}")
+                raise SystemExit(
+                    f"constant primary prefix rejected: {row['sample_path']}"
+                )
             primary_sizes.append(int(row["sample_size_bytes"]))
             primary_counts.append(int(row["value_count"]))
 
     primary_values = sum(primary_counts)
     primary_bytes = sum(primary_sizes)
     median_values = statistics.median(primary_counts)
-    if primary_values != int(stats["primary_values"]) or primary_bytes != int(stats["primary_bytes"]):
+    if primary_values != int(stats["primary_values"]) or primary_bytes != int(
+        stats["primary_bytes"]
+    ):
         raise SystemExit("stats/index primary total mismatch")
     if primary_values < MIN_PRIMARY_VALUES:
         raise SystemExit(f"primary values below floor: {primary_values}")

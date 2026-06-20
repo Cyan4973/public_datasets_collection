@@ -290,7 +290,6 @@ metacpan_releases_search_large	ok	3597093	14388372	9	399677	1598708	0	0	0	1	none
 citibike_2024_01_station_ids_u16	ok	3776170	7552340	16	180600	361200	0	0	0	1	none	none
 ncbi_gene_human	ok	4794554	19178216	4	1198638.5	4794554	0	0	0	1	none	none
 beijing_air_quality_uci	ok	5753775	46030200	180	32141.5	257132	0	0	0	1	none	none
-binance_usdm_futures_bookticker_btc_eth_2024_w01	ok	7355408	58843264	8	919426	7355408	0	0	0	1	none	none
 unicode_bmp_gutenberg	ok	8700484	17400968	12	490769	981538	0	0	0	1	none	none
 fsdd_spoken_digits	ok	10498424	20996848	3000	3358.5	6717	0	0	0	1	none	none
 noaa_ndbc_wave_spectral_density_f64	ok	11719309	93754472	24	427159.5	3417276	0	0	0	1	none	none
@@ -310,6 +309,7 @@ wikimedia_clickstream_enwiki	ok	35605767	142423068	1	35605767	142423068	0	0	0	1	
 yearpredictionmsd_uci	ok	46896395	186554890	91	515345	2061380	0	0	0	1	none	none
 electricity_load_diagrams_uci	ok	51894720	207578880	370	140256	561024	0	0	0	1	none	none
 noaa_ndbc_stdmet_historical	ok	56949977	455599816	273	224130	1793040	0	0	0	1	none	none
+binance_usdm_futures_bookticker_2024_w01	ok	60000000	480000000	240	250000	2000000	0	0	0	1	none	none
 mitbih_arrhythmia_physionet	ok	62400000	124800000	96	650000	1300000	0	0	0	1	none	none
 geonames_allcountries	ok	67174535	322437768	5	13434907	53739628	0	0	0	1	none	none
 susy_uci	ok	95000000	365000000	19	5000000	20000000	0	0	0	1	none	none

@@ -1,7 +1,7 @@
 manifest_version = 1
-dataset_id = "binance_usdm_futures_bookticker_btc_eth_2024_w01"
-name = "Binance USD-M Futures BookTicker BTC/ETH 2024 Week 01"
-description = "Bounded Binance USD-M futures best bid/ask update archive for BTCUSDT and ETHUSDT on 2024-01-01."
+dataset_id = "binance_usdm_futures_bookticker_2024_w01"
+name = "Binance USD-M Futures BookTicker 2024 Week 01"
+description = "Bounded Binance USD-M futures best bid/ask update archive across 20 liquid symbols over 2024-01-01..03, one sample per symbol-day per field."
 homepage = "https://data.binance.vision/"
 
 [license]
@@ -25,30 +25,30 @@ type = "public_archive"
 notes = "Official static archive for historical Binance market data ZIP files."
 
 [[resources]]
-id = "usdm_futures_bookticker_btc_eth_2024_w01"
+id = "usdm_futures_bookticker_2024_w01"
 origin = "binance_public_data"
 url = "https://data.binance.vision/"
 type = "bounded_archive_subset"
-version = "2024-01-01_BTCUSDT_ETHUSDT"
-access = "Download script fetches fixed daily bookTicker ZIP files from data.binance.vision; build keeps the first two hours of updates from each file."
+version = "2024-01-01_to_2024-01-03_20_symbols"
+access = "Download fetches daily bookTicker ZIPs for 20 symbols x 3 days from data.binance.vision; build keeps the earliest max_rows_per_resource (250000) updates by event time from each file."
 size_bytes = 0
 sha256 = ""
-local_path = "downloads/binance_usdm_futures_bookticker_btc_eth_2024_w01/"
-notes = "Expected 2 daily ZIP resources."
+local_path = "downloads/binance_usdm_futures_bookticker_2024_w01/"
+notes = "Up to 60 daily ZIP resources (20 symbols x 3 days); missing symbol-days are skipped."
 
 [local_paths]
-downloads = "downloads/binance_usdm_futures_bookticker_btc_eth_2024_w01/"
-filtered = "filtered/binance_usdm_futures_bookticker_btc_eth_2024_w01/"
-index = "index/binance_usdm_futures_bookticker_btc_eth_2024_w01/"
-samples = "samples/binance_usdm_futures_bookticker_btc_eth_2024_w01/"
+downloads = "downloads/binance_usdm_futures_bookticker_2024_w01/"
+filtered = "filtered/binance_usdm_futures_bookticker_2024_w01/"
+index = "index/binance_usdm_futures_bookticker_2024_w01/"
+samples = "samples/binance_usdm_futures_bookticker_2024_w01/"
 
 [processing]
 download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
-sample_index_path = "index/binance_usdm_futures_bookticker_btc_eth_2024_w01/samples.jsonl"
-summary = "Fetch fixed USD-M futures daily bookTicker ZIPs and parse a contiguous two-hour ordered window of native best bid/ask price and quantity columns as primary samples."
-deterministic_notes = "Fixed symbols, fixed date window, fixed first-two-hour source window per file, no network access during build, and sample boundaries follow symbol-day field event-window sequences."
+sample_index_path = "index/binance_usdm_futures_bookticker_2024_w01/samples.jsonl"
+summary = "Fetch USD-M futures daily bookTicker ZIPs for 20 symbols over three days and parse a bounded ordered window of native best bid/ask price and quantity columns as one primary sample per symbol-day per field."
+deterministic_notes = "Fixed symbol list, fixed date window, fixed per-resource row/time cap, no network access during build, and sample boundaries follow symbol-day field event-window sequences."
 
 [[series]]
 id = "best_bid_price"
@@ -57,8 +57,8 @@ semantic_meaning = "Best bid price for each USD-M futures bookTicker update."
 role = "primary"
 representation_class = "native_numeric"
 representation_notes = "Native numeric Binance bookTicker CSV field parsed without synthetic remapping."
-source_resources = ["usdm_futures_bookticker_btc_eth_2024_w01"]
-filtered_input_path = "filtered/binance_usdm_futures_bookticker_btc_eth_2024_w01/ingest_stats.json"
+source_resources = ["usdm_futures_bookticker_2024_w01"]
+filtered_input_path = "filtered/binance_usdm_futures_bookticker_2024_w01/ingest_stats.json"
 filtering = "Rows with malformed bookTicker numeric fields are skipped consistently across emitted fields."
 missing_value_policy = "Required numeric fields must parse; malformed rows are skipped."
 conversion = "Parse decimal CSV best bid price to little-endian float64 arrays."
@@ -66,9 +66,9 @@ numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 sample_format = "raw homogeneous numeric arrays by symbol-day field"
-sample_count = 2
-total_size_bytes = 14710816
-output_path = "samples/binance_usdm_futures_bookticker_btc_eth_2024_w01/best_bid_price/"
+sample_count = 60
+total_size_bytes = 0
+output_path = "samples/binance_usdm_futures_bookticker_2024_w01/best_bid_price/"
 
 [[series]]
 id = "best_bid_qty"
@@ -77,8 +77,8 @@ semantic_meaning = "Best bid quantity for each USD-M futures bookTicker update."
 role = "primary"
 representation_class = "native_numeric"
 representation_notes = "Native numeric Binance bookTicker CSV field parsed without synthetic remapping."
-source_resources = ["usdm_futures_bookticker_btc_eth_2024_w01"]
-filtered_input_path = "filtered/binance_usdm_futures_bookticker_btc_eth_2024_w01/ingest_stats.json"
+source_resources = ["usdm_futures_bookticker_2024_w01"]
+filtered_input_path = "filtered/binance_usdm_futures_bookticker_2024_w01/ingest_stats.json"
 filtering = "Rows with malformed bookTicker numeric fields are skipped consistently across emitted fields."
 missing_value_policy = "Required numeric fields must parse; malformed rows are skipped."
 conversion = "Parse decimal CSV best bid quantity to little-endian float64 arrays."
@@ -86,9 +86,9 @@ numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 sample_format = "raw homogeneous numeric arrays by symbol-day field"
-sample_count = 2
-total_size_bytes = 14710816
-output_path = "samples/binance_usdm_futures_bookticker_btc_eth_2024_w01/best_bid_qty/"
+sample_count = 60
+total_size_bytes = 0
+output_path = "samples/binance_usdm_futures_bookticker_2024_w01/best_bid_qty/"
 
 [[series]]
 id = "best_ask_price"
@@ -97,8 +97,8 @@ semantic_meaning = "Best ask price for each USD-M futures bookTicker update."
 role = "primary"
 representation_class = "native_numeric"
 representation_notes = "Native numeric Binance bookTicker CSV field parsed without synthetic remapping."
-source_resources = ["usdm_futures_bookticker_btc_eth_2024_w01"]
-filtered_input_path = "filtered/binance_usdm_futures_bookticker_btc_eth_2024_w01/ingest_stats.json"
+source_resources = ["usdm_futures_bookticker_2024_w01"]
+filtered_input_path = "filtered/binance_usdm_futures_bookticker_2024_w01/ingest_stats.json"
 filtering = "Rows with malformed bookTicker numeric fields are skipped consistently across emitted fields."
 missing_value_policy = "Required numeric fields must parse; malformed rows are skipped."
 conversion = "Parse decimal CSV best ask price to little-endian float64 arrays."
@@ -106,9 +106,9 @@ numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 sample_format = "raw homogeneous numeric arrays by symbol-day field"
-sample_count = 2
-total_size_bytes = 14710816
-output_path = "samples/binance_usdm_futures_bookticker_btc_eth_2024_w01/best_ask_price/"
+sample_count = 60
+total_size_bytes = 0
+output_path = "samples/binance_usdm_futures_bookticker_2024_w01/best_ask_price/"
 
 [[series]]
 id = "best_ask_qty"
@@ -117,8 +117,8 @@ semantic_meaning = "Best ask quantity for each USD-M futures bookTicker update."
 role = "primary"
 representation_class = "native_numeric"
 representation_notes = "Native numeric Binance bookTicker CSV field parsed without synthetic remapping."
-source_resources = ["usdm_futures_bookticker_btc_eth_2024_w01"]
-filtered_input_path = "filtered/binance_usdm_futures_bookticker_btc_eth_2024_w01/ingest_stats.json"
+source_resources = ["usdm_futures_bookticker_2024_w01"]
+filtered_input_path = "filtered/binance_usdm_futures_bookticker_2024_w01/ingest_stats.json"
 filtering = "Rows with malformed bookTicker numeric fields are skipped consistently across emitted fields."
 missing_value_policy = "Required numeric fields must parse; malformed rows are skipped."
 conversion = "Parse decimal CSV best ask quantity to little-endian float64 arrays."
@@ -126,6 +126,6 @@ numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 sample_format = "raw homogeneous numeric arrays by symbol-day field"
-sample_count = 2
-total_size_bytes = 14710816
-output_path = "samples/binance_usdm_futures_bookticker_btc_eth_2024_w01/best_ask_qty/"
+sample_count = 60
+total_size_bytes = 0
+output_path = "samples/binance_usdm_futures_bookticker_2024_w01/best_ask_qty/"

@@ -1,0 +1,18 @@
+{
+  "dataset_id": "binance_usdm_futures_bookticker_2024_w01",
+  "kind": "bookTicker",
+  "market_path": "futures/um",
+  "sample_axis": "top_of_book_update_rows",
+  "symbols": [
+    "BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT",
+    "ADAUSDT", "DOGEUSDT", "AVAXUSDT", "LINKUSDT", "DOTUSDT",
+    "LTCUSDT", "TRXUSDT", "BCHUSDT", "ETCUSDT", "ATOMUSDT",
+    "MATICUSDT", "NEARUSDT", "FILUSDT", "APTUSDT", "ARBUSDT"
+  ],
+  "start_date": "2024-01-01",
+  "end_date": "2024-01-03",
+  "order_by_time": true,
+  "time_filter_index": 6,
+  "max_rows_per_resource": 250000,
+  "skip_missing_resources": true
+}

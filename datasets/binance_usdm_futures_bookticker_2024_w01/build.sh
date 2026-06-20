@@ -3,7 +3,7 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 DATA_DIR="${DATA_DIR:-.data}"
-DATASET_ID="binance_usdm_futures_bookticker_btc_eth_2024_w01"
+DATASET_ID="binance_usdm_futures_bookticker_2024_w01"
 LOG_DIR="$REPO_ROOT/$DATA_DIR/logs/$DATASET_ID"
 mkdir -p "$LOG_DIR"
 RUN_TS="$(date +%Y%m%d_%H%M%S)"

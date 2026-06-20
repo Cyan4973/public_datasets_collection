@@ -4,8 +4,8 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 155
-- `below_floor`: 167
+- `ok`: 156
+- `below_floor`: 166
 - `broken`: 0
 
 ## Below Floor
@@ -178,4 +178,3 @@ Auxiliary series do not count toward acceptance.
 | `nasa_donki_cme` | 7560 | 21168 | 5 | 1512 | 0 | 0 | `aggregate_floor` |
 | `coinpaprika_tickers` | 8000 | 52000 | 4 | 2000 | 0 | 0 | `aggregate_floor` |
 | `cisa_kev_catalog` | 8060 | 14508 | 5 | 1612 | 0 | 0 | `aggregate_floor` |
-| `metacpan_releases_search_large` | 9000 | 36000 | 9 | 1000 | 0 | 0 | `aggregate_floor` |

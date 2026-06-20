@@ -1,21 +1,44 @@
 manifest_version = 1
 dataset_id = "metacpan_releases_search_large"
 name = "MetaCPAN Releases Search Large"
-description = "Pinned MetaCPAN release search sample with release metadata metrics."
+description = "Bounded paginated MetaCPAN release table with release-level numeric metadata, one column sample per native numeric field."
+homepage = "https://metacpan.org/"
 
 [license]
 name = "MetaCPAN"
 spdx = "LicenseRef-MetaCPAN"
 url = "https://metacpan.org/"
+citation = "https://metacpan.org/"
+notes = "Public MetaCPAN API output. Release records describe public CPAN distributions."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public JSON responses from paginated MetaCPAN release _search pages."
+usage_notes = "Promote only after fresh successful download, build, and verify."
+
+[[origins]]
+id = "official"
+name = "MetaCPAN"
+url = "https://fastapi.metacpan.org/v1/release/_search"
+type = "api"
+notes = "Official public MetaCPAN Elasticsearch endpoint."
 
 [[resources]]
-id = "metacpan_releases_json"
+id = "release_pages"
+origin = "official"
 url = "https://fastapi.metacpan.org/v1/release/_search"
-type = "api_response"
-local_path = "downloads/metacpan_releases_search_large/metacpan_releases_search_large.json"
+type = "api_response_pages"
+version = "from_size_paginated"
+access = "Public Elasticsearch from/size pagination (match_all sorted by date desc) within the 10000 result window."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/metacpan_releases_search_large/pages/"
+notes = "Most recent METACPAN_TARGET_RECORDS (default 9000) releases in descending date order."
 
 [local_paths]
 downloads = "downloads/metacpan_releases_search_large/"
+extracted = "extracted/metacpan_releases_search_large/"
 filtered = "filtered/metacpan_releases_search_large/"
 index = "index/metacpan_releases_search_large/"
 samples = "samples/metacpan_releases_search_large/"
@@ -25,75 +48,104 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/metacpan_releases_search_large/samples.jsonl"
+summary = "Paginate the MetaCPAN release index to a bounded record count, extract release-level numeric fields as table columns, and emit one raw little-endian numeric sample per field."
+deterministic_notes = "Fixed endpoint, fixed page size, match_all sorted by date desc, from/size pagination within the Elasticsearch result window, bounded target record count, atomic per-row field extraction with _id de-duplication, and a generated sample index."
 
 [[series]]
 id = "metacpan_version_numified"
+semantic_meaning = "Native MetaCPAN version_numified value for the release."
+role = "primary"
 representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered."
+missing_value_policy = "Rows missing version_numified are filtered."
+conversion = "Native JSON number stored as float64."
 numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 
 [[series]]
 id = "metacpan_stat_size"
-representation_class = "derived_operational_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered."
+semantic_meaning = "Release archive size in bytes (stat.size)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing stat.size defaults to 0."
+conversion = "Native JSON integer stored as uint32."
 numeric_kind = "uint"
 bit_width = 32
 endianness = "little"
 
 [[series]]
 id = "metacpan_stat_mtime"
-representation_class = "derived_operational_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered."
+semantic_meaning = "Release archive modification time (stat.mtime, Unix epoch seconds)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing stat.mtime defaults to 0."
+conversion = "Native JSON integer stored as uint32."
 numeric_kind = "uint"
 bit_width = 32
 endianness = "little"
 
 [[series]]
 id = "metacpan_dependency_count"
+semantic_meaning = "Number of declared dependency records for the release."
+role = "primary"
 representation_class = "derived_operational_numeric"
-missing_value_policy = "Rows missing list fields are filtered."
+missing_value_policy = "Missing arrays are treated as empty arrays; counts are clamped to 65535."
+conversion = "Stable JSON array cardinality stored as uint16."
 numeric_kind = "uint"
 bit_width = 16
 endianness = "little"
 
 [[series]]
 id = "metacpan_provides_count"
+semantic_meaning = "Number of provided modules for the release."
+role = "primary"
 representation_class = "derived_operational_numeric"
-missing_value_policy = "Rows missing list fields are filtered."
+missing_value_policy = "Missing arrays are treated as empty arrays; counts are clamped to 65535."
+conversion = "Stable JSON array cardinality stored as uint16."
 numeric_kind = "uint"
 bit_width = 16
 endianness = "little"
 
 [[series]]
 id = "metacpan_tests_pass"
-representation_class = "derived_operational_numeric"
-missing_value_policy = "Rows missing test fields are filtered."
+semantic_meaning = "CPAN Testers pass count for the release."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing test counts default to 0."
+conversion = "Native JSON integer stored as uint32."
 numeric_kind = "uint"
 bit_width = 32
 endianness = "little"
 
 [[series]]
 id = "metacpan_tests_fail"
-representation_class = "derived_operational_numeric"
-missing_value_policy = "Rows missing test fields are filtered."
+semantic_meaning = "CPAN Testers fail count for the release."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing test counts default to 0."
+conversion = "Native JSON integer stored as uint32."
 numeric_kind = "uint"
 bit_width = 32
 endianness = "little"
 
 [[series]]
 id = "metacpan_tests_na"
-representation_class = "derived_operational_numeric"
-missing_value_policy = "Rows missing test fields are filtered."
+semantic_meaning = "CPAN Testers N/A count for the release."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing test counts default to 0."
+conversion = "Native JSON integer stored as uint32."
 numeric_kind = "uint"
 bit_width = 32
 endianness = "little"
 
 [[series]]
 id = "metacpan_tests_unknown"
-representation_class = "derived_operational_numeric"
-missing_value_policy = "Rows missing test fields are filtered."
+semantic_meaning = "CPAN Testers unknown count for the release."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing test counts default to 0."
+conversion = "Native JSON integer stored as uint32."
 numeric_kind = "uint"
 bit_width = 32
 endianness = "little"

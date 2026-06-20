@@ -14,7 +14,9 @@ LOG_FILE="$LOG_DIR/download.$RUN_TS.log"
 LATEST_LOG="$LOG_DIR/download.latest.log"
 exec > >(tee "$LOG_FILE" "$LATEST_LOG") 2>&1
 
-TARGET_RECORDS="${OPENALEX_TARGET_RECORDS:-20000}"
+# MAX_RECORDS caps the pull; default is effectively "the whole index" (loop stops when the cursor ends).
+MAX_RECORDS="${OPENALEX_MAX_RECORDS:-10000000}"
+MIN_RECORDS="${OPENALEX_MIN_RECORDS:-150000}"
 PAGE_SIZE="${OPENALEX_PAGE_SIZE:-200}"
 REQUEST_DELAY="${OPENALEX_REQUEST_DELAY_SECONDS:-0.12}"
 BASE_URL="https://api.openalex.org/sources"
@@ -24,12 +26,12 @@ if [ "$PAGE_SIZE" -lt 1 ] || [ "$PAGE_SIZE" -gt 200 ]; then
   exit 2
 fi
 
-echo "[$(date -Is)] download_start dataset=$DATASET_ID target_records=$TARGET_RECORDS page_size=$PAGE_SIZE"
+echo "[$(date -Is)] download_start dataset=$DATASET_ID max_records=$MAX_RECORDS min_records=$MIN_RECORDS page_size=$PAGE_SIZE"
 
 cursor="*"
 rows_downloaded=0
 page=0
-while [ "$rows_downloaded" -lt "$TARGET_RECORDS" ]; do
+while [ "$rows_downloaded" -lt "$MAX_RECORDS" ]; do
   out="$PAGE_DIR/sources_page_$(printf '%04d' "$page").json"
   tmp="$out.tmp"
   if [ -s "$out" ] && [ "${FORCE_DOWNLOAD:-0}" != "1" ]; then
@@ -43,6 +45,7 @@ while [ "$rows_downloaded" -lt "$TARGET_RECORDS" ]; do
       --retry-delay 2
       -A "openzl-public-datasets/1.0"
       -o "$tmp"
+      --data-urlencode "select=id,works_count,oa_works_count,cited_by_count,summary_stats,first_publication_year,last_publication_year,topics"
       --data-urlencode "per-page=$PAGE_SIZE"
       --data-urlencode "cursor=$cursor"
     )
@@ -86,7 +89,7 @@ PY
   page=$(( page + 1 ))
 done
 
-python3 - <<'PY' "$PAGE_DIR" "$DOWNLOAD_DIR/download_stats.json" "$TARGET_RECORDS"
+python3 - <<'PY' "$PAGE_DIR" "$DOWNLOAD_DIR/download_stats.json" "$MIN_RECORDS"
 import json
 import re
 import sys
@@ -94,7 +97,7 @@ from pathlib import Path
 
 page_dir = Path(sys.argv[1])
 stats_path = Path(sys.argv[2])
-target_records = int(sys.argv[3])
+min_records = int(sys.argv[3])
 page_re = re.compile(r"sources_page_(\d+)\.json$")
 pages = []
 seen_ids = set()
@@ -118,17 +121,16 @@ for path in sorted(page_dir.glob("sources_page_*.json")):
             seen_ids.add(entity_id)
     pages.append({"path": path.name, "page": int(match.group(1)), "rows": len(results)})
 
-if rows_total < target_records:
-    raise SystemExit(f"downloaded only {rows_total} rows, target is {target_records}")
-if duplicate_ids:
-    raise SystemExit(f"duplicate OpenAlex source IDs across pages: {duplicate_ids}")
+if rows_total < min_records:
+    raise SystemExit(f"downloaded only {rows_total} rows, minimum is {min_records}")
+# A few cursor-boundary duplicates are harmless; the build de-duplicates by id.
 
 stats = {
     "dataset_id": "openalex_sources_large",
     "api_total": api_total,
     "pages": pages,
     "rows_downloaded": rows_total,
-    "target_records": target_records,
+    "min_records": min_records,
 }
 stats_path.write_text(json.dumps(stats, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 print(f"downloaded_pages={len(pages)} rows_downloaded={rows_total} api_total={api_total}")

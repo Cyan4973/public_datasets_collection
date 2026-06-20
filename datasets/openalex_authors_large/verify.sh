@@ -28,7 +28,7 @@ MIN_PRIMARY_VALUES = 10_000
 MIN_PRIMARY_BYTES = 262_144
 MIN_MEDIAN_VALUES = 1_000
 MAX_PRIMARY_BYTES = 1_000_000_000
-MIN_ROWS_KEPT = 17_000
+MIN_ROWS_KEPT = 300_000
 EXPECTED_PRIMARY = {
     "openalex_author_works_count_u32",
     "openalex_author_cited_by_count_u32",

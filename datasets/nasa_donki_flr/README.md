@@ -3,7 +3,7 @@
 NASA DONKI solar flare events over a multi-year window, extracted into one numeric column sample per native or parsed flare field.
 
 - Source: https://kauai.ccmc.gsfc.nasa.gov/DONKI/WS/get/FLR (NASA CCMC DONKI, no API key)
-- Scope: all solar flare events for each calendar year in `DONKI_START_YEAR`..`DONKI_END_YEAR` (default **2020–2024**), fetched one year per page. The 2024-only window was too thin; widening years adds real flares (the id is already generic).
+- Scope: all solar flare events for each calendar year in `DONKI_START_YEAR`..`DONKI_END_YEAR` (default **2010–2026**, the full DONKI archive), fetched one year per page.
 - Local raw pages: `${DATA_DIR:-.data}/downloads/nasa_donki_flr/pages/`
 
 ## Series (each a `table_column` sample, one value per flare event)

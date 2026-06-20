@@ -3,7 +3,7 @@
 Paginated MetaCPAN **release** table, extracted into one numeric column sample per release-level field.
 
 - Source: https://fastapi.metacpan.org/v1/release/_search (MetaCPAN public Elasticsearch API)
-- Scope: the most recent `METACPAN_TARGET_RECORDS` (default `9000`) releases in descending `date` order, via `from`/`size` pagination within the Elasticsearch 10,000 result window. Rows are de-duplicated by `_id`. (Descending so the slice carries modern dependency/test metadata; the oldest CPAN releases lack structured dependencies.)
+- Scope: the **full** MetaCPAN release index (~hundreds of thousands of releases), walked in ascending `date` order via Elasticsearch `search_after` (which bypasses the 10,000 `from`/`size` window). `_source` filtering keeps pages small. `METACPAN_MAX_RECORDS` caps the pull (default 500k — effectively the whole index); `METACPAN_MIN_RECORDS` is the floor. Rows are de-duplicated by `_id`. (The full index spans 1995→present, so dependency/test fields vary across old and modern releases.)
 - Local raw pages: `${DATA_DIR:-.data}/downloads/metacpan_releases_search_large/pages/`
 
 ## Series (each a `table_column` sample, one value per release row)
@@ -30,4 +30,4 @@ bash datasets/metacpan_releases_search_large/build.sh
 bash datasets/metacpan_releases_search_large/verify.sh
 ```
 
-Tuning env vars: `METACPAN_TARGET_RECORDS`, `METACPAN_PAGE_SIZE`, `METACPAN_REQUEST_DELAY_SECONDS` (keep `from + size` ≤ 10000). Logs under `${DATA_DIR:-.data}/logs/metacpan_releases_search_large/`.
+Tuning env vars: `METACPAN_MAX_RECORDS`, `METACPAN_MIN_RECORDS`, `METACPAN_PAGE_SIZE`, `METACPAN_REQUEST_DELAY_SECONDS`. Logs under `${DATA_DIR:-.data}/logs/metacpan_releases_search_large/`.

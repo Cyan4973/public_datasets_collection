@@ -162,9 +162,7 @@ nomis_employment	below_floor	6180	12360	4	1545	2317.5	0	0	0	1	none	aggregate_flo
 openml_tasks_large	below_floor	7000	26000	7	1000	4000	0	0	0	1	none	aggregate_floor
 coinpaprika_tickers	below_floor	8000	52000	4	2000	16000	0	0	0	1	none	aggregate_floor
 cisa_kev_catalog	below_floor	8060	14508	5	1612	3224	0	0	0	1	none	aggregate_floor
-jpl_cad_2024	ok	11466	91728	7	1638	13104	0	0	0	1	none	none
 met_biocollection_objects	ok	12281	49124	1	12281	49124	0	0	0	1	none	none
-nasa_donki_flr	ok	13916	55664	7	1988	7952	0	0	0	1	none	none
 usgs_nwis_gage_height_daily	ok	14567	116536	15	1080	8640	0	0	0	1	none	none
 geonames_admin1_codes	ok	15460	34785	4	3865	7730	0	0	0	1	none	none
 nasa_power_daily_climate	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
@@ -183,10 +181,10 @@ nasa_power_daily_temperature_humidity	ok	16425	131400	15	1095	8760	0	0	0	1	none	
 nasa_power_daily_wind	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
 usgs_nwis_dissolved_oxygen_daily	ok	16558	132464	15	1343	10744	0	0	0	1	none	none
 usgs_nwis_ph_daily	ok	17277	138216	16	1287.5	10300	0	0	0	1	none	none
-nasa_donki_cme	ok	18525	74100	5	3705	14820	0	0	0	1	none	none
 internetarchive_advancedsearch	ok	20000	120000	2	10000	60000	0	0	0	1	none	none
 nasa_eonet_events	ok	20115	73755	3	6705	13410	0	0	0	1	none	none
 binance_ticker_24hr	ok	21564	115008	6	3594	14376	0	0	0	1	none	none
+nasa_donki_flr	ok	22484	89936	7	3212	12848	0	0	0	1	none	none
 openflights_airports	ok	23094	153960	3	7698	61584	0	0	0	1	none	none
 statsbomb_world_cup_final	ok	26802	44670	9	2978	2978	0	0	0	1	none	none
 macrostrat_columns	ok	31155	124620	9	3462	13848	0	0	0	1	none	none
@@ -196,6 +194,7 @@ noaa_tides_water_level	ok	37200	141360	5	7440	7440	0	0	0	1	none	none
 ourworldindata_energy_mix	ok	38274	108443	6	6379	19137	0	0	0	1	none	none
 arxiv_cs_lg_2024q1_metadata	ok	38360	115080	4	9590	28770	0	0	0	1	none	none
 expression_atlas_experiments	ok	41058	95802	9	4562	9124	0	0	0	1	none	none
+nasa_donki_cme	ok	41650	166600	5	8330	33320	0	0	0	1	none	none
 homebrew_formulae	ok	42045	84090	5	8409	16818	0	0	0	1	none	none
 opensky_states	ok	44580	178320	5	8536	34144	0	0	0	1	none	none
 universities_domains_list	ok	51245	71743	5	10249	10249	0	0	0	1	none	none
@@ -210,7 +209,6 @@ usgs_quakes_month	ok	68900	374024	7	9842	39376	0	0	0	1	none	none
 medrxiv_details	ok	77615	186276	5	15523	31046	15523	62092	1	1	none	none
 uci_wine_quality	ok	77964	623712	24	3248.5	25988	0	0	0	1	none	none
 metmuseum_object_ids_large	ok	80220	320880	1	80220	320880	0	0	0	1	none	none
-metacpan_releases_search_large	ok	81000	324000	9	9000	36000	0	0	0	1	none	none
 usgs_fdsn_events_large	ok	84792	268508	6	14132	28264	0	0	0	1	none	none
 open_meteo_hourly_apparent_temperature	ok	87600	350400	5	17520	70080	0	0	0	1	none	none
 open_meteo_hourly_cloud_cover	ok	87600	350400	5	17520	70080	0	0	0	1	none	none
@@ -234,10 +232,7 @@ reactome_events_hierarchy	ok	104345	271297	5	20869	41738	0	0	0	1	none	none
 noaa_ghcn_daily_tavg_by_station	ok	121079	242158	59	2588	5176	0	0	0	1	none	none
 noaa_ghcn_daily_tsun_by_station	ok	133376	266752	16	11347.5	22695	0	0	0	1	none	none
 bike_sharing_uci	ok	139032	399717	8	17379	52137	0	0	0	1	none	none
-openalex_authors_large	ok	140000	360000	7	20000	40000	0	0	0	1	none	none
-openalex_institutions_large	ok	140000	420000	7	20000	80000	0	0	0	1	none	none
 seismic_waveform_i32	ok	168000	672000	12	12000	48000	0	0	0	1	none	none
-openalex_sources_large	ok	176652	529956	9	19628	78512	0	0	0	1	none	none
 movielens_latest_small	ok	201672	806688	2	100836	403344	0	0	0	1	none	none
 gutendex_catalog_books	ok	203883	565180	3	62588	125176	78707	314828	1	1	none	none
 geonames_cities5000	ok	206700	1378000	3	68900	551200	0	0	0	1	none	none
@@ -249,6 +244,7 @@ who_atlas_gisah	ok	252140	806848	5	50428	100856	0	0	0	1	none	none
 gwosc_event_strain_f32	ok	262144	1048576	2	131072	524288	0	0	0	1	none	none
 noaa_ghcn_daily_wsfg_by_station	ok	266478	532956	33	8055	16110	0	0	0	1	none	none
 nyc_311_descriptor_u16	ok	287186	574372	3	100000	200000	0	0	0	1	none	none
+jpl_close_approaches	ok	297934	2383472	7	42562	340496	0	0	0	1	none	none
 noaa_coops_water_temperature	ok	346842	2774736	2	173421	1387368	0	0	0	1	none	none
 who_gho_observations	ok	348104	1435929	8	43513	130539	0	0	0	1	none	none
 ghcnd_stations	ok	397497	1589988	3	132499	529996	0	0	0	1	none	none
@@ -268,6 +264,7 @@ gdelt_events_nummentions_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	no
 gdelt_events_numsources_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	none
 binance_usdm_futures_bookdepth_btc_eth_2024_w01	ok	806360	6450880	28	28800	230400	806360	6450880	28	1	none	none
 noaa_coops_water_level	ok	876000	7008000	5	175200	1401600	0	0	0	1	none	none
+openalex_institutions_large	ok	880957	2642871	7	125851	503404	0	0	0	1	none	none
 smithsonian_openaccess_gltf_indices_u16	ok	899964	1799928	3	299988	599976	0	0	0	1	none	none
 europe_pmc_search	ok	1127748	2631412	6	187958	375916	187958	751832	1	1	none	none
 eeg_physionet	ok	1178880	2357760	30	39200	78400	0	0	0	1	none	none
@@ -280,13 +277,16 @@ noaa_ghcn_daily_snow_by_station	ok	2077730	4155460	59	36089	72178	0	0	0	1	none	n
 tokens_t5_gutenberg	ok	2258811	4517622	12	125381.5	250763	0	0	0	1	none	none
 nist_matrix_market_sparse_matrices	ok	2300385	12268720	57	15100	71428	0	0	0	1	none	none
 noaa_ghcn_daily_tmin_by_station	ok	2343685	4687370	59	41993	83986	0	0	0	1	none	none
+openalex_sources_large	ok	2348739	7046217	9	260971	1043884	0	0	0	1	none	none
 noaa_ghcn_daily_tmax_by_station	ok	2350732	4701464	59	41953	83906	0	0	0	1	none	none
 noaa_ghcn_daily_prcp_by_station	ok	2374291	4748582	59	41780	83560	0	0	0	1	none	none
 ptbxl_physionet	ok	2400000	9600000	200	12000	48000	0	0	0	1	none	none
 openf1_belgium_2023_car_data_native	ok	2526120	3368160	120	21051	21051	0	0	0	1	none	none
 ncbi_assembly_refseq_summary	ok	2614503	12549768	5	522939	2091756	0	0	0	1	none	none
+openalex_authors_large	ok	2815400	7239600	7	402200	804400	0	0	0	1	none	none
 sensorless_drive_diagnosis_uci	ok	2866941	22525965	49	58509	468072	0	0	0	1	none	none
 imdb_title_ratings	ok	3358804	13435216	2	1679402	6717608	0	0	0	1	none	none
+metacpan_releases_search_large	ok	3597093	14388372	9	399677	1598708	0	0	0	1	none	none
 citibike_2024_01_station_ids_u16	ok	3776170	7552340	16	180600	361200	0	0	0	1	none	none
 ncbi_gene_human	ok	4794554	19178216	4	1198638.5	4794554	0	0	0	1	none	none
 beijing_air_quality_uci	ok	5753775	46030200	180	32141.5	257132	0	0	0	1	none	none

@@ -3,7 +3,7 @@
 Cursor-paginated OpenAlex **sources** table, extracted into one numeric column sample per source-level field.
 
 - Source: https://api.openalex.org/sources (CC0)
-- Scope: the first `OPENALEX_TARGET_RECORDS` (default `20000`) sources in OpenAlex default cursor order — a bounded, reproducible slice, not a ranked top-N leaderboard.
+- Scope: the **full** OpenAlex sources index (~284k sources) in default cursor order. `OPENALEX_MAX_RECORDS` caps the pull (default effectively unlimited — pagination stops when the cursor ends); `OPENALEX_MIN_RECORDS` is the floor the download must reach.
 - Local raw pages: `${DATA_DIR:-.data}/downloads/openalex_sources_large/pages/`
 
 ## Series (each a `table_column` sample, one value per source row)
@@ -30,4 +30,4 @@ bash datasets/openalex_sources_large/build.sh
 bash datasets/openalex_sources_large/verify.sh
 ```
 
-Tuning env vars: `OPENALEX_TARGET_RECORDS`, `OPENALEX_PAGE_SIZE` (≤200), `OPENALEX_REQUEST_DELAY_SECONDS`, `OPENALEX_MAILTO` (polite pool). Logs under `${DATA_DIR:-.data}/logs/openalex_sources_large/`.
+Tuning env vars: `OPENALEX_MAX_RECORDS`, `OPENALEX_MIN_RECORDS`, `OPENALEX_PAGE_SIZE` (≤200), `OPENALEX_REQUEST_DELAY_SECONDS`, `OPENALEX_MAILTO` (polite pool). Logs under `${DATA_DIR:-.data}/logs/openalex_sources_large/`.

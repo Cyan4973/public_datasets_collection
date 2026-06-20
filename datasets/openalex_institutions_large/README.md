@@ -3,7 +3,7 @@
 Cursor-paginated OpenAlex **institutions** table, extracted into one numeric column sample per institution-level field.
 
 - Source: https://api.openalex.org/institutions (CC0)
-- Scope: the first `OPENALEX_TARGET_RECORDS` (default `20000`) institutions in OpenAlex default cursor order — a bounded, reproducible slice, not a ranked top-N leaderboard.
+- Scope: the **full** OpenAlex institutions index (~126k institutions) in default cursor order. `OPENALEX_MAX_RECORDS` caps the pull (default effectively unlimited); `OPENALEX_MIN_RECORDS` is the floor the download must reach.
 - Local raw pages: `${DATA_DIR:-.data}/downloads/openalex_institutions_large/pages/`
 
 ## Series (each a `table_column` sample, one value per institution row)
@@ -28,4 +28,4 @@ bash datasets/openalex_institutions_large/build.sh
 bash datasets/openalex_institutions_large/verify.sh
 ```
 
-Tuning env vars: `OPENALEX_TARGET_RECORDS`, `OPENALEX_PAGE_SIZE` (≤200), `OPENALEX_REQUEST_DELAY_SECONDS`, `OPENALEX_MAILTO` (polite pool). Logs under `${DATA_DIR:-.data}/logs/openalex_institutions_large/`.
+Tuning env vars: `OPENALEX_MAX_RECORDS`, `OPENALEX_MIN_RECORDS`, `OPENALEX_PAGE_SIZE` (≤200), `OPENALEX_REQUEST_DELAY_SECONDS`, `OPENALEX_MAILTO` (polite pool). Logs under `${DATA_DIR:-.data}/logs/openalex_institutions_large/`.

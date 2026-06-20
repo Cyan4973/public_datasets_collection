@@ -3,7 +3,7 @@
 Cursor-paginated OpenAlex **authors** table, extracted into one numeric column sample per author-level field.
 
 - Source: https://api.openalex.org/authors (CC0)
-- Scope: the first `OPENALEX_TARGET_RECORDS` (default `20000`) authors in OpenAlex default cursor order — a bounded, reproducible slice, not a ranked top-N leaderboard.
+- Scope: a large bounded slice of the OpenAlex authors index (default cap **1,000,000** authors; the full index is ~118M) in default cursor order. `OPENALEX_MAX_RECORDS` sets the cap; `OPENALEX_MIN_RECORDS` is the floor the download must reach.
 - Local raw pages: `${DATA_DIR:-.data}/downloads/openalex_authors_large/pages/`
 
 ## Series (each a `table_column` sample, one value per author row)
@@ -28,4 +28,4 @@ bash datasets/openalex_authors_large/build.sh
 bash datasets/openalex_authors_large/verify.sh
 ```
 
-Tuning env vars: `OPENALEX_TARGET_RECORDS`, `OPENALEX_PAGE_SIZE` (≤200), `OPENALEX_REQUEST_DELAY_SECONDS`, `OPENALEX_MAILTO` (polite pool). Logs under `${DATA_DIR:-.data}/logs/openalex_authors_large/`.
+Tuning env vars: `OPENALEX_MAX_RECORDS`, `OPENALEX_MIN_RECORDS`, `OPENALEX_PAGE_SIZE` (≤200), `OPENALEX_REQUEST_DELAY_SECONDS`, `OPENALEX_MAILTO` (polite pool). Logs under `${DATA_DIR:-.data}/logs/openalex_authors_large/`.

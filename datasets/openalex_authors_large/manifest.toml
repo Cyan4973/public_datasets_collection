@@ -34,7 +34,7 @@ access = "Direct public HTTP cursor pagination over the default author ordering.
 size_bytes = 0
 sha256 = ""
 local_path = "downloads/openalex_authors_large/pages/"
-notes = "First TARGET_RECORDS (default 20000) authors in OpenAlex default cursor order."
+notes = "Large bounded slice of the OpenAlex authors index (default cap 1,000,000 of ~118M) in default cursor order; set via OPENALEX_MAX_RECORDS."
 
 [local_paths]
 downloads = "downloads/openalex_authors_large/"

@@ -3,7 +3,7 @@
 NASA DONKI CME events over a multi-year window, extracted into one numeric column sample per native CME-analysis field.
 
 - Source: https://kauai.ccmc.gsfc.nasa.gov/DONKI/WS/get/CME (NASA CCMC DONKI)
-- Scope: all CME events for each calendar year in `DONKI_START_YEAR`..`DONKI_END_YEAR` (default **2020–2024**), fetched one year per page. The 2024-only window was too thin for the floor; widening years adds real measurements (the dataset id is already generic).
+- Scope: all CME events for each calendar year in `DONKI_START_YEAR`..`DONKI_END_YEAR` (default **2010–2026**, the full DONKI archive), fetched one year per page.
 - Local raw pages: `${DATA_DIR:-.data}/downloads/nasa_donki_cme/pages/`
 
 ## Series (each a `table_column` sample, one value per CME event)

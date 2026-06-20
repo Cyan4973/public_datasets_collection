@@ -3,38 +3,45 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 DATA_DIR="${DATA_DIR:-.data}"
-DATASET_ID="jpl_cad_2024"
+DATASET_ID="jpl_close_approaches"
 LOG_DIR="$REPO_ROOT/$DATA_DIR/logs/$DATASET_ID"
 DOWNLOAD_DIR="$REPO_ROOT/$DATA_DIR/downloads/$DATASET_ID"
+PAGE_DIR="$DOWNLOAD_DIR/pages"
 FILTER_DIR="$REPO_ROOT/$DATA_DIR/filtered/$DATASET_ID"
 INDEX_DIR="$REPO_ROOT/$DATA_DIR/index/$DATASET_ID"
 SAMPLES_DIR="$REPO_ROOT/$DATA_DIR/samples/$DATASET_ID"
-mkdir -p "$LOG_DIR" "$DOWNLOAD_DIR" "$FILTER_DIR" "$INDEX_DIR" "$SAMPLES_DIR"
+mkdir -p "$LOG_DIR" "$FILTER_DIR" "$INDEX_DIR" "$SAMPLES_DIR"
 
 RUN_TS="$(date +%Y%m%d_%H%M%S)"
 LOG_FILE="$LOG_DIR/build.$RUN_TS.log"
 LATEST_LOG="$LOG_DIR/build.latest.log"
 exec > >(tee "$LOG_FILE" "$LATEST_LOG") 2>&1
 
-export REPO_ROOT DATA_DIR DOWNLOAD_DIR FILTER_DIR INDEX_DIR SAMPLES_DIR
+export REPO_ROOT DATA_DIR PAGE_DIR FILTER_DIR INDEX_DIR SAMPLES_DIR
 python3 - <<'PY'
 from __future__ import annotations
 
 import json
 import os
+import re
 import shutil
 import struct
 from pathlib import Path
 
 repo_root = Path(os.environ["REPO_ROOT"])
 data_root = repo_root / os.environ["DATA_DIR"]
-download_dir = Path(os.environ["DOWNLOAD_DIR"])
+page_dir = Path(os.environ["PAGE_DIR"])
 filter_dir = Path(os.environ["FILTER_DIR"])
 index_dir = Path(os.environ["INDEX_DIR"])
 samples_dir = Path(os.environ["SAMPLES_DIR"])
 
-obj = json.load(open(download_dir / "cad_2024.json", encoding="utf-8"))
-field_index = {name: i for i, name in enumerate(obj["fields"])}
+page_re = re.compile(r"cad_(\d{4})\.json$")
+page_paths = sorted(
+    [p for p in page_dir.glob("cad_*.json") if page_re.search(p.name)],
+    key=lambda p: int(page_re.search(p.name).group(1)),
+)
+if not page_paths:
+    raise SystemExit(f"no downloaded CAD pages found under {page_dir}")
 
 # series_id -> CAD field name (all native float64)
 defs = {
@@ -55,18 +62,29 @@ for sid in defs:
 
 rows_total = 0
 rows_skipped = 0
-for row in obj["data"]:
-    rows_total += 1
-    before = len(vals["jpl_cad_jd"])
-    try:
-        parsed = {sid: float(row[field_index[field]]) for sid, field in defs.items()}
-        for sid in defs:
-            vals[sid].append(parsed[sid])
-    except Exception:
-        for series_values in vals.values():
-            while len(series_values) > before:
-                series_values.pop()
-        rows_skipped += 1
+seen: set[tuple] = set()
+for path in page_paths:
+    with path.open(encoding="utf-8") as fh:
+        obj = json.load(fh)
+    data = obj.get("data") or []
+    fields = obj.get("fields") or []
+    field_index = {name: i for i, name in enumerate(fields)}
+    for row in data:
+        rows_total += 1
+        before = len(vals["jpl_cad_jd"])
+        try:
+            key = (row[field_index["des"]], row[field_index["jd"]])
+            if key in seen:
+                raise ValueError("duplicate close approach")
+            seen.add(key)
+            parsed = {sid: float(row[field_index[field]]) for sid, field in defs.items()}
+            for sid in defs:
+                vals[sid].append(parsed[sid])
+        except Exception:
+            for series_values in vals.values():
+                while len(series_values) > before:
+                    series_values.pop()
+            rows_skipped += 1
 
 kept_rows = len(vals["jpl_cad_jd"])
 if len({len(series_values) for series_values in vals.values()}) != 1:
@@ -82,7 +100,7 @@ for sid in defs:
         fh.write(struct.pack("<" + "d" * len(values), *values))
     rows.append(
         {
-            "dataset_id": "jpl_cad_2024",
+            "dataset_id": "jpl_close_approaches",
             "series_id": sid,
             "role": "primary",
             "sample_path": out.relative_to(data_root).as_posix(),
@@ -106,7 +124,8 @@ for sid in defs:
 primary_bytes = sum(row["sample_size_bytes"] for row in rows)
 primary_values = sum(row["value_count"] for row in rows)
 stats = {
-    "dataset_id": "jpl_cad_2024",
+    "dataset_id": "jpl_close_approaches",
+    "downloaded_pages": len(page_paths),
     "rows_total": rows_total,
     "rows_skipped": rows_skipped,
     "rows_kept": kept_rows,

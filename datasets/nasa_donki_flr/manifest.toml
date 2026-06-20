@@ -34,7 +34,7 @@ access = "One public HTTP request per calendar year in the configured window."
 size_bytes = 0
 sha256 = ""
 local_path = "downloads/nasa_donki_flr/pages/"
-notes = "DONKI solar flare events for each year in DONKI_START_YEAR..DONKI_END_YEAR (default 2020-2024)."
+notes = "DONKI solar flare events for each year in DONKI_START_YEAR..DONKI_END_YEAR (default 2010-2026, full archive)."
 
 [local_paths]
 downloads = "downloads/nasa_donki_flr/"

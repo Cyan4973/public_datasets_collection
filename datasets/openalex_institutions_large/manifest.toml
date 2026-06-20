@@ -34,7 +34,7 @@ access = "Direct public HTTP cursor pagination over the default institution orde
 size_bytes = 0
 sha256 = ""
 local_path = "downloads/openalex_institutions_large/pages/"
-notes = "First TARGET_RECORDS (default 20000) institutions in OpenAlex default cursor order."
+notes = "Full OpenAlex institutions index (~126k) in default cursor order; OPENALEX_MAX_RECORDS optionally caps the pull."
 
 [local_paths]
 downloads = "downloads/openalex_institutions_large/"

@@ -3,7 +3,7 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 DATA_DIR="${DATA_DIR:-.data}"
-DATASET_ID="jpl_cad_2024"
+DATASET_ID="jpl_close_approaches"
 LOG_DIR="$REPO_ROOT/$DATA_DIR/logs/$DATASET_ID"
 FILTER_DIR="$REPO_ROOT/$DATA_DIR/filtered/$DATASET_ID"
 INDEX_DIR="$REPO_ROOT/$DATA_DIR/index/$DATASET_ID"
@@ -29,7 +29,7 @@ MIN_PRIMARY_VALUES = 10_000
 MIN_PRIMARY_BYTES = 102_400
 MIN_MEDIAN_VALUES = 1_000
 MAX_PRIMARY_BYTES = 1_000_000_000
-MIN_ROWS_KEPT = 1_500
+MIN_ROWS_KEPT = 35_000
 EXPECTED_PRIMARY = {
     "jpl_cad_jd",
     "jpl_cad_dist",

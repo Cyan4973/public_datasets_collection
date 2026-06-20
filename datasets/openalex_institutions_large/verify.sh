@@ -28,7 +28,7 @@ MIN_PRIMARY_VALUES = 10_000
 MIN_PRIMARY_BYTES = 262_144
 MIN_MEDIAN_VALUES = 1_000
 MAX_PRIMARY_BYTES = 1_000_000_000
-MIN_ROWS_KEPT = 17_000
+MIN_ROWS_KEPT = 80_000
 EXPECTED_PRIMARY = {
     "openalex_inst_works_count",
     "openalex_inst_cited_by_count",

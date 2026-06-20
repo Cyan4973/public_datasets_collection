@@ -1,10 +1,44 @@
 manifest_version = 1
 dataset_id = "nasa_donki_flr"
 name = "NASA DONKI Solar Flares"
-description = "Pinned DONKI solar flare event feed with event metadata and timing fields."
+description = "NASA DONKI solar flare events over a multi-year window, one column sample per native or parsed flare numeric field."
+homepage = "https://ccmc.gsfc.nasa.gov/tools/DONKI/"
+
+[license]
+name = "NASA"
+spdx = "LicenseRef-NASA-Open"
+url = "https://ccmc.gsfc.nasa.gov/tools/DONKI/"
+citation = "NASA CCMC Database Of Notifications, Knowledge, Information (DONKI)."
+notes = "Public NASA DONKI web service output."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public JSON responses from the DONKI FLR web service, fetched one calendar year per page."
+usage_notes = "Promote only after fresh successful download, build, and verify."
+
+[[origins]]
+id = "official"
+name = "NASA DONKI"
+url = "https://kauai.ccmc.gsfc.nasa.gov/DONKI/WS/get/FLR"
+type = "api"
+notes = "Official public DONKI FLR web service (no API key required)."
+
+[[resources]]
+id = "flr_year_pages"
+origin = "official"
+url = "https://kauai.ccmc.gsfc.nasa.gov/DONKI/WS/get/FLR?startDate=YYYY-01-01&endDate=YYYY-12-31"
+type = "api_response_pages"
+version = "per_year"
+access = "One public HTTP request per calendar year in the configured window."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/nasa_donki_flr/pages/"
+notes = "DONKI solar flare events for each year in DONKI_START_YEAR..DONKI_END_YEAR (default 2020-2024)."
 
 [local_paths]
 downloads = "downloads/nasa_donki_flr/"
+extracted = "extracted/nasa_donki_flr/"
 filtered = "filtered/nasa_donki_flr/"
 index = "index/nasa_donki_flr/"
 samples = "samples/nasa_donki_flr/"
@@ -14,3 +48,82 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/nasa_donki_flr/samples.jsonl"
+summary = "Download DONKI solar flare events year by year and emit one raw little-endian numeric sample per native or parsed flare field across all events."
+deterministic_notes = "Fixed endpoint, per-year date windows, deterministic parsing of classType (GOES peak flux) and sourceLocation (heliographic latitude/longitude), atomic per-row extraction with flrID de-duplication (rows with unparseable required fields are dropped), and a generated sample index."
+
+[[series]]
+id = "donki_flr_begin_epoch_u32"
+semantic_meaning = "Flare beginTime as Unix epoch seconds."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing a parseable beginTime are dropped."
+conversion = "Native ISO time parsed to Unix epoch seconds, stored as uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "donki_flr_rise_seconds_u32"
+semantic_meaning = "Flare rise duration (peakTime - beginTime) in seconds."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows whose timestamps are missing or yield a negative duration are dropped."
+conversion = "Difference of parsed epoch seconds, stored as uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "donki_flr_decay_seconds_u32"
+semantic_meaning = "Flare decay duration (endTime - peakTime) in seconds."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows whose timestamps are missing or yield a negative duration are dropped."
+conversion = "Difference of parsed epoch seconds, stored as uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "donki_flr_active_region_u32"
+semantic_meaning = "NOAA active region number associated with the flare."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing activeRegionNum defaults to 0."
+conversion = "Native JSON integer stored as uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "donki_flr_peak_flux_f32"
+semantic_meaning = "GOES peak X-ray flux (W/m^2) decoded from the flare classType."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows with an unparseable classType are dropped."
+conversion = "classType letter mapped to its decade (A=1e-8 ... X=1e-4) times the mantissa, stored as float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "donki_flr_source_lat_f32"
+semantic_meaning = "Heliographic latitude (degrees, N positive) parsed from sourceLocation."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows with an unparseable sourceLocation are dropped."
+conversion = "sourceLocation hemisphere/degrees parsed to signed degrees, stored as float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "donki_flr_source_lon_f32"
+semantic_meaning = "Heliographic longitude (degrees, E positive) parsed from sourceLocation."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows with an unparseable sourceLocation are dropped."
+conversion = "sourceLocation hemisphere/degrees parsed to signed degrees, stored as float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"

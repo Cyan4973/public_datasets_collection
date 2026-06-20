@@ -4,8 +4,8 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 158
-- `below_floor`: 164
+- `ok`: 159
+- `below_floor`: 163
 - `broken`: 0
 
 ## Below Floor
@@ -138,7 +138,6 @@ Auxiliary series do not count toward acceptance.
 | `dataone_solr_1000` | 2000 | 10000 | 2 | 1000 | 0 | 0 | `aggregate_floor` |
 | `fred_sp500_daily` | 2162 | 8648 | 9 | 251 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `geofabrik_index` | 2220 | 17760 | 4 | 555 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `nasa_donki_flr` | 2256 | 9024 | 2 | 1128 | 0 | 0 | `aggregate_floor` |
 | `eurostat_female_unemployment_monthly` | 2465 | 9860 | 5 | 520 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `eurostat_male_unemployment_monthly` | 2465 | 9860 | 5 | 520 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `eurostat_unemployment_monthly` | 2465 | 9860 | 5 | 520 | 0 | 0 | `aggregate_floor,median_sample_floor` |

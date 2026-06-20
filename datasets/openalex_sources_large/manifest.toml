@@ -1,21 +1,21 @@
 manifest_version = 1
 dataset_id = "openalex_sources_large"
 name = "OpenAlex Sources Large"
-description = "Source-level numeric metadata from a 200-row OpenAlex sources result."
+description = "Bounded cursor-paginated OpenAlex sources table with source-level numeric metadata, one column sample per native numeric field."
 homepage = "https://openalex.org/"
 
 [license]
-name = "OpenAlex Terms"
+name = "CC0-1.0"
 spdx = "CC0-1.0"
 url = "https://docs.openalex.org/"
 citation = "https://openalex.org/"
-notes = "Public OpenAlex API output."
+notes = "Public OpenAlex API output (CC0)."
 
 [safety]
 contains_sensitive_data = false
 contains_personal_data = false
-provenance_notes = "Public JSON response from a fixed OpenAlex sources query."
-usage_notes = "Promote only after fresh successful download."
+provenance_notes = "Public JSON responses from cursor-paginated OpenAlex sources pages."
+usage_notes = "Promote only after fresh successful download, build, and verify."
 
 [[origins]]
 id = "official"
@@ -25,16 +25,16 @@ type = "api"
 notes = "Official public endpoint."
 
 [[resources]]
-id = "sources"
+id = "sources_pages"
 origin = "official"
-url = "https://api.openalex.org/sources?per-page=200&sort=works_count:desc"
-type = "api_query_result"
-version = "2026-06-11"
-access = "Direct public HTTP request."
+url = "https://api.openalex.org/sources?per-page=200&cursor=*"
+type = "api_response_pages"
+version = "cursor_paginated"
+access = "Direct public HTTP cursor pagination over the default source ordering."
 size_bytes = 0
 sha256 = ""
-local_path = "downloads/openalex_sources_large/openalex_sources_large.json"
-notes = "Pinned query parameters from the scout batch."
+local_path = "downloads/openalex_sources_large/pages/"
+notes = "First TARGET_RECORDS (default 20000) sources in OpenAlex default cursor order."
 
 [local_paths]
 downloads = "downloads/openalex_sources_large/"
@@ -48,5 +48,104 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/openalex_sources_large/samples.jsonl"
-summary = "Download the pinned OpenAlex sources result, extract source-level numeric metadata, and emit raw little-endian numeric samples."
-deterministic_notes = "Fixed query parameters, source-order row retention, fixed field extraction."
+summary = "Cursor-paginate the OpenAlex sources index to a bounded record count, extract source-level numeric fields as table columns, and emit one raw little-endian numeric sample per field."
+deterministic_notes = "Fixed endpoint, fixed page size, cursor pagination over default order, bounded target record count, atomic per-row field extraction (rows missing required scalar fields are dropped), and a generated sample index."
+
+[[series]]
+id = "openalex_source_works_count_u32"
+semantic_meaning = "Native OpenAlex works_count for the source."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing works_count are filtered."
+conversion = "Native JSON integer stored as uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "openalex_source_oa_works_count_u32"
+semantic_meaning = "Native OpenAlex oa_works_count (open-access works) for the source."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing oa_works_count are filtered."
+conversion = "Native JSON integer stored as uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "openalex_source_cited_by_count_u32"
+semantic_meaning = "Native OpenAlex cited_by_count for the source."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing cited_by_count are filtered."
+conversion = "Native JSON integer stored as uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "openalex_source_2yr_mean_citedness_f32"
+semantic_meaning = "Native summary_stats.2yr_mean_citedness impact factor for the source."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing metric defaults to 0.0."
+conversion = "Native JSON number stored as float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "openalex_source_h_index_u16"
+semantic_meaning = "Native summary_stats.h_index for the source."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing metric defaults to 0."
+conversion = "Native JSON integer stored as uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "openalex_source_i10_index_u32"
+semantic_meaning = "Native summary_stats.i10_index for the source."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing metric defaults to 0."
+conversion = "Native JSON integer stored as uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "openalex_source_first_publication_year_u16"
+semantic_meaning = "Native first_publication_year for the source."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing first_publication_year are filtered."
+conversion = "Native JSON integer year stored as uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "openalex_source_last_publication_year_u16"
+semantic_meaning = "Native last_publication_year for the source."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing last_publication_year are filtered."
+conversion = "Native JSON integer year stored as uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "openalex_source_topic_count_u8"
+semantic_meaning = "Number of topic records attached to the source."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Missing arrays are treated as empty arrays; counts are clamped to 255."
+conversion = "Stable JSON array cardinality stored as uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"

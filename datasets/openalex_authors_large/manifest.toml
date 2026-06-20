@@ -1,13 +1,129 @@
 manifest_version = 1
 dataset_id = "openalex_authors_large"
-status = "staged"
-kind = "derived_operational_numeric"
+name = "OpenAlex Authors Large"
+description = "Bounded cursor-paginated OpenAlex authors table with author-level numeric metadata, one column sample per native numeric field."
+homepage = "https://openalex.org/"
 
-[origin]
-name = "OpenAlex Authors"
+[license]
+name = "CC0-1.0"
+spdx = "CC0-1.0"
+url = "https://docs.openalex.org/"
+citation = "https://openalex.org/"
+notes = "Public OpenAlex API output (CC0)."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public JSON responses from cursor-paginated OpenAlex authors pages. Author records are public bibliometric aggregates."
+usage_notes = "Promote only after fresh successful download, build, and verify."
+
+[[origins]]
+id = "official"
+name = "OpenAlex"
 url = "https://api.openalex.org/authors"
-license = "OpenAlex terms"
+type = "api"
+notes = "Official public endpoint."
 
-[build]
-sample_index_path = ".data/index/openalex_authors_large/samples.jsonl"
-missing_value_policy = "Rows lacking works_count or cited_by_count are dropped. Missing summary stats become zero."
+[[resources]]
+id = "authors_pages"
+origin = "official"
+url = "https://api.openalex.org/authors?per-page=200&cursor=*"
+type = "api_response_pages"
+version = "cursor_paginated"
+access = "Direct public HTTP cursor pagination over the default author ordering."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/openalex_authors_large/pages/"
+notes = "First TARGET_RECORDS (default 20000) authors in OpenAlex default cursor order."
+
+[local_paths]
+downloads = "downloads/openalex_authors_large/"
+extracted = "extracted/openalex_authors_large/"
+filtered = "filtered/openalex_authors_large/"
+index = "index/openalex_authors_large/"
+samples = "samples/openalex_authors_large/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/openalex_authors_large/samples.jsonl"
+summary = "Cursor-paginate the OpenAlex authors index to a bounded record count, extract author-level numeric fields as table columns, and emit one raw little-endian numeric sample per field."
+deterministic_notes = "Fixed endpoint, fixed page size, cursor pagination over default order, bounded target record count, atomic per-row field extraction (rows missing required scalar fields are dropped), and a generated sample index."
+
+[[series]]
+id = "openalex_author_works_count_u32"
+semantic_meaning = "Native OpenAlex works_count for the author."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing works_count are filtered."
+conversion = "Native JSON integer stored as uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "openalex_author_cited_by_count_u32"
+semantic_meaning = "Native OpenAlex cited_by_count for the author."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing cited_by_count are filtered."
+conversion = "Native JSON integer stored as uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "openalex_author_h_index_u16"
+semantic_meaning = "Native summary_stats.h_index for the author."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing metric defaults to 0."
+conversion = "Native JSON integer stored as uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "openalex_author_i10_index_u32"
+semantic_meaning = "Native summary_stats.i10_index for the author."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing metric defaults to 0."
+conversion = "Native JSON integer stored as uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "openalex_author_raw_name_count_u8"
+semantic_meaning = "Number of raw author-name variants attached to the author."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Missing arrays are treated as empty arrays; counts are clamped to 255."
+conversion = "Stable JSON array cardinality stored as uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "openalex_author_affiliation_count_u16"
+semantic_meaning = "Number of affiliation records attached to the author."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Missing arrays are treated as empty arrays; counts are clamped to 65535."
+conversion = "Stable JSON array cardinality stored as uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "openalex_author_topic_count_u8"
+semantic_meaning = "Number of topic records attached to the author."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Missing arrays are treated as empty arrays; counts are clamped to 255."
+conversion = "Stable JSON array cardinality stored as uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"

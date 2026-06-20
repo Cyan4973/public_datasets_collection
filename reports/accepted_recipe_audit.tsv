@@ -91,8 +91,6 @@ ena_portal_search	below_floor	1000	5000	2	500	2500	0	0	0	1	none	aggregate_floor,
 scryfall_default_cards	below_floor	1050	2100	6	175	175	0	0	0	1	none	aggregate_floor,median_sample_floor
 owid_cement_co2_annual	below_floor	1155	4620	10	97	388	0	0	0	1	none	aggregate_floor,median_sample_floor
 iris_seismon_events_fixed	below_floor	1170	5330	9	130	260	0	0	0	1	none	aggregate_floor,median_sample_floor
-openalex_authors_large	below_floor	1400	3000	7	200	400	0	0	0	1	none	aggregate_floor,median_sample_floor
-openalex_institutions_large	below_floor	1400	4200	7	200	800	0	0	0	1	none	aggregate_floor,median_sample_floor
 owid_co2_per_gdp_annual	below_floor	1403	5612	10	140	560	0	0	0	1	none	aggregate_floor,median_sample_floor
 openfda_device_event	below_floor	1500	3500	3	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
 plos_search	below_floor	1500	3500	3	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -115,7 +113,6 @@ owid_methane_annual	below_floor	1750	7000	10	175	700	0	0	0	1	none	aggregate_floo
 owid_nitrous_oxide_annual	below_floor	1750	7000	10	175	700	0	0	0	1	none	aggregate_floor,median_sample_floor
 owid_total_ghg_annual	below_floor	1750	7000	10	175	700	0	0	0	1	none	aggregate_floor,median_sample_floor
 npm_search_packages_large	below_floor	1750	10000	7	250	2000	0	0	0	1	none	aggregate_floor,median_sample_floor
-openalex_sources_large	below_floor	1800	5400	9	200	800	0	0	0	1	none	aggregate_floor,median_sample_floor
 eurostat_hicp_all_items_monthly	below_floor	1800	7200	5	360	1440	0	0	0	1	none	aggregate_floor,median_sample_floor
 eurostat_hicp_food_monthly	below_floor	1800	7200	5	360	1440	0	0	0	1	none	aggregate_floor,median_sample_floor
 disease_sh_countries	below_floor	1848	12936	8	231	1848	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -237,7 +234,10 @@ reactome_events_hierarchy	ok	104345	271297	5	20869	41738	0	0	0	1	none	none
 noaa_ghcn_daily_tavg_by_station	ok	121079	242158	59	2588	5176	0	0	0	1	none	none
 noaa_ghcn_daily_tsun_by_station	ok	133376	266752	16	11347.5	22695	0	0	0	1	none	none
 bike_sharing_uci	ok	139032	399717	8	17379	52137	0	0	0	1	none	none
+openalex_authors_large	ok	140000	360000	7	20000	40000	0	0	0	1	none	none
+openalex_institutions_large	ok	140000	420000	7	20000	80000	0	0	0	1	none	none
 seismic_waveform_i32	ok	168000	672000	12	12000	48000	0	0	0	1	none	none
+openalex_sources_large	ok	176652	529956	9	19628	78512	0	0	0	1	none	none
 movielens_latest_small	ok	201672	806688	2	100836	403344	0	0	0	1	none	none
 gutendex_catalog_books	ok	203883	565180	3	62588	125176	78707	314828	1	1	none	none
 geonames_cities5000	ok	206700	1378000	3	68900	551200	0	0	0	1	none	none

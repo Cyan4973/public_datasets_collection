@@ -4,8 +4,8 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 152
-- `below_floor`: 170
+- `ok`: 155
+- `below_floor`: 167
 - `broken`: 0
 
 ## Below Floor
@@ -104,8 +104,6 @@ Auxiliary series do not count toward acceptance.
 | `scryfall_default_cards` | 1050 | 2100 | 6 | 175 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_cement_co2_annual` | 1155 | 4620 | 10 | 97 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `iris_seismon_events_fixed` | 1170 | 5330 | 9 | 130 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `openalex_authors_large` | 1400 | 3000 | 7 | 200 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `openalex_institutions_large` | 1400 | 4200 | 7 | 200 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_co2_per_gdp_annual` | 1403 | 5612 | 10 | 140 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `openfda_device_event` | 1500 | 3500 | 3 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `plos_search` | 1500 | 3500 | 3 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
@@ -128,7 +126,6 @@ Auxiliary series do not count toward acceptance.
 | `owid_nitrous_oxide_annual` | 1750 | 7000 | 10 | 175 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_total_ghg_annual` | 1750 | 7000 | 10 | 175 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `npm_search_packages_large` | 1750 | 10000 | 7 | 250 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `openalex_sources_large` | 1800 | 5400 | 9 | 200 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `eurostat_hicp_all_items_monthly` | 1800 | 7200 | 5 | 360 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `eurostat_hicp_food_monthly` | 1800 | 7200 | 5 | 360 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `disease_sh_countries` | 1848 | 12936 | 8 | 231 | 0 | 0 | `aggregate_floor,median_sample_floor` |

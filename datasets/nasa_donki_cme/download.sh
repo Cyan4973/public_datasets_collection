@@ -1,40 +1,99 @@
 #!/usr/bin/env bash
 set -euo pipefail
-ROOT_DIR=$(cd "$(dirname "$0")/../.." && pwd)
-DATA_DIR=${DATA_DIR:-"$ROOT_DIR/.data"}
-DATASET_ID=nasa_donki_cme
-DOWNLOAD_DIR="$DATA_DIR/downloads/$DATASET_ID"
-LOG_DIR="$DATA_DIR/logs/$DATASET_ID"
-mkdir -p "$DOWNLOAD_DIR" "$LOG_DIR"
-TS=$(date +%Y%m%d_%H%M%S)
-LOG_FILE="$LOG_DIR/download.$TS.log"
+
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+DATA_DIR="${DATA_DIR:-.data}"
+DATASET_ID="nasa_donki_cme"
+LOG_DIR="$REPO_ROOT/$DATA_DIR/logs/$DATASET_ID"
+DOWNLOAD_DIR="$REPO_ROOT/$DATA_DIR/downloads/$DATASET_ID"
+PAGE_DIR="$DOWNLOAD_DIR/pages"
+mkdir -p "$LOG_DIR" "$PAGE_DIR"
+
+RUN_TS="$(date +%Y%m%d_%H%M%S)"
+LOG_FILE="$LOG_DIR/download.$RUN_TS.log"
 LATEST_LOG="$LOG_DIR/download.latest.log"
-FAILURES="$DOWNLOAD_DIR/download_failures.tsv"
-: > "$FAILURES"
-exec > >(tee "$LOG_FILE") 2>&1
-FORCE_DOWNLOAD=${FORCE_DOWNLOAD:-0}
-URL="https://kauai.ccmc.gsfc.nasa.gov/DONKI/WS/get/CME?startDate=2024-01-01&endDate=2024-12-31"
-OUT="$DOWNLOAD_DIR/nasa_donki_cme.json"
-TMP="$OUT.tmp"
-if [[ "$FORCE_DOWNLOAD" != "1" && -s "$OUT" ]]; then
-  echo "cache_hit key=nasa_donki_cme path=$OUT"
-  cp "$LOG_FILE" "$LATEST_LOG" 2>/dev/null || true
-  exit 0
-fi
-echo "fetch key=nasa_donki_cme url=$URL"
-rm -f "$TMP"
-if ! curl --globoff --fail --location --retry 3 --retry-delay 2 --silent --show-error "$URL" -o "$TMP"; then
-  echo -e "nasa_donki_cme\t$URL\tcurl_failed" >> "$FAILURES"
-  rm -f "$TMP"
-  cp "$LOG_FILE" "$LATEST_LOG" 2>/dev/null || true
-  exit 1
-fi
-if ! jq -e "type==\"array\"" "$TMP" >/dev/null 2>&1; then
-  echo -e "nasa_donki_cme\t$URL\tvalidation_failed" >> "$FAILURES"
-  rm -f "$TMP"
-  cp "$LOG_FILE" "$LATEST_LOG" 2>/dev/null || true
-  exit 1
-fi
-mv "$TMP" "$OUT"
-echo "fetch_ok key=nasa_donki_cme bytes=$(stat -c '%s' "$OUT")"
-cp "$LOG_FILE" "$LATEST_LOG" 2>/dev/null || true
+exec > >(tee "$LOG_FILE" "$LATEST_LOG") 2>&1
+
+START_YEAR="${DONKI_START_YEAR:-2020}"
+END_YEAR="${DONKI_END_YEAR:-2024}"
+REQUEST_DELAY="${DONKI_REQUEST_DELAY_SECONDS:-1.0}"
+MIN_RECORDS="${DONKI_MIN_RECORDS:-2500}"
+BASE_URL="https://kauai.ccmc.gsfc.nasa.gov/DONKI/WS/get/CME"
+
+echo "[$(date -Is)] download_start dataset=$DATASET_ID years=${START_YEAR}-${END_YEAR}"
+
+year="$START_YEAR"
+while [ "$year" -le "$END_YEAR" ]; do
+  out="$PAGE_DIR/cme_${year}.json"
+  tmp="$out.tmp"
+  if [ -s "$out" ] && [ "${FORCE_DOWNLOAD:-0}" != "1" ]; then
+    echo "cache_hit year=$year path=$out"
+  else
+    rm -f "$tmp"
+    url="${BASE_URL}?startDate=${year}-01-01&endDate=${year}-12-31"
+    echo "fetch year=$year url=$url"
+    curl --globoff -fL --retry 3 --retry-delay 3 -A "openzl-public-datasets/1.0" -o "$tmp" "$url"
+    python3 - <<'PY' "$tmp" "$year"
+import json
+import sys
+
+path, year = sys.argv[1], sys.argv[2]
+with open(path, encoding="utf-8") as fh:
+    obj = json.load(fh)
+if not isinstance(obj, list):
+    raise SystemExit(f"bad DONKI CME payload for {year}: expected JSON array")
+PY
+    mv "$tmp" "$out"
+    sleep "$REQUEST_DELAY"
+  fi
+  year=$(( year + 1 ))
+done
+
+python3 - <<'PY' "$PAGE_DIR" "$DOWNLOAD_DIR/download_stats.json" "$MIN_RECORDS" "$START_YEAR" "$END_YEAR"
+import json
+import re
+import sys
+from pathlib import Path
+
+page_dir = Path(sys.argv[1])
+stats_path = Path(sys.argv[2])
+min_records = int(sys.argv[3])
+start_year, end_year = sys.argv[4], sys.argv[5]
+page_re = re.compile(r"cme_(\d{4})\.json$")
+pages = []
+seen = set()
+duplicate = 0
+rows_total = 0
+for path in sorted(page_dir.glob("cme_*.json")):
+    match = page_re.search(path.name)
+    if not match:
+        continue
+    with path.open(encoding="utf-8") as fh:
+        obj = json.load(fh)
+    rows_total += len(obj)
+    for row in obj:
+        aid = row.get("activityID")
+        if aid in seen:
+            duplicate += 1
+        elif aid:
+            seen.add(aid)
+    pages.append({"path": path.name, "year": int(match.group(1)), "rows": len(obj)})
+
+unique = len(seen)
+if unique < min_records:
+    raise SystemExit(f"only {unique} unique CME records over {start_year}-{end_year}, need {min_records}")
+
+stats = {
+    "dataset_id": "nasa_donki_cme",
+    "pages": pages,
+    "rows_total": rows_total,
+    "unique_ids": unique,
+    "duplicate_ids": duplicate,
+    "start_year": int(start_year),
+    "end_year": int(end_year),
+}
+stats_path.write_text(json.dumps(stats, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+print(f"years={start_year}-{end_year} pages={len(pages)} rows_total={rows_total} unique={unique}")
+PY
+
+echo "[$(date -Is)] download done dataset=$DATASET_ID"

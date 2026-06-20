@@ -161,7 +161,6 @@ openml_runs_large	below_floor	6000	28000	6	1000	4000	0	0	0	1	none	aggregate_floo
 figshare_articles_large	below_floor	6000	34000	6	1000	6000	0	0	0	1	none	aggregate_floor
 nomis_employment	below_floor	6180	12360	4	1545	2317.5	0	0	0	1	none	aggregate_floor
 openml_tasks_large	below_floor	7000	26000	7	1000	4000	0	0	0	1	none	aggregate_floor
-nasa_donki_cme	below_floor	7560	21168	5	1512	6048	0	0	0	1	none	aggregate_floor
 coinpaprika_tickers	below_floor	8000	52000	4	2000	16000	0	0	0	1	none	aggregate_floor
 cisa_kev_catalog	below_floor	8060	14508	5	1612	3224	0	0	0	1	none	aggregate_floor
 jpl_cad_2024	ok	11466	91728	7	1638	13104	0	0	0	1	none	none
@@ -184,6 +183,7 @@ nasa_power_daily_temperature_humidity	ok	16425	131400	15	1095	8760	0	0	0	1	none	
 nasa_power_daily_wind	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
 usgs_nwis_dissolved_oxygen_daily	ok	16558	132464	15	1343	10744	0	0	0	1	none	none
 usgs_nwis_ph_daily	ok	17277	138216	16	1287.5	10300	0	0	0	1	none	none
+nasa_donki_cme	ok	18525	74100	5	3705	14820	0	0	0	1	none	none
 internetarchive_advancedsearch	ok	20000	120000	2	10000	60000	0	0	0	1	none	none
 nasa_eonet_events	ok	20115	73755	3	6705	13410	0	0	0	1	none	none
 binance_ticker_24hr	ok	21564	115008	6	3594	14376	0	0	0	1	none	none

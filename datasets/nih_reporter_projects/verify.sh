@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 DATA_DIR="${DATA_DIR:-.data}"
 DATASET_ID="nih_reporter_projects"
@@ -7,31 +8,96 @@ LOG_DIR="$REPO_ROOT/$DATA_DIR/logs/$DATASET_ID"
 FILTER_DIR="$REPO_ROOT/$DATA_DIR/filtered/$DATASET_ID"
 INDEX_DIR="$REPO_ROOT/$DATA_DIR/index/$DATASET_ID"
 mkdir -p "$LOG_DIR" "$FILTER_DIR" "$INDEX_DIR"
+
 RUN_TS="$(date +%Y%m%d_%H%M%S)"
 LOG_FILE="$LOG_DIR/verify.$RUN_TS.log"
 LATEST_LOG="$LOG_DIR/verify.latest.log"
 exec > >(tee "$LOG_FILE" "$LATEST_LOG") 2>&1
+
 export REPO_ROOT DATA_DIR FILTER_DIR INDEX_DIR
 python3 - <<'PY'
-import csv, json, os
+from __future__ import annotations
+
+import json
+import os
+import statistics
+import struct
+from collections import defaultdict
 from pathlib import Path
-root = Path(os.environ['REPO_ROOT']) / os.environ['DATA_DIR']
-rows = [json.loads(line) for line in (Path(os.environ['INDEX_DIR']) / 'samples.jsonl').read_text().splitlines() if line.strip()]
-if len(rows) != 4:
-    raise SystemExit(f'unexpected row count {len(rows)}')
-for row in rows:
-    p = root / row['sample_path']
+
+MIN_SAMPLES_PER_FAMILY = 5
+MIN_MEDIAN_VALUES = 1_000
+MIN_PRIMARY_VALUES = 10_000
+MAX_FAMILY_BYTES = 1_000_000_000
+EXPECTED_PRIMARY = {
+    "nih_award_amount_u64",
+    "nih_direct_cost_amt_u64",
+    "nih_indirect_cost_amt_u64",
+    "nih_project_start_date_u32",
+    "nih_project_end_date_u32",
+    "nih_award_notice_date_u32",
+}
+
+root = Path(os.environ["REPO_ROOT"]) / os.environ["DATA_DIR"]
+index_path = Path(os.environ["INDEX_DIR"]) / "samples.jsonl"
+stats_path = Path(os.environ["FILTER_DIR"]) / "ingest_stats.json"
+rows = [json.loads(line) for line in index_path.read_text().splitlines() if line.strip()]
+stats = json.loads(stats_path.read_text())
+
+primary = [r for r in rows if r.get("role", "primary") == "primary"]
+ids = {r["series_id"] for r in primary}
+if ids != EXPECTED_PRIMARY:
+    raise SystemExit(f"unexpected primary series: {sorted(ids)}")
+
+by_family = defaultdict(list)
+by_year = defaultdict(dict)
+for r in primary:
+    by_family[r["series_id"]].append(r)
+    by_year[r["fiscal_year"]][r["series_id"]] = int(r["value_count"])
+
+for sid, samples in by_family.items():
+    if len(samples) < MIN_SAMPLES_PER_FAMILY:
+        raise SystemExit(f"family {sid} has {len(samples)} samples < {MIN_SAMPLES_PER_FAMILY}")
+    fam_bytes = sum(int(s["sample_size_bytes"]) for s in samples)
+    if fam_bytes > MAX_FAMILY_BYTES:
+        raise SystemExit(f"family {sid} bytes exceed cap: {fam_bytes}")
+
+# within each fiscal year the 6 fields must be atomically aligned (equal length)
+for year, fields in by_year.items():
+    if set(fields) != EXPECTED_PRIMARY or len(set(fields.values())) != 1:
+        raise SystemExit(f"year {year} fields misaligned: {fields}")
+
+counts = [int(r["value_count"]) for r in primary]
+median_values = statistics.median(counts)
+primary_values = sum(counts)
+if median_values < MIN_MEDIAN_VALUES:
+    raise SystemExit(f"median sample values below floor: {median_values}")
+if primary_values < MIN_PRIMARY_VALUES:
+    raise SystemExit(f"primary values below floor: {primary_values}")
+
+
+def unpack(path: Path, numeric_kind: str, bit_width: int, count: int) -> tuple:
+    code = {("uint", 16): "H", ("uint", 32): "I", ("uint", 64): "Q", ("float", 32): "f", ("float", 64): "d"}[(numeric_kind, bit_width)]
+    data = path.read_bytes()
+    if len(data) != count * (bit_width // 8):
+        raise SystemExit(f"size mismatch for {path}")
+    return struct.unpack("<" + code * count, data)
+
+
+for r in primary:
+    p = root / r["sample_path"]
     if not p.is_file():
-        raise SystemExit(f'missing sample {row["sample_path"]}')
-    if row['sample_size_bytes'] != p.stat().st_size:
-        raise SystemExit(f'size mismatch {row["sample_path"]}')
-    if row['value_count'] * row['element_size_bytes'] != row['sample_size_bytes']:
-        raise SystemExit(f'bad sizing {row["sample_path"]}')
-with open(Path(os.environ['FILTER_DIR']) / 'stats.tsv', encoding='utf-8') as f:
-    stats = list(csv.DictReader(f, delimiter='\t'))
-kept = int(stats[0]['kept_count'])
-if kept < 100:
-    raise SystemExit(f'kept too few rows {kept}')
-print(f'verified_samples={len(rows)} rows_total={kept} rows_skipped={int(stats[0]["skipped_count"])}')
+        raise SystemExit(f"missing sample {r['sample_path']}")
+    if p.stat().st_size != int(r["sample_size_bytes"]):
+        raise SystemExit(f"size mismatch {r['sample_path']}")
+    values = unpack(p, r["numeric_kind"], int(r["bit_width"]), int(r["value_count"]))
+    if len(set(values)) <= 1:
+        raise SystemExit(f"constant primary sample rejected: {r['sample_path']}")
+
+print(
+    f"verified families={len(by_family)} samples={len(primary)} years={len(by_year)} "
+    f"primary_values={primary_values} median_values={int(median_values)} rows_kept={stats['rows_kept']}"
+)
 PY
+
 echo "[$(date -Is)] verify done dataset=$DATASET_ID"

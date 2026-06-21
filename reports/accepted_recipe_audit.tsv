@@ -103,7 +103,6 @@ owid_oil_co2_annual	below_floor	1607	6428	10	148.5	594	0	0	0	1	none	aggregate_fl
 owid_co2_annual	below_floor	1687	6748	10	163	652	0	0	0	1	none	aggregate_floor,median_sample_floor
 owid_co2_per_capita_annual	below_floor	1687	6748	10	163	652	0	0	0	1	none	aggregate_floor,median_sample_floor
 owid_coal_co2_annual	below_floor	1687	6748	10	163	652	0	0	0	1	none	aggregate_floor,median_sample_floor
-nih_reporter_projects	below_floor	1712	8560	4	428	2140	0	0	0	1	none	aggregate_floor,median_sample_floor
 tvmaze_shows	below_floor	1715	4655	7	245	490	0	0	0	1	none	aggregate_floor,median_sample_floor
 owid_temperature_change_from_co2_annual	below_floor	1740	6960	10	174	696	0	0	0	1	none	aggregate_floor,median_sample_floor
 owid_land_use_change_co2_annual	below_floor	1750	7000	10	175	700	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -264,6 +263,7 @@ binance_usdm_futures_bookdepth_btc_eth_2024_w01	ok	806360	6450880	28	28800	23040
 noaa_coops_water_level	ok	876000	7008000	5	175200	1401600	0	0	0	1	none	none
 openalex_institutions_large	ok	880957	2642871	7	125851	503404	0	0	0	1	none	none
 smithsonian_openaccess_gltf_indices_u16	ok	899964	1799928	3	299988	599976	0	0	0	1	none	none
+nih_reporter_projects	ok	1064676	6388056	90	11664	66162	0	0	0	1	none	none
 europe_pmc_search	ok	1127748	2631412	6	187958	375916	187958	751832	1	1	none	none
 eeg_physionet	ok	1178880	2357760	30	39200	78400	0	0	0	1	none	none
 census_acs_pums_ca_person_2023_i64	ok	1265252	10122016	4	334276	2674208	0	0	0	1	none	none

@@ -1,10 +1,44 @@
 manifest_version = 1
 dataset_id = "nih_reporter_projects"
-name = "NIH Reporter Projects"
-description = "Pinned NIH Reporter project search results for fiscal year 2024."
+name = "NIH RePORTER Projects"
+description = "NIH RePORTER funded projects, one numeric field per family with one independent sample per fiscal year (2010-2024). Dollar and date fields kept as separate homogeneous families."
+homepage = "https://reporter.nih.gov/"
+
+[license]
+name = "NIH RePORTER (U.S. Government public data)"
+spdx = "LicenseRef-US-Gov-Public-Domain"
+url = "https://api.reporter.nih.gov/"
+citation = "NIH RePORTER API (https://api.reporter.nih.gov/)."
+notes = "U.S. federal funding records, public domain."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public JSON from the NIH RePORTER v2 projects/search API, fetched per fiscal year with offset pagination."
+usage_notes = "Public award metadata; no application content beyond public fields."
+
+[[origins]]
+id = "official"
+name = "NIH RePORTER"
+url = "https://api.reporter.nih.gov/v2/projects/search"
+type = "api"
+notes = "Official public NIH RePORTER v2 API. offset+limit is capped at 15000 per query."
+
+[[resources]]
+id = "projects_year_pages"
+origin = "official"
+url = "https://api.reporter.nih.gov/v2/projects/search"
+type = "api_response_pages"
+version = "per_fiscal_year_2010_2024"
+access = "POST search per fiscal year (criteria.fiscal_years=[YEAR]) with offset pagination up to the 15000 offset+limit cap, sorted by project_start_date desc."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/nih_reporter_projects/pages/"
+notes = "One fiscal year per criteria window = one independent sample per field; ~15000 projects/year (offset cap)."
 
 [local_paths]
 downloads = "downloads/nih_reporter_projects/"
+extracted = "extracted/nih_reporter_projects/"
 filtered = "filtered/nih_reporter_projects/"
 index = "index/nih_reporter_projects/"
 samples = "samples/nih_reporter_projects/"
@@ -14,39 +48,71 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/nih_reporter_projects/samples.jsonl"
+summary = "Fetch NIH RePORTER projects one fiscal year per query (offset-paginated within the 15000 cap) and emit, per numeric field, one homogeneous sample per fiscal year."
+deterministic_notes = "Fixed endpoint, fixed fiscal-year windows, fixed sort, offset pagination within the API cap, atomic per-row extraction within each year with appl_id de-duplication, and a generated sample index. fiscal_year itself is the sample axis and is not emitted as a field."
 
 [[series]]
 id = "nih_award_amount_u64"
-path = "samples/nih_reporter_projects/nih_award_amount_u64/projects.bin"
+semantic_meaning = "Total award amount (USD) for the project."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing award_amount are filtered."
+conversion = "Native JSON integer dollars stored as uint64."
 numeric_kind = "uint"
 bit_width = 64
 endianness = "little"
-sample_format = "raw_homogeneous_array"
-missing_value_policy = "filtered_rows_with_missing_award_amount"
 
 [[series]]
-id = "nih_direct_cost_amount_u64"
-path = "samples/nih_reporter_projects/nih_direct_cost_amount_u64/projects.bin"
+id = "nih_direct_cost_amt_u64"
+semantic_meaning = "Direct cost amount (USD) for the project."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing direct_cost_amt are filtered."
+conversion = "Native JSON integer dollars stored as uint64."
 numeric_kind = "uint"
 bit_width = 64
 endianness = "little"
-sample_format = "raw_homogeneous_array"
-missing_value_policy = "filtered_rows_with_missing_direct_cost_amount"
 
 [[series]]
-id = "nih_project_start_year_u16"
-path = "samples/nih_reporter_projects/nih_project_start_year_u16/projects.bin"
+id = "nih_indirect_cost_amt_u64"
+semantic_meaning = "Indirect cost amount (USD) for the project."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing indirect_cost_amt are filtered."
+conversion = "Native JSON integer dollars stored as uint64."
 numeric_kind = "uint"
-bit_width = 16
+bit_width = 64
 endianness = "little"
-sample_format = "raw_homogeneous_array"
-missing_value_policy = "filtered_rows_with_invalid_project_start_dates"
 
 [[series]]
-id = "nih_project_end_year_u16"
-path = "samples/nih_reporter_projects/nih_project_end_year_u16/projects.bin"
+id = "nih_project_start_date_u32"
+semantic_meaning = "Project start date encoded as YYYYMMDD."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows without a usable project_start_date are filtered."
+conversion = "Native ISO date parsed to YYYYMMDD uint32."
 numeric_kind = "uint"
-bit_width = 16
+bit_width = 32
 endianness = "little"
-sample_format = "raw_homogeneous_array"
-missing_value_policy = "filtered_rows_with_invalid_project_end_dates"
+
+[[series]]
+id = "nih_project_end_date_u32"
+semantic_meaning = "Project end date encoded as YYYYMMDD."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows without a usable project_end_date are filtered."
+conversion = "Native ISO date parsed to YYYYMMDD uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "nih_award_notice_date_u32"
+semantic_meaning = "Award notice date encoded as YYYYMMDD."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows without a usable award_notice_date are filtered."
+conversion = "Native ISO date parsed to YYYYMMDD uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"

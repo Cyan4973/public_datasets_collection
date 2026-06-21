@@ -4,8 +4,8 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 160
-- `below_floor`: 161
+- `ok`: 161
+- `below_floor`: 160
 - `broken`: 0
 
 ## Below Floor
@@ -116,7 +116,6 @@ Auxiliary series do not count toward acceptance.
 | `owid_co2_annual` | 1687 | 6748 | 10 | 163 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_co2_per_capita_annual` | 1687 | 6748 | 10 | 163 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_coal_co2_annual` | 1687 | 6748 | 10 | 163 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `nih_reporter_projects` | 1712 | 8560 | 4 | 428 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `tvmaze_shows` | 1715 | 4655 | 7 | 245 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_temperature_change_from_co2_annual` | 1740 | 6960 | 10 | 174 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_land_use_change_co2_annual` | 1750 | 7000 | 10 | 175 | 0 | 0 | `aggregate_floor,median_sample_floor` |

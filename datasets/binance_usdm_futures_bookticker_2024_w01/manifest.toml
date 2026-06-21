@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "binance_usdm_futures_bookticker_2024_w01"
 name = "Binance USD-M Futures BookTicker 2024 Week 01"
-description = "Bounded Binance USD-M futures best bid/ask update archive across 20 liquid symbols over 2024-01-01..03, one sample per symbol-day per field."
+description = "Bounded Binance USD-M futures best bid/ask update archive for BTCUSDT and ETHUSDT (one coherent high-value price regime) over 2024-01-01..03, one large earliest-by-time sample per symbol-day per field."
 homepage = "https://data.binance.vision/"
 
 [license]
@@ -29,12 +29,12 @@ id = "usdm_futures_bookticker_2024_w01"
 origin = "binance_public_data"
 url = "https://data.binance.vision/"
 type = "bounded_archive_subset"
-version = "2024-01-01_to_2024-01-03_20_symbols"
-access = "Download fetches daily bookTicker ZIPs for 20 symbols x 3 days from data.binance.vision; build keeps the earliest max_rows_per_resource (250000) updates by event time from each file."
+version = "2024-01-01_to_2024-01-03_btc_eth"
+access = "Download fetches daily bookTicker ZIPs for BTCUSDT and ETHUSDT x 3 days from data.binance.vision; build keeps the earliest max_rows_per_resource (2000000) updates by event time from each file."
 size_bytes = 0
 sha256 = ""
 local_path = "downloads/binance_usdm_futures_bookticker_2024_w01/"
-notes = "Up to 60 daily ZIP resources (20 symbols x 3 days); missing symbol-days are skipped."
+notes = "6 daily ZIP resources (BTCUSDT, ETHUSDT x 3 days). Symbols kept to one homogeneous high-value price regime; do not mix in other-scale symbols."
 
 [local_paths]
 downloads = "downloads/binance_usdm_futures_bookticker_2024_w01/"
@@ -47,7 +47,7 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/binance_usdm_futures_bookticker_2024_w01/samples.jsonl"
-summary = "Fetch USD-M futures daily bookTicker ZIPs for 20 symbols over three days and parse a bounded ordered window of native best bid/ask price and quantity columns as one primary sample per symbol-day per field."
+summary = "Fetch USD-M futures daily bookTicker ZIPs for BTCUSDT and ETHUSDT over three days and parse a large earliest-by-time window of native best bid/ask price and quantity columns as one primary sample per symbol-day per field."
 deterministic_notes = "Fixed symbol list, fixed date window, fixed per-resource row/time cap, no network access during build, and sample boundaries follow symbol-day field event-window sequences."
 
 [[series]]
@@ -66,7 +66,7 @@ numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 sample_format = "raw homogeneous numeric arrays by symbol-day field"
-sample_count = 60
+sample_count = 6
 total_size_bytes = 0
 output_path = "samples/binance_usdm_futures_bookticker_2024_w01/best_bid_price/"
 
@@ -86,7 +86,7 @@ numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 sample_format = "raw homogeneous numeric arrays by symbol-day field"
-sample_count = 60
+sample_count = 6
 total_size_bytes = 0
 output_path = "samples/binance_usdm_futures_bookticker_2024_w01/best_bid_qty/"
 
@@ -106,7 +106,7 @@ numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 sample_format = "raw homogeneous numeric arrays by symbol-day field"
-sample_count = 60
+sample_count = 6
 total_size_bytes = 0
 output_path = "samples/binance_usdm_futures_bookticker_2024_w01/best_ask_price/"
 
@@ -126,6 +126,6 @@ numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 sample_format = "raw homogeneous numeric arrays by symbol-day field"
-sample_count = 60
+sample_count = 6
 total_size_bytes = 0
 output_path = "samples/binance_usdm_futures_bookticker_2024_w01/best_ask_qty/"

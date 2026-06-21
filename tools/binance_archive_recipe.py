@@ -426,6 +426,12 @@ def build_one_resource(
         counter = 0
         prev_time = None
         monotonic = True
+        no_insert_streak = 0
+        # Stop once the heap is full and a safe margin of rows has passed with no
+        # new earliest-row insertion. Files here are at most a few monotone time
+        # streams, so once the input has moved past the kept window it never dips
+        # back; a margin of max_rows is generous.
+        stop_margin = max_rows
         for row in read_csv_rows(zip_path):
             if not row:
                 continue
@@ -449,11 +455,19 @@ def build_one_resource(
             counter += 1
             if len(heap) < max_rows:
                 heapq.heappush(heap, entry)
+                no_insert_streak = 0
             elif time_ms < -heap[0][0]:
                 heapq.heapreplace(heap, entry)
+                no_insert_streak = 0
+            else:
+                no_insert_streak += 1
             # Fast path: a file that is time-sorted so far already has its earliest
             # max_rows rows in hand; no need to scan the rest.
             if monotonic and len(heap) >= max_rows:
+                break
+            # Bounded scan: heap is full and the input has clearly moved past the
+            # kept earliest window, so no later row can enter it.
+            if len(heap) >= max_rows and no_insert_streak >= stop_margin:
                 break
         for _neg_time, _counter, vals_tuple in sorted(
             heap, key=lambda e: (-e[0], e[1])

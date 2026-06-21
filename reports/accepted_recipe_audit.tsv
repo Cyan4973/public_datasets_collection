@@ -44,7 +44,6 @@ imf_population_annual	below_floor	416	1664	8	52	208	0	0	0	1	none	aggregate_floor
 imf_unemployment_rate_annual	below_floor	416	1664	8	52	208	0	0	0	1	none	aggregate_floor,median_sample_floor
 musicbrainz_release_groups	below_floor	491	982	5	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
 openfoodfacts_products	below_floor	491	1870	5	98	392	0	0	0	1	none	aggregate_floor,median_sample_floor
-inaturalist_observations	below_floor	495	1188	5	99	198	0	0	0	1	none	aggregate_floor,median_sample_floor
 pokemontcg_cards	below_floor	498	1071	6	81	130.5	0	0	0	1	none	aggregate_floor,median_sample_floor
 artic_artworks_search	below_floor	500	1400	5	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
 pride_projects_search	below_floor	500	1600	5	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor

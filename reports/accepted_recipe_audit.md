@@ -5,7 +5,7 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 Auxiliary series do not count toward acceptance.
 
 - `ok`: 162
-- `below_floor`: 159
+- `below_floor`: 158
 - `broken`: 0
 
 ## Below Floor
@@ -57,7 +57,6 @@ Auxiliary series do not count toward acceptance.
 | `imf_unemployment_rate_annual` | 416 | 1664 | 8 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `musicbrainz_release_groups` | 491 | 982 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `openfoodfacts_products` | 491 | 1870 | 5 | 98 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `inaturalist_observations` | 495 | 1188 | 5 | 99 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `pokemontcg_cards` | 498 | 1071 | 6 | 81 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `artic_artworks_search` | 500 | 1400 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `pride_projects_search` | 500 | 1600 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |

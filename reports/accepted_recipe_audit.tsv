@@ -60,7 +60,6 @@ worldbank_gdp_constant	below_floor	570	2090	3	190	380	0	0	0	1	none	aggregate_flo
 owid_energy_per_capita_annual	below_floor	584	2336	10	60	240	0	0	0	1	none	aggregate_floor,median_sample_floor
 owid_primary_energy_consumption_annual	below_floor	584	2336	10	60	240	0	0	0	1	none	aggregate_floor,median_sample_floor
 worldbank_population_total	below_floor	588	2156	3	196	392	0	0	0	1	none	aggregate_floor,median_sample_floor
-crossref_works_jan_2024	below_floor	588	3136	3	196	784	0	0	0	1	none	aggregate_floor,median_sample_floor
 gleif_lei_records_api	below_floor	600	1000	3	200	400	0	0	0	1	none	aggregate_floor,median_sample_floor
 crossref_members	below_floor	600	1800	6	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
 deezer_chart	below_floor	600	2000	6	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -96,7 +95,6 @@ openfda_device_event	below_floor	1500	3500	3	500	1000	0	0	0	1	none	aggregate_flo
 plos_search	below_floor	1500	3500	3	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
 nvd_cpe_match_feed	below_floor	1500	5000	3	500	2000	0	0	0	1	none	aggregate_floor,median_sample_floor
 gbif_datasets	below_floor	1500	6000	3	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
-crossref_works_large_retry	below_floor	1500	8000	3	500	2000	0	0	0	1	none	aggregate_floor,median_sample_floor
 eurostat_retail_trade_volume_monthly	below_floor	1524	6096	5	288	1152	0	0	0	1	none	aggregate_floor,median_sample_floor
 coinpaprika_exchanges	below_floor	1530	5760	6	255	960	0	0	0	1	none	aggregate_floor,median_sample_floor
 owid_co2_including_luc_annual	below_floor	1545	6180	10	163	652	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -295,6 +293,7 @@ fsdd_spoken_digits	ok	10498424	20996848	3000	3358.5	6717	0	0	0	1	none	none
 noaa_ndbc_wave_spectral_density_f64	ok	11719309	93754472	24	427159.5	3417276	0	0	0	1	none	none
 binance_usdm_futures_1m_klines_2024_q1	ok	11793600	89107200	270	44640	357120	2620800	20966400	60	1	none	none
 har_smartphone_uci	ok	11864448	94915584	18	659136	5273088	0	0	0	1	none	none
+crossref_works_large_retry	ok	11996320	59981600	8	1499540	5998160	0	0	0	1	none	none
 noaa_isd_lite	ok	12103704	20912475	502	26015	51830	0	0	0	1	none	none
 skadi_srtm_hgt	ok	12967201	25934402	1	12967201	25934402	0	0	0	1	none	none
 binance_spot_1m_klines_2024_q1	ok	14152320	106928640	324	44640	357120	3144960	25159680	72	1	none	none

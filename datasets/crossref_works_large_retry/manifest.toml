@@ -1,21 +1,44 @@
 manifest_version = 1
 dataset_id = "crossref_works_large_retry"
-name = "Crossref Works Large Retry"
-description = "Pinned Crossref works sample with citation and timestamp fields."
+name = "Crossref Works Large"
+description = "Large cursor-paginated Crossref 2024 works table; one numeric column family per native field, each big enough (>1M values) for the selector to shard into samples."
+homepage = "https://www.crossref.org/"
 
 [license]
-name = "Crossref"
+name = "CC0-1.0"
 spdx = "CC0-1.0"
 url = "https://api.crossref.org/"
+citation = "Crossref REST API."
+notes = "Crossref metadata is provided under CC0."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public JSON from cursor-paginated Crossref REST works pages with select field projection."
+usage_notes = "Promote only after fresh successful download, build, and verify."
+
+[[origins]]
+id = "official"
+name = "Crossref REST API"
+url = "https://api.crossref.org/works"
+type = "api"
+notes = "Official public Crossref REST API; polite-pool mailto supported via CROSSREF_MAILTO."
 
 [[resources]]
-id = "crossref_works_json"
-url = "https://api.crossref.org/works?rows=500&filter=from-pub-date:2024-01-01,until-pub-date:2024-12-31"
-type = "api_response"
-local_path = "downloads/crossref_works_large_retry/crossref_works_large_retry.json"
+id = "works_pages"
+origin = "official"
+url = "https://api.crossref.org/works?filter=from-pub-date:2024-01-01,until-pub-date:2024-12-31&select=...&rows=1000&cursor=*"
+type = "api_response_pages"
+version = "cursor_paginated_2024"
+access = "Public cursor pagination over 2024 works with select field projection."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/crossref_works_large_retry/pages/"
+notes = "First CROSSREF_MAX_RECORDS (default 1500000) works of 2024 in cursor order; de-duplicated by DOI."
 
 [local_paths]
 downloads = "downloads/crossref_works_large_retry/"
+extracted = "extracted/crossref_works_large_retry/"
 filtered = "filtered/crossref_works_large_retry/"
 index = "index/crossref_works_large_retry/"
 samples = "samples/crossref_works_large_retry/"
@@ -25,27 +48,93 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/crossref_works_large_retry/samples.jsonl"
+summary = "Cursor-paginate >1M Crossref 2024 works and emit one raw little-endian numeric column per native field; each column family is large enough for the selector to shard into samples."
+deterministic_notes = "Fixed endpoint, fixed 2024 pub-date filter, fixed select field set, cursor pagination, bounded max record count, atomic per-row extraction with DOI de-duplication, and a generated sample index."
 
 [[series]]
 id = "crossref_reference_count_u32"
+semantic_meaning = "Number of references the work declares (reference-count)."
+role = "primary"
 representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered."
+missing_value_policy = "Rows missing reference-count are filtered."
+conversion = "Native JSON integer stored as uint32."
 numeric_kind = "uint"
 bit_width = 32
 endianness = "little"
 
 [[series]]
 id = "crossref_is_referenced_by_count_u32"
+semantic_meaning = "Number of works citing this work (is-referenced-by-count)."
+role = "primary"
 representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered."
+missing_value_policy = "Rows missing is-referenced-by-count are filtered."
+conversion = "Native JSON integer stored as uint32."
 numeric_kind = "uint"
 bit_width = 32
 endianness = "little"
 
 [[series]]
-id = "crossref_created_timestamp_u64"
-representation_class = "derived_operational_numeric"
-missing_value_policy = "Rows missing timestamp fields are filtered."
+id = "crossref_created_ts_u64"
+semantic_meaning = "Crossref record creation time (created.timestamp, epoch ms)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing created.timestamp are filtered."
+conversion = "Native JSON integer epoch milliseconds stored as uint64."
 numeric_kind = "uint"
 bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "crossref_deposited_ts_u64"
+semantic_meaning = "Latest metadata deposit time (deposited.timestamp, epoch ms)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing deposited.timestamp are filtered."
+conversion = "Native JSON integer epoch milliseconds stored as uint64."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "crossref_indexed_ts_u64"
+semantic_meaning = "Crossref indexing time (indexed.timestamp, epoch ms)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing indexed.timestamp are filtered."
+conversion = "Native JSON integer epoch milliseconds stored as uint64."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "crossref_link_count_u16"
+semantic_meaning = "Number of full-text link records attached to the work."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Missing arrays are treated as empty arrays; counts clamped to 65535."
+conversion = "Stable JSON array cardinality stored as uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "crossref_license_count_u16"
+semantic_meaning = "Number of license records attached to the work."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Missing arrays are treated as empty arrays; counts clamped to 65535."
+conversion = "Stable JSON array cardinality stored as uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "crossref_member_id_u32"
+semantic_meaning = "Crossref member (publisher) id for the work."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing member are filtered."
+conversion = "Native member id string parsed to uint32."
+numeric_kind = "uint"
+bit_width = 32
 endianness = "little"

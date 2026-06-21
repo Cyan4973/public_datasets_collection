@@ -4,8 +4,8 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 162
-- `below_floor`: 158
+- `ok`: 163
+- `below_floor`: 156
 - `broken`: 0
 
 ## Below Floor
@@ -96,8 +96,6 @@ Auxiliary series do not count toward acceptance.
 | `arxiv_ai_recent` | 900 | 2300 | 9 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `geoboundaries_all_adm0` | 920 | 3220 | 4 | 230 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `eia_petroleum_prices` | 988 | 3952 | 2 | 494 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `uniprot_human_reviewed_lengths` | 1000 | 4000 | 2 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `uniprot_reviewed_human` | 1000 | 4000 | 2 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `ena_portal_search` | 1000 | 5000 | 2 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `scryfall_default_cards` | 1050 | 2100 | 6 | 175 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_cement_co2_annual` | 1155 | 4620 | 10 | 97 | 0 | 0 | `aggregate_floor,median_sample_floor` |

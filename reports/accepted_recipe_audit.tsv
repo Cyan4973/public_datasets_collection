@@ -83,8 +83,6 @@ gwas_catalog_studies	below_floor	800	2200	8	100	200	0	0	0	1	none	aggregate_floor
 arxiv_ai_recent	below_floor	900	2300	9	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
 geoboundaries_all_adm0	below_floor	920	3220	4	230	920	0	0	0	1	none	aggregate_floor,median_sample_floor
 eia_petroleum_prices	below_floor	988	3952	2	494	1976	0	0	0	1	none	aggregate_floor,median_sample_floor
-uniprot_human_reviewed_lengths	below_floor	1000	4000	2	500	2000	0	0	0	1	none	aggregate_floor,median_sample_floor
-uniprot_reviewed_human	below_floor	1000	4000	2	500	2000	0	0	0	1	none	aggregate_floor,median_sample_floor
 ena_portal_search	below_floor	1000	5000	2	500	2500	0	0	0	1	none	aggregate_floor,median_sample_floor
 scryfall_default_cards	below_floor	1050	2100	6	175	175	0	0	0	1	none	aggregate_floor,median_sample_floor
 owid_cement_co2_annual	below_floor	1155	4620	10	97	388	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -239,6 +237,7 @@ who_atlas_gisah	ok	252140	806848	5	50428	100856	0	0	0	1	none	none
 gwosc_event_strain_f32	ok	262144	1048576	2	131072	524288	0	0	0	1	none	none
 noaa_ghcn_daily_wsfg_by_station	ok	266478	532956	33	8055	16110	0	0	0	1	none	none
 nyc_311_descriptor_u16	ok	287186	574372	3	100000	200000	0	0	0	1	none	none
+uniprot_protein_sizes	ok	294084	882252	74	2048	6834	0	0	0	1	none	none
 jpl_close_approaches	ok	297934	2383472	7	42562	340496	0	0	0	1	none	none
 noaa_coops_water_temperature	ok	346842	2774736	2	173421	1387368	0	0	0	1	none	none
 who_gho_observations	ok	348104	1435929	8	43513	130539	0	0	0	1	none	none

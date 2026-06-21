@@ -1,0 +1,74 @@
+manifest_version = 1
+dataset_id = "uniprot_protein_sizes"
+name = "UniProt Protein Sizes (per organism)"
+description = "UniProtKB reviewed (Swiss-Prot) protein sizes: one family per quantity (sequence length, molecular mass), one sample per organism."
+homepage = "https://www.uniprot.org/"
+
+[license]
+name = "CC-BY-4.0"
+spdx = "CC-BY-4.0"
+url = "https://www.uniprot.org/help/license"
+citation = "UniProt Consortium, UniProtKB."
+notes = "UniProt data is released under CC BY 4.0."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public TSV from the UniProt REST stream endpoint with field projection."
+usage_notes = "Promote only after fresh successful download, build, and verify."
+
+[[origins]]
+id = "official"
+name = "UniProt REST"
+url = "https://rest.uniprot.org/uniprotkb/stream"
+type = "api"
+notes = "Official public UniProt REST stream endpoint; one request returns the full reviewed set as gzipped TSV."
+
+[[resources]]
+id = "reviewed_sizes_tsv"
+origin = "official"
+url = "https://rest.uniprot.org/uniprotkb/stream?query=reviewed:true&fields=accession,length,mass,organism_id&format=tsv&compressed=true"
+type = "api_response"
+version = "reviewed_swissprot"
+access = "Single streamed gzipped TSV with accession, length, mass, organism id for all reviewed entries."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/uniprot_protein_sizes/uniprot_protein_sizes.tsv.gz"
+notes = "Reviewed (Swiss-Prot) set (~570k entries); UNIPROT_QUERY overrides the scope."
+
+[local_paths]
+downloads = "downloads/uniprot_protein_sizes/"
+extracted = "extracted/uniprot_protein_sizes/"
+filtered = "filtered/uniprot_protein_sizes/"
+index = "index/uniprot_protein_sizes/"
+samples = "samples/uniprot_protein_sizes/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/uniprot_protein_sizes/samples.jsonl"
+summary = "Stream the reviewed UniProtKB set as TSV (accession, length, mass, organism), group by organism, and emit one length sample and one mass sample per organism with >= 1000 proteins."
+deterministic_notes = "Fixed query and field set, accession de-duplication, per-organism grouping with a >= 1000-protein floor, per-family >= 5-sample floor, and a generated sample index. Each family is one physical quantity (length in aa; mass in Da); the two are never mixed -- 'many station-series of the same quantity' across organisms."
+
+[[series]]
+id = "uniprot_length_u16"
+semantic_meaning = "Protein sequence length (amino acids), one sample per organism."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Blank/non-integer or >65535 lengths dropped; organisms with < 1000 proteins dropped."
+conversion = "Native integer amino-acid count stored as uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "uniprot_mass_u32"
+semantic_meaning = "Protein molecular mass (Da), one sample per organism."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Blank/non-integer masses dropped; organisms with < 1000 proteins dropped."
+conversion = "Native integer dalton mass stored as uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"

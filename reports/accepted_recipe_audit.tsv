@@ -145,7 +145,6 @@ taginfo_keys_all	below_floor	4000	25500	8	500	4000	0	0	0	1	none	aggregate_floor,
 dataone_solr	below_floor	4039	24078	5	1000	4000	0	0	0	1	none	aggregate_floor
 dataone_solr_large_retry	below_floor	4039	24078	5	1000	4000	0	0	0	1	none	aggregate_floor
 mitre_attack_enterprise	below_floor	4290	5148	5	858	858	0	0	0	1	none	aggregate_floor,median_sample_floor
-usgs_daily_values_large	below_floor	4445	35560	7	572	4576	0	0	0	1	none	aggregate_floor,median_sample_floor
 inspirehep_literature	below_floor	4927	15854	5	1000	4000	0	0	0	1	none	aggregate_floor
 usgs_water_sites_rdb	below_floor	4992	36976	6	878	7024	0	0	0	1	none	aggregate_floor,median_sample_floor
 crossref_funders_large	below_floor	5000	10000	5	1000	2000	0	0	0	1	none	aggregate_floor
@@ -285,6 +284,7 @@ openalex_authors_large	ok	2815400	7239600	7	402200	804400	0	0	0	1	none	none
 sensorless_drive_diagnosis_uci	ok	2866941	22525965	49	58509	468072	0	0	0	1	none	none
 imdb_title_ratings	ok	3358804	13435216	2	1679402	6717608	0	0	0	1	none	none
 metacpan_releases_search_large	ok	3597093	14388372	9	399677	1598708	0	0	0	1	none	none
+usgs_daily_values_large	ok	3733419	29867352	1800	2192	17536	0	0	0	1	none	none
 citibike_2024_01_station_ids_u16	ok	3776170	7552340	16	180600	361200	0	0	0	1	none	none
 ncbi_gene_human	ok	4794554	19178216	4	1198638.5	4794554	0	0	0	1	none	none
 beijing_air_quality_uci	ok	5753775	46030200	180	32141.5	257132	0	0	0	1	none	none

@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "usgs_daily_values_large"
 name = "USGS Daily Values Large"
-description = "Large daily USGS water values for a fixed multi-site, multi-parameter query."
+description = "USGS NWIS daily-values time series, one family per physical parameter (streamflow / gage height / water temperature), one sample per gauge site across several states."
 homepage = "https://waterservices.usgs.gov/"
 
 [license]
@@ -9,32 +9,32 @@ name = "USGS Terms"
 spdx = "NOASSERTION"
 url = "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits"
 citation = "https://waterservices.usgs.gov/"
-notes = "Public USGS water services output."
+notes = "Public USGS water services output (U.S. Government public data)."
 
 [safety]
 contains_sensitive_data = false
 contains_personal_data = false
-provenance_notes = "Public JSON response from a fixed USGS Water Services query."
-usage_notes = "Promote only after fresh successful download."
+provenance_notes = "Public JSON from the USGS NWIS daily-values service, one (state, parameter) request each."
+usage_notes = "Promote only after fresh successful download, build, and verify."
 
 [[origins]]
 id = "official"
 name = "USGS Water Services"
-url = "https://waterservices.usgs.gov/"
+url = "https://waterservices.usgs.gov/nwis/dv/"
 type = "api"
-notes = "Official public endpoint."
+notes = "Official public NWIS daily-values endpoint."
 
 [[resources]]
-id = "daily_values"
+id = "daily_values_pages"
 origin = "official"
-url = "https://waterservices.usgs.gov/nwis/dv/?format=json&sites=01646500,02087500,07374000&startDT=2023-01-01&endDT=2024-12-31&parameterCd=00060,00065&siteStatus=all"
-type = "api_query_result"
-version = "2026-06-11"
-access = "Direct public HTTP request."
+url = "https://waterservices.usgs.gov/nwis/dv/?format=json&stateCd=XX&parameterCd=00060&statCd=00003&startDT=...&endDT=..."
+type = "api_response_pages"
+version = "per_state_per_parameter"
+access = "One public HTTP request per (state, parameter); daily-mean statistic (statCd=00003)."
 size_bytes = 0
 sha256 = ""
-local_path = "downloads/usgs_daily_values_large/usgs_daily_values_large.json"
-notes = "Pinned site list, time range, and parameter list."
+local_path = "downloads/usgs_daily_values_large/pages/"
+notes = "States USGS_STATES x parameters USGS_PARAMS (default 00060,00065,00010) over USGS_START_DT..USGS_END_DT (default 2019-2024); failed/oversized state queries are skipped."
 
 [local_paths]
 downloads = "downloads/usgs_daily_values_large/"
@@ -48,5 +48,38 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/usgs_daily_values_large/samples.jsonl"
-summary = "Download the pinned USGS JSON payload, keep non-empty time-series rows with parseable numeric values and dates, and emit per-series raw little-endian numeric arrays."
-deterministic_notes = "Fixed query parameters, source-order row retention inside each timeSeries, deterministic sample naming by timeSeries name."
+summary = "Download USGS daily-mean values per (state, parameter), group time series by physical parameter into one homogeneous family each, and emit one float64 sample per gauge site (longest valid series, >= 1000 days)."
+deterministic_notes = "Fixed states/parameters/date window, daily-mean stat, sentinel (-999999) filtering, longest-series selection per (site, parameter), per-family >= 5-site floor, and a generated sample index. Each family is one physical quantity/unit (good 'many station-series of the same quantity' consolidation); parameters are never mixed into one family."
+
+[[series]]
+id = "usgs_streamflow_cfs_f64"
+semantic_meaning = "Daily mean streamflow / discharge (cubic feet per second), one sample per gauge site."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing/sentinel (-999999) days dropped; sites with < 1000 valid days dropped."
+conversion = "Native decimal streamflow parsed to float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "usgs_gage_height_ft_f64"
+semantic_meaning = "Daily mean gage height (feet), one sample per gauge site."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing/sentinel (-999999) days dropped; sites with < 1000 valid days dropped."
+conversion = "Native decimal gage height parsed to float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "usgs_water_temp_c_f64"
+semantic_meaning = "Daily mean water temperature (degrees Celsius), one sample per gauge site. Emitted only if >= 5 sites are available."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing/sentinel (-999999) days dropped; sites with < 1000 valid days dropped; family dropped if < 5 sites."
+conversion = "Native decimal water temperature parsed to float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"

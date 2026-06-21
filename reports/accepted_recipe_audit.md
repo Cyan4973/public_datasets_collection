@@ -4,8 +4,8 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 161
-- `below_floor`: 160
+- `ok`: 162
+- `below_floor`: 159
 - `broken`: 0
 
 ## Below Floor
@@ -158,7 +158,6 @@ Auxiliary series do not count toward acceptance.
 | `dataone_solr` | 4039 | 24078 | 5 | 1000 | 0 | 0 | `aggregate_floor` |
 | `dataone_solr_large_retry` | 4039 | 24078 | 5 | 1000 | 0 | 0 | `aggregate_floor` |
 | `mitre_attack_enterprise` | 4290 | 5148 | 5 | 858 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `usgs_daily_values_large` | 4445 | 35560 | 7 | 572 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `inspirehep_literature` | 4927 | 15854 | 5 | 1000 | 0 | 0 | `aggregate_floor` |
 | `usgs_water_sites_rdb` | 4992 | 36976 | 6 | 878 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `crossref_funders_large` | 5000 | 10000 | 5 | 1000 | 0 | 0 | `aggregate_floor` |

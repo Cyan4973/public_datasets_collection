@@ -1,21 +1,44 @@
 manifest_version = 1
 dataset_id = "inspirehep_literature"
-name = "INSPIRE HEP Literature"
-description = "Numeric bibliographic fields from a public INSPIRE-HEP literature search."
+name = "INSPIRE-HEP Literature Bibliometrics (per year)"
+description = "Bibliometric counts from INSPIRE-HEP literature: one family per quantity (citations, authors, pages, references), one sample per publication year."
+homepage = "https://inspirehep.net/"
 
 [license]
-name = "CC BY 4.0"
-spdx = "CC-BY-4.0"
-url = "https://creativecommons.org/licenses/by/4.0/"
+name = "CC0 1.0 / CC BY 4.0"
+spdx = "CC0-1.0"
+url = "https://inspirehep.net/info/terms"
+citation = "INSPIRE-HEP, https://inspirehep.net/."
+notes = "INSPIRE metadata is openly available; numeric bibliometric counts only are extracted."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official INSPIRE-HEP REST API with scalar field projection (no author lists or reference arrays retrieved)."
+usage_notes = "Promote only after fresh successful download, build, and verify."
+
+[[origins]]
+id = "inspirehep"
+name = "INSPIRE-HEP REST API"
+url = "https://inspirehep.net/api/literature"
+type = "api"
+notes = "Official public INSPIRE-HEP literature search API (Invenio)."
 
 [[resources]]
-id = "inspirehep_json"
-url = "https://inspirehep.net/api/literature?q=electron&size=1000"
+id = "literature_by_year"
+origin = "inspirehep"
+url = "https://inspirehep.net/api/literature?q=date%20YYYY&fields=control_number,citation_count,author_count,number_of_pages,number_of_references,earliest_date,preprint_date&sort=mostrecent&size=1000"
 type = "api_response"
-local_path = "downloads/inspirehep_literature/inspirehep_literature.json"
+version = "per_year_paged"
+access = "Paged JSON, sharded by publication year to respect the 10000-result deep-paging window."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/inspirehep_literature/pages/"
+notes = "One or more pages per year; each record projected to scalar bibliometric fields plus dates for partitioning."
 
 [local_paths]
 downloads = "downloads/inspirehep_literature/"
+extracted = "extracted/inspirehep_literature/"
 filtered = "filtered/inspirehep_literature/"
 index = "index/inspirehep_literature/"
 samples = "samples/inspirehep_literature/"
@@ -25,43 +48,49 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/inspirehep_literature/samples.jsonl"
+summary = "Crawl INSPIRE-HEP literature sharded by publication year, project each record to scalar bibliometric counts, de-duplicate by control number, and emit one sample per year for each quantity family."
+deterministic_notes = "Year queries are fetch shards only; the build re-derives each record's canonical year from earliest_date (fallback preprint_date) and de-duplicates by control_number, so fuzzy date matching cannot double-count. A family is emitted only if it has >= 5 publication-year samples each with >= INSPIRE_MIN_YEAR_RECORDS non-constant values. Each family is one physical quantity; quantities are never mixed -- 'many year-series of the same quantity'. Record timestamps (created/updated) are intentionally excluded as non-bibliometric metadata."
 
 [[series]]
-id = "inspirehep_citation_count"
+id = "inspirehep_citation_count_u32"
+semantic_meaning = "Citation count per paper, one sample per publication year."
+role = "primary"
 representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered."
+missing_value_policy = "Records missing the field or out of range are dropped; years with < INSPIRE_MIN_YEAR_RECORDS values are dropped."
+conversion = "Native integer citation count stored as uint32."
 numeric_kind = "uint"
 bit_width = 32
 endianness = "little"
 
 [[series]]
-id = "inspirehep_author_count"
+id = "inspirehep_author_count_u16"
+semantic_meaning = "Author count per paper, one sample per publication year."
+role = "primary"
 representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered."
+missing_value_policy = "Records missing the field or out of range are dropped; years with < INSPIRE_MIN_YEAR_RECORDS values are dropped."
+conversion = "Native integer author count stored as uint16."
 numeric_kind = "uint"
 bit_width = 16
 endianness = "little"
 
 [[series]]
-id = "inspirehep_page_count"
+id = "inspirehep_page_count_u16"
+semantic_meaning = "Page count per paper, one sample per publication year (emitted only if the field is populated enough)."
+role = "primary"
 representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered."
+missing_value_policy = "Records missing the field or out of range are dropped; years with < INSPIRE_MIN_YEAR_RECORDS values are dropped; family omitted if < 5 qualifying years."
+conversion = "Native integer page count stored as uint16."
 numeric_kind = "uint"
 bit_width = 16
 endianness = "little"
 
 [[series]]
-id = "inspirehep_created_at"
+id = "inspirehep_reference_count_u16"
+semantic_meaning = "Reference count per paper, one sample per publication year (emitted only if the field is populated enough)."
+role = "primary"
 representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered."
+missing_value_policy = "Records missing the field or out of range are dropped; years with < INSPIRE_MIN_YEAR_RECORDS values are dropped; family omitted if < 5 qualifying years."
+conversion = "Native integer reference count stored as uint16."
 numeric_kind = "uint"
-bit_width = 32
-endianness = "little"
-
-[[series]]
-id = "inspirehep_updated_at"
-representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered."
-numeric_kind = "uint"
-bit_width = 32
+bit_width = 16
 endianness = "little"

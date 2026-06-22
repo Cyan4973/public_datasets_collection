@@ -1,48 +1,48 @@
-# GDC Cancer Cases — clinical numerics (per primary site)
+# GDC Simple Somatic Mutations — genomic position (per chromosome)
 
-Clinical numeric fields from the NCI Genomic Data Commons (GDC) cancer cases, organized
-as **one family per quantity** with **one sample per primary site** — "many series of the
-same physical quantity". Supersedes the earlier `cases?size=500` recipe (which kept 500
-cases and emitted string-length / ID series).
+Genomic **start positions** of GDC simple somatic mutations (SSMs), organized as **one
+family** (base-pair position) with **one sample per chromosome** — "many series of the
+same physical quantity". Replaces the earlier `gdc_cases` clinical recipe, whose source
+was hard-capped at ~46k values; the SSM endpoint exposes ~3.3M open-access mutations.
 
-- Source: https://api.gdc.cancer.gov/cases (open-access clinical fields, CC0-like terms)
-- Local raw payloads: `${DATA_DIR:-.data}/downloads/gdc_cases/pages/`
+- Source: https://api.gdc.cancer.gov/ssms (open simple somatic mutations)
+- Local raw payloads: `${DATA_DIR:-.data}/downloads/gdc_somatic_mutations/pages/`
 
 ## Families & samples
 
 | family | quantity | type |
 |---|---|---|
-| `gdc_age_at_diagnosis_days_u32` | age at diagnosis (days) | uint32 |
-| `gdc_days_to_last_follow_up_i32` | days to last follow-up | int32 *(if populated)* |
-| `gdc_year_of_diagnosis_u16` | calendar year of diagnosis | uint16 *(if populated)* |
-| `gdc_year_of_birth_u16` | calendar year of birth | uint16 *(if populated)* |
-| `gdc_days_to_death_i32` | days to death | int32 *(if populated)* |
+| `gdc_ssm_position_u32` | base-pair start position of a mutation | uint32 |
 
-- **A sample** = one primary site's values of a single quantity (e.g. age-at-diagnosis for
-  all breast cases). **Samples/family** = number of qualifying sites (those with
-  `>= GDC_MIN_SITE_RECORDS` non-constant values, default 1000). The probe found 13 sites
-  with ≥1000 cases, so dense fields yield ~10–13 samples; sparse fields self-omit if < 5
-  sites qualify.
-- Each family is one quantity across sites; age-in-days, survival-days and calendar-years
-  are never mixed.
+- **A sample** = one chromosome's mutation start positions, sorted ascending (canonical
+  genomic order — the natural delta-codeable form for coordinates).
+- **Samples/family** = number of qualifying chromosomes (autosomes 1–22 + X; those with
+  `>= GDC_MIN_CHR_RECORDS` non-constant positions). The probe found 22 chromosomes with
+  ≥50k mutations, so most chromosomes qualify; chrY is sparse and may drop.
+- Single quantity across chromosomes (each chromosome a different length/range, same
+  base-pair coordinate quantity).
 
-## Why per primary site (not per project)
+## Why this and not the clinical cases
 
-A liveness probe showed 13 primary sites with ≥1000 cases vs only 9 projects — so
-`primary_site` is the partition that clears the per-sample floor and gives more, larger,
-biologically-coherent samples. Catch-all labels (`unknown`, `not reported`) are dropped.
+`gdc_cases` clinical fields are sparse — the densest (`age_at_diagnosis`) covers only
+~46k cases, so no partition yields a large dataset. The `ssms` endpoint holds ~3.3M open
+mutations, giving large per-chromosome position samples instead.
+
+## How the crawl is bounded
+
+INSPIRE-style sharding: one fetch loop per chromosome (a `filters` query), capped at
+`GDC_MAX_PER_CHR` positions (sorted by `start_position`) so pagination depth stays modest.
+Only `chromosome` + `start_position` are projected (lean payload). The build re-derives the
+chromosome per record and stores positions sorted ascending.
 
 ## Run
 
 ```sh
-bash datasets/gdc_cases/download.sh   # ~25 paged JSON requests (projected, ~15 MB)
-bash datasets/gdc_cases/build.sh
-bash datasets/gdc_cases/verify.sh
+bash datasets/gdc_somatic_mutations/download.sh   # ~240 paged JSON requests
+bash datasets/gdc_somatic_mutations/build.sh
+bash datasets/gdc_somatic_mutations/verify.sh
 ```
 
-The download uses `fields=` projection so the payload stays small, paginates by `from`/`size`
-with a `case_id` sort for determinism, and fails fast if page 0 is empty. Families self-select,
-so a GDC field-set change degrades gracefully rather than breaking the build.
-
-Tuning env vars: `GDC_PAGE_SIZE` (default 2000), `GDC_MIN_SITE_RECORDS` (default 1000),
-`GDC_FIELDS`. Logs under `${DATA_DIR:-.data}/logs/gdc_cases/`.
+Tuning env vars: `GDC_MAX_PER_CHR` (default 50000), `GDC_PAGE_SIZE` (default 5000),
+`GDC_MIN_CHR_RECORDS` (default 5000), `GDC_CHROMS`. Logs under
+`${DATA_DIR:-.data}/logs/gdc_somatic_mutations/`.

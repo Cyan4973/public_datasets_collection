@@ -3,7 +3,7 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 DATA_DIR="${DATA_DIR:-.data}"
-DATASET_ID="gdc_cases"
+DATASET_ID="gdc_somatic_mutations"
 LOG_DIR="$REPO_ROOT/$DATA_DIR/logs/$DATASET_ID"
 FILTER_DIR="$REPO_ROOT/$DATA_DIR/filtered/$DATASET_ID"
 INDEX_DIR="$REPO_ROOT/$DATA_DIR/index/$DATASET_ID"
@@ -26,17 +26,11 @@ import struct
 from collections import defaultdict
 from pathlib import Path
 
-MIN_FAMILIES = 2
+MIN_FAMILIES = 1
 MIN_SAMPLES_PER_FAMILY = 5
 MIN_MEDIAN_VALUES = 1_000
 MAX_FAMILY_BYTES = 1_000_000_000
-ALLOWED = {
-    "gdc_age_at_diagnosis_days_u32",
-    "gdc_days_to_last_follow_up_i32",
-    "gdc_year_of_diagnosis_u16",
-    "gdc_year_of_birth_u16",
-    "gdc_days_to_death_i32",
-}
+EXPECTED_PRIMARY = {"gdc_ssm_position_u32"}
 
 root = Path(os.environ["REPO_ROOT"]) / os.environ["DATA_DIR"]
 index_path = Path(os.environ["INDEX_DIR"]) / "samples.jsonl"
@@ -47,9 +41,8 @@ by_family = defaultdict(list)
 for r in primary:
     by_family[r["series_id"]].append(r)
 
-unknown = set(by_family) - ALLOWED
-if unknown:
-    raise SystemExit(f"unexpected families: {sorted(unknown)}")
+if set(by_family) != EXPECTED_PRIMARY:
+    raise SystemExit(f"unexpected families: {sorted(by_family)}")
 if len(by_family) < MIN_FAMILIES:
     raise SystemExit(f"only {len(by_family)} families < {MIN_FAMILIES}")
 
@@ -68,7 +61,7 @@ if median_values < MIN_MEDIAN_VALUES:
 
 
 def unpack(path: Path, numeric_kind: str, bit_width: int, count: int) -> tuple:
-    code = {("uint", 16): "H", ("uint", 32): "I", ("int", 32): "i"}[(numeric_kind, bit_width)]
+    code = {("uint", 32): "I"}[(numeric_kind, bit_width)]
     data = path.read_bytes()
     if len(data) != count * (bit_width // 8):
         raise SystemExit(f"size mismatch for {path}")

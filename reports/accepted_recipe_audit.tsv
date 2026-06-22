@@ -186,7 +186,6 @@ arxiv_cs_lg_2024q1_metadata	ok	38360	115080	4	9590	28770	0	0	0	1	none	none
 expression_atlas_experiments	ok	41058	95802	9	4562	9124	0	0	0	1	none	none
 nasa_donki_cme	ok	41650	166600	5	8330	33320	0	0	0	1	none	none
 homebrew_formulae	ok	42045	84090	5	8409	16818	0	0	0	1	none	none
-gdc_cases	ok	42596	170384	15	1772	7088	0	0	0	1	none	none
 opensky_states	ok	44580	178320	5	8536	34144	0	0	0	1	none	none
 universities_domains_list	ok	51245	71743	5	10249	10249	0	0	0	1	none	none
 rhea_reactions	ok	55029	128401	3	18343	36686	0	0	0	1	none	none
@@ -280,6 +279,7 @@ openf1_belgium_2023_car_data_native	ok	2526120	3368160	120	21051	21051	0	0	0	1	n
 ncbi_assembly_refseq_summary	ok	2614503	12549768	5	522939	2091756	0	0	0	1	none	none
 openalex_authors_large	ok	2815400	7239600	7	402200	804400	0	0	0	1	none	none
 sensorless_drive_diagnosis_uci	ok	2866941	22525965	49	58509	468072	0	0	0	1	none	none
+gdc_somatic_mutations	ok	3323270	13293080	23	133731	534924	0	0	0	1	none	none
 imdb_title_ratings	ok	3358804	13435216	2	1679402	6717608	0	0	0	1	none	none
 metacpan_releases_search_large	ok	3597093	14388372	9	399677	1598708	0	0	0	1	none	none
 usgs_daily_values_large	ok	3733419	29867352	1800	2192	17536	0	0	0	1	none	none

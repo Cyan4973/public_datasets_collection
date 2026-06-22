@@ -1,13 +1,107 @@
 manifest_version = 1
 dataset_id = "gdc_cases"
-status = "staged"
-kind = "derived_operational_numeric"
+name = "GDC Cancer Cases — clinical numerics (per primary site)"
+description = "Clinical numeric fields from GDC cancer cases: one family per quantity (age at diagnosis, follow-up/survival days, birth/diagnosis year), one sample per primary site."
+homepage = "https://portal.gdc.cancer.gov/"
 
-[origin]
-name = "GDC Cases API"
+[license]
+name = "NIH GDC Data Access / Open"
+spdx = "NONE"
+url = "https://gdc.cancer.gov/access-data/data-access-policies"
+citation = "NCI Genomic Data Commons (GDC), https://gdc.cancer.gov/."
+notes = "Open-access aggregate clinical fields only; no controlled-access or individual genomic data."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official GDC REST API (cases endpoint) with field projection; open-access clinical numerics only."
+usage_notes = "Promote only after fresh successful download, build, and verify. Aggregate clinical numbers; no patient identifiers."
+
+[[origins]]
+id = "gdc"
+name = "NCI Genomic Data Commons API"
 url = "https://api.gdc.cancer.gov/cases"
-license = "GDC terms"
+type = "api"
+notes = "Official public GDC REST API."
 
-[build]
-sample_index_path = ".data/index/gdc_cases/samples.jsonl"
-missing_value_policy = "Rows lacking project_id or submitter_id are dropped. Missing age_at_diagnosis becomes -1."
+[[resources]]
+id = "cases_json"
+origin = "gdc"
+url = "https://api.gdc.cancer.gov/cases?format=JSON&fields=case_id,primary_site,project.project_id,diagnoses.age_at_diagnosis,diagnoses.days_to_last_follow_up,diagnoses.year_of_diagnosis,demographic.year_of_birth,demographic.days_to_death&sort=case_id:asc&size=2000"
+type = "api_response"
+version = "all_cases_paged"
+access = "Paged JSON over all cases with field projection (case_id sort for deterministic pagination)."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/gdc_cases/pages/"
+notes = "One page per 2000 cases; nested diagnoses[]/demographic{} parsed by the build."
+
+[local_paths]
+downloads = "downloads/gdc_cases/"
+extracted = "extracted/gdc_cases/"
+filtered = "filtered/gdc_cases/"
+index = "index/gdc_cases/"
+samples = "samples/gdc_cases/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/gdc_cases/samples.jsonl"
+summary = "Page through all GDC cases with field projection, de-duplicate by case_id, and emit one sample per primary site for each clinical numeric family that has enough sites."
+deterministic_notes = "Cases are de-duplicated by case_id; the first diagnosis is used for diagnoses.* fields. Each case is assigned to its primary_site (catch-all labels 'unknown'/'not reported' dropped). A family is emitted only if it has >= 5 site samples each with >= GDC_MIN_SITE_RECORDS non-constant values, so sparse fields self-omit. Each family is one physical quantity; quantities (age in days, survival days, calendar years) are never mixed. The original recipe's string-length/ID series are removed."
+
+[[series]]
+id = "gdc_age_at_diagnosis_days_u32"
+semantic_meaning = "Age at diagnosis in days, one sample per primary site."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing/out-of-range values dropped; sites with < GDC_MIN_SITE_RECORDS values dropped."
+conversion = "Native integer day count stored as uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "gdc_days_to_last_follow_up_i32"
+semantic_meaning = "Days to last follow-up, one sample per primary site (emitted only if populated enough)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing/out-of-range values dropped; sites with < GDC_MIN_SITE_RECORDS values dropped; family omitted if < 5 sites."
+conversion = "Rounded to integer days stored as int32 (can be negative)."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "gdc_year_of_diagnosis_u16"
+semantic_meaning = "Calendar year of diagnosis, one sample per primary site (emitted only if populated enough)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing/out-of-range values dropped; sites with < GDC_MIN_SITE_RECORDS values dropped; family omitted if < 5 sites."
+conversion = "Native calendar year stored as uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "gdc_year_of_birth_u16"
+semantic_meaning = "Calendar year of birth, one sample per primary site (emitted only if populated enough)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing/out-of-range values dropped; sites with < GDC_MIN_SITE_RECORDS values dropped; family omitted if < 5 sites."
+conversion = "Native calendar year stored as uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "gdc_days_to_death_i32"
+semantic_meaning = "Days to death, one sample per primary site (emitted only if populated enough)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing/out-of-range values dropped; sites with < GDC_MIN_SITE_RECORDS values dropped; family omitted if < 5 sites."
+conversion = "Rounded to integer days stored as int32."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"

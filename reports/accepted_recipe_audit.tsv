@@ -112,7 +112,6 @@ eurostat_hicp_food_monthly	below_floor	1800	7200	5	360	1440	0	0	0	1	none	aggrega
 disease_sh_countries	below_floor	1848	12936	8	231	1848	0	0	0	1	none	aggregate_floor,median_sample_floor
 eurostat_industrial_production_monthly	below_floor	1884	7536	5	396	1584	0	0	0	1	none	aggregate_floor,median_sample_floor
 europepmc_grants	below_floor	1984	3968	4	496	992	0	0	0	1	none	aggregate_floor,median_sample_floor
-gdc_cases	below_floor	2000	3500	4	500	500	0	0	0	1	none	aggregate_floor,median_sample_floor
 chembl_documents	below_floor	2000	4000	4	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
 wikimedia_mostread	below_floor	2000	6000	2	1000	3000	0	0	0	1	none	aggregate_floor
 npi_registry_ca	below_floor	2000	7000	4	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -187,6 +186,7 @@ arxiv_cs_lg_2024q1_metadata	ok	38360	115080	4	9590	28770	0	0	0	1	none	none
 expression_atlas_experiments	ok	41058	95802	9	4562	9124	0	0	0	1	none	none
 nasa_donki_cme	ok	41650	166600	5	8330	33320	0	0	0	1	none	none
 homebrew_formulae	ok	42045	84090	5	8409	16818	0	0	0	1	none	none
+gdc_cases	ok	42596	170384	15	1772	7088	0	0	0	1	none	none
 opensky_states	ok	44580	178320	5	8536	34144	0	0	0	1	none	none
 universities_domains_list	ok	51245	71743	5	10249	10249	0	0	0	1	none	none
 rhea_reactions	ok	55029	128401	3	18343	36686	0	0	0	1	none	none

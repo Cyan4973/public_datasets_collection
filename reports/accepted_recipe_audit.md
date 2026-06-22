@@ -4,8 +4,8 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 165
-- `below_floor`: 154
+- `ok`: 166
+- `below_floor`: 153
 - `broken`: 0
 
 ## Below Floor
@@ -125,7 +125,6 @@ Auxiliary series do not count toward acceptance.
 | `disease_sh_countries` | 1848 | 12936 | 8 | 231 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `eurostat_industrial_production_monthly` | 1884 | 7536 | 5 | 396 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `europepmc_grants` | 1984 | 3968 | 4 | 496 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `gdc_cases` | 2000 | 3500 | 4 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `chembl_documents` | 2000 | 4000 | 4 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `wikimedia_mostread` | 2000 | 6000 | 2 | 1000 | 0 | 0 | `aggregate_floor` |
 | `npi_registry_ca` | 2000 | 7000 | 4 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |

@@ -1,0 +1,63 @@
+manifest_version = 1
+dataset_id = "encode_methylation_pct_u8"
+name = "ENCODE WGBS CpG Methylation Percent (uint8, per chromosome)"
+description = "Native 8-bit per-CpG methylation level (percent, 0-100) from one ENCODE WGBS bedMethyl file: one family, one sample per chromosome."
+homepage = "https://www.encodeproject.org/"
+
+[license]
+name = "ENCODE open data"
+spdx = "NONE"
+url = "https://www.encodeproject.org/help/citing-encode/"
+citation = "ENCODE Project Consortium; file ENCFF424XKF."
+notes = "ENCODE data are openly available; only the numeric percent-methylation column is extracted."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public ENCODE WGBS bedMethyl file; only per-CpG percent methylation (and coverage filter) is used."
+usage_notes = "Promote only after fresh successful download, build, and verify."
+
+[[origins]]
+id = "encode"
+name = "ENCODE Project"
+url = "https://www.encodeproject.org/"
+type = "bulk_download"
+notes = "ENCODE file download (@@download 307-redirects to a CDN)."
+
+[[resources]]
+id = "wgbs_bedmethyl"
+origin = "encode"
+url = "https://www.encodeproject.org/files/ENCFF424XKF/@@download/ENCFF424XKF.bed.gz"
+type = "bulk_file"
+version = "ENCFF424XKF"
+access = "Single gzipped bedMethyl (BED9+2); column 10 coverage, column 11 percent methylation."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/encode_methylation_pct_u8/methylation.bed.gz"
+notes = "Override with ENCODE_METH_URL. WGBS, GRCh38; ~595 MB gz; resumable download."
+
+[local_paths]
+downloads = "downloads/encode_methylation_pct_u8/"
+extracted = "extracted/encode_methylation_pct_u8/"
+filtered = "filtered/encode_methylation_pct_u8/"
+index = "index/encode_methylation_pct_u8/"
+samples = "samples/encode_methylation_pct_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/encode_methylation_pct_u8/samples.jsonl"
+summary = "Stream an ENCODE WGBS bedMethyl file, keep covered CpGs (coverage >= METH_MIN_COVERAGE), and emit one uint8 percent-methylation sample per chromosome."
+deterministic_notes = "bedMethyl column 10 is read coverage and column 11 is percent methylation (0-100). CpGs with coverage < METH_MIN_COVERAGE (default 1) are dropped (genome-wide bedMethyl pads uncovered sites with 0, which are not measurements). Percent methylation is stored as uint8 (0-100). One family = one quantity (methylation level); chromosomes share the quantity -- 'many series of the same quantity'. A chromosome is kept only with >= METH_MIN_CHR_RECORDS non-constant values."
+
+[[series]]
+id = "methylation_pct_u8"
+semantic_meaning = "Per-CpG methylation level (percent, 0-100), one sample per chromosome."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Uncovered CpGs (coverage < METH_MIN_COVERAGE) and out-of-range values dropped; chromosomes with < METH_MIN_CHR_RECORDS values dropped."
+conversion = "bedMethyl percent-methylation column rounded to integer and stored as uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"

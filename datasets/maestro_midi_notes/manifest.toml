@@ -1,0 +1,74 @@
+manifest_version = 1
+dataset_id = "maestro_midi_notes"
+name = "MAESTRO MIDI Note Pitch & Velocity (uint8)"
+description = "Native 8-bit MIDI note data from MAESTRO piano performances: one family per quantity (note pitch, note velocity), one sample per performance."
+homepage = "https://magenta.tensorflow.org/datasets/maestro"
+
+[license]
+name = "Creative Commons Attribution Non-Commercial Share-Alike 4.0"
+spdx = "CC-BY-NC-SA-4.0"
+url = "https://magenta.tensorflow.org/datasets/maestro#license"
+citation = "Hawthorne et al., Enabling Factorized Piano Music Modeling and Generation with the MAESTRO Dataset, ICLR 2019."
+notes = "MAESTRO MIDI is released under CC BY-NC-SA 4.0; numeric note attributes only are extracted."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official MAESTRO v3.0.0 MIDI archive from Magenta (Google Cloud Storage)."
+usage_notes = "Promote only after fresh successful download, build, and verify. Non-commercial license."
+
+[[origins]]
+id = "magenta"
+name = "Magenta MAESTRO"
+url = "https://magenta.tensorflow.org/datasets/maestro"
+type = "bulk_download"
+notes = "Official MAESTRO v3.0.0 MIDI-only zip."
+
+[[resources]]
+id = "maestro_midi_zip"
+origin = "magenta"
+url = "https://storage.googleapis.com/magentadata/datasets/maestro/v3.0.0/maestro-v3.0.0-midi.zip"
+type = "bulk_file"
+version = "v3.0.0"
+access = "Single zip of ~1.3k MIDI performances."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/maestro_midi_notes/maestro-v3.0.0-midi.zip"
+notes = "Override with MAESTRO_URL. Build parses MIDI note-on events; no external MIDI library needed."
+
+[local_paths]
+downloads = "downloads/maestro_midi_notes/"
+extracted = "extracted/maestro_midi_notes/"
+filtered = "filtered/maestro_midi_notes/"
+index = "index/maestro_midi_notes/"
+samples = "samples/maestro_midi_notes/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/maestro_midi_notes/samples.jsonl"
+summary = "Parse MAESTRO MIDI performances with a stdlib MIDI reader and emit, per performance, one uint8 note-pitch sample and one uint8 note-velocity sample from note-on events."
+deterministic_notes = "A stdlib MIDI parser reads MThd/MTrk chunks, variable-length delta times, running status, meta and sysex events, and collects note-on events with velocity > 0. Pitch and velocity are independent 8-bit families (0-127); they are never mixed. One sample per performance with >= MAESTRO_MIN_NOTES notes; constant samples dropped. Note-off (and note-on velocity 0) events are not values."
+
+[[series]]
+id = "midi_note_pitch_u8"
+semantic_meaning = "MIDI note number (pitch) of each note-on, one sample per performance."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Note-off / velocity-0 events ignored; performances with < MAESTRO_MIN_NOTES notes dropped."
+conversion = "Native 7-bit MIDI note number stored as uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "midi_note_velocity_u8"
+semantic_meaning = "MIDI velocity (loudness) of each note-on, one sample per performance."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Note-off / velocity-0 events ignored; performances with < MAESTRO_MIN_NOTES notes dropped."
+conversion = "Native 7-bit MIDI velocity stored as uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"

@@ -1,10 +1,44 @@
 manifest_version = 1
 dataset_id = "crossref_members"
-name = "Crossref Members"
-description = "Pinned Crossref members response with DOI and metadata coverage counters."
+name = "Crossref Member DOI Counts (per name initial)"
+description = "Per-member DOI counts from the full Crossref members list: one family per quantity (total/current/backfile DOIs), one sample per member-name initial."
+homepage = "https://www.crossref.org/"
+
+[license]
+name = "Crossref REST API (open)"
+spdx = "NONE"
+url = "https://www.crossref.org/documentation/retrieve-metadata/rest-api/"
+citation = "Crossref REST API, https://api.crossref.org/members."
+notes = "Crossref metadata is openly available; only numeric DOI counts per member are extracted."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Crossref REST API, full members list via cursor pagination."
+usage_notes = "Promote only after fresh successful download, build, and verify."
+
+[[origins]]
+id = "crossref"
+name = "Crossref REST API"
+url = "https://api.crossref.org/members"
+type = "api"
+notes = "Public Crossref members endpoint; deep cursor pagination (rows=1000)."
+
+[[resources]]
+id = "members_pages"
+origin = "crossref"
+url = "https://api.crossref.org/members?rows=1000&cursor=*"
+type = "api_response"
+version = "all_members_cursor"
+access = "Paged JSON member objects (rows=1000) via cursor pagination (~33 pages)."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/crossref_members/pages/"
+notes = "Full member objects (the nested counts object is not select-able)."
 
 [local_paths]
 downloads = "downloads/crossref_members/"
+extracted = "extracted/crossref_members/"
 filtered = "filtered/crossref_members/"
 index = "index/crossref_members/"
 samples = "samples/crossref_members/"
@@ -14,3 +48,38 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/crossref_members/samples.jsonl"
+summary = "Crawl all Crossref members via cursor pagination and emit one sample per member-name initial for each DOI-count quantity (total, current, backfile)."
+deterministic_notes = "Members are de-duplicated by id and grouped by the first ASCII letter of primary-name (A-Z). A family is emitted only if it has >= 5 initials each with >= CROSSREF_MIN_LETTER_RECORDS non-constant values. Each family is one quantity (a DOI count); the three counts are never mixed. The earlier recipe captured only a single 100-member page."
+
+[[series]]
+id = "crossref_member_total_dois_u32"
+semantic_meaning = "Total DOIs registered by a member, one sample per name initial."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Members without the count or out of range dropped; initials with < CROSSREF_MIN_LETTER_RECORDS dropped."
+conversion = "Native integer DOI count stored as uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "crossref_member_current_dois_u32"
+semantic_meaning = "Current-year DOIs registered by a member, one sample per name initial."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Members without the count or out of range dropped; initials with < CROSSREF_MIN_LETTER_RECORDS dropped; family omitted if < 5 initials."
+conversion = "Native integer DOI count stored as uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "crossref_member_backfile_dois_u32"
+semantic_meaning = "Backfile DOIs registered by a member, one sample per name initial."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Members without the count or out of range dropped; initials with < CROSSREF_MIN_LETTER_RECORDS dropped; family omitted if < 5 initials."
+conversion = "Native integer DOI count stored as uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"

@@ -4,8 +4,8 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 172
-- `below_floor`: 151
+- `ok`: 173
+- `below_floor`: 150
 - `broken`: 0
 
 ## Below Floor
@@ -72,7 +72,6 @@ Auxiliary series do not count toward acceptance.
 | `owid_primary_energy_consumption_annual` | 584 | 2336 | 10 | 60 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `worldbank_population_total` | 588 | 2156 | 3 | 196 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `gleif_lei_records_api` | 600 | 1000 | 3 | 200 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `crossref_members` | 600 | 1800 | 6 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `deezer_chart` | 600 | 2000 | 6 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `openml_datasets` | 600 | 2000 | 6 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `openml_dataset_61` | 600 | 2400 | 4 | 150 | 0 | 0 | `aggregate_floor,median_sample_floor` |

@@ -59,7 +59,6 @@ owid_energy_per_capita_annual	below_floor	584	2336	10	60	240	0	0	0	1	none	aggreg
 owid_primary_energy_consumption_annual	below_floor	584	2336	10	60	240	0	0	0	1	none	aggregate_floor,median_sample_floor
 worldbank_population_total	below_floor	588	2156	3	196	392	0	0	0	1	none	aggregate_floor,median_sample_floor
 gleif_lei_records_api	below_floor	600	1000	3	200	400	0	0	0	1	none	aggregate_floor,median_sample_floor
-crossref_members	below_floor	600	1800	6	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
 deezer_chart	below_floor	600	2000	6	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
 openml_datasets	below_floor	600	2000	6	100	400	0	0	0	1	none	aggregate_floor,median_sample_floor
 openml_dataset_61	below_floor	600	2400	4	150	600	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -198,6 +197,7 @@ macrostrat_sections	ok	67885	271540	6	11315	45260	0	0	0	1	none	none
 usgs_quakes_month	ok	68900	374024	7	9842	39376	0	0	0	1	none	none
 medrxiv_details	ok	77615	186276	5	15523	31046	15523	62092	1	1	none	none
 uci_wine_quality	ok	77964	623712	24	3248.5	25988	0	0	0	1	none	none
+crossref_members	ok	79572	318288	39	1839	7356	0	0	0	1	none	none
 metmuseum_object_ids_large	ok	80220	320880	1	80220	320880	0	0	0	1	none	none
 usgs_fdsn_events_large	ok	84792	268508	6	14132	28264	0	0	0	1	none	none
 open_meteo_hourly_apparent_temperature	ok	87600	350400	5	17520	70080	0	0	0	1	none	none

@@ -24,7 +24,7 @@ if [ -s "$OUT" ] && [ "${FORCE_DOWNLOAD:-0}" != "1" ]; then
 else
   rm -f "$TMP"
   echo "[$(date -Is)] stream query='$QUERY' fields=accession,length,mass,organism_id"
-  curl --globoff -fL --retry 4 --retry-delay 5 --max-time 1800 \
+  curl --globoff -fL --retry 6 --retry-delay 5 --speed-limit 1024 --speed-time 120 \
     -A "openzl-public-datasets/1.0" \
     -G "https://rest.uniprot.org/uniprotkb/stream" \
     --data-urlencode "query=${QUERY}" \

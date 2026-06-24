@@ -29,7 +29,7 @@ elif [[ -s "$PROBE_CACHE_FILE" && "${FORCE_DOWNLOAD:-0}" != "1" ]]; then
 else
   rm -f "$OUT.tmp"
   if ! curl --globoff --fail --location --show-error --retry 4 --retry-delay 3 --retry-all-errors \
-    --connect-timeout 30 --max-time 600 -A "openzl-public-datasets/1.0" -o "$OUT.tmp" "$URL"; then
+    --connect-timeout 30 --speed-limit 1024 --speed-time 120 -A "openzl-public-datasets/1.0" -o "$OUT.tmp" "$URL"; then
     printf 'failed\tcurl_failed\t%s\n' "$URL" >> "$FAILURES"
     rm -f "$OUT.tmp"
     exit 1

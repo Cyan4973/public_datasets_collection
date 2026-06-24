@@ -1,0 +1,63 @@
+manifest_version = 1
+dataset_id = "ena_fastq_quality_phred"
+name = "ENA FASTQ Phred Quality Scores (uint8, per cycle)"
+description = "Native 8-bit per-base sequencing quality scores from one ENA FASTQ run: one family (Phred quality), one sample per sequencing cycle."
+homepage = "https://www.ebi.ac.uk/ena"
+
+[license]
+name = "INSDC / ENA open data"
+spdx = "NONE"
+url = "https://www.ebi.ac.uk/ena/browser/about/terms-of-use"
+citation = "European Nucleotide Archive (ENA), run SRR2584863."
+notes = "ENA read data are openly available; only numeric base-quality scores are extracted (no sequence or identifiers)."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public ENA FASTQ run (E. coli isolate); only per-base Phred quality values are extracted."
+usage_notes = "Promote only after fresh successful download, build, and verify."
+
+[[origins]]
+id = "ena"
+name = "European Nucleotide Archive"
+url = "https://www.ebi.ac.uk/ena"
+type = "bulk_download"
+notes = "ENA FASTQ over the EBI FTP/HTTPS mirror."
+
+[[resources]]
+id = "fastq_run"
+origin = "ena"
+url = "https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR258/003/SRR2584863/SRR2584863_1.fastq.gz"
+type = "bulk_file"
+version = "SRR2584863_1"
+access = "Single gzipped FASTQ (forward mate); Illumina 150bp, Phred+33."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/ena_fastq_quality_phred/reads.fastq.gz"
+notes = "Override with ENA_FASTQ_URL. gzip keeps the download small relative to the decompressed quality volume."
+
+[local_paths]
+downloads = "downloads/ena_fastq_quality_phred/"
+extracted = "extracted/ena_fastq_quality_phred/"
+filtered = "filtered/ena_fastq_quality_phred/"
+index = "index/ena_fastq_quality_phred/"
+samples = "samples/ena_fastq_quality_phred/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/ena_fastq_quality_phred/samples.jsonl"
+summary = "Stream a gzipped ENA FASTQ run, decode Phred+33 base-quality scores, and emit one uint8 sample per sequencing cycle (read position)."
+deterministic_notes = "The build reads up to FASTQ_MAX_READS records, decodes each quality character as (ord - FASTQ_PHRED_OFFSET, default 33), and groups by read position (cycle). One family = one quantity (Phred quality score); cycles differ in distribution (quality declines along the read) but share the quantity -- 'many series of the same quantity'. A cycle is kept only with >= FASTQ_MIN_CYCLE_RECORDS non-constant values. Quality values are bounded to 0..93."
+
+[[series]]
+id = "fastq_phred_quality_u8"
+semantic_meaning = "Per-base Phred quality score, one sample per sequencing cycle (read position)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Out-of-range or malformed quality entries dropped; cycles with < FASTQ_MIN_CYCLE_RECORDS values dropped."
+conversion = "ASCII quality char decoded as Phred+33 (ord - 33) and stored as uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"

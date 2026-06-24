@@ -1,0 +1,63 @@
+manifest_version = 1
+dataset_id = "cifar10_pixels_u8"
+name = "CIFAR-10 RGB Pixel Intensities (uint8)"
+description = "Native 8-bit RGB pixel intensities from CIFAR-10: one family (pixel intensity), one sample per 32x32 single-channel plane (matching cifar10_rgb_32x32, full scale)."
+homepage = "https://www.cs.toronto.edu/~kriz/cifar.html"
+
+[license]
+name = "CIFAR-10 (research use)"
+spdx = "NONE"
+url = "https://www.cs.toronto.edu/~kriz/cifar.html"
+citation = "Krizhevsky, Learning Multiple Layers of Features from Tiny Images, 2009."
+notes = "CIFAR-10 is distributed for research; only numeric pixel intensities are extracted."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official CIFAR-10 binary distribution (University of Toronto)."
+usage_notes = "Promote only after fresh successful download, build, and verify."
+
+[[origins]]
+id = "cifar"
+name = "CIFAR (University of Toronto)"
+url = "https://www.cs.toronto.edu/~kriz/cifar.html"
+type = "bulk_download"
+notes = "Official CIFAR-10 binary tarball."
+
+[[resources]]
+id = "cifar10_binary"
+origin = "cifar"
+url = "https://www.cs.toronto.edu/~kriz/cifar-10-binary.tar.gz"
+type = "bulk_file"
+version = "cifar-10-binary"
+access = "Single tar.gz of 6 record files (50k train + 10k test images)."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/cifar10_pixels_u8/cifar-10-binary.tar.gz"
+notes = "Override with CIFAR10_URL. Each record = 1 label byte + 3072 RGB pixel bytes (32x32x3)."
+
+[local_paths]
+downloads = "downloads/cifar10_pixels_u8/"
+extracted = "extracted/cifar10_pixels_u8/"
+filtered = "filtered/cifar10_pixels_u8/"
+index = "index/cifar10_pixels_u8/"
+samples = "samples/cifar10_pixels_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/cifar10_pixels_u8/samples.jsonl"
+summary = "Read the CIFAR-10 binary records and emit one uint8 sample per 32x32 single-channel plane (1024 values), three planes (R,G,B) per image; label byte dropped."
+deterministic_notes = "Each 3073-byte record is one image: the first (categorical class label) byte is dropped; the remaining 3072 bytes (1024 R, 1024 G, 1024 B) are emitted as THREE separate 1024-value samples (one per channel plane), matching the existing cifar10_rgb_32x32 layout but at full scale. One family = one quantity (pixel intensity, 0-255); R/G/B share the family (not split into separate families) and are distinguished by the `channel` field. Constant planes are dropped. Up to CIFAR_MAX_IMAGES images (default all 60000)."
+
+[[series]]
+id = "cifar_pixel_u8"
+semantic_meaning = "RGB pixel intensity (0-255), one sample per 32x32 single-channel plane (channel in metadata)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Constant planes dropped; otherwise every image yields three 1024-value planes (label byte excluded)."
+conversion = "Native 8-bit channel intensity stored as uint8 (one 32x32 plane per sample)."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"

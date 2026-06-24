@@ -129,7 +129,6 @@ chesscom_hikaru_2024_01	below_floor	3135	8360	3	1045	2090	0	0	0	1	none	aggregate
 openlibrary_editions	below_floor	3479	6958	7	497	994	0	0	0	1	none	aggregate_floor,median_sample_floor
 loc_photos_search_large	below_floor	3500	8000	7	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
 smithsonian_search_large	below_floor	3500	10000	7	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
-huggingface_models_large	below_floor	3500	12500	7	500	2000	0	0	0	1	none	aggregate_floor,median_sample_floor
 federalregister_documents_large	below_floor	4000	6000	4	1000	1500	0	0	0	1	none	aggregate_floor
 europepmc_grants_large_retry	below_floor	4000	8000	4	1000	2000	0	0	0	1	none	aggregate_floor
 taginfo_tags_popular	below_floor	4000	19500	8	500	2500	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -184,6 +183,7 @@ expression_atlas_experiments	ok	41058	95802	9	4562	9124	0	0	0	1	none	none
 nasa_donki_cme	ok	41650	166600	5	8330	33320	0	0	0	1	none	none
 homebrew_formulae	ok	42045	84090	5	8409	16818	0	0	0	1	none	none
 opensky_states	ok	44580	178320	5	8536	34144	0	0	0	1	none	none
+huggingface_models_large	ok	50000	200000	10	4942	19768	0	0	0	1	none	none
 universities_domains_list	ok	51245	71743	5	10249	10249	0	0	0	1	none	none
 rhea_reactions	ok	55029	128401	3	18343	36686	0	0	0	1	none	none
 ourworldindata_co2_latest	ok	58768	293840	2	29384	146920	0	0	0	1	none	none

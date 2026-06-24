@@ -1,21 +1,44 @@
 manifest_version = 1
 dataset_id = "huggingface_models_large"
-name = "Hugging Face Models Large"
-description = "Pinned Hugging Face models listing with model metrics."
+name = "Hugging Face Model Downloads & Likes (per year)"
+description = "Numeric Hugging Face model metrics: one family per quantity (downloads, likes), one sample per model creation year."
+homepage = "https://huggingface.co/"
 
 [license]
 name = "LicenseRef-HuggingFace"
 spdx = "LicenseRef-HuggingFace"
 url = "https://huggingface.co/"
+citation = "Hugging Face Hub models API."
+notes = "Public Hub metadata; only numeric model metrics are extracted."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Hugging Face Hub models API, cursor-paginated (Link header), sorted by downloads."
+usage_notes = "Promote only after fresh successful download, build, and verify."
+
+[[origins]]
+id = "huggingface"
+name = "Hugging Face Hub"
+url = "https://huggingface.co/api/models"
+type = "api"
+notes = "Cursor pagination via the Link rel=next header; sort=downloads ensures a dense (non-zero) head."
 
 [[resources]]
-id = "huggingface_models_json"
-url = "https://huggingface.co/api/models?limit=500&full=true"
+id = "models_pages"
+origin = "huggingface"
+url = "https://huggingface.co/api/models?limit=100&full=false&sort=downloads&direction=-1"
 type = "api_response"
-local_path = "downloads/huggingface_models_large/huggingface_models_large.json"
+version = "models_by_downloads_cursor"
+access = "Paged JSON model lists (limit=100) followed via the Link rel=next cursor."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/huggingface_models_large/pages/"
+notes = "HF_MAX_PAGES (default 250) bounds the crawl; downloads/likes are dense because the head is sorted by downloads."
 
 [local_paths]
 downloads = "downloads/huggingface_models_large/"
+extracted = "extracted/huggingface_models_large/"
 filtered = "filtered/huggingface_models_large/"
 index = "index/huggingface_models_large/"
 samples = "samples/huggingface_models_large/"
@@ -25,59 +48,27 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/huggingface_models_large/samples.jsonl"
+summary = "Cursor-crawl Hugging Face models sorted by downloads and emit one sample per creation year for each numeric quantity (downloads, likes)."
+deterministic_notes = "Models are de-duplicated by id and grouped by createdAt year. A family is emitted only if it has >= 5 year samples each with >= HF_MIN_YEAR_RECORDS non-constant values. Each family is one quantity; downloads and likes are never mixed. Sorting by downloads guarantees the fetched head is dense (non-zero). The earlier recipe captured only a single ~500-model page and mixed in derived counts."
 
 [[series]]
-id = "hf_model_downloads"
+id = "hf_downloads_u32"
+semantic_meaning = "30-day download count per model, one sample per creation year."
+role = "primary"
 representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered."
-numeric_kind = "uint"
-bit_width = 64
-endianness = "little"
-
-[[series]]
-id = "hf_model_likes"
-representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered."
+missing_value_policy = "Models without the field or out of range dropped; years with < HF_MIN_YEAR_RECORDS dropped."
+conversion = "Native integer download count stored as uint32."
 numeric_kind = "uint"
 bit_width = 32
 endianness = "little"
 
 [[series]]
-id = "hf_model_trending_score"
+id = "hf_likes_u32"
+semantic_meaning = "Like count per model, one sample per creation year."
+role = "primary"
 representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered."
-numeric_kind = "int"
-bit_width = 32
-endianness = "little"
-
-[[series]]
-id = "hf_model_created_at"
-representation_class = "derived_operational_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered."
+missing_value_policy = "Models without the field or out of range dropped; years with < HF_MIN_YEAR_RECORDS dropped; family omitted if < 5 years."
+conversion = "Native integer like count stored as uint32."
 numeric_kind = "uint"
 bit_width = 32
-endianness = "little"
-
-[[series]]
-id = "hf_model_siblings_count"
-representation_class = "derived_operational_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered."
-numeric_kind = "uint"
-bit_width = 16
-endianness = "little"
-
-[[series]]
-id = "hf_model_tags_count"
-representation_class = "derived_operational_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered."
-numeric_kind = "uint"
-bit_width = 16
-endianness = "little"
-
-[[series]]
-id = "hf_model_gated"
-representation_class = "derived_operational_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered."
-numeric_kind = "uint"
-bit_width = 8
 endianness = "little"

@@ -16,7 +16,6 @@ fred_unemployment_level_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggreg
 fred_unemployment_rate_monthly	below_floor	120	480	10	12	48	0	0	0	1	none	aggregate_floor,median_sample_floor
 world_bank_access_to_electricity_percent_annual	below_floor	183	1464	6	31.5	252	0	0	0	1	none	aggregate_floor,median_sample_floor
 openbrewerydb_breweries	below_floor	246	1640	3	82	656	0	0	0	1	none	aggregate_floor,median_sample_floor
-anilist_media	below_floor	295	837	6	49	147	0	0	0	1	none	aggregate_floor,median_sample_floor
 nuget_search	below_floor	300	1200	3	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
 weathergov_stations	below_floor	300	2000	3	100	800	0	0	0	1	none	aggregate_floor,median_sample_floor
 world_bank_renewable_energy_consumption_percent_annual	below_floor	320	2560	10	32	256	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -192,6 +191,7 @@ ourworldindata_co2_latest	ok	58768	293840	2	29384	146920	0	0	0	1	none	none
 osf_preprints	ok	59997	239988	3	19999	79996	0	0	0	1	none	none
 ooni_measurements	ok	60000	240000	3	20000	80000	0	0	0	1	none	none
 usgs_nwis_water_temperature_daily	ok	60459	483672	50	1427.5	11420	0	0	0	1	none	none
+anilist_media	ok	64534	172603	30	2288	5151	0	0	0	1	none	none
 scryfall_default_cards	ok	65272	180931	29	2205	5268	0	0	0	1	none	none
 library_of_congress_items	ok	66380	264316	5	15000	60000	0	0	0	1	none	none
 macrostrat_sections	ok	67885	271540	6	11315	45260	0	0	0	1	none	none

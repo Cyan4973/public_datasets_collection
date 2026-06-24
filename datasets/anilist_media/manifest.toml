@@ -1,10 +1,44 @@
 manifest_version = 1
 dataset_id = "anilist_media"
-name = "AniList Media Popularity Snapshot"
-description = "Pinned AniList GraphQL response for popular anime numeric metadata."
+name = "AniList Anime Numerics (per 3-year period)"
+description = "Numeric AniList anime fields: one family per quantity (average score, popularity, favourites, episodes, duration), one sample per 3-year period."
+homepage = "https://anilist.co/"
+
+[license]
+name = "AniList API terms"
+spdx = "NONE"
+url = "https://anilist.gitbook.io/anilist-apiv2-docs/"
+citation = "AniList GraphQL API (https://graphql.anilist.co)."
+notes = "Public AniList API; only numeric media fields are extracted."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official AniList GraphQL API, paginated by media id."
+usage_notes = "Promote only after fresh successful download, build, and verify. Respect the AniList rate limit."
+
+[[origins]]
+id = "anilist"
+name = "AniList GraphQL"
+url = "https://graphql.anilist.co"
+type = "api"
+notes = "Public GraphQL API; perPage 50, paginated by id."
+
+[[resources]]
+id = "media_pages"
+origin = "anilist"
+url = "https://graphql.anilist.co"
+type = "api_response"
+version = "media_anime_by_id"
+access = "Paged GraphQL responses (perPage 50), one file per page."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/anilist_media/pages/"
+notes = "ANILIST_TYPE (default ANIME), ANILIST_MAX_PAGES (default 400), ANILIST_SLEEP pace requests."
 
 [local_paths]
 downloads = "downloads/anilist_media/"
+extracted = "extracted/anilist_media/"
 filtered = "filtered/anilist_media/"
 index = "index/anilist_media/"
 samples = "samples/anilist_media/"
@@ -14,3 +48,60 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/anilist_media/samples.jsonl"
+summary = "Paginate the AniList media list and emit one sample per 3-year period for each numeric quantity (average score, popularity, favourites, episodes, duration)."
+deterministic_notes = "Each media item is assigned to its startDate year, binned into 3-year groups. A family is emitted only if it has >= 5 3-year-period samples each with >= ANILIST_MIN_YEAR_RECORDS non-constant values, so sparse fields self-omit. Each family is one quantity; quantities are never mixed. The earlier recipe captured only a single 100-item page."
+
+[[series]]
+id = "anilist_average_score_u8"
+semantic_meaning = "Average user score (0-100), one sample per 3-year period."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing/out-of-range scores dropped; years with < ANILIST_MIN_YEAR_RECORDS dropped."
+conversion = "Native 0-100 score stored as uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "anilist_popularity_u32"
+semantic_meaning = "Number of users with the title on a list, one sample per 3-year period."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing values dropped; years with < ANILIST_MIN_YEAR_RECORDS dropped; family omitted if < 5 years."
+conversion = "Native integer count stored as uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "anilist_favourites_u32"
+semantic_meaning = "Number of users who favourited the title, one sample per 3-year period."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing values dropped; years with < ANILIST_MIN_YEAR_RECORDS dropped; family omitted if < 5 years."
+conversion = "Native integer count stored as uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+
+[[series]]
+id = "anilist_episodes_u16"
+semantic_meaning = "Episode count, one sample per 3-year period."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing/out-of-range values dropped; years with < ANILIST_MIN_YEAR_RECORDS dropped; family omitted if < 5 years."
+conversion = "Native integer episode count stored as uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "anilist_duration_u16"
+semantic_meaning = "Per-episode duration in minutes, one sample per 3-year period."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing/out-of-range values dropped; years with < ANILIST_MIN_YEAR_RECORDS dropped; family omitted if < 5 years."
+conversion = "Native integer minute duration stored as uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"

@@ -84,7 +84,6 @@ arxiv_ai_recent	below_floor	900	2300	9	100	200	0	0	0	1	none	aggregate_floor,medi
 geoboundaries_all_adm0	below_floor	920	3220	4	230	920	0	0	0	1	none	aggregate_floor,median_sample_floor
 eia_petroleum_prices	below_floor	988	3952	2	494	1976	0	0	0	1	none	aggregate_floor,median_sample_floor
 ena_portal_search	below_floor	1000	5000	2	500	2500	0	0	0	1	none	aggregate_floor,median_sample_floor
-scryfall_default_cards	below_floor	1050	2100	6	175	175	0	0	0	1	none	aggregate_floor,median_sample_floor
 owid_cement_co2_annual	below_floor	1155	4620	10	97	388	0	0	0	1	none	aggregate_floor,median_sample_floor
 iris_seismon_events_fixed	below_floor	1170	5330	9	130	260	0	0	0	1	none	aggregate_floor,median_sample_floor
 owid_co2_per_gdp_annual	below_floor	1403	5612	10	140	560	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -193,6 +192,7 @@ ourworldindata_co2_latest	ok	58768	293840	2	29384	146920	0	0	0	1	none	none
 osf_preprints	ok	59997	239988	3	19999	79996	0	0	0	1	none	none
 ooni_measurements	ok	60000	240000	3	20000	80000	0	0	0	1	none	none
 usgs_nwis_water_temperature_daily	ok	60459	483672	50	1427.5	11420	0	0	0	1	none	none
+scryfall_default_cards	ok	65272	180931	29	2205	5268	0	0	0	1	none	none
 library_of_congress_items	ok	66380	264316	5	15000	60000	0	0	0	1	none	none
 macrostrat_sections	ok	67885	271540	6	11315	45260	0	0	0	1	none	none
 usgs_quakes_month	ok	68900	374024	7	9842	39376	0	0	0	1	none	none

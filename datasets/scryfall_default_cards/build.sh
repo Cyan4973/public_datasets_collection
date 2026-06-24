@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 DATA_DIR="${DATA_DIR:-.data}"
 DATASET_ID="scryfall_default_cards"
@@ -9,93 +10,156 @@ FILTER_DIR="$REPO_ROOT/$DATA_DIR/filtered/$DATASET_ID"
 INDEX_DIR="$REPO_ROOT/$DATA_DIR/index/$DATASET_ID"
 SAMPLES_DIR="$REPO_ROOT/$DATA_DIR/samples/$DATASET_ID"
 mkdir -p "$LOG_DIR" "$DOWNLOAD_DIR" "$FILTER_DIR" "$INDEX_DIR" "$SAMPLES_DIR"
+
 RUN_TS="$(date +%Y%m%d_%H%M%S)"
 LOG_FILE="$LOG_DIR/build.$RUN_TS.log"
 LATEST_LOG="$LOG_DIR/build.latest.log"
 exec > >(tee "$LOG_FILE" "$LATEST_LOG") 2>&1
-export REPO_ROOT DATA_DIR DOWNLOAD_DIR FILTER_DIR INDEX_DIR SAMPLES_DIR
+
+echo "[$(date -Is)] build start dataset=$DATASET_ID"
+MIN_YEAR_RECORDS="${SCRYFALL_MIN_YEAR_RECORDS:-1000}"
+export REPO_ROOT DATA_DIR DOWNLOAD_DIR FILTER_DIR INDEX_DIR SAMPLES_DIR MIN_YEAR_RECORDS
 python3 - <<'PY'
 from __future__ import annotations
-import array, csv, json, os, shutil, struct
+
+import json
+import os
+import shutil
+import struct
+from collections import defaultdict
 from pathlib import Path
-repo_root = Path(os.environ['REPO_ROOT'])
-data_root = repo_root / os.environ['DATA_DIR']
-download_dir = Path(os.environ['DOWNLOAD_DIR'])
-filter_dir = Path(os.environ['FILTER_DIR'])
-index_dir = Path(os.environ['INDEX_DIR'])
-samples_dir = Path(os.environ['SAMPLES_DIR'])
-series_defs = [
-    {'series_id': 'scryfall_cmc_f32', 'kind': 'float32', 'numeric_kind': 'float', 'bit_width': 32, 'endianness': 'little', 'element_size_bytes': 4},
-    {'series_id': 'scryfall_edhrec_rank_u32', 'array_type': 'I', 'numeric_kind': 'uint', 'bit_width': 32, 'endianness': 'little', 'element_size_bytes': 4},
-    {'series_id': 'scryfall_released_month_u8', 'array_type': 'B', 'numeric_kind': 'uint', 'bit_width': 8, 'endianness': 'little', 'element_size_bytes': 1},
-    {'series_id': 'scryfall_games_count_u8', 'array_type': 'B', 'numeric_kind': 'uint', 'bit_width': 8, 'endianness': 'little', 'element_size_bytes': 1},
-    {'series_id': 'scryfall_color_count_u8', 'array_type': 'B', 'numeric_kind': 'uint', 'bit_width': 8, 'endianness': 'little', 'element_size_bytes': 1},
-    {'series_id': 'scryfall_color_identity_count_u8', 'array_type': 'B', 'numeric_kind': 'uint', 'bit_width': 8, 'endianness': 'little', 'element_size_bytes': 1},
-]
-for s in series_defs:
-    d = samples_dir / s['series_id']
-    if d.exists():
-        shutil.rmtree(d)
-    d.mkdir(parents=True, exist_ok=True)
-rows = json.load(open(download_dir / 'cards.json', encoding='utf-8'))['data']
-vals = {s['series_id']: [] for s in series_defs}
-row_count = len(rows)
-kept = 0
-skipped = 0
-for row in rows:
+
+repo_root = Path(os.environ["REPO_ROOT"])
+data_root = repo_root / os.environ["DATA_DIR"]
+download_dir = Path(os.environ["DOWNLOAD_DIR"])
+filter_dir = Path(os.environ["FILTER_DIR"])
+index_dir = Path(os.environ["INDEX_DIR"])
+samples_dir = Path(os.environ["SAMPLES_DIR"])
+min_year = int(os.environ["MIN_YEAR_RECORDS"])
+
+DATASET_ID = "scryfall_default_cards"
+# family -> (numeric_kind, bit_width, struct code, lo, hi)
+FAMILIES = {
+    "scryfall_cmc_u8":            ("uint", 8,  "B", 0, 255),
+    "scryfall_edhrec_rank_u32":   ("uint", 32, "I", 0, 0xFFFFFFFF),
+    "scryfall_price_usd_cents_u32": ("uint", 32, "I", 0, 0xFFFFFFFF),
+}
+
+src = download_dir / "cards.json"
+if not src.is_file():
+    raise SystemExit(f"missing {src}")
+cards = json.loads(src.read_text(encoding="utf-8"))
+if not isinstance(cards, list):
+    raise SystemExit("cards.json is not a JSON array")
+
+# field extractors: card -> int value or None
+def get_cmc(c):
+    v = c.get("cmc")
+    if v is None:
+        return None
     try:
-        cmc = float(row['cmc'])
-        released = str(row['released_at'])
-        year = int(released[:4])
-        month = int(released[5:7])
-        edhrec = int(row.get('edhrec_rank') or 0)
-        color_count = len(row.get('colors', []))
-        color_identity_count = len(row.get('color_identity', []))
-        games_count = len(row.get('games', []))
-    except Exception:
-        skipped += 1
+        iv = int(round(float(v)))
+    except (TypeError, ValueError):
+        return None
+    return iv if 0 <= iv <= 255 else None
+
+def get_rank(c):
+    v = c.get("edhrec_rank")
+    return int(v) if isinstance(v, int) and 0 <= v <= 0xFFFFFFFF else None
+
+def get_price(c):
+    p = (c.get("prices") or {}).get("usd")
+    if not p:
+        return None
+    try:
+        cents = int(round(float(p) * 100))
+    except (TypeError, ValueError):
+        return None
+    return cents if 0 <= cents <= 0xFFFFFFFF else None
+
+EXTRACT = {
+    "scryfall_cmc_u8": get_cmc,
+    "scryfall_edhrec_rank_u32": get_rank,
+    "scryfall_price_usd_cents_u32": get_price,
+}
+
+by_fam_year = {f: defaultdict(list) for f in FAMILIES}
+cards_used = 0
+no_year = 0
+
+for c in cards:
+    d = c.get("released_at")
+    if not isinstance(d, str) or len(d) < 4 or not d[:4].isdigit():
+        no_year += 1
         continue
-    vals['scryfall_cmc_f32'].append(cmc)
-    vals['scryfall_edhrec_rank_u32'].append(edhrec)
-    vals['scryfall_released_month_u8'].append(month)
-    vals['scryfall_games_count_u8'].append(games_count)
-    vals['scryfall_color_count_u8'].append(color_count)
-    vals['scryfall_color_identity_count_u8'].append(color_identity_count)
-    kept += 1
-filter_dir.mkdir(parents=True, exist_ok=True)
-index_dir.mkdir(parents=True, exist_ok=True)
-with (filter_dir / 'stats.tsv').open('w', encoding='utf-8', newline='') as f:
-    w = csv.writer(f, delimiter='\t')
-    w.writerow(['row_count', 'kept_count', 'skipped_count'])
-    w.writerow([row_count, kept, skipped])
-records = []
-for s in series_defs:
-    out = samples_dir / s['series_id'] / 'cards.bin'
-    if s.get('kind') == 'float32':
-        with out.open('wb') as fh:
-            for value in vals[s['series_id']]:
-                fh.write(struct.pack('<f', value))
-    else:
-        arr = array.array(s['array_type'], vals[s['series_id']])
-        if arr.itemsize > 1 and os.sys.byteorder != 'little':
-            arr.byteswap()
-        with out.open('wb') as fh:
-            fh.write(arr.tobytes())
-    records.append({
-        'dataset_id': 'scryfall_default_cards',
-        'series_id': s['series_id'],
-        'sample_path': out.relative_to(data_root).as_posix(),
-        'numeric_kind': s['numeric_kind'],
-        'bit_width': s['bit_width'],
-        'endianness': s['endianness'],
-        'element_size_bytes': s['element_size_bytes'],
-        'sample_size_bytes': out.stat().st_size,
-        'value_count': len(vals[s['series_id']]),
-    })
-with (index_dir / 'samples.jsonl').open('w', encoding='utf-8') as fh:
-    for row in records:
-        fh.write(json.dumps(row, sort_keys=True) + '\n')
-if kept < 150:
-    raise SystemExit(f'kept too few rows: {kept}')
+    year = int(d[:4])
+    cards_used += 1
+    for fam, fn in EXTRACT.items():
+        v = fn(c)
+        if v is not None:
+            by_fam_year[fam][year].append(v)
+
+if samples_dir.exists():
+    shutil.rmtree(samples_dir)
+samples_dir.mkdir(parents=True, exist_ok=True)
+
+index_rows = []
+fam_summary = {}
+for fam, (kind, bits, code, _lo, _hi) in FAMILIES.items():
+    years = by_fam_year[fam]
+    qualifying = sorted(y for y, vals in years.items()
+                        if len(vals) >= min_year and len(set(vals)) > 1)
+    if len(qualifying) < 5:
+        continue
+    (samples_dir / fam).mkdir(parents=True, exist_ok=True)
+    for y in qualifying:
+        vals = years[y]
+        out = samples_dir / fam / f"{fam}_y{y}_n{len(vals):06d}.bin"
+        out.write_bytes(struct.pack("<" + code * len(vals), *vals))
+        index_rows.append({
+            "dataset_id": DATASET_ID,
+            "series_id": fam,
+            "role": "primary",
+            "sample_path": out.relative_to(data_root).as_posix(),
+            "numeric_kind": kind,
+            "bit_width": bits,
+            "endianness": "little",
+            "element_size_bytes": bits // 8,
+            "sample_size_bytes": out.stat().st_size,
+            "value_count": len(vals),
+            "sample_geometry": "sequence",
+            "sample_rank": 1,
+            "year": y,
+            "natural_record_kind": "scryfall_card",
+        })
+    fam_summary[fam] = len(qualifying)
+
+if len(fam_summary) < 2:
+    raise SystemExit(f"only {len(fam_summary)} families qualified: {fam_summary}")
+
+primary_values = sum(r["value_count"] for r in index_rows)
+primary_bytes = sum(r["sample_size_bytes"] for r in index_rows)
+counts = sorted(r["value_count"] for r in index_rows)
+median = counts[len(counts) // 2]
+stats = {
+    "dataset_id": DATASET_ID,
+    "families": fam_summary,
+    "samples": len(index_rows),
+    "cards_used": cards_used,
+    "cards_without_year": no_year,
+    "primary_values": primary_values,
+    "primary_sample_bytes": primary_bytes,
+    "median_value_count": median,
+    "min_value_count": counts[0],
+    "max_value_count": counts[-1],
+}
+(filter_dir / "ingest_stats.json").write_text(json.dumps(stats, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+with (index_dir / "samples.jsonl").open("w", encoding="utf-8") as fh:
+    for row in sorted(index_rows, key=lambda r: r["sample_path"]):
+        fh.write(json.dumps(row, sort_keys=True) + "\n")
+print(
+    f"built families={fam_summary} samples={len(index_rows)} cards_used={cards_used} "
+    f"no_year={no_year} primary_values={primary_values} median={median} range=[{counts[0]},{counts[-1]}]"
+)
 PY
 echo "[$(date -Is)] build done dataset=$DATASET_ID"

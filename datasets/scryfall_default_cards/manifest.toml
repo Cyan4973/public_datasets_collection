@@ -1,10 +1,44 @@
 manifest_version = 1
 dataset_id = "scryfall_default_cards"
-name = "Scryfall Default Cards"
-description = "Pinned Scryfall card search reduced to direct numeric card metadata."
+name = "Scryfall Card Numerics (per year)"
+description = "Numeric Magic: The Gathering card fields from the Scryfall bulk data: one family per quantity (mana value, EDHREC rank, USD price in cents), one sample per release year."
+homepage = "https://scryfall.com/docs/api/bulk-data"
+
+[license]
+name = "Scryfall data (CC0 card data)"
+spdx = "CC0-1.0"
+url = "https://scryfall.com/docs/api"
+citation = "Scryfall bulk data, https://scryfall.com/docs/api/bulk-data."
+notes = "Scryfall card data is provided free; only numeric card fields are extracted. Card images/text excluded."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Scryfall bulk-data file (download URI resolved at run time from the bulk-data listing)."
+usage_notes = "Promote only after fresh successful download, build, and verify."
+
+[[origins]]
+id = "scryfall"
+name = "Scryfall"
+url = "https://scryfall.com/docs/api/bulk-data"
+type = "bulk_download"
+notes = "Official Scryfall bulk-data endpoint; oracle_cards (unique cards) by default."
+
+[[resources]]
+id = "bulk_cards"
+origin = "scryfall"
+url = "https://api.scryfall.com/bulk-data"
+type = "api"
+version = "oracle_cards"
+access = "Single bulk JSON array of card objects; the timestamped download URI is resolved from the bulk-data listing."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/scryfall_default_cards/cards.json"
+notes = "Override the bulk type with SCRYFALL_BULK_TYPE (oracle_cards ~178 MB; default_cards ~551 MB)."
 
 [local_paths]
 downloads = "downloads/scryfall_default_cards/"
+extracted = "extracted/scryfall_default_cards/"
 filtered = "filtered/scryfall_default_cards/"
 index = "index/scryfall_default_cards/"
 samples = "samples/scryfall_default_cards/"
@@ -14,57 +48,38 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/scryfall_default_cards/samples.jsonl"
+summary = "Download the Scryfall bulk card file and emit one sample per release year for each numeric card quantity (mana value, EDHREC rank, USD price)."
+deterministic_notes = "Each card is assigned to its released_at year. A family is emitted only if it has >= 5 release-year samples each with >= SCRYFALL_MIN_YEAR_RECORDS non-constant values. Each family is one quantity; quantities are never mixed. Mana value (cmc) is rounded to an integer uint8 (cards with cmc > 255 dropped); price is USD rounded to integer cents (uint32); EDHREC rank is uint32. The earlier recipe captured only a single ~175-card search page."
 
 [[series]]
-id = "scryfall_cmc_f32"
-path = "samples/scryfall_default_cards/scryfall_cmc_f32/cards.bin"
-numeric_kind = "float"
-bit_width = 32
+id = "scryfall_cmc_u8"
+semantic_meaning = "Converted mana cost / mana value, one sample per release year."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing/out-of-range cmc dropped; years with < SCRYFALL_MIN_YEAR_RECORDS values dropped."
+conversion = "cmc rounded to integer and stored as uint8 (0-255)."
+numeric_kind = "uint"
+bit_width = 8
 endianness = "little"
-sample_format = "raw_homogeneous_array"
-missing_value_policy = "filtered_rows_with_invalid_numeric_card_fields"
 
 [[series]]
 id = "scryfall_edhrec_rank_u32"
-path = "samples/scryfall_default_cards/scryfall_edhrec_rank_u32/cards.bin"
+semantic_meaning = "EDHREC commander popularity rank, one sample per release year."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Cards without edhrec_rank dropped; years with < SCRYFALL_MIN_YEAR_RECORDS values dropped; family omitted if < 5 years."
+conversion = "Native integer rank stored as uint32."
 numeric_kind = "uint"
 bit_width = 32
 endianness = "little"
-sample_format = "raw_homogeneous_array"
-missing_value_policy = "missing_edhrec_rank_preserved_as_zero"
 
 [[series]]
-id = "scryfall_released_month_u8"
-path = "samples/scryfall_default_cards/scryfall_released_month_u8/cards.bin"
+id = "scryfall_price_usd_cents_u32"
+semantic_meaning = "Card market price in USD cents, one sample per release year."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Cards without a USD price dropped; years with < SCRYFALL_MIN_YEAR_RECORDS values dropped; family omitted if < 5 years."
+conversion = "prices.usd multiplied by 100 and rounded to integer cents, stored as uint32."
 numeric_kind = "uint"
-bit_width = 8
+bit_width = 32
 endianness = "little"
-sample_format = "raw_homogeneous_array"
-missing_value_policy = "filtered_rows_with_invalid_release_dates"
-
-[[series]]
-id = "scryfall_games_count_u8"
-path = "samples/scryfall_default_cards/scryfall_games_count_u8/cards.bin"
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-sample_format = "raw_homogeneous_array"
-missing_value_policy = "preserved_zero_for_missing_games_list"
-
-[[series]]
-id = "scryfall_color_count_u8"
-path = "samples/scryfall_default_cards/scryfall_color_count_u8/cards.bin"
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-sample_format = "raw_homogeneous_array"
-missing_value_policy = "preserved_zero_for_missing_color_lists"
-
-[[series]]
-id = "scryfall_color_identity_count_u8"
-path = "samples/scryfall_default_cards/scryfall_color_identity_count_u8/cards.bin"
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-sample_format = "raw_homogeneous_array"
-missing_value_policy = "preserved_zero_for_missing_color_identity_lists"

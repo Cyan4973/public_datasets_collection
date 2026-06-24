@@ -25,15 +25,17 @@ UA="openzl-public-datasets/1.0 (numeric dataset collection)"
 if [ -s "$OUT" ] && [ "${FORCE_DOWNLOAD:-0}" != "1" ]; then
   echo "[$(date -Is)] cache_hit dataset=$DATASET_ID path=$OUT"
 else
-  # fail-fast liveness check before the ~85 MB pull
+  # fail-fast liveness check (one-byte range GET, follows redirects) before the ~85 MB pull
   echo "probe url=$URL"
-  code="$(curl --globoff -fsS -I -o /dev/null -w '%{http_code}' --max-time 60 -A "$UA" "$URL" || true)"
+  code="$(curl --globoff -fsSL -r 0-0 -o /dev/null -w '%{http_code}' --max-time 60 -A "$UA" "$URL" || true)"
   if [ "$code" != "200" ] && [ "$code" != "206" ]; then
     echo "FATAL: liveness check returned HTTP $code for $URL (override MAESTRO_URL)."; exit 1
   fi
-  echo "liveness ok (HTTP $code); downloading"
-  rm -f "$TMP"
-  curl --globoff -fL --retry 4 --retry-delay 5 --max-time 1800 -A "$UA" -o "$TMP" "$URL"
+  echo "liveness ok (HTTP $code); downloading (resumable)"
+  # resumable + stall-based abort (no hard total-time cap that would restart a slow server)
+  curl --globoff -fL -C - --retry 10 --retry-delay 5 \
+    --speed-limit 1024 --speed-time 120 \
+    -A "$UA" -o "$TMP" "$URL"
   mv "$TMP" "$OUT"
 fi
 

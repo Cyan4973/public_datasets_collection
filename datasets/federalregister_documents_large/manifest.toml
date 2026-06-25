@@ -1,21 +1,44 @@
 manifest_version = 1
 dataset_id = "federalregister_documents_large"
-name = "Federal Register Documents Large"
-description = "Pinned Federal Register documents sample with publication and field-length metrics."
+name = "Federal Register Document Page Metrics (per month)"
+description = "Numeric Federal Register document page metrics: one family per quantity (page length, start page), one sample per publication month."
+homepage = "https://www.federalregister.gov/"
 
 [license]
 name = "U.S. Government Work"
 spdx = "LicenseRef-USGov"
 url = "https://www.federalregister.gov/"
+citation = "Federal Register API v1 (U.S. Government work, public domain)."
+notes = "Public U.S. government documents; only numeric page metrics are extracted."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Federal Register API v1 documents.json, sharded by publication month with a per-page loop; only numeric page fields are kept."
+usage_notes = "Promote only after a fresh successful download, build, and verify."
+
+[[origins]]
+id = "federalregister"
+name = "Federal Register API"
+url = "https://www.federalregister.gov/api/v1/documents.json"
+type = "api"
+notes = "Sharded by publication month (the API caps count at 10000/query, so months stay well under the cap); fields projected to document_number, page_length, start_page."
 
 [[resources]]
-id = "federalregister_documents_json"
-url = "https://www.federalregister.gov/api/v1/documents.json?per_page=1000&conditions%5Bpublication_date%5D%5Bgte%5D=2024-01-01&conditions%5Bpublication_date%5D%5Blte%5D=2024-12-31"
+id = "documents_pages"
+origin = "federalregister"
+url = "https://www.federalregister.gov/api/v1/documents.json?per_page=1000&fields[]=page_length&fields[]=start_page&conditions[publication_date][gte]={YYYY-MM-01}&conditions[publication_date][lte]={YYYY-MM-last}"
 type = "api_response"
-local_path = "downloads/federalregister_documents_large/federalregister_documents_large.json"
+version = "documents_by_month"
+access = "Paged JSON document lists (per_page=1000) looped per month until a short page."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/federalregister_documents_large/pages/"
+notes = "FEDREG_START_YEAR (default 2010) and FEDREG_END_YEAR (default 2024) bound the crawl."
 
 [local_paths]
 downloads = "downloads/federalregister_documents_large/"
+extracted = "extracted/federalregister_documents_large/"
 filtered = "filtered/federalregister_documents_large/"
 index = "index/federalregister_documents_large/"
 samples = "samples/federalregister_documents_large/"
@@ -25,35 +48,27 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/federalregister_documents_large/samples.jsonl"
+summary = "Crawl Federal Register documents per publication month and emit one sample per month for each numeric page quantity (page length, start page)."
+deterministic_notes = "Documents are de-duplicated by document_number and grouped by publication month (YYYY-MM). A family is emitted only if >= 5 months each have >= FEDREG_MIN_RECORDS non-constant values. Each family is one quantity; page_length and start_page are never mixed. Supersedes the earlier single-query recipe that captured only the first 1000 docs of 2024 and extracted text-field byte lengths (not numeric quantities)."
 
 [[series]]
-id = "fedreg_agencies_count"
-representation_class = "derived_operational_numeric"
-missing_value_policy = "Rows missing required fields are filtered."
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-
-[[series]]
-id = "fedreg_title_length"
-representation_class = "derived_operational_numeric"
-missing_value_policy = "Rows missing required fields are filtered."
+id = "fedreg_page_length_u16"
+semantic_meaning = "Number of printed Federal Register pages a document occupies, one sample per publication month."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Documents missing page_length dropped; months with < FEDREG_MIN_RECORDS values dropped; family omitted if < 5 months."
+conversion = "Native integer page count stored as uint16."
 numeric_kind = "uint"
 bit_width = 16
 endianness = "little"
 
 [[series]]
-id = "fedreg_abstract_length"
-representation_class = "derived_operational_numeric"
-missing_value_policy = "Rows missing required fields are filtered."
+id = "fedreg_start_page_u32"
+semantic_meaning = "Starting page number of a document within the annual Federal Register volume, one sample per publication month (monotonic within a year)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Documents missing start_page dropped; months with < FEDREG_MIN_RECORDS values dropped; family omitted if < 5 months."
+conversion = "Native integer page position stored as uint32 (annual volumes exceed 65535 pages)."
 numeric_kind = "uint"
-bit_width = 16
-endianness = "little"
-
-[[series]]
-id = "fedreg_publication_day"
-representation_class = "derived_operational_numeric"
-missing_value_policy = "Rows missing required fields are filtered."
-numeric_kind = "uint"
-bit_width = 8
+bit_width = 32
 endianness = "little"

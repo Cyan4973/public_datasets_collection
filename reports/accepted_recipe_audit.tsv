@@ -128,7 +128,6 @@ rubygems_versions_large	below_floor	2580	9288	5	516	2064	0	0	0	1	none	aggregate_
 openlibrary_editions	below_floor	3479	6958	7	497	994	0	0	0	1	none	aggregate_floor,median_sample_floor
 loc_photos_search_large	below_floor	3500	8000	7	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
 smithsonian_search_large	below_floor	3500	10000	7	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
-federalregister_documents_large	below_floor	4000	6000	4	1000	1500	0	0	0	1	none	aggregate_floor
 europepmc_grants_large_retry	below_floor	4000	8000	4	1000	2000	0	0	0	1	none	aggregate_floor
 taginfo_tags_popular	below_floor	4000	19500	8	500	2500	0	0	0	1	none	aggregate_floor,median_sample_floor
 taginfo_keys_all	below_floor	4000	25500	8	500	4000	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -257,6 +256,7 @@ gdelt_events_numsources_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	non
 binance_usdm_futures_bookdepth_btc_eth_2024_w01	ok	806360	6450880	28	28800	230400	806360	6450880	28	1	none	none
 noaa_coops_water_level	ok	876000	7008000	5	175200	1401600	0	0	0	1	none	none
 openalex_institutions_large	ok	880957	2642871	7	125851	503404	0	0	0	1	none	none
+federalregister_documents_large	ok	887298	2661894	358	2463	6824	0	0	0	1	none	none
 inspirehep_literature	ok	897494	2403434	195	5000	10000	0	0	0	1	none	none
 smithsonian_openaccess_gltf_indices_u16	ok	899964	1799928	3	299988	599976	0	0	0	1	none	none
 nih_reporter_projects	ok	1064676	6388056	90	11664	66162	0	0	0	1	none	none

@@ -4,8 +4,8 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 174
-- `below_floor`: 149
+- `ok`: 175
+- `below_floor`: 148
 - `broken`: 0
 
 ## Below Floor
@@ -138,7 +138,6 @@ Auxiliary series do not count toward acceptance.
 | `fred_treasury_30y_daily` | 2501 | 10004 | 10 | 250 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_wti_crude_daily` | 2505 | 10020 | 10 | 250.5 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `rubygems_versions_large` | 2580 | 9288 | 5 | 516 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `chesscom_hikaru_2024_01` | 3135 | 8360 | 3 | 1045 | 0 | 0 | `aggregate_floor` |
 | `openlibrary_editions` | 3479 | 6958 | 7 | 497 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `loc_photos_search_large` | 3500 | 8000 | 7 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `smithsonian_search_large` | 3500 | 10000 | 7 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |

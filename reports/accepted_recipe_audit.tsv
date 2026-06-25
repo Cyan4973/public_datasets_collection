@@ -125,7 +125,6 @@ fred_treasury_2y_daily	below_floor	2501	10004	10	250	1000	0	0	0	1	none	aggregate
 fred_treasury_30y_daily	below_floor	2501	10004	10	250	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
 fred_wti_crude_daily	below_floor	2505	10020	10	250.5	1002	0	0	0	1	none	aggregate_floor,median_sample_floor
 rubygems_versions_large	below_floor	2580	9288	5	516	2064	0	0	0	1	none	aggregate_floor,median_sample_floor
-chesscom_hikaru_2024_01	below_floor	3135	8360	3	1045	2090	0	0	0	1	none	aggregate_floor
 openlibrary_editions	below_floor	3479	6958	7	497	994	0	0	0	1	none	aggregate_floor,median_sample_floor
 loc_photos_search_large	below_floor	3500	8000	7	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
 smithsonian_search_large	below_floor	3500	10000	7	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -238,6 +237,7 @@ uniprot_protein_sizes	ok	294084	882252	74	2048	6834	0	0	0	1	none	none
 jpl_close_approaches	ok	297934	2383472	7	42562	340496	0	0	0	1	none	none
 noaa_coops_water_temperature	ok	346842	2774736	2	173421	1387368	0	0	0	1	none	none
 who_gho_observations	ok	348104	1435929	8	43513	130539	0	0	0	1	none	none
+chesscom_blitz_games	ok	368189	736378	83	3480	6960	0	0	0	1	none	none
 ghcnd_stations	ok	397497	1589988	3	132499	529996	0	0	0	1	none	none
 hgnc_complete_set_json	ok	404973	1034931	9	44997	89994	0	0	0	1	none	none
 usgs_sitefile_all_large	ok	452020	3073736	5	90404	723232	0	0	0	1	none	none

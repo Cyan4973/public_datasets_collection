@@ -1,0 +1,74 @@
+manifest_version = 1
+dataset_id = "chesscom_blitz_games"
+name = "Chess.com Blitz Game Ratings & Lengths (per player)"
+description = "Numeric Chess.com blitz-game metrics: one family per quantity (player Elo rating, game length in plies), one sample per player's chronological blitz-game stream."
+homepage = "https://www.chess.com/news/view/published-data-api"
+
+[license]
+name = "LicenseRef-ChessCom"
+spdx = "LicenseRef-ChessCom"
+url = "https://www.chess.com/news/view/published-data-api"
+citation = "Chess.com Published-Data API (public, no authentication)."
+notes = "Public per-player game archives; only numeric game metrics are extracted."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Chess.com Published-Data API: live leaderboards select players, per-player monthly game archives are crawled, games filtered to rated standard blitz."
+usage_notes = "Promote only after a fresh successful download, build, and verify."
+
+[[origins]]
+id = "chesscom"
+name = "Chess.com Published-Data API"
+url = "https://api.chess.com/pub"
+type = "api"
+notes = "No authentication; a descriptive User-Agent is required. Player list seeded from /pub/leaderboards, games from /pub/player/{u}/games/{YYYY}/{MM}."
+
+[[resources]]
+id = "game_archives"
+origin = "chesscom"
+url = "https://api.chess.com/pub/player/{username}/games/{YYYY}/{MM}"
+type = "api_response"
+version = "per_player_monthly_archives"
+access = "Monthly per-player game-list JSON; archive URLs come from /pub/player/{u}/games/archives."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/chesscom_blitz_games/pages/"
+notes = "CHESSCOM_PLAYERS_MAX (default 50) and CHESSCOM_MONTHS_MAX (default 24) bound the crawl; only rated standard blitz games are kept."
+
+[local_paths]
+downloads = "downloads/chesscom_blitz_games/"
+extracted = "extracted/chesscom_blitz_games/"
+filtered = "filtered/chesscom_blitz_games/"
+index = "index/chesscom_blitz_games/"
+samples = "samples/chesscom_blitz_games/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/chesscom_blitz_games/samples.jsonl"
+summary = "Crawl recent monthly blitz-game archives for top Chess.com players and emit one sample per player for each numeric quantity (Elo rating, game length in plies)."
+deterministic_notes = "Games are filtered to rated, standard (rules=chess) blitz. Per player, ratings are the white and black Elo in game order; plies = len(tcn)//2 (TCN encodes two characters per half-move). A family is emitted only if >= 5 players each have >= CHESSCOM_MIN_RECORDS non-constant values. Each family is one quantity; ratings and plies are never mixed. Supersedes the earlier single-player single-month draft (chesscom_hikaru_2024_01)."
+
+[[series]]
+id = "chesscom_blitz_rating_u16"
+semantic_meaning = "Player Elo rating in rated standard blitz games (white and black, in game order), one sample per player."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Games missing a rating, non-blitz, non-standard, or unrated are dropped; players with < CHESSCOM_MIN_RECORDS values dropped; family omitted if < 5 players."
+conversion = "Native integer Elo rating stored as uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "chesscom_blitz_plies_u16"
+semantic_meaning = "Game length in plies (half-moves) of rated standard blitz games, one sample per player."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Games missing TCN, non-blitz, non-standard, or unrated are dropped; players with < CHESSCOM_MIN_RECORDS values dropped; family omitted if < 5 players."
+conversion = "Ply count derived as len(tcn)//2 stored as uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"

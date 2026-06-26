@@ -1,0 +1,72 @@
+manifest_version = 1
+dataset_id = "dc_lidar_2015_classification_u8"
+name = "District of Columbia 2015 LiDAR Classification Codes"
+description = "Public District of Columbia classified LAS point-cloud tiles, emitted as native uint8 point classification-code streams."
+homepage = "https://registry.opendata.aws/dc-lidar-2015/"
+
+[license]
+name = "District of Columbia public open data"
+spdx = "LicenseRef-DC-Open-Data"
+url = "https://registry.opendata.aws/dc-lidar-2015/"
+citation = "District of Columbia Classified Point Cloud LiDAR 2015, AWS Open Data Registry."
+notes = "Public AWS Open Data dataset; preserve District of Columbia and AWS Open Data attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public government geospatial point-cloud tiles."
+usage_notes = "Classified topographic LiDAR point attributes; no personal data expected."
+
+[[origins]]
+id = "dc_lidar_2015_s3"
+name = "District of Columbia Classified Point Cloud LiDAR 2015"
+url = "https://dc-lidar-2015.s3.amazonaws.com/"
+type = "public_s3_bucket"
+notes = "Public S3 bucket containing uncompressed LAS files under Classified_LAS/."
+
+[[resources]]
+id = "bounded_classified_las_tiles"
+origin = "dc_lidar_2015_s3"
+url = "https://dc-lidar-2015.s3.amazonaws.com/Classified_LAS/"
+type = "s3_prefix_or_exact_key_selection"
+version = "2015_public_bucket_at_user_download_time"
+access = "Download script lists the Classified_LAS/ prefix or reads exact keys/URLs from override files."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/dc_lidar_2015_classification_u8/"
+notes = "Defaults select the smallest bounded uncompressed .las tiles; .laz and COPC are intentionally rejected."
+
+[local_paths]
+downloads = "downloads/dc_lidar_2015_classification_u8/"
+extracted = "extracted/dc_lidar_2015_classification_u8/"
+filtered = "filtered/dc_lidar_2015_classification_u8/"
+index = "index/dc_lidar_2015_classification_u8/"
+samples = "samples/dc_lidar_2015_classification_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/dc_lidar_2015_classification_u8/samples.jsonl"
+summary = "Download bounded uncompressed classified LAS tiles, parse LAS point records locally, and emit one uint8 classification-code vector per tile."
+deterministic_notes = "Default discovery uses a fixed public S3 prefix, sorted by source object size then key, with fixed file and byte caps. Build is local-only, rejects compressed .laz/COPC, validates LAS headers and point-record layout, extracts only native classification codes, and rejects tiny, constant, malformed, or over-cap outputs."
+
+[[series]]
+id = "dc_lidar_classification_code_u8"
+description = "LAS point classification codes."
+semantic_meaning = "One uint8 classification-code stream per classified LAS tile, in source point-record order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "LAS classification is a native one-byte point attribute. For LAS point formats 0-5, only the low 5 classification-code bits are emitted because the high bits are historical flags; for formats 6-10, the native classification byte is emitted."
+source_resources = ["bounded_classified_las_tiles"]
+filtered_input_path = "filtered/dc_lidar_2015_classification_u8/ingest_stats.json"
+filtering = "Keep downloaded uncompressed .las files with valid LAS headers, supported point formats 0-10, positive point counts, valid point data offsets, non-constant classification codes, and source/output byte caps."
+missing_value_policy = "Missing files, compressed .laz/COPC inputs, malformed LAS headers, unsupported point formats, zero point counts, truncated point data, tiny outputs, or constant classification streams are fatal or skipped as documented in build stats."
+conversion = "Read each LAS point record, extract the classification-code byte at the LAS-defined point-format offset, mask old-format flag bits when applicable, and write the resulting codes unchanged as a raw uint8 array."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 byte array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/dc_lidar_2015_classification_u8/dc_lidar_classification_code_u8/"

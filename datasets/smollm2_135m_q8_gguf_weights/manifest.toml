@@ -1,0 +1,85 @@
+manifest_version = 1
+dataset_id = "smollm2_135m_q8_gguf_weights"
+name = "SmolLM2-135M Q8_0 GGUF Quantized Weights"
+description = "Int8 quantized model weights from a SmolLM2-135M-Instruct Q8_0 GGUF: one family per layer role (attention, MLP, embedding), one sample per weight tensor."
+homepage = "https://huggingface.co/bartowski/SmolLM2-135M-Instruct-GGUF"
+
+[license]
+name = "Apache-2.0"
+spdx = "Apache-2.0"
+url = "https://huggingface.co/HuggingFaceTB/SmolLM2-135M-Instruct"
+citation = "SmolLM2 (HuggingFaceTB); Q8_0 GGUF quantization by bartowski."
+notes = "SmolLM2 base weights are Apache-2.0; only numeric quantized weight values are extracted."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public Q8_0 GGUF file from the Hugging Face Hub; only the int8 quantized weight values (block qs) are extracted, scales are dropped."
+usage_notes = "Promote only after a fresh successful download, build, and verify."
+
+[[origins]]
+id = "huggingface"
+name = "Hugging Face Hub"
+url = "https://huggingface.co/bartowski/SmolLM2-135M-Instruct-GGUF"
+type = "model_repository"
+notes = "GGUF v3 container; Q8_0 tensors store 32 int8 weights + one fp16 scale per block."
+
+[[resources]]
+id = "gguf_model"
+origin = "huggingface"
+url = "https://huggingface.co/bartowski/SmolLM2-135M-Instruct-GGUF/resolve/main/SmolLM2-135M-Instruct-Q8_0.gguf"
+type = "model_weights"
+version = "Q8_0"
+access = "Single ~145MB GGUF file; resumable download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/smollm2_135m_q8_gguf_weights/model.gguf"
+notes = "Parsed with a stdlib GGUF reader; per-block fp16 scale skipped, 32 int8 values per block kept."
+
+[local_paths]
+downloads = "downloads/smollm2_135m_q8_gguf_weights/"
+extracted = "extracted/smollm2_135m_q8_gguf_weights/"
+filtered = "filtered/smollm2_135m_q8_gguf_weights/"
+index = "index/smollm2_135m_q8_gguf_weights/"
+samples = "samples/smollm2_135m_q8_gguf_weights/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/smollm2_135m_q8_gguf_weights/samples.jsonl"
+summary = "Parse a SmolLM2-135M Q8_0 GGUF and emit one sample per Q8_0 weight tensor, grouped into families by layer role (attention, MLP, embedding)."
+deterministic_notes = "Only ggml type Q8_0 tensors are used (F32 norms skipped). Tensor name -> role: 'attn' -> gguf_q8_attn, 'ffn'/'mlp' -> gguf_q8_mlp, token/output embedding -> gguf_q8_embed. Each block's two-byte fp16 scale is dropped; the 32 signed int8 quantized values are kept. A family is emitted only if it has tensors with >= GGUF_MIN_RECORDS non-constant values. Each family is one layer role; roles are never mixed. Mirrors the downstream llama_q8_{attn,embed,mlp} families."
+
+[[series]]
+id = "gguf_q8_attn"
+semantic_meaning = "Int8 quantized attention weight values (q/k/v/output projections), one sample per weight tensor."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Non-Q8_0 tensors and tensors with < GGUF_MIN_RECORDS values dropped."
+conversion = "Q8_0 block qs (signed int8) stored as int8; per-block fp16 scale dropped."
+numeric_kind = "int"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "gguf_q8_mlp"
+semantic_meaning = "Int8 quantized MLP/feed-forward weight values (gate/up/down projections), one sample per weight tensor."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Non-Q8_0 tensors and tensors with < GGUF_MIN_RECORDS values dropped."
+conversion = "Q8_0 block qs (signed int8) stored as int8; per-block fp16 scale dropped."
+numeric_kind = "int"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "gguf_q8_embed"
+semantic_meaning = "Int8 quantized token-embedding weight values, one sample per embedding tensor."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Non-Q8_0 tensors and tensors with < GGUF_MIN_RECORDS values dropped; single-tensor family retained because the sample exceeds 1M values."
+conversion = "Q8_0 block qs (signed int8) stored as int8; per-block fp16 scale dropped."
+numeric_kind = "int"
+bit_width = 8
+endianness = "little"

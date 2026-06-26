@@ -1,0 +1,72 @@
+manifest_version = 1
+dataset_id = "pfam_seed_alignments_u8"
+name = "Pfam-A Seed Multiple-Sequence Alignments"
+description = "Pfam-A seed Stockholm alignment blocks converted to row-major uint8 alignment-symbol samples, one sample per protein-family seed alignment."
+homepage = "https://pfam.xfam.org/"
+
+[license]
+name = "Creative Commons Zero 1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "Mistry J et al. Pfam: The protein families database."
+notes = "Pfam database files are public and distributed for reuse; verify current release terms before promotion."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official EBI/Pfam current-release FTP file only."
+usage_notes = "Public protein-family alignment data; preserve Pfam citation."
+
+[[origins]]
+id = "pfam"
+name = "Pfam current release"
+url = "https://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/"
+type = "data_portal"
+notes = "Official Pfam FTP release directory hosted by EBI."
+
+[[resources]]
+id = "pfam_a_seed"
+origin = "pfam"
+url = "https://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/Pfam-A.seed.gz"
+type = "gzip_stockholm"
+version = "current_release_at_user_download_time"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/pfam_seed_alignments_u8/Pfam-A.seed.gz"
+notes = "Gzipped Stockholm seed alignments. The download script records the downloaded file hash in logs."
+
+[local_paths]
+downloads = "downloads/pfam_seed_alignments_u8/"
+extracted = "extracted/pfam_seed_alignments_u8/"
+filtered = "filtered/pfam_seed_alignments_u8/"
+index = "index/pfam_seed_alignments_u8/"
+samples = "samples/pfam_seed_alignments_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/pfam_seed_alignments_u8/samples.jsonl"
+summary = "Download the official Pfam-A seed Stockholm gzip, parse each alignment block locally, and emit one raw uint8 row-major alignment-symbol sample per qualifying family."
+deterministic_notes = "Build is local-only, preserves source alignment symbols as ASCII bytes, tolerates non-ASCII metadata/comment text that is not emitted, rejects malformed blocks, keeps source block order, filters only complete non-constant family alignments with at least PFAM_MIN_SAMPLE_BYTES bytes, and never concatenates families."
+
+[[series]]
+id = "pfam_seed_alignment_symbols_u8"
+description = "Row-major Pfam seed alignment symbols."
+semantic_meaning = "Protein-family seed multiple-sequence alignment matrices; each sample is one Pfam family block with aligned residue and gap symbols written row-major."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Stockholm alignment files store aligned residue/gap symbols as source bytes; the recipe removes metadata and writes the alignment symbol matrix unchanged as uint8 bytes."
+source_resources = ["pfam_a_seed"]
+filtered_input_path = "filtered/pfam_seed_alignments_u8/ingest_stats.json"
+filtering = "Keep alignment blocks whose rows have equal aligned length, whose row-major symbol matrix has at least PFAM_MIN_SAMPLE_BYTES bytes, and whose symbols are non-constant ASCII tokens."
+missing_value_policy = "Malformed gzip, malformed Stockholm boundaries, empty blocks, non-ASCII alignment symbols, unequal row lengths within a block, duplicate family ids, or no qualifying blocks are fatal. Non-ASCII metadata/comment text is ignored."
+conversion = "Parse Stockholm blocks, collect non-comment alignment rows, concatenate aligned sequence symbols row-major within each family block, and write one raw uint8 sample per family."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 alignment-symbol matrix"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/pfam_seed_alignments_u8/pfam_seed_alignment_symbols_u8/"

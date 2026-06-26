@@ -1,0 +1,92 @@
+manifest_version = 1
+dataset_id = "coco_panoptic_val2017_labels_u8"
+name = "COCO 2017 Panoptic Validation Label Maps"
+description = "COCO 2017 panoptic validation PNG annotations decoded into uint8 category-id maps and optional uint32 segment-id maps, one natural sample per image label map."
+homepage = "https://cocodataset.org/#download"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "COCO Consortium. COCO 2017 Panoptic Segmentation annotations."
+notes = "COCO annotations are distributed under CC BY 4.0. This recipe uses annotation label maps only, not the source photographs."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official COCO annotations download only; no image payloads are downloaded or processed."
+usage_notes = "Public annotation data; preserve COCO attribution."
+
+[[origins]]
+id = "coco"
+name = "COCO Dataset"
+url = "https://cocodataset.org/#download"
+type = "data_portal"
+notes = "Official COCO download page and annotations host."
+
+[[resources]]
+id = "panoptic_annotations_trainval2017"
+origin = "coco"
+url = "http://images.cocodataset.org/annotations/panoptic_annotations_trainval2017.zip"
+type = "archive"
+version = "2017"
+access = "Direct public download over COCO's official annotations host."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/coco_panoptic_val2017_labels_u8/panoptic_annotations_trainval2017.zip"
+notes = "Archive contains annotations/panoptic_val2017.zip with PNG label maps plus annotations/panoptic_val2017.json. The build uses only the validation split and a deterministic bounded prefix. HTTP is the default because some environments see a TLS hostname mismatch on the same host; override with COCO_PANOPTIC_URL if needed."
+
+[local_paths]
+downloads = "downloads/coco_panoptic_val2017_labels_u8/"
+extracted = "extracted/coco_panoptic_val2017_labels_u8/"
+filtered = "filtered/coco_panoptic_val2017_labels_u8/"
+index = "index/coco_panoptic_val2017_labels_u8/"
+samples = "samples/coco_panoptic_val2017_labels_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/coco_panoptic_val2017_labels_u8/samples.jsonl"
+summary = "Download the official COCO panoptic annotations archive, decode validation PNG label maps locally, map each official segment id to its category id, and emit raw homogeneous numeric samples."
+deterministic_notes = "Build is local-only after download. Images are processed in sorted panoptic_val2017 annotation filename order. COCO_PANOPTIC_MAX_IMAGES bounds the deterministic prefix and COCO_PANOPTIC_MAX_PRIMARY_BYTES prevents accepted output above the repository cap. PNG decoding is stdlib-only and rejects interlaced, non-8-bit, malformed, or unknown-label maps."
+
+[[series]]
+id = "coco_panoptic_category_id_u8"
+description = "Per-pixel COCO panoptic category id label maps."
+semantic_meaning = "For each validation panoptic label PNG, each pixel stores the official COCO category id for the segment covering that pixel; 0 is used only for void/unlabeled pixels."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "The category map is deterministically derived from the official panoptic RGB segment-id PNG and the official segments_info table in panoptic_val2017.json."
+source_resources = ["panoptic_annotations_trainval2017"]
+filtered_input_path = "filtered/coco_panoptic_val2017_labels_u8/ingest_stats.json"
+filtering = "Keep a deterministic bounded prefix of validation panoptic label maps whose decoded category maps are non-constant."
+missing_value_policy = "Unknown nonzero segment ids, category ids outside 0..255, malformed PNGs, missing annotations, and empty outputs are fatal."
+conversion = "Decode each RGB panoptic PNG, reconstruct segment_id = R + 256*G + 65536*B, map segment ids through segments_info.category_id, and write one raw uint8 category-id array per image."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 grid"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/coco_panoptic_val2017_labels_u8/coco_panoptic_category_id_u8/"
+
+[[series]]
+id = "coco_panoptic_segment_id_u32"
+description = "Per-pixel COCO panoptic segment-id label maps."
+semantic_meaning = "For each validation panoptic label PNG, each pixel stores the official 24-bit panoptic segment id reconstructed from RGB and written as little-endian uint32."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "The source panoptic annotation encodes segment ids as RGB bytes. Reconstructing the integer id preserves the official machine-facing label map exactly except for widening to uint32 storage."
+source_resources = ["panoptic_annotations_trainval2017"]
+filtered_input_path = "filtered/coco_panoptic_val2017_labels_u8/ingest_stats.json"
+filtering = "Emitted when COCO_PANOPTIC_EMIT_SEGMENT_IDS=1, for the same deterministic bounded image prefix as the category-id maps."
+missing_value_policy = "Malformed PNGs, missing annotations, and empty outputs are fatal."
+conversion = "Decode each RGB panoptic PNG, reconstruct segment_id = R + 256*G + 65536*B, and write one raw little-endian uint32 array per image."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous uint32 grid"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/coco_panoptic_val2017_labels_u8/coco_panoptic_segment_id_u32/"

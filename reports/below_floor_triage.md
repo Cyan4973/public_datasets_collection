@@ -125,7 +125,6 @@ Representative high-value rewrite/expand candidates:
 - `usgs_water_sites_rdb`
 - `inspirehep_literature`
 - `usgs_daily_values_large`
-- `mitre_attack_enterprise`
 - `dataone_solr`
 - `dataone_solr_large_retry`
 - `federalregister_documents_large`

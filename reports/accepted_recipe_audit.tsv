@@ -133,7 +133,6 @@ taginfo_tags_popular	below_floor	4000	19500	8	500	2500	0	0	0	1	none	aggregate_fl
 taginfo_keys_all	below_floor	4000	25500	8	500	4000	0	0	0	1	none	aggregate_floor,median_sample_floor
 dataone_solr	below_floor	4039	24078	5	1000	4000	0	0	0	1	none	aggregate_floor
 dataone_solr_large_retry	below_floor	4039	24078	5	1000	4000	0	0	0	1	none	aggregate_floor
-mitre_attack_enterprise	below_floor	4290	5148	5	858	858	0	0	0	1	none	aggregate_floor,median_sample_floor
 usgs_water_sites_rdb	below_floor	4992	36976	6	878	7024	0	0	0	1	none	aggregate_floor,median_sample_floor
 crossref_funders_large	below_floor	5000	10000	5	1000	2000	0	0	0	1	none	aggregate_floor
 jhu_covid19_confirmed_global_daily	below_floor	5715	22860	5	1143	4572	0	0	0	1	none	aggregate_floor

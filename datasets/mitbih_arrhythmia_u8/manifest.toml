@@ -1,0 +1,107 @@
+manifest_version = 1
+dataset_id = "mitbih_arrhythmia_u8"
+name = "MIT-BIH Arrhythmia ECG — 8-bit"
+description = "Unsigned 8-bit ECG waveform amplitude from the MIT-BIH Arrhythmia Database: one family per lead, one sample per record-lead."
+homepage = "https://physionet.org/content/mitdb/1.0.0/"
+
+[license]
+name = "ODC-By 1.0"
+spdx = "ODC-By-1.0"
+url = "https://physionet.org/content/mitdb/1.0.0/"
+citation = "Moody GB, Mark RG. The impact of the MIT-BIH Arrhythmia Database. IEEE Eng in Med and Biol 2001. PhysioNet."
+notes = "Public PhysioNet database; only numeric ECG amplitudes are extracted."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "PhysioNet MIT-BIH Arrhythmia Database (mitdb 1.0.0); WFDB format-212 12-bit signals linearly requantized to unsigned 8-bit."
+usage_notes = "Promote only after a fresh successful download, build, and verify. Width variant of mitbih_arrhythmia_physionet (i16)."
+
+[[origins]]
+id = "physionet"
+name = "PhysioNet MIT-BIH Arrhythmia Database"
+url = "https://physionet.org/files/mitdb/1.0.0"
+type = "data_portal"
+notes = "48 two-lead records at 360 Hz, WFDB format 212 (two 12-bit signed samples per 3 bytes)."
+
+[[resources]]
+id = "wfdb_records"
+origin = "physionet"
+url = "https://physionet.org/files/mitdb/1.0.0/"
+type = "archive"
+version = "1.0.0"
+access = "Per-record .dat/.hea/.atr files listed in RECORDS."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/mitbih_arrhythmia_u8/"
+notes = "RECORDS-driven crawl; same source as mitbih_arrhythmia_physionet."
+
+[local_paths]
+downloads = "downloads/mitbih_arrhythmia_u8/"
+extracted = "extracted/mitbih_arrhythmia_u8/"
+filtered = "filtered/mitbih_arrhythmia_u8/"
+index = "index/mitbih_arrhythmia_u8/"
+samples = "samples/mitbih_arrhythmia_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/mitbih_arrhythmia_u8/samples.jsonl"
+summary = "Decode WFDB format-212 MIT-BIH records and emit one sample per record-lead of unsigned 8-bit ECG amplitude, one family per lead."
+deterministic_notes = "Each 12-bit signed sample s in [-2048,2047] is mapped to unsigned 8-bit as ((s + 2048) >> 4) (baseline -> 128). Lead -> family: MLII->mitbih_mlii_u8, V1->mitbih_v1_u8, V2->mitbih_v2_u8, V4->mitbih_v4_u8, V5->mitbih_v5_u8. A family is emitted only if >= 5 record-leads each have >= MITBIH_MIN_RECORDS non-constant values (rare leads self-drop). Mirrors the downstream mitbih_*_u8 families; the i16 form is mitbih_arrhythmia_physionet."
+
+[[series]]
+id = "mitbih_mlii_u8"
+semantic_meaning = "Unsigned 8-bit ECG amplitude, lead MLII, one sample per record."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Record-leads with < MITBIH_MIN_RECORDS or constant values dropped; family omitted if < 5 record-leads."
+conversion = "12-bit signed WFDB sample requantized to unsigned 8-bit: ((s + 2048) >> 4)."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "mitbih_v1_u8"
+semantic_meaning = "Unsigned 8-bit ECG amplitude, lead V1, one sample per record."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Record-leads with < MITBIH_MIN_RECORDS or constant values dropped; family omitted if < 5 record-leads."
+conversion = "12-bit signed WFDB sample requantized to unsigned 8-bit: ((s + 2048) >> 4)."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "mitbih_v2_u8"
+semantic_meaning = "Unsigned 8-bit ECG amplitude, lead V2, one sample per record."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Record-leads with < MITBIH_MIN_RECORDS or constant values dropped; family omitted if < 5 record-leads."
+conversion = "12-bit signed WFDB sample requantized to unsigned 8-bit: ((s + 2048) >> 4)."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "mitbih_v4_u8"
+semantic_meaning = "Unsigned 8-bit ECG amplitude, lead V4, one sample per record."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Record-leads with < MITBIH_MIN_RECORDS or constant values dropped; family omitted if < 5 record-leads."
+conversion = "12-bit signed WFDB sample requantized to unsigned 8-bit: ((s + 2048) >> 4)."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+
+[[series]]
+id = "mitbih_v5_u8"
+semantic_meaning = "Unsigned 8-bit ECG amplitude, lead V5, one sample per record."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Record-leads with < MITBIH_MIN_RECORDS or constant values dropped; family omitted if < 5 record-leads."
+conversion = "12-bit signed WFDB sample requantized to unsigned 8-bit: ((s + 2048) >> 4)."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"

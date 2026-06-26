@@ -1,0 +1,63 @@
+manifest_version = 1
+dataset_id = "fsdd_pcm_u8"
+name = "Free Spoken Digit Dataset — 8-bit PCM"
+description = "Unsigned 8-bit PCM audio amplitude of the Free Spoken Digit Dataset recordings: one family, one sample per recording."
+homepage = "https://github.com/Jakobovski/free-spoken-digit-dataset"
+
+[license]
+name = "CC BY-SA 4.0"
+spdx = "CC-BY-SA-4.0"
+url = "https://github.com/Jakobovski/free-spoken-digit-dataset"
+citation = "Free Spoken Digit Dataset (FSDD), Jakobovski et al."
+notes = "Public spoken-digit recordings; only numeric audio amplitudes are extracted."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "FSDD GitHub repository; mono 16-bit WAV recordings linearly requantized to unsigned 8-bit PCM."
+usage_notes = "Promote only after a fresh successful download, build, and verify. Width variant of fsdd_spoken_digits (i16)."
+
+[[origins]]
+id = "fsdd"
+name = "Free Spoken Digit Dataset"
+url = "https://github.com/Jakobovski/free-spoken-digit-dataset"
+type = "repository"
+notes = "8 kHz mono 16-bit WAV recordings under recordings/."
+
+[[resources]]
+id = "fsdd_archive"
+origin = "fsdd"
+url = "https://github.com/Jakobovski/free-spoken-digit-dataset/archive/refs/heads/master.zip"
+type = "archive"
+version = "master"
+access = "GitHub source archive (~20MB)."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/fsdd_pcm_u8/fsdd_master.zip"
+notes = "Recordings extracted to extracted/fsdd_pcm_u8/."
+
+[local_paths]
+downloads = "downloads/fsdd_pcm_u8/"
+extracted = "extracted/fsdd_pcm_u8/"
+filtered = "filtered/fsdd_pcm_u8/"
+index = "index/fsdd_pcm_u8/"
+samples = "samples/fsdd_pcm_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/fsdd_pcm_u8/samples.jsonl"
+summary = "Decode each FSDD mono 16-bit WAV and emit one sample per recording of unsigned 8-bit PCM amplitude."
+deterministic_notes = "Each 16-bit signed sample s is mapped to unsigned 8-bit PCM as ((s + 32768) >> 8) (silence -> 128). One family fsdd_pcm_u8, one sample per recording; recordings with < FSDD_MIN_RECORDS or constant values are dropped. Mirrors the downstream fsdd_pcm_u8 family; the i16 form is fsdd_spoken_digits."
+
+[[series]]
+id = "fsdd_pcm_u8"
+semantic_meaning = "Unsigned 8-bit PCM audio amplitude per spoken-digit recording."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Recordings with < FSDD_MIN_RECORDS samples or constant amplitude dropped."
+conversion = "16-bit signed PCM linearly requantized to unsigned 8-bit: ((s + 32768) >> 8)."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"

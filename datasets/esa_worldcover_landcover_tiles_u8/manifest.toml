@@ -1,0 +1,72 @@
+manifest_version = 1
+dataset_id = "esa_worldcover_landcover_tiles_u8"
+name = "ESA WorldCover 2021 Land-Cover COG Tiles"
+description = "Selected internal GeoTIFF tile chunks from ESA WorldCover 2021 categorical land-cover Cloud Optimized GeoTIFFs, decoded to native uint8 class-label grids."
+homepage = "https://esa-worldcover.org/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data."
+notes = "ESA WorldCover products are distributed under CC BY 4.0; preserve attribution and product citation."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official ESA WorldCover public object storage only; no imagery or personal data."
+usage_notes = "Public global land-cover classification maps; preserve ESA WorldCover attribution."
+
+[[origins]]
+id = "esa_worldcover"
+name = "ESA WorldCover public bucket"
+url = "https://esa-worldcover.s3.eu-central-1.amazonaws.com/"
+type = "bucket"
+notes = "Official public object storage for ESA WorldCover COG tiles."
+
+[[resources]]
+id = "worldcover_2021_map_cogs"
+origin = "esa_worldcover"
+url = "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/"
+type = "cloud_optimized_geotiff_collection"
+version = "v200_2021"
+access = "Public HTTP range requests against selected COG objects."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/esa_worldcover_landcover_tiles_u8/"
+notes = "download.sh fetches TIFF headers and selected internal compressed tile byte ranges from a fixed URL list; it does not download full global COGs."
+
+[local_paths]
+downloads = "downloads/esa_worldcover_landcover_tiles_u8/"
+extracted = "extracted/esa_worldcover_landcover_tiles_u8/"
+filtered = "filtered/esa_worldcover_landcover_tiles_u8/"
+index = "index/esa_worldcover_landcover_tiles_u8/"
+samples = "samples/esa_worldcover_landcover_tiles_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/esa_worldcover_landcover_tiles_u8/samples.jsonl"
+summary = "Fetch headers and deterministic internal COG tile byte ranges from selected ESA WorldCover 2021 map tiles, decode local Deflate/uncompressed TIFF chunks, and emit one uint8 land-cover class grid per internal tile."
+deterministic_notes = "Build is local-only after download. The download plan is deterministic: fixed source COG URLs, fixed header range size, and fixed interior tile-index positions per source. Full source rasters can exceed the repository output cap, so the natural sample boundary is one official TIFF internal tile/chunk. Edge tiles are avoided. Values are preserved as ESA WorldCover uint8 class codes."
+
+[[series]]
+id = "worldcover_landcover_class_u8"
+description = "ESA WorldCover land-cover class labels."
+semantic_meaning = "Per-pixel categorical land-cover class codes from ESA WorldCover 2021 map COGs, one decoded internal GeoTIFF tile per sample."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source COG stores land-cover classes as uint8 pixels; the recipe preserves those class-code bytes after decompressing official internal TIFF tile chunks."
+source_resources = ["worldcover_2021_map_cogs"]
+filtered_input_path = "filtered/esa_worldcover_landcover_tiles_u8/ingest_stats.json"
+filtering = "Keep selected interior internal TIFF tiles from a fixed set of WorldCover map COGs; skip constant decoded tiles; reject if too few non-constant samples remain."
+missing_value_policy = "Preserve all official class bytes, including 0 NoData. Malformed TIFF metadata, unsupported compression, truncated byte ranges, non-uint8 rasters, unexpected class codes, and missing selected chunks are fatal."
+conversion = "Parse local TIFF headers and selected compressed tile chunks, decompress Deflate/uncompressed tile data, undo horizontal predictor if present, and write one raw uint8 grid per selected internal tile."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 grid"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/esa_worldcover_landcover_tiles_u8/worldcover_landcover_class_u8/"

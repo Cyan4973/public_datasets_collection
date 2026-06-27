@@ -1,7 +1,40 @@
 manifest_version = 1
 dataset_id = "weathergov_stations"
-name = "Weather.gov Stations"
-description = "Pinned weather.gov station listing."
+name = "Weather.gov Observation Stations"
+description = "Public weather.gov observation-station catalog parsed into homogeneous station coordinate and elevation arrays."
+homepage = "https://api.weather.gov/stations"
+
+[license]
+name = "U.S. Government Public Domain"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://www.weather.gov/disclaimer"
+citation = "National Weather Service weather.gov API station catalog."
+notes = "NWS/weather.gov data are U.S. government public information; preserve source attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public observation station metadata from the weather.gov API."
+usage_notes = "Public fixed station metadata; no personal data expected."
+
+[[origins]]
+id = "weathergov_api"
+name = "weather.gov API"
+url = "https://api.weather.gov/stations"
+type = "public_api"
+notes = "Public National Weather Service API endpoint for observation station metadata."
+
+[[resources]]
+id = "paginated_station_catalog"
+origin = "weathergov_api"
+url = "https://api.weather.gov/stations"
+type = "paginated_api"
+version = "catalog_at_user_download_time"
+access = "Download script follows weather.gov pagination links up to bounded page and feature caps."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/weathergov_stations/"
+notes = "Semantic validation requires at least WEATHERGOV_MIN_FEATURES station features with coordinates."
 
 [local_paths]
 downloads = "downloads/weathergov_stations/"
@@ -14,3 +47,74 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/weathergov_stations/samples.jsonl"
+summary = "Download a bounded paginated weather.gov station catalog and emit separate raw numeric arrays for station longitude, latitude, and elevation."
+deterministic_notes = "Download follows source pagination order. Build deduplicates stations by stationIdentifier/@id while preserving first-seen order, rejects malformed coordinates, writes one homogeneous little-endian array per numeric field, and enforces acceptance floors."
+
+[[series]]
+id = "weathergov_station_lon_f64"
+description = "Station longitude values."
+semantic_meaning = "Longitude of each weather.gov observation station, preserving deduplicated source catalog order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Station longitude is a native numeric coordinate in the source GeoJSON geometry."
+source_resources = ["paginated_station_catalog"]
+filtered_input_path = "filtered/weathergov_stations/ingest_stats.json"
+filtering = "Keep station features with finite longitude, latitude, and elevation values."
+missing_value_policy = "Features with missing geometry, malformed coordinates, non-finite values, or out-of-range coordinates are skipped; too many skipped or too few retained stations rejects the build."
+conversion = "Parse source GeoJSON longitude values and write little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 array"
+sample_geometry = "station_catalog_column"
+sample_rank = 1
+sample_axes = ["station"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/weathergov_stations/weathergov_station_lon_f64/"
+
+[[series]]
+id = "weathergov_station_lat_f64"
+description = "Station latitude values."
+semantic_meaning = "Latitude of each weather.gov observation station, preserving deduplicated source catalog order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Station latitude is a native numeric coordinate in the source GeoJSON geometry."
+source_resources = ["paginated_station_catalog"]
+filtered_input_path = "filtered/weathergov_stations/ingest_stats.json"
+filtering = "Keep station features with finite longitude, latitude, and elevation values."
+missing_value_policy = "Features with missing geometry, malformed coordinates, non-finite values, or out-of-range coordinates are skipped; too many skipped or too few retained stations rejects the build."
+conversion = "Parse source GeoJSON latitude values and write little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 array"
+sample_geometry = "station_catalog_column"
+sample_rank = 1
+sample_axes = ["station"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/weathergov_stations/weathergov_station_lat_f64/"
+
+[[series]]
+id = "weathergov_station_elevation_m_f32"
+description = "Station elevation values."
+semantic_meaning = "Elevation in meters for each weather.gov observation station, preserving deduplicated source catalog order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Station elevation is a native numeric QuantitativeValue in the source station properties."
+source_resources = ["paginated_station_catalog"]
+filtered_input_path = "filtered/weathergov_stations/ingest_stats.json"
+filtering = "Keep station features with finite longitude, latitude, and elevation values."
+missing_value_policy = "Features with missing geometry, malformed coordinates, non-finite values, or out-of-range coordinates are skipped; too many skipped or too few retained stations rejects the build."
+conversion = "Parse source elevation meter values and write little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 array"
+sample_geometry = "station_catalog_column"
+sample_rank = 1
+sample_axes = ["station"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/weathergov_stations/weathergov_station_elevation_m_f32/"

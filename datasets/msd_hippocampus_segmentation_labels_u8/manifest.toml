@@ -1,0 +1,84 @@
+manifest_version = 1
+dataset_id = "msd_hippocampus_segmentation_labels_u8"
+name = "Medical Segmentation Decathlon Hippocampus Labels"
+description = "3D hippocampus segmentation label volumes from the Medical Segmentation Decathlon Task04 archive, emitted as uint8 class-code voxels."
+homepage = "http://medicaldecathlon.com/"
+
+[license]
+name = "Creative Commons Attribution-ShareAlike 4.0 International"
+spdx = "CC-BY-SA-4.0"
+url = "https://creativecommons.org/licenses/by-sa/4.0/"
+citation = "Antonelli et al., The Medical Segmentation Decathlon, Nature Communications 2022; Task04 Hippocampus public archive."
+notes = "The public AWS mirror includes license.txt with Creative Commons Attribution-ShareAlike 4.0 International terms."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public benchmark archive containing de-identified medical imaging segmentation labels."
+usage_notes = "Use as public biomedical segmentation benchmark labels; preserve MSD attribution and license terms."
+
+[[origins]]
+id = "msd_s3_mirror"
+name = "Medical Segmentation Decathlon AWS mirror"
+url = "https://msd-for-monai.s3-us-west-2.amazonaws.com/"
+type = "public_s3_bucket"
+notes = "Public S3 mirror listing includes Task04_Hippocampus.tar and license.txt."
+
+[[resources]]
+id = "task04_hippocampus_archive"
+origin = "msd_s3_mirror"
+url = "https://msd-for-monai.s3-us-west-2.amazonaws.com/Task04_Hippocampus.tar"
+type = "tar_archive"
+version = "2020-08-14 public mirror object"
+access = "Direct public HTTPS download from the public S3 mirror."
+size_bytes = 28425216
+sha256 = ""
+local_path = "downloads/msd_hippocampus_segmentation_labels_u8/Task04_Hippocampus.tar"
+notes = "Archive contains imagesTr/imagesTs and labelsTr; this recipe uses only labelsTr segmentation volumes as primary numeric material."
+
+[[resources]]
+id = "msd_license"
+origin = "msd_s3_mirror"
+url = "https://msd-for-monai.s3-us-west-2.amazonaws.com/license.txt"
+type = "text_license"
+version = "2020-08-14 public mirror object"
+access = "Direct public HTTPS download from the public S3 mirror."
+size_bytes = 20133
+sha256 = ""
+local_path = "downloads/msd_hippocampus_segmentation_labels_u8/license.txt"
+notes = "License text for the public MSD mirror."
+
+[local_paths]
+downloads = "downloads/msd_hippocampus_segmentation_labels_u8/"
+extracted = "extracted/msd_hippocampus_segmentation_labels_u8/"
+filtered = "filtered/msd_hippocampus_segmentation_labels_u8/"
+index = "index/msd_hippocampus_segmentation_labels_u8/"
+samples = "samples/msd_hippocampus_segmentation_labels_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/msd_hippocampus_segmentation_labels_u8/samples.jsonl"
+summary = "Download the Task04 Hippocampus tar archive, parse local NIfTI-1 label volumes under labelsTr/, and emit one raw uint8 3D class-code volume per case."
+deterministic_notes = "The archive URL and license URL are fixed. Build sorts labelsTr members by archive path, accepts only integer unscaled 3D NIfTI-1 single-file volumes, converts class IDs losslessly to uint8 only when all values are in range, rejects constant or malformed volumes, and writes a deterministic JSONL sample index."
+
+[[series]]
+id = "hippocampus_segmentation_label_u8"
+description = "3D hippocampus segmentation class-label volumes."
+semantic_meaning = "Voxelwise biomedical segmentation labels, one patient/case label volume per natural NIfTI record."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "The semantic source values are integer segmentation class IDs. The recipe emits those class IDs as uint8 after verifying that every source integer value is in the uint8 range; no local remapping or relabeling is applied."
+source_resources = ["task04_hippocampus_archive"]
+filtered_input_path = "filtered/msd_hippocampus_segmentation_labels_u8/ingest_stats.json"
+filtering = "Keep labelsTr/*.nii.gz NIfTI-1 volumes that are 3D, integer-typed, unscaled, non-constant, and whose label values fit in uint8."
+missing_value_policy = "Missing archive, missing labels, malformed NIfTI headers, unsupported datatypes, scaled labels, out-of-range labels, non-3D labels, empty labels, or constant labels are fatal or skipped as documented in build stats."
+conversion = "Read each NIfTI label payload, preserve source voxel order, and write class IDs as a raw homogeneous uint8 byte array."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 byte array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/msd_hippocampus_segmentation_labels_u8/hippocampus_segmentation_label_u8/"

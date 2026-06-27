@@ -1,0 +1,258 @@
+manifest_version = 1
+dataset_id = "hsl_gtfs_static_schedule_numeric"
+name = "HSL GTFS Static Schedule Numeric"
+description = "Helsinki Region Transport GTFS static schedule feed parsed into native and operational numeric timetable and geometry arrays."
+homepage = "https://www.hsl.fi/en/hsl/open-data"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Helsinki Region Transport (HSL) open data GTFS static feed."
+notes = "Preserve HSL attribution and feed metadata."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public transit schedule and stop geometry feed."
+usage_notes = "Public transport timetable data; no personal data expected."
+
+[[origins]]
+id = "hsl_open_data_gtfs"
+name = "HSL Open Data GTFS"
+url = "https://www.hsl.fi/en/hsl/open-data"
+type = "public_data_portal"
+notes = "Helsinki Region Transport public GTFS static feed."
+
+[[resources]]
+id = "hsl_gtfs_static_zip"
+origin = "hsl_open_data_gtfs"
+url = "https://infopalvelut.storage.hsldev.com/gtfs/hsl.zip"
+type = "source_archive"
+version = "feed_at_user_download_time"
+access = "Download script fetches the public GTFS ZIP URL, or HSL_GTFS_URL can override it for the same HSL GTFS material."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/hsl_gtfs_static_schedule_numeric/"
+notes = "Download validation requires GTFS stop_times, stops, and shapes tables with parseable numeric schedule and geometry fields."
+
+[local_paths]
+downloads = "downloads/hsl_gtfs_static_schedule_numeric/"
+filtered = "filtered/hsl_gtfs_static_schedule_numeric/"
+index = "index/hsl_gtfs_static_schedule_numeric/"
+samples = "samples/hsl_gtfs_static_schedule_numeric/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/hsl_gtfs_static_schedule_numeric/samples.jsonl"
+summary = "Download the HSL GTFS static ZIP, parse numeric schedule and geometry fields from local CSV tables, and emit raw homogeneous numeric arrays."
+deterministic_notes = "Build reads only the local ZIP, parses fixed GTFS table columns with Python csv, converts GTFS times to service-day seconds, preserves source row order, skips missing optional numeric values, writes little-endian arrays, and enforces acceptance floors."
+
+[[series]]
+id = "stop_times_arrival_seconds_i32"
+description = "GTFS stop_times arrival seconds."
+semantic_meaning = "Service-day arrival time at each trip stop, preserving stop_times.txt row order."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "GTFS represents service-day times as HH:MM:SS strings; integer seconds since service-day start is the standard operational numeric form."
+source_resources = ["hsl_gtfs_static_zip"]
+filtered_input_path = "filtered/hsl_gtfs_static_schedule_numeric/ingest_stats.json"
+filtering = "Keep rows with parseable arrival_time values."
+missing_value_policy = "Missing stop_times.txt, absent columns, malformed times, non-finite values, tiny outputs, or constant outputs are rejected or skipped as recorded in build stats."
+conversion = "Convert HH:MM:SS to little-endian int32 seconds, allowing GTFS hours beyond 24."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous int32 array"
+sample_geometry = "gtfs_table_column"
+sample_rank = 1
+sample_axes = ["stop_time_row"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/hsl_gtfs_static_schedule_numeric/stop_times_arrival_seconds_i32/"
+
+[[series]]
+id = "stop_times_departure_seconds_i32"
+description = "GTFS stop_times departure seconds."
+semantic_meaning = "Service-day departure time at each trip stop, preserving stop_times.txt row order."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "GTFS represents service-day times as HH:MM:SS strings; integer seconds since service-day start is the standard operational numeric form."
+source_resources = ["hsl_gtfs_static_zip"]
+filtered_input_path = "filtered/hsl_gtfs_static_schedule_numeric/ingest_stats.json"
+filtering = "Keep rows with parseable departure_time values."
+missing_value_policy = "Missing stop_times.txt, absent columns, malformed times, non-finite values, tiny outputs, or constant outputs are rejected or skipped as recorded in build stats."
+conversion = "Convert HH:MM:SS to little-endian int32 seconds, allowing GTFS hours beyond 24."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous int32 array"
+sample_geometry = "gtfs_table_column"
+sample_rank = 1
+sample_axes = ["stop_time_row"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/hsl_gtfs_static_schedule_numeric/stop_times_departure_seconds_i32/"
+
+[[series]]
+id = "stop_times_stop_sequence_u32"
+description = "GTFS stop_times stop sequence numbers."
+semantic_meaning = "Native stop order within each trip, preserving stop_times.txt row order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "stop_sequence is a native integer GTFS field."
+source_resources = ["hsl_gtfs_static_zip"]
+filtered_input_path = "filtered/hsl_gtfs_static_schedule_numeric/ingest_stats.json"
+filtering = "Keep rows with parseable nonnegative stop_sequence values."
+missing_value_policy = "Missing stop_sequence values, malformed integers, tiny outputs, or constant outputs are rejected or skipped as recorded in build stats."
+conversion = "Parse decimal integers and write little-endian uint32 values."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous uint32 array"
+sample_geometry = "gtfs_table_column"
+sample_rank = 1
+sample_axes = ["stop_time_row"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/hsl_gtfs_static_schedule_numeric/stop_times_stop_sequence_u32/"
+
+[[series]]
+id = "stop_times_shape_dist_traveled_f64"
+description = "GTFS stop_times shape distances."
+semantic_meaning = "Distance traveled along the associated shape at each stop-time row where the optional field is populated."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "shape_dist_traveled is a native numeric GTFS field when provided by the feed."
+source_resources = ["hsl_gtfs_static_zip"]
+filtered_input_path = "filtered/hsl_gtfs_static_schedule_numeric/ingest_stats.json"
+filtering = "Keep populated parseable shape_dist_traveled values."
+missing_value_policy = "Rows with missing optional shape_dist_traveled are omitted from this optional series; malformed populated values reject the build."
+conversion = "Parse decimal values and write little-endian float64 values."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 array"
+sample_geometry = "gtfs_table_column"
+sample_rank = 1
+sample_axes = ["populated_stop_time_row"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/hsl_gtfs_static_schedule_numeric/stop_times_shape_dist_traveled_f64/"
+
+[[series]]
+id = "shapes_lat_lon_f64"
+description = "GTFS shape point latitude/longitude pairs."
+semantic_meaning = "Ordered shape polyline points as latitude/longitude pairs, preserving shapes.txt row order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "shape_pt_lat and shape_pt_lon are native decimal GTFS geometry fields."
+source_resources = ["hsl_gtfs_static_zip"]
+filtered_input_path = "filtered/hsl_gtfs_static_schedule_numeric/ingest_stats.json"
+filtering = "Keep rows with finite latitude and longitude values."
+missing_value_policy = "Missing shapes.txt, absent columns, malformed coordinates, tiny outputs, or constant outputs are rejected or skipped as recorded in build stats."
+conversion = "Parse decimal coordinates and write interleaved little-endian float64 latitude/longitude pairs."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 lat/lon pairs"
+sample_geometry = "gtfs_shape_point_pairs"
+sample_rank = 2
+sample_axes = ["shape_point_row", "coordinate"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/hsl_gtfs_static_schedule_numeric/shapes_lat_lon_f64/"
+
+[[series]]
+id = "shapes_sequence_u32"
+description = "GTFS shape point sequence numbers."
+semantic_meaning = "Native point order within each shape, preserving shapes.txt row order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "shape_pt_sequence is a native integer GTFS field."
+source_resources = ["hsl_gtfs_static_zip"]
+filtered_input_path = "filtered/hsl_gtfs_static_schedule_numeric/ingest_stats.json"
+filtering = "Keep rows with parseable nonnegative shape_pt_sequence values."
+missing_value_policy = "Missing sequence values, malformed integers, tiny outputs, or constant outputs are rejected or skipped as recorded in build stats."
+conversion = "Parse decimal integers and write little-endian uint32 values."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous uint32 array"
+sample_geometry = "gtfs_table_column"
+sample_rank = 1
+sample_axes = ["shape_point_row"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/hsl_gtfs_static_schedule_numeric/shapes_sequence_u32/"
+
+[[series]]
+id = "shapes_dist_traveled_f64"
+description = "GTFS shape point distances."
+semantic_meaning = "Distance traveled along each shape at each shape point where the optional field is populated."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "shape_dist_traveled is a native numeric GTFS field when provided by the feed."
+source_resources = ["hsl_gtfs_static_zip"]
+filtered_input_path = "filtered/hsl_gtfs_static_schedule_numeric/ingest_stats.json"
+filtering = "Keep populated parseable shape_dist_traveled values."
+missing_value_policy = "Rows with missing optional shape_dist_traveled are omitted from this optional series; malformed populated values reject the build."
+conversion = "Parse decimal values and write little-endian float64 values."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 array"
+sample_geometry = "gtfs_table_column"
+sample_rank = 1
+sample_axes = ["populated_shape_point_row"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/hsl_gtfs_static_schedule_numeric/shapes_dist_traveled_f64/"
+
+[[series]]
+id = "stops_lat_lon_f64"
+description = "GTFS stop latitude/longitude pairs."
+semantic_meaning = "Stop, station, and platform positions as latitude/longitude pairs, preserving stops.txt row order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "stop_lat and stop_lon are native decimal GTFS geometry fields."
+source_resources = ["hsl_gtfs_static_zip"]
+filtered_input_path = "filtered/hsl_gtfs_static_schedule_numeric/ingest_stats.json"
+filtering = "Keep rows with finite latitude and longitude values."
+missing_value_policy = "Missing stops.txt, absent columns, malformed coordinates, tiny outputs, or constant outputs are rejected or skipped as recorded in build stats."
+conversion = "Parse decimal coordinates and write interleaved little-endian float64 latitude/longitude pairs."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 lat/lon pairs"
+sample_geometry = "gtfs_stop_point_pairs"
+sample_rank = 2
+sample_axes = ["stop_row", "coordinate"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/hsl_gtfs_static_schedule_numeric/stops_lat_lon_f64/"
+
+[[series]]
+id = "frequencies_start_end_headway_seconds_i32"
+description = "GTFS frequency service windows and headways."
+semantic_meaning = "Optional GTFS frequency rows as start-time, end-time, and headway-second triples."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "GTFS frequency start/end times are operationally represented as service-day seconds; headway_secs is already numeric."
+source_resources = ["hsl_gtfs_static_zip"]
+filtered_input_path = "filtered/hsl_gtfs_static_schedule_numeric/ingest_stats.json"
+filtering = "Keep rows with parseable start_time, end_time, and nonnegative headway_secs."
+missing_value_policy = "If frequencies.txt is absent or below floor this optional series is skipped; malformed populated values reject the build."
+conversion = "Convert start/end HH:MM:SS values to int32 seconds and parse headway_secs as int32, then write row-major triples."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous int32 triples"
+sample_geometry = "gtfs_frequency_triples"
+sample_rank = 2
+sample_axes = ["frequency_row", "field"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/hsl_gtfs_static_schedule_numeric/frequencies_start_end_headway_seconds_i32/"

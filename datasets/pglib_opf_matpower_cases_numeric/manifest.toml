@@ -1,0 +1,144 @@
+manifest_version = 1
+dataset_id = "pglib_opf_matpower_cases_numeric"
+name = "PGLib-OPF MATPOWER Cases Numeric"
+description = "Public PGLib-OPF power-grid benchmark cases parsed into native MATPOWER numeric matrix arrays."
+homepage = "https://github.com/power-grid-lib/pglib-opf"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Power Grid Lib - Optimal Power Flow benchmark library; cite PGLib-OPF and the original case sources as appropriate."
+notes = "Preserve PGLib-OPF attribution and case identifiers. Some cases derive from named public benchmark systems; retain source metadata."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public electrical-grid optimization benchmark cases."
+usage_notes = "Public engineering benchmark data for power-flow and optimal-power-flow research."
+
+[[origins]]
+id = "pglib_opf"
+name = "Power Grid Lib - Optimal Power Flow"
+url = "https://github.com/power-grid-lib/pglib-opf"
+type = "public_repository"
+notes = "Public repository of MATPOWER-format optimal-power-flow benchmark cases."
+
+[[resources]]
+id = "pglib_opf_archive"
+origin = "pglib_opf"
+url = "https://github.com/power-grid-lib/pglib-opf/archive/refs/heads/master.tar.gz"
+type = "source_archive"
+version = "master_at_user_download_time"
+access = "Download script fetches a bounded GitHub source archive, or PGLIB_OPF_ARCHIVE_URL can point at an exact public tag archive."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/pglib_opf_matpower_cases_numeric/"
+notes = "Download validation requires MATPOWER case files containing bus, branch, and gen numeric matrix blocks."
+
+[local_paths]
+downloads = "downloads/pglib_opf_matpower_cases_numeric/"
+extracted = "extracted/pglib_opf_matpower_cases_numeric/"
+filtered = "filtered/pglib_opf_matpower_cases_numeric/"
+index = "index/pglib_opf_matpower_cases_numeric/"
+samples = "samples/pglib_opf_matpower_cases_numeric/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/pglib_opf_matpower_cases_numeric/samples.jsonl"
+summary = "Download a public PGLib-OPF source archive, parse native MATPOWER matrix blocks from local .m case files, and emit row-major float64 arrays by case and matrix family."
+deterministic_notes = "Build sorts local case paths, parses only mpc.bus, mpc.branch, mpc.gen, and mpc.gencost bracketed numeric matrices, skips small or malformed matrix blocks, writes little-endian float64 row-major arrays, and enforces acceptance floors without network access."
+
+[[series]]
+id = "bus_matrix_f64"
+description = "MATPOWER bus matrices."
+semantic_meaning = "Per-bus native MATPOWER bus rows, including bus IDs, types, load, shunts, voltage, zones, and voltage limits."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The bus matrix is a native numeric MATPOWER case block. Source row and column order are preserved."
+source_resources = ["pglib_opf_archive"]
+filtered_input_path = "filtered/pglib_opf_matpower_cases_numeric/ingest_stats.json"
+filtering = "Keep bus matrix blocks with consistent row widths, finite numeric values, nonconstant payloads, and at least PGLIB_MIN_VALUES values."
+missing_value_policy = "Missing archives, absent bus blocks, malformed matrix rows, nonnumeric tokens, non-finite values, tiny blocks, or constant payloads are rejected or skipped as recorded in build stats."
+conversion = "Parse decimal numeric MATPOWER matrix values and write row-major little-endian float64 arrays."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 row-major matrix"
+sample_geometry = "matpower_case_matrix"
+sample_rank = 2
+sample_axes = ["row", "column"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/pglib_opf_matpower_cases_numeric/bus_matrix_f64/"
+
+[[series]]
+id = "branch_matrix_f64"
+description = "MATPOWER branch matrices."
+semantic_meaning = "Per-branch native MATPOWER rows, including from/to bus IDs, impedance, line charging, ratings, transformer settings, status, and angle bounds."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The branch matrix is a native numeric MATPOWER case block. Source row and column order are preserved."
+source_resources = ["pglib_opf_archive"]
+filtered_input_path = "filtered/pglib_opf_matpower_cases_numeric/ingest_stats.json"
+filtering = "Keep branch matrix blocks with consistent row widths, finite numeric values, nonconstant payloads, and at least PGLIB_MIN_VALUES values."
+missing_value_policy = "Missing archives, absent branch blocks, malformed matrix rows, nonnumeric tokens, non-finite values, tiny blocks, or constant payloads are rejected or skipped as recorded in build stats."
+conversion = "Parse decimal numeric MATPOWER matrix values and write row-major little-endian float64 arrays."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 row-major matrix"
+sample_geometry = "matpower_case_matrix"
+sample_rank = 2
+sample_axes = ["row", "column"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/pglib_opf_matpower_cases_numeric/branch_matrix_f64/"
+
+[[series]]
+id = "gen_matrix_f64"
+description = "MATPOWER generator matrices."
+semantic_meaning = "Per-generator native MATPOWER rows, including bus ID, active/reactive output, limits, voltage setpoint, status, capability, and ramp fields."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The gen matrix is a native numeric MATPOWER case block. Source row and column order are preserved."
+source_resources = ["pglib_opf_archive"]
+filtered_input_path = "filtered/pglib_opf_matpower_cases_numeric/ingest_stats.json"
+filtering = "Keep gen matrix blocks with consistent row widths, finite numeric values, nonconstant payloads, and at least PGLIB_MIN_VALUES values."
+missing_value_policy = "Missing archives, absent gen blocks, malformed matrix rows, nonnumeric tokens, non-finite values, tiny blocks, or constant payloads are rejected or skipped as recorded in build stats."
+conversion = "Parse decimal numeric MATPOWER matrix values and write row-major little-endian float64 arrays."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 row-major matrix"
+sample_geometry = "matpower_case_matrix"
+sample_rank = 2
+sample_axes = ["row", "column"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/pglib_opf_matpower_cases_numeric/gen_matrix_f64/"
+
+[[series]]
+id = "gencost_matrix_f64"
+description = "MATPOWER generator-cost matrices."
+semantic_meaning = "Native MATPOWER generator-cost rows, including model, startup/shutdown values, coefficient counts, and cost coefficients."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The gencost matrix is a native numeric MATPOWER case block. Source row and column order are preserved."
+source_resources = ["pglib_opf_archive"]
+filtered_input_path = "filtered/pglib_opf_matpower_cases_numeric/ingest_stats.json"
+filtering = "Keep gencost matrix blocks with consistent row widths, finite numeric values, nonconstant payloads, and at least PGLIB_MIN_VALUES values."
+missing_value_policy = "Missing archives, absent gencost blocks, malformed matrix rows, nonnumeric tokens, non-finite values, tiny blocks, or constant payloads are rejected or skipped as recorded in build stats."
+conversion = "Parse decimal numeric MATPOWER matrix values and write row-major little-endian float64 arrays."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 row-major matrix"
+sample_geometry = "matpower_case_matrix"
+sample_rank = 2
+sample_axes = ["row", "column"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/pglib_opf_matpower_cases_numeric/gencost_matrix_f64/"

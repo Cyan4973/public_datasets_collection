@@ -1,0 +1,72 @@
+manifest_version = 1
+dataset_id = "wwpdb_mmcif_atom_coords_f32"
+name = "wwPDB mmCIF Atom Coordinates"
+description = "Bounded public wwPDB mmCIF structures, emitted as native atom Cartesian coordinate triples in float32."
+homepage = "https://www.wwpdb.org/ftp/pdb-ftp-sites"
+
+[license]
+name = "Creative Commons CC0 1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "wwPDB archive coordinate data; cite individual PDB entries and wwPDB/RCSB as appropriate."
+notes = "wwPDB archive data are distributed under CC0; preserve entry identifiers and attribution/citation metadata."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public biomolecular structure archive coordinate files."
+usage_notes = "Public scientific structural biology data; no personal data expected."
+
+[[origins]]
+id = "wwpdb_archive"
+name = "Worldwide Protein Data Bank archive"
+url = "https://files.wwpdb.org/download/"
+type = "public_archive"
+notes = "Public wwPDB coordinate-file download endpoint."
+
+[[resources]]
+id = "bounded_mmcif_structures"
+origin = "wwpdb_archive"
+url = "https://files.wwpdb.org/download/"
+type = "exact_url_selection"
+version = "entry_ids_at_user_download_time"
+access = "Download script fetches exact <PDB_ID>.cif.gz URLs or reads exact URLs from WWPDB_URLS_FILE."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/wwpdb_mmcif_atom_coords_f32/"
+notes = "Defaults select a small, varied set of public structures; override WWPDB_IDS for a different bounded set."
+
+[local_paths]
+downloads = "downloads/wwpdb_mmcif_atom_coords_f32/"
+extracted = "extracted/wwpdb_mmcif_atom_coords_f32/"
+filtered = "filtered/wwpdb_mmcif_atom_coords_f32/"
+index = "index/wwpdb_mmcif_atom_coords_f32/"
+samples = "samples/wwpdb_mmcif_atom_coords_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/wwpdb_mmcif_atom_coords_f32/samples.jsonl"
+summary = "Download bounded mmCIF coordinate files, parse atom-site Cartesian coordinate columns, and emit one raw float32 xyz-coordinate stream per structure."
+deterministic_notes = "Default entry IDs and URL order are fixed. Build sorts local files, accepts only mmCIF atom_site loops with numeric Cartn_x/Cartn_y/Cartn_z columns, writes little-endian float32 triples, and rejects missing, malformed, tiny, non-finite, constant, or over-cap outputs."
+
+[[series]]
+id = "atom_cartesian_xyz_f32"
+description = "Atom Cartesian coordinate triples."
+semantic_meaning = "3D biomolecular atom coordinates, one variable-length coordinate stream per PDB/mmCIF structure."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source mmCIF atom-site Cartesian coordinate fields are native floating-point scientific coordinates. The recipe converts text decimal coordinates to IEEE float32 without changing atom order or applying a local remap."
+source_resources = ["bounded_mmcif_structures"]
+filtered_input_path = "filtered/wwpdb_mmcif_atom_coords_f32/ingest_stats.json"
+filtering = "Keep structures with looped atom_site Cartn_x, Cartn_y, and Cartn_z columns, at least WWPDB_MIN_ATOMS atoms, finite numeric coordinates, and nonconstant coordinate payloads."
+missing_value_policy = "Missing files, malformed gzip/mmCIF content, absent coordinate columns, unknown/missing coordinate tokens, non-finite values, tiny structures, constant coordinates, or output byte-cap overflow are fatal or skipped as documented in build stats."
+conversion = "Read each local .cif.gz text file, extract atom-site Cartesian x/y/z values in source row order, and write little-endian float32 triples."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 xyz triples"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/wwpdb_mmcif_atom_coords_f32/atom_cartesian_xyz_f32/"

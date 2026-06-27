@@ -7,8 +7,8 @@ This is a policy-and-examples triage memo. The exact live inventory is
 
 Audit baseline when this triage memo was last refreshed:
 
-- `ok`: `192`
-- `below_floor`: `134`
+- `ok`: `193`
+- `below_floor`: `133`
 - `broken`: `0`
 
 The remaining below-floor set falls into three buckets:
@@ -25,12 +25,11 @@ one-entity, or otherwise intrinsically narrow, but some source APIs can be
 extended coherently. Per-recipe extension assessment lives in
 `reports/tiny_standalone_extension_triage.md`.
 
-Current count: `6`
+Current count: `5`
 
 | dataset_id | values | bytes | samples | median values | reasons |
 |---|---:|---:|---:|---:|---|
 | `openbrewerydb_breweries` | 246 | 1640 | 3 | 82 | `aggregate_floor,median_sample_floor` |
-| `gleif_lei_records` | 400 | 800 | 4 | 100 | `aggregate_floor,median_sample_floor` |
 | `wger_exercises` | 400 | 800 | 4 | 100 | `aggregate_floor,median_sample_floor` |
 | `gitlab_projects` | 500 | 2000 | 5 | 100 | `aggregate_floor,median_sample_floor` |
 | `huggingface_datasets` | 500 | 2000 | 5 | 100 | `aggregate_floor,median_sample_floor` |

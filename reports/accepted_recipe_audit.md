@@ -4,8 +4,8 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 192
-- `below_floor`: 134
+- `ok`: 193
+- `below_floor`: 133
 - `broken`: 0
 
 ## Below Floor
@@ -38,7 +38,6 @@ Auxiliary series do not count toward acceptance.
 | `world_bank_energy_use_per_capita_annual` | 346 | 2768 | 10 | 35 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `world_bank_unemployment_total_percent_annual` | 350 | 2800 | 10 | 35 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `wger_exercises` | 400 | 800 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `gleif_lei_records` | 400 | 800 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `imf_gdp_growth_annual` | 416 | 1664 | 8 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `imf_gdp_per_capita_usd_annual` | 416 | 1664 | 8 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `imf_general_government_gross_debt_gdp_annual` | 416 | 1664 | 8 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |

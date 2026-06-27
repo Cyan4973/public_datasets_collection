@@ -10,14 +10,14 @@ the upstream source is useless. The question is whether the current recipe can b
 extended into one coherent material without violating the protocol.
 
 Initial count before this removal pass: `41`
-Current pending count: `6`
+Current pending count: `5`
 
 ## Summary
 
 - repairable by straightforward pagination, cursoring, or bounded time windows: `23`
 - repairable only as a redesign/replacement because current query is arbitrary, ranked, or too narrow: `12`
 - removed or superseded so far: `22`
-- remaining repairable by straightforward pagination, cursoring, or bounded time windows: `6`
+- remaining repairable by straightforward pagination, cursoring, or bounded time windows: `5`
 - remaining redesign/replacement candidates because current query is arbitrary, ranked, or too narrow: `0`
 
 ## Removed In First Pass
@@ -68,13 +68,13 @@ coherent, materially sized recipes.
 - `ooni_measurements`: replaced the latest-page snapshot with a bounded January 2024 OONI `web_connectivity` measurement window; now passes the floor with 60,000 primary values and 240,000 primary bytes.
 - `anilist_media`: extended from a tiny popular-media page into materially sized per-period numeric families; now passes the floor.
 - `weathergov_stations`: extended from the first 100 stations into the bounded paginated weather.gov station catalog; now passes the floor with 146,184 primary values and 974,560 primary bytes.
+- `gleif_lei_records`: extended from one 100-record page into a bounded 10,000-record LEI catalog prefix; now passes the floor with 69,797 primary values and 219,362 primary bytes.
 
 ## Per-Recipe Assessment
 
 | recipe | current shape | extension path | recommendation |
 |---|---|---|---|
 | `openbrewerydb_breweries` | Open Brewery DB first page, 3 series, 246 values | Page through brewery records. | Repairable by pagination, but numeric payload is weak. |
-| `gleif_lei_records` | GLEIF LEI records first page, 4 series, 400 values | LEI API is pageable. | Repairable by pagination, but review whether date/count fields are strong enough. |
 | `wger_exercises` | wger exercise listing first page, 4 series, 400 values | API pagination can cover the exercise corpus, but numeric density is weak. | Repairable but low priority. |
 | `gitlab_projects` | GitLab public projects first page, 5 series, 500 values | GitLab API supports pagination. | Repairable by pagination, but public-project listing is volatile. |
 | `huggingface_datasets` | Hugging Face datasets first page, 5 series, 500 values | API has listing/pagination/cursor options, but volatility and license fields need review. | Repairable by pagination if reproducibility is controlled. |
@@ -83,6 +83,6 @@ coherent, materially sized recipes.
 ## Recommended Order
 
 1. Repair remaining high-confidence pageable/time-windowed sources such as
-   `gleif_lei_records` and `pride_projects_search`.
+   `pride_projects_search`.
 2. Revisit medium-confidence catalog/search recipes only if the replacement
    scope can be made explicit and homogeneous.

@@ -25,7 +25,6 @@ world_bank_internet_users_percent_annual	below_floor	344	2752	10	35	280	0	0	0	1	
 world_bank_energy_use_per_capita_annual	below_floor	346	2768	10	35	280	0	0	0	1	none	aggregate_floor,median_sample_floor
 world_bank_unemployment_total_percent_annual	below_floor	350	2800	10	35	280	0	0	0	1	none	aggregate_floor,median_sample_floor
 wger_exercises	below_floor	400	800	4	100	150	0	0	0	1	none	aggregate_floor,median_sample_floor
-gleif_lei_records	below_floor	400	800	4	100	200	0	0	0	1	none	aggregate_floor,median_sample_floor
 imf_gdp_growth_annual	below_floor	416	1664	8	52	208	0	0	0	1	none	aggregate_floor,median_sample_floor
 imf_gdp_per_capita_usd_annual	below_floor	416	1664	8	52	208	0	0	0	1	none	aggregate_floor,median_sample_floor
 imf_general_government_gross_debt_gdp_annual	below_floor	416	1664	8	52	208	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -180,6 +179,7 @@ scryfall_default_cards	ok	65272	180931	29	2205	5268	0	0	0	1	none	none
 library_of_congress_items	ok	66380	264316	5	15000	60000	0	0	0	1	none	none
 macrostrat_sections	ok	67885	271540	6	11315	45260	0	0	0	1	none	none
 usgs_quakes_month	ok	68900	374024	7	9842	39376	0	0	0	1	none	none
+gleif_lei_records	ok	69797	219362	7	9971	39884	0	0	0	1	none	none
 medrxiv_details	ok	77615	186276	5	15523	31046	15523	62092	1	1	none	none
 uci_wine_quality	ok	77964	623712	24	3248.5	25988	0	0	0	1	none	none
 crossref_members	ok	79572	318288	39	1839	7356	0	0	0	1	none	none

@@ -1,7 +1,40 @@
 manifest_version = 1
 dataset_id = "gleif_lei_records"
-name = "GLEIF LEI Records Snapshot"
-description = "Pinned GLEIF LEI record page with registration timing and nested count metrics."
+name = "GLEIF LEI Records"
+description = "Bounded public GLEIF LEI record catalog parsed into homogeneous entity and registration numeric arrays."
+homepage = "https://www.gleif.org/en/lei-data/gleif-api"
+
+[license]
+name = "GLEIF LEI Data Terms of Use"
+spdx = "LicenseRef-GLEIF-LEI-Data-Terms"
+url = "https://www.gleif.org/en/lei-data/gleif-data-terms-of-use"
+citation = "Global Legal Entity Identifier Foundation (GLEIF) LEI record data."
+notes = "Preserve GLEIF attribution and comply with GLEIF LEI data terms."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public legal-entity reference data from GLEIF."
+usage_notes = "Public legal-entity identifier metadata; no private personal records expected."
+
+[[origins]]
+id = "gleif_api"
+name = "GLEIF API LEI records"
+url = "https://api.gleif.org/api/v1/lei-records"
+type = "public_api"
+notes = "Public paginated API for LEI record data."
+
+[[resources]]
+id = "bounded_lei_record_pages"
+origin = "gleif_api"
+url = "https://api.gleif.org/api/v1/lei-records"
+type = "paginated_api"
+version = "catalog_prefix_at_user_download_time"
+access = "Download script fetches exact page-numbered API pages up to bounded page and record caps."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/gleif_lei_records/"
+notes = "Default selection is a bounded prefix of the public LEI record catalog, preserving API page order."
 
 [local_paths]
 downloads = "downloads/gleif_lei_records/"
@@ -14,3 +47,166 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/gleif_lei_records/samples.jsonl"
+summary = "Download bounded GLEIF LEI record pages, parse date and nested-count fields, and emit separate homogeneous raw numeric arrays."
+deterministic_notes = "Download uses fixed page size and ascending page numbers. Build preserves first-seen API order, deduplicates by LEI, emits one homogeneous field per series, skips rows with missing required dates, and enforces acceptance floors without network access."
+
+[[series]]
+id = "gleif_entity_creation_days_i32"
+description = "Entity creation dates."
+semantic_meaning = "LEI entity creation date as days since Unix epoch, preserving deduplicated API order."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "GLEIF exposes dates as ISO date-time strings; days since Unix epoch is a stable machine-facing date representation."
+source_resources = ["bounded_lei_record_pages"]
+filtered_input_path = "filtered/gleif_lei_records/ingest_stats.json"
+filtering = "Keep records with parseable entity creation, initial registration, and last update dates plus finite nested counts."
+missing_value_policy = "Rows missing required date fields or malformed count/list fields are skipped; optional next-renewal dates are emitted only for records where present."
+conversion = "Parse ISO date/date-time strings and write little-endian int32 day numbers."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous int32 date array"
+sample_geometry = "lei_record_column"
+sample_rank = 1
+sample_axes = ["lei_record"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gleif_lei_records/gleif_entity_creation_days_i32/"
+
+[[series]]
+id = "gleif_initial_registration_days_i32"
+description = "Initial registration dates."
+semantic_meaning = "Initial LEI registration date as days since Unix epoch, preserving deduplicated API order."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "GLEIF exposes dates as ISO date-time strings; days since Unix epoch is a stable machine-facing date representation."
+source_resources = ["bounded_lei_record_pages"]
+filtered_input_path = "filtered/gleif_lei_records/ingest_stats.json"
+filtering = "Keep records with parseable entity creation, initial registration, and last update dates plus finite nested counts."
+missing_value_policy = "Rows missing required date fields or malformed count/list fields are skipped."
+conversion = "Parse ISO date/date-time strings and write little-endian int32 day numbers."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous int32 date array"
+sample_geometry = "lei_record_column"
+sample_rank = 1
+sample_axes = ["lei_record"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gleif_lei_records/gleif_initial_registration_days_i32/"
+
+[[series]]
+id = "gleif_last_update_days_i32"
+description = "Registration last-update dates."
+semantic_meaning = "LEI registration last-update date as days since Unix epoch, preserving deduplicated API order."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "GLEIF exposes dates as ISO date-time strings; days since Unix epoch is a stable machine-facing date representation."
+source_resources = ["bounded_lei_record_pages"]
+filtered_input_path = "filtered/gleif_lei_records/ingest_stats.json"
+filtering = "Keep records with parseable entity creation, initial registration, and last update dates plus finite nested counts."
+missing_value_policy = "Rows missing required date fields or malformed count/list fields are skipped."
+conversion = "Parse ISO date/date-time strings and write little-endian int32 day numbers."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous int32 date array"
+sample_geometry = "lei_record_column"
+sample_rank = 1
+sample_axes = ["lei_record"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gleif_lei_records/gleif_last_update_days_i32/"
+
+[[series]]
+id = "gleif_next_renewal_days_i32"
+description = "Next renewal dates."
+semantic_meaning = "LEI next-renewal date as days since Unix epoch for records where the optional field is present."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "GLEIF exposes dates as ISO date-time strings; days since Unix epoch is a stable machine-facing date representation. This optional series omits records where the source omits nextRenewalDate."
+source_resources = ["bounded_lei_record_pages"]
+filtered_input_path = "filtered/gleif_lei_records/ingest_stats.json"
+filtering = "Keep populated parseable nextRenewalDate values."
+missing_value_policy = "Rows with missing optional nextRenewalDate are omitted from this series; malformed populated dates reject the row."
+conversion = "Parse ISO date/date-time strings and write little-endian int32 day numbers."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous int32 date array"
+sample_geometry = "lei_record_column"
+sample_rank = 1
+sample_axes = ["lei_record_with_next_renewal"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gleif_lei_records/gleif_next_renewal_days_i32/"
+
+[[series]]
+id = "gleif_legal_address_line_count_u16"
+description = "Legal-address line counts."
+semantic_meaning = "Number of source legal-address lines for each retained LEI record."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The count is the native cardinality of the GLEIF legalAddress.addressLines array, emitted separately from other count fields."
+source_resources = ["bounded_lei_record_pages"]
+filtered_input_path = "filtered/gleif_lei_records/ingest_stats.json"
+filtering = "Keep records with legalAddress addressLines arrays and required date fields."
+missing_value_policy = "Malformed or missing legalAddress addressLines arrays are skipped."
+conversion = "Count source array elements and write little-endian uint16 values."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 count array"
+sample_geometry = "lei_record_column"
+sample_rank = 1
+sample_axes = ["lei_record"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gleif_lei_records/gleif_legal_address_line_count_u16/"
+
+[[series]]
+id = "gleif_other_names_count_u16"
+description = "Other-name counts."
+semantic_meaning = "Number of source otherNames entries for each retained LEI record."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The count is the native cardinality of the GLEIF entity.otherNames array, emitted separately from other count fields."
+source_resources = ["bounded_lei_record_pages"]
+filtered_input_path = "filtered/gleif_lei_records/ingest_stats.json"
+filtering = "Keep records with otherNames arrays and required date fields."
+missing_value_policy = "Malformed otherNames arrays are skipped."
+conversion = "Count source array elements and write little-endian uint16 values."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 count array"
+sample_geometry = "lei_record_column"
+sample_rank = 1
+sample_axes = ["lei_record"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gleif_lei_records/gleif_other_names_count_u16/"
+
+[[series]]
+id = "gleif_other_validation_authority_count_u16"
+description = "Other validation-authority counts."
+semantic_meaning = "Number of source otherValidationAuthorities entries for each retained LEI record."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The count is the native cardinality of the GLEIF registration.otherValidationAuthorities array, emitted separately from other count fields."
+source_resources = ["bounded_lei_record_pages"]
+filtered_input_path = "filtered/gleif_lei_records/ingest_stats.json"
+filtering = "Keep records with otherValidationAuthorities arrays and required date fields."
+missing_value_policy = "Malformed otherValidationAuthorities arrays are skipped."
+conversion = "Count source array elements and write little-endian uint16 values."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 count array"
+sample_geometry = "lei_record_column"
+sample_rank = 1
+sample_axes = ["lei_record"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gleif_lei_records/gleif_other_validation_authority_count_u16/"

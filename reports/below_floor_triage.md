@@ -7,8 +7,8 @@ This is a policy-and-examples triage memo. The exact live inventory is
 
 Audit baseline when this triage memo was last refreshed:
 
-- `ok`: `150`
-- `below_floor`: `170`
+- `ok`: `191`
+- `below_floor`: `135`
 - `broken`: `0`
 
 The remaining below-floor set falls into three buckets:
@@ -25,27 +25,14 @@ one-entity, or otherwise intrinsically narrow, but some source APIs can be
 extended coherently. Per-recipe extension assessment lives in
 `reports/tiny_standalone_extension_triage.md`.
 
-Current count: `20`
+Current count: `7`
 
 | dataset_id | values | bytes | samples | median values | reasons |
 |---|---:|---:|---:|---:|---|
 | `openbrewerydb_breweries` | 246 | 1640 | 3 | 82 | `aggregate_floor,median_sample_floor` |
-| `anilist_media` | 295 | 837 | 6 | 49 | `aggregate_floor,median_sample_floor` |
-| `nuget_search` | 300 | 1200 | 3 | 100 | `aggregate_floor,median_sample_floor` |
 | `weathergov_stations` | 300 | 2000 | 3 | 100 | `aggregate_floor,median_sample_floor` |
-| `musicbrainz_recordings` | 382 | 952 | 4 | 94 | `aggregate_floor,median_sample_floor` |
-| `cratesio_crates` | 400 | 2000 | 4 | 100 | `aggregate_floor,median_sample_floor` |
-| `datacite_dois` | 400 | 1200 | 4 | 100 | `aggregate_floor,median_sample_floor` |
 | `gleif_lei_records` | 400 | 800 | 4 | 100 | `aggregate_floor,median_sample_floor` |
-| `hex_packages` | 400 | 2600 | 4 | 100 | `aggregate_floor,median_sample_floor` |
-| `osm_overpass_cafes` | 400 | 2600 | 4 | 100 | `aggregate_floor,median_sample_floor` |
-| `stackexchange_top_questions_jan_2024` | 400 | 1400 | 4 | 100 | `aggregate_floor,median_sample_floor` |
 | `wger_exercises` | 400 | 800 | 4 | 100 | `aggregate_floor,median_sample_floor` |
-| `musicbrainz_release_groups` | 491 | 982 | 5 | 100 | `aggregate_floor,median_sample_floor` |
-| `openfoodfacts_products` | 491 | 1870 | 5 | 98 | `aggregate_floor,median_sample_floor` |
-| `inaturalist_observations` | 495 | 1188 | 5 | 99 | `aggregate_floor,median_sample_floor` |
-| `pokemontcg_cards` | 498 | 1071 | 6 | 81 | `aggregate_floor,median_sample_floor` |
-| `artic_artworks_search` | 500 | 1400 | 5 | 100 | `aggregate_floor,median_sample_floor` |
 | `gitlab_projects` | 500 | 2000 | 5 | 100 | `aggregate_floor,median_sample_floor` |
 | `huggingface_datasets` | 500 | 2000 | 5 | 100 | `aggregate_floor,median_sample_floor` |
 | `pride_projects_search` | 500 | 1600 | 5 | 100 | `aggregate_floor,median_sample_floor` |

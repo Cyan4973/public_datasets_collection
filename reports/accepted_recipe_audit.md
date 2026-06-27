@@ -4,8 +4,8 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 181
-- `below_floor`: 146
+- `ok`: 191
+- `below_floor`: 135
 - `broken`: 0
 
 ## Below Floor
@@ -29,7 +29,6 @@ Auxiliary series do not count toward acceptance.
 | `fred_unemployment_rate_monthly` | 120 | 480 | 10 | 12 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `world_bank_access_to_electricity_percent_annual` | 183 | 1464 | 6 | 31.5 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `openbrewerydb_breweries` | 246 | 1640 | 3 | 82 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `nuget_search` | 300 | 1200 | 3 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `weathergov_stations` | 300 | 2000 | 3 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `world_bank_renewable_energy_consumption_percent_annual` | 320 | 2560 | 10 | 32 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_consumption_co2_annual` | 340 | 1360 | 10 | 34 | 0 | 0 | `aggregate_floor,median_sample_floor` |
@@ -39,14 +38,8 @@ Auxiliary series do not count toward acceptance.
 | `world_bank_internet_users_percent_annual` | 344 | 2752 | 10 | 35 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `world_bank_energy_use_per_capita_annual` | 346 | 2768 | 10 | 35 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `world_bank_unemployment_total_percent_annual` | 350 | 2800 | 10 | 35 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `musicbrainz_recordings` | 382 | 952 | 4 | 94 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `wger_exercises` | 400 | 800 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `gleif_lei_records` | 400 | 800 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `datacite_dois` | 400 | 1200 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `stackexchange_top_questions_jan_2024` | 400 | 1400 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `cratesio_crates` | 400 | 2000 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `hex_packages` | 400 | 2600 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `osm_overpass_cafes` | 400 | 2600 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `imf_gdp_growth_annual` | 416 | 1664 | 8 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `imf_gdp_per_capita_usd_annual` | 416 | 1664 | 8 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `imf_general_government_gross_debt_gdp_annual` | 416 | 1664 | 8 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |
@@ -54,10 +47,6 @@ Auxiliary series do not count toward acceptance.
 | `imf_nominal_gdp_usd_annual` | 416 | 1664 | 8 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `imf_population_annual` | 416 | 1664 | 8 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `imf_unemployment_rate_annual` | 416 | 1664 | 8 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `musicbrainz_release_groups` | 491 | 982 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `openfoodfacts_products` | 491 | 1870 | 5 | 98 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `pokemontcg_cards` | 498 | 1071 | 6 | 81 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `artic_artworks_search` | 500 | 1400 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `pride_projects_search` | 500 | 1600 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `gitlab_projects` | 500 | 2000 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `huggingface_datasets` | 500 | 2000 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |

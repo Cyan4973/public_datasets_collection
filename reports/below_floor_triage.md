@@ -7,8 +7,8 @@ This is a policy-and-examples triage memo. The exact live inventory is
 
 Audit baseline when this triage memo was last refreshed:
 
-- `ok`: `195`
-- `below_floor`: `129`
+- `ok`: `196`
+- `below_floor`: `128`
 - `broken`: `0`
 
 The remaining below-floor set falls into three buckets:

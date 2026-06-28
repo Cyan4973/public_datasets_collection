@@ -4,8 +4,8 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 195
-- `below_floor`: 129
+- `ok`: 196
+- `below_floor`: 128
 - `broken`: 0
 
 ## Below Floor
@@ -88,7 +88,6 @@ Auxiliary series do not count toward acceptance.
 | `openfda_device_event` | 1500 | 3500 | 3 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `plos_search` | 1500 | 3500 | 3 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `nvd_cpe_match_feed` | 1500 | 5000 | 3 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `gbif_datasets` | 1500 | 6000 | 3 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `eurostat_retail_trade_volume_monthly` | 1524 | 6096 | 5 | 288 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `coinpaprika_exchanges` | 1530 | 5760 | 6 | 255 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_co2_including_luc_annual` | 1545 | 6180 | 10 | 163 | 0 | 0 | `aggregate_floor,median_sample_floor` |

@@ -122,8 +122,6 @@ These are below floor but may survive if materially widened without violating pr
 Representative examples:
 
 - `openml_tasks_large`
-- `dataone_solr`
-- `dataone_solr_large_retry`
 - `usgs_daily_values_large`
 - `nasa_donki_cme`
 - `nasa_donki_flr`

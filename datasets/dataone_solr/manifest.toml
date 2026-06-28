@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "dataone_solr"
 name = "DataONE Solr"
-description = "Numeric repository metadata fields extracted from a public DataONE Solr query."
+description = "Paged DataONE Solr repository metadata; each emitted sample is one homogeneous numeric field across Solr document rows."
 
 [license]
 name = "LicenseRef-DataONE"
@@ -9,10 +9,10 @@ spdx = "LicenseRef-DataONE"
 url = "https://www.dataone.org/"
 
 [[resources]]
-id = "dataone_json"
-url = "https://cn.dataone.org/cn/v2/query/solr/?q=*:*&rows=1000&wt=json"
+id = "dataone_solr_pages"
+url = "https://cn.dataone.org/cn/v2/query/solr/?q=*:*&rows={rows}&start={start}&wt=json&fl=id,size,numberReplicas,dateUploaded,updateDate,dateModified&sort=id%20asc"
 type = "api_response"
-local_path = "downloads/dataone_solr/dataone_solr.json"
+local_path = "downloads/dataone_solr/pages/"
 
 [local_paths]
 downloads = "downloads/dataone_solr/"
@@ -28,40 +28,70 @@ sample_index_path = "index/dataone_solr/samples.jsonl"
 
 [[series]]
 id = "dataone_size"
+role = "primary"
 representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered for that series."
+missing_value_policy = "Rows missing required numeric fields are filtered."
 numeric_kind = "uint"
 bit_width = 64
 endianness = "little"
+sample_geometry = "dataone_solr_record_column"
 
 [[series]]
 id = "dataone_number_replicas"
+role = "primary"
 representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered for that series."
+missing_value_policy = "Rows without DataONE numberReplicas are omitted from this optional field sample."
 numeric_kind = "uint"
 bit_width = 16
 endianness = "little"
+sample_geometry = "dataone_solr_record_column"
 
 [[series]]
 id = "dataone_date_uploaded"
+role = "primary"
 representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered for that series."
+missing_value_policy = "Rows missing required date fields are filtered."
 numeric_kind = "uint"
 bit_width = 32
 endianness = "little"
+sample_geometry = "dataone_solr_record_column"
 
 [[series]]
 id = "dataone_update_date"
+role = "primary"
 representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered for that series."
+missing_value_policy = "Rows missing required date fields are filtered."
 numeric_kind = "uint"
 bit_width = 32
 endianness = "little"
+sample_geometry = "dataone_solr_record_column"
 
 [[series]]
 id = "dataone_date_modified"
+role = "primary"
 representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered for that series."
+missing_value_policy = "Rows missing required date fields are filtered."
 numeric_kind = "uint"
 bit_width = 64
 endianness = "little"
+sample_geometry = "dataone_solr_record_column"
+
+[[series]]
+id = "dataone_uploaded_year"
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing required date fields are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_geometry = "dataone_solr_record_column"
+
+[[series]]
+id = "dataone_modified_year"
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Rows missing required date fields are filtered."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_geometry = "dataone_solr_record_column"

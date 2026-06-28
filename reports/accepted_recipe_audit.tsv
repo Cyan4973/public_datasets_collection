@@ -99,7 +99,6 @@ europepmc_grants	below_floor	1984	3968	4	496	992	0	0	0	1	none	aggregate_floor,me
 chembl_documents	below_floor	2000	4000	4	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
 wikimedia_mostread	below_floor	2000	6000	2	1000	3000	0	0	0	1	none	aggregate_floor
 npi_registry_ca	below_floor	2000	7000	4	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
-dataone_solr_1000	below_floor	2000	10000	2	1000	5000	0	0	0	1	none	aggregate_floor
 fred_sp500_daily	below_floor	2162	8648	9	251	1004	0	0	0	1	none	aggregate_floor,median_sample_floor
 geofabrik_index	below_floor	2220	17760	4	555	4440	0	0	0	1	none	aggregate_floor,median_sample_floor
 eurostat_female_unemployment_monthly	below_floor	2465	9860	5	520	2080	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -117,8 +116,6 @@ loc_photos_search_large	below_floor	3500	8000	7	500	1000	0	0	0	1	none	aggregate_
 smithsonian_search_large	below_floor	3500	10000	7	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
 europepmc_grants_large_retry	below_floor	4000	8000	4	1000	2000	0	0	0	1	none	aggregate_floor
 taginfo_tags_popular	below_floor	4000	19500	8	500	2500	0	0	0	1	none	aggregate_floor,median_sample_floor
-dataone_solr	below_floor	4039	24078	5	1000	4000	0	0	0	1	none	aggregate_floor
-dataone_solr_large_retry	below_floor	4039	24078	5	1000	4000	0	0	0	1	none	aggregate_floor
 usgs_water_sites_rdb	below_floor	4992	36976	6	878	7024	0	0	0	1	none	aggregate_floor,median_sample_floor
 crossref_funders_large	below_floor	5000	10000	5	1000	2000	0	0	0	1	none	aggregate_floor
 jhu_covid19_confirmed_global_daily	below_floor	5715	22860	5	1143	4572	0	0	0	1	none	aggregate_floor
@@ -234,6 +231,7 @@ noaa_coops_air_temperature	ok	525155	4201240	3	175044	1400352	0	0	0	1	none	none
 noaa_coops_air_pressure	ok	525156	4201248	3	175047	1400376	0	0	0	1	none	none
 noaa_ghcn_daily_awnd_by_station	ok	545792	1091584	57	9970	19940	0	0	0	1	none	none
 appliances_energy_uci	ok	552580	4420640	28	19735	157880	0	0	0	1	none	none
+dataone_solr	ok	602719	2805438	7	100000	400000	0	0	0	1	none	none
 gharchive_hourly_events_20240101_00	ok	614476	4301332	4	153619	1228952	0	0	0	1	none	none
 wikimedia_pageviews_daily	ok	619828	2479312	208	3472	13888	0	0	0	1	none	none
 earthquake_usgs	ok	630753	4880874	50	14515	115292	0	0	0	1	none	none

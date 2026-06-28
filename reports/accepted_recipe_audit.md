@@ -4,8 +4,8 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 194
-- `below_floor`: 132
+- `ok`: 195
+- `below_floor`: 129
 - `broken`: 0
 
 ## Below Floor
@@ -112,7 +112,6 @@ Auxiliary series do not count toward acceptance.
 | `chembl_documents` | 2000 | 4000 | 4 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `wikimedia_mostread` | 2000 | 6000 | 2 | 1000 | 0 | 0 | `aggregate_floor` |
 | `npi_registry_ca` | 2000 | 7000 | 4 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `dataone_solr_1000` | 2000 | 10000 | 2 | 1000 | 0 | 0 | `aggregate_floor` |
 | `fred_sp500_daily` | 2162 | 8648 | 9 | 251 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `geofabrik_index` | 2220 | 17760 | 4 | 555 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `eurostat_female_unemployment_monthly` | 2465 | 9860 | 5 | 520 | 0 | 0 | `aggregate_floor,median_sample_floor` |
@@ -130,8 +129,6 @@ Auxiliary series do not count toward acceptance.
 | `smithsonian_search_large` | 3500 | 10000 | 7 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `europepmc_grants_large_retry` | 4000 | 8000 | 4 | 1000 | 0 | 0 | `aggregate_floor` |
 | `taginfo_tags_popular` | 4000 | 19500 | 8 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `dataone_solr` | 4039 | 24078 | 5 | 1000 | 0 | 0 | `aggregate_floor` |
-| `dataone_solr_large_retry` | 4039 | 24078 | 5 | 1000 | 0 | 0 | `aggregate_floor` |
 | `usgs_water_sites_rdb` | 4992 | 36976 | 6 | 878 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `crossref_funders_large` | 5000 | 10000 | 5 | 1000 | 0 | 0 | `aggregate_floor` |
 | `jhu_covid19_confirmed_global_daily` | 5715 | 22860 | 5 | 1143 | 0 | 0 | `aggregate_floor` |

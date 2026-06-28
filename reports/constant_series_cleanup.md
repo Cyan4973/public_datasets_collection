@@ -48,8 +48,6 @@ material statistics, manifests where present, and verification expectations.
 | `crossref_funders` | `crossref_replaced_by_count` | `uint16` | 1 | 100 | 200 | `0` |
 | `datacite_dois` | `datacite_download_count` | `uint32` | 1 | 100 | 400 | `0` |
 | `datacite_dois` | `datacite_view_count` | `uint32` | 1 | 100 | 400 | `0` |
-| `dataone_solr` | `dataone_is_public` | `uint8` | 1 | 1000 | 1000 | `1` |
-| `dataone_solr_large_retry` | `dataone_is_public` | `uint8` | 1 | 1000 | 1000 | `1` |
 | `disease_sh_countries` | `disease_today_cases` | `uint32` | 1 | 231 | 924 | `0` |
 | `disease_sh_countries` | `disease_today_deaths` | `uint32` | 1 | 231 | 924 | `0` |
 | `dryad_search` | `dryad_citation_count` | `uint32` | 1 | 20 | 80 | `0` |

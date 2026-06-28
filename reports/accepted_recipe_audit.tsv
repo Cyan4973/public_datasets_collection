@@ -74,7 +74,6 @@ iris_seismon_events_fixed	below_floor	1170	5330	9	130	260	0	0	0	1	none	aggregate
 owid_co2_per_gdp_annual	below_floor	1403	5612	10	140	560	0	0	0	1	none	aggregate_floor,median_sample_floor
 openfda_device_event	below_floor	1500	3500	3	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
 plos_search	below_floor	1500	3500	3	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
-nvd_cpe_match_feed	below_floor	1500	5000	3	500	2000	0	0	0	1	none	aggregate_floor,median_sample_floor
 eurostat_retail_trade_volume_monthly	below_floor	1524	6096	5	288	1152	0	0	0	1	none	aggregate_floor,median_sample_floor
 coinpaprika_exchanges	below_floor	1530	5760	6	255	960	0	0	0	1	none	aggregate_floor,median_sample_floor
 owid_co2_including_luc_annual	below_floor	1545	6180	10	163	652	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -151,6 +150,7 @@ binance_ticker_24hr	ok	21564	115008	6	3594	14376	0	0	0	1	none	none
 nasa_donki_flr	ok	22484	89936	7	3212	12848	0	0	0	1	none	none
 openflights_airports	ok	23094	153960	3	7698	61584	0	0	0	1	none	none
 statsbomb_world_cup_final	ok	26802	44670	9	2978	2978	0	0	0	1	none	none
+nvd_cpe_match_feed	ok	30000	100000	3	10000	40000	0	0	0	1	none	none
 macrostrat_columns	ok	31155	124620	9	3462	13848	0	0	0	1	none	none
 usgs_nwis_streamflow_daily	ok	34304	274432	32	1095	8760	0	0	0	1	none	none
 usgs_nwis_specific_conductance_daily	ok	34889	279112	29	1406	11248	0	0	0	1	none	none

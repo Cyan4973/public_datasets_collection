@@ -7,8 +7,8 @@ This is a policy-and-examples triage memo. The exact live inventory is
 
 Audit baseline when this triage memo was last refreshed:
 
-- `ok`: `196`
-- `below_floor`: `128`
+- `ok`: `197`
+- `below_floor`: `127`
 - `broken`: `0`
 
 The remaining below-floor set falls into three buckets:
@@ -99,7 +99,6 @@ Representative high-value rewrite/expand candidates:
 - `nasa_donki_cme`
 - `openml_tasks_large`
 - `jpl_cad_2024`
-- `nomis_employment`
 - `openml_runs_large`
 - `figshare_articles_large`
 - `jhu_covid19_confirmed_global_daily`

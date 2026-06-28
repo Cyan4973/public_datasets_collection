@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "taginfo_keys_all"
 name = "Taginfo Keys All"
-description = "Pinned OpenStreetMap Taginfo key statistics."
+description = "Paged OpenStreetMap Taginfo key statistics; each emitted sample is one homogeneous numeric field across key rows."
 
 [license]
 name = "OpenStreetMap"
@@ -10,7 +10,7 @@ url = "https://taginfo.openstreetmap.org/"
 
 [[resources]]
 id = "taginfo_keys_json"
-url = "https://taginfo.openstreetmap.org/api/4/keys/all?page=1&rp=500"
+url = "https://taginfo.openstreetmap.org/api/4/keys/all?page={page}&rp={page_size}"
 type = "api_response"
 local_path = "downloads/taginfo_keys_all/taginfo_keys_all.json"
 
@@ -28,64 +28,80 @@ sample_index_path = "index/taginfo_keys_all/samples.jsonl"
 
 [[series]]
 id = "taginfo_count_all"
+role = "primary"
 representation_class = "native_numeric"
 missing_value_policy = "Rows missing numeric fields are filtered."
 numeric_kind = "uint"
 bit_width = 64
 endianness = "little"
+sample_geometry = "taginfo_key_table_column"
 
 [[series]]
 id = "taginfo_count_nodes"
+role = "primary"
 representation_class = "native_numeric"
 missing_value_policy = "Rows missing numeric fields are filtered."
 numeric_kind = "uint"
 bit_width = 64
 endianness = "little"
+sample_geometry = "taginfo_key_table_column"
 
 [[series]]
 id = "taginfo_count_ways"
+role = "primary"
 representation_class = "native_numeric"
 missing_value_policy = "Rows missing numeric fields are filtered."
 numeric_kind = "uint"
 bit_width = 64
 endianness = "little"
+sample_geometry = "taginfo_key_table_column"
 
 [[series]]
 id = "taginfo_count_relations"
+role = "primary"
 representation_class = "native_numeric"
 missing_value_policy = "Rows missing numeric fields are filtered."
 numeric_kind = "uint"
 bit_width = 64
 endianness = "little"
+sample_geometry = "taginfo_key_table_column"
 
 [[series]]
 id = "taginfo_values_all"
+role = "primary"
 representation_class = "native_numeric"
 missing_value_policy = "Rows missing numeric fields are filtered."
 numeric_kind = "uint"
 bit_width = 64
 endianness = "little"
+sample_geometry = "taginfo_key_table_column"
 
 [[series]]
 id = "taginfo_users_all"
+role = "primary"
 representation_class = "native_numeric"
 missing_value_policy = "Rows missing numeric fields are filtered."
 numeric_kind = "uint"
 bit_width = 64
 endianness = "little"
+sample_geometry = "taginfo_key_table_column"
 
 [[series]]
 id = "taginfo_in_wiki"
+role = "primary"
 representation_class = "derived_operational_numeric"
 missing_value_policy = "Rows missing numeric fields are filtered."
 numeric_kind = "uint"
 bit_width = 8
 endianness = "little"
+sample_geometry = "taginfo_key_table_column"
 
 [[series]]
 id = "taginfo_projects"
-representation_class = "derived_operational_numeric"
+role = "primary"
+representation_class = "native_numeric"
 missing_value_policy = "Rows missing numeric fields are filtered."
 numeric_kind = "uint"
 bit_width = 16
 endianness = "little"
+sample_geometry = "taginfo_key_table_column"

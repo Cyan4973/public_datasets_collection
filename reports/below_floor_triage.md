@@ -8,7 +8,7 @@ This is a policy-and-examples triage memo. The exact live inventory is
 Audit baseline when this triage memo was last refreshed:
 
 - `ok`: `193`
-- `below_floor`: `133`
+- `below_floor`: `132`
 - `broken`: `0`
 
 The remaining below-floor set falls into three buckets:
@@ -115,7 +115,6 @@ Representative high-value rewrite/expand candidates:
 - `federalregister_documents_large`
 - `europepmc_grants_large_retry`
 - `taginfo_tags_popular`
-- `taginfo_keys_all`
 
 Action:
 - widen pagination

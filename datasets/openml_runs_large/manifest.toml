@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "openml_runs_large"
 name = "OpenML Runs Large"
-description = "Pinned OpenML run list reduced to identifiers and upload timestamps."
+description = "Bounded OpenML run list reduced to identifiers and upload timestamps."
 
 [local_paths]
 downloads = "downloads/openml_runs_large/"

@@ -4,8 +4,8 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 201
-- `below_floor`: 123
+- `ok`: 207
+- `below_floor`: 117
 - `broken`: 0
 
 ## Below Floor
@@ -124,14 +124,8 @@ Auxiliary series do not count toward acceptance.
 | `openlibrary_editions` | 3479 | 6958 | 7 | 497 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `loc_photos_search_large` | 3500 | 8000 | 7 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `smithsonian_search_large` | 3500 | 10000 | 7 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `europepmc_grants_large_retry` | 4000 | 8000 | 4 | 1000 | 0 | 0 | `aggregate_floor` |
 | `taginfo_tags_popular` | 4000 | 19500 | 8 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `usgs_water_sites_rdb` | 4992 | 36976 | 6 | 878 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `crossref_funders_large` | 5000 | 10000 | 5 | 1000 | 0 | 0 | `aggregate_floor` |
-| `jhu_covid19_confirmed_global_daily` | 5715 | 22860 | 5 | 1143 | 0 | 0 | `aggregate_floor` |
-| `jhu_covid19_confirmed_us_daily` | 5715 | 22860 | 5 | 1143 | 0 | 0 | `aggregate_floor` |
-| `jhu_covid19_deaths_global_daily` | 5715 | 22860 | 5 | 1143 | 0 | 0 | `aggregate_floor` |
-| `jhu_covid19_deaths_us_daily` | 5715 | 22860 | 5 | 1143 | 0 | 0 | `aggregate_floor` |
 | `openml_runs_large` | 6000 | 28000 | 6 | 1000 | 0 | 0 | `aggregate_floor` |
 | `figshare_articles_large` | 6000 | 34000 | 6 | 1000 | 0 | 0 | `aggregate_floor` |
-| `openml_tasks_large` | 7000 | 26000 | 7 | 1000 | 0 | 0 | `aggregate_floor` |

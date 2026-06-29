@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "openml_tasks_large"
 name = "OpenML Tasks Large"
-description = "Pinned OpenML task list reduced to task identifiers and selected dataset quality metrics."
+description = "Bounded OpenML task list reduced to task identifiers and native dataset quality metrics."
 
 [local_paths]
 downloads = "downloads/openml_tasks_large/"
@@ -72,6 +72,33 @@ missing_value_policy = "filtered_rows_missing_required_quality_metrics"
 [[series]]
 id = "openml_number_of_missing_values_f32"
 path = "samples/openml_tasks_large/openml_number_of_missing_values_f32/tasks.bin"
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_missing_required_quality_metrics"
+
+[[series]]
+id = "openml_number_of_instances_with_missing_values_f32"
+path = "samples/openml_tasks_large/openml_number_of_instances_with_missing_values_f32/tasks.bin"
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_missing_required_quality_metrics"
+
+[[series]]
+id = "openml_number_of_numeric_features_f32"
+path = "samples/openml_tasks_large/openml_number_of_numeric_features_f32/tasks.bin"
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw_homogeneous_array"
+missing_value_policy = "filtered_rows_missing_required_quality_metrics"
+
+[[series]]
+id = "openml_number_of_symbolic_features_f32"
+path = "samples/openml_tasks_large/openml_number_of_symbolic_features_f32/tasks.bin"
 numeric_kind = "float"
 bit_width = 32
 endianness = "little"

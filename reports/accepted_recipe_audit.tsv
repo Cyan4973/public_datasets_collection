@@ -72,7 +72,6 @@ ena_portal_search	below_floor	1000	5000	2	500	2500	0	0	0	1	none	aggregate_floor,
 owid_cement_co2_annual	below_floor	1155	4620	10	97	388	0	0	0	1	none	aggregate_floor,median_sample_floor
 iris_seismon_events_fixed	below_floor	1170	5330	9	130	260	0	0	0	1	none	aggregate_floor,median_sample_floor
 owid_co2_per_gdp_annual	below_floor	1403	5612	10	140	560	0	0	0	1	none	aggregate_floor,median_sample_floor
-openfda_device_event	below_floor	1500	3500	3	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
 plos_search	below_floor	1500	3500	3	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
 eurostat_retail_trade_volume_monthly	below_floor	1524	6096	5	288	1152	0	0	0	1	none	aggregate_floor,median_sample_floor
 coinpaprika_exchanges	below_floor	1530	5760	6	255	960	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -161,6 +160,7 @@ expression_atlas_experiments	ok	41058	95802	9	4562	9124	0	0	0	1	none	none
 nasa_donki_cme	ok	41650	166600	5	8330	33320	0	0	0	1	none	none
 homebrew_formulae	ok	42045	84090	5	8409	16818	0	0	0	1	none	none
 opensky_states	ok	44580	178320	5	8536	34144	0	0	0	1	none	none
+openfda_device_event	ok	50000	140000	5	10000	20000	0	0	0	1	none	none
 huggingface_models_large	ok	50000	200000	10	4942	19768	0	0	0	1	none	none
 universities_domains_list	ok	51245	71743	5	10249	10249	0	0	0	1	none	none
 rhea_reactions	ok	55029	128401	3	18343	36686	0	0	0	1	none	none

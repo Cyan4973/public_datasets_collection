@@ -1,7 +1,19 @@
 manifest_version = 1
 dataset_id = "openfda_device_event"
 name = "openFDA Device Event"
-description = "Pinned openFDA device adverse event page reduced to direct event count and date series."
+description = "openFDA bulk device adverse event records reduced to homogeneous numeric date and event-count columns."
+
+[license]
+name = "openFDA Terms of Service"
+spdx = "LicenseRef-openFDA"
+url = "https://open.fda.gov/terms/"
+
+[[resources]]
+id = "openfda_device_event_api"
+url = "https://api.fda.gov/download.json"
+type = "bulk_download_index"
+local_path = "downloads/openfda_device_event/events.json"
+notes = "The downloader resolves device/event .json.zip partitions from the openFDA bulk download index."
 
 [local_paths]
 downloads = "downloads/openfda_device_event/"
@@ -17,27 +29,50 @@ sample_index_path = "index/openfda_device_event/samples.jsonl"
 
 [[series]]
 id = "openfda_device_event_date_received_ymd_u32"
-path = "samples/openfda_device_event/openfda_device_event_date_received_ymd_u32/events.bin"
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing parseable received dates are filtered."
 numeric_kind = "uint"
 bit_width = 32
 endianness = "little"
-sample_format = "raw_homogeneous_array"
-missing_value_policy = "filtered_rows_with_invalid_received_dates"
+sample_geometry = "openfda_device_event_column"
 
 [[series]]
 id = "openfda_device_event_mdr_text_count_u16"
-path = "samples/openfda_device_event/openfda_device_event_mdr_text_count_u16/events.bin"
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing MDR text arrays are counted as zero."
 numeric_kind = "uint"
 bit_width = 16
 endianness = "little"
-sample_format = "raw_homogeneous_array"
-missing_value_policy = "missing_mdr_text_preserved_as_zero"
+sample_geometry = "openfda_device_event_column"
 
 [[series]]
-id = "openfda_device_event_adverse_flag_u8"
-path = "samples/openfda_device_event/openfda_device_event_adverse_flag_u8/events.bin"
+id = "openfda_device_event_date_changed_ymd_u32"
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing parseable changed dates are filtered."
 numeric_kind = "uint"
-bit_width = 8
+bit_width = 32
 endianness = "little"
-sample_format = "raw_homogeneous_array"
-missing_value_policy = "missing_adverse_flags_preserved_as_zero"
+sample_geometry = "openfda_device_event_column"
+
+[[series]]
+id = "openfda_device_event_patient_problem_count_u16"
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing patient problem arrays are counted as zero."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_geometry = "openfda_device_event_column"
+
+[[series]]
+id = "openfda_device_event_product_problem_count_u16"
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Missing product problem arrays are counted as zero."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_geometry = "openfda_device_event_column"

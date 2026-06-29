@@ -21,12 +21,16 @@ from pathlib import Path
 repo_root=Path(os.environ['REPO_ROOT']); data_root=repo_root/os.environ['DATA_DIR']
 download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTER_DIR']); index_dir=Path(os.environ['INDEX_DIR']); samples_dir=Path(os.environ['SAMPLES_DIR'])
 items=json.load(open(download_dir/'cisa_kev_catalog.json', encoding='utf-8'))['vulnerabilities']
+def ymd(value):
+    return int(str(value).replace('-', '')[:8])
 meta={
     'cisa_kev_cwe_count': ('uint', 16, 'H'),
     'cisa_kev_known_ransomware': ('uint', 8, 'B'),
     'cisa_kev_description_length': ('uint', 16, 'H'),
     'cisa_kev_date_added_year': ('uint', 16, 'H'),
     'cisa_kev_due_year': ('uint', 16, 'H'),
+    'cisa_kev_date_added_ymd_u32': ('uint', 32, 'I'),
+    'cisa_kev_due_ymd_u32': ('uint', 32, 'I'),
 }
 vals={sid:[] for sid in meta}
 skipped=0
@@ -41,6 +45,8 @@ for row in items:
         vals['cisa_kev_description_length'].append(len(row.get('shortDescription') or ''))
         vals['cisa_kev_date_added_year'].append(int((row.get('dateAdded') or '')[:4]))
         vals['cisa_kev_due_year'].append(int((row.get('dueDate') or '')[:4]))
+        vals['cisa_kev_date_added_ymd_u32'].append(ymd(row.get('dateAdded')))
+        vals['cisa_kev_due_ymd_u32'].append(ymd(row.get('dueDate')))
     except Exception:
         skipped += 1
 rows=[]
@@ -50,7 +56,14 @@ for sid,(kind,bits,code) in meta.items():
     with out.open('wb') as fh:
         fh.write(struct.pack('<' + code*len(values), *values))
     rows.append({'dataset_id':'cisa_kev_catalog','series_id':sid,'sample_path':out.relative_to(data_root).as_posix(),'numeric_kind':kind,'bit_width':bits,'endianness':'little','element_size_bytes':bits//8,'sample_size_bytes':out.stat().st_size,'value_count':len(values)})
-(filter_dir/'ingest_stats.json').write_text(json.dumps({'dataset_id':'cisa_kev_catalog','rows_total':len(items),'rows_skipped':skipped}, indent=2, sort_keys=True)+'\n', encoding='utf-8')
+if len({row['value_count'] for row in rows}) != 1:
+    raise SystemExit('series length mismatch')
+if sum(row['value_count'] for row in rows) < 10_000 and sum(row['sample_size_bytes'] for row in rows) < 102_400:
+    raise SystemExit('below aggregate floor')
+for sid, values in vals.items():
+    if min(values) == max(values):
+        raise SystemExit(f'constant sample: {sid}')
+(filter_dir/'ingest_stats.json').write_text(json.dumps({'dataset_id':'cisa_kev_catalog','rows_total':len(items),'rows_skipped':skipped,'primary_values':sum(row['value_count'] for row in rows),'primary_sample_bytes':sum(row['sample_size_bytes'] for row in rows)}, indent=2, sort_keys=True)+'\n', encoding='utf-8')
 with (index_dir/'samples.jsonl').open('w', encoding='utf-8') as fh:
     for row in rows:
         fh.write(json.dumps(row, sort_keys=True)+'\n')

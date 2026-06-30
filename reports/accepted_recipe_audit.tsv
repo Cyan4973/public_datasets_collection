@@ -111,7 +111,6 @@ rubygems_versions_large	below_floor	2580	9288	5	516	2064	0	0	0	1	none	aggregate_
 openlibrary_editions	below_floor	3479	6958	7	497	994	0	0	0	1	none	aggregate_floor,median_sample_floor
 loc_photos_search_large	below_floor	3500	8000	7	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
 smithsonian_search_large	below_floor	3500	10000	7	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
-taginfo_tags_popular	below_floor	4000	19500	8	500	2500	0	0	0	1	none	aggregate_floor,median_sample_floor
 crossref_funders_large	below_floor	5000	10000	5	1000	2000	0	0	0	1	none	aggregate_floor
 jhu_covid19_confirmed_global_daily	ok	10287	41148	9	1143	4572	0	0	0	1	none	none
 jhu_covid19_confirmed_us_daily	ok	10287	41148	9	1143	4572	0	0	0	1	none	none
@@ -195,6 +194,7 @@ kegg_hsa_genes	ok	97008	315276	4	24252	97008	0	0	0	1	none	none
 noaa_ghcn_daily_wesd_by_station	ok	102494	204988	24	5845	11690	0	0	0	1	none	none
 worldclim_tavg_10m	ok	103680	414720	6	17280	69120	0	0	0	1	none	none
 reactome_events_hierarchy	ok	104345	271297	5	20869	41738	0	0	0	1	none	none
+taginfo_tags_popular	ok	113896	911168	8	14237	113896	28474	42711	2	1	none	none
 figshare_articles_large	ok	119994	679966	6	19999	119994	0	0	0	1	none	none
 openml_runs_large	ok	120000	560000	6	20000	80000	0	0	0	1	none	none
 noaa_ghcn_daily_tavg_by_station	ok	121079	242158	59	2588	5176	0	0	0	1	none	none

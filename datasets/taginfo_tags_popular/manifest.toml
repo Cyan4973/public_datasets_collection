@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "taginfo_tags_popular"
 name = "Taginfo Tags Popular"
-description = "Pinned OpenStreetMap Taginfo popular tag statistics."
+description = "Paginated OpenStreetMap Taginfo popular tag usage statistics."
 
 [license]
 name = "OpenStreetMap"
@@ -10,9 +10,9 @@ url = "https://taginfo.openstreetmap.org/"
 
 [[resources]]
 id = "taginfo_tags_json"
-url = "https://taginfo.openstreetmap.org/api/4/tags/popular?page=1&rp=500"
+url = "https://taginfo.openstreetmap.org/api/4/tags/popular?page={page}&rp=500"
 type = "api_response"
-local_path = "downloads/taginfo_tags_popular/taginfo_tags_popular.json"
+local_path = "downloads/taginfo_tags_popular/pages/"
 
 [local_paths]
 downloads = "downloads/taginfo_tags_popular/"
@@ -28,30 +28,61 @@ sample_index_path = "index/taginfo_tags_popular/samples.jsonl"
 
 [[series]]
 id = "taginfo_tag_count_all"
+role = "primary"
 representation_class = "native_numeric"
 missing_value_policy = "Rows missing numeric fields are filtered."
 numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "taginfo_tag_count_all_fraction"
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 
 [[series]]
 id = "taginfo_tag_count_nodes"
+role = "primary"
 representation_class = "native_numeric"
 missing_value_policy = "Rows missing numeric fields are filtered."
 numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "taginfo_tag_count_nodes_fraction"
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 
 [[series]]
 id = "taginfo_tag_count_ways"
+role = "primary"
 representation_class = "native_numeric"
 missing_value_policy = "Rows missing numeric fields are filtered."
 numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "taginfo_tag_count_ways_fraction"
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 
 [[series]]
 id = "taginfo_tag_count_relations"
+role = "primary"
 representation_class = "native_numeric"
 missing_value_policy = "Rows missing numeric fields are filtered."
 numeric_kind = "uint"
@@ -59,7 +90,17 @@ bit_width = 64
 endianness = "little"
 
 [[series]]
+id = "taginfo_tag_count_relations_fraction"
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows missing numeric fields are filtered."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+
+[[series]]
 id = "taginfo_tag_projects"
+role = "auxiliary"
 representation_class = "derived_operational_numeric"
 missing_value_policy = "Rows missing numeric fields are filtered."
 numeric_kind = "uint"
@@ -68,24 +109,9 @@ endianness = "little"
 
 [[series]]
 id = "taginfo_tag_in_wiki"
+role = "auxiliary"
 representation_class = "derived_operational_numeric"
 missing_value_policy = "Rows missing numeric fields are filtered."
 numeric_kind = "uint"
 bit_width = 8
-endianness = "little"
-
-[[series]]
-id = "taginfo_tag_key_length"
-representation_class = "derived_operational_numeric"
-missing_value_policy = "Rows missing text fields are filtered."
-numeric_kind = "uint"
-bit_width = 16
-endianness = "little"
-
-[[series]]
-id = "taginfo_tag_value_length"
-representation_class = "derived_operational_numeric"
-missing_value_policy = "Rows missing text fields are filtered."
-numeric_kind = "uint"
-bit_width = 16
 endianness = "little"

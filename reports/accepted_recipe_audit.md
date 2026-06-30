@@ -4,8 +4,8 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 210
-- `below_floor`: 114
+- `ok`: 211
+- `below_floor`: 113
 - `broken`: 0
 
 ## Below Floor
@@ -124,5 +124,4 @@ Auxiliary series do not count toward acceptance.
 | `openlibrary_editions` | 3479 | 6958 | 7 | 497 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `loc_photos_search_large` | 3500 | 8000 | 7 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `smithsonian_search_large` | 3500 | 10000 | 7 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `taginfo_tags_popular` | 4000 | 19500 | 8 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `crossref_funders_large` | 5000 | 10000 | 5 | 1000 | 0 | 0 | `aggregate_floor` |

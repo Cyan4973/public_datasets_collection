@@ -112,7 +112,6 @@ openlibrary_editions	below_floor	3479	6958	7	497	994	0	0	0	1	none	aggregate_floo
 loc_photos_search_large	below_floor	3500	8000	7	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
 smithsonian_search_large	below_floor	3500	10000	7	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
 taginfo_tags_popular	below_floor	4000	19500	8	500	2500	0	0	0	1	none	aggregate_floor,median_sample_floor
-usgs_water_sites_rdb	below_floor	4992	36976	6	878	7024	0	0	0	1	none	aggregate_floor,median_sample_floor
 crossref_funders_large	below_floor	5000	10000	5	1000	2000	0	0	0	1	none	aggregate_floor
 jhu_covid19_confirmed_global_daily	ok	10287	41148	9	1143	4572	0	0	0	1	none	none
 jhu_covid19_confirmed_us_daily	ok	10287	41148	9	1143	4572	0	0	0	1	none	none
@@ -219,6 +218,7 @@ uniprot_protein_sizes	ok	294084	882252	74	2048	6834	0	0	0	1	none	none
 jpl_close_approaches	ok	297934	2383472	7	42562	340496	0	0	0	1	none	none
 gbif_datasets	ok	300000	1200000	3	100000	200000	0	0	0	1	none	none
 noaa_coops_water_temperature	ok	346842	2774736	2	173421	1387368	0	0	0	1	none	none
+usgs_water_sites_rdb	ok	347330	2500776	5	69466	555728	69466	555728	1	1	none	none
 who_gho_observations	ok	348104	1435929	8	43513	130539	0	0	0	1	none	none
 chesscom_blitz_games	ok	368189	736378	83	3480	6960	0	0	0	1	none	none
 ghcnd_stations	ok	397497	1589988	3	132499	529996	0	0	0	1	none	none

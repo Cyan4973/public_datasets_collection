@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "usgs_water_sites_rdb"
 name = "USGS Water Sites RDB"
-description = "Numeric site registry fields extracted from a public USGS RDB site listing."
+description = "Numeric site registry fields extracted from public USGS RDB stream-site listings across U.S. states."
 
 [license]
 name = "U.S. Government Work"
@@ -10,9 +10,9 @@ url = "https://www.usa.gov/government-works"
 
 [[resources]]
 id = "usgs_rdb"
-url = "https://waterservices.usgs.gov/nwis/site/?format=rdb&stateCd=ca&siteType=ST&siteStatus=active"
+url = "https://waterservices.usgs.gov/nwis/site/?format=rdb&siteOutput=expanded&siteType=ST&siteStatus=all&stateCd={state}"
 type = "table_export"
-local_path = "downloads/usgs_water_sites_rdb/usgs_water_sites_rdb.txt"
+local_path = "downloads/usgs_water_sites_rdb/site_inventory/"
 
 [local_paths]
 downloads = "downloads/usgs_water_sites_rdb/"
@@ -28,48 +28,54 @@ sample_index_path = "index/usgs_water_sites_rdb/samples.jsonl"
 
 [[series]]
 id = "usgs_site_no"
+role = "auxiliary"
 representation_class = "derived_operational_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered for that series."
+missing_value_policy = "Rows missing any required numeric site field are filtered before all series are emitted."
 numeric_kind = "uint"
 bit_width = 64
 endianness = "little"
 
 [[series]]
 id = "usgs_dec_lat"
+role = "primary"
 representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered for that series."
+missing_value_policy = "Rows missing any required numeric site field are filtered before all series are emitted."
 numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 
 [[series]]
 id = "usgs_dec_long"
+role = "primary"
 representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered for that series."
+missing_value_policy = "Rows missing any required numeric site field are filtered before all series are emitted."
 numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 
 [[series]]
 id = "usgs_altitude"
+role = "primary"
 representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered for that series."
+missing_value_policy = "Rows missing any required numeric site field are filtered before all series are emitted."
 numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 
 [[series]]
 id = "usgs_alt_accuracy"
+role = "primary"
 representation_class = "native_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered for that series."
+missing_value_policy = "Rows missing any required numeric site field are filtered before all series are emitted."
 numeric_kind = "float"
 bit_width = 32
 endianness = "little"
 
 [[series]]
 id = "usgs_huc_cd"
+role = "primary"
 representation_class = "derived_operational_numeric"
-missing_value_policy = "Rows missing numeric fields are filtered for that series."
+missing_value_policy = "Rows missing any required numeric site field are filtered before all series are emitted."
 numeric_kind = "uint"
 bit_width = 64
 endianness = "little"

@@ -4,8 +4,8 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 208
-- `below_floor`: 116
+- `ok`: 209
+- `below_floor`: 115
 - `broken`: 0
 
 ## Below Floor
@@ -127,4 +127,3 @@ Auxiliary series do not count toward acceptance.
 | `taginfo_tags_popular` | 4000 | 19500 | 8 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `usgs_water_sites_rdb` | 4992 | 36976 | 6 | 878 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `crossref_funders_large` | 5000 | 10000 | 5 | 1000 | 0 | 0 | `aggregate_floor` |
-| `figshare_articles_large` | 6000 | 34000 | 6 | 1000 | 0 | 0 | `aggregate_floor` |

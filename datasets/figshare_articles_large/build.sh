@@ -13,7 +13,9 @@ RUN_TS="$(date +%Y%m%d_%H%M%S)"
 LOG_FILE="$LOG_DIR/build.$RUN_TS.log"
 LATEST_LOG="$LOG_DIR/build.latest.log"
 exec > >(tee "$LOG_FILE" "$LATEST_LOG") 2>&1
+echo "[$(date -Is)] build start dataset=$DATASET_ID"
 export REPO_ROOT DATA_DIR DOWNLOAD_DIR FILTER_DIR INDEX_DIR SAMPLES_DIR
+export FIGSHARE_ARTICLES_LARGE_MIN_RETAINED_RECORDS="${FIGSHARE_ARTICLES_LARGE_MIN_RETAINED_RECORDS:-17000}"
 python3 - <<'PY'
 from __future__ import annotations
 import array, csv, json, os, shutil
@@ -21,13 +23,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 repo_root=Path(os.environ['REPO_ROOT']); data_root=repo_root/os.environ['DATA_DIR']
 download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTER_DIR']); index_dir=Path(os.environ['INDEX_DIR']); samples_dir=Path(os.environ['SAMPLES_DIR'])
+min_retained=int(os.environ['FIGSHARE_ARTICLES_LARGE_MIN_RETAINED_RECORDS'])
 series_defs=[
  {'series_id':'figshare_id_u32','array_type':'I','numeric_kind':'uint','bit_width':32,'endianness':'little','element_size_bytes':4},
  {'series_id':'figshare_defined_type_u16','array_type':'H','numeric_kind':'uint','bit_width':16,'endianness':'little','element_size_bytes':2},
  {'series_id':'figshare_group_id_u32','array_type':'I','numeric_kind':'uint','bit_width':32,'endianness':'little','element_size_bytes':4},
- {'series_id':'figshare_published_timestamp_u64','array_type':'Q','numeric_kind':'uint','bit_width':64,'endianness':'little','element_size_bytes':8},
- {'series_id':'figshare_created_timestamp_u64','array_type':'Q','numeric_kind':'uint','bit_width':64,'endianness':'little','element_size_bytes':8},
- {'series_id':'figshare_modified_timestamp_u64','array_type':'Q','numeric_kind':'uint','bit_width':64,'endianness':'little','element_size_bytes':8},
+ {'series_id':'figshare_published_timestamp_i64','array_type':'q','numeric_kind':'int','bit_width':64,'endianness':'little','element_size_bytes':8},
+ {'series_id':'figshare_created_timestamp_i64','array_type':'q','numeric_kind':'int','bit_width':64,'endianness':'little','element_size_bytes':8},
+ {'series_id':'figshare_modified_timestamp_i64','array_type':'q','numeric_kind':'int','bit_width':64,'endianness':'little','element_size_bytes':8},
 ]
 for s in series_defs:
  d=samples_dir/s['series_id']
@@ -38,20 +41,24 @@ vals={s['series_id']:[] for s in series_defs}
 row_count=len(rows); kept=0; skipped=0
 for row in rows:
     try:
-        id_=int(row['id']); dtype=int(row['defined_type']); group_id=int(row['group_id'])
-        pub=int(datetime.fromisoformat(row['published_date'].replace('Z','+00:00')).timestamp())
-        created=int(datetime.fromisoformat(row['created_date'].replace('Z','+00:00')).timestamp())
-        modified=int(datetime.fromisoformat(row['modified_date'].replace('Z','+00:00')).timestamp())
+        parsed = {
+            'figshare_id_u32': int(row['id']),
+            'figshare_defined_type_u16': int(row['defined_type']),
+            'figshare_group_id_u32': int(row['group_id']),
+            'figshare_published_timestamp_i64': int(datetime.fromisoformat(row['published_date'].replace('Z','+00:00')).timestamp()),
+            'figshare_created_timestamp_i64': int(datetime.fromisoformat(row['created_date'].replace('Z','+00:00')).timestamp()),
+            'figshare_modified_timestamp_i64': int(datetime.fromisoformat(row['modified_date'].replace('Z','+00:00')).timestamp()),
+        }
     except Exception:
         skipped += 1
         continue
-    vals['figshare_id_u32'].append(id_)
-    vals['figshare_defined_type_u16'].append(dtype)
-    vals['figshare_group_id_u32'].append(group_id)
-    vals['figshare_published_timestamp_u64'].append(pub)
-    vals['figshare_created_timestamp_u64'].append(created)
-    vals['figshare_modified_timestamp_u64'].append(modified)
+    for sid, value in parsed.items():
+        vals[sid].append(value)
     kept += 1
+if kept < min_retained:
+    raise SystemExit(f'kept too few rows: {kept} < FIGSHARE_ARTICLES_LARGE_MIN_RETAINED_RECORDS={min_retained}')
+if len({len(values) for values in vals.values()}) != 1:
+    raise SystemExit('series length mismatch after filtering')
 with (filter_dir/'stats.tsv').open('w', encoding='utf-8', newline='') as f:
     w=csv.writer(f, delimiter='\t'); w.writerow(['row_count','kept_count','skipped_count']); w.writerow([row_count, kept, skipped])
 records=[]
@@ -63,6 +70,11 @@ for s in series_defs:
     records.append({'dataset_id':'figshare_articles_large','series_id':s['series_id'],'sample_path':out.relative_to(data_root).as_posix(),'numeric_kind':s['numeric_kind'],'bit_width':s['bit_width'],'endianness':s['endianness'],'element_size_bytes':s['element_size_bytes'],'sample_size_bytes':out.stat().st_size,'value_count':len(vals[s['series_id']])})
 with (index_dir/'samples.jsonl').open('w', encoding='utf-8') as fh:
     for row in records: fh.write(json.dumps(row, sort_keys=True)+'\n')
-if kept < 500: raise SystemExit(f'kept too few rows: {kept}')
+if sum(row['value_count'] for row in records) < 100000:
+    raise SystemExit('below large-repair value target: expected at least 100000 primary values')
+for sid, values in vals.items():
+    if min(values) == max(values):
+        raise SystemExit(f'constant sample: {sid}')
+print(f'built samples={len(records)} retained_records={kept} values={sum(row["value_count"] for row in records)} bytes={sum(row["sample_size_bytes"] for row in records)} skipped={skipped}')
 PY
 echo "[$(date -Is)] build done dataset=$DATASET_ID"

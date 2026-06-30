@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "figshare_articles_large"
 name = "Figshare Articles Large"
-description = "Pinned Figshare article listing reduced to IDs, type, group, and timestamps."
+description = "Bounded Figshare article listing reduced to IDs, type, group, and timestamps."
 
 [local_paths]
 downloads = "downloads/figshare_articles_large/"
@@ -43,27 +43,27 @@ sample_format = "raw_homogeneous_array"
 missing_value_policy = "filtered_rows_with_invalid_required_fields"
 
 [[series]]
-id = "figshare_published_timestamp_u64"
-path = "samples/figshare_articles_large/figshare_published_timestamp_u64/articles.bin"
-numeric_kind = "uint"
+id = "figshare_published_timestamp_i64"
+path = "samples/figshare_articles_large/figshare_published_timestamp_i64/articles.bin"
+numeric_kind = "int"
 bit_width = 64
 endianness = "little"
 sample_format = "raw_homogeneous_array"
 missing_value_policy = "filtered_rows_with_invalid_required_fields"
 
 [[series]]
-id = "figshare_created_timestamp_u64"
-path = "samples/figshare_articles_large/figshare_created_timestamp_u64/articles.bin"
-numeric_kind = "uint"
+id = "figshare_created_timestamp_i64"
+path = "samples/figshare_articles_large/figshare_created_timestamp_i64/articles.bin"
+numeric_kind = "int"
 bit_width = 64
 endianness = "little"
 sample_format = "raw_homogeneous_array"
 missing_value_policy = "filtered_rows_with_invalid_required_fields"
 
 [[series]]
-id = "figshare_modified_timestamp_u64"
-path = "samples/figshare_articles_large/figshare_modified_timestamp_u64/articles.bin"
-numeric_kind = "uint"
+id = "figshare_modified_timestamp_i64"
+path = "samples/figshare_articles_large/figshare_modified_timestamp_i64/articles.bin"
+numeric_kind = "int"
 bit_width = 64
 endianness = "little"
 sample_format = "raw_homogeneous_array"

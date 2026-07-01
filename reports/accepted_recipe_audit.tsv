@@ -300,6 +300,7 @@ pglib_opf_matpower_cases_numeric	ok	39285570	314284560	639	14406	115248	0	0	0	1	
 hsl_gtfs_static_schedule_numeric	ok	44453630	226392932	8	5809272	25274372	0	0	0	1	none	none
 encode_methylation_pct_u8	ok	44773596	44773596	24	1804995	1804995	0	0	0	1	none	none
 yearpredictionmsd_uci	ok	46896395	186554890	91	515345	2061380	0	0	0	1	none	none
+nasa_pds_sharad_radargram_f32	ok	47106000	188424000	10	4658400	18633600	0	0	0	1	none	none
 binance_usdm_futures_bookticker_2024_w01	ok	48000000	384000000	24	2000000	16000000	0	0	0	1	none	none
 electricity_load_diagrams_uci	ok	51894720	207578880	370	140256	561024	0	0	0	1	none	none
 esa_worldcover_landcover_tiles_u8	ok	54525952	54525952	52	1048576	1048576	0	0	0	1	none	none

@@ -1,0 +1,55 @@
+manifest_version = 1
+dataset_id = "nasa_pds_sharad_radargram_f32"
+name = "NASA PDS SHARAD Radargram Float32"
+description = "Mars Reconnaissance Orbiter SHARAD radargram PDS3 products preserved as native float32 radar backscatter images."
+homepage = "https://pds-geosciences.wustl.edu/missions/mro/sharad.htm"
+
+[license]
+name = "NASA PDS Public Data"
+spdx = "LicenseRef-NASA-PDS"
+url = "https://pds.nasa.gov/"
+notes = "NASA Planetary Data System public scientific data; preserve mission and instrument citation."
+
+[[origins]]
+id = "pds_sharad"
+name = "PDS Geosciences MRO SHARAD"
+url = "https://pds-geosciences.wustl.edu/missions/mro/sharad.htm"
+type = "public_data_portal"
+
+[[resources]]
+id = "selected_sharad_radargrams"
+origin = "pds_sharad"
+type = "bounded_url_selection"
+local_path = "downloads/nasa_pds_sharad_radargram_f32/"
+notes = "Exact detached PDS3 label/image URLs are pinned in urls.txt. Historical local repairs may read downloads/nasa_pds_sharad_radargram_i16/ because the target was first misclassified as 16-bit."
+
+[local_paths]
+downloads = "downloads/nasa_pds_sharad_radargram_f32/"
+filtered = "filtered/nasa_pds_sharad_radargram_f32/"
+index = "index/nasa_pds_sharad_radargram_f32/"
+samples = "samples/nasa_pds_sharad_radargram_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_pds_sharad_radargram_f32/samples.jsonl"
+summary = "Validate selected SHARAD PDS3 labels, accept only PC_REAL 32-bit IMAGE objects, and copy each detached radargram payload as one raw float32 sample."
+
+[[series]]
+id = "sharad_radargram_backscatter_f32"
+description = "SHARAD radargram backscatter power pixels."
+semantic_meaning = "Mars subsurface SHARAD radar backscatter power values arranged as along-track lines by delay bins."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["selected_sharad_radargrams"]
+missing_value_policy = "Products with non-PC_REAL sample type, non-32-bit samples, malformed labels, missing images, geometry mismatches, non-finite values, or constant payloads are rejected."
+conversion = "Copy PDS3 detached IMAGE payload bytes unchanged after validating SAMPLE_TYPE=PC_REAL, SAMPLE_BITS=32, RECORD_BYTES=LINE_SAMPLES*4, and FILE_RECORDS=LINES."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 array copied from PDS3 PC_REAL image"
+sample_geometry = "sharad_radargram_2d"
+sample_axes = ["along_track_line", "delay_bin"]
+natural_record_kind = "pds_sharad_radargram_product"
+output_path = "samples/nasa_pds_sharad_radargram_f32/sharad_radargram_backscatter_f32/"

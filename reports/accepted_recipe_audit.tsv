@@ -101,7 +101,6 @@ geofabrik_index	below_floor	2220	17760	4	555	4440	0	0	0	1	none	aggregate_floor,m
 eurostat_female_unemployment_monthly	below_floor	2465	9860	5	520	2080	0	0	0	1	none	aggregate_floor,median_sample_floor
 eurostat_male_unemployment_monthly	below_floor	2465	9860	5	520	2080	0	0	0	1	none	aggregate_floor,median_sample_floor
 eurostat_unemployment_monthly	below_floor	2465	9860	5	520	2080	0	0	0	1	none	aggregate_floor,median_sample_floor
-eia_series_petroleum	below_floor	2500	4000	5	500	500	0	0	0	1	none	aggregate_floor,median_sample_floor
 openfda_food_enforcement	below_floor	2500	7500	5	500	2000	0	0	0	1	none	aggregate_floor,median_sample_floor
 fred_treasury_10y_daily	below_floor	2501	10004	10	250	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
 fred_treasury_2y_daily	below_floor	2501	10004	10	250	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -187,6 +186,7 @@ open_meteo_hourly_surface_pressure	ok	87600	350400	5	17520	70080	0	0	0	1	none	no
 open_meteo_hourly_temperature	ok	87600	350400	5	17520	70080	0	0	0	1	none	none
 open_meteo_hourly_vapour_pressure_deficit	ok	87600	350400	5	17520	70080	0	0	0	1	none	none
 open_meteo_hourly_wind	ok	87600	350400	5	17520	70080	0	0	0	1	none	none
+eia_series_petroleum	ok	91395	731160	11	9107	72856	91395	365580	11	1	none	none
 nomis_employment	ok	92145	221148	5	18429	36858	0	0	0	1	none	none
 cran_packages	ok	95504	191008	4	23876	47752	0	0	0	1	none	none
 gbif_occurrence_2024_coordinate_sample	ok	95952	527736	8	11994	47976	0	0	0	1	none	none

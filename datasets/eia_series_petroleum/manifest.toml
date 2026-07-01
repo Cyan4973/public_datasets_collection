@@ -1,7 +1,18 @@
 manifest_version = 1
 dataset_id = "eia_series_petroleum"
-name = "EIA Petroleum Series Snapshot"
-description = "Pinned EIA petroleum daily series rows with value and date fields."
+name = "EIA Petroleum Spot Prices"
+description = "Paginated EIA daily petroleum spot-price observations, grouped into homogeneous price time series by EIA series and unit."
+
+[license]
+name = "U.S. Government Work"
+spdx = "LicenseRef-USGov"
+url = "https://www.eia.gov/about/copyrights_reuse.php"
+
+[[resources]]
+id = "eia_petroleum_spot_prices"
+url = "https://api.eia.gov/v2/petroleum/pri/spt/data/?frequency=daily&data[0]=value"
+type = "api_response_pages"
+local_path = "downloads/eia_series_petroleum/pages/"
 
 [local_paths]
 downloads = "downloads/eia_series_petroleum/"
@@ -14,3 +25,30 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/eia_series_petroleum/samples.jsonl"
+
+[[series]]
+id = "eia_petroleum_spot_price_usd_per_gallon_f64"
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows with malformed dates, missing series identifiers, non-finite values, or mixed units within an EIA series are filtered."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "eia_petroleum_spot_price_usd_per_barrel_f64"
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Rows with malformed dates, missing series identifiers, non-finite values, or mixed units within an EIA series are filtered."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+
+[[series]]
+id = "eia_petroleum_period_ordinal"
+role = "auxiliary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Emitted only for retained primary price samples."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"

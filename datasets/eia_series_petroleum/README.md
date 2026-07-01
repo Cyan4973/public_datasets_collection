@@ -1,12 +1,15 @@
-# EIA Petroleum Series Snapshot
+# EIA Petroleum Spot Prices
 
-Pinned EIA petroleum daily series rows with value and date fields.
+Paginated daily observations from the EIA petroleum spot-price endpoint:
 
-Selected series:
-- `eia_petroleum_value`
-- `eia_petroleum_period_month`
-- `eia_petroleum_period_day`
-- `eia_petroleum_area_name_length`
-- `eia_petroleum_product_name_length`
+- `https://api.eia.gov/v2/petroleum/pri/spt/data/`
 
-Missing-value policy: filters malformed rows and preserves zero-length name-derived lengths if they occur.
+The primary payload is the native `value` field, grouped into one sample per EIA
+series and split by reported unit:
+
+- `eia_petroleum_spot_price_usd_per_gallon_f64`
+- `eia_petroleum_spot_price_usd_per_barrel_f64`
+
+The date axis is emitted as auxiliary ordinal-day samples. Product names, area
+names, and other text metadata are retained only in the sample index metadata;
+text lengths are not emitted.

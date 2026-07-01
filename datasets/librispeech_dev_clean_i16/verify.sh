@@ -55,6 +55,10 @@ for row in rows:
         raise SystemExit(f"unexpected numeric representation: {row}")
     if row.get("sample_geometry") != "1d_waveform" or row.get("sample_axes") != ["time"]:
         raise SystemExit(f"unexpected waveform geometry metadata: {row}")
+    if row.get("sample_format") != "raw homogeneous int16 PCM array" or row.get("natural_record_kind") != "librispeech_utterance_flac":
+        raise SystemExit(f"missing or invalid sample semantics: {row}")
+    if row.get("min") == row.get("max"):
+        raise SystemExit(f"constant utterance sample metadata: {row}")
     sample_path = data_root / row["sample_path"]
     if not sample_path.is_file():
         raise SystemExit(f"missing sample file: {sample_path}")
@@ -85,4 +89,3 @@ print(
 )
 PY
 echo "[$(date -Is)] verify done dataset=$DATASET_ID"
-

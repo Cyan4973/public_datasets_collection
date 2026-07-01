@@ -23,6 +23,7 @@ python3 - <<'PY'
 from __future__ import annotations
 
 import json
+import array
 import os
 import shutil
 import statistics
@@ -72,7 +73,7 @@ with tarfile.open(archive, "r:gz") as tf:
     members = [member for member in tf.getmembers() if member.isfile() and member.name.startswith("LibriSpeech/dev-clean/")]
     if not members:
         raise SystemExit("archive contains no LibriSpeech/dev-clean files")
-    tf.extractall(extract_dir, members=members)
+    tf.extractall(extract_dir, members=members, filter="data")
 
 flacs = sorted((extract_dir / "LibriSpeech" / "dev-clean").glob("*/*/*.flac"))
 if len(flacs) < 2500:
@@ -116,6 +117,12 @@ for flac_path in flacs:
     size = out.stat().st_size
     if size == 0 or size % 2:
         raise SystemExit(f"invalid decoded PCM size for {flac_path}: {size}")
+    pcm = array.array("h")
+    pcm.frombytes(out.read_bytes())
+    sample_min = min(pcm)
+    sample_max = max(pcm)
+    if sample_min == sample_max:
+        raise SystemExit(f"degenerate decoded PCM for {flac_path}")
     values = size // 2
     row = {
         "dataset_id": DATASET_ID,
@@ -128,17 +135,21 @@ for flac_path in flacs:
         "element_size_bytes": 2,
         "sample_size_bytes": size,
         "value_count": values,
+        "sample_format": "raw homogeneous int16 PCM array",
         "sample_geometry": "1d_waveform",
         "sample_rank": 1,
         "sample_shape": [values],
         "sample_axes": ["time"],
+        "natural_record_kind": "librispeech_utterance_flac",
         "sample_rate_hz": SAMPLE_RATE_HZ,
         "speaker_id": speaker,
         "chapter_id": chapter,
         "source_flac": flac_path.relative_to(extract_dir).as_posix(),
+        "min": int(sample_min),
+        "max": int(sample_max),
     }
     rows.append(row)
-    records.append({"speaker_id": speaker, "chapter_id": chapter, "utterance_id": Path(name).stem, "values": values, "bytes": size})
+    records.append({"speaker_id": speaker, "chapter_id": chapter, "utterance_id": Path(name).stem, "values": values, "bytes": size, "min": int(sample_min), "max": int(sample_max)})
 
 sizes = [row["sample_size_bytes"] for row in rows]
 values = [row["value_count"] for row in rows]
@@ -168,4 +179,3 @@ with (index_dir / "samples.jsonl").open("w", encoding="utf-8") as fh:
 print(f"built_samples={len(rows)} primary_bytes={total_bytes} size_range={min(sizes)}/{statistics.median(sizes)}/{max(sizes)}")
 PY
 echo "[$(date -Is)] build done dataset=$DATASET_ID"
-

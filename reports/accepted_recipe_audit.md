@@ -4,7 +4,7 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 215
+- `ok`: 216
 - `below_floor`: 111
 - `broken`: 0
 

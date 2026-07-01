@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "tcia_nsclc_radiomics_ct_i16"
-name = "TCIA NSCLC Radiomics CT Int16"
-description = "Uncompressed 16-bit CT DICOM slice pixels from a bounded TCIA NSCLC-Radiomics series selection."
+name = "TCIA NSCLC Radiomics CT UInt16"
+description = "Uncompressed unsigned 16-bit CT DICOM slice pixels from a bounded TCIA NSCLC-Radiomics series selection."
 homepage = "https://www.cancerimagingarchive.net/"
 
 [license]
@@ -35,16 +35,16 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/tcia_nsclc_radiomics_ct_i16/samples.jsonl"
-summary = "Extract one uncompressed native 16-bit DICOM CT pixel plane per slice."
+summary = "Extract one uncompressed native unsigned 16-bit DICOM CT pixel plane per slice."
 
 [[series]]
-id = "ct_slice_pixels_i16"
+id = "ct_slice_pixels_u16"
 description = "CT slice pixel planes."
-semantic_meaning = "Scanner CT image pixel values in source DICOM integer representation."
+semantic_meaning = "Scanner CT image pixel values in source unsigned DICOM integer representation."
 role = "primary"
 representation_class = "native_numeric"
 source_resources = ["bounded_ct_series"]
-missing_value_policy = "Compressed transfer syntaxes, non-16-bit images, multi-sample images, missing pixel data, or truncated pixel data are rejected."
+missing_value_policy = "Compressed transfer syntaxes, signed pixel representations, non-16-bit images, multi-sample images, missing pixel data, or truncated pixel data are rejected."
 conversion = "Copy DICOM PixelData bytes unchanged for accepted uncompressed 16-bit slices."
 numeric_kind = "uint"
 bit_width = 16
@@ -56,4 +56,4 @@ sample_shape = [512, 512]
 sample_axes = ["y", "x"]
 sample_count = 933
 total_size_bytes = 489160704
-output_path = "samples/tcia_nsclc_radiomics_ct_i16/ct_slice_pixels_i16/"
+output_path = "samples/tcia_nsclc_radiomics_ct_i16/ct_slice_pixels_u16/"

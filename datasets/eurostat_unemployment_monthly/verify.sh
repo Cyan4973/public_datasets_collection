@@ -1,181 +1,100 @@
-#!/usr/bin/env sh
-set -eu
+#!/usr/bin/env bash
+set -euo pipefail
 
-SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
-REPO_ROOT=$(CDPATH= cd -- "${SCRIPT_DIR}/../.." && pwd)
-DATA_DIR=${DATA_DIR:-"${REPO_ROOT}/.data"}
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+DATA_DIR="${DATA_DIR:-.data}"
 DATASET_ID="eurostat_unemployment_monthly"
-DOWNLOAD_ROOT="${DATA_DIR}/downloads/${DATASET_ID}"
-FILTERED_ROOT="${DATA_DIR}/filtered/${DATASET_ID}"
-INDEX_ROOT="${DATA_DIR}/index/${DATASET_ID}"
-SAMPLES_ROOT="${DATA_DIR}/samples/${DATASET_ID}"
-LOG_ROOT="${DATA_DIR}/logs/${DATASET_ID}"
-RUN_TS=$(date -u +"%Y%m%dT%H%M%SZ")
-LOG_FILE="${LOG_ROOT}/verify.${RUN_TS}.log"
-LATEST_LOG="${LOG_ROOT}/verify.latest.log"
+DOWNLOAD_DIR="$REPO_ROOT/$DATA_DIR/downloads/$DATASET_ID"
+FILTER_DIR="$REPO_ROOT/$DATA_DIR/filtered/$DATASET_ID"
+INDEX_DIR="$REPO_ROOT/$DATA_DIR/index/$DATASET_ID"
+LOG_DIR="$REPO_ROOT/$DATA_DIR/logs/$DATASET_ID"
+mkdir -p "$LOG_DIR"
 
-mkdir -p "${LOG_ROOT}"
-: > "${LOG_FILE}"
-sync_latest_log() { cp "${LOG_FILE}" "${LATEST_LOG}"; }
-trap sync_latest_log EXIT
+RUN_TS="$(date +%Y%m%d_%H%M%S)"
+LOG_FILE="$LOG_DIR/verify.$RUN_TS.log"
+LATEST_LOG="$LOG_DIR/verify.latest.log"
+exec > >(tee "$LOG_FILE" "$LATEST_LOG") 2>&1
 
-say() { printf '%s\n' "$*" | tee -a "${LOG_FILE}"; }
+echo "[$(date -Is)] verify start dataset=$DATASET_ID"
 
-say "download_root=${DOWNLOAD_ROOT}"
-say "filtered_root=${FILTERED_ROOT}"
-say "index_root=${INDEX_ROOT}"
-say "samples_root=${SAMPLES_ROOT}"
-say "log_file=${LOG_FILE}"
-
-DATASET_ID="${DATASET_ID}" DOWNLOAD_ROOT="${DOWNLOAD_ROOT}" FILTERED_ROOT="${FILTERED_ROOT}" INDEX_ROOT="${INDEX_ROOT}" SAMPLES_ROOT="${SAMPLES_ROOT}" python3 - <<'PY' >>"${LOG_FILE}" 2>&1
+export EUROSTAT_UNEMPLOYMENT_MIN_PRIMARY_VALUES="${EUROSTAT_UNEMPLOYMENT_MIN_PRIMARY_VALUES:-100000}"
+export EUROSTAT_UNEMPLOYMENT_MIN_PRIMARY_BYTES="${EUROSTAT_UNEMPLOYMENT_MIN_PRIMARY_BYTES:-400000}"
+export EUROSTAT_UNEMPLOYMENT_MIN_MEDIAN_VALUES="${EUROSTAT_UNEMPLOYMENT_MIN_MEDIAN_VALUES:-100000}"
+python3 - <<'PY' "$REPO_ROOT" "$DATA_DIR" "$DOWNLOAD_DIR" "$FILTER_DIR" "$INDEX_DIR"
 from __future__ import annotations
-import csv, json, os, re
+
+import json
+import os
+import statistics
+import sys
 from pathlib import Path
 
-download_root = Path(os.environ["DOWNLOAD_ROOT"])
-filtered_root = Path(os.environ["FILTERED_ROOT"])
-index_root = Path(os.environ["INDEX_ROOT"])
-samples_root = Path(os.environ["SAMPLES_ROOT"])
-data_root = samples_root.parent.parent
-dataset_id = os.environ["DATASET_ID"]
+repo_root = Path(sys.argv[1])
+data_dir = sys.argv[2]
+download_dir = Path(sys.argv[3])
+filter_dir = Path(sys.argv[4])
+index_dir = Path(sys.argv[5])
+min_primary_values = int(os.environ["EUROSTAT_UNEMPLOYMENT_MIN_PRIMARY_VALUES"])
+min_primary_bytes = int(os.environ["EUROSTAT_UNEMPLOYMENT_MIN_PRIMARY_BYTES"])
+min_median_values = int(os.environ["EUROSTAT_UNEMPLOYMENT_MIN_MEDIAN_VALUES"])
 
-countries = ["DE", "FR", "IT", "ES", "NL"]
-series_defs = [
-    {"series_id": "unemployment_rate_f32", "numeric_kind": "float", "bit_width": 32, "endianness": "little", "element_size_bytes": 4},
-]
-
-def parse_time_key(raw: str) -> tuple[int, int]:
-    raw = raw.strip()
-    match = re.fullmatch(r"(\d{4})[-M](\d{2})", raw)
-    if not match:
-        raise ValueError(raw)
-    year = int(match.group(1))
-    month = int(match.group(2))
-    if month < 1 or month > 12:
-        raise ValueError(raw)
-    return year, month
-
-def flatten_index(ids, sizes, positions):
-    index = 0
-    stride = 1
-    for dim_name, dim_size in zip(reversed(ids), reversed(sizes)):
-        index += positions[dim_name] * stride
-        stride *= dim_size
-    return index
-
-stats_path = filtered_root / "country_stats.tsv"
-index_path = index_root / "samples.jsonl"
-failures_path = download_root / "download_failures.tsv"
+failures_path = download_dir / "download_failures.tsv"
 if failures_path.is_file() and failures_path.stat().st_size > 0:
     raise SystemExit(f"download failures recorded in {failures_path}")
-if not stats_path.is_file():
-    raise SystemExit(f"missing stats file: {stats_path}")
-if not index_path.is_file():
-    raise SystemExit(f"missing sample index: {index_path}")
+if not (download_dir / "data.json").is_file():
+    raise SystemExit("missing downloaded data.json")
 
-raw_path = download_root / "data.json"
-if not raw_path.is_file():
-    raise SystemExit(f"missing raw JSON: {raw_path}")
-payload = json.loads(raw_path.read_text(encoding="utf-8"))
-ids = payload["id"]
-sizes = payload["size"]
-dimension = payload["dimension"]
-value_data = payload["value"]
-geo_index = dimension["geo"]["category"]["index"]
-time_index = dimension["time"]["category"]["index"]
-time_items = sorted(time_index.items(), key=lambda item: item[1])
+stats = json.loads((filter_dir / "ingest_stats.json").read_text(encoding="utf-8"))
+rows = [json.loads(line) for line in (index_dir / "samples.jsonl").read_text(encoding="utf-8").splitlines() if line.strip()]
+expected_roles = {
+    "unemployment_rate_f32": "primary",
+    "eurostat_unemployment_s_adj_index": "auxiliary",
+    "eurostat_unemployment_age_index": "auxiliary",
+    "eurostat_unemployment_sex_index": "auxiliary",
+    "eurostat_unemployment_geo_index": "auxiliary",
+    "eurostat_unemployment_month_ordinal": "auxiliary",
+}
+series_ids = {row["series_id"] for row in rows}
+if series_ids != set(expected_roles):
+    raise SystemExit(f"series mismatch: {sorted(series_ids)}")
 
-with stats_path.open("r", encoding="utf-8", newline="") as handle:
-    stats_rows = list(csv.DictReader(handle, delimiter="\t"))
-stats_by_country = {row["country_code"]: row for row in stats_rows}
-expected_records = {}
+primary_counts = []
+primary_bytes = []
+for row in rows:
+    series_id = row["series_id"]
+    role = row.get("role")
+    if role != expected_roles[series_id]:
+        raise SystemExit(f"{series_id}: expected role {expected_roles[series_id]} got {role}")
+    sample = repo_root / data_dir / row["sample_path"]
+    if not sample.is_file():
+        raise SystemExit(f"missing sample {row['sample_path']}")
+    expected_size = int(row["value_count"]) * int(row["element_size_bytes"])
+    actual_size = sample.stat().st_size
+    if actual_size != expected_size or actual_size != int(row["sample_size_bytes"]):
+        raise SystemExit(f"{series_id}: sample size mismatch")
+    if int(row["value_count"]) != int(stats["retained_records"]):
+        raise SystemExit(f"{series_id}: value_count does not match retained_records")
+    if role == "primary":
+        if row.get("min") == row.get("max"):
+            raise SystemExit(f"{series_id}: constant min/max")
+        primary_counts.append(int(row["value_count"]))
+        primary_bytes.append(actual_size)
 
-for country_code in countries:
-    if country_code not in geo_index:
-        raise SystemExit(f"missing geo category {country_code}")
-    row_count = len(time_items)
-    kept_count = 0
-    skipped_blank = 0
-    skipped_parse = 0
-    start_period = ""
-    end_period = ""
-    for time_key, time_pos in time_items:
-        positions = {}
-        for dim_name in ids:
-            if dim_name == "geo":
-                positions[dim_name] = geo_index[country_code]
-            elif dim_name == "time":
-                positions[dim_name] = time_pos
-            else:
-                positions[dim_name] = 0
-        flat_index = flatten_index(ids, sizes, positions)
-        if isinstance(value_data, dict):
-            raw_value = value_data.get(str(flat_index))
-        else:
-            raw_value = value_data[flat_index] if flat_index < len(value_data) else None
-        if raw_value in ("", None):
-            skipped_blank += 1
-            continue
-        try:
-            year, month = parse_time_key(time_key)
-            float(raw_value)
-        except (TypeError, ValueError):
-            skipped_parse += 1
-            continue
-        kept_count += 1
-        period = f"{year:04d}-{month:02d}"
-        if start_period == "":
-            start_period = period
-        end_period = period
-    stats_row = stats_by_country.get(country_code)
-    if stats_row is None:
-        raise SystemExit(f"missing stats row for {country_code}")
-    for field, expected in [("row_count", row_count), ("kept_count", kept_count), ("skipped_blank_count", skipped_blank), ("skipped_parse_count", skipped_parse)]:
-        if int(stats_row[field]) != expected:
-            raise SystemExit(f"stats mismatch for {country_code} field {field}: stats={stats_row[field]} raw={expected}")
-    if stats_row["start_period"] != start_period or stats_row["end_period"] != end_period:
-        raise SystemExit(f"period-range mismatch for {country_code}")
-    for series in series_defs:
-        sample_path = samples_root / series["series_id"] / f"{country_code.lower()}.bin"
-        if not sample_path.is_file():
-            raise SystemExit(f"missing sample file: {sample_path}")
-        sample_size_bytes = sample_path.stat().st_size
-        expected_size = kept_count * int(series["element_size_bytes"])
-        if sample_size_bytes != expected_size:
-            raise SystemExit(f"wrong size for {sample_path}: expected {expected_size}, got {sample_size_bytes}")
-        expected_records[(series["series_id"], country_code.lower())] = {
-            "dataset_id": dataset_id,
-            "series_id": series["series_id"],
-            "sample_path": sample_path.relative_to(data_root).as_posix(),
-            "numeric_kind": series["numeric_kind"],
-            "bit_width": series["bit_width"],
-            "endianness": series["endianness"],
-            "element_size_bytes": series["element_size_bytes"],
-            "sample_size_bytes": sample_size_bytes,
-            "value_count": kept_count,
-            "country_code": country_code,
-        }
+if sum(primary_counts) != int(stats["primary_values"]):
+    raise SystemExit("primary_values statistic mismatch")
+if sum(primary_bytes) != int(stats["primary_sample_bytes"]):
+    raise SystemExit("primary_sample_bytes statistic mismatch")
+if sum(primary_counts) < min_primary_values:
+    raise SystemExit(f"primary values below floor: {sum(primary_counts)} < {min_primary_values}")
+if sum(primary_bytes) < min_primary_bytes:
+    raise SystemExit(f"primary bytes below floor: {sum(primary_bytes)} < {min_primary_bytes}")
+if statistics.median(primary_counts) < min_median_values:
+    raise SystemExit(f"median primary values below floor: {statistics.median(primary_counts)}")
 
-index_records = {}
-with index_path.open("r", encoding="utf-8") as handle:
-    for line_number, line in enumerate(handle, start=1):
-        if not line.strip():
-            continue
-        record = json.loads(line)
-        sample_path = record.get("sample_path")
-        sample_key = Path(sample_path).stem if isinstance(sample_path, str) else ""
-        key = (record.get("series_id"), sample_key)
-        if key in index_records:
-            raise SystemExit(f"duplicate index entry for {key} on line {line_number}")
-        index_records[key] = record
-if set(index_records) != set(expected_records):
-    raise SystemExit(f"sample index keys do not match samples: index={len(index_records)} expected={len(expected_records)}")
-for key, expected in expected_records.items():
-    record = index_records[key]
-    for field, expected_value in expected.items():
-        if record.get(field) != expected_value:
-            raise SystemExit(f"index mismatch for {key} field {field}: {record.get(field)!r} != {expected_value!r}")
-print("verified raw inventory, generated sample sizes, stats, and sample index")
+print(
+    f"verified_samples={len(rows)} primary_values={sum(primary_counts)} "
+    f"primary_sample_bytes={sum(primary_bytes)}"
+)
 PY
 
-say "verified raw inventory, generated sample sizes, stats, and sample index"
+echo "[$(date -Is)] verify done dataset=$DATASET_ID"

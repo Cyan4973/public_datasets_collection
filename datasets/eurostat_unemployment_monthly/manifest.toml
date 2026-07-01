@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "eurostat_unemployment_monthly"
 name = "Eurostat Unemployment Monthly"
-description = "Eurostat monthly unemployment rate JSON-stat extract for a fixed five-country subset."
+description = "Eurostat monthly unemployment-rate observations for active-population percentage units across all returned adjustment statuses, age groups, sex categories, geographies, and months."
 homepage = "https://ec.europa.eu/eurostat/"
 
 [license]
@@ -9,36 +9,15 @@ name = "European Commission Reuse Notice"
 spdx = "LicenseRef-EC-Reuse"
 url = "https://commission.europa.eu/legal-notice_en"
 citation = "Eurostat dissemination API."
-notes = "Confirm any attribution requirements during review."
-
-[safety]
-contains_sensitive_data = false
-contains_personal_data = false
-provenance_notes = "Official Eurostat dissemination API only."
-usage_notes = "Public official statistics suitable for numeric dataset collection if licensing review remains acceptable."
-
-[[origins]]
-id = "eurostat_api"
-name = "Eurostat Dissemination API"
-url = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/"
-type = "api"
-notes = "JSON-stat style public API."
 
 [[resources]]
-id = "eurostat_unemployment_monthly_country_subset"
-origin = "eurostat_api"
-url = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/une_rt_m"
+id = "eurostat_unemployment_monthly"
+url = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/une_rt_m?unit=PC_ACT"
 type = "api_query_result"
-version = "five-country-subset"
-access = "One fixed JSON query with five selected countries and fixed filters."
-size_bytes = 0
-sha256 = ""
-local_path = "downloads/eurostat_unemployment_monthly/"
-notes = "Single JSON-stat payload."
+local_path = "downloads/eurostat_unemployment_monthly/data.json"
 
 [local_paths]
 downloads = "downloads/eurostat_unemployment_monthly/"
-extracted = "extracted/eurostat_unemployment_monthly/"
 filtered = "filtered/eurostat_unemployment_monthly/"
 index = "index/eurostat_unemployment_monthly/"
 samples = "samples/eurostat_unemployment_monthly/"
@@ -48,23 +27,64 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/eurostat_unemployment_monthly/samples.jsonl"
-summary = "Download a fixed Eurostat JSON-stat query, retain parseable monthly values, and emit one numeric sample per country plus a machine-readable sample index."
-deterministic_notes = "Fixed country subset, fixed filters, download-time JSON validation, filtered sparse and malformed cells only, durable logs under logs/eurostat_unemployment_monthly/, and generated sample index at index/eurostat_unemployment_monthly/samples.jsonl."
 
 [[series]]
 id = "unemployment_rate_f32"
-description = "Monthly unemployment rate values."
-semantic_meaning = "Float32 monthly unemployment rate values, one sample per country."
-source_resources = ["eurostat_unemployment_monthly_country_subset"]
-filtered_input_path = "filtered/eurostat_unemployment_monthly/country_stats.tsv"
-filtering = "Keep sparse-value cells with parseable monthly time keys and parseable numeric values."
-missing_value_policy = "Filter sparse missing cells, malformed time keys, and malformed numeric values."
-conversion = "Parse retained values as float32 and write IEEE-754 little-endian arrays ordered by ascending month."
+role = "primary"
+description = "Monthly unemployment-rate values."
+semantic_meaning = "Float32 monthly unemployment rates, aligned by adjustment status, age, sex, geography, and month."
+representation_class = "native_numeric"
+missing_value_policy = "Sparse missing cells, malformed time keys, malformed numeric values, and non-finite values are filtered."
 numeric_kind = "float"
 bit_width = 32
 endianness = "little"
-sample_format = "raw homogeneous numeric array"
-sample_count = 0
-total_size_bytes = 0
-output_path = "samples/eurostat_unemployment_monthly/unemployment_rate_f32/"
 
+[[series]]
+id = "eurostat_unemployment_s_adj_index"
+role = "auxiliary"
+description = "Eurostat seasonal-adjustment-status ordinal for each retained unemployment-rate observation."
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Emitted only for retained primary observations."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "eurostat_unemployment_age_index"
+role = "auxiliary"
+description = "Eurostat age-category ordinal for each retained unemployment-rate observation."
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Emitted only for retained primary observations."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "eurostat_unemployment_sex_index"
+role = "auxiliary"
+description = "Eurostat sex-category ordinal for each retained unemployment-rate observation."
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Emitted only for retained primary observations."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "eurostat_unemployment_geo_index"
+role = "auxiliary"
+description = "Eurostat geography-category ordinal for each retained unemployment-rate observation."
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Emitted only for retained primary observations."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+
+[[series]]
+id = "eurostat_unemployment_month_ordinal"
+role = "auxiliary"
+description = "Month ordinal encoded as year * 12 + month for each retained unemployment-rate observation."
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Emitted only for retained primary observations."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"

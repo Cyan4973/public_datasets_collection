@@ -1,141 +1,107 @@
-#!/usr/bin/env sh
-set -eu
+#!/usr/bin/env bash
+set -euo pipefail
 
-SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
-REPO_ROOT=$(CDPATH= cd -- "${SCRIPT_DIR}/../.." && pwd)
-DATA_DIR=${DATA_DIR:-"${REPO_ROOT}/.data"}
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+DATA_DIR="${DATA_DIR:-.data}"
 DATASET_ID="eurostat_unemployment_monthly"
-DOWNLOAD_ROOT="${DATA_DIR}/downloads/${DATASET_ID}"
-LOG_ROOT="${DATA_DIR}/logs/${DATASET_ID}"
-FORCE=${FORCE:-0}
-RUN_TS=$(date -u +"%Y%m%dT%H%M%SZ")
-LOG_FILE="${LOG_ROOT}/download.${RUN_TS}.log"
-LATEST_LOG="${LOG_ROOT}/download.latest.log"
-FAILURES_FILE="${DOWNLOAD_ROOT}/download_failures.tsv"
-PLAN_FILE="${DOWNLOAD_ROOT}/download_plan.tsv"
-CHECKSUM_FILE="${DOWNLOAD_ROOT}/collection_checksums.sha256"
+DOWNLOAD_DIR="$REPO_ROOT/$DATA_DIR/downloads/$DATASET_ID"
+LOG_DIR="$REPO_ROOT/$DATA_DIR/logs/$DATASET_ID"
+mkdir -p "$DOWNLOAD_DIR" "$LOG_DIR"
 
-mkdir -p "${DOWNLOAD_ROOT}" "${LOG_ROOT}"
-: > "${LOG_FILE}"
-: > "${FAILURES_FILE}"
-sync_latest_log() { cp "${LOG_FILE}" "${LATEST_LOG}"; }
-trap sync_latest_log EXIT
+RUN_TS="$(date +%Y%m%d_%H%M%S)"
+LOG_FILE="$LOG_DIR/download.$RUN_TS.log"
+LATEST_LOG="$LOG_DIR/download.latest.log"
+FAIL_FILE="$DOWNLOAD_DIR/download_failures.tsv"
+PLAN_FILE="$DOWNLOAD_DIR/download_plan.tsv"
+CHECKSUM_FILE="$DOWNLOAD_DIR/collection_checksums.sha256"
+OUT="$DOWNLOAD_DIR/data.json"
+TMP="$OUT.tmp"
+exec > >(tee "$LOG_FILE" "$LATEST_LOG") 2>&1
 
-say() { printf '%s\n' "$*" | tee -a "${LOG_FILE}"; }
+echo "[$(date -Is)] download start dataset=$DATASET_ID"
 
-say "dataset=${DATASET_ID}"
-say "run_ts=${RUN_TS}"
-say "download_root=${DOWNLOAD_ROOT}"
-say "log_file=${LOG_FILE}"
+BASE_URL="${EUROSTAT_UNEMPLOYMENT_URL:-https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/une_rt_m}"
+MIN_VALUES="${EUROSTAT_UNEMPLOYMENT_MIN_VALUES:-100000}"
 
-python3 - <<'PY' "${PLAN_FILE}"
+: > "$FAIL_FILE"
+
+python3 - <<'PY' "$PLAN_FILE" "$BASE_URL"
+from __future__ import annotations
+
+import sys
+import urllib.parse
 from pathlib import Path
-import sys, urllib.parse
 
 plan_path = Path(sys.argv[1])
-base_url = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/une_rt_m"
+base_url = sys.argv[2]
 params = [
-    ("geo", "DE"),
-    ("geo", "FR"),
-    ("geo", "IT"),
-    ("geo", "ES"),
-    ("geo", "NL"),
-    ("age", "TOTAL"),
-    ("sex", "T"),
     ("unit", "PC_ACT"),
-    ("s_adj", "SA"),
 ]
-with plan_path.open("w", encoding="utf-8", newline="") as plan_file:
-    url = base_url + "?" + urllib.parse.urlencode(params)
-    plan_file.write(f"eurostat_unemployment_monthly\t{url}\tdata.json\n")
+url = base_url + "?" + urllib.parse.urlencode(params)
+plan_path.write_text(f"eurostat_unemployment_monthly\t{url}\tdata.json\n", encoding="utf-8")
 PY
 
 validate_payload() {
-  path=$1
-  python3 - <<'PY' "${path}" >>"${LOG_FILE}" 2>&1
+  local path="$1"
+  python3 - <<'PY' "$path" "$MIN_VALUES"
 from __future__ import annotations
-import json, sys
+
+import json
+import sys
 from pathlib import Path
 
 path = Path(sys.argv[1])
+min_values = int(sys.argv[2])
 payload = json.loads(path.read_text(encoding="utf-8"))
-dimension = payload.get("dimension", {})
 if not isinstance(payload, dict):
     raise SystemExit(f"unexpected Eurostat payload shape in {path}")
 if "error" in payload:
     raise SystemExit(f"Eurostat error payload in {path}")
+dimension = payload.get("dimension")
 if not isinstance(dimension, dict):
     raise SystemExit(f"missing dimension object in {path}")
-if "geo" not in dimension or "time" not in dimension:
-    raise SystemExit(f"missing geo/time dimensions in {path}")
-if "value" not in payload:
+for required in ["s_adj", "age", "sex", "geo", "time"]:
+    category = (dimension.get(required) or {}).get("category") or {}
+    index = category.get("index")
+    if not isinstance(index, dict) or not index:
+        raise SystemExit(f"missing {required} categories in {path}")
+value_data = payload.get("value")
+if isinstance(value_data, dict):
+    value_count = len(value_data)
+elif isinstance(value_data, list):
+    value_count = sum(value is not None for value in value_data)
+else:
     raise SystemExit(f"missing value field in {path}")
-geo_index = dimension["geo"]["category"]["index"]
-time_index = dimension["time"]["category"]["index"]
-if not isinstance(geo_index, dict) or not geo_index:
-    raise SystemExit(f"missing geo categories in {path}")
-if not isinstance(time_index, dict) or not time_index:
-    raise SystemExit(f"missing time categories in {path}")
+if value_count < min_values:
+    raise SystemExit(f"only {value_count} sparse values < EUROSTAT_UNEMPLOYMENT_MIN_VALUES={min_values}")
+print(f"semantic_validation=ok sparse_values={value_count}")
 PY
 }
 
-fetch() {
-  url=$1
-  out=$2
-  tmp="${out}.tmp"
-  if [ -f "${out}" ] && [ "${FORCE}" != "1" ]; then
-    if validate_payload "${out}"; then
-      return 2
-    fi
-    rm -f "${out}"
+if [ -s "$OUT" ] && [ "${FORCE_DOWNLOAD:-0}" != "1" ]; then
+  if validate_payload "$OUT"; then
+    echo "[$(date -Is)] cache_hit dataset=$DATASET_ID path=$OUT"
+    echo "[$(date -Is)] download done dataset=$DATASET_ID"
+    exit 0
   fi
-  rm -f "${tmp}"
-  if command -v curl >/dev/null 2>&1; then
-    curl -fL --retry 3 --retry-delay 5 -o "${tmp}" "${url}" >>"${LOG_FILE}" 2>&1
-  elif command -v wget >/dev/null 2>&1; then
-    wget -O "${tmp}" "${url}" >>"${LOG_FILE}" 2>&1
-  else
-    printf 'error: need curl or wget\n' >&2
-    exit 1
-  fi
-  validate_payload "${tmp}"
-  mv "${tmp}" "${out}"
-  return 0
-}
+  rm -f "$OUT"
+fi
 
-success_count=0
-cached_count=0
-failure_count=0
-while IFS='	' read -r label url rel_out; do
-  [ -n "${label}" ] || continue
-  out="${DOWNLOAD_ROOT}/${rel_out}"
-  say "fetch ${label} ${url}"
-  if fetch "${url}" "${out}"; then
-    success_count=$((success_count + 1))
-    say "ok ${label} ${out}"
-  else
-    status=$?
-    if [ "${status}" -eq 2 ]; then
-      cached_count=$((cached_count + 1))
-      say "cached ${label} ${out}"
-    else
-      failure_count=$((failure_count + 1))
-      rm -f "${out}" "${out}.tmp"
-      printf '%s\t%s\t%s\n' "${label}" "${url}" "${rel_out}" >> "${FAILURES_FILE}"
-      say "failed ${label} ${url}"
-    fi
-  fi
-done < "${PLAN_FILE}"
-
-find "${DOWNLOAD_ROOT}" -maxdepth 1 -type f -name '*.json' -print0 | sort -z | xargs -0 sha256sum > "${CHECKSUM_FILE}"
-say "success_count=${success_count}"
-say "cached_count=${cached_count}"
-say "failure_count=${failure_count}"
-say "plan_file=${PLAN_FILE}"
-say "failures_file=${FAILURES_FILE}"
-say "checksum_file=${CHECKSUM_FILE}"
-if [ "${failure_count}" -gt 0 ]; then
-  say "download completed with failures"
+rm -f "$TMP"
+url="$(cut -f2 "$PLAN_FILE")"
+echo "fetch dataset=$DATASET_ID url=$url"
+if ! curl --globoff -fL --retry 3 --retry-delay 5 -A "openzl-public-datasets/1.0" -o "$TMP" "$url"; then
+  printf '%s\tcurl_failed\t%s\n' "$DATASET_ID" "$url" >> "$FAIL_FILE"
+  rm -f "$TMP"
   exit 1
 fi
-say "downloaded recipe inputs under ${DOWNLOAD_ROOT}"
+if ! validate_payload "$TMP"; then
+  printf '%s\tvalidation_failed\t%s\n' "$DATASET_ID" "$url" >> "$FAIL_FILE"
+  rm -f "$TMP"
+  exit 1
+fi
+mv "$TMP" "$OUT"
+sha256sum "$OUT" > "$CHECKSUM_FILE"
+echo "plan_file=$PLAN_FILE"
+echo "checksum_file=$CHECKSUM_FILE"
+echo "[$(date -Is)] download done dataset=$DATASET_ID"

@@ -4,8 +4,8 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 212
-- `below_floor`: 112
+- `ok`: 213
+- `below_floor`: 111
 - `broken`: 0
 
 ## Below Floor
@@ -113,7 +113,6 @@ Auxiliary series do not count toward acceptance.
 | `geofabrik_index` | 2220 | 17760 | 4 | 555 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `eurostat_female_unemployment_monthly` | 2465 | 9860 | 5 | 520 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `eurostat_male_unemployment_monthly` | 2465 | 9860 | 5 | 520 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `eurostat_unemployment_monthly` | 2465 | 9860 | 5 | 520 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `openfda_food_enforcement` | 2500 | 7500 | 5 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_treasury_10y_daily` | 2501 | 10004 | 10 | 250 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_treasury_2y_daily` | 2501 | 10004 | 10 | 250 | 0 | 0 | `aggregate_floor,median_sample_floor` |

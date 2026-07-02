@@ -1,0 +1,74 @@
+manifest_version = 1
+dataset_id = "fred_treasury_yields_daily_bundle"
+name = "FRED Daily Treasury Yields Bundle"
+description = "Daily U.S. Treasury constant-maturity yield series from FRED, emitted as one homogeneous yield-percent sample per maturity."
+homepage = "https://fred.stlouisfed.org/"
+
+[license]
+name = "FRED Terms"
+spdx = "LicenseRef-FRED"
+url = "https://fred.stlouisfed.org/legal/"
+citation = "Federal Reserve Economic Data (FRED), selected Daily Treasury Constant Maturity Rate series."
+notes = "Confirm any downstream attribution requirements during review."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official FRED graph CSV endpoint only."
+usage_notes = "Public macro-financial time series suitable for reproducible numeric dataset collection."
+
+[[origins]]
+id = "fred_graph_csv"
+name = "FRED Graph CSV Endpoint"
+url = "https://fred.stlouisfed.org/graph/fredgraph.csv"
+type = "api"
+notes = "Public CSV endpoint for individual FRED time series."
+
+[[resources]]
+id = "fred_treasury_yield_csvs"
+origin = "fred_graph_csv"
+url = "https://fred.stlouisfed.org/graph/fredgraph.csv"
+type = "api_query_result"
+version = "daily-treasury-constant-maturity-1962-2024"
+access = "One CSV query per fixed FRED series id with fixed cosd=1962-01-02 and coed=2024-12-31."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/fred_treasury_yields_daily_bundle/"
+notes = "Default series: DGS1MO, DGS3MO, DGS6MO, DGS1, DGS2, DGS3, DGS5, DGS7, DGS10, DGS20, DGS30."
+
+[local_paths]
+downloads = "downloads/fred_treasury_yields_daily_bundle/"
+filtered = "filtered/fred_treasury_yields_daily_bundle/"
+index = "index/fred_treasury_yields_daily_bundle/"
+samples = "samples/fred_treasury_yields_daily_bundle/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/fred_treasury_yields_daily_bundle/samples.jsonl"
+summary = "Download fixed daily Treasury constant-maturity CSVs, retain native numeric percent-yield observations, and emit one float32 time-series sample per maturity."
+deterministic_notes = "Fixed FRED series list and fixed date window; blank and dot-sentinel observations are filtered; observations remain in ascending date order. The recipe rejects insufficient partial bundles and never mixes Treasury yields with other FRED materials."
+
+[[series]]
+id = "treasury_yield_percent_f32"
+description = "Daily Treasury constant-maturity yield values."
+semantic_meaning = "Daily U.S. Treasury constant-maturity yields in percent, one sample per maturity series."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["fred_treasury_yield_csvs"]
+filtered_input_path = "filtered/fred_treasury_yields_daily_bundle/series_stats.tsv"
+filtering = "Keep rows with parseable observation_date and parseable numeric yield value; blank and dot-sentinel values are dropped."
+missing_value_policy = "Filter blank values, dot sentinel values, malformed dates, and malformed numeric values."
+conversion = "Parse retained yield percent values as Python float and write IEEE-754 little-endian float32 arrays."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 Treasury yield percent array"
+sample_geometry = "time_series"
+sample_rank = 1
+sample_axes = ["observation_day"]
+natural_record_kind = "fred_treasury_constant_maturity_series"
+sample_count = 11
+total_size_bytes = 569928
+output_path = "samples/fred_treasury_yields_daily_bundle/treasury_yield_percent_f32/"

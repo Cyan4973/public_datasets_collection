@@ -101,9 +101,6 @@ geofabrik_index	below_floor	2220	17760	4	555	4440	0	0	0	1	none	aggregate_floor,m
 eurostat_female_unemployment_monthly	below_floor	2465	9860	5	520	2080	0	0	0	1	none	aggregate_floor,median_sample_floor
 eurostat_male_unemployment_monthly	below_floor	2465	9860	5	520	2080	0	0	0	1	none	aggregate_floor,median_sample_floor
 openfda_food_enforcement	below_floor	2500	7500	5	500	2000	0	0	0	1	none	aggregate_floor,median_sample_floor
-fred_treasury_10y_daily	below_floor	2501	10004	10	250	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
-fred_treasury_2y_daily	below_floor	2501	10004	10	250	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
-fred_treasury_30y_daily	below_floor	2501	10004	10	250	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
 fred_wti_crude_daily	below_floor	2505	10020	10	250.5	1002	0	0	0	1	none	aggregate_floor,median_sample_floor
 rubygems_versions_large	below_floor	2580	9288	5	516	2064	0	0	0	1	none	aggregate_floor,median_sample_floor
 openlibrary_editions	below_floor	3479	6958	7	497	994	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -199,6 +196,7 @@ openml_runs_large	ok	120000	560000	6	20000	80000	0	0	0	1	none	none
 noaa_ghcn_daily_tavg_by_station	ok	121079	242158	59	2588	5176	0	0	0	1	none	none
 noaa_ghcn_daily_tsun_by_station	ok	133376	266752	16	11347.5	22695	0	0	0	1	none	none
 bike_sharing_uci	ok	139032	399717	8	17379	52137	0	0	0	1	none	none
+fred_treasury_yields_daily_bundle	ok	142482	569928	11	13865	55460	0	0	0	1	none	none
 weathergov_stations	ok	146184	974560	3	48728	389824	0	0	0	1	none	none
 seismic_waveform_i32	ok	168000	672000	12	12000	48000	0	0	0	1	none	none
 openml_tasks_large	ok	197900	752020	10	19790	79160	0	0	0	1	none	none

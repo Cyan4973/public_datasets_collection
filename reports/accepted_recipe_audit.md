@@ -4,8 +4,8 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 216
-- `below_floor`: 111
+- `ok`: 217
+- `below_floor`: 108
 - `broken`: 0
 
 ## Below Floor
@@ -114,9 +114,6 @@ Auxiliary series do not count toward acceptance.
 | `eurostat_female_unemployment_monthly` | 2465 | 9860 | 5 | 520 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `eurostat_male_unemployment_monthly` | 2465 | 9860 | 5 | 520 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `openfda_food_enforcement` | 2500 | 7500 | 5 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `fred_treasury_10y_daily` | 2501 | 10004 | 10 | 250 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `fred_treasury_2y_daily` | 2501 | 10004 | 10 | 250 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `fred_treasury_30y_daily` | 2501 | 10004 | 10 | 250 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_wti_crude_daily` | 2505 | 10020 | 10 | 250.5 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `rubygems_versions_large` | 2580 | 9288 | 5 | 516 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `openlibrary_editions` | 3479 | 6958 | 7 | 497 | 0 | 0 | `aggregate_floor,median_sample_floor` |

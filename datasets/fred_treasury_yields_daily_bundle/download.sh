@@ -4,7 +4,7 @@ set -eu
 SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 REPO_ROOT=$(CDPATH= cd -- "${SCRIPT_DIR}/../.." && pwd)
 DATA_DIR=${DATA_DIR:-"${REPO_ROOT}/.data"}
-DATASET_ID="fred_treasury_2y_daily"
+DATASET_ID="fred_treasury_yields_daily_bundle"
 DOWNLOAD_ROOT="${DATA_DIR}/downloads/${DATASET_ID}"
 LOG_ROOT="${DATA_DIR}/logs/${DATASET_ID}"
 FORCE=${FORCE:-0}
@@ -30,27 +30,47 @@ say "log_file=${LOG_FILE}"
 
 python3 - <<'PY' "${PLAN_FILE}"
 from pathlib import Path
-import sys, urllib.parse
+import sys
+import urllib.parse
 
 plan_path = Path(sys.argv[1])
 base_url = "https://fred.stlouisfed.org/graph/fredgraph.csv"
-params = {"id": "DGS2", "cosd": "2015-01-01", "coed": "2024-12-31"}
-url = base_url + "?" + urllib.parse.urlencode(params)
+start_date = "1962-01-02"
+end_date = "2024-12-31"
+series = [
+    ("DGS1MO", "1mo", "treasury_1mo.csv"),
+    ("DGS3MO", "3mo", "treasury_3mo.csv"),
+    ("DGS6MO", "6mo", "treasury_6mo.csv"),
+    ("DGS1", "1y", "treasury_1y.csv"),
+    ("DGS2", "2y", "treasury_2y.csv"),
+    ("DGS3", "3y", "treasury_3y.csv"),
+    ("DGS5", "5y", "treasury_5y.csv"),
+    ("DGS7", "7y", "treasury_7y.csv"),
+    ("DGS10", "10y", "treasury_10y.csv"),
+    ("DGS20", "20y", "treasury_20y.csv"),
+    ("DGS30", "30y", "treasury_30y.csv"),
+]
 with plan_path.open("w", encoding="utf-8", newline="") as plan_file:
-    plan_file.write(f"DGS2\t{url}\tfred_treasury_2y_daily.csv\n")
+    for series_id, maturity, rel_out in series:
+        params = {"id": series_id, "cosd": start_date, "coed": end_date}
+        url = base_url + "?" + urllib.parse.urlencode(params)
+        plan_file.write(f"{series_id}\t{maturity}\t{url}\t{rel_out}\n")
 PY
 
 validate_payload() {
-  path=$1
-  python3 - <<'PY' "${path}" >>"${LOG_FILE}" 2>&1
+  series_id=$1
+  path=$2
+  python3 - <<'PY' "${series_id}" "${path}" >>"${LOG_FILE}" 2>&1
 from __future__ import annotations
-import csv, sys
+import csv
+import sys
 from pathlib import Path
 
-path = Path(sys.argv[1])
+series_id = sys.argv[1]
+path = Path(sys.argv[2])
 with path.open("r", encoding="utf-8", newline="") as handle:
     reader = csv.DictReader(handle)
-    if reader.fieldnames != ["observation_date", "DGS2"]:
+    if reader.fieldnames != ["observation_date", series_id]:
         raise SystemExit(f"unexpected CSV header in {path}: {reader.fieldnames!r}")
     first = next(reader, None)
     if first is None:
@@ -59,11 +79,12 @@ PY
 }
 
 fetch() {
-  url=$1
-  out=$2
+  series_id=$1
+  url=$2
+  out=$3
   tmp="${out}.tmp"
   if [ -f "${out}" ] && [ "${FORCE}" != "1" ]; then
-    if validate_payload "${out}"; then
+    if validate_payload "${series_id}" "${out}"; then
       return 2
     fi
     rm -f "${out}"
@@ -77,7 +98,7 @@ fetch() {
     printf 'error: need curl or wget\n' >&2
     exit 1
   fi
-  validate_payload "${tmp}"
+  validate_payload "${series_id}" "${tmp}"
   mv "${tmp}" "${out}"
   return 0
 }
@@ -85,11 +106,11 @@ fetch() {
 success_count=0
 cached_count=0
 failure_count=0
-while IFS='	' read -r series_id url rel_out; do
+while IFS='	' read -r series_id maturity url rel_out; do
   [ -n "${series_id}" ] || continue
   out="${DOWNLOAD_ROOT}/${rel_out}"
-  say "fetch ${series_id} ${url}"
-  if fetch "${url}" "${out}"; then
+  say "fetch ${series_id} ${maturity} ${url}"
+  if fetch "${series_id}" "${url}" "${out}"; then
     success_count=$((success_count + 1))
     say "ok ${series_id} ${out}"
   else
@@ -100,13 +121,13 @@ while IFS='	' read -r series_id url rel_out; do
     else
       failure_count=$((failure_count + 1))
       rm -f "${out}" "${out}.tmp"
-      printf '%s\t%s\t%s\n' "${series_id}" "${url}" "${rel_out}" >> "${FAILURES_FILE}"
+      printf '%s\t%s\t%s\t%s\n' "${series_id}" "${maturity}" "${url}" "${rel_out}" >> "${FAILURES_FILE}"
       say "failed ${series_id} ${url}"
     fi
   fi
 done < "${PLAN_FILE}"
 
-find "${DOWNLOAD_ROOT}" -maxdepth 1 -type f -name '*.csv' -print0 | sort -z | xargs -0 sha256sum > "${CHECKSUM_FILE}"
+find "${DOWNLOAD_ROOT}" -maxdepth 1 -type f -name 'treasury_*.csv' -print0 | sort -z | xargs -0 sha256sum > "${CHECKSUM_FILE}"
 say "success_count=${success_count}"
 say "cached_count=${cached_count}"
 say "failure_count=${failure_count}"

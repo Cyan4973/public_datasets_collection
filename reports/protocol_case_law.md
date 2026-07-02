@@ -46,6 +46,46 @@ If a recipe claims `50` sites, `500` entities, or some other target scope, the a
 
 Do not leave aspirational scope text in the manifest or README.
 
+## Rejected Thin Catalog/Search Shapes
+
+The following below-floor recipes were removed on 2026-07-02 because their
+committed shape was not worth repairing. They should not be reintroduced as
+one-page, ranked-list, arbitrary-search, single-entity, or weak metadata-table
+recipes. The source may be reconsidered only as a materially different,
+homogeneous, reproducible, and sufficiently large recipe.
+
+Superseded by stronger replacements:
+
+- `eia_petroleum_prices` -> `eia_series_petroleum`
+- `eurostat_female_unemployment_monthly` -> `eurostat_unemployment_monthly`
+- `eurostat_male_unemployment_monthly` -> `eurostat_unemployment_monthly`
+- `gleif_lei_records_api` -> `gleif_lei_records`
+- `openml_dataset_61` -> broader OpenML recipes
+- `openml_datasets` -> broader OpenML recipes
+- `worldbank_gdp_constant` -> use the `world_bank_*` family only if repaired as a coherent bundle
+- `worldbank_population_total` -> use the `world_bank_*` family only if repaired as a coherent bundle
+
+Discarded as weak one-page/search/ranked/catalog metadata shapes:
+
+- `arxiv_ai_recent`
+- `coingecko_top_markets`
+- `deezer_chart`
+- `disease_sh_countries`
+- `doaj_articles`
+- `geoboundaries_all_adm0`
+- `gitlab_projects`
+- `huggingface_datasets`
+- `itunes_search`
+- `launchlibrary_upcoming`
+- `marine_regions_gazetteer`
+- `npm_search_packages_large`
+- `openbrewerydb_breweries`
+- `openlibrary_editions`
+- `rubygems_versions_large`
+- `scryfall_cards`
+- `tvmaze_shows`
+- `wger_exercises`
+
 ## Derived Numeric Representations
 
 Accept only when the representation is:

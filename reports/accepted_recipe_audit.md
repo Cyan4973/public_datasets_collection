@@ -5,7 +5,7 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 Auxiliary series do not count toward acceptance.
 
 - `ok`: 218
-- `below_floor`: 103
+- `below_floor`: 77
 - `broken`: 0
 
 ## Below Floor
@@ -28,7 +28,6 @@ Auxiliary series do not count toward acceptance.
 | `fred_unemployment_level_monthly` | 120 | 480 | 10 | 12 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_unemployment_rate_monthly` | 120 | 480 | 10 | 12 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `world_bank_access_to_electricity_percent_annual` | 183 | 1464 | 6 | 31.5 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `openbrewerydb_breweries` | 246 | 1640 | 3 | 82 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `world_bank_renewable_energy_consumption_percent_annual` | 320 | 2560 | 10 | 32 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_consumption_co2_annual` | 340 | 1360 | 10 | 34 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_trade_co2_annual` | 340 | 1360 | 10 | 34 | 0 | 0 | `aggregate_floor,median_sample_floor` |
@@ -37,7 +36,6 @@ Auxiliary series do not count toward acceptance.
 | `world_bank_internet_users_percent_annual` | 344 | 2752 | 10 | 35 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `world_bank_energy_use_per_capita_annual` | 346 | 2768 | 10 | 35 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `world_bank_unemployment_total_percent_annual` | 350 | 2800 | 10 | 35 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `wger_exercises` | 400 | 800 | 4 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `imf_gdp_growth_annual` | 416 | 1664 | 8 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `imf_gdp_per_capita_usd_annual` | 416 | 1664 | 8 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `imf_general_government_gross_debt_gdp_annual` | 416 | 1664 | 8 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |
@@ -46,22 +44,13 @@ Auxiliary series do not count toward acceptance.
 | `imf_population_annual` | 416 | 1664 | 8 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `imf_unemployment_rate_annual` | 416 | 1664 | 8 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `pride_projects_search` | 500 | 1600 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `gitlab_projects` | 500 | 2000 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `huggingface_datasets` | 500 | 2000 | 5 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_fed_balance_sheet_weekly` | 521 | 2084 | 10 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_mortgage_30y_weekly` | 521 | 2084 | 10 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_initial_claims_weekly` | 522 | 2088 | 10 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_energy_per_gdp_annual` | 565 | 2260 | 10 | 58 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `world_bank_population_density_annual` | 567 | 4536 | 9 | 63 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `worldbank_gdp_constant` | 570 | 2090 | 3 | 190 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_energy_per_capita_annual` | 584 | 2336 | 10 | 60 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_primary_energy_consumption_annual` | 584 | 2336 | 10 | 60 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `worldbank_population_total` | 588 | 2156 | 3 | 196 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `gleif_lei_records_api` | 600 | 1000 | 3 | 200 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `deezer_chart` | 600 | 2000 | 6 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `openml_datasets` | 600 | 2000 | 6 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `openml_dataset_61` | 600 | 2400 | 4 | 150 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `coingecko_top_markets` | 600 | 4200 | 6 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `world_bank_agricultural_land_percent_annual` | 630 | 5040 | 10 | 63 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `world_bank_birth_rate_annual` | 650 | 5200 | 10 | 65 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `world_bank_death_rate_annual` | 650 | 5200 | 10 | 65 | 0 | 0 | `aggregate_floor,median_sample_floor` |
@@ -71,15 +60,7 @@ Auxiliary series do not count toward acceptance.
 | `world_bank_life_expectancy` | 650 | 5200 | 10 | 65 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `world_bank_population_total` | 650 | 5200 | 10 | 65 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `world_bank_urban_population_percent_annual` | 650 | 5200 | 10 | 65 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `scryfall_cards` | 667 | 1684 | 4 | 164 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `itunes_search` | 697 | 3390 | 7 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `doaj_articles` | 700 | 1300 | 7 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `launchlibrary_upcoming` | 700 | 1800 | 7 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `marine_regions_gazetteer` | 758 | 5264 | 8 | 93.5 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `gwas_catalog_studies` | 800 | 2200 | 8 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `arxiv_ai_recent` | 900 | 2300 | 9 | 100 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `geoboundaries_all_adm0` | 920 | 3220 | 4 | 230 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `eia_petroleum_prices` | 988 | 3952 | 2 | 494 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `ena_portal_search` | 1000 | 5000 | 2 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `iris_seismon_events_fixed` | 1170 | 5330 | 9 | 130 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_co2_per_gdp_annual` | 1403 | 5612 | 10 | 140 | 0 | 0 | `aggregate_floor,median_sample_floor` |
@@ -89,16 +70,13 @@ Auxiliary series do not count toward acceptance.
 | `owid_co2_including_luc_annual` | 1545 | 6180 | 10 | 163 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_co2_annual` | 1687 | 6748 | 10 | 163 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_co2_per_capita_annual` | 1687 | 6748 | 10 | 163 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `tvmaze_shows` | 1715 | 4655 | 7 | 245 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_temperature_change_from_co2_annual` | 1740 | 6960 | 10 | 174 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_land_use_change_co2_annual` | 1750 | 7000 | 10 | 175 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_methane_annual` | 1750 | 7000 | 10 | 175 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_nitrous_oxide_annual` | 1750 | 7000 | 10 | 175 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_total_ghg_annual` | 1750 | 7000 | 10 | 175 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `npm_search_packages_large` | 1750 | 10000 | 7 | 250 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `eurostat_hicp_all_items_monthly` | 1800 | 7200 | 5 | 360 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `eurostat_hicp_food_monthly` | 1800 | 7200 | 5 | 360 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `disease_sh_countries` | 1848 | 12936 | 8 | 231 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `eurostat_industrial_production_monthly` | 1884 | 7536 | 5 | 396 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `europepmc_grants` | 1984 | 3968 | 4 | 496 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `chembl_documents` | 2000 | 4000 | 4 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
@@ -106,12 +84,8 @@ Auxiliary series do not count toward acceptance.
 | `npi_registry_ca` | 2000 | 7000 | 4 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_sp500_daily` | 2162 | 8648 | 9 | 251 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `geofabrik_index` | 2220 | 17760 | 4 | 555 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `eurostat_female_unemployment_monthly` | 2465 | 9860 | 5 | 520 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `eurostat_male_unemployment_monthly` | 2465 | 9860 | 5 | 520 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `openfda_food_enforcement` | 2500 | 7500 | 5 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_wti_crude_daily` | 2505 | 10020 | 10 | 250.5 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `rubygems_versions_large` | 2580 | 9288 | 5 | 516 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `openlibrary_editions` | 3479 | 6958 | 7 | 497 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `loc_photos_search_large` | 3500 | 8000 | 7 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `smithsonian_search_large` | 3500 | 10000 | 7 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `crossref_funders_large` | 5000 | 10000 | 5 | 1000 | 0 | 0 | `aggregate_floor` |

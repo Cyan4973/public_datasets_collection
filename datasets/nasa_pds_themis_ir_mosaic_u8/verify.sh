@@ -54,6 +54,12 @@ for row in rows:
         raise SystemExit(f"unexpected element size: {row}")
     if row.get("sample_geometry") != "2d_raster" or int(row.get("sample_rank", 0)) != 2:
         raise SystemExit(f"unexpected geometry: {row}")
+    if row.get("sample_format") != "raw homogeneous uint8 array copied from TIFF pixel plane":
+        raise SystemExit(f"unexpected sample format: {row}")
+    if row.get("natural_record_kind") != "themis_controlled_ir_mosaic":
+        raise SystemExit(f"unexpected natural record kind: {row}")
+    if row.get("min") == row.get("max"):
+        raise SystemExit(f"constant raster metadata: {row}")
     path = data_root / row["sample_path"]
     payload = path.read_bytes()
     if len(payload) != int(row["sample_size_bytes"]) or len(payload) != int(row["value_count"]):
@@ -63,6 +69,8 @@ for row in rows:
         raise SystemExit(f"constant raster rejected: {path}")
     if histogram.most_common(1)[0][1] / len(payload) > 0.999:
         raise SystemExit(f"near-constant raster rejected: {path}")
+    if min(histogram) != int(row["min"]) or max(histogram) != int(row["max"]):
+        raise SystemExit(f"min/max metadata mismatch: {path}")
     sizes.append(len(payload))
     value_counts.append(int(row["value_count"]))
     shapes.append(tuple(row["sample_shape"]))

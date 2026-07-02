@@ -177,11 +177,16 @@ for sample_index, path in enumerate(tiffs, start=1):
         "element_size_bytes": 1,
         "sample_size_bytes": size,
         "value_count": info["value_count"],
+        "sample_format": "raw homogeneous uint8 array copied from TIFF pixel plane",
         "sample_geometry": "2d_raster",
         "sample_rank": 2,
         "sample_shape": [info["height"], info["width"]],
         "sample_axes": ["y", "x"],
+        "natural_record_kind": "themis_controlled_ir_mosaic",
         "source_path": path.as_posix(),
+        "source_file": path.name,
+        "min": min(histogram),
+        "max": max(histogram),
     }
     rows.append(row)
     records.append(

@@ -4,7 +4,7 @@ set -eu
 SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 REPO_ROOT=$(CDPATH= cd -- "${SCRIPT_DIR}/../.." && pwd)
 DATA_DIR=${DATA_DIR:-"${REPO_ROOT}/.data"}
-DATASET_ID="owid_flaring_co2_annual"
+DATASET_ID="owid_co2_source_emissions_annual_f32"
 DOWNLOAD_ROOT="${DATA_DIR}/downloads/${DATASET_ID}"
 LOG_ROOT="${DATA_DIR}/logs/${DATASET_ID}"
 FORCE=${FORCE:-0}
@@ -42,7 +42,8 @@ validate_payload() {
   path=$1
   python3 - <<'PY' "${path}" >>"${LOG_FILE}" 2>&1
 from __future__ import annotations
-import csv, sys
+import csv
+import sys
 from pathlib import Path
 
 path = Path(sys.argv[1])
@@ -50,7 +51,7 @@ with path.open("r", encoding="utf-8", newline="") as handle:
     reader = csv.DictReader(handle)
     if reader.fieldnames is None:
         raise SystemExit(f"missing CSV header in {path}")
-    required = {"iso_code", "country", "year", "flaring_co2"}
+    required = {"iso_code", "country", "year", "coal_co2", "oil_co2", "gas_co2", "cement_co2", "flaring_co2"}
     if not required.issubset(reader.fieldnames):
         raise SystemExit(f"missing required columns in {path}: {reader.fieldnames!r}")
     first = next(reader, None)

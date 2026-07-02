@@ -4,8 +4,8 @@ Acceptance floor: at least `10000` primary values total or at least `102400` pri
 
 Auxiliary series do not count toward acceptance.
 
-- `ok`: 217
-- `below_floor`: 108
+- `ok`: 218
+- `below_floor`: 103
 - `broken`: 0
 
 ## Below Floor
@@ -51,7 +51,6 @@ Auxiliary series do not count toward acceptance.
 | `fred_fed_balance_sheet_weekly` | 521 | 2084 | 10 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_mortgage_30y_weekly` | 521 | 2084 | 10 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `fred_initial_claims_weekly` | 522 | 2088 | 10 | 52 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `owid_flaring_co2_annual` | 564 | 2256 | 10 | 57.5 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_energy_per_gdp_annual` | 565 | 2260 | 10 | 58 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `world_bank_population_density_annual` | 567 | 4536 | 9 | 63 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `worldbank_gdp_constant` | 570 | 2090 | 3 | 190 | 0 | 0 | `aggregate_floor,median_sample_floor` |
@@ -82,18 +81,14 @@ Auxiliary series do not count toward acceptance.
 | `geoboundaries_all_adm0` | 920 | 3220 | 4 | 230 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `eia_petroleum_prices` | 988 | 3952 | 2 | 494 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `ena_portal_search` | 1000 | 5000 | 2 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `owid_cement_co2_annual` | 1155 | 4620 | 10 | 97 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `iris_seismon_events_fixed` | 1170 | 5330 | 9 | 130 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_co2_per_gdp_annual` | 1403 | 5612 | 10 | 140 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `plos_search` | 1500 | 3500 | 3 | 500 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `eurostat_retail_trade_volume_monthly` | 1524 | 6096 | 5 | 288 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `coinpaprika_exchanges` | 1530 | 5760 | 6 | 255 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_co2_including_luc_annual` | 1545 | 6180 | 10 | 163 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `owid_gas_co2_annual` | 1546 | 6184 | 10 | 139.5 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `owid_oil_co2_annual` | 1607 | 6428 | 10 | 148.5 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_co2_annual` | 1687 | 6748 | 10 | 163 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_co2_per_capita_annual` | 1687 | 6748 | 10 | 163 | 0 | 0 | `aggregate_floor,median_sample_floor` |
-| `owid_coal_co2_annual` | 1687 | 6748 | 10 | 163 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `tvmaze_shows` | 1715 | 4655 | 7 | 245 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_temperature_change_from_co2_annual` | 1740 | 6960 | 10 | 174 | 0 | 0 | `aggregate_floor,median_sample_floor` |
 | `owid_land_use_change_co2_annual` | 1750 | 7000 | 10 | 175 | 0 | 0 | `aggregate_floor,median_sample_floor` |

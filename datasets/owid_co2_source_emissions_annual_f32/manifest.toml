@@ -1,0 +1,166 @@
+manifest_version = 1
+dataset_id = "owid_co2_source_emissions_annual_f32"
+name = "OWID CO2 Source Emissions Annual Float32"
+description = "Annual Our World in Data CO2 source-emissions columns over ISO-country rows, emitted as homogeneous float32 column samples."
+homepage = "https://ourworldindata.org/co2-and-greenhouse-gas-emissions"
+
+[license]
+name = "CC BY 4.0"
+spdx = "CC-BY-4.0"
+url = "https://github.com/owid/co2-data"
+citation = "Our World in Data CO2 Data."
+notes = "Confirm downstream attribution handling during review."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Our World in Data CO2 CSV only."
+usage_notes = "Public country-level emissions data suitable for reproducible numeric dataset collection."
+
+[[origins]]
+id = "owid_co2_github_raw"
+name = "OWID CO2 GitHub Raw"
+url = "https://raw.githubusercontent.com/owid/co2-data/"
+type = "file_download"
+notes = "Public raw CSV files from the OWID CO2 data repository."
+
+[[resources]]
+id = "owid_co2_csv"
+origin = "owid_co2_github_raw"
+url = "https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv"
+type = "csv"
+version = "master"
+access = "Single fixed raw CSV URL."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/owid_co2_source_emissions_annual_f32/"
+notes = "Annual country rows with source-specific CO2 emissions columns."
+
+[local_paths]
+downloads = "downloads/owid_co2_source_emissions_annual_f32/"
+filtered = "filtered/owid_co2_source_emissions_annual_f32/"
+index = "index/owid_co2_source_emissions_annual_f32/"
+samples = "samples/owid_co2_source_emissions_annual_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/owid_co2_source_emissions_annual_f32/samples.jsonl"
+summary = "Download the OWID CO2 CSV, retain native annual source-emissions values over ISO-country rows, and emit one float32 column sample per source."
+deterministic_notes = "Fixed input URL and fixed source-emissions columns. Rows are limited to ISO3 country codes, malformed years and non-finite values are rejected, blanks are skipped, and each column sample is sorted by (iso_code, year). The recipe intentionally excludes unrelated OWID fields such as per-capita values, shares, energy, and total greenhouse-gas columns."
+
+[[series]]
+id = "owid_coal_co2_mt_f32"
+description = "Annual coal CO2 emissions values."
+semantic_meaning = "Annual CO2 emissions from coal, in million tonnes, over ISO-country rows."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["owid_co2_csv"]
+filtered_input_path = "filtered/owid_co2_source_emissions_annual_f32/source_stats.tsv"
+filtering = "Keep ISO3 country rows with parseable year and parseable coal_co2 value."
+missing_value_policy = "Blank coal_co2 values are skipped; malformed years and malformed numeric values are rejected."
+conversion = "Sort retained values by (iso_code, year) and write IEEE-754 little-endian float32 arrays."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 annual CO2 source-emissions column"
+sample_geometry = "table_column"
+sample_rank = 1
+sample_axes = ["iso_country_year_row"]
+natural_record_kind = "owid_co2_source_emissions_column"
+sample_count = 1
+total_size_bytes = 72460
+output_path = "samples/owid_co2_source_emissions_annual_f32/owid_coal_co2_mt_f32/"
+
+[[series]]
+id = "owid_oil_co2_mt_f32"
+description = "Annual oil CO2 emissions values."
+semantic_meaning = "Annual CO2 emissions from oil, in million tonnes, over ISO-country rows."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["owid_co2_csv"]
+filtered_input_path = "filtered/owid_co2_source_emissions_annual_f32/source_stats.tsv"
+filtering = "Keep ISO3 country rows with parseable year and parseable oil_co2 value."
+missing_value_policy = "Blank oil_co2 values are skipped; malformed years and malformed numeric values are rejected."
+conversion = "Sort retained values by (iso_code, year) and write IEEE-754 little-endian float32 arrays."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 annual CO2 source-emissions column"
+sample_geometry = "table_column"
+sample_rank = 1
+sample_axes = ["iso_country_year_row"]
+natural_record_kind = "owid_co2_source_emissions_column"
+sample_count = 1
+total_size_bytes = 86960
+output_path = "samples/owid_co2_source_emissions_annual_f32/owid_oil_co2_mt_f32/"
+
+[[series]]
+id = "owid_gas_co2_mt_f32"
+description = "Annual gas CO2 emissions values."
+semantic_meaning = "Annual CO2 emissions from gas, in million tonnes, over ISO-country rows."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["owid_co2_csv"]
+filtered_input_path = "filtered/owid_co2_source_emissions_annual_f32/source_stats.tsv"
+filtering = "Keep ISO3 country rows with parseable year and parseable gas_co2 value."
+missing_value_policy = "Blank gas_co2 values are skipped; malformed years and malformed numeric values are rejected."
+conversion = "Sort retained values by (iso_code, year) and write IEEE-754 little-endian float32 arrays."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 annual CO2 source-emissions column"
+sample_geometry = "table_column"
+sample_rank = 1
+sample_axes = ["iso_country_year_row"]
+natural_record_kind = "owid_co2_source_emissions_column"
+sample_count = 1
+total_size_bytes = 57932
+output_path = "samples/owid_co2_source_emissions_annual_f32/owid_gas_co2_mt_f32/"
+
+[[series]]
+id = "owid_cement_co2_mt_f32"
+description = "Annual cement CO2 emissions values."
+semantic_meaning = "Annual CO2 emissions from cement production, in million tonnes, over ISO-country rows."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["owid_co2_csv"]
+filtered_input_path = "filtered/owid_co2_source_emissions_annual_f32/source_stats.tsv"
+filtering = "Keep ISO3 country rows with parseable year and parseable cement_co2 value."
+missing_value_policy = "Blank cement_co2 values are skipped; malformed years and malformed numeric values are rejected."
+conversion = "Sort retained values by (iso_code, year) and write IEEE-754 little-endian float32 arrays."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 annual CO2 source-emissions column"
+sample_geometry = "table_column"
+sample_rank = 1
+sample_axes = ["iso_country_year_row"]
+natural_record_kind = "owid_co2_source_emissions_column"
+sample_count = 1
+total_size_bytes = 96140
+output_path = "samples/owid_co2_source_emissions_annual_f32/owid_cement_co2_mt_f32/"
+
+[[series]]
+id = "owid_flaring_co2_mt_f32"
+description = "Annual flaring CO2 emissions values."
+semantic_meaning = "Annual CO2 emissions from flaring, in million tonnes, over ISO-country rows."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["owid_co2_csv"]
+filtered_input_path = "filtered/owid_co2_source_emissions_annual_f32/source_stats.tsv"
+filtering = "Keep ISO3 country rows with parseable year and parseable flaring_co2 value."
+missing_value_policy = "Blank flaring_co2 values are skipped; malformed years and malformed numeric values are rejected."
+conversion = "Sort retained values by (iso_code, year) and write IEEE-754 little-endian float32 arrays."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 annual CO2 source-emissions column"
+sample_geometry = "table_column"
+sample_rank = 1
+sample_axes = ["iso_country_year_row"]
+natural_record_kind = "owid_co2_source_emissions_column"
+sample_count = 1
+total_size_bytes = 49932
+output_path = "samples/owid_co2_source_emissions_annual_f32/owid_flaring_co2_mt_f32/"

@@ -38,7 +38,6 @@ huggingface_datasets	below_floor	500	2000	5	100	400	0	0	0	1	none	aggregate_floor
 fred_fed_balance_sheet_weekly	below_floor	521	2084	10	52	208	0	0	0	1	none	aggregate_floor,median_sample_floor
 fred_mortgage_30y_weekly	below_floor	521	2084	10	52	208	0	0	0	1	none	aggregate_floor,median_sample_floor
 fred_initial_claims_weekly	below_floor	522	2088	10	52	208	0	0	0	1	none	aggregate_floor,median_sample_floor
-owid_flaring_co2_annual	below_floor	564	2256	10	57.5	230	0	0	0	1	none	aggregate_floor,median_sample_floor
 owid_energy_per_gdp_annual	below_floor	565	2260	10	58	232	0	0	0	1	none	aggregate_floor,median_sample_floor
 world_bank_population_density_annual	below_floor	567	4536	9	63	504	0	0	0	1	none	aggregate_floor,median_sample_floor
 worldbank_gdp_constant	below_floor	570	2090	3	190	380	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -69,18 +68,14 @@ arxiv_ai_recent	below_floor	900	2300	9	100	200	0	0	0	1	none	aggregate_floor,medi
 geoboundaries_all_adm0	below_floor	920	3220	4	230	920	0	0	0	1	none	aggregate_floor,median_sample_floor
 eia_petroleum_prices	below_floor	988	3952	2	494	1976	0	0	0	1	none	aggregate_floor,median_sample_floor
 ena_portal_search	below_floor	1000	5000	2	500	2500	0	0	0	1	none	aggregate_floor,median_sample_floor
-owid_cement_co2_annual	below_floor	1155	4620	10	97	388	0	0	0	1	none	aggregate_floor,median_sample_floor
 iris_seismon_events_fixed	below_floor	1170	5330	9	130	260	0	0	0	1	none	aggregate_floor,median_sample_floor
 owid_co2_per_gdp_annual	below_floor	1403	5612	10	140	560	0	0	0	1	none	aggregate_floor,median_sample_floor
 plos_search	below_floor	1500	3500	3	500	1000	0	0	0	1	none	aggregate_floor,median_sample_floor
 eurostat_retail_trade_volume_monthly	below_floor	1524	6096	5	288	1152	0	0	0	1	none	aggregate_floor,median_sample_floor
 coinpaprika_exchanges	below_floor	1530	5760	6	255	960	0	0	0	1	none	aggregate_floor,median_sample_floor
 owid_co2_including_luc_annual	below_floor	1545	6180	10	163	652	0	0	0	1	none	aggregate_floor,median_sample_floor
-owid_gas_co2_annual	below_floor	1546	6184	10	139.5	558	0	0	0	1	none	aggregate_floor,median_sample_floor
-owid_oil_co2_annual	below_floor	1607	6428	10	148.5	594	0	0	0	1	none	aggregate_floor,median_sample_floor
 owid_co2_annual	below_floor	1687	6748	10	163	652	0	0	0	1	none	aggregate_floor,median_sample_floor
 owid_co2_per_capita_annual	below_floor	1687	6748	10	163	652	0	0	0	1	none	aggregate_floor,median_sample_floor
-owid_coal_co2_annual	below_floor	1687	6748	10	163	652	0	0	0	1	none	aggregate_floor,median_sample_floor
 tvmaze_shows	below_floor	1715	4655	7	245	490	0	0	0	1	none	aggregate_floor,median_sample_floor
 owid_temperature_change_from_co2_annual	below_floor	1740	6960	10	174	696	0	0	0	1	none	aggregate_floor,median_sample_floor
 owid_land_use_change_co2_annual	below_floor	1750	7000	10	175	700	0	0	0	1	none	aggregate_floor,median_sample_floor
@@ -182,6 +177,7 @@ open_meteo_hourly_surface_pressure	ok	87600	350400	5	17520	70080	0	0	0	1	none	no
 open_meteo_hourly_temperature	ok	87600	350400	5	17520	70080	0	0	0	1	none	none
 open_meteo_hourly_vapour_pressure_deficit	ok	87600	350400	5	17520	70080	0	0	0	1	none	none
 open_meteo_hourly_wind	ok	87600	350400	5	17520	70080	0	0	0	1	none	none
+owid_co2_source_emissions_annual_f32	ok	90856	363424	5	18115	72460	0	0	0	1	none	none
 eia_series_petroleum	ok	91395	731160	11	9107	72856	91395	365580	11	1	none	none
 nomis_employment	ok	92145	221148	5	18429	36858	0	0	0	1	none	none
 cran_packages	ok	95504	191008	4	23876	47752	0	0	0	1	none	none

@@ -11,7 +11,6 @@ geonames_admin1_codes	ok	15460	34785	4	3865	7730	0	0	0	1	none	none
 coinpaprika_tickers	ok	16000	116000	8	2000	16000	0	0	0	1	none	none
 nasa_power_daily_climate	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
 nasa_power_daily_humidity_wind	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
-nasa_power_daily_longwave_flux	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
 nasa_power_daily_precip_solar	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
 nasa_power_daily_precip_temperature	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
 nasa_power_daily_solar_temperature_extremes	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
@@ -115,6 +114,7 @@ openalex_works_2024_sample	ok	460000	1160000	23	20000	40000	0	0	0	1	none	none
 sec_submissions_largecap_bundle	ok	483235	1739646	245	1001	4000	0	0	0	1	none	none
 noaa_coops_air_temperature	ok	525155	4201240	3	175044	1400352	0	0	0	1	none	none
 noaa_coops_air_pressure	ok	525156	4201248	3	175047	1400376	0	0	0	1	none	none
+nasa_power_daily_longwave_flux	ok	540600	4324800	40	13515	108120	0	0	0	1	none	none
 noaa_ghcn_daily_awnd_by_station	ok	545792	1091584	57	9970	19940	0	0	0	1	none	none
 appliances_energy_uci	ok	552580	4420640	28	19735	157880	0	0	0	1	none	none
 dataone_solr	ok	602719	2805438	7	100000	400000	0	0	0	1	none	none

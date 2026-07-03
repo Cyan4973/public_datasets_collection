@@ -4,6 +4,9 @@ set -eu
 SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 REPO_ROOT=$(CDPATH= cd -- "${SCRIPT_DIR}/../.." && pwd)
 DATA_DIR=${DATA_DIR:-"${REPO_ROOT}/.data"}
+START_YEAR=${NASA_POWER_DAILY_LONGWAVE_FLUX_START_YEAR:-1988}
+END_YEAR=${NASA_POWER_DAILY_LONGWAVE_FLUX_END_YEAR:-2024}
+MIN_VALUES_PER_SAMPLE=${NASA_POWER_DAILY_LONGWAVE_FLUX_MIN_VALUES_PER_SAMPLE:-13500}
 DOWNLOAD_ROOT="${DATA_DIR}/downloads/nasa_power_daily_longwave_flux"
 FILTERED_ROOT="${DATA_DIR}/filtered/nasa_power_daily_longwave_flux"
 INDEX_ROOT="${DATA_DIR}/index/nasa_power_daily_longwave_flux"
@@ -25,34 +28,80 @@ say "filtered_root=${FILTERED_ROOT}"
 say "index_root=${INDEX_ROOT}"
 say "samples_root=${SAMPLES_ROOT}"
 say "log_file=${LOG_FILE}"
+say "year_window=${START_YEAR}..${END_YEAR}"
+say "min_values_per_sample=${MIN_VALUES_PER_SAMPLE}"
 
-DOWNLOAD_ROOT="${DOWNLOAD_ROOT}" FILTERED_ROOT="${FILTERED_ROOT}" INDEX_ROOT="${INDEX_ROOT}" SAMPLES_ROOT="${SAMPLES_ROOT}" python3 - <<'PY' >>"${LOG_FILE}" 2>&1
+DOWNLOAD_ROOT="${DOWNLOAD_ROOT}" FILTERED_ROOT="${FILTERED_ROOT}" INDEX_ROOT="${INDEX_ROOT}" SAMPLES_ROOT="${SAMPLES_ROOT}" START_YEAR="${START_YEAR}" END_YEAR="${END_YEAR}" MIN_VALUES_PER_SAMPLE="${MIN_VALUES_PER_SAMPLE}" python3 - <<'PY' >>"${LOG_FILE}" 2>&1
 from __future__ import annotations
-import csv, json
+
+import csv
+import json
+import os
 from collections import defaultdict
 from pathlib import Path
-import os
 
 download_root = Path(os.environ["DOWNLOAD_ROOT"])
 filtered_root = Path(os.environ["FILTERED_ROOT"])
 index_root = Path(os.environ["INDEX_ROOT"])
 samples_root = Path(os.environ["SAMPLES_ROOT"])
 data_root = samples_root.parent.parent
+start_year = int(os.environ["START_YEAR"])
+end_year = int(os.environ["END_YEAR"])
+min_values_per_sample = int(os.environ["MIN_VALUES_PER_SAMPLE"])
 
 stats_path = filtered_root / "location_parameter_year_stats.tsv"
 index_path = index_root / "samples.jsonl"
 failures_path = download_root / "download_failures.tsv"
-locations = ["san_francisco", "phoenix", "chicago", "miami", "anchorage"]
-parameter_ids = ["ALLSKY_SFC_LW_DWN", "CLRSKY_SFC_LW_DWN", "T2M"]
-series_defs = [
-    {"series_id": "power_value_f64", "numeric_kind": "float", "bit_width": 64, "endianness": "little", "element_size_bytes": 8},
+locations = [
+    "san_francisco",
+    "phoenix",
+    "chicago",
+    "miami",
+    "anchorage",
+    "fairbanks",
+    "honolulu",
+    "denver",
+    "new_orleans",
+    "san_juan",
+    "seattle",
+    "boston",
+    "atlanta",
+    "dallas",
+    "minneapolis",
+    "las_vegas",
+    "albuquerque",
+    "portland",
+    "billings",
+    "fargo",
 ]
+parameter_series = {
+    "ALLSKY_SFC_LW_DWN": {"series_id": "nasa_power_longwave_allsky_lw_down_f64", "numeric_kind": "float", "bit_width": 64, "endianness": "little", "element_size_bytes": 8},
+    "CLRSKY_SFC_LW_DWN": {"series_id": "nasa_power_longwave_clrsky_lw_down_f64", "numeric_kind": "float", "bit_width": 64, "endianness": "little", "element_size_bytes": 8},
+}
+parameter_ids = list(parameter_series)
+
 if failures_path.is_file() and failures_path.stat().st_size > 0:
-    raise SystemExit(f"download failures recorded in {failures_path}")
+    active_failures = []
+    with failures_path.open("r", encoding="utf-8", newline="") as failures_file:
+        for line in failures_file:
+            parts = line.rstrip("\n").split("\t")
+            if len(parts) < 2:
+                active_failures.append(line.rstrip("\n"))
+                continue
+            try:
+                failure_year = int(parts[1])
+            except ValueError:
+                active_failures.append(line.rstrip("\n"))
+                continue
+            if start_year <= failure_year <= end_year:
+                active_failures.append(line.rstrip("\n"))
+    if active_failures:
+        raise SystemExit(f"download failures recorded inside active year window in {failures_path}")
 if not stats_path.is_file():
     raise SystemExit(f"missing stats file: {stats_path}")
 if not index_path.is_file():
     raise SystemExit(f"missing sample index: {index_path}")
+
 with stats_path.open("r", encoding="utf-8", newline="") as handle:
     stats_rows = list(csv.DictReader(handle, delimiter="\t"))
 stats_by_key = {(row["location_id"], row["parameter_id"], row["year"]): row for row in stats_rows}
@@ -60,7 +109,7 @@ expected_records = {}
 group_counts = defaultdict(int)
 
 for location_id in locations:
-    for year in range(2021, 2024):
+    for year in range(start_year, end_year + 1):
         path = download_root / f"{location_id}_{year}.json"
         if not path.is_file():
             raise SystemExit(f"missing raw JSON: {path}")
@@ -120,28 +169,36 @@ for location_id in locations:
                 raise SystemExit(f"end date mismatch for {location_id} {parameter_id} {year}: stats={stats_row['end_date']!r} raw={end_date!r}")
 
 for (location_id, parameter_id), value_count in sorted(group_counts.items()):
-    sample_slug = f"{location_id}_{parameter_id}"
-    for series in series_defs:
-        sample_path = samples_root / series["series_id"] / f"{sample_slug}.bin"
-        if not sample_path.is_file():
-            raise SystemExit(f"missing sample file: {sample_path}")
-        sample_size_bytes = sample_path.stat().st_size
-        expected_size = value_count * int(series["element_size_bytes"])
-        if sample_size_bytes != expected_size:
-            raise SystemExit(f"wrong size for {sample_path}: expected {expected_size}, got {sample_size_bytes}")
-        expected_records[(series["series_id"], sample_slug)] = {
-            "dataset_id": "nasa_power_daily_longwave_flux",
-            "series_id": series["series_id"],
-            "sample_path": sample_path.relative_to(data_root).as_posix(),
-            "numeric_kind": series["numeric_kind"],
-            "bit_width": series["bit_width"],
-            "endianness": series["endianness"],
-            "element_size_bytes": series["element_size_bytes"],
-            "sample_size_bytes": sample_size_bytes,
-            "value_count": value_count,
-            "location_id": location_id,
-            "parameter_id": parameter_id,
-        }
+    if value_count < min_values_per_sample:
+        raise SystemExit(f"{location_id} {parameter_id}: only {value_count} values, need {min_values_per_sample}")
+    series = parameter_series[parameter_id]
+    sample_path = samples_root / series["series_id"] / f"{location_id}.bin"
+    if not sample_path.is_file():
+        raise SystemExit(f"missing sample file: {sample_path}")
+    sample_size_bytes = sample_path.stat().st_size
+    expected_size = value_count * int(series["element_size_bytes"])
+    if sample_size_bytes != expected_size:
+        raise SystemExit(f"wrong size for {sample_path}: expected {expected_size}, got {sample_size_bytes}")
+    expected_records[(series["series_id"], location_id)] = {
+        "dataset_id": "nasa_power_daily_longwave_flux",
+        "series_id": series["series_id"],
+        "sample_path": sample_path.relative_to(data_root).as_posix(),
+        "numeric_kind": series["numeric_kind"],
+        "bit_width": series["bit_width"],
+        "endianness": series["endianness"],
+        "element_size_bytes": series["element_size_bytes"],
+        "sample_size_bytes": sample_size_bytes,
+        "value_count": value_count,
+        "location_id": location_id,
+        "parameter_id": parameter_id,
+        "sample_geometry": "daily_point_time_series",
+        "sample_rank": 1,
+        "sample_axes": ["day"],
+    }
+
+expected_key_count = len(locations) * len(parameter_ids)
+if len(expected_records) != expected_key_count:
+    raise SystemExit(f"expected {expected_key_count} location-parameter samples, got {len(expected_records)}")
 
 index_records = {}
 with index_path.open("r", encoding="utf-8") as handle:
@@ -149,9 +206,8 @@ with index_path.open("r", encoding="utf-8") as handle:
         if not line.strip():
             continue
         record = json.loads(line)
-        sample_path = record.get("sample_path")
-        sample_key = Path(sample_path).stem if isinstance(sample_path, str) else ""
-        key = (record.get("series_id"), sample_key)
+        location_id = record.get("location_id", "")
+        key = (record.get("series_id"), location_id)
         if key in index_records:
             raise SystemExit(f"duplicate index entry for {key} on line {line_number}")
         index_records[key] = record

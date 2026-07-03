@@ -22,7 +22,6 @@ nasa_power_daily_surface_state	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
 nasa_power_daily_temp_precip_humidity	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
 nasa_power_daily_temperature_extremes	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
 nasa_power_daily_temperature_humidity	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
-nasa_power_daily_wind	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
 usgs_nwis_dissolved_oxygen_daily	ok	16558	132464	15	1343	10744	0	0	0	1	none	none
 usgs_nwis_ph_daily	ok	17277	138216	16	1287.5	10300	0	0	0	1	none	none
 internetarchive_advancedsearch	ok	20000	120000	2	10000	60000	0	0	0	1	none	none
@@ -113,6 +112,7 @@ eurostat_unemployment_monthly	ok	374109	1496436	1	374109	1496436	1870545	4489308
 ghcnd_stations	ok	397497	1589988	3	132499	529996	0	0	0	1	none	none
 hgnc_complete_set_json	ok	404973	1034931	9	44997	89994	0	0	0	1	none	none
 nasa_fits_sample_image_planes	ok	422144	2737152	2	211072	1368576	0	0	0	1	none	none
+nasa_power_daily_wind	ok	449280	3594240	30	14976	119808	0	0	0	1	none	none
 usgs_sitefile_all_large	ok	452020	3073736	5	90404	723232	0	0	0	1	none	none
 openalex_works_2024_sample	ok	460000	1160000	23	20000	40000	0	0	0	1	none	none
 sec_submissions_largecap_bundle	ok	483235	1739646	245	1001	4000	0	0	0	1	none	none

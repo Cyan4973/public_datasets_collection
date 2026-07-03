@@ -8,6 +8,8 @@ DATASET_ID="nasa_power_daily_wind"
 DOWNLOAD_ROOT="${DATA_DIR}/downloads/${DATASET_ID}"
 LOG_ROOT="${DATA_DIR}/logs/${DATASET_ID}"
 FORCE=${FORCE:-0}
+START_YEAR=${NASA_POWER_DAILY_WIND_START_YEAR:-1984}
+END_YEAR=${NASA_POWER_DAILY_WIND_END_YEAR:-2024}
 RUN_TS=$(date -u +"%Y%m%dT%H%M%SZ")
 LOG_FILE="${LOG_ROOT}/download.${RUN_TS}.log"
 LATEST_LOG="${LOG_ROOT}/download.latest.log"
@@ -27,13 +29,16 @@ say "dataset=${DATASET_ID}"
 say "run_ts=${RUN_TS}"
 say "download_root=${DOWNLOAD_ROOT}"
 say "log_file=${LOG_FILE}"
+say "year_window=${START_YEAR}..${END_YEAR}"
 
-python3 - <<'PY' "${PLAN_FILE}"
+python3 - <<'PY' "${PLAN_FILE}" "${START_YEAR}" "${END_YEAR}"
 from __future__ import annotations
 from pathlib import Path
 import sys, urllib.parse
 
 plan_path = Path(sys.argv[1])
+start_year = int(sys.argv[2])
+end_year = int(sys.argv[3])
 base_url = "https://power.larc.nasa.gov/api/temporal/daily/point"
 locations = [
     ("san_francisco", "37.7749", "-122.4194"),
@@ -41,10 +46,17 @@ locations = [
     ("chicago", "41.8781", "-87.6298"),
     ("miami", "25.7617", "-80.1918"),
     ("anchorage", "61.2181", "-149.9003"),
+    ("fairbanks", "64.8378", "-147.7164"),
+    ("honolulu", "21.3069", "-157.8583"),
+    ("denver", "39.7392", "-104.9903"),
+    ("new_orleans", "29.9511", "-90.0715"),
+    ("san_juan", "18.4655", "-66.1057"),
 ]
+if start_year > end_year:
+    raise SystemExit(f"invalid year window: {start_year}..{end_year}")
 with plan_path.open("w", encoding="utf-8", newline="") as plan_file:
     for location_id, lat, lon in locations:
-        for year in range(2021, 2024):
+        for year in range(start_year, end_year + 1):
             params = {
                 "parameters": "WS2M,WS10M,WS50M",
                 "community": "RE",

@@ -109,7 +109,6 @@ nasa_donki_flr	ok	22484	89936	7	3212	12848	0	0	0	1	none	none
 openflights_airports	ok	23094	153960	3	7698	61584	0	0	0	1	none	none
 statsbomb_world_cup_final	ok	26802	44670	9	2978	2978	0	0	0	1	none	none
 nvd_cpe_match_feed	ok	30000	100000	3	10000	40000	0	0	0	1	none	none
-macrostrat_columns	ok	31155	124620	9	3462	13848	0	0	0	1	none	none
 usgs_nwis_streamflow_daily	ok	34304	274432	32	1095	8760	0	0	0	1	none	none
 usgs_nwis_specific_conductance_daily	ok	34889	279112	29	1406	11248	0	0	0	1	none	none
 noaa_tides_water_level	ok	37200	141360	5	7440	7440	0	0	0	1	none	none
@@ -130,7 +129,6 @@ usgs_nwis_water_temperature_daily	ok	60459	483672	50	1427.5	11420	0	0	0	1	none	n
 anilist_media	ok	64534	172603	30	2288	5151	0	0	0	1	none	none
 scryfall_default_cards	ok	65272	180931	29	2205	5268	0	0	0	1	none	none
 library_of_congress_items	ok	66380	264316	5	15000	60000	0	0	0	1	none	none
-macrostrat_sections	ok	67885	271540	6	11315	45260	0	0	0	1	none	none
 usgs_quakes_month	ok	68900	374024	7	9842	39376	0	0	0	1	none	none
 gleif_lei_records	ok	69797	219362	7	9971	39884	0	0	0	1	none	none
 medrxiv_details	ok	77615	186276	5	15523	31046	15523	62092	1	1	none	none

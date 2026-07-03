@@ -28,6 +28,31 @@ Reject recipes that clear the aggregate floor mainly by multiplying trivial samp
 
 Some small samples are fine. A dataset is not fine when most samples are tiny and the only acceptance story is "there are many of them."
 
+## Single-Sample Families
+
+A family should contain multiple homogeneous natural samples with the same field
+meaning. A one-sample family is weak training material unless the source sample
+is large enough to shard confidently. Treat roughly-100KB or sub-MB table-column
+samples as insufficient even when they pass the historical audit floor.
+
+If the only available shape is one full table column per field, the recipe must
+either:
+
+- produce multi-MB single-field samples that can be deterministically sharded, or
+- be reshaped into multiple homogeneous natural samples without concatenating
+  different field meanings.
+
+The following Macrostrat recipes were removed on 2026-07-02 despite passing the
+audit because they were one-sample-per-field table-column families and their
+per-family samples were far below a shardable size:
+
+- `macrostrat_columns`
+- `macrostrat_sections`
+
+`macrostrat_units` was left in place for separate review. Its per-field samples
+are still single-sample families, but the source is materially larger than
+columns/sections and may deserve a better repair path before deletion.
+
 ## Homogeneity
 
 Reject bundles that combine unrelated indicators merely because they share:

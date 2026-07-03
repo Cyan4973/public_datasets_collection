@@ -10,7 +10,6 @@ usgs_nwis_gage_height_daily	ok	14567	116536	15	1080	8640	0	0	0	1	none	none
 geonames_admin1_codes	ok	15460	34785	4	3865	7730	0	0	0	1	none	none
 coinpaprika_tickers	ok	16000	116000	8	2000	16000	0	0	0	1	none	none
 nasa_power_daily_climate	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
-nasa_power_daily_humidity	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
 nasa_power_daily_humidity_wind	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
 nasa_power_daily_longwave_flux	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
 nasa_power_daily_precip_solar	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
@@ -123,6 +122,7 @@ dataone_solr	ok	602719	2805438	7	100000	400000	0	0	0	1	none	none
 gharchive_hourly_events_20240101_00	ok	614476	4301332	4	153619	1228952	0	0	0	1	none	none
 wikimedia_pageviews_daily	ok	619828	2479312	208	3472	13888	0	0	0	1	none	none
 earthquake_usgs	ok	630753	4880874	50	14515	115292	0	0	0	1	none	none
+nasa_power_daily_humidity	ok	642840	5142720	40	16071	128568	0	0	0	1	none	none
 gdelt_events_avgtone_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	none
 gdelt_events_goldstein_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	none
 gdelt_events_nummentions_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	none

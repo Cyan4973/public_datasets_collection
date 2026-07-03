@@ -4,6 +4,8 @@ set -eu
 SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 REPO_ROOT=$(CDPATH= cd -- "${SCRIPT_DIR}/../.." && pwd)
 DATA_DIR=${DATA_DIR:-"${REPO_ROOT}/.data"}
+START_YEAR=${NASA_POWER_DAILY_TEMPERATURE_EXTREMES_START_YEAR:-1981}
+END_YEAR=${NASA_POWER_DAILY_TEMPERATURE_EXTREMES_END_YEAR:-2024}
 DOWNLOAD_ROOT="${DATA_DIR}/downloads/nasa_power_daily_temperature_extremes"
 FILTERED_ROOT="${DATA_DIR}/filtered/nasa_power_daily_temperature_extremes"
 INDEX_ROOT="${DATA_DIR}/index/nasa_power_daily_temperature_extremes"
@@ -25,8 +27,9 @@ say "filtered_root=${FILTERED_ROOT}"
 say "index_root=${INDEX_ROOT}"
 say "samples_root=${SAMPLES_ROOT}"
 say "log_file=${LOG_FILE}"
+say "year_window=${START_YEAR}..${END_YEAR}"
 
-DOWNLOAD_ROOT="${DOWNLOAD_ROOT}" FILTERED_ROOT="${FILTERED_ROOT}" INDEX_ROOT="${INDEX_ROOT}" SAMPLES_ROOT="${SAMPLES_ROOT}" python3 - <<'PY' >>"${LOG_FILE}" 2>&1
+DOWNLOAD_ROOT="${DOWNLOAD_ROOT}" FILTERED_ROOT="${FILTERED_ROOT}" INDEX_ROOT="${INDEX_ROOT}" SAMPLES_ROOT="${SAMPLES_ROOT}" START_YEAR="${START_YEAR}" END_YEAR="${END_YEAR}" python3 - <<'PY' >>"${LOG_FILE}" 2>&1
 from __future__ import annotations
 import array, csv, json, os, shutil
 from collections import defaultdict
@@ -37,13 +40,39 @@ filtered_root = Path(os.environ["FILTERED_ROOT"])
 index_root = Path(os.environ["INDEX_ROOT"])
 samples_root = Path(os.environ["SAMPLES_ROOT"])
 data_root = samples_root.parent.parent
+start_year = int(os.environ["START_YEAR"])
+end_year = int(os.environ["END_YEAR"])
 
 dataset_id = "nasa_power_daily_temperature_extremes"
-locations = ["san_francisco", "phoenix", "chicago", "miami", "anchorage"]
-parameter_ids = ["T2M", "T2M_MAX", "T2M_MIN"]
-series_defs = [
-    {"series_id": "power_value_f64", "array_type": "d", "numeric_kind": "float", "bit_width": 64, "endianness": "little", "element_size_bytes": 8},
+locations = [
+    "san_francisco",
+    "phoenix",
+    "chicago",
+    "miami",
+    "anchorage",
+    "fairbanks",
+    "honolulu",
+    "denver",
+    "new_orleans",
+    "san_juan",
+    "seattle",
+    "boston",
+    "atlanta",
+    "dallas",
+    "minneapolis",
+    "las_vegas",
+    "albuquerque",
+    "portland",
+    "billings",
+    "fargo",
 ]
+parameter_series = {
+    "T2M": {"series_id": "nasa_power_temperature_t2m_f64", "array_type": "d", "numeric_kind": "float", "bit_width": 64, "endianness": "little", "element_size_bytes": 8},
+    "T2M_MAX": {"series_id": "nasa_power_temperature_t2m_max_f64", "array_type": "d", "numeric_kind": "float", "bit_width": 64, "endianness": "little", "element_size_bytes": 8},
+    "T2M_MIN": {"series_id": "nasa_power_temperature_t2m_min_f64", "array_type": "d", "numeric_kind": "float", "bit_width": 64, "endianness": "little", "element_size_bytes": 8},
+}
+parameter_ids = list(parameter_series)
+series_defs = list(parameter_series.values())
 for series in series_defs:
     series_dir = samples_root / series["series_id"]
     if series_dir.exists():
@@ -64,7 +93,7 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
     writer = csv.writer(stats_file, delimiter="\t")
     writer.writerow(["location_id", "parameter_id", "year", "row_count", "kept_count", "skipped_fill_count", "skipped_parse_count", "start_date", "end_date"])
     for location_id in locations:
-        for year in range(2021, 2024):
+        for year in range(start_year, end_year + 1):
             path = download_root / f"{location_id}_{year}.json"
             if not path.is_file():
                 raise SystemExit(f"missing raw JSON: {path}")
@@ -119,31 +148,30 @@ with stats_path.open("w", encoding="utf-8", newline="") as stats_file:
 
 for key in sorted(group_values):
     location_id, parameter_id = key
-    sample_slug = f"{location_id}_{parameter_id}"
-    payloads = {
-        "power_value_f64": group_values[key],
-    }
-    for series in series_defs:
-        payload = array.array(series["array_type"], payloads[series["series_id"]])
-        if payload.itemsize > 1 and os.sys.byteorder != "little":
-            payload.byteswap()
-        out_path = samples_root / series["series_id"] / f"{sample_slug}.bin"
-        with out_path.open("wb") as out_file:
-            out_file.write(payload.tobytes())
-        sample_size_bytes = out_path.stat().st_size
-        index_records.append({
-            "dataset_id": dataset_id,
-            "series_id": series["series_id"],
-            "sample_path": out_path.relative_to(data_root).as_posix(),
-            "numeric_kind": series["numeric_kind"],
-            "bit_width": series["bit_width"],
-            "endianness": series["endianness"],
-            "element_size_bytes": series["element_size_bytes"],
-            "sample_size_bytes": sample_size_bytes,
-            "value_count": len(payloads[series["series_id"]]),
-            "location_id": location_id,
-            "parameter_id": parameter_id,
-        })
+    series = parameter_series[parameter_id]
+    payload = array.array(series["array_type"], group_values[key])
+    if payload.itemsize > 1 and os.sys.byteorder != "little":
+        payload.byteswap()
+    out_path = samples_root / series["series_id"] / f"{location_id}.bin"
+    with out_path.open("wb") as out_file:
+        out_file.write(payload.tobytes())
+    sample_size_bytes = out_path.stat().st_size
+    index_records.append({
+        "dataset_id": dataset_id,
+        "series_id": series["series_id"],
+        "sample_path": out_path.relative_to(data_root).as_posix(),
+        "numeric_kind": series["numeric_kind"],
+        "bit_width": series["bit_width"],
+        "endianness": series["endianness"],
+        "element_size_bytes": series["element_size_bytes"],
+        "sample_size_bytes": sample_size_bytes,
+        "value_count": len(group_values[key]),
+        "location_id": location_id,
+        "parameter_id": parameter_id,
+        "sample_geometry": "daily_point_time_series",
+        "sample_rank": 1,
+        "sample_axes": ["day"],
+    })
 
 with index_path.open("w", encoding="utf-8", newline="") as index_file:
     for record in index_records:

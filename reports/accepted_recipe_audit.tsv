@@ -20,7 +20,6 @@ nasa_power_daily_solar_temperature_extremes	ok	16425	131400	15	1095	8760	0	0	0	1
 nasa_power_daily_solar_wind	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
 nasa_power_daily_surface_state	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
 nasa_power_daily_temp_precip_humidity	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
-nasa_power_daily_temperature_extremes	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
 nasa_power_daily_temperature_humidity	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
 usgs_nwis_dissolved_oxygen_daily	ok	16558	132464	15	1343	10744	0	0	0	1	none	none
 usgs_nwis_ph_daily	ok	17277	138216	16	1287.5	10300	0	0	0	1	none	none
@@ -136,6 +135,7 @@ openalex_institutions_large	ok	880957	2642871	7	125851	503404	0	0	0	1	none	none
 federalregister_documents_large	ok	887298	2661894	358	2463	6824	0	0	0	1	none	none
 inspirehep_literature	ok	897494	2403434	195	5000	10000	0	0	0	1	none	none
 smithsonian_openaccess_gltf_indices_u16	ok	899964	1799928	3	299988	599976	0	0	0	1	none	none
+nasa_power_daily_temperature_extremes	ok	964260	7714080	60	16071	128568	0	0	0	1	none	none
 nih_reporter_projects	ok	1064676	6388056	90	11664	66162	0	0	0	1	none	none
 europe_pmc_search	ok	1127748	2631412	6	187958	375916	187958	751832	1	1	none	none
 eeg_physionet	ok	1178880	2357760	30	39200	78400	0	0	0	1	none	none

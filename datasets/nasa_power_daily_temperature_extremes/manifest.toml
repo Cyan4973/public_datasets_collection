@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "nasa_power_daily_temperature_extremes"
 name = "NASA POWER Daily Temperature Extremes"
-description = "NASA POWER daily point temperature JSON extracts for five fixed locations, 2021-2023."
+description = "NASA POWER daily point temperature JSON extracts for twenty fixed locations, 1981-2024."
 homepage = "https://power.larc.nasa.gov/"
 
 [license]
@@ -25,11 +25,11 @@ type = "api"
 notes = "Public JSON API for daily point climate time series."
 
 [[resources]]
-id = "power_daily_temperature_extremes_2021_2023"
+id = "power_daily_temperature_extremes_1981_2024"
 origin = "nasa_power_daily_api"
 url = "https://power.larc.nasa.gov/api/temporal/daily/point"
 type = "api_query_result"
-version = "2021-2023-five-locations-three-temperature-parameters"
+version = "1981-2024-twenty-locations-three-temperature-parameters"
 access = "Location-year JSON queries with fixed coordinates, parameters, start, end, format, and UTC time standard."
 size_bytes = 0
 sha256 = ""
@@ -48,23 +48,56 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/nasa_power_daily_temperature_extremes/samples.jsonl"
-summary = "Download selected NASA POWER daily point JSON files, retain parseable temperature parameter values, and emit raw numeric arrays plus a machine-readable sample index."
-deterministic_notes = "Fixed location list, fixed parameter list, fixed years 2021-2023, fixed API query parameters, download-time payload validation, skipped fill-value and malformed rows only, preserved day order within each location-year response, concatenated years in ascending order per location-parameter sample, durable logs under logs/nasa_power_daily_temperature_extremes/, and generated sample index at index/nasa_power_daily_temperature_extremes/samples.jsonl."
+summary = "Download selected NASA POWER daily point JSON files, retain parseable temperature parameter values, and emit one homogeneous temperature sample per location and parameter."
+deterministic_notes = "Fixed location list, fixed parameter list, fixed years 1981-2024, fixed API query parameters, download-time payload validation, skipped fill-value and malformed rows only, preserved day order within each location-year response, concatenated years in ascending order per location-parameter sample, durable logs under logs/nasa_power_daily_temperature_extremes/, and generated sample index at index/nasa_power_daily_temperature_extremes/samples.jsonl."
 
 [[series]]
-id = "power_value_f64"
-description = "NASA POWER temperature parameter values."
-semantic_meaning = "Float64 daily temperature-related parameter values; semantic units depend on the parameter id encoded in the sample path and sample index."
-source_resources = ["power_daily_temperature_extremes_2021_2023"]
+id = "nasa_power_temperature_t2m_f64"
+description = "NASA POWER daily mean 2-meter temperature."
+semantic_meaning = "Float64 daily mean 2-meter temperature, one sample per selected location."
+source_resources = ["power_daily_temperature_extremes_1981_2024"]
 filtered_input_path = "filtered/nasa_power_daily_temperature_extremes/location_parameter_year_stats.tsv"
-filtering = "Keep rows with parseable date keys and parameter values that are not equal to the API fill value."
+filtering = "Keep T2M rows with parseable date keys and values that are not equal to the API fill value."
 missing_value_policy = "Filter rows whose values equal the API fill value, blank strings, NaN strings, malformed date keys, or malformed numeric values."
 conversion = "Parse retained parameter values as Python float and write IEEE-754 little-endian float64 arrays preserving chronological order within each location-parameter sample."
 numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
-sample_count = 0
+sample_count = 20
 total_size_bytes = 0
-output_path = "samples/nasa_power_daily_temperature_extremes/power_value_f64/"
+output_path = "samples/nasa_power_daily_temperature_extremes/nasa_power_temperature_t2m_f64/"
 
+[[series]]
+id = "nasa_power_temperature_t2m_max_f64"
+description = "NASA POWER daily maximum 2-meter temperature."
+semantic_meaning = "Float64 daily maximum 2-meter temperature, one sample per selected location."
+source_resources = ["power_daily_temperature_extremes_1981_2024"]
+filtered_input_path = "filtered/nasa_power_daily_temperature_extremes/location_parameter_year_stats.tsv"
+filtering = "Keep T2M_MAX rows with parseable date keys and values that are not equal to the API fill value."
+missing_value_policy = "Filter rows whose values equal the API fill value, blank strings, NaN strings, malformed date keys, or malformed numeric values."
+conversion = "Parse retained parameter values as Python float and write IEEE-754 little-endian float64 arrays preserving chronological order within each location-parameter sample."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 20
+total_size_bytes = 0
+output_path = "samples/nasa_power_daily_temperature_extremes/nasa_power_temperature_t2m_max_f64/"
+
+[[series]]
+id = "nasa_power_temperature_t2m_min_f64"
+description = "NASA POWER daily minimum 2-meter temperature."
+semantic_meaning = "Float64 daily minimum 2-meter temperature, one sample per selected location."
+source_resources = ["power_daily_temperature_extremes_1981_2024"]
+filtered_input_path = "filtered/nasa_power_daily_temperature_extremes/location_parameter_year_stats.tsv"
+filtering = "Keep T2M_MIN rows with parseable date keys and values that are not equal to the API fill value."
+missing_value_policy = "Filter rows whose values equal the API fill value, blank strings, NaN strings, malformed date keys, or malformed numeric values."
+conversion = "Parse retained parameter values as Python float and write IEEE-754 little-endian float64 arrays preserving chronological order within each location-parameter sample."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 20
+total_size_bytes = 0
+output_path = "samples/nasa_power_daily_temperature_extremes/nasa_power_temperature_t2m_min_f64/"

@@ -75,6 +75,35 @@ These sources may return only if the recipe produces genuinely large
 same-measure natural samples, or if a different upstream product exposes dense
 numeric material rather than short country/year indicator vectors.
 
+## Rejected Residual Metadata Recipes
+
+The final below-floor residuals were removed on 2026-07-03 because their
+committed shape was metadata/search/catalog/event-list extraction, not strong
+homogeneous numeric source material. Do not repair these by widening the same
+metadata shape or by adding more deterministic text lengths/counts:
+
+- `chembl_documents`
+- `coinpaprika_exchanges`
+- `crossref_funders_large`
+- `ena_portal_search`
+- `europepmc_grants`
+- `geofabrik_index`
+- `gwas_catalog_studies`
+- `iris_seismon_events_fixed`
+- `loc_photos_search_large`
+- `npi_registry_ca`
+- `openfda_food_enforcement`
+- `plos_search`
+- `pride_projects_search`
+- `smithsonian_search_large`
+- `wikimedia_mostread`
+
+Some of these sources remain valid for new recipes if the replacement uses
+actual dense numeric material. Examples: ChEMBL assay/activity measurements,
+GWAS association statistics, ENA FASTQ quality or signal payloads, Wikimedia
+pageview/clickstream series, or geospatial rasters/vectors with naturally large
+numeric records.
+
 ## Homogeneity
 
 Reject bundles that combine unrelated indicators merely because they share:

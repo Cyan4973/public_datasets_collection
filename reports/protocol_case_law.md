@@ -53,6 +53,28 @@ per-family samples were far below a shardable size:
 are still single-sample families, but the source is materially larger than
 columns/sections and may deserve a better repair path before deletion.
 
+## Rejected Short Indicator Time Series
+
+Short annual, monthly, weekly, and daily indicator recipes are not acceptable
+when their natural same-meaning samples remain tiny. Expanding from a few
+countries to many countries, or from a few yearly shards to a full but still
+small national series, is aggregate-only salvage unless each natural sample is
+large enough to train on or shard confidently.
+
+The following below-floor recipes were removed on 2026-07-03. Do not recreate
+them as one-indicator-per-recipe country samples, one national FRED series, or
+loosely bundled portal indicators:
+
+- all below-floor `fred_*` single-indicator recipes present on that date
+- all below-floor `world_bank_*` single-indicator country recipes present on that date
+- all below-floor `imf_*` annual country-indicator recipes present on that date
+- all below-floor `eurostat_*` monthly country-indicator recipes present on that date
+- remaining below-floor `owid_*` annual country-indicator recipes present on that date
+
+These sources may return only if the recipe produces genuinely large
+same-measure natural samples, or if a different upstream product exposes dense
+numeric material rather than short country/year indicator vectors.
+
 ## Homogeneity
 
 Reject bundles that combine unrelated indicators merely because they share:

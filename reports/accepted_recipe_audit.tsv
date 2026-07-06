@@ -18,7 +18,6 @@ openflights_airports	ok	23094	153960	3	7698	61584	0	0	0	1	none	none
 statsbomb_world_cup_final	ok	26802	44670	9	2978	2978	0	0	0	1	none	none
 nvd_cpe_match_feed	ok	30000	100000	3	10000	40000	0	0	0	1	none	none
 eia_petroleum_barrel_prices	ok	33764	270112	16	1339	10712	0	0	0	1	none	none
-usgs_nwis_streamflow_daily	ok	34304	274432	32	1095	8760	0	0	0	1	none	none
 usgs_nwis_specific_conductance_daily	ok	34889	279112	29	1406	11248	0	0	0	1	none	none
 noaa_tides_water_level	ok	37200	141360	5	7440	7440	0	0	0	1	none	none
 ourworldindata_energy_mix	ok	38274	108443	6	6379	19137	0	0	0	1	none	none
@@ -96,6 +95,7 @@ nasa_power_daily_precip_temperature	ok	321420	2571360	20	16071	128568	0	0	0	1	no
 noaa_coops_water_temperature	ok	346842	2774736	2	173421	1387368	0	0	0	1	none	none
 usgs_water_sites_rdb	ok	347330	2500776	5	69466	555728	69466	555728	1	1	none	none
 who_gho_observations	ok	348104	1435929	8	43513	130539	0	0	0	1	none	none
+usgs_nwis_streamflow_daily	ok	362420	2899360	40	9132	73056	0	0	0	1	none	none
 chesscom_blitz_games	ok	368189	736378	83	3480	6960	0	0	0	1	none	none
 eurostat_unemployment_monthly	ok	374109	1496436	1	374109	1496436	1870545	4489308	5	1	none	none
 ghcnd_stations	ok	397497	1589988	3	132499	529996	0	0	0	1	none	none

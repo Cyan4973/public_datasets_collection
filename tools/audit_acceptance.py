@@ -170,9 +170,10 @@ def main() -> int:
         fh.write("Auxiliary series do not count toward acceptance.\n\n")
         fh.write(f"- `ok`: {len(ok)}\n")
         fh.write(f"- `below_floor`: {len(below)}\n")
-        fh.write(f"- `broken`: {len(broken)}\n\n")
+        fh.write(f"- `broken`: {len(broken)}\n")
 
         if broken:
+            fh.write("\n")
             fh.write("## Broken\n\n")
             fh.write("| dataset_id | primary_values | primary_sample_bytes | primary_sample_rows | median_primary_sample_value_count | auxiliary_values | auxiliary_sample_rows | reasons |\n")
             fh.write("|---|---:|---:|---:|---:|---:|---:|---|\n")
@@ -185,6 +186,8 @@ def main() -> int:
             fh.write("\n")
 
         if below:
+            if not broken:
+                fh.write("\n")
             fh.write("## Below Floor\n\n")
             fh.write("| dataset_id | primary_values | primary_sample_bytes | primary_sample_rows | median_primary_sample_value_count | auxiliary_values | auxiliary_sample_rows | reasons |\n")
             fh.write("|---|---:|---:|---:|---:|---:|---:|---|\n")

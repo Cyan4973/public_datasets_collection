@@ -6,7 +6,6 @@ jhu_covid19_deaths_us_daily	ok	10287	41148	9	1143	4572	0	0	0	1	none	none
 cisa_kev_catalog	ok	11284	27404	7	1612	3224	0	0	0	1	none	none
 met_biocollection_objects	ok	12281	49124	1	12281	49124	0	0	0	1	none	none
 europepmc_grants_large_retry	ok	14000	18000	14	1000	1000	0	0	0	1	none	none
-usgs_nwis_gage_height_daily	ok	14567	116536	15	1080	8640	0	0	0	1	none	none
 geonames_admin1_codes	ok	15460	34785	4	3865	7730	0	0	0	1	none	none
 coinpaprika_tickers	ok	16000	116000	8	2000	16000	0	0	0	1	none	none
 usgs_nwis_dissolved_oxygen_daily	ok	16558	132464	15	1343	10744	0	0	0	1	none	none
@@ -86,6 +85,7 @@ nasa_techport_projects	ok	227414	413480	11	20674	20674	0	0	0	1	none	none
 ourairports_airports	ok	241771	1651444	3	85545	684360	0	0	0	1	none	none
 nvd_cves_recent	ok	244224	651264	6	40704	81408	0	0	0	1	none	none
 who_atlas_gisah	ok	252140	806848	5	50428	100856	0	0	0	1	none	none
+usgs_nwis_gage_height_daily	ok	262068	2096544	30	8843.5	70748	0	0	0	1	none	none
 gwosc_event_strain_f32	ok	262144	1048576	2	131072	524288	0	0	0	1	none	none
 noaa_ghcn_daily_wsfg_by_station	ok	266478	532956	33	8055	16110	0	0	0	1	none	none
 nyc_311_descriptor_u16	ok	287186	574372	3	100000	200000	0	0	0	1	none	none

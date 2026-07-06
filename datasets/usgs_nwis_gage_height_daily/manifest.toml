@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "usgs_nwis_gage_height_daily"
 name = "USGS NWIS Daily Gage Height"
-description = "USGS NWIS daily gage-height JSON extracts for 32 geographically diverse stream sites across the US, 2021-2023."
+description = "USGS NWIS long-window daily gage-height JSON extracts for candidate-selected active US stream sites."
 homepage = "https://waterservices.usgs.gov/"
 
 [license]
@@ -25,16 +25,16 @@ type = "api"
 notes = "Public JSON service for historical daily observations by site and parameter code."
 
 [[resources]]
-id = "usgs_gage_height_2021_2023"
+id = "usgs_gage_height_long_window"
 origin = "usgs_nwis_dv_api"
 url = "https://waterservices.usgs.gov/nwis/dv/"
 type = "api_query_result"
-version = "2021-2023-one-site-00065-json"
-access = "Site-year JSON queries with fixed sites, parameterCd=00065, startDT, endDT, format=json, and siteStatus=all."
+version = "2000-2024-candidate-selected-one-site-00065-json"
+access = "One JSON query per selected site with parameterCd=00065, startDT=2000-01-01, endDT=2024-12-31, format=json, and siteStatus=all."
 size_bytes = 0
 sha256 = ""
 local_path = "downloads/usgs_nwis_gage_height_daily/"
-notes = "One JSON file per site per year for the fixed one-site subset."
+notes = "One JSON file per selected site after candidate inventory scan and minimum usable-value filtering."
 
 [local_paths]
 downloads = "downloads/usgs_nwis_gage_height_daily/"
@@ -48,22 +48,21 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/usgs_nwis_gage_height_daily/samples.jsonl"
-summary = "Download site-year USGS daily gage-height JSON files, select statistic code 00003 when multiple daily statistics are present, derive aligned date component arrays, and emit raw numeric arrays plus a machine-readable sample index."
-deterministic_notes = "Fixed 32-site list, fixed years 2021-2023, fixed parameterCd=00065, fixed API query parameters, explicit selection of statistic code 00003 when multiple daily statistics are present, preserved source observation order within each site-year file, concatenated years in ascending order per site, durable script logs under logs/usgs_nwis_gage_height_daily/, and generated sample index at index/usgs_nwis_gage_height_daily/samples.jsonl."
+summary = "Download active-stream site inventory, probe candidate sites for long USGS daily gage-height JSON records, require statistic code 00003, reject short samples, and emit raw numeric arrays plus a machine-readable sample index."
+deterministic_notes = "Fixed state inventory query set, fixed candidate round-robin ordering by state, fixed default date window 2000-01-01 through 2024-12-31, fixed parameterCd=00065, required statistic code 00003, preserved source observation order within each selected site response, durable script logs under logs/usgs_nwis_gage_height_daily/, generated quality summary under filtered/usgs_nwis_gage_height_daily/, and generated sample index at index/usgs_nwis_gage_height_daily/samples.jsonl."
 
 [[series]]
 id = "usgs_gage_height_ft_f64"
 description = "Daily gage-height values."
-semantic_meaning = "Float64 gage-height values from USGS parameter code 00065, one sample per site after selecting statistic code 00003 where needed."
-source_resources = ["usgs_gage_height_2021_2023"]
-filtered_input_path = "filtered/usgs_nwis_gage_height_daily/site_year_stats.tsv"
-filtering = "Keep rows with parseable gage-height values and parseable observation dates."
-conversion = "Parse the USGS value field as Python float and write IEEE-754 little-endian float64 arrays preserving source order after site-year concatenation."
+semantic_meaning = "Float64 gage-height values from USGS parameter code 00065 and statistic code 00003, one sample per site."
+source_resources = ["usgs_gage_height_long_window"]
+filtered_input_path = "filtered/usgs_nwis_gage_height_daily/site_stats.tsv"
+filtering = "Keep rows with finite parseable gage-height values and parseable observation dates; keep only site samples with at least USGS_NWIS_GAGE_HEIGHT_MIN_VALUES_PER_SAMPLE values, default 7000."
+conversion = "Parse the USGS value field as Python float and write IEEE-754 little-endian float64 arrays preserving source order within each selected site response."
 numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
-sample_count = 15
-total_size_bytes = 0
+sample_count = 30
+total_size_bytes = 2096544
 output_path = "samples/usgs_nwis_gage_height_daily/usgs_gage_height_ft_f64/"
-

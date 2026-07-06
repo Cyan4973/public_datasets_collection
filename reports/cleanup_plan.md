@@ -28,6 +28,8 @@ Current audit baseline:
 - removed `94` globally constant manifest series across `52` datasets
 - filtered `93` constant natural samples from otherwise non-constant series
 - removed five below-floor SEC companyfacts single-metric recipes after accepting the broader SEC FSD replacement
+- removed seven tiny mixed NASA POWER bundle recipes after accepting stronger
+  homogeneous POWER recipes for their constituent fields
 
 ## Next: Sparse-Binary Policy
 

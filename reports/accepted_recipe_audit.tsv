@@ -9,13 +9,6 @@ europepmc_grants_large_retry	ok	14000	18000	14	1000	1000	0	0	0	1	none	none
 usgs_nwis_gage_height_daily	ok	14567	116536	15	1080	8640	0	0	0	1	none	none
 geonames_admin1_codes	ok	15460	34785	4	3865	7730	0	0	0	1	none	none
 coinpaprika_tickers	ok	16000	116000	8	2000	16000	0	0	0	1	none	none
-nasa_power_daily_climate	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
-nasa_power_daily_humidity_wind	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
-nasa_power_daily_precip_solar	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
-nasa_power_daily_solar_temperature_extremes	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
-nasa_power_daily_solar_wind	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
-nasa_power_daily_temp_precip_humidity	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
-nasa_power_daily_temperature_humidity	ok	16425	131400	15	1095	8760	0	0	0	1	none	none
 usgs_nwis_dissolved_oxygen_daily	ok	16558	132464	15	1343	10744	0	0	0	1	none	none
 usgs_nwis_ph_daily	ok	17277	138216	16	1287.5	10300	0	0	0	1	none	none
 internetarchive_advancedsearch	ok	20000	120000	2	10000	60000	0	0	0	1	none	none
@@ -25,6 +18,7 @@ nasa_donki_flr	ok	22484	89936	7	3212	12848	0	0	0	1	none	none
 openflights_airports	ok	23094	153960	3	7698	61584	0	0	0	1	none	none
 statsbomb_world_cup_final	ok	26802	44670	9	2978	2978	0	0	0	1	none	none
 nvd_cpe_match_feed	ok	30000	100000	3	10000	40000	0	0	0	1	none	none
+eia_petroleum_barrel_prices	ok	33764	270112	16	1339	10712	0	0	0	1	none	none
 usgs_nwis_streamflow_daily	ok	34304	274432	32	1095	8760	0	0	0	1	none	none
 usgs_nwis_specific_conductance_daily	ok	34889	279112	29	1406	11248	0	0	0	1	none	none
 noaa_tides_water_level	ok	37200	141360	5	7440	7440	0	0	0	1	none	none

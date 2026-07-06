@@ -1,0 +1,74 @@
+manifest_version = 1
+dataset_id = "eia_petroleum_barrel_prices"
+name = "EIA Petroleum Barrel-Denominated Crude/Oil Prices"
+description = "EIA petroleum daily, weekly, and monthly crude/oil price observations reported in dollars per barrel."
+homepage = "https://www.eia.gov/opendata/"
+
+[license]
+name = "U.S. Government Work"
+spdx = "LicenseRef-USGov"
+url = "https://www.eia.gov/about/copyrights_reuse.php"
+citation = "U.S. Energy Information Administration Open Data API."
+notes = "EIA data are public U.S. government information. Preserve EIA attribution and endpoint metadata."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official EIA Open Data API only."
+usage_notes = "Public petroleum market price series suitable for reproducible numeric dataset collection."
+
+[[origins]]
+id = "eia_api"
+name = "EIA Open Data API"
+url = "https://api.eia.gov/v2/"
+type = "api"
+notes = "Official EIA v2 API. Download script uses fixed petroleum price endpoints by default, with optional route discovery or explicit endpoint overrides."
+
+[[resources]]
+id = "eia_petroleum_price_routes"
+origin = "eia_api"
+url = "https://api.eia.gov/v2/petroleum/pri/"
+type = "api_query_result"
+version = "default-petroleum-price-endpoints-daily-weekly-monthly"
+access = "Default endpoint list petroleum/pri/spt, petroleum/pri/fut, and petroleum/pri/rac; optional route discovery via EIA_BARREL_PRICE_DISCOVER=1 or explicit EIA_BARREL_PRICE_ENDPOINTS override."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/eia_petroleum_barrel_prices/pages/"
+notes = "Downloaded pages are API JSON responses. Current verified build retained daily, weekly, and monthly dollars-per-barrel crude/oil price series from spot and futures endpoints."
+
+[local_paths]
+downloads = "downloads/eia_petroleum_barrel_prices/"
+filtered = "filtered/eia_petroleum_barrel_prices/"
+index = "index/eia_petroleum_barrel_prices/"
+samples = "samples/eia_petroleum_barrel_prices/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/eia_petroleum_barrel_prices/samples.jsonl"
+summary = "Download configured EIA petroleum price endpoints, filter to crude/oil dollars-per-barrel series, and emit one little-endian float64 array per retained EIA series/frequency pair."
+deterministic_notes = "Default endpoints are petroleum/pri/spt, petroleum/pri/fut, and petroleum/pri/rac; default frequencies are daily, weekly, and monthly; page size, record caps, min records, unit filters, keyword filters, and sample ordering are fixed by environment-defaulted script settings. Build performs no network access and sorts by endpoint, frequency, series, and period."
+
+[[series]]
+id = "eia_petroleum_crude_oil_price_usd_per_barrel_f64"
+description = "Crude/oil price observations reported in dollars per barrel."
+semantic_meaning = "Native EIA value cells for daily, weekly, or monthly petroleum crude/oil price series whose units are dollars per barrel."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "One natural sample per retained EIA series/frequency pair. Source row order is normalized by period within each sample."
+source_resources = ["eia_petroleum_price_routes"]
+filtered_input_path = "filtered/eia_petroleum_barrel_prices/ingest_stats.json"
+filtering = "Keep parseable finite values from retained daily, weekly, and monthly EIA series with dollars-per-barrel units and crude/oil price metadata; reject non-price, non-oil, constant, too-short, or duplicate-period rows."
+missing_value_policy = "Rows with malformed periods, missing series identifiers, missing units, non-finite values, duplicate periods, or malformed numeric values are dropped for the affected series."
+conversion = "Parse decimal EIA value text as IEEE-754 little-endian float64 arrays."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "eia_petroleum_price_time_series"
+sample_rank = 1
+sample_axes = ["period"]
+sample_count = 16
+total_size_bytes = 270112
+output_path = "samples/eia_petroleum_barrel_prices/eia_petroleum_crude_oil_price_usd_per_barrel_f64/"

@@ -116,6 +116,19 @@ Reject bundles that combine unrelated indicators merely because they share:
 
 Accept only bundles whose material type, generation process, cadence, and unit semantics still read as one coherent dataset.
 
+The following accepted-but-tiny NASA POWER mixed bundles were removed on
+2026-07-06 after stronger homogeneous NASA POWER recipes had been expanded.
+Do not recreate these mixed bundles: repair the corresponding homogeneous
+single-field POWER recipe instead.
+
+- `nasa_power_daily_climate` mixed temperature, precipitation, and wind
+- `nasa_power_daily_humidity_wind` mixed humidity and wind
+- `nasa_power_daily_precip_solar` mixed precipitation, solar radiation, and humidity
+- `nasa_power_daily_solar_temperature_extremes` mixed solar radiation and temperature
+- `nasa_power_daily_solar_wind` mixed solar radiation and wind
+- `nasa_power_daily_temp_precip_humidity` mixed temperature, precipitation, and humidity
+- `nasa_power_daily_temperature_humidity` mixed temperature and humidity
+
 ## Claimed Scope Must Be Real
 
 If a recipe claims `50` sites, `500` entities, or some other target scope, the accepted output must actually realize that scope or be narrowed before acceptance.

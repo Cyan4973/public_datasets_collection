@@ -1,305 +1,225 @@
-#!/usr/bin/env sh
-set -eu
+#!/usr/bin/env bash
+set -euo pipefail
 
-SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
-REPO_ROOT=$(CDPATH= cd -- "${SCRIPT_DIR}/../.." && pwd)
-DATA_DIR=${DATA_DIR:-"${REPO_ROOT}/.data"}
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+DATA_DIR="${DATA_DIR:-.data}"
 DATASET_ID="usgs_nwis_specific_conductance_daily"
+LOG_DIR="$REPO_ROOT/$DATA_DIR/logs/$DATASET_ID"
+DOWNLOAD_DIR="$REPO_ROOT/$DATA_DIR/downloads/$DATASET_ID"
+PAGE_DIR="$DOWNLOAD_DIR/pages"
+mkdir -p "$LOG_DIR" "$PAGE_DIR"
+
+RUN_TS="$(date -u +%Y%m%dT%H%M%SZ)"
+LOG_FILE="$LOG_DIR/download.$RUN_TS.log"
+LATEST_LOG="$LOG_DIR/download.latest.log"
+exec > >(tee "$LOG_FILE" "$LATEST_LOG") 2>&1
+
 PARAMETER_CD="00095"
-PARAMETER_LABEL="specific conductance"
-START_YEAR=2021
-END_YEAR=2024
-TARGET_SITES=50
-TARGET_CANDIDATES=250
-STATE_CODES="AL AK AZ AR CA CO CT DE FL GA ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY"
-SITE_BASE_URL="https://waterservices.usgs.gov/nwis/site/"
-DAILY_BASE_URL="https://waterservices.usgs.gov/nwis/dv/"
-DOWNLOAD_ROOT="${DATA_DIR}/downloads/${DATASET_ID}"
-INVENTORY_ROOT="${DOWNLOAD_ROOT}/site_inventory"
-LOG_ROOT="${DATA_DIR}/logs/${DATASET_ID}"
-FORCE=${FORCE:-0}
-RUN_TS=$(date -u +"%Y%m%dT%H%M%SZ")
-LOG_FILE="${LOG_ROOT}/download.${RUN_TS}.log"
-LATEST_LOG="${LOG_ROOT}/download.latest.log"
-FAILURES_FILE="${DOWNLOAD_ROOT}/download_failures.tsv"
-STATE_PLAN_FILE="${DOWNLOAD_ROOT}/state_inventory_plan.tsv"
-CANDIDATE_FILE="${DOWNLOAD_ROOT}/candidate_sites.tsv"
-SELECTED_FILE="${DOWNLOAD_ROOT}/selected_sites.tsv"
-PLAN_FILE="${DOWNLOAD_ROOT}/download_plan.tsv"
-CHECKSUM_FILE="${DOWNLOAD_ROOT}/collection_checksums.sha256"
-USER_AGENT=${USER_AGENT:-"openzl-public-datasets-collection/1.0"}
+STAT_CD="00003"
+START_DATE="${USGS_NWIS_SPECIFIC_CONDUCTANCE_START_DATE:-2000-01-01}"
+END_DATE="${USGS_NWIS_SPECIFIC_CONDUCTANCE_END_DATE:-2024-12-31}"
+STATES="${USGS_NWIS_SPECIFIC_CONDUCTANCE_STATES:-az ca co fl ga ia ma md nc nd ny or ri sc tx ut va wa wi wy}"
+MIN_VALUES_PER_SAMPLE="${USGS_NWIS_SPECIFIC_CONDUCTANCE_MIN_VALUES_PER_SAMPLE:-7000}"
+MIN_SAMPLE_COUNT="${USGS_NWIS_SPECIFIC_CONDUCTANCE_MIN_SAMPLE_COUNT:-20}"
+REQUEST_DELAY="${USGS_NWIS_SPECIFIC_CONDUCTANCE_REQUEST_DELAY_SECONDS:-1.0}"
+BASE_URL="https://waterservices.usgs.gov/nwis/dv/"
+FAILURES_FILE="$DOWNLOAD_DIR/download_failures.tsv"
+PLAN_FILE="$DOWNLOAD_DIR/download_plan.tsv"
+SELECTED_FILE="$DOWNLOAD_DIR/selected_sites.tsv"
+STATS_FILE="$DOWNLOAD_DIR/download_stats.json"
+CHECKSUM_FILE="$DOWNLOAD_DIR/collection_checksums.sha256"
 
-mkdir -p "${DOWNLOAD_ROOT}" "${INVENTORY_ROOT}" "${LOG_ROOT}"
-: > "${LOG_FILE}"
-: > "${FAILURES_FILE}"
-sync_latest_log() { cp "${LOG_FILE}" "${LATEST_LOG}"; }
-trap sync_latest_log EXIT
+: > "$FAILURES_FILE"
+printf 'state_code\tstart_date\tend_date\turl\trel_out\n' > "$PLAN_FILE"
 
-say() { printf '%s\n' "$*" | tee -a "${LOG_FILE}"; }
+echo "[$(date -Is)] download_start dataset=$DATASET_ID states='$STATES' parameter=$PARAMETER_CD stat=$STAT_CD window=$START_DATE..$END_DATE min_values=$MIN_VALUES_PER_SAMPLE"
 
-say "dataset=${DATASET_ID}"
-say "parameter_cd=${PARAMETER_CD}"
-say "run_ts=${RUN_TS}"
-say "download_root=${DOWNLOAD_ROOT}"
-say "inventory_root=${INVENTORY_ROOT}"
-say "log_file=${LOG_FILE}"
+for state in $STATES; do
+  state_lc="$(printf '%s' "$state" | tr '[:upper:]' '[:lower:]')"
+  rel_out="pages/usgs_${PARAMETER_CD}_${state_lc}.json"
+  out="$DOWNLOAD_DIR/$rel_out"
+  tmp="$out.tmp"
+  url="${BASE_URL}?format=json&stateCd=${state_lc}&parameterCd=${PARAMETER_CD}&statCd=${STAT_CD}&startDT=${START_DATE}&endDT=${END_DATE}&siteStatus=all"
+  printf '%s\t%s\t%s\t%s\t%s\n' "$state_lc" "$START_DATE" "$END_DATE" "$url" "$rel_out" >> "$PLAN_FILE"
 
-STATE_CODES="${STATE_CODES}" SITE_BASE_URL="${SITE_BASE_URL}" python3 - <<'PY' "${STATE_PLAN_FILE}"
+  if [ -s "$out" ] && [ "${FORCE_DOWNLOAD:-0}" != "1" ]; then
+    echo "cache_hit state=$state_lc path=$out"
+    continue
+  fi
+
+  rm -f "$tmp"
+  echo "fetch state=$state_lc url=$url"
+  if ! curl --globoff -fL --retry 3 --retry-delay 5 -A "openzl-public-datasets/1.0" -o "$tmp" "$url"; then
+    printf 'state\t%s\t%s\n' "$state_lc" "$url" >> "$FAILURES_FILE"
+    echo "failed state=$state_lc"
+    rm -f "$tmp"
+    continue
+  fi
+
+  if ! python3 - "$tmp" "$PARAMETER_CD" "$STAT_CD" <<'PY'; then
 from __future__ import annotations
-import os, sys, urllib.parse
-from pathlib import Path
-plan_path = Path(sys.argv[1])
-site_base_url = os.environ["SITE_BASE_URL"]
-state_codes = [code.strip().lower() for code in os.environ["STATE_CODES"].split() if code.strip()]
-with plan_path.open("w", encoding="utf-8", newline="") as plan_file:
-    for state_code in state_codes:
-        params = {"format":"rdb","siteOutput":"expanded","siteType":"ST","siteStatus":"active","stateCd":state_code}
-        url = site_base_url + "?" + urllib.parse.urlencode(params)
-        rel_out = f"site_inventory_{state_code}.txt"
-        plan_file.write(f"{state_code}\t{url}\t{rel_out}\n")
-PY
 
-validate_inventory_payload() {
-  path=$1
-  python3 - <<'PY' "${path}" >>"${LOG_FILE}" 2>&1
-from __future__ import annotations
+import json
 import sys
 from pathlib import Path
-path = Path(sys.argv[1])
-header = None
-with path.open("r", encoding="utf-8", errors="replace") as handle:
-    for line in handle:
-        if line.startswith("#"): continue
-        columns = line.rstrip("\n").split("\t")
-        if columns and columns[0] == "agency_cd":
-            header = columns
-            break
-if header is None: raise SystemExit(f"missing tabular header in {path}")
-required = {"site_no","site_tp_cd","station_nm","instruments_cd","state_cd"}
-missing = required.difference(header)
-if missing: raise SystemExit(f"missing required columns in {path}: {sorted(missing)}")
-PY
-}
 
-validate_daily_payload() {
-  path=$1
-  python3 - <<'PY' "${path}" >>"${LOG_FILE}" 2>&1
-from __future__ import annotations
-import json, sys
-from pathlib import Path
 path = Path(sys.argv[1])
-payload = json.loads(path.read_text(encoding="utf-8"))
-if "value" not in payload: raise SystemExit(f"missing value object in {path}")
-PY
-}
-
-daily_payload_has_usable_values() {
-  path=$1
-  python3 - <<'PY' "${path}" >>"${LOG_FILE}" 2>&1
-from __future__ import annotations
-import json, sys
-from pathlib import Path
-path = Path(sys.argv[1])
+parameter_cd = sys.argv[2]
+stat_cd = sys.argv[3]
 payload = json.loads(path.read_text(encoding="utf-8"))
 time_series = payload.get("value", {}).get("timeSeries", [])
-if not time_series: raise SystemExit(1)
-selected_series = None
-for candidate in time_series:
-    if str(candidate.get("name", "")).endswith(":00003"):
-        selected_series = candidate
-        break
-if selected_series is None: selected_series = time_series[0]
-for wrapper in selected_series.get("values", []):
-    rows = wrapper.get("value", [])
-    if not isinstance(rows, list): continue
-    for row in rows:
-        raw_value = str(row.get("value", "")).strip()
-        raw_date = str(row.get("dateTime", "")).strip()
-        if raw_value == "" or raw_date == "": continue
-        try: float(raw_value)
-        except ValueError: continue
-        pieces = raw_date[:10].split("-")
-        if len(pieces) != 3: continue
-        try: year = int(pieces[0]); month = int(pieces[1]); day = int(pieces[2])
-        except ValueError: continue
-        if year < 0 or year > 65535 or month < 1 or month > 12 or day < 1 or day > 31: continue
-        raise SystemExit(0)
-raise SystemExit(1)
-PY
-}
-
-fetch_inventory() {
-  url=$1; out=$2; tmp="${out}.tmp"
-  if [ -f "${out}" ] && [ "${FORCE}" != "1" ]; then
-    if validate_inventory_payload "${out}"; then return 2; fi
-    rm -f "${out}"
-  fi
-  rm -f "${tmp}"
-  if command -v curl >/dev/null 2>&1; then
-    curl -fL --retry 3 --retry-delay 5 -A "${USER_AGENT}" -o "${tmp}" "${url}" >>"${LOG_FILE}" 2>&1
-  elif command -v wget >/dev/null 2>&1; then
-    wget --user-agent="${USER_AGENT}" -O "${tmp}" "${url}" >>"${LOG_FILE}" 2>&1
-  else
-    printf 'error: need curl or wget\n' >&2; exit 1
-  fi
-  validate_inventory_payload "${tmp}"
-  mv "${tmp}" "${out}"
-  return 0
-}
-
-fetch_daily() {
-  url=$1; out=$2; tmp="${out}.tmp"
-  if [ -f "${out}" ] && [ "${FORCE}" != "1" ]; then
-    if validate_daily_payload "${out}"; then return 2; fi
-    rm -f "${out}"
-  fi
-  rm -f "${tmp}"
-  if command -v curl >/dev/null 2>&1; then
-    curl -fL --retry 3 --retry-delay 5 -A "${USER_AGENT}" -o "${tmp}" "${url}" >>"${LOG_FILE}" 2>&1
-  elif command -v wget >/dev/null 2>&1; then
-    wget --user-agent="${USER_AGENT}" -O "${tmp}" "${url}" >>"${LOG_FILE}" 2>&1
-  else
-    printf 'error: need curl or wget\n' >&2; exit 1
-  fi
-  validate_daily_payload "${tmp}"
-  mv "${tmp}" "${out}"
-  return 0
-}
-
-inventory_success=0; inventory_cached=0; inventory_failures=0
-while IFS='	' read -r state_code url rel_out; do
-  [ -n "${state_code}" ] || continue
-  out="${INVENTORY_ROOT}/${rel_out}"
-  say "fetch inventory ${state_code} ${url}"
-  if fetch_inventory "${url}" "${out}"; then
-    inventory_success=$((inventory_success + 1)); say "ok inventory ${state_code} ${out}"
-  else
-    status=$?
-    if [ "${status}" -eq 2 ]; then
-      inventory_cached=$((inventory_cached + 1)); say "cached inventory ${state_code} ${out}"
-    else
-      inventory_failures=$((inventory_failures + 1))
-      rm -f "${out}" "${out}.tmp"
-      printf 'inventory\t%s\t%s\t%s\n' "${state_code}" "${url}" "${rel_out}" >> "${FAILURES_FILE}"
-      say "failed inventory ${state_code} ${url}"
-    fi
-  fi
-done < "${STATE_PLAN_FILE}"
-if [ "${inventory_failures}" -gt 0 ]; then say "inventory fetch completed with failures"; exit 1; fi
-
-STATE_CODES="${STATE_CODES}" INVENTORY_ROOT="${INVENTORY_ROOT}" TARGET_CANDIDATES="${TARGET_CANDIDATES}" python3 - <<'PY' "${CANDIDATE_FILE}"
-from __future__ import annotations
-import csv, os, sys
-from pathlib import Path
-candidate_path = Path(sys.argv[1]); inventory_root = Path(os.environ["INVENTORY_ROOT"]); target_candidates = int(os.environ["TARGET_CANDIDATES"])
-state_codes = [code.strip().lower() for code in os.environ["STATE_CODES"].split() if code.strip()]
-per_state = {}
-for state_code in state_codes:
-    path = inventory_root / f"site_inventory_{state_code}.txt"
-    if not path.is_file(): raise SystemExit(f"missing inventory file: {path}")
-    rows = []
-    with path.open("r", encoding="utf-8", errors="replace") as handle:
-        header = None
-        for line in handle:
-            if line.startswith("#"): continue
-            columns = line.rstrip("\n").split("\t")
-            if header is None:
-                header = columns
-                indexes = {name: header.index(name) for name in ["site_no","station_nm","site_tp_cd","instruments_cd","state_cd"]}
-                continue
-            if columns and columns[0] == "5s": continue
-            if len(columns) < len(header): columns += [""] * (len(header) - len(columns))
-            site_no = columns[indexes["site_no"]].strip()
-            station_nm = columns[indexes["station_nm"]].strip()
-            site_tp_cd = columns[indexes["site_tp_cd"]].strip()
-            instruments_cd = columns[indexes["instruments_cd"]].strip()
-            if not site_no.isdigit() or not site_tp_cd.startswith("ST"): continue
-            if instruments_cd == "" or set(instruments_cd) == {"N"}: continue
-            rows.append((site_no, station_nm, instruments_cd))
-    deduped = []; seen = set()
-    for row in sorted(rows):
-        if row[0] in seen: continue
-        seen.add(row[0]); deduped.append(row)
-    per_state[state_code.upper()] = deduped
-candidates = []; positions = {state: 0 for state in per_state}
-while len(candidates) < target_candidates:
-    progressed = False
-    for state in sorted(per_state):
-        rows = per_state[state]; pos = positions[state]
-        if pos >= len(rows): continue
-        site_no, station_nm, instruments_cd = rows[pos]
-        positions[state] = pos + 1
-        candidates.append((len(candidates) + 1, state, site_no, station_nm, instruments_cd))
-        progressed = True
-        if len(candidates) >= target_candidates: break
-    if not progressed: break
-with candidate_path.open("w", encoding="utf-8", newline="") as handle:
-    writer = csv.writer(handle, delimiter="\t")
-    writer.writerow(["rank","state_code","site_no","station_nm","instruments_cd"])
-    for row in candidates: writer.writerow(row)
-if len(candidates) < 50: raise SystemExit(f"only {len(candidates)} candidate sites discovered")
-PY
-
-printf 'rank\tstate_code\tsite_no\tstation_nm\tinstruments_cd\tusable_years\n' > "${SELECTED_FILE}"
-: > "${PLAN_FILE}"
-daily_success=0; daily_cached=0; daily_failures=0; selected_count=0
-while IFS='	' read -r rank state_code site_no station_nm instruments_cd; do
-  [ "${rank}" != "rank" ] || continue
-  [ -n "${site_no}" ] || continue
-  site_has_data=0; usable_years=""
-  for year in $(seq "${START_YEAR}" "${END_YEAR}"); do
-    url="${DAILY_BASE_URL}?format=json&sites=${site_no}&parameterCd=${PARAMETER_CD}&siteStatus=all&startDT=${year}-01-01&endDT=${year}-12-31"
-    out="${DOWNLOAD_ROOT}/dv_${site_no}_${year}.json"
-    say "fetch daily ${site_no} ${year} ${url}"
-    if fetch_daily "${url}" "${out}"; then
-      daily_success=$((daily_success + 1)); say "ok daily ${site_no} ${year} ${out}"
-    else
-      status=$?
-      if [ "${status}" -eq 2 ]; then
-        daily_cached=$((daily_cached + 1)); say "cached daily ${site_no} ${year} ${out}"
-      else
-        daily_failures=$((daily_failures + 1))
-        rm -f "${out}" "${out}.tmp"
-        printf 'daily\t%s\t%s\t%s\n' "${site_no}" "${year}" "${url}" >> "${FAILURES_FILE}"
-        say "failed daily ${site_no} ${year} ${url}"
+if not isinstance(time_series, list):
+    raise SystemExit(f"missing timeSeries in {path}")
+for ts in time_series:
+    if not isinstance(ts, dict):
         continue
-      fi
-    fi
-    if daily_payload_has_usable_values "${out}"; then
-      site_has_data=1
-      if [ -z "${usable_years}" ]; then usable_years="${year}"; else usable_years="${usable_years},${year}"; fi
-    fi
-  done
-  if [ "${site_has_data}" -eq 1 ]; then
-    selected_count=$((selected_count + 1))
-    printf '%s\t%s\t%s\t%s\t%s\t%s\n' "${rank}" "${state_code}" "${site_no}" "${station_nm}" "${instruments_cd}" "${usable_years}" >> "${SELECTED_FILE}"
-    for year in $(seq "${START_YEAR}" "${END_YEAR}"); do
-      url="${DAILY_BASE_URL}?format=json&sites=${site_no}&parameterCd=${PARAMETER_CD}&siteStatus=all&startDT=${year}-01-01&endDT=${year}-12-31"
-      rel_out="dv_${site_no}_${year}.json"
-      printf '%s\t%s\t%s\t%s\n' "${site_no}" "${year}" "${url}" "${rel_out}" >> "${PLAN_FILE}"
-    done
-    say "selected site ${site_no} usable_years=${usable_years} selected_count=${selected_count}"
-    if [ "${selected_count}" -ge "${TARGET_SITES}" ]; then break; fi
-  else
-    rm -f "${DOWNLOAD_ROOT}/dv_${site_no}_"*.json
-    say "rejected site ${site_no} no usable ${PARAMETER_LABEL} observations across ${START_YEAR}-${END_YEAR}"
+    name = str(ts.get("name", ""))
+    if f":{parameter_cd}:" in name and name.endswith(f":{stat_cd}"):
+        break
+else:
+    # Empty but structurally valid state pages are accepted; the build will
+    # reject the collection if too few long site series are present.
+    if time_series:
+        raise SystemExit(f"no matching {parameter_cd}:{stat_cd} series in {path}")
+PY
+    printf 'state\t%s\tinvalid_payload\n' "$state_lc" >> "$FAILURES_FILE"
+    echo "invalid state=$state_lc"
+    rm -f "$tmp"
+    continue
   fi
-done < "${CANDIDATE_FILE}"
-if [ "${daily_failures}" -gt 0 ]; then say "daily fetch completed with failures"; exit 1; fi
-if [ "${selected_count}" -lt "${TARGET_SITES}" ]; then
-  say "selected_count=${selected_count} target_sites=${TARGET_SITES}"
-  say "download completed below the target number of usable sites"
+
+  mv "$tmp" "$out"
+  sleep "$REQUEST_DELAY"
+done
+
+python3 - "$PAGE_DIR" "$SELECTED_FILE" "$STATS_FILE" "$MIN_VALUES_PER_SAMPLE" "$MIN_SAMPLE_COUNT" "$PARAMETER_CD" "$STAT_CD" <<'PY'
+from __future__ import annotations
+
+import csv
+import json
+import math
+import re
+import sys
+from pathlib import Path
+
+page_dir = Path(sys.argv[1])
+selected_path = Path(sys.argv[2])
+stats_path = Path(sys.argv[3])
+min_values = int(sys.argv[4])
+min_samples = int(sys.argv[5])
+parameter_cd = sys.argv[6]
+stat_cd = sys.argv[7]
+page_re = re.compile(r"usgs_(\d{5})_([a-z]{2})\.json$")
+
+def parse_row(row: object) -> tuple[float, str] | None:
+    if not isinstance(row, dict):
+        return None
+    raw_value = str(row.get("value", "")).strip()
+    raw_date = str(row.get("dateTime", "")).strip()
+    if raw_value == "" or raw_date == "":
+        return None
+    try:
+        value = float(raw_value)
+    except ValueError:
+        return None
+    if not math.isfinite(value) or value < 0:
+        return None
+    date_part = raw_date[:10]
+    pieces = date_part.split("-")
+    if len(pieces) != 3:
+        return None
+    try:
+        year, month, day = (int(piece) for piece in pieces)
+    except ValueError:
+        return None
+    if year < 0 or year > 65535 or month < 1 or month > 12 or day < 1 or day > 31:
+        return None
+    return value, date_part
+
+pages = []
+selected_rows = []
+candidate_count = 0
+for path in sorted(page_dir.glob(f"usgs_{parameter_cd}_*.json")):
+    match = page_re.search(path.name)
+    if not match:
+        continue
+    state = match.group(2)
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    series_count = 0
+    long_series_count = 0
+    for ts in payload.get("value", {}).get("timeSeries", []):
+        if not isinstance(ts, dict):
+            continue
+        name = str(ts.get("name", ""))
+        if f":{parameter_cd}:" not in name or not name.endswith(f":{stat_cd}"):
+            continue
+        source_info = ts.get("sourceInfo", {})
+        site_codes = source_info.get("siteCode", []) if isinstance(source_info, dict) else []
+        site_no = ""
+        if site_codes and isinstance(site_codes[0], dict):
+            site_no = str(site_codes[0].get("value", "")).strip()
+        if not site_no:
+            continue
+        best_count = 0
+        first_date = ""
+        last_date = ""
+        for wrapper in ts.get("values", []):
+            if not isinstance(wrapper, dict):
+                continue
+            rows = wrapper.get("value", [])
+            if not isinstance(rows, list):
+                continue
+            count = 0
+            wrapper_first = ""
+            wrapper_last = ""
+            for row in rows:
+                parsed = parse_row(row)
+                if parsed is None:
+                    continue
+                _, date_part = parsed
+                count += 1
+                if wrapper_first == "":
+                    wrapper_first = date_part
+                wrapper_last = date_part
+            if count > best_count:
+                best_count = count
+                first_date = wrapper_first
+                last_date = wrapper_last
+        series_count += 1
+        candidate_count += 1
+        if best_count >= min_values:
+            long_series_count += 1
+            selected_rows.append((state, site_no, best_count, first_date, last_date, name, path.name))
+    pages.append({"path": path.name, "state": state, "series": series_count, "long_series": long_series_count})
+
+selected_rows.sort(key=lambda row: (row[0], row[1]))
+with selected_path.open("w", encoding="utf-8", newline="") as handle:
+    writer = csv.writer(handle, delimiter="\t")
+    writer.writerow(["state_code", "site_no", "value_count", "start_date", "end_date", "series_name", "page"])
+    writer.writerows(selected_rows)
+
+stats = {
+    "candidate_site_series": candidate_count,
+    "dataset_id": "usgs_nwis_specific_conductance_daily",
+    "min_sample_count": min_samples,
+    "min_values_per_sample": min_values,
+    "pages": pages,
+    "selected_site_series": len(selected_rows),
+}
+stats_path.write_text(json.dumps(stats, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+if len(selected_rows) < min_samples:
+    raise SystemExit(f"only {len(selected_rows)} long site series, minimum is {min_samples}")
+print(f"pages={len(pages)} candidate_series={candidate_count} selected_series={len(selected_rows)}")
+PY
+
+if [ -s "$FAILURES_FILE" ]; then
+  echo "download failures recorded in $FAILURES_FILE"
+  exit 1
 fi
-find "${INVENTORY_ROOT}" -maxdepth 1 -type f -name 'site_inventory_*.txt' -print0 | sort -z | xargs -0 sha256sum > "${CHECKSUM_FILE}"
-find "${DOWNLOAD_ROOT}" -maxdepth 1 -type f -name 'dv_*.json' -print0 | sort -z | xargs -0 sha256sum >> "${CHECKSUM_FILE}"
-say "inventory_success=${inventory_success}"
-say "inventory_cached=${inventory_cached}"
-say "inventory_failures=${inventory_failures}"
-say "daily_success=${daily_success}"
-say "daily_cached=${daily_cached}"
-say "daily_failures=${daily_failures}"
-say "candidate_file=${CANDIDATE_FILE}"
-say "selected_file=${SELECTED_FILE}"
-say "plan_file=${PLAN_FILE}"
-say "checksum_file=${CHECKSUM_FILE}"
-say "downloaded recipe inputs under ${DOWNLOAD_ROOT}"
+
+find "$PAGE_DIR" -maxdepth 1 -type f -name "usgs_${PARAMETER_CD}_*.json" -print0 | sort -z | xargs -0 sha256sum > "$CHECKSUM_FILE"
+
+echo "selected_file=$SELECTED_FILE"
+echo "stats_file=$STATS_FILE"
+echo "checksum_file=$CHECKSUM_FILE"
+echo "[$(date -Is)] download done dataset=$DATASET_ID"

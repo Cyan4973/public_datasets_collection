@@ -18,7 +18,6 @@ openflights_airports	ok	23094	153960	3	7698	61584	0	0	0	1	none	none
 statsbomb_world_cup_final	ok	26802	44670	9	2978	2978	0	0	0	1	none	none
 nvd_cpe_match_feed	ok	30000	100000	3	10000	40000	0	0	0	1	none	none
 eia_petroleum_barrel_prices	ok	33764	270112	16	1339	10712	0	0	0	1	none	none
-usgs_nwis_specific_conductance_daily	ok	34889	279112	29	1406	11248	0	0	0	1	none	none
 ourworldindata_energy_mix	ok	38274	108443	6	6379	19137	0	0	0	1	none	none
 arxiv_cs_lg_2024q1_metadata	ok	38360	115080	4	9590	28770	0	0	0	1	none	none
 expression_atlas_experiments	ok	41058	95802	9	4562	9124	0	0	0	1	none	none
@@ -129,6 +128,7 @@ nasa_power_daily_solar_flux	ok	898551	7188408	60	14976	119808	0	0	0	1	none	none
 smithsonian_openaccess_gltf_indices_u16	ok	899964	1799928	3	299988	599976	0	0	0	1	none	none
 nasa_power_daily_surface_state	ok	964260	7714080	60	16071	128568	0	0	0	1	none	none
 nasa_power_daily_temperature_extremes	ok	964260	7714080	60	16071	128568	0	0	0	1	none	none
+usgs_nwis_specific_conductance_daily	ok	984131	7873048	120	8317.5	66540	0	0	0	1	none	none
 nih_reporter_projects	ok	1064676	6388056	90	11664	66162	0	0	0	1	none	none
 europe_pmc_search	ok	1127748	2631412	6	187958	375916	187958	751832	1	1	none	none
 eeg_physionet	ok	1178880	2357760	30	39200	78400	0	0	0	1	none	none

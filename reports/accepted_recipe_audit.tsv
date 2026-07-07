@@ -31,7 +31,6 @@ rhea_reactions	ok	55029	128401	3	18343	36686	0	0	0	1	none	none
 ourworldindata_co2_latest	ok	58768	293840	2	29384	146920	0	0	0	1	none	none
 osf_preprints	ok	59997	239988	3	19999	79996	0	0	0	1	none	none
 ooni_measurements	ok	60000	240000	3	20000	80000	0	0	0	1	none	none
-usgs_nwis_water_temperature_daily	ok	60459	483672	50	1427.5	11420	0	0	0	1	none	none
 anilist_media	ok	64534	172603	30	2288	5151	0	0	0	1	none	none
 scryfall_default_cards	ok	65272	180931	29	2205	5268	0	0	0	1	none	none
 library_of_congress_items	ok	66380	264316	5	15000	60000	0	0	0	1	none	none
@@ -134,6 +133,7 @@ europe_pmc_search	ok	1127748	2631412	6	187958	375916	187958	751832	1	1	none	none
 eeg_physionet	ok	1178880	2357760	30	39200	78400	0	0	0	1	none	none
 census_acs_pums_ca_person_2023_i64	ok	1265252	10122016	4	334276	2674208	0	0	0	1	none	none
 macrostrat_units	ok	1422089	5688356	11	129262	517048	0	0	0	1	none	none
+usgs_nwis_water_temperature_daily	ok	1680861	13446888	200	8567	68536	0	0	0	1	none	none
 noaa_ghcn_daily_snwd_by_station	ok	1725872	3451744	58	28052.5	56105	0	0	0	1	none	none
 gas_sensor_array_drift_uci	ok	1794390	14257750	129	13910	111280	0	0	0	1	none	none
 noaa_nexrad_level3_products_u8	ok	1833134	1833134	96	19238	19238	0	0	0	1	none	none

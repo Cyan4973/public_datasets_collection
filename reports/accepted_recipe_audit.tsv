@@ -150,6 +150,7 @@ ptbxl_physionet	ok	2400000	9600000	200	12000	48000	0	0	0	1	none	none
 openf1_belgium_2023_car_data_native	ok	2526120	3368160	120	21051	21051	0	0	0	1	none	none
 ncbi_assembly_refseq_summary	ok	2614503	12549768	5	522939	2091756	0	0	0	1	none	none
 openalex_authors_large	ok	2815400	7239600	7	402200	804400	0	0	0	1	none	none
+openalex_author_topic_count_u8	ok	2858800	2858800	11	262144	262144	0	0	0	1	none	none
 sensorless_drive_diagnosis_uci	ok	2866941	22525965	49	58509	468072	0	0	0	1	none	none
 gdc_somatic_mutations	ok	3323270	13293080	23	133731	534924	0	0	0	1	none	none
 imdb_title_ratings	ok	3358804	13435216	2	1679402	6717608	0	0	0	1	none	none

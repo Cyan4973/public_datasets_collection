@@ -17,10 +17,7 @@ LOG_FILE="$LOG_DIR/build.$RUN_TS.log"
 LATEST_LOG="$LOG_DIR/build.latest.log"
 exec > >(tee "$LOG_FILE" "$LATEST_LOG") 2>&1
 
-SHARD_VALUES="${OPENALEX_TOPIC_COUNT_SHARD_VALUES:-262144}"
-MIN_FINAL_SHARD_VALUES="${OPENALEX_TOPIC_COUNT_MIN_FINAL_SHARD_VALUES:-65536}"
-
-export REPO_ROOT DATA_DIR PAGE_DIR FILTER_DIR INDEX_DIR SAMPLES_DIR SHARD_VALUES MIN_FINAL_SHARD_VALUES
+export REPO_ROOT DATA_DIR PAGE_DIR FILTER_DIR INDEX_DIR SAMPLES_DIR
 python3 - <<'PY'
 from __future__ import annotations
 
@@ -37,13 +34,6 @@ page_dir = Path(os.environ["PAGE_DIR"])
 filter_dir = Path(os.environ["FILTER_DIR"])
 index_dir = Path(os.environ["INDEX_DIR"])
 samples_dir = Path(os.environ["SAMPLES_DIR"])
-shard_values = int(os.environ["SHARD_VALUES"])
-min_final_shard_values = int(os.environ["MIN_FINAL_SHARD_VALUES"])
-
-if shard_values < 1000:
-    raise SystemExit(f"OPENALEX_TOPIC_COUNT_SHARD_VALUES too small: {shard_values}")
-if min_final_shard_values < 1000 or min_final_shard_values > shard_values:
-    raise SystemExit(f"invalid OPENALEX_TOPIC_COUNT_MIN_FINAL_SHARD_VALUES: {min_final_shard_values}")
 
 page_re = re.compile(r"topic_count_page_(\d+)\.json$")
 page_paths = sorted(
@@ -66,41 +56,7 @@ rows_total = 0
 rows_kept = 0
 rows_skipped = 0
 duplicate_ids = 0
-shard_index = 0
-buffer = bytearray()
-
-def flush_shard(force: bool = False) -> None:
-    global shard_index, buffer
-    if not buffer:
-        return
-    if len(buffer) < min_final_shard_values and not force:
-        return
-    out = series_dir / f"part{shard_index:04d}_n{len(buffer):06d}.bin"
-    out.write_bytes(buffer)
-    index_rows.append(
-        {
-            "dataset_id": "openalex_author_topic_count_u8",
-            "series_id": series_id,
-            "role": "primary",
-            "sample_path": out.relative_to(data_root).as_posix(),
-            "numeric_kind": "uint",
-            "bit_width": 8,
-            "endianness": "little",
-            "element_size_bytes": 1,
-            "sample_size_bytes": len(buffer),
-            "value_count": len(buffer),
-            "sample_geometry": "contiguous_author_topic_count_shard",
-            "sample_rank": 1,
-            "sample_shape": [len(buffer)],
-            "shard_index": shard_index,
-            "source_row_count": len(buffer),
-            "natural_record_kind": "openalex_author_row",
-            "natural_record_count": len(buffer),
-            "natural_record_values": 1,
-        }
-    )
-    shard_index += 1
-    buffer = bytearray()
+values = bytearray()
 
 for path in page_paths:
     with path.open(encoding="utf-8") as fh:
@@ -121,27 +77,36 @@ for path in page_paths:
             rows_skipped += 1
             continue
         value = min(len(topics), 255)
-        buffer.append(value)
+        values.append(value)
         histogram[value] += 1
         rows_kept += 1
-        if len(buffer) == shard_values:
-            flush_shard(force=True)
 
-dropped_tail_values = 0
-if buffer:
-    if len(buffer) >= min_final_shard_values:
-        flush_shard(force=True)
-    else:
-        dropped_tail_values = len(buffer)
-        rows_kept -= dropped_tail_values
-        for value in buffer:
-            histogram[value] -= 1
-            if histogram[value] == 0:
-                del histogram[value]
-        buffer = bytearray()
+if not values:
+    raise SystemExit("no values emitted")
 
-if not index_rows:
-    raise SystemExit("no shards emitted")
+out = series_dir / f"authors_topic_count_n{len(values):08d}.bin"
+out.write_bytes(values)
+index_rows.append(
+    {
+        "dataset_id": "openalex_author_topic_count_u8",
+        "series_id": series_id,
+        "role": "primary",
+        "sample_path": out.relative_to(data_root).as_posix(),
+        "numeric_kind": "uint",
+        "bit_width": 8,
+        "endianness": "little",
+        "element_size_bytes": 1,
+        "sample_size_bytes": len(values),
+        "value_count": len(values),
+        "sample_geometry": "contiguous_author_topic_count_stream",
+        "sample_rank": 1,
+        "sample_shape": [len(values)],
+        "source_row_count": len(values),
+        "natural_record_kind": "openalex_author_row",
+        "natural_record_count": len(values),
+        "natural_record_values": 1,
+    }
+)
 
 index_path = index_dir / "samples.jsonl"
 with index_path.open("w", encoding="utf-8") as fh:
@@ -152,20 +117,18 @@ stats_out = {
     "dataset_id": "openalex_author_topic_count_u8",
     "downloaded_pages": len(page_paths),
     "duplicate_ids": duplicate_ids,
-    "dropped_tail_values": dropped_tail_values,
     "histogram": {str(k): histogram[k] for k in sorted(histogram)},
     "rows_kept": rows_kept,
     "rows_skipped": rows_skipped,
     "rows_total": rows_total,
     "sample_count": len(index_rows),
-    "shard_values": shard_values,
     "primary_values": sum(int(row["value_count"]) for row in index_rows),
     "primary_sample_bytes": sum(int(row["sample_size_bytes"]) for row in index_rows),
 }
 (filter_dir / "ingest_stats.json").write_text(json.dumps(stats_out, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 print(
-    f"built shards={len(index_rows)} rows_kept={rows_kept} rows_skipped={rows_skipped} "
+    f"built samples={len(index_rows)} rows_kept={rows_kept} rows_skipped={rows_skipped} "
     f"primary_values={stats_out['primary_values']} primary_bytes={stats_out['primary_sample_bytes']}"
 )
 PY

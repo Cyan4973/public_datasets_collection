@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "openalex_author_topic_count_u8"
 name = "OpenAlex Author Topic Count U8"
-description = "Focused OpenAlex author embedded-topic-list count stream, emitted as large contiguous uint8 shards."
+description = "Focused OpenAlex author embedded-topic-list count stream, emitted as one source-order contiguous uint8 sample."
 homepage = "https://openalex.org/"
 
 [license]
@@ -48,8 +48,8 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/openalex_author_topic_count_u8/samples.jsonl"
-summary = "Cursor-paginate a large OpenAlex author slice with only id and topics, convert embedded topics-list length to uint8, and emit deterministic contiguous shards."
-deterministic_notes = "Fixed endpoint, fixed selected fields, fixed page size, cursor pagination over default order, bounded target record count, 429 stop-after-minimum behavior for cached prefixes, duplicate author IDs skipped, source row order preserved, fixed contiguous shard size, optional tiny tail dropped below OPENALEX_TOPIC_COUNT_MIN_FINAL_SHARD_VALUES, durable logs, generated ingest stats with histogram, and generated sample index."
+summary = "Cursor-paginate a large OpenAlex author slice with only id and topics, convert embedded topics-list length to uint8, and emit one deterministic source-order contiguous stream sample."
+deterministic_notes = "Fixed endpoint, fixed selected fields, fixed page size, cursor pagination over default order, bounded target record count, 429 stop-after-minimum behavior for cached prefixes, duplicate author IDs skipped, source row order preserved, durable logs, generated ingest stats with histogram, and generated sample index."
 
 [[series]]
 id = "openalex_author_topic_count_u8"
@@ -60,12 +60,12 @@ representation_class = "derived_operational_numeric"
 source_resources = ["author_topic_pages"]
 filtered_input_path = "filtered/openalex_author_topic_count_u8/ingest_stats.json"
 filtering = "Rows with missing/non-string author IDs, duplicate author IDs, or non-list topics fields are skipped."
-conversion = "Compute min(len(topics), 255) for each kept author row and write uint8 values in source cursor order into deterministic contiguous shards."
+conversion = "Compute min(len(topics), 255) for each kept author row and write uint8 values in source cursor order into one contiguous stream sample."
 numeric_kind = "uint"
 bit_width = 8
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
-sample_geometry = "contiguous_author_topic_count_shard"
-sample_count = 11
+sample_geometry = "contiguous_author_topic_count_stream"
+sample_count = 1
 total_size_bytes = 2858800
 output_path = "samples/openalex_author_topic_count_u8/openalex_author_topic_count_u8/"

@@ -15,11 +15,10 @@ LATEST_LOG="$LOG_DIR/verify.latest.log"
 exec > >(tee "$LOG_FILE" "$LATEST_LOG") 2>&1
 
 MIN_VALUES="${OPENALEX_TOPIC_COUNT_VERIFY_MIN_VALUES:-2000000}"
-MIN_SAMPLE_COUNT="${OPENALEX_TOPIC_COUNT_VERIFY_MIN_SAMPLE_COUNT:-8}"
-MIN_SAMPLE_VALUES="${OPENALEX_TOPIC_COUNT_VERIFY_MIN_SAMPLE_VALUES:-65536}"
+MIN_SAMPLE_VALUES="${OPENALEX_TOPIC_COUNT_VERIFY_MIN_SAMPLE_VALUES:-2000000}"
 MAX_PRIMARY_BYTES="${OPENALEX_TOPIC_COUNT_VERIFY_MAX_PRIMARY_BYTES:-1000000000}"
 
-export REPO_ROOT DATA_DIR FILTER_DIR INDEX_DIR MIN_VALUES MIN_SAMPLE_COUNT MIN_SAMPLE_VALUES MAX_PRIMARY_BYTES
+export REPO_ROOT DATA_DIR FILTER_DIR INDEX_DIR MIN_VALUES MIN_SAMPLE_VALUES MAX_PRIMARY_BYTES
 python3 - <<'PY'
 from __future__ import annotations
 
@@ -31,7 +30,6 @@ root = Path(os.environ["REPO_ROOT"]) / os.environ["DATA_DIR"]
 index_path = Path(os.environ["INDEX_DIR"]) / "samples.jsonl"
 stats_path = Path(os.environ["FILTER_DIR"]) / "ingest_stats.json"
 min_values = int(os.environ["MIN_VALUES"])
-min_sample_count = int(os.environ["MIN_SAMPLE_COUNT"])
 min_sample_values = int(os.environ["MIN_SAMPLE_VALUES"])
 max_primary_bytes = int(os.environ["MAX_PRIMARY_BYTES"])
 
@@ -39,6 +37,8 @@ rows = [json.loads(line) for line in index_path.read_text().splitlines() if line
 stats = json.loads(stats_path.read_text())
 if not rows:
     raise SystemExit("empty sample index")
+if len(rows) != 1:
+    raise SystemExit(f"expected one contiguous stream sample, found {len(rows)}")
 
 total_values = 0
 total_bytes = 0
@@ -47,6 +47,8 @@ seen_paths = set()
 for row in rows:
     if row.get("series_id") != "openalex_author_topic_count_u8":
         raise SystemExit(f"unexpected series_id: {row.get('series_id')}")
+    if row.get("sample_geometry") != "contiguous_author_topic_count_stream":
+        raise SystemExit(f"unexpected sample_geometry: {row.get('sample_geometry')}")
     if row.get("numeric_kind") != "uint" or int(row.get("bit_width", 0)) != 8:
         raise SystemExit(f"unexpected numeric type in row: {row}")
     value_count = int(row["value_count"])
@@ -66,8 +68,6 @@ for row in rows:
     total_values += value_count
     total_bytes += len(data)
 
-if len(rows) < min_sample_count:
-    raise SystemExit(f"only {len(rows)} samples, minimum is {min_sample_count}")
 if total_values < min_values:
     raise SystemExit(f"only {total_values} values, minimum is {min_values}")
 if total_bytes > max_primary_bytes:

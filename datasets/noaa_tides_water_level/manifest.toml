@@ -1,48 +1,90 @@
 manifest_version = 1
 dataset_id = "noaa_tides_water_level"
-status = "staged"
-kind = "native_numeric"
+name = "NOAA Tides Water Level"
+description = "NOAA CO-OPS coastal water-level station time series, emitted as homogeneous physical water-level and sigma families."
+homepage = "https://tidesandcurrents.noaa.gov/"
 
-[origin]
-name = "NOAA Tides and Currents"
+[license]
+name = "U.S. Government Public Domain"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://tidesandcurrents.noaa.gov/"
+citation = "NOAA Center for Operational Oceanographic Products and Services, Tides and Currents API."
+notes = "NOAA water-level observations are public U.S. government data. Preserve attribution and source provenance."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NOAA CO-OPS API only; public tide-gauge observations."
+usage_notes = "Physical coastal water-level observations suitable for compression training."
+
+[[origins]]
+id = "noaa_coops_api"
+name = "NOAA CO-OPS Data API"
 url = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter"
-license = "Public API terms"
+type = "api"
+notes = "Public API for NOAA Tides and Currents observations."
 
-[build]
-sample_index_path = ".data/index/noaa_tides_water_level/samples.jsonl"
-missing_value_policy = "Rows with unparseable timestamp or numeric water-level fields are dropped."
+[[resources]]
+id = "water_level_station_months"
+origin = "noaa_coops_api"
+url = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?product=water_level"
+type = "api_response_pages"
+version = "2023-2024-21-stations-monthly-json"
+access = "Monthly JSON queries by station with product=water_level, datum=MSL, time_zone=gmt, units=metric, and format=json."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/noaa_tides_water_level/"
+notes = "One JSON response per station-month chunk."
+
+[local_paths]
+downloads = "downloads/noaa_tides_water_level/"
+extracted = "extracted/noaa_tides_water_level/"
+filtered = "filtered/noaa_tides_water_level/"
+index = "index/noaa_tides_water_level/"
+samples = "samples/noaa_tides_water_level/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_tides_water_level/samples.jsonl"
+summary = "Download monthly NOAA CO-OPS water-level observations for selected stations, parse physical water level and sigma fields, reject short station samples, and emit one station time-series sample per physical field."
+deterministic_notes = "Fixed default station list, fixed default date window, fixed monthly chunking, source row order preserved within chunks, chunks concatenated in plan order per station, rows with unparseable timestamps or non-finite physical fields skipped atomically, calendar-derived fields excluded, durable logs, generated chunk stats, ingest stats, and sample index."
 
 [[series]]
 id = "noaa_tides_level_f64"
+description = "NOAA CO-OPS observed water level."
+semantic_meaning = "Observed coastal water level in meters relative to MSL for one NOAA station."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["water_level_station_months"]
+filtered_input_path = "filtered/noaa_tides_water_level/ingest_stats.json"
+filtering = "Keep rows with parseable timestamp, finite water level, and finite sigma; keep station samples with at least NOAA_TIDES_MIN_VALUES_PER_SAMPLE values."
+conversion = "Parse JSON field v as Python float and write IEEE-754 little-endian float64 arrays preserving source order."
 numeric_kind = "float"
 bit_width = 64
 endianness = "little"
-sample_format = "raw"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "noaa_coops_station_time_series"
+sample_count = 21
+total_size_bytes = 29149968
+output_path = "samples/noaa_tides_water_level/noaa_tides_level_f64/"
 
 [[series]]
 id = "noaa_tides_sigma_f64"
+description = "NOAA CO-OPS water-level sigma."
+semantic_meaning = "Reported water-level sigma/uncertainty in meters for one NOAA station."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["water_level_station_months"]
+filtered_input_path = "filtered/noaa_tides_water_level/ingest_stats.json"
+filtering = "Keep rows with parseable timestamp, finite water level, and finite sigma; keep station samples with at least NOAA_TIDES_MIN_VALUES_PER_SAMPLE values."
+conversion = "Parse JSON field s as Python float and write IEEE-754 little-endian float64 arrays preserving source order."
 numeric_kind = "float"
 bit_width = 64
 endianness = "little"
-sample_format = "raw"
-
-[[series]]
-id = "noaa_tides_day_u8"
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-sample_format = "raw"
-
-[[series]]
-id = "noaa_tides_hour_u8"
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-sample_format = "raw"
-
-[[series]]
-id = "noaa_tides_minute_u8"
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-sample_format = "raw"
+sample_format = "raw homogeneous numeric array"
+sample_geometry = "noaa_coops_station_time_series"
+sample_count = 21
+total_size_bytes = 29149968
+output_path = "samples/noaa_tides_water_level/noaa_tides_sigma_f64/"

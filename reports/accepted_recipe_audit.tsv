@@ -19,7 +19,6 @@ statsbomb_world_cup_final	ok	26802	44670	9	2978	2978	0	0	0	1	none	none
 nvd_cpe_match_feed	ok	30000	100000	3	10000	40000	0	0	0	1	none	none
 eia_petroleum_barrel_prices	ok	33764	270112	16	1339	10712	0	0	0	1	none	none
 usgs_nwis_specific_conductance_daily	ok	34889	279112	29	1406	11248	0	0	0	1	none	none
-noaa_tides_water_level	ok	37200	141360	5	7440	7440	0	0	0	1	none	none
 ourworldindata_energy_mix	ok	38274	108443	6	6379	19137	0	0	0	1	none	none
 arxiv_cs_lg_2024q1_metadata	ok	38360	115080	4	9590	28770	0	0	0	1	none	none
 expression_atlas_experiments	ok	41058	95802	9	4562	9124	0	0	0	1	none	none
@@ -159,6 +158,7 @@ usgs_daily_values_large	ok	3733419	29867352	1800	2192	17536	0	0	0	1	none	none
 citibike_2024_01_station_ids_u16	ok	3776170	7552340	16	180600	361200	0	0	0	1	none	none
 ncbi_gene_human	ok	4794554	19178216	4	1198638.5	4794554	0	0	0	1	none	none
 beijing_air_quality_uci	ok	5753775	46030200	180	32141.5	257132	0	0	0	1	none	none
+noaa_tides_water_level	ok	7287492	58299936	42	175440	1403520	0	0	0	1	none	none
 unicode_bmp_gutenberg	ok	8700484	17400968	12	490769	981538	0	0	0	1	none	none
 fsdd_pcm_u8	ok	10498424	10498424	3000	3358.5	3358.5	0	0	0	1	none	none
 fsdd_spoken_digits	ok	10498424	20996848	3000	3358.5	6717	0	0	0	1	none	none

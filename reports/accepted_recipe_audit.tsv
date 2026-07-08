@@ -8,7 +8,6 @@ met_biocollection_objects	ok	12281	49124	1	12281	49124	0	0	0	1	none	none
 europepmc_grants_large_retry	ok	14000	18000	14	1000	1000	0	0	0	1	none	none
 geonames_admin1_codes	ok	15460	34785	4	3865	7730	0	0	0	1	none	none
 coinpaprika_tickers	ok	16000	116000	8	2000	16000	0	0	0	1	none	none
-usgs_nwis_ph_daily	ok	17277	138216	16	1287.5	10300	0	0	0	1	none	none
 internetarchive_advancedsearch	ok	20000	120000	2	10000	60000	0	0	0	1	none	none
 nasa_eonet_events	ok	20115	73755	3	6705	13410	0	0	0	1	none	none
 binance_ticker_24hr	ok	21564	115008	6	3594	14376	0	0	0	1	none	none
@@ -73,6 +72,7 @@ weathergov_stations	ok	146184	974560	3	48728	389824	0	0	0	1	none	none
 seismic_waveform_i32	ok	168000	672000	12	12000	48000	0	0	0	1	none	none
 openml_tasks_large	ok	197900	752020	10	19790	79160	0	0	0	1	none	none
 movielens_latest_small	ok	201672	806688	2	100836	403344	0	0	0	1	none	none
+usgs_nwis_ph_daily	ok	202184	1617472	36	4561.5	36492	0	0	0	1	none	none
 gutendex_catalog_books	ok	203883	565180	3	62588	125176	78707	314828	1	1	none	none
 geonames_cities5000	ok	206700	1378000	3	68900	551200	0	0	0	1	none	none
 geonames_postal_fixed	ok	207450	954270	5	41490	165960	0	0	0	1	none	none

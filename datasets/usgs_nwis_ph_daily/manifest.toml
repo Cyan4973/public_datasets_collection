@@ -1,61 +1,69 @@
 manifest_version = 1
 dataset_id = "usgs_nwis_ph_daily"
 name = "USGS NWIS Daily pH"
-description = "USGS NWIS daily pH JSON extracts for up to 50 deterministically selected active stream sites across the US, 2021-2024."
+description = "USGS NWIS long-window daily pH JSON extracts from selected state-level daily-values pages."
 homepage = "https://waterservices.usgs.gov/"
+
 [license]
 name = "U.S. Government Public Domain"
 spdx = "LicenseRef-US-Government-Public-Domain"
 url = "https://waterservices.usgs.gov/"
 citation = "USGS Water Services, NWIS daily values service."
-notes = "USGS pH data are public U.S. government works."
+notes = "USGS pH data are public U.S. government works. Preserve attribution and source provenance."
+
 [safety]
 contains_sensitive_data = false
 contains_personal_data = false
-provenance_notes = "Official USGS NWIS daily values API only."
+provenance_notes = "Official USGS NWIS daily values API only; no mirrors, leaks, or scraped personal content."
 usage_notes = "Public-domain hydrology observations suitable for reproducible numeric dataset collection."
+
 [[origins]]
 id = "usgs_nwis_dv_api"
 name = "USGS NWIS Daily Values Service"
 url = "https://waterservices.usgs.gov/nwis/dv/"
 type = "api"
 notes = "Public JSON service for historical daily observations by site and parameter code."
+
 [[resources]]
-id = "usgs_ph_selected_sites_2021_2024"
+id = "usgs_ph_long_window"
 origin = "usgs_nwis_dv_api"
 url = "https://waterservices.usgs.gov/nwis/dv/"
-type = "api_query_result"
-version = "2021-2024-selected-up-to-50-sites-00400-json"
-access = "Fixed active-stream site inventory queries plus site-year JSON queries for usable daily parameterCd=00400 sites found by a deterministic nationwide candidate scan, capped at 50 sites across 2021-2024."
+type = "api_response_pages"
+version = "1980-2024-selected-states-00400-00003-json"
+access = "One JSON query per configured state with parameterCd=00400, statCd=00003, startDT=1980-01-01, endDT=2024-12-31, format=json, and siteStatus=all."
 size_bytes = 0
 sha256 = ""
 local_path = "downloads/usgs_nwis_ph_daily/"
-notes = "Inventory queries derive a deterministic candidate pool from active stream sites with non-all-N instruments_cd values; one daily JSON file is kept per selected site per year."
+notes = "One state-level daily-values JSON file per configured state; build keeps natural site time-series samples that pass the usable-value threshold."
+
 [local_paths]
 downloads = "downloads/usgs_nwis_ph_daily/"
 extracted = "extracted/usgs_nwis_ph_daily/"
 filtered = "filtered/usgs_nwis_ph_daily/"
 index = "index/usgs_nwis_ph_daily/"
 samples = "samples/usgs_nwis_ph_daily/"
+
 [processing]
 download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/usgs_nwis_ph_daily/samples.jsonl"
-summary = "Download fixed active-stream site inventory queries, derive a deterministic nationwide candidate pool, keep usable daily pH sites found across 2021-2024 up to a cap of 50, and emit raw numeric arrays plus a machine-readable sample index."
-deterministic_notes = "Fixed state inventory query list, fixed years 2021-2024, fixed parameterCd=00400, candidate sites restricted to active streams with non-all-N instruments_cd values, round-robin candidate ordering by state then site number, deterministic usable-site selection capped at 50 sites, explicit selection of statistic code 00003 when multiple daily statistics are present, build-time filtering to site-year files listed in the current download plan, preserved source observation order within each site-year file, concatenated years in ascending order per site, durable script logs under logs/usgs_nwis_ph_daily/, and generated sample index at index/usgs_nwis_ph_daily/samples.jsonl."
+summary = "Download selected state-level USGS daily pH pages, require statistic code 00003, reject short or constant site time series, select one value wrapper per site, and emit raw numeric arrays plus a machine-readable sample index."
+deterministic_notes = "Fixed default state list, fixed default date window 1980-01-01 through 2024-12-31, fixed parameterCd=00400, fixed statCd=00003, selected the single value wrapper with the most parseable values when multiple wrappers are present, kept natural site daily time-series samples sorted by state and site number, bounded maximum sample count, preserved source observation order within each selected site response, durable script logs under logs/usgs_nwis_ph_daily/, generated quality summary under filtered/usgs_nwis_ph_daily/, and generated sample index at index/usgs_nwis_ph_daily/samples.jsonl."
+
 [[series]]
 id = "usgs_ph_f64"
-description = "Daily pH values."
-semantic_meaning = "Float64 pH values from USGS parameter code 00400, one sample per site."
-source_resources = ["usgs_ph_selected_sites_2021_2024"]
-filtered_input_path = "filtered/usgs_nwis_ph_daily/site_year_stats.tsv"
-filtering = "Keep rows with parseable pH values and parseable observation dates."
-conversion = "Parse the USGS value field as Python float and write IEEE-754 little-endian float64 arrays preserving source order after site-year concatenation."
+description = "Daily mean pH values."
+semantic_meaning = "Float64 pH daily mean from USGS parameter code 00400 and statistic code 00003, one sample per site."
+source_resources = ["usgs_ph_long_window"]
+filtered_input_path = "filtered/usgs_nwis_ph_daily/site_stats.tsv"
+filtering = "Keep rows with finite parseable pH values in the range 0 through 14 and parseable observation dates; keep only site samples with at least USGS_NWIS_PH_MIN_VALUES_PER_SAMPLE values, default 3000."
+conversion = "Parse the USGS value field as Python float and write IEEE-754 little-endian float64 arrays preserving source order within each selected site response."
 numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
-sample_count = 16
-total_size_bytes = 0
+sample_geometry = "usgs_site_daily_time_series"
+sample_count = 36
+total_size_bytes = 1617472
 output_path = "samples/usgs_nwis_ph_daily/usgs_ph_f64/"

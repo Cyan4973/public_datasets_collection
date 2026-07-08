@@ -8,7 +8,6 @@ met_biocollection_objects	ok	12281	49124	1	12281	49124	0	0	0	1	none	none
 europepmc_grants_large_retry	ok	14000	18000	14	1000	1000	0	0	0	1	none	none
 geonames_admin1_codes	ok	15460	34785	4	3865	7730	0	0	0	1	none	none
 coinpaprika_tickers	ok	16000	116000	8	2000	16000	0	0	0	1	none	none
-usgs_nwis_dissolved_oxygen_daily	ok	16558	132464	15	1343	10744	0	0	0	1	none	none
 usgs_nwis_ph_daily	ok	17277	138216	16	1287.5	10300	0	0	0	1	none	none
 internetarchive_advancedsearch	ok	20000	120000	2	10000	60000	0	0	0	1	none	none
 nasa_eonet_events	ok	20115	73755	3	6705	13410	0	0	0	1	none	none
@@ -112,6 +111,7 @@ gharchive_hourly_events_20240101_00	ok	614476	4301332	4	153619	1228952	0	0	0	1	n
 wikimedia_pageviews_daily	ok	619828	2479312	208	3472	13888	0	0	0	1	none	none
 earthquake_usgs	ok	630753	4880874	50	14515	115292	0	0	0	1	none	none
 nasa_power_daily_humidity	ok	642840	5142720	40	16071	128568	0	0	0	1	none	none
+usgs_nwis_dissolved_oxygen_daily	ok	700423	5603384	85	8398	67184	0	0	0	1	none	none
 gdelt_events_avgtone_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	none
 gdelt_events_goldstein_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	none
 gdelt_events_nummentions_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	none

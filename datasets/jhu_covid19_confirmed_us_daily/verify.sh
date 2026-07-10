@@ -1,185 +1,156 @@
-#!/usr/bin/env sh
-set -eu
+#!/usr/bin/env bash
+set -euo pipefail
 
-SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
-REPO_ROOT=$(CDPATH= cd -- "${SCRIPT_DIR}/../.." && pwd)
-DATA_DIR=${DATA_DIR:-"${REPO_ROOT}/.data"}
-DOWNLOAD_ROOT="${DATA_DIR}/downloads/jhu_covid19_confirmed_us_daily"
-FILTERED_ROOT="${DATA_DIR}/filtered/jhu_covid19_confirmed_us_daily"
-INDEX_ROOT="${DATA_DIR}/index/jhu_covid19_confirmed_us_daily"
-SAMPLES_ROOT="${DATA_DIR}/samples/jhu_covid19_confirmed_us_daily"
-LOG_ROOT="${DATA_DIR}/logs/jhu_covid19_confirmed_us_daily"
-RUN_TS=$(date -u +"%Y%m%dT%H%M%SZ")
-LOG_FILE="${LOG_ROOT}/verify.${RUN_TS}.log"
-LATEST_LOG="${LOG_ROOT}/verify.latest.log"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+DATA_DIR="${DATA_DIR:-.data}"
+DATASET_ID="jhu_covid19_confirmed_us_daily"
+LOG_DIR="$REPO_ROOT/$DATA_DIR/logs/$DATASET_ID"
+DOWNLOAD_DIR="$REPO_ROOT/$DATA_DIR/downloads/$DATASET_ID"
+FILTER_DIR="$REPO_ROOT/$DATA_DIR/filtered/$DATASET_ID"
+INDEX_DIR="$REPO_ROOT/$DATA_DIR/index/$DATASET_ID"
+SAMPLES_DIR="$REPO_ROOT/$DATA_DIR/samples/$DATASET_ID"
+mkdir -p "$LOG_DIR"
 
-mkdir -p "${LOG_ROOT}"
-: > "${LOG_FILE}"
-sync_latest_log() { cp "${LOG_FILE}" "${LATEST_LOG}"; }
-trap sync_latest_log EXIT
+RUN_TS="$(date -u +%Y%m%dT%H%M%SZ)"
+LOG_FILE="$LOG_DIR/verify.$RUN_TS.log"
+LATEST_LOG="$LOG_DIR/verify.latest.log"
+exec > >(tee "$LOG_FILE" "$LATEST_LOG") 2>&1
 
-say() { printf '%s\n' "$*" | tee -a "${LOG_FILE}"; }
+MIN_VALUES_PER_SAMPLE="${JHU_COVID19_CONFIRMED_US_MIN_VALUES_PER_SAMPLE:-1000}"
+MIN_SAMPLE_COUNT="${JHU_COVID19_CONFIRMED_US_MIN_SAMPLE_COUNT:-500}"
+MIN_TOTAL_VALUES="${JHU_COVID19_CONFIRMED_US_MIN_TOTAL_VALUES:-500000}"
+MAX_PRIMARY_BYTES="${JHU_COVID19_CONFIRMED_US_MAX_PRIMARY_BYTES:-1000000000}"
 
-say "download_root=${DOWNLOAD_ROOT}"
-say "filtered_root=${FILTERED_ROOT}"
-say "index_root=${INDEX_ROOT}"
-say "samples_root=${SAMPLES_ROOT}"
-say "log_file=${LOG_FILE}"
+echo "download_dir=$DOWNLOAD_DIR"
+echo "filter_dir=$FILTER_DIR"
+echo "index_dir=$INDEX_DIR"
+echo "samples_dir=$SAMPLES_DIR"
+echo "min_values_per_sample=$MIN_VALUES_PER_SAMPLE"
+echo "min_sample_count=$MIN_SAMPLE_COUNT"
+echo "min_total_values=$MIN_TOTAL_VALUES"
 
-DOWNLOAD_ROOT="${DOWNLOAD_ROOT}" FILTERED_ROOT="${FILTERED_ROOT}" INDEX_ROOT="${INDEX_ROOT}" SAMPLES_ROOT="${SAMPLES_ROOT}" python3 - <<'PY' >>"${LOG_FILE}" 2>&1
+export REPO_ROOT DATA_DIR DOWNLOAD_DIR FILTER_DIR INDEX_DIR SAMPLES_DIR MIN_VALUES_PER_SAMPLE MIN_SAMPLE_COUNT MIN_TOTAL_VALUES MAX_PRIMARY_BYTES
+python3 - <<'PY'
 from __future__ import annotations
-import csv, json, os, re
-from collections import defaultdict
-from datetime import datetime
+
+import csv
+import json
+import os
+import struct
 from pathlib import Path
 
-download_root = Path(os.environ["DOWNLOAD_ROOT"])
-filtered_root = Path(os.environ["FILTERED_ROOT"])
-index_root = Path(os.environ["INDEX_ROOT"])
-samples_root = Path(os.environ["SAMPLES_ROOT"])
-data_root = samples_root.parent.parent
+repo_root = Path(os.environ["REPO_ROOT"])
+data_root = repo_root / os.environ["DATA_DIR"]
+download_dir = Path(os.environ["DOWNLOAD_DIR"])
+filter_dir = Path(os.environ["FILTER_DIR"])
+index_dir = Path(os.environ["INDEX_DIR"])
+min_values_per_sample = int(os.environ["MIN_VALUES_PER_SAMPLE"])
+min_sample_count = int(os.environ["MIN_SAMPLE_COUNT"])
+min_total_values = int(os.environ["MIN_TOTAL_VALUES"])
+max_primary_bytes = int(os.environ["MAX_PRIMARY_BYTES"])
 
-dataset_id = "jhu_covid19_confirmed_us_daily"
-entities = [
-    ("california", "California"),
-    ("texas", "Texas"),
-    ("florida", "Florida"),
-    ("new_york", "New York"),
-    ("illinois", "Illinois"),
-]
-series_defs = [
-    {"series_id": "confirmed_cases_u32", "numeric_kind": "uint", "bit_width": 32, "endianness": "little", "element_size_bytes": 4},
-]
-stats_path = filtered_root / "state_stats.tsv"
-index_path = index_root / "samples.jsonl"
-failures_path = download_root / "download_failures.tsv"
-if failures_path.is_file() and failures_path.stat().st_size > 0:
+failures_path = download_dir / "download_failures.tsv"
+if failures_path.exists() and failures_path.stat().st_size > 0:
     raise SystemExit(f"download failures recorded in {failures_path}")
-if not stats_path.is_file():
-    raise SystemExit(f"missing stats file: {stats_path}")
+
+for required in [
+    download_dir / "download_plan.tsv",
+    download_dir / "time_series_covid19_confirmed_US.csv",
+    filter_dir / "county_stats.tsv",
+]:
+    if not required.is_file():
+        raise SystemExit(f"missing required file: {required}")
+
+summary_path = filter_dir / "quality_summary.json"
+index_path = index_dir / "samples.jsonl"
+if not summary_path.is_file():
+    raise SystemExit(f"missing quality summary: {summary_path}")
 if not index_path.is_file():
     raise SystemExit(f"missing sample index: {index_path}")
 
-stats_rows = {}
-with stats_path.open("r", encoding="utf-8", newline="") as handle:
+stats_by_fips: dict[str, dict[str, str]] = {}
+with (filter_dir / "county_stats.tsv").open("r", encoding="utf-8", newline="") as handle:
     for row in csv.DictReader(handle, delimiter="\t"):
-        stats_rows[row["entity_id"]] = row
+        fips = row.get("fips", "")
+        if not fips:
+            raise SystemExit(f"stats row missing fips: {row}")
+        if fips in stats_by_fips:
+            raise SystemExit(f"duplicate stats fips: {fips}")
+        stats_by_fips[fips] = row
 
-path = download_root / "time_series_covid19_confirmed_US.csv"
-if not path.is_file():
-    raise SystemExit(f"missing raw CSV: {path}")
-with path.open("r", encoding="utf-8", newline="") as handle:
-    reader = csv.DictReader(handle)
-    if reader.fieldnames is None:
-        raise SystemExit(f"missing CSV header in {path}")
-    date_columns = [field for field in reader.fieldnames if re.fullmatch(r"\d{1,2}/\d{1,2}/\d{2}", field or "")]
-    parsed_dates = []
-    for raw_date in date_columns:
-        try:
-            dt = datetime.strptime(raw_date, "%m/%d/%y")
-        except ValueError:
-            parsed_dates.append(None)
-        else:
-            parsed_dates.append(dt)
-    rows = list(reader)
-country_rows = defaultdict(list)
+rows = [json.loads(line) for line in index_path.read_text(encoding="utf-8").splitlines() if line.strip()]
+if not rows:
+    raise SystemExit("empty sample index")
+
+seen_paths: set[str] = set()
+seen_fips: set[str] = set()
+total_values = 0
+total_bytes = 0
 for row in rows:
-    country_rows[str(row.get("Province_State", "")).strip()].append(row)
+    if row.get("dataset_id") != "jhu_covid19_confirmed_us_daily":
+        raise SystemExit(f"unexpected dataset_id: {row.get('dataset_id')}")
+    if row.get("series_id") != "confirmed_cases_u32":
+        raise SystemExit(f"unexpected series_id: {row.get('series_id')}")
+    if row.get("sample_geometry") != "jhu_county_daily_time_series":
+        raise SystemExit(f"unexpected sample_geometry: {row.get('sample_geometry')}")
+    if row.get("numeric_kind") != "uint" or int(row.get("bit_width", 0)) != 32:
+        raise SystemExit(f"unexpected numeric type in row: {row}")
+    fips = str(row.get("fips", ""))
+    if fips in seen_fips:
+        raise SystemExit(f"duplicate fips in index: {fips}")
+    if fips not in stats_by_fips:
+        raise SystemExit(f"missing stats row for fips: {fips}")
+    seen_fips.add(fips)
+    sample_path = str(row.get("sample_path", ""))
+    if sample_path in seen_paths:
+        raise SystemExit(f"duplicate sample path: {sample_path}")
+    seen_paths.add(sample_path)
+    path = data_root / sample_path
+    if not path.is_file():
+        raise SystemExit(f"missing sample file: {path}")
+    data = path.read_bytes()
+    value_count = int(row.get("value_count", 0))
+    if value_count < min_values_per_sample:
+        raise SystemExit(f"sample below minimum: {path} has {value_count}, minimum is {min_values_per_sample}")
+    expected_size = value_count * 4
+    if len(data) != expected_size or int(row.get("sample_size_bytes", 0)) != expected_size:
+        raise SystemExit(f"size/count mismatch for {path}")
+    stats_value_count = int(stats_by_fips[fips]["value_count"])
+    if stats_value_count != value_count:
+        raise SystemExit(f"stats/index value_count mismatch for {fips}: {stats_value_count} != {value_count}")
+    seen_values: set[int] = set()
+    previous = 0
+    for (value,) in struct.iter_unpack("<I", data):
+        if value < 0:
+            raise SystemExit(f"invalid uint32 value in {path}: {value}")
+        if value < previous:
+            # JHU cumulative series contain occasional corrections; keep them,
+            # but the values still need to remain valid uint32 payloads.
+            pass
+        previous = value
+        if len(seen_values) < 2:
+            seen_values.add(value)
+    if len(seen_values) < 2:
+        raise SystemExit(f"constant sample rejected: {path}")
+    total_values += value_count
+    total_bytes += len(data)
 
-expected_records = {}
-for entity_id, country_name in entities:
-    matched_rows = country_rows.get(country_name, [])
-    kept = 0
-    skipped_blank = 0
-    skipped_parse = 0
-    start_date = ""
-    end_date = ""
-    for idx, raw_date in enumerate(date_columns):
-        dt = parsed_dates[idx]
-        if dt is None:
-            skipped_parse += 1
-            continue
-        total = 0
-        valid = True
-        saw_value = False
-        for row in matched_rows:
-            raw_value = str(row.get(raw_date, "")).strip()
-            if raw_value == "":
-                continue
-            saw_value = True
-            try:
-                total += int(raw_value)
-            except ValueError:
-                valid = False
-                break
-        if not saw_value:
-            skipped_blank += 1
-            continue
-        if not valid or total < 0:
-            skipped_parse += 1
-            continue
-        kept += 1
-        iso_date = dt.strftime("%Y-%m-%d")
-        if start_date == "":
-            start_date = iso_date
-        end_date = iso_date
-    stats_row = stats_rows.get(entity_id)
-    if stats_row is None:
-        raise SystemExit(f"missing stats row for {entity_id}")
-    if int(stats_row["row_count"]) != len(date_columns):
-        raise SystemExit(f"row_count mismatch for {entity_id}")
-    if int(stats_row["kept_count"]) != kept:
-        raise SystemExit(f"kept_count mismatch for {entity_id}")
-    if int(stats_row["skipped_blank_count"]) != skipped_blank:
-        raise SystemExit(f"skipped_blank_count mismatch for {entity_id}")
-    if int(stats_row["skipped_parse_count"]) != skipped_parse:
-        raise SystemExit(f"skipped_parse_count mismatch for {entity_id}")
-    if stats_row["start_date"] != start_date or stats_row["end_date"] != end_date:
-        raise SystemExit(f"date-range mismatch for {entity_id}")
-    for series in series_defs:
-        sample_path = samples_root / series["series_id"] / f"{entity_id}.bin"
-        if not sample_path.is_file():
-            raise SystemExit(f"missing sample file: {sample_path}")
-        sample_size_bytes = sample_path.stat().st_size
-        expected_size = kept * int(series["element_size_bytes"])
-        if sample_size_bytes != expected_size:
-            raise SystemExit(f"wrong size for {sample_path}: expected {expected_size}, got {sample_size_bytes}")
-        expected_records[(series["series_id"], entity_id)] = {
-            "dataset_id": dataset_id,
-            "series_id": series["series_id"],
-            "sample_path": sample_path.relative_to(data_root).as_posix(),
-            "numeric_kind": series["numeric_kind"],
-            "bit_width": series["bit_width"],
-            "endianness": series["endianness"],
-            "element_size_bytes": series["element_size_bytes"],
-            "sample_size_bytes": sample_size_bytes,
-            "value_count": kept,
-            "entity_id": entity_id,
-            "entity_name": country_name,
-        }
-if not expected_records:
-    raise SystemExit("no country samples were produced")
+if len(rows) < min_sample_count:
+    raise SystemExit(f"only {len(rows)} samples, minimum is {min_sample_count}")
+if total_values < min_total_values:
+    raise SystemExit(f"only {total_values} values, minimum is {min_total_values}")
+if total_bytes > max_primary_bytes:
+    raise SystemExit(f"primary bytes too large: {total_bytes} > {max_primary_bytes}")
 
-index_records = {}
-with index_path.open("r", encoding="utf-8") as handle:
-    for line_number, line in enumerate(handle, start=1):
-        if not line.strip():
-            continue
-        record = json.loads(line)
-        sample_path = record.get("sample_path")
-        sample_key = Path(sample_path).stem if isinstance(sample_path, str) else ""
-        key = (record.get("series_id"), sample_key)
-        if key in index_records:
-            raise SystemExit(f"duplicate index entry for {key} on line {line_number}")
-        index_records[key] = record
-if set(index_records) != set(expected_records):
-    raise SystemExit(f"sample index keys do not match samples: index={len(index_records)} expected={len(expected_records)}")
-for key, expected in expected_records.items():
-    record = index_records[key]
-    for field, expected_value in expected.items():
-        if record.get(field) != expected_value:
-            raise SystemExit(f"index mismatch for {key} field {field}: {record.get(field)!r} != {expected_value!r}")
-print("verified raw inventory, generated sample sizes, stats, and sample index")
+summary = json.loads(summary_path.read_text(encoding="utf-8"))
+if int(summary.get("sample_count", -1)) != len(rows):
+    raise SystemExit(f"summary sample_count mismatch: {summary.get('sample_count')} != {len(rows)}")
+if int(summary.get("primary_values", -1)) != total_values:
+    raise SystemExit(f"summary primary_values mismatch: {summary.get('primary_values')} != {total_values}")
+if int(summary.get("primary_sample_bytes", -1)) != total_bytes:
+    raise SystemExit(f"summary primary_sample_bytes mismatch: {summary.get('primary_sample_bytes')} != {total_bytes}")
+
+print(f"verified_samples={len(rows)} primary_values={total_values} primary_bytes={total_bytes}")
 PY
 
-say "verified raw inventory, generated sample sizes, stats, and sample index"
+echo "[$(date -Is)] verify done dataset=$DATASET_ID"

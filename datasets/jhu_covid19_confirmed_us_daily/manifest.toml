@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "jhu_covid19_confirmed_us_daily"
 name = "JHU COVID-19 Confirmed US Daily"
-description = "Johns Hopkins CSSE US cumulative confirmed COVID-19 daily time series, emitted as one sample per selected state."
+description = "Johns Hopkins CSSE US cumulative confirmed COVID-19 daily time series, emitted as one natural county/FIPS sample per county."
 homepage = "https://github.com/CSSEGISandData/COVID-19"
 
 [license]
@@ -34,7 +34,7 @@ access = "Single fixed raw CSV URL."
 size_bytes = 0
 sha256 = ""
 local_path = "downloads/jhu_covid19_confirmed_us_daily/"
-notes = "US cumulative confirmed counts by county rows and date, aggregated to selected states."
+notes = "US cumulative confirmed counts by county rows and date; build emits one natural county/FIPS time-series sample per county."
 
 [local_paths]
 downloads = "downloads/jhu_covid19_confirmed_us_daily/"
@@ -48,23 +48,23 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/jhu_covid19_confirmed_us_daily/samples.jsonl"
-summary = "Download the JHU CSSE US confirmed CSV, aggregate selected states across county rows, and emit cumulative daily numeric arrays plus a machine-readable sample index."
-deterministic_notes = "Fixed input URL, fixed country list, download-time CSV validation, deterministic aggregation across county rows per state, filtered blank and malformed values only, preserved chronological order of source date columns, durable logs under logs/jhu_covid19_confirmed_us_daily/, and generated sample index at index/jhu_covid19_confirmed_us_daily/samples.jsonl."
+summary = "Download the JHU CSSE US confirmed CSV, keep county/FIPS rows as natural homogeneous samples, reject non-county buckets, short samples, and constant samples, and emit cumulative daily numeric arrays plus a machine-readable sample index."
+deterministic_notes = "Fixed input URL, fixed date-column parser, deterministic county/FIPS grouping sorted by state, county, and FIPS, filtered non-US rows, non-county buckets, missing or invalid FIPS rows, blank or malformed values, short county series, and constant county series, preserved chronological order of source date columns, durable logs under logs/jhu_covid19_confirmed_us_daily/, generated quality summary under filtered/jhu_covid19_confirmed_us_daily/, and generated sample index at index/jhu_covid19_confirmed_us_daily/samples.jsonl."
 
 [[series]]
 id = "confirmed_cases_u32"
 description = "Cumulative confirmed COVID-19 case counts."
-semantic_meaning = "Unsigned 32-bit cumulative daily confirmed counts, one sample per selected state."
+semantic_meaning = "Unsigned 32-bit cumulative daily confirmed counts, one sample per county/FIPS."
 source_resources = ["jhu_covid19_confirmed_us_csv"]
-filtered_input_path = "filtered/jhu_covid19_confirmed_us_daily/state_stats.tsv"
-filtering = "Keep header date columns with parseable dates and integer cumulative counts after country aggregation."
+filtered_input_path = "filtered/jhu_covid19_confirmed_us_daily/county_stats.tsv"
+filtering = "Keep US rows with parseable positive FIPS, non-empty county and state names, parseable date columns, and integer cumulative counts; reject non-county buckets, short county series below JHU_COVID19_CONFIRMED_US_MIN_VALUES_PER_SAMPLE, and constant county series."
 missing_value_policy = "Filter blank or malformed daily count cells."
-conversion = "Aggregate selected state rows by date, preserve source column order, and write little-endian uint32 arrays."
+conversion = "Group by FIPS, sum duplicate FIPS rows if present, preserve source date-column order, and write little-endian uint32 arrays."
 numeric_kind = "uint"
 bit_width = 32
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
-sample_count = 0
-total_size_bytes = 0
+sample_geometry = "jhu_county_daily_time_series"
+sample_count = 3206
+total_size_bytes = 14657832
 output_path = "samples/jhu_covid19_confirmed_us_daily/confirmed_cases_u32/"
-

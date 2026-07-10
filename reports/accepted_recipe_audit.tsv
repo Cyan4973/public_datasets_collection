@@ -1,6 +1,5 @@
 dataset_id	status	primary_values	primary_sample_bytes	primary_sample_rows	median_primary_sample_value_count	median_primary_sample_size_bytes	auxiliary_values	auxiliary_sample_bytes	auxiliary_sample_rows	has_index	inferred_auxiliary_series	failure_reasons
 jhu_covid19_confirmed_global_daily	ok	10287	41148	9	1143	4572	0	0	0	1	none	none
-jhu_covid19_confirmed_us_daily	ok	10287	41148	9	1143	4572	0	0	0	1	none	none
 jhu_covid19_deaths_global_daily	ok	10287	41148	9	1143	4572	0	0	0	1	none	none
 jhu_covid19_deaths_us_daily	ok	10287	41148	9	1143	4572	0	0	0	1	none	none
 cisa_kev_catalog	ok	11284	27404	7	1612	3224	0	0	0	1	none	none
@@ -154,6 +153,7 @@ sensorless_drive_diagnosis_uci	ok	2866941	22525965	49	58509	468072	0	0	0	1	none	
 gdc_somatic_mutations	ok	3323270	13293080	23	133731	534924	0	0	0	1	none	none
 imdb_title_ratings	ok	3358804	13435216	2	1679402	6717608	0	0	0	1	none	none
 metacpan_releases_search_large	ok	3597093	14388372	9	399677	1598708	0	0	0	1	none	none
+jhu_covid19_confirmed_us_daily	ok	3664458	14657832	3206	1143	4572	0	0	0	1	none	none
 usgs_daily_values_large	ok	3733419	29867352	1800	2192	17536	0	0	0	1	none	none
 citibike_2024_01_station_ids_u16	ok	3776170	7552340	16	180600	361200	0	0	0	1	none	none
 ncbi_gene_human	ok	4794554	19178216	4	1198638.5	4794554	0	0	0	1	none	none

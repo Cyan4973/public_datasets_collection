@@ -52,7 +52,7 @@ with path.open("r", encoding="utf-8", newline="") as handle:
     first = next(reader, None)
 if header is None or first is None:
     raise SystemExit(f"empty CSV payload in {path}")
-required = {"Admin2", "Province_State"}
+required = {"Admin2", "Country_Region", "FIPS", "Province_State"}
 if not required.issubset(header):
     raise SystemExit(f"missing required columns in {path}: {header!r}")
 if len(header) < 6:

@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "skadi_srtm_hgt"
 name = "Skadi SRTM HGT"
-description = "A canonical public N37W122 HGT elevation tile converted from big-endian int16 to full-width little-endian int16 row-band strip samples."
+description = "A canonical public N37W122 HGT elevation tile converted from big-endian int16 to one whole-tile little-endian int16 raster sample."
 homepage = "https://registry.opendata.aws/terrain-tiles/"
 
 [license]
@@ -48,29 +48,29 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/skadi_srtm_hgt/samples.jsonl"
-summary = "Download the pinned N37W122 HGT gzip, decode the full 3601x3601 raster, byte-swap native big-endian int16 elevations to little-endian int16, and emit one sample per full-width row-band strip (default 54 rows)."
-deterministic_notes = "Fixed upstream tile, fixed decoded dimensions, no network access during build, deterministic full-width row-band strips (default 54 rows, final strip shorter), constant/all-void strips dropped, durable logs under logs/skadi_srtm_hgt/, and generated sample index at index/skadi_srtm_hgt/samples.jsonl."
+summary = "Download the pinned N37W122 HGT gzip, decode the full 3601x3601 raster, byte-swap native big-endian int16 elevations to little-endian int16, and emit one sample at the natural HGT tile boundary."
+deterministic_notes = "Fixed upstream tile, fixed decoded dimensions, no network access during build, one whole-tile sample rather than arbitrary row-band shards, durable logs under logs/skadi_srtm_hgt/, and generated sample index at index/skadi_srtm_hgt/samples.jsonl."
 
 [[series]]
 id = "skadi_elevation"
-description = "N37W122 HGT tile elevation, split into full-width row-band strips."
+description = "Whole N37W122 HGT tile elevation grid."
 semantic_meaning = "Native signed SRTM elevation values in meters for the N37W122 one-degree HGT tile."
 role = "primary"
 representation_class = "native_numeric"
-representation_notes = "HGT stores one 3601x3601 signed 16-bit elevation raster per tile. The whole tile is far too large for one training sample, so it is split row-major into full-width strips of 54 rows (final strip shorter), preserving the file's natural row order. Byte-identical to the downstream srtm_skadi_elevation family."
+representation_notes = "HGT stores one 3601x3601 signed 16-bit elevation raster per tile; the emitted sample preserves that natural tile boundary."
 source_resources = ["n37w122_hgt"]
 filtered_input_path = "filtered/skadi_srtm_hgt/ingest_stats.json"
-filtering = "Split the decoded raster into contiguous full-width row-band strips without resampling or cropping; drop constant and all-void strips."
-missing_value_policy = "Preserve native void sentinel values (-32768) within strips; missing source, wrong decoded tile dimensions, and fully constant/all-void strips are dropped, and too few surviving strips is fatal."
-conversion = "Decompress the HGT gzip, byte-swap source big-endian int16 values, and write one little-endian int16 sample per full-width row-band strip."
+filtering = "Keep the full decoded raster without resampling, cropping, row-band splitting, or concatenating independent tiles."
+missing_value_policy = "Preserve native void sentinel values if present; missing source, wrong decoded tile dimensions, and degenerate constant/all-void prefixes are fatal."
+conversion = "Decompress the HGT gzip, byte-swap source big-endian int16 values, and write one little-endian int16 raster sample."
 numeric_kind = "int"
 bit_width = 16
 endianness = "little"
-sample_format = "raw homogeneous int16 row-band raster strip"
+sample_format = "raw homogeneous int16 raster"
 sample_geometry = "2d_raster"
 sample_rank = 2
-sample_shape = []
+sample_shape = [3601, 3601]
 sample_axes = ["y", "x"]
-sample_count = 67
+sample_count = 1
 total_size_bytes = 25934402
 output_path = "samples/skadi_srtm_hgt/skadi_elevation/"

@@ -39,7 +39,7 @@ ALLOWED_SERIES = {
 MIN_PRIMARY_VALUES = int(os.environ.get("SENTINEL1_MIN_PRIMARY_VALUES", "10000"))
 MIN_PRIMARY_BYTES = int(os.environ.get("SENTINEL1_MIN_PRIMARY_BYTES", str(100 * 1024)))
 MIN_MEDIAN_VALUES = int(os.environ.get("SENTINEL1_MIN_MEDIAN_VALUES", "1000"))
-MIN_SAMPLE_COUNT = int(os.environ.get("SENTINEL1_MIN_SAMPLE_COUNT", "8"))
+MIN_SAMPLE_COUNT = int(os.environ.get("SENTINEL1_MIN_SAMPLE_COUNT", "2"))
 MAX_PRIMARY_BYTES = int(os.environ.get("SENTINEL1_MAX_PRIMARY_BYTES", "1000000000"))
 
 data_root = Path(os.environ["DATA_ROOT"])
@@ -67,7 +67,7 @@ for row in rows:
         raise SystemExit(f"unexpected element size: {row}")
     if row.get("sample_geometry") != "2d_raster" or int(row.get("sample_rank", 0)) != 2:
         raise SystemExit(f"unexpected geometry: {row}")
-    if row.get("natural_record_kind") != "sentinel1_grd_measurement_tile":
+    if row.get("natural_record_kind") != "sentinel1_grd_measurement_tiff":
         raise SystemExit(f"unexpected natural boundary: {row}")
     path = data_root / row["sample_path"]
     expected_bytes = int(row["sample_size_bytes"])

@@ -31,6 +31,7 @@ MIN_PRIMARY_VALUES = 10_000
 MIN_PRIMARY_BYTES = 100 * 1024
 MIN_MEDIAN_VALUES = 1_000
 MAX_PRIMARY_BYTES = 1_000_000_000
+MIN_SAMPLE_COUNT = int(os.environ.get("SENTINEL2_MIN_SAMPLE_COUNT", "12"))
 EXPECTED_BANDS = {"blue_10m", "rededge1_20m", "coastal_60m"}
 
 repo_root = Path(os.environ["REPO_ROOT"])
@@ -39,8 +40,8 @@ index_path = Path(os.environ["INDEX_DIR"]) / "samples.jsonl"
 stats_path = Path(os.environ["FILTER_DIR"]) / "ingest_stats.json"
 rows = [json.loads(line) for line in index_path.read_text(encoding="utf-8").splitlines() if line.strip()]
 stats = json.loads(stats_path.read_text(encoding="utf-8"))
-if len(rows) < 6:
-    raise SystemExit(f"expected at least 6 Sentinel-2 band samples, found {len(rows)}")
+if len(rows) < MIN_SAMPLE_COUNT:
+    raise SystemExit(f"expected at least {MIN_SAMPLE_COUNT} Sentinel-2 reflectance tiles, found {len(rows)}")
 scene_ids = {row.get("scene_id") for row in rows}
 band_labels = {row.get("band_label") for row in rows}
 if len(scene_ids) < 2:
@@ -60,6 +61,8 @@ for row in rows:
         raise SystemExit(f"unexpected element size: {row}")
     if row.get("sample_geometry") != "2d_raster" or int(row.get("sample_rank", 0)) != 2:
         raise SystemExit(f"unexpected geometry: {row}")
+    if row.get("natural_record_kind") != "sentinel2_l2a_reflectance_tile":
+        raise SystemExit(f"unexpected natural boundary: {row}")
     path = data_root / row["sample_path"]
     expected_bytes = int(row["sample_size_bytes"])
     expected_values = int(row["value_count"])

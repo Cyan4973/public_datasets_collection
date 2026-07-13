@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "sentinel2_l2a_reflectance_cogs_u16"
 name = "Sentinel-2 L2A Reflectance COG Uint16"
-description = "Selected Sentinel-2 Level-2A multispectral surface-reflectance bands from Element84 public COGs, preserved as native uint16 raster samples."
+description = "Selected Sentinel-2 Level-2A multispectral surface-reflectance bands from Element84 public COGs, preserved as native uint16 measurement tiles (one per COG internal tile)."
 homepage = "https://registry.opendata.aws/sentinel-2-l2a-cogs/"
 
 [license]
@@ -34,7 +34,7 @@ access = "Download script queries Element84 Earth Search for fixed AOI/date wind
 size_bytes = 0
 sha256 = ""
 local_path = "downloads/sentinel2_l2a_reflectance_cogs_u16/"
-notes = "Default selected primary output is expected to remain below 1 GB: two scenes times one 10 m, one 20 m, and one 60 m uint16 band."
+notes = "Default selected primary output stays well below 1 GB: two scenes times one 10 m, one 20 m, and one 60 m uint16 band, each split into its native COG internal tiles (~72 tiles, ~80 MB total)."
 
 [local_paths]
 downloads = "downloads/sentinel2_l2a_reflectance_cogs_u16/"
@@ -47,8 +47,8 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/sentinel2_l2a_reflectance_cogs_u16/samples.jsonl"
-summary = "Download selected Sentinel-2 L2A COG band files and extract one native uint16 reflectance raster sample per band."
-deterministic_notes = "Fixed AOI/date search order, cloud-cover filter, fixed band set, exact asset URL plan, 1 GB primary output cap, lossless TIFF decompression, no band stacking, and no image concatenation."
+summary = "Download selected Sentinel-2 L2A COG band files and extract native uint16 reflectance tiles (one sample per COG internal tile)."
+deterministic_notes = "Fixed AOI/date search order, cloud-cover filter, fixed band set, exact asset URL plan, native COG-tile sample boundaries (blue 1024, red-edge 512, coastal 256; full interior tiles only), nodata-border and constant tiles dropped by a non-zero-fraction floor, 1 GB primary output cap, lossless TIFF decompression (Deflate via zlib, predictor-2 reversal), no resampling, no band stacking, and no image concatenation."
 
 [[series]]
 id = "sentinel2_l2a_reflectance_pixels_u16"
@@ -56,16 +56,16 @@ description = "Sentinel-2 Level-2A surface-reflectance band pixel planes."
 semantic_meaning = "Scaled Sentinel-2 multispectral surface-reflectance pixel values for selected bands."
 role = "primary"
 representation_class = "native_numeric"
-representation_notes = "Source COGs store reflectance bands as uint16 raster pixels. The build performs only lossless TIFF decompression and predictor reversal."
+representation_notes = "Source COGs store reflectance bands as uint16 raster pixels in native internal tiles (blue 1024, red-edge 512, coastal 256). Each sample is one native tile decoded losslessly; the build performs only TIFF decompression and predictor-2 reversal. Sample shapes are mixed across the three resolutions."
 source_resources = ["selected_reflectance_cogs"]
 filtered_input_path = "filtered/sentinel2_l2a_reflectance_cogs_u16/ingest_stats.json"
-filtering = "Keep only single-band uint16 TIFF images with supported uncompressed or Deflate-compressed tile/strip encoding."
-missing_value_policy = "Missing assets, non-uint16 TIFFs, unsupported TIFF compression, malformed tile/strip tables, truncated tiles, empty rasters, and constant rasters are rejected."
-conversion = "Decode TIFF tiles/strips losslessly and write one raw uint16 pixel-plane sample per source band file."
+filtering = "Keep only single-band uint16 tiled COGs with supported uncompressed, Deflate, or Zstandard encoding; emit only full interior native tiles that are non-constant and at least 98% in-swath (non-zero)."
+missing_value_policy = "Missing assets, non-uint16 TIFFs, unsupported TIFF compression, malformed tile tables, truncated tiles, empty rasters, constant tiles, and nodata-border (sparse) tiles are rejected."
+conversion = "Decode each native COG tile losslessly (Deflate via zlib, Zstandard via the zstd CLI) with predictor-2 reversal and write one raw uint16 pixel tile per sample."
 numeric_kind = "uint"
 bit_width = 16
 endianness = "little"
-sample_format = "raw Sentinel-2 reflectance pixel plane"
+sample_format = "raw Sentinel-2 reflectance pixel tile"
 sample_geometry = "2d_raster"
 sample_rank = 2
 sample_shape = []

@@ -1,0 +1,74 @@
+manifest_version = 1
+dataset_id = "bam_read_mapq_u8"
+name = "BAM Read Mapping Quality (uint8)"
+description = "Native 8-bit per-read mapping-quality (MAPQ) scores extracted from public BAM sequencing alignments: one homogeneous family, one sample per source BAM."
+homepage = "https://www.internationalgenome.org/"
+
+[license]
+name = "1000 Genomes / IGSR open data"
+spdx = "NONE"
+url = "https://www.internationalgenome.org/data"
+citation = "1000 Genomes Project phase 3 low-coverage BWA alignments, distributed via the EBI 1000 Genomes FTP mirror."
+notes = "1000 Genomes data are openly available for use with no restrictions. Only numeric MAPQ values are extracted (no sequence, read names, or identifiers)."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public research reference genomes (anonymized cell-line donors). Only per-read integer mapping-quality scores are extracted."
+usage_notes = "Promote only after fresh successful download, build, and verify. MAPQ scale depends on the aligner; the default source is all-BWA for homogeneity."
+
+[[origins]]
+id = "onekg"
+name = "1000 Genomes Project (IGSR)"
+url = "https://www.internationalgenome.org/"
+type = "bulk_download"
+notes = "Phase 3 low-coverage BWA alignment BAMs over the EBI FTP/HTTPS mirror."
+
+[[resources]]
+id = "bam_alignments"
+origin = "onekg"
+url = "datasets/bam_read_mapq_u8/download.sh"
+type = "bounded_byte_range_selection"
+version = "onekg_phase3_low_coverage_bwa_gbr"
+access = "Download script fetches a bounded byte-range PREFIX of each source BAM (leading BGZF blocks) or consumes an exact URL list; MAPQ is extracted from the reads present in each prefix."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/bam_read_mapq_u8/"
+notes = "BAMs are multi-GB, so only a per-file prefix (default ~48 MB) is downloaded; one BAM -> one MAPQ sample. Override the URL list with BAM_URLS_FILE if defaults 404."
+
+[local_paths]
+downloads = "downloads/bam_read_mapq_u8/"
+filtered = "filtered/bam_read_mapq_u8/"
+index = "index/bam_read_mapq_u8/"
+samples = "samples/bam_read_mapq_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/bam_read_mapq_u8/samples.jsonl"
+summary = "Decode the BGZF blocks of each downloaded BAM prefix, walk the alignment records, and emit one uint8 MAPQ stream per source BAM."
+deterministic_notes = "Pure-python BGZF decode (zlib) of complete leading blocks only, deterministic BAM record walk stopping at the truncated prefix tail, MAPQ read from the fixed per-record byte offset, one sample per source BAM (no sharding, no read reordering), constant or under-populated samples dropped, and a 1 GB primary-output cap. The natural sample boundary is one BAM's read set (bounded to a leading byte-range prefix because BAMs are multi-GB)."
+
+[[series]]
+id = "bam_read_mapq_u8"
+description = "Per-read mapping-quality (MAPQ) scores from BAM alignment records."
+semantic_meaning = "Phred-scaled probability that a sequencing read is mapped to the wrong position; a native uint8 field of each BAM record (typically 0..60 for BWA)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Each sample is the in-file-order MAPQ byte stream of one BAM's reads (leading prefix). Distinct from base-call quality (fastq_phred): MAPQ is per-read alignment confidence, not per-base call quality."
+source_resources = ["bam_alignments"]
+filtered_input_path = "filtered/bam_read_mapq_u8/ingest_stats.json"
+filtering = "Keep only samples with >= BAM_MIN_READS_PER_SAMPLE reads and more than one distinct MAPQ value; drop constant or under-populated streams."
+missing_value_policy = "MAPQ 255 ('unavailable' per the SAM spec) is preserved as a native value; truncated final records/blocks of the byte-range prefix are excluded."
+conversion = "Read the MAPQ byte (record body offset 9) from each alignment record and store it as uint8 in read order."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw uint8 per-read MAPQ stream"
+sample_geometry = "1d_sequence"
+sample_rank = 1
+sample_axes = ["read"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/bam_read_mapq_u8/bam_read_mapq_u8/"

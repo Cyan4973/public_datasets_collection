@@ -1,0 +1,147 @@
+manifest_version = 1
+dataset_id = "sentinel1_grd_measurement_u16"
+name = "Sentinel-1 GRD Measurement Uint16"
+description = "Selected Sentinel-1 Level-1 GRD SAR measurement rasters preserved as native uint16 measurement tiles (one per Cloud Optimized GeoTIFF internal tile)."
+homepage = "https://planetarycomputer.microsoft.com/dataset/sentinel-1-grd"
+
+[license]
+name = "Copernicus Sentinel Data Terms and Conditions"
+spdx = "LicenseRef-Copernicus-Sentinel"
+url = "https://sentinels.copernicus.eu/documents/d/sentinel/sentinel-data-legal-notice"
+citation = "Contains modified Copernicus Sentinel data processed by ESA and distributed through the Microsoft Planetary Computer Sentinel-1 GRD collection."
+notes = "Sentinel data are free and open under Copernicus Sentinel Data Terms and Conditions. Preserve attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public satellite synthetic-aperture-radar imagery from the Microsoft Planetary Computer Sentinel-1 GRD collection or exact official measurement TIFF URLs supplied by the user."
+usage_notes = "Remote-sensing SAR measurement rasters; no personal records or private observations."
+
+[[origins]]
+id = "planetary_computer_sentinel1_grd"
+name = "Microsoft Planetary Computer Sentinel-1 GRD"
+url = "https://planetarycomputer.microsoft.com/dataset/sentinel-1-grd"
+type = "data_portal"
+notes = "Public STAC catalog for Sentinel-1 Level-1 GRD products converted to Cloud Optimized GeoTIFF assets (uint16, Zstandard-compressed, 1024x1024 internal tiles)."
+
+[[resources]]
+id = "selected_measurement_tiffs"
+origin = "planetary_computer_sentinel1_grd"
+url = "datasets/sentinel1_grd_measurement_u16/download.sh"
+type = "bounded_stac_selection"
+version = "medium_resolution_grd_default_hh"
+access = "Download script queries a public STAC endpoint or consumes an exact URL file, writes a download plan, and downloads a bounded set of measurement TIFFs."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/sentinel1_grd_measurement_u16/"
+notes = "Default selection is two medium-resolution GRD scenes for the HH measurement asset, using high-latitude/ocean search windows first and bounded by file-size and aggregate-download caps. Each scene yields many native measurement tiles."
+
+[local_paths]
+downloads = "downloads/sentinel1_grd_measurement_u16/"
+filtered = "filtered/sentinel1_grd_measurement_u16/"
+index = "index/sentinel1_grd_measurement_u16/"
+samples = "samples/sentinel1_grd_measurement_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/sentinel1_grd_measurement_u16/samples.jsonl"
+summary = "Download selected Sentinel-1 GRD measurement GeoTIFFs and extract native uint16 measurement tiles (one sample per COG internal tile)."
+deterministic_notes = "Fixed high-latitude/ocean-first STAC search order, product-token filter, explicit polarization set, exact asset URL plan, no polarization mixing, no scene concatenation, native COG-tile sample boundaries (default 1024x1024, full interior tiles only), swath-edge and constant tiles dropped by a non-zero-fraction floor, 1 GB primary output cap, and lossless TIFF tile decoding (Deflate via zlib, Zstandard via the zstd CLI)."
+
+[[series]]
+id = "sentinel1_grd_vv_dn_u16"
+description = "VV-polarized Sentinel-1 GRD measurement digital-number raster tiles."
+semantic_meaning = "Native VV polarization SAR measurement pixel digital numbers from Sentinel-1 GRD products."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Source measurement TIFFs store SAR digital numbers as uint16 raster pixels in 1024x1024 internal tiles. Each sample is one native tile decoded losslessly; the default tile size follows the source COG (SENTINEL1_TILE)."
+source_resources = ["selected_measurement_tiffs"]
+filtered_input_path = "filtered/sentinel1_grd_measurement_u16/ingest_stats.json"
+filtering = "Keep only single-band uint16 TIFF images for the VV polarization with supported uncompressed, Deflate, or Zstandard tile encoding; emit only full interior tiles that are non-constant and at least 98% non-zero."
+missing_value_policy = "Missing assets, non-uint16 TIFFs, unsupported TIFF compression, malformed tile tables, truncated tiles, empty rasters, constant tiles, and sparse swath-edge tiles are rejected."
+conversion = "Decode each native COG tile losslessly (Deflate via zlib, Zstandard via the zstd CLI) and write one raw uint16 pixel tile per VV sample."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw Sentinel-1 GRD measurement digital-number tile"
+sample_geometry = "2d_raster"
+sample_rank = 2
+sample_shape = [1024, 1024]
+sample_axes = ["y", "x"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sentinel1_grd_measurement_u16/sentinel1_grd_vv_dn_u16/"
+
+[[series]]
+id = "sentinel1_grd_vh_dn_u16"
+description = "VH-polarized Sentinel-1 GRD measurement digital-number raster tiles."
+semantic_meaning = "Native VH polarization SAR measurement pixel digital numbers from Sentinel-1 GRD products."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Optional homogeneous polarization family emitted only when VH measurement files are selected. Each sample is one native 1024x1024 COG tile decoded losslessly."
+source_resources = ["selected_measurement_tiffs"]
+filtered_input_path = "filtered/sentinel1_grd_measurement_u16/ingest_stats.json"
+filtering = "Keep only single-band uint16 TIFF images for the VH polarization with supported uncompressed, Deflate, or Zstandard tile encoding; emit only full interior tiles that are non-constant and at least 98% non-zero."
+missing_value_policy = "Missing assets, non-uint16 TIFFs, unsupported TIFF compression, malformed tile tables, truncated tiles, empty rasters, constant tiles, and sparse swath-edge tiles are rejected."
+conversion = "Decode each native COG tile losslessly (Deflate via zlib, Zstandard via the zstd CLI) and write one raw uint16 pixel tile per VH sample."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw Sentinel-1 GRD measurement digital-number tile"
+sample_geometry = "2d_raster"
+sample_rank = 2
+sample_shape = [1024, 1024]
+sample_axes = ["y", "x"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sentinel1_grd_measurement_u16/sentinel1_grd_vh_dn_u16/"
+
+[[series]]
+id = "sentinel1_grd_hh_dn_u16"
+description = "HH-polarized Sentinel-1 GRD measurement digital-number raster tiles."
+semantic_meaning = "Native HH polarization SAR measurement pixel digital numbers from Sentinel-1 GRD products."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Default polarization family. Each sample is one native 1024x1024 COG tile decoded losslessly; medium-resolution GRD hits in the default search windows are commonly dual-pol HH+HV products."
+source_resources = ["selected_measurement_tiffs"]
+filtered_input_path = "filtered/sentinel1_grd_measurement_u16/ingest_stats.json"
+filtering = "Keep only single-band uint16 TIFF images for the HH polarization with supported uncompressed, Deflate, or Zstandard tile encoding; emit only full interior tiles that are non-constant and at least 98% non-zero."
+missing_value_policy = "Missing assets, non-uint16 TIFFs, unsupported TIFF compression, malformed tile tables, truncated tiles, empty rasters, constant tiles, and sparse swath-edge tiles are rejected."
+conversion = "Decode each native COG tile losslessly (Deflate via zlib, Zstandard via the zstd CLI) and write one raw uint16 pixel tile per HH sample."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw Sentinel-1 GRD measurement digital-number tile"
+sample_geometry = "2d_raster"
+sample_rank = 2
+sample_shape = [1024, 1024]
+sample_axes = ["y", "x"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sentinel1_grd_measurement_u16/sentinel1_grd_hh_dn_u16/"
+
+[[series]]
+id = "sentinel1_grd_hv_dn_u16"
+description = "HV-polarized Sentinel-1 GRD measurement digital-number raster tiles."
+semantic_meaning = "Native HV polarization SAR measurement pixel digital numbers from Sentinel-1 GRD products."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Optional homogeneous polarization family emitted only when HV measurement files are selected. Each sample is one native 1024x1024 COG tile decoded losslessly."
+source_resources = ["selected_measurement_tiffs"]
+filtered_input_path = "filtered/sentinel1_grd_measurement_u16/ingest_stats.json"
+filtering = "Keep only single-band uint16 TIFF images for the HV polarization with supported uncompressed, Deflate, or Zstandard tile encoding; emit only full interior tiles that are non-constant and at least 98% non-zero."
+missing_value_policy = "Missing assets, non-uint16 TIFFs, unsupported TIFF compression, malformed tile tables, truncated tiles, empty rasters, constant tiles, and sparse swath-edge tiles are rejected."
+conversion = "Decode each native COG tile losslessly (Deflate via zlib, Zstandard via the zstd CLI) and write one raw uint16 pixel tile per HV sample."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw Sentinel-1 GRD measurement digital-number tile"
+sample_geometry = "2d_raster"
+sample_rank = 2
+sample_shape = [1024, 1024]
+sample_axes = ["y", "x"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sentinel1_grd_measurement_u16/sentinel1_grd_hv_dn_u16/"

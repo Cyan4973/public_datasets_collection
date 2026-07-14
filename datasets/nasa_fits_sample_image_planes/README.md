@@ -1,14 +1,18 @@
 # NASA FITS Sample Image Planes
 
 This recipe collects public astronomical FITS sample files from NASA's FITS
-Support Office and emits homogeneous image pixel arrays.
+Support Office and emits two homogeneous image pixel-array series:
+
+- `fits_scaled_image_pixels_f64` — 2D integer image planes with the FITS
+  `BSCALE`/`BZERO` transform applied, giving float64 physical pixel values;
+- `fits_image_cubes_f32` — 3D float32 image cubes.
 
 The recipe is intentionally strict about series homogeneity:
 
 - tables, spectra, and binary-table HDUs are not emitted;
-- each output series contains only one FITS numeric storage type;
-- scaled integer image planes are emitted only in a separate float64 physical
-  pixel-value series;
+- raw stored-value 2D planes are **not** collected: their per-`BITPIX` storage
+  width (u8/i16/i32/f32/f64) is a property of the source file, not a distinct
+  numeric quantity, so mirroring the same pixels across widths is avoided;
 - 3D image cubes are emitted only in a separate cube series and are not mixed
   with 2D image planes;
 - HDUs with missing integer pixels or non-finite floating pixels are skipped.
@@ -16,9 +20,9 @@ The recipe is intentionally strict about series homogeneity:
 ## Usage
 
 ```bash
-bash staging/nasa_fits_sample_image_planes/download.sh
-bash staging/nasa_fits_sample_image_planes/build.sh
-bash staging/nasa_fits_sample_image_planes/verify.sh
+bash datasets/nasa_fits_sample_image_planes/download.sh
+bash datasets/nasa_fits_sample_image_planes/build.sh
+bash datasets/nasa_fits_sample_image_planes/verify.sh
 ```
 
 The default URL list is a bounded set of public NASA FITS Support Office sample

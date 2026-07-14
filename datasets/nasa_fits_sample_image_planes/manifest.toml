@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "nasa_fits_sample_image_planes"
 name = "NASA FITS Sample Image Arrays"
-description = "Public astronomical FITS sample files parsed into homogeneous scalar image-plane and image-cube pixel arrays."
+description = "Public astronomical FITS sample files parsed into a scaled-physical image-plane series (float64) and a float image-cube series (float32)."
 homepage = "https://fits.gsfc.nasa.gov/fits_samples.html"
 
 [license]
@@ -47,123 +47,8 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/nasa_fits_sample_image_planes/samples.jsonl"
-summary = "Download bounded public FITS files, parse local FITS image HDUs, and emit separate homogeneous raw little-endian pixel-array series by FITS storage type and array rank."
-deterministic_notes = "Build sorts local FITS files, scans HDUs in source order, accepts only scalar image HDUs with no missing/non-finite values, keeps scaled integer planes separate from raw stored-value planes, keeps 3D image cubes separate from 2D image planes, preserves source pixel order, writes little-endian raw arrays, and enforces acceptance floors without network access."
-
-[[series]]
-id = "fits_image_pixels_u8"
-description = "Unsigned 8-bit FITS image planes."
-semantic_meaning = "2D scalar astronomical image pixel values from FITS image HDUs stored as BITPIX=8."
-role = "primary"
-representation_class = "native_numeric"
-representation_notes = "This series contains only unscaled FITS 2D scalar image planes with unsigned 8-bit stored pixels."
-source_resources = ["selected_fits_samples"]
-filtered_input_path = "filtered/nasa_fits_sample_image_planes/ingest_stats.json"
-filtering = "Keep only 2D image HDUs with BITPIX=8, NAXIS=2, default BSCALE/BZERO, no BLANK sentinel, nonconstant payloads, and at least NASA_FITS_MIN_VALUES values."
-missing_value_policy = "Missing files, malformed FITS headers/data, table/cube HDUs, scaled integer HDUs, missing-pixel sentinels, tiny planes, or constant planes are skipped or rejected as recorded in build stats."
-conversion = "Copy FITS unsigned 8-bit image payloads unchanged into raw pixel-plane samples."
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-sample_format = "raw homogeneous FITS image plane"
-sample_geometry = "2d_astronomical_image_plane"
-sample_rank = 2
-sample_axes = ["y", "x"]
-sample_count = 0
-total_size_bytes = 0
-output_path = "samples/nasa_fits_sample_image_planes/fits_image_pixels_u8/"
-
-[[series]]
-id = "fits_image_pixels_i16"
-description = "Signed 16-bit FITS image planes."
-semantic_meaning = "2D scalar astronomical image pixel values from FITS image HDUs stored as BITPIX=16."
-role = "primary"
-representation_class = "native_numeric"
-representation_notes = "This series contains only unscaled FITS 2D scalar image planes with signed 16-bit stored pixels."
-source_resources = ["selected_fits_samples"]
-filtered_input_path = "filtered/nasa_fits_sample_image_planes/ingest_stats.json"
-filtering = "Keep only 2D image HDUs with BITPIX=16, NAXIS=2, default BSCALE/BZERO, no BLANK sentinel, nonconstant payloads, and at least NASA_FITS_MIN_VALUES values."
-missing_value_policy = "Missing files, malformed FITS headers/data, table/cube HDUs, scaled integer HDUs, missing-pixel sentinels, tiny planes, or constant planes are skipped or rejected as recorded in build stats."
-conversion = "Convert FITS big-endian signed 16-bit stored pixels to little-endian signed int16 samples without scaling."
-numeric_kind = "int"
-bit_width = 16
-endianness = "little"
-sample_format = "raw homogeneous FITS image plane"
-sample_geometry = "2d_astronomical_image_plane"
-sample_rank = 2
-sample_axes = ["y", "x"]
-sample_count = 0
-total_size_bytes = 0
-output_path = "samples/nasa_fits_sample_image_planes/fits_image_pixels_i16/"
-
-[[series]]
-id = "fits_image_pixels_i32"
-description = "Signed 32-bit FITS image planes."
-semantic_meaning = "2D scalar astronomical image pixel values from FITS image HDUs stored as BITPIX=32."
-role = "primary"
-representation_class = "native_numeric"
-representation_notes = "This series contains only unscaled FITS 2D scalar image planes with signed 32-bit stored pixels."
-source_resources = ["selected_fits_samples"]
-filtered_input_path = "filtered/nasa_fits_sample_image_planes/ingest_stats.json"
-filtering = "Keep only 2D image HDUs with BITPIX=32, NAXIS=2, default BSCALE/BZERO, no BLANK sentinel, nonconstant payloads, and at least NASA_FITS_MIN_VALUES values."
-missing_value_policy = "Missing files, malformed FITS headers/data, table/cube HDUs, scaled integer HDUs, missing-pixel sentinels, tiny planes, or constant planes are skipped or rejected as recorded in build stats."
-conversion = "Convert FITS big-endian signed 32-bit stored pixels to little-endian signed int32 samples without scaling."
-numeric_kind = "int"
-bit_width = 32
-endianness = "little"
-sample_format = "raw homogeneous FITS image plane"
-sample_geometry = "2d_astronomical_image_plane"
-sample_rank = 2
-sample_axes = ["y", "x"]
-sample_count = 0
-total_size_bytes = 0
-output_path = "samples/nasa_fits_sample_image_planes/fits_image_pixels_i32/"
-
-[[series]]
-id = "fits_image_pixels_f32"
-description = "Float32 FITS image planes."
-semantic_meaning = "2D scalar astronomical image pixel values from FITS image HDUs stored as BITPIX=-32."
-role = "primary"
-representation_class = "native_numeric"
-representation_notes = "This series contains only FITS 2D scalar image planes with IEEE float32 stored pixels."
-source_resources = ["selected_fits_samples"]
-filtered_input_path = "filtered/nasa_fits_sample_image_planes/ingest_stats.json"
-filtering = "Keep only 2D image HDUs with BITPIX=-32, NAXIS=2, finite pixel values, nonconstant payloads, and at least NASA_FITS_MIN_VALUES values."
-missing_value_policy = "Missing files, malformed FITS headers/data, table/cube HDUs, non-finite pixels, tiny planes, or constant planes are skipped or rejected as recorded in build stats."
-conversion = "Convert FITS big-endian IEEE float32 pixels to little-endian float32 samples without scaling."
-numeric_kind = "float"
-bit_width = 32
-endianness = "little"
-sample_format = "raw homogeneous FITS image plane"
-sample_geometry = "2d_astronomical_image_plane"
-sample_rank = 2
-sample_axes = ["y", "x"]
-sample_count = 0
-total_size_bytes = 0
-output_path = "samples/nasa_fits_sample_image_planes/fits_image_pixels_f32/"
-
-[[series]]
-id = "fits_image_pixels_f64"
-description = "Float64 FITS image planes."
-semantic_meaning = "2D scalar astronomical image pixel values from FITS image HDUs stored as BITPIX=-64."
-role = "primary"
-representation_class = "native_numeric"
-representation_notes = "This series contains only FITS 2D scalar image planes with IEEE float64 stored pixels."
-source_resources = ["selected_fits_samples"]
-filtered_input_path = "filtered/nasa_fits_sample_image_planes/ingest_stats.json"
-filtering = "Keep only 2D image HDUs with BITPIX=-64, NAXIS=2, finite pixel values, nonconstant payloads, and at least NASA_FITS_MIN_VALUES values."
-missing_value_policy = "Missing files, malformed FITS headers/data, table/cube HDUs, non-finite pixels, tiny planes, or constant planes are skipped or rejected as recorded in build stats."
-conversion = "Convert FITS big-endian IEEE float64 pixels to little-endian float64 samples without scaling."
-numeric_kind = "float"
-bit_width = 64
-endianness = "little"
-sample_format = "raw homogeneous FITS image plane"
-sample_geometry = "2d_astronomical_image_plane"
-sample_rank = 2
-sample_axes = ["y", "x"]
-sample_count = 0
-total_size_bytes = 0
-output_path = "samples/nasa_fits_sample_image_planes/fits_image_pixels_f64/"
+summary = "Download bounded public FITS files, parse local FITS image HDUs, and emit two homogeneous little-endian pixel-array series: scaled physical 2D image planes (float64) and 3D image cubes (float32)."
+deterministic_notes = "Build sorts local FITS files, scans HDUs in source order, and accepts only scalar image HDUs with no missing/non-finite values. It collects two coherent quantities: 2D integer image planes with FITS BSCALE/BZERO scaling applied to float64 physical values, and 3D float32 image cubes. Raw stored-value 2D planes are intentionally NOT collected (their per-BITPIX storage width is a property of the source file, not a distinct numeric quantity). Source pixel order is preserved, arrays are written little-endian, and acceptance floors are enforced without network access."
 
 [[series]]
 id = "fits_scaled_image_pixels_f64"

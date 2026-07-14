@@ -32,11 +32,6 @@ DATA_ROOT = Path(os.environ["REPO_ROOT"]) / os.environ["DATA_DIR"]
 INDEX_PATH = Path(os.environ["INDEX_DIR"]) / "samples.jsonl"
 STATS_PATH = Path(os.environ["FILTER_DIR"]) / "ingest_stats.json"
 EXPECTED = {
-    "fits_image_pixels_u8": ("uint", 8, 1, "<B", "2d_astronomical_image_plane", 2),
-    "fits_image_pixels_i16": ("int", 16, 2, "<h", "2d_astronomical_image_plane", 2),
-    "fits_image_pixels_i32": ("int", 32, 4, "<i", "2d_astronomical_image_plane", 2),
-    "fits_image_pixels_f32": ("float", 32, 4, "<f", "2d_astronomical_image_plane", 2),
-    "fits_image_pixels_f64": ("float", 64, 8, "<d", "2d_astronomical_image_plane", 2),
     "fits_scaled_image_pixels_f64": ("float", 64, 8, "<d", "2d_astronomical_image_plane", 2),
     "fits_image_cubes_f32": ("float", 32, 4, "<f", "3d_astronomical_image_cube", 3),
 }

@@ -46,12 +46,17 @@ SAMPLE_DIR = Path(os.environ["SAMPLE_DIR"])
 MIN_VALUES = int(os.environ["NASA_FITS_MIN_VALUES"])
 MAX_PRIMARY_BYTES = int(os.environ["NASA_FITS_MAX_PRIMARY_BYTES"])
 
+# Per-BITPIX FITS input-decode map (element size + big-endian read format). This
+# is only used to DECODE stored pixels; raw stored-value 2D planes are not
+# collected as their own series (their per-BITPIX storage width is a property of
+# the source file, not a distinct numeric quantity). The tuple keeps its legacy
+# shape; the first two fields are unused for output.
 BITPIX_SPECS = {
-    8: ("fits_image_pixels_u8", "uint", 8, 1, ">B", "<B"),
-    16: ("fits_image_pixels_i16", "int", 16, 2, ">h", "<h"),
-    32: ("fits_image_pixels_i32", "int", 32, 4, ">i", "<i"),
-    -32: ("fits_image_pixels_f32", "float", 32, 4, ">f", "<f"),
-    -64: ("fits_image_pixels_f64", "float", 64, 8, ">d", "<d"),
+    8: ("_decode_only", "uint", 8, 1, ">B", "<B"),
+    16: ("_decode_only", "int", 16, 2, ">h", "<h"),
+    32: ("_decode_only", "int", 32, 4, ">i", "<i"),
+    -32: ("_decode_only", "float", 32, 4, ">f", "<f"),
+    -64: ("_decode_only", "float", 64, 8, ">d", "<d"),
 }
 SCALED_SERIES = ("fits_scaled_image_pixels_f64", "float", 64, 8, "<d")
 CUBE_SPECS = {
@@ -220,8 +225,7 @@ shutil.rmtree(SAMPLE_DIR, ignore_errors=True)
 shutil.rmtree(INDEX_DIR, ignore_errors=True)
 FILTER_DIR.mkdir(parents=True, exist_ok=True)
 INDEX_DIR.mkdir(parents=True, exist_ok=True)
-all_series_ids = {spec[0] for spec in BITPIX_SPECS.values()}
-all_series_ids.update(spec[0] for spec in CUBE_SPECS.values())
+all_series_ids = {spec[0] for spec in CUBE_SPECS.values()}
 all_series_ids.add(SCALED_SERIES[0])
 for series_id in sorted(all_series_ids):
     (SAMPLE_DIR / series_id).mkdir(parents=True, exist_ok=True)
@@ -290,6 +294,11 @@ for source_path in source_files:
                     reason = "scaled_cube"
                 elif naxis == 3 and bitpix not in CUBE_SPECS:
                     reason = f"unsupported_cube_bitpix_{bitpix}"
+                elif naxis == 2 and bscale == 1.0 and bzero == 0.0:
+                    # Raw stored-value 2D planes are intentionally not collected;
+                    # only BSCALE/BZERO-scaled physical planes form a coherent
+                    # (width-independent) series.
+                    reason = "unscaled_raw_plane_not_collected"
                 else:
                     reason = ""
                 if reason:
@@ -322,14 +331,11 @@ for source_path in source_files:
                     sample_axes = ["plane", "y", "x"]
                     sample_format = "raw homogeneous FITS image cube"
                 else:
-                    series_id, numeric_kind, bit_width, element_size, in_fmt, out_fmt = BITPIX_SPECS[bitpix]
-                    sample_element_size = element_size
-                    value_count = width * height
-                    sample_geometry = "2d_astronomical_image_plane"
-                    sample_rank = 2
-                    sample_shape = [height, width]
-                    sample_axes = ["y", "x"]
-                    sample_format = "raw homogeneous FITS image plane"
+                    # Unreachable: unscaled 2D planes are skipped above and only
+                    # scaled 2D planes / 3D cubes are collected.
+                    raise ValueError(
+                        f"unexpected uncollected HDU reached emission (bitpix={bitpix}, naxis={naxis})"
+                    )
 
                 if value_count < MIN_VALUES:
                     reason = "below_min_values"

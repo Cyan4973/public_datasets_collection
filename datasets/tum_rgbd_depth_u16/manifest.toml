@@ -1,0 +1,74 @@
+manifest_version = 1
+dataset_id = "tum_rgbd_depth_u16"
+name = "TUM RGB-D Depth Frames (uint16)"
+description = "Native 16-bit depth-sensor frames from the TUM RGB-D benchmark: one uint16 depth raster per frame (640x480), where each pixel is the sensor's raw range reading (TUM scale factor 5000: metres = pixel / 5000)."
+homepage = "https://cvg.cit.tum.de/data/datasets/rgbd-dataset"
+
+[license]
+name = "CC BY 4.0"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "J. Sturm et al., A Benchmark for the Evaluation of RGB-D SLAM Systems, IROS 2012 (TUM RGB-D dataset)."
+notes = "TUM RGB-D data is released under CC BY 4.0; preserve attribution. Only numeric depth frames are extracted (no RGB, poses, or timestamps)."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public robotics/vision benchmark of indoor depth-camera recordings. Only per-pixel range values are extracted."
+usage_notes = "Depth is the sensor's native uint16 range reading; 0 marks pixels with no valid return."
+
+[[origins]]
+id = "tum_rgbd"
+name = "TUM RGB-D Benchmark (Computer Vision Group, TU Munich)"
+url = "https://cvg.cit.tum.de/data/datasets/rgbd-dataset"
+type = "bulk_download"
+notes = "Per-sequence .tgz archives, each with a depth/ folder of 16-bit grayscale PNG depth frames."
+
+[[resources]]
+id = "tum_sequences"
+origin = "tum_rgbd"
+url = "datasets/tum_rgbd_depth_u16/download.sh"
+type = "bounded_bulk_selection"
+version = "rgbd_dataset_freiburg_sequences"
+access = "Download script fetches a bounded set of per-sequence .tgz archives (default one; override with TUM_SEQUENCES or TUM_TGZ_URLS); the build extracts a capped number of depth frames."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/tum_rgbd_depth_u16/"
+notes = "Archives contain both rgb/ and depth/; only depth/*.png (16-bit) is used. One depth frame = one natural sample."
+
+[local_paths]
+downloads = "downloads/tum_rgbd_depth_u16/"
+filtered = "filtered/tum_rgbd_depth_u16/"
+index = "index/tum_rgbd_depth_u16/"
+samples = "samples/tum_rgbd_depth_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/tum_rgbd_depth_u16/samples.jsonl"
+summary = "Download bounded TUM RGB-D sequence archives and emit one native uint16 depth raster per depth frame."
+deterministic_notes = "Depth frames are read from the depth/ folder of each archive in archive order, decoded from 16-bit grayscale PNG with a pure-python decoder (zlib + PNG scanline unfiltering), and written as raw little-endian uint16 rasters. Frames are capped (default 400) and constant frames are rejected. One depth frame is one natural sample (no tiling, no reordering). RGB, camera poses, and timestamps are not collected."
+
+[[series]]
+id = "tum_rgbd_depth_u16"
+description = "Depth-camera range frame (uint16)."
+semantic_meaning = "Per-pixel range reading of an indoor scene from an RGB-D (Kinect) depth sensor; the sensor's native uint16 value, TUM scale factor 5000 (metres = pixel / 5000). Zero marks pixels with no valid return."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Each sample is one full 640x480 depth raster in source pixel order, decoded losslessly from the 16-bit grayscale PNG and stored as raw little-endian uint16."
+source_resources = ["tum_sequences"]
+filtered_input_path = "filtered/tum_rgbd_depth_u16/ingest_stats.json"
+filtering = "Keep 16-bit single-channel depth PNGs from each archive's depth/ folder; reject constant frames and frames that fail to decode."
+missing_value_policy = "Invalid-return pixels are the native 0 value and are preserved; constant frames are rejected."
+conversion = "Decode the 16-bit grayscale depth PNG and write one raw little-endian uint16 raster per frame."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw uint16 depth raster"
+sample_geometry = "2d_raster"
+sample_rank = 2
+sample_axes = ["y", "x"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/tum_rgbd_depth_u16/tum_rgbd_depth_u16/"

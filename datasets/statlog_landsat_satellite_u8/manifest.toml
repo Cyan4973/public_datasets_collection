@@ -1,0 +1,148 @@
+manifest_version = 1
+dataset_id = "statlog_landsat_satellite_u8"
+name = "Statlog (Landsat Satellite) Spectral DN"
+description = "Landsat MSS four-band surface-reflectance digital numbers (0-255) from the UCI Statlog (Landsat Satellite) dataset, emitted as one raw uint8 series per spectral band."
+homepage = "https://archive.ics.uci.edu/dataset/146/statlog+landsat+satellite"
+
+[license]
+name = "CC BY 4.0"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Statlog (Landsat Satellite), UCI Machine Learning Repository."
+notes = "UCI metadata indicates CC BY 4.0."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official upstream UCI distribution only; no mirrors, leaks, or scraped content."
+usage_notes = "Public source intended for reproducible numeric dataset collection."
+
+[[origins]]
+id = "official"
+name = "UCI ML Repository"
+url = "https://archive.ics.uci.edu/dataset/146/statlog+landsat+satellite"
+type = "data_portal"
+notes = "Official upstream dataset page."
+
+[[resources]]
+id = "main"
+origin = "official"
+url = "https://archive.ics.uci.edu/static/public/146/statlog+landsat+satellite.zip"
+type = "archive"
+version = "accessed_by_user"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/statlog_landsat_satellite_u8/statlog_landsat_satellite.zip"
+notes = "Archive containing sat.trn and sat.tst."
+
+[[resources]]
+id = "fallback_direct"
+origin = "official"
+url = "https://archive.ics.uci.edu/ml/machine-learning-databases/statlog/satimage/"
+type = "directory"
+version = "accessed_by_user"
+access = "Direct public download of sat.trn and sat.tst."
+size_bytes = 0
+sha256 = ""
+local_path = "extracted/statlog_landsat_satellite_u8/"
+notes = "Stable classic UCI directory used as fallback when the static zip is unavailable; ships the identical sat.trn/sat.tst files."
+
+[local_paths]
+downloads = "downloads/statlog_landsat_satellite_u8/"
+extracted = "extracted/statlog_landsat_satellite_u8/"
+filtered = "filtered/statlog_landsat_satellite_u8/"
+index = "index/statlog_landsat_satellite_u8/"
+samples = "samples/statlog_landsat_satellite_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/statlog_landsat_satellite_u8/samples.jsonl"
+summary = "Download the pinned UCI Statlog (Landsat Satellite) files, and for each of the four Landsat MSS spectral bands emit its per-pixel 0-255 reflectance digital numbers as a raw uint8 series, one sample per upstream train/test file."
+deterministic_notes = "Each Statlog row is a 3x3 pixel neighbourhood of 36 attributes (9 pixels x 4 bands, pixel-major) plus a class label. Band b occupies attribute positions b, b+4, ..., b+32; its nine per-pixel values are serialized in row order. The trailing class label is auxiliary categorical metadata and is not collected. The sat.trn and sat.tst files are the natural record boundary and each becomes one sample per band (no concatenation across files). Writes durable logs and samples.jsonl under index/statlog_landsat_satellite_u8/."
+
+[[series]]
+id = "landsat_band_green_u8"
+description = "Landsat MSS green-band reflectance digital numbers."
+semantic_meaning = "Per-pixel surface-reflectance digital number (0-255) in the green spectral band (~0.5-0.6 um) of a Landsat MSS sub-scene."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtering = "Extract attribute positions 0,4,...,32 of each 3x3-neighbourhood row in row order; one sample per upstream train/test file."
+missing_value_policy = "The Statlog files are complete with no missing values; constant or empty samples are rejected by build and verify."
+conversion = "Store the green-band digital numbers as raw uint8 in row order."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 reflectance array"
+sample_geometry = "1d_sequence"
+sample_rank = 1
+sample_axes = ["pixel"]
+sample_count = 2
+total_size_bytes = 57915
+output_path = "samples/statlog_landsat_satellite_u8/landsat_band_green_u8/"
+
+[[series]]
+id = "landsat_band_red_u8"
+description = "Landsat MSS red-band reflectance digital numbers."
+semantic_meaning = "Per-pixel surface-reflectance digital number (0-255) in the red spectral band (~0.6-0.7 um) of a Landsat MSS sub-scene."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtering = "Extract attribute positions 1,5,...,33 of each 3x3-neighbourhood row in row order; one sample per upstream train/test file."
+missing_value_policy = "The Statlog files are complete with no missing values; constant or empty samples are rejected by build and verify."
+conversion = "Store the red-band digital numbers as raw uint8 in row order."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 reflectance array"
+sample_geometry = "1d_sequence"
+sample_rank = 1
+sample_axes = ["pixel"]
+sample_count = 2
+total_size_bytes = 57915
+output_path = "samples/statlog_landsat_satellite_u8/landsat_band_red_u8/"
+
+[[series]]
+id = "landsat_band_nir1_u8"
+description = "Landsat MSS first near-infrared band reflectance digital numbers."
+semantic_meaning = "Per-pixel surface-reflectance digital number (0-255) in the first near-infrared spectral band (~0.7-0.8 um) of a Landsat MSS sub-scene."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtering = "Extract attribute positions 2,6,...,34 of each 3x3-neighbourhood row in row order; one sample per upstream train/test file."
+missing_value_policy = "The Statlog files are complete with no missing values; constant or empty samples are rejected by build and verify."
+conversion = "Store the first near-infrared band digital numbers as raw uint8 in row order."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 reflectance array"
+sample_geometry = "1d_sequence"
+sample_rank = 1
+sample_axes = ["pixel"]
+sample_count = 2
+total_size_bytes = 57915
+output_path = "samples/statlog_landsat_satellite_u8/landsat_band_nir1_u8/"
+
+[[series]]
+id = "landsat_band_nir2_u8"
+description = "Landsat MSS second near-infrared band reflectance digital numbers."
+semantic_meaning = "Per-pixel surface-reflectance digital number (0-255) in the second near-infrared spectral band (~0.8-1.1 um) of a Landsat MSS sub-scene."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtering = "Extract attribute positions 3,7,...,35 of each 3x3-neighbourhood row in row order; one sample per upstream train/test file."
+missing_value_policy = "The Statlog files are complete with no missing values; constant or empty samples are rejected by build and verify."
+conversion = "Store the second near-infrared band digital numbers as raw uint8 in row order."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 reflectance array"
+sample_geometry = "1d_sequence"
+sample_rank = 1
+sample_axes = ["pixel"]
+sample_count = 2
+total_size_bytes = 57915
+output_path = "samples/statlog_landsat_satellite_u8/landsat_band_nir2_u8/"

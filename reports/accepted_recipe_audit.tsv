@@ -69,6 +69,7 @@ usgs_nwis_ph_daily	ok	202184	1617472	36	4561.5	36492	0	0	0	1	none	none
 gutendex_catalog_books	ok	203883	565180	3	62588	125176	78707	314828	1	1	none	none
 geonames_cities5000	ok	206700	1378000	3	68900	551200	0	0	0	1	none	none
 nasa_techport_projects	ok	227414	413480	11	20674	20674	0	0	0	1	none	none
+statlog_landsat_satellite_u8	ok	231660	231660	8	28957.5	28957.5	0	0	0	1	none	none
 ourairports_airports	ok	241771	1651444	3	85545	684360	0	0	0	1	none	none
 nvd_cves_recent	ok	244224	651264	6	40704	81408	0	0	0	1	none	none
 usgs_nwis_gage_height_daily	ok	262068	2096544	30	8843.5	70748	0	0	0	1	none	none

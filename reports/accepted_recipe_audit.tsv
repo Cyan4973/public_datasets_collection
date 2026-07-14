@@ -99,11 +99,11 @@ nasa_power_daily_wind	ok	449280	3594240	30	14976	119808	0	0	0	1	none	none
 usgs_sitefile_all_large	ok	452020	3073736	5	90404	723232	0	0	0	1	none	none
 openalex_works_2024_sample	ok	460000	1160000	23	20000	40000	0	0	0	1	none	none
 sec_submissions_largecap_bundle	ok	483235	1739646	245	1001	4000	0	0	0	1	none	none
+appliances_energy_uci	ok	513110	4104880	26	19735	157880	39470	315760	2	1	none	none
 noaa_coops_air_temperature	ok	525155	4201240	3	175044	1400352	0	0	0	1	none	none
 noaa_coops_air_pressure	ok	525156	4201248	3	175047	1400376	0	0	0	1	none	none
 nasa_power_daily_longwave_flux	ok	540600	4324800	40	13515	108120	0	0	0	1	none	none
 noaa_ghcn_daily_awnd_by_station	ok	545792	1091584	57	9970	19940	0	0	0	1	none	none
-appliances_energy_uci	ok	552580	4420640	28	19735	157880	0	0	0	1	none	none
 dataone_solr	ok	602719	2805438	7	100000	400000	0	0	0	1	none	none
 gharchive_hourly_events_20240101_00	ok	614476	4301332	4	153619	1228952	0	0	0	1	none	none
 wikimedia_pageviews_daily	ok	619828	2479312	208	3472	13888	0	0	0	1	none	none
@@ -156,8 +156,8 @@ metacpan_releases_search_large	ok	3597093	14388372	9	399677	1598708	0	0	0	1	none
 jhu_covid19_confirmed_us_daily	ok	3664458	14657832	3206	1143	4572	0	0	0	1	none	none
 usgs_daily_values_large	ok	3733419	29867352	1800	2192	17536	0	0	0	1	none	none
 citibike_2024_01_station_ids_u16	ok	3776170	7552340	16	180600	361200	0	0	0	1	none	none
+beijing_air_quality_uci	ok	4219435	33755480	132	32141.5	257132	1534340	12274720	48	1	none	none
 ncbi_gene_human	ok	4794554	19178216	4	1198638.5	4794554	0	0	0	1	none	none
-beijing_air_quality_uci	ok	5753775	46030200	180	32141.5	257132	0	0	0	1	none	none
 bam_read_mapq_u8	ok	6170563	6170563	14	435368	435368	0	0	0	1	none	none
 noaa_tides_water_level	ok	7287492	58299936	42	175440	1403520	0	0	0	1	none	none
 unicode_bmp_gutenberg	ok	8700484	17400968	12	490769	981538	0	0	0	1	none	none

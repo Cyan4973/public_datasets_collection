@@ -74,28 +74,6 @@ bit_width = 8
 endianness = "little"
 
 [[series]]
-id = "mitbih_v2_u8"
-semantic_meaning = "Unsigned 8-bit ECG amplitude, lead V2, one sample per record."
-role = "primary"
-representation_class = "native_numeric"
-missing_value_policy = "Record-leads with < MITBIH_MIN_RECORDS or constant values dropped; family omitted if < 5 record-leads."
-conversion = "12-bit signed WFDB sample requantized to unsigned 8-bit: ((s + 2048) >> 4)."
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-
-[[series]]
-id = "mitbih_v4_u8"
-semantic_meaning = "Unsigned 8-bit ECG amplitude, lead V4, one sample per record."
-role = "primary"
-representation_class = "native_numeric"
-missing_value_policy = "Record-leads with < MITBIH_MIN_RECORDS or constant values dropped; family omitted if < 5 record-leads."
-conversion = "12-bit signed WFDB sample requantized to unsigned 8-bit: ((s + 2048) >> 4)."
-numeric_kind = "uint"
-bit_width = 8
-endianness = "little"
-
-[[series]]
 id = "mitbih_v5_u8"
 semantic_meaning = "Unsigned 8-bit ECG amplitude, lead V5, one sample per record."
 role = "primary"

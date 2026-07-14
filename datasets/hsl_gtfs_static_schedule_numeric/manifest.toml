@@ -234,25 +234,3 @@ sample_count = 0
 total_size_bytes = 0
 output_path = "samples/hsl_gtfs_static_schedule_numeric/stops_lat_lon_f64/"
 
-[[series]]
-id = "frequencies_start_end_headway_seconds_i32"
-description = "GTFS frequency service windows and headways."
-semantic_meaning = "Optional GTFS frequency rows as start-time, end-time, and headway-second triples."
-role = "primary"
-representation_class = "derived_operational_numeric"
-representation_notes = "GTFS frequency start/end times are operationally represented as service-day seconds; headway_secs is already numeric."
-source_resources = ["hsl_gtfs_static_zip"]
-filtered_input_path = "filtered/hsl_gtfs_static_schedule_numeric/ingest_stats.json"
-filtering = "Keep rows with parseable start_time, end_time, and nonnegative headway_secs."
-missing_value_policy = "If frequencies.txt is absent or below floor this optional series is skipped; malformed populated values reject the build."
-conversion = "Convert start/end HH:MM:SS values to int32 seconds and parse headway_secs as int32, then write row-major triples."
-numeric_kind = "int"
-bit_width = 32
-endianness = "little"
-sample_format = "raw homogeneous int32 triples"
-sample_geometry = "gtfs_frequency_triples"
-sample_rank = 2
-sample_axes = ["frequency_row", "field"]
-sample_count = 0
-total_size_bytes = 0
-output_path = "samples/hsl_gtfs_static_schedule_numeric/frequencies_start_end_headway_seconds_i32/"

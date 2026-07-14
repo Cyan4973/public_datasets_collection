@@ -52,18 +52,286 @@ summary = "Download pinned upstream resources, build local raw numeric samples o
 deterministic_notes = "Build preserves source file order, does no network access, writes durable logs, and emits samples.jsonl under index/beijing_air_quality_uci/."
 
 [[series]]
-id = "air_numeric"
-description = "Air-quality and weather columns emitted per station."
-semantic_meaning = "Selected numeric fields from the per-station PRSA CSV files."
+id = "air_year"
+description = "Observation year."
+semantic_meaning = "Observation year."
+role = "auxiliary"
+representation_class = "native_numeric"
 source_resources = ["main"]
 filtered_input_path = "filtered/beijing_air_quality_uci/inventory.tsv"
 filtering = "Keep rows where all retained numeric fields are parseable."
 missing_value_policy = "Rows with blanks in retained fields are filtered out."
-conversion = "Parse station CSVs in source order and emit one sample per station for each retained numeric field."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per monitoring station, as raw little-endian float64."
 numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
 sample_count = 0
 total_size_bytes = 0
-output_path = "samples/beijing_air_quality_uci/air_numeric/"
+output_path = "samples/beijing_air_quality_uci/air_year/"
+
+[[series]]
+id = "air_month"
+description = "Observation month."
+semantic_meaning = "Observation month."
+role = "auxiliary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/beijing_air_quality_uci/inventory.tsv"
+filtering = "Keep rows where all retained numeric fields are parseable."
+missing_value_policy = "Rows with blanks in retained fields are filtered out."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per monitoring station, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/beijing_air_quality_uci/air_month/"
+
+[[series]]
+id = "air_day"
+description = "Observation day."
+semantic_meaning = "Observation day."
+role = "auxiliary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/beijing_air_quality_uci/inventory.tsv"
+filtering = "Keep rows where all retained numeric fields are parseable."
+missing_value_policy = "Rows with blanks in retained fields are filtered out."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per monitoring station, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/beijing_air_quality_uci/air_day/"
+
+[[series]]
+id = "air_hour"
+description = "Observation hour."
+semantic_meaning = "Observation hour."
+role = "auxiliary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/beijing_air_quality_uci/inventory.tsv"
+filtering = "Keep rows where all retained numeric fields are parseable."
+missing_value_policy = "Rows with blanks in retained fields are filtered out."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per monitoring station, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/beijing_air_quality_uci/air_hour/"
+
+[[series]]
+id = "air_pm25"
+description = "PM2.5 concentration (ug/m^3)."
+semantic_meaning = "PM2.5 concentration (ug/m^3)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/beijing_air_quality_uci/inventory.tsv"
+filtering = "Keep rows where all retained numeric fields are parseable."
+missing_value_policy = "Rows with blanks in retained fields are filtered out."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per monitoring station, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/beijing_air_quality_uci/air_pm25/"
+
+[[series]]
+id = "air_pm10"
+description = "PM10 concentration (ug/m^3)."
+semantic_meaning = "PM10 concentration (ug/m^3)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/beijing_air_quality_uci/inventory.tsv"
+filtering = "Keep rows where all retained numeric fields are parseable."
+missing_value_policy = "Rows with blanks in retained fields are filtered out."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per monitoring station, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/beijing_air_quality_uci/air_pm10/"
+
+[[series]]
+id = "air_so2"
+description = "SO2 concentration (ug/m^3)."
+semantic_meaning = "SO2 concentration (ug/m^3)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/beijing_air_quality_uci/inventory.tsv"
+filtering = "Keep rows where all retained numeric fields are parseable."
+missing_value_policy = "Rows with blanks in retained fields are filtered out."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per monitoring station, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/beijing_air_quality_uci/air_so2/"
+
+[[series]]
+id = "air_no2"
+description = "NO2 concentration (ug/m^3)."
+semantic_meaning = "NO2 concentration (ug/m^3)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/beijing_air_quality_uci/inventory.tsv"
+filtering = "Keep rows where all retained numeric fields are parseable."
+missing_value_policy = "Rows with blanks in retained fields are filtered out."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per monitoring station, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/beijing_air_quality_uci/air_no2/"
+
+[[series]]
+id = "air_co"
+description = "CO concentration (ug/m^3)."
+semantic_meaning = "CO concentration (ug/m^3)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/beijing_air_quality_uci/inventory.tsv"
+filtering = "Keep rows where all retained numeric fields are parseable."
+missing_value_policy = "Rows with blanks in retained fields are filtered out."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per monitoring station, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/beijing_air_quality_uci/air_co/"
+
+[[series]]
+id = "air_o3"
+description = "O3 concentration (ug/m^3)."
+semantic_meaning = "O3 concentration (ug/m^3)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/beijing_air_quality_uci/inventory.tsv"
+filtering = "Keep rows where all retained numeric fields are parseable."
+missing_value_policy = "Rows with blanks in retained fields are filtered out."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per monitoring station, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/beijing_air_quality_uci/air_o3/"
+
+[[series]]
+id = "air_temp"
+description = "Temperature (degrees C)."
+semantic_meaning = "Temperature (degrees C)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/beijing_air_quality_uci/inventory.tsv"
+filtering = "Keep rows where all retained numeric fields are parseable."
+missing_value_policy = "Rows with blanks in retained fields are filtered out."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per monitoring station, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/beijing_air_quality_uci/air_temp/"
+
+[[series]]
+id = "air_pres"
+description = "Barometric pressure (hPa)."
+semantic_meaning = "Barometric pressure (hPa)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/beijing_air_quality_uci/inventory.tsv"
+filtering = "Keep rows where all retained numeric fields are parseable."
+missing_value_policy = "Rows with blanks in retained fields are filtered out."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per monitoring station, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/beijing_air_quality_uci/air_pres/"
+
+[[series]]
+id = "air_dewp"
+description = "Dew point temperature (degrees C)."
+semantic_meaning = "Dew point temperature (degrees C)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/beijing_air_quality_uci/inventory.tsv"
+filtering = "Keep rows where all retained numeric fields are parseable."
+missing_value_policy = "Rows with blanks in retained fields are filtered out."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per monitoring station, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/beijing_air_quality_uci/air_dewp/"
+
+[[series]]
+id = "air_rain"
+description = "Precipitation (mm)."
+semantic_meaning = "Precipitation (mm)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/beijing_air_quality_uci/inventory.tsv"
+filtering = "Keep rows where all retained numeric fields are parseable."
+missing_value_policy = "Rows with blanks in retained fields are filtered out."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per monitoring station, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/beijing_air_quality_uci/air_rain/"
+
+[[series]]
+id = "air_wspm"
+description = "Wind speed (m/s)."
+semantic_meaning = "Wind speed (m/s)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/beijing_air_quality_uci/inventory.tsv"
+filtering = "Keep rows where all retained numeric fields are parseable."
+missing_value_policy = "Rows with blanks in retained fields are filtered out."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per monitoring station, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/beijing_air_quality_uci/air_wspm/"

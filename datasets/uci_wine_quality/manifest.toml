@@ -52,18 +52,229 @@ summary = "Download pinned upstream resources, build local raw numeric samples o
 deterministic_notes = "Build preserves source file order, does no network access, writes durable logs, and emits samples.jsonl under index/uci_wine_quality/."
 
 [[series]]
-id = "wine_numeric"
-description = "Wine chemistry measurements and quality scores emitted per wine color."
-semantic_meaning = "Numeric columns from winequality-red.csv and winequality-white.csv."
+id = "wine_fixed_acidity"
+description = "Fixed acidity (g/dm^3 tartaric acid)."
+semantic_meaning = "Fixed acidity (g/dm^3 tartaric acid)."
+role = "primary"
+representation_class = "native_numeric"
 source_resources = ["main"]
 filtered_input_path = "filtered/uci_wine_quality/inventory.tsv"
 filtering = "Keep all rows from both CSVs with parseable numeric fields."
 missing_value_policy = "Malformed or blank numeric values are fatal."
-conversion = "Parse semicolon-delimited CSV rows in source order and emit one sample per color for each retained column."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per wine color, as raw little-endian float64."
 numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
 sample_count = 0
 total_size_bytes = 0
-output_path = "samples/uci_wine_quality/wine_numeric/"
+output_path = "samples/uci_wine_quality/wine_fixed_acidity/"
+
+[[series]]
+id = "wine_volatile_acidity"
+description = "Volatile acidity (g/dm^3 acetic acid)."
+semantic_meaning = "Volatile acidity (g/dm^3 acetic acid)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/uci_wine_quality/inventory.tsv"
+filtering = "Keep all rows from both CSVs with parseable numeric fields."
+missing_value_policy = "Malformed or blank numeric values are fatal."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per wine color, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/uci_wine_quality/wine_volatile_acidity/"
+
+[[series]]
+id = "wine_citric_acid"
+description = "Citric acid (g/dm^3)."
+semantic_meaning = "Citric acid (g/dm^3)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/uci_wine_quality/inventory.tsv"
+filtering = "Keep all rows from both CSVs with parseable numeric fields."
+missing_value_policy = "Malformed or blank numeric values are fatal."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per wine color, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/uci_wine_quality/wine_citric_acid/"
+
+[[series]]
+id = "wine_residual_sugar"
+description = "Residual sugar (g/dm^3)."
+semantic_meaning = "Residual sugar (g/dm^3)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/uci_wine_quality/inventory.tsv"
+filtering = "Keep all rows from both CSVs with parseable numeric fields."
+missing_value_policy = "Malformed or blank numeric values are fatal."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per wine color, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/uci_wine_quality/wine_residual_sugar/"
+
+[[series]]
+id = "wine_chlorides"
+description = "Chlorides (g/dm^3 sodium chloride)."
+semantic_meaning = "Chlorides (g/dm^3 sodium chloride)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/uci_wine_quality/inventory.tsv"
+filtering = "Keep all rows from both CSVs with parseable numeric fields."
+missing_value_policy = "Malformed or blank numeric values are fatal."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per wine color, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/uci_wine_quality/wine_chlorides/"
+
+[[series]]
+id = "wine_free_sulfur_dioxide"
+description = "Free sulfur dioxide (mg/dm^3)."
+semantic_meaning = "Free sulfur dioxide (mg/dm^3)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/uci_wine_quality/inventory.tsv"
+filtering = "Keep all rows from both CSVs with parseable numeric fields."
+missing_value_policy = "Malformed or blank numeric values are fatal."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per wine color, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/uci_wine_quality/wine_free_sulfur_dioxide/"
+
+[[series]]
+id = "wine_total_sulfur_dioxide"
+description = "Total sulfur dioxide (mg/dm^3)."
+semantic_meaning = "Total sulfur dioxide (mg/dm^3)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/uci_wine_quality/inventory.tsv"
+filtering = "Keep all rows from both CSVs with parseable numeric fields."
+missing_value_policy = "Malformed or blank numeric values are fatal."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per wine color, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/uci_wine_quality/wine_total_sulfur_dioxide/"
+
+[[series]]
+id = "wine_density"
+description = "Density (g/cm^3)."
+semantic_meaning = "Density (g/cm^3)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/uci_wine_quality/inventory.tsv"
+filtering = "Keep all rows from both CSVs with parseable numeric fields."
+missing_value_policy = "Malformed or blank numeric values are fatal."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per wine color, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/uci_wine_quality/wine_density/"
+
+[[series]]
+id = "wine_pH"
+description = "pH."
+semantic_meaning = "pH."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/uci_wine_quality/inventory.tsv"
+filtering = "Keep all rows from both CSVs with parseable numeric fields."
+missing_value_policy = "Malformed or blank numeric values are fatal."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per wine color, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/uci_wine_quality/wine_pH/"
+
+[[series]]
+id = "wine_sulphates"
+description = "Sulphates (g/dm^3 potassium sulphate)."
+semantic_meaning = "Sulphates (g/dm^3 potassium sulphate)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/uci_wine_quality/inventory.tsv"
+filtering = "Keep all rows from both CSVs with parseable numeric fields."
+missing_value_policy = "Malformed or blank numeric values are fatal."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per wine color, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/uci_wine_quality/wine_sulphates/"
+
+[[series]]
+id = "wine_alcohol"
+description = "Alcohol (percent by volume)."
+semantic_meaning = "Alcohol (percent by volume)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/uci_wine_quality/inventory.tsv"
+filtering = "Keep all rows from both CSVs with parseable numeric fields."
+missing_value_policy = "Malformed or blank numeric values are fatal."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per wine color, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/uci_wine_quality/wine_alcohol/"
+
+[[series]]
+id = "wine_quality"
+description = "Sensory quality score (0-10)."
+semantic_meaning = "Sensory quality score (0-10)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/uci_wine_quality/inventory.tsv"
+filtering = "Keep all rows from both CSVs with parseable numeric fields."
+missing_value_policy = "Malformed or blank numeric values are fatal."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per wine color, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/uci_wine_quality/wine_quality/"

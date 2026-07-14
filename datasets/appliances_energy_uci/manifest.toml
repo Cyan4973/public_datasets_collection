@@ -52,18 +52,533 @@ summary = "Download pinned upstream resources, build local raw numeric samples o
 deterministic_notes = "Build preserves CSV row order, does no network access, writes durable logs, and emits samples.jsonl under index/appliances_energy_uci/."
 
 [[series]]
-id = "appliances_numeric"
-description = "Numeric columns from energydata_complete.csv emitted as one sample per retained column."
-semantic_meaning = "Residential energy and sensor measurements after excluding the date string column."
+id = "appl_appliances"
+description = "Appliances energy use (Wh)."
+semantic_meaning = "Appliances energy use (Wh)."
+role = "primary"
+representation_class = "native_numeric"
 source_resources = ["main"]
 filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
 filtering = "Keep all rows with parseable numeric fields after excluding date."
 missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
-conversion = "Parse CSV rows in source order and write one sample per retained numeric column using fixed little-endian widths."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
 numeric_kind = "float"
 bit_width = 64
 endianness = "little"
 sample_format = "raw homogeneous numeric array"
 sample_count = 0
 total_size_bytes = 0
-output_path = "samples/appliances_energy_uci/appliances_numeric/"
+output_path = "samples/appliances_energy_uci/appl_appliances/"
+
+[[series]]
+id = "appl_lights"
+description = "Light-fixtures energy use (Wh)."
+semantic_meaning = "Light-fixtures energy use (Wh)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_lights/"
+
+[[series]]
+id = "appl_t1"
+description = "Kitchen area temperature (degrees C)."
+semantic_meaning = "Kitchen area temperature (degrees C)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_t1/"
+
+[[series]]
+id = "appl_rh_1"
+description = "Kitchen area relative humidity (percent)."
+semantic_meaning = "Kitchen area relative humidity (percent)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_rh_1/"
+
+[[series]]
+id = "appl_t2"
+description = "Living room temperature (degrees C)."
+semantic_meaning = "Living room temperature (degrees C)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_t2/"
+
+[[series]]
+id = "appl_rh_2"
+description = "Living room relative humidity (percent)."
+semantic_meaning = "Living room relative humidity (percent)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_rh_2/"
+
+[[series]]
+id = "appl_t3"
+description = "Laundry room temperature (degrees C)."
+semantic_meaning = "Laundry room temperature (degrees C)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_t3/"
+
+[[series]]
+id = "appl_rh_3"
+description = "Laundry room relative humidity (percent)."
+semantic_meaning = "Laundry room relative humidity (percent)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_rh_3/"
+
+[[series]]
+id = "appl_t4"
+description = "Office room temperature (degrees C)."
+semantic_meaning = "Office room temperature (degrees C)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_t4/"
+
+[[series]]
+id = "appl_rh_4"
+description = "Office room relative humidity (percent)."
+semantic_meaning = "Office room relative humidity (percent)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_rh_4/"
+
+[[series]]
+id = "appl_t5"
+description = "Bathroom temperature (degrees C)."
+semantic_meaning = "Bathroom temperature (degrees C)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_t5/"
+
+[[series]]
+id = "appl_rh_5"
+description = "Bathroom relative humidity (percent)."
+semantic_meaning = "Bathroom relative humidity (percent)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_rh_5/"
+
+[[series]]
+id = "appl_t6"
+description = "Outside (north) temperature (degrees C)."
+semantic_meaning = "Outside (north) temperature (degrees C)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_t6/"
+
+[[series]]
+id = "appl_rh_6"
+description = "Outside (north) relative humidity (percent)."
+semantic_meaning = "Outside (north) relative humidity (percent)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_rh_6/"
+
+[[series]]
+id = "appl_t7"
+description = "Ironing room temperature (degrees C)."
+semantic_meaning = "Ironing room temperature (degrees C)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_t7/"
+
+[[series]]
+id = "appl_rh_7"
+description = "Ironing room relative humidity (percent)."
+semantic_meaning = "Ironing room relative humidity (percent)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_rh_7/"
+
+[[series]]
+id = "appl_t8"
+description = "Teenager room temperature (degrees C)."
+semantic_meaning = "Teenager room temperature (degrees C)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_t8/"
+
+[[series]]
+id = "appl_rh_8"
+description = "Teenager room relative humidity (percent)."
+semantic_meaning = "Teenager room relative humidity (percent)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_rh_8/"
+
+[[series]]
+id = "appl_t9"
+description = "Parents room temperature (degrees C)."
+semantic_meaning = "Parents room temperature (degrees C)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_t9/"
+
+[[series]]
+id = "appl_rh_9"
+description = "Parents room relative humidity (percent)."
+semantic_meaning = "Parents room relative humidity (percent)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_rh_9/"
+
+[[series]]
+id = "appl_t_out"
+description = "Outside temperature (degrees C)."
+semantic_meaning = "Outside temperature (degrees C)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_t_out/"
+
+[[series]]
+id = "appl_press_mm_hg"
+description = "Atmospheric pressure (mm Hg)."
+semantic_meaning = "Atmospheric pressure (mm Hg)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_press_mm_hg/"
+
+[[series]]
+id = "appl_rh_out"
+description = "Outside relative humidity (percent)."
+semantic_meaning = "Outside relative humidity (percent)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_rh_out/"
+
+[[series]]
+id = "appl_windspeed"
+description = "Wind speed (m/s)."
+semantic_meaning = "Wind speed (m/s)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_windspeed/"
+
+[[series]]
+id = "appl_visibility"
+description = "Visibility (km)."
+semantic_meaning = "Visibility (km)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_visibility/"
+
+[[series]]
+id = "appl_tdewpoint"
+description = "Dew point temperature (degrees C)."
+semantic_meaning = "Dew point temperature (degrees C)."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_tdewpoint/"
+
+[[series]]
+id = "appl_rv1"
+description = "Random variable 1 (dataset test column)."
+semantic_meaning = "Random variable 1 (dataset test column)."
+role = "auxiliary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_rv1/"
+
+[[series]]
+id = "appl_rv2"
+description = "Random variable 2 (dataset test column)."
+semantic_meaning = "Random variable 2 (dataset test column)."
+role = "auxiliary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/appliances_energy_uci/inventory.tsv"
+filtering = "Keep all rows with parseable numeric fields after excluding date."
+missing_value_policy = "Malformed rows are fatal because the selected source CSV is expected to be complete."
+conversion = "Parse the source table(s) in order and write this column's parsed values as one sample per source table, as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/appliances_energy_uci/appl_rv2/"

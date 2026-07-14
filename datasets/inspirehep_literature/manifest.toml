@@ -84,13 +84,3 @@ numeric_kind = "uint"
 bit_width = 16
 endianness = "little"
 
-[[series]]
-id = "inspirehep_reference_count_u16"
-semantic_meaning = "Reference count per paper, one sample per publication year (emitted only if the field is populated enough)."
-role = "primary"
-representation_class = "native_numeric"
-missing_value_policy = "Records missing the field or out of range are dropped; years with < INSPIRE_MIN_YEAR_RECORDS values are dropped; family omitted if < 5 qualifying years."
-conversion = "Native integer reference count stored as uint16."
-numeric_kind = "uint"
-bit_width = 16
-endianness = "little"

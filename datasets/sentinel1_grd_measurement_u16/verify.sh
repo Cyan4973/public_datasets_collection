@@ -27,6 +27,8 @@ import json
 import os
 import statistics
 import struct
+import sys
+from array import array
 from pathlib import Path
 
 DATASET_ID = "sentinel1_grd_measurement_u16"
@@ -75,14 +77,28 @@ for row in rows:
     if path.stat().st_size != expected_bytes or expected_bytes != expected_values * 2:
         raise SystemExit(f"size/count mismatch: {path}")
     endian = "<" if row["endianness"] == "little" else ">"
+    raw = path.read_bytes()
+    if len(raw) != expected_bytes:
+        raise SystemExit(f"size mismatch on read: {path}")
     sample_count = min(expected_values, 200_000)
-    with path.open("rb") as fh:
-        sampled_bytes = fh.read(sample_count * 2)
-    sampled = struct.unpack(endian + "H" * sample_count, sampled_bytes)
+    sampled = struct.unpack(endian + "H" * sample_count, raw[: sample_count * 2])
     if len(set(sampled)) <= 1:
         raise SystemExit(f"constant prefix rejected: {path}")
-    if min(sampled) < 0 or max(sampled) > 65535:
+    # Recompute the full-raster value range and cross-check the recorded min/max.
+    pixels = array("H")
+    pixels.frombytes(raw)
+    if (row["endianness"] == "big") != (sys.byteorder == "big"):
+        pixels.byteswap()
+    actual_min = min(pixels)
+    actual_max = max(pixels)
+    if actual_min < 0 or actual_max > 65535:
         raise SystemExit(f"value outside uint16 range: {path}")
+    if actual_min == actual_max:
+        raise SystemExit(f"constant sample rejected: {path}")
+    if "min" not in row or "max" not in row:
+        raise SystemExit(f"missing recorded min/max: {path}")
+    if int(row["min"]) != actual_min or int(row["max"]) != actual_max:
+        raise SystemExit(f"index min/max mismatch: {path} recorded={row.get('min')}/{row.get('max')} actual={actual_min}/{actual_max}")
     sizes.append(expected_bytes)
     values.append(expected_values)
     series_counts[sid] = series_counts.get(sid, 0) + 1

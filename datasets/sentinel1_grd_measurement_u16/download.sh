@@ -20,7 +20,9 @@ exec > >(tee "$LOG_FILE" "$LATEST_LOG") 2>&1
 echo "[$(date -Is)] download start dataset=$DATASET_ID"
 
 SCENE_LIMIT="${SCENE_LIMIT:-2}"
-POLARIZATIONS="${POLARIZATIONS:-HH}"
+# Default scenes are dual-pol GRDM (1SDH = HH+HV), so both polarization assets
+# exist per scene; each polarization becomes its own homogeneous series.
+POLARIZATIONS="${POLARIZATIONS:-HH HV}"
 PRODUCT_TOKEN="${PRODUCT_TOKEN:-GRDM}"
 MAX_FILE_BYTES="${MAX_FILE_BYTES:-600000000}"
 MAX_DOWNLOAD_BYTES="${MAX_DOWNLOAD_BYTES:-1000000000}"

@@ -15,12 +15,16 @@ full uint16 measurement raster. Polarizations are separate homogeneous families:
 | `sentinel1_grd_hh_dn_u16` | HH-polarized GRD measurement digital numbers |
 | `sentinel1_grd_hv_dn_u16` | HV-polarized GRD measurement digital numbers |
 
-Default selection uses `POLARIZATIONS=HH` and `SCENE_LIMIT=2` to stay under the
-repository's 1 GB raw primary-output cap. Medium-resolution GRD hits in the
-default search windows are commonly dual-pol `SDH` (HH+HV) products, so HH is a
-better default than VV. Other single-polarization runs are possible, but each
-polarization remains a separate family and the build will reject output above the
-cap.
+Default selection uses `POLARIZATIONS="HH HV"` and `SCENE_LIMIT=2`. The
+medium-resolution GRD hits in the default search windows are dual-pol `1SDH`
+(HH+HV) products, so each of the two scenes contributes one HH and one HV
+raster — two homogeneous families of two samples each, kept under the
+repository's 1 GB raw primary-output cap. Other polarization selections are
+possible; each polarization remains a separate family and the build rejects
+output above the cap.
+
+Each index row records the sample's full-raster `min`/`max` value range, which
+`verify.sh` re-derives and cross-checks.
 
 The Planetary Computer serves these COGs Zstandard-compressed, which the build
 decodes via the `zstd` CLI (no Python packages required); Deflate tiles decode
@@ -37,7 +41,7 @@ Tunables (all optional):
 | Variable | Default | Meaning |
 | --- | --- | --- |
 | `SCENE_LIMIT` | `2` | Number of GRD scenes to select |
-| `POLARIZATIONS` | `HH` | Comma/space list drawn from `VV VH HH HV` |
+| `POLARIZATIONS` | `HH HV` | Comma/space list drawn from `VV VH HH HV` |
 | `ZSTD_BIN` | `zstd` | Path to the `zstd` decompressor |
 
 Exact URL mode is preferred when stable measurement TIFF URLs are known:

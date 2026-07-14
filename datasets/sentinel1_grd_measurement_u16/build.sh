@@ -32,7 +32,9 @@ import shutil
 import statistics
 import struct
 import subprocess
+import sys
 import zlib
+from array import array
 from pathlib import Path
 
 DATASET_ID = "sentinel1_grd_measurement_u16"
@@ -287,6 +289,15 @@ for sample_index, plan_row in enumerate(read_plan(), start=1):
     prefix_values = struct.unpack(info["endian"] + "H" * prefix_count, payload[: prefix_count * 2])
     if len(set(prefix_values)) <= 1:
         raise RuntimeError(f"{source.name}: constant prefix rejected")
+    # Full-raster value range (uint16), recorded per sample in the index.
+    pixels = array("H")
+    pixels.frombytes(payload)
+    if (info["endianness"] == "big") != (sys.byteorder == "big"):
+        pixels.byteswap()
+    sample_min = min(pixels)
+    sample_max = max(pixels)
+    if sample_min == sample_max:
+        raise RuntimeError(f"{source.name}: constant raster rejected")
     total_bytes += len(payload)
     if total_bytes > MAX_PRIMARY_BYTES:
         raise RuntimeError(f"primary output exceeds cap: {total_bytes}")
@@ -305,6 +316,8 @@ for sample_index, plan_row in enumerate(read_plan(), start=1):
         "element_size_bytes": 2,
         "sample_size_bytes": len(payload),
         "value_count": len(payload) // 2,
+        "min": sample_min,
+        "max": sample_max,
         "sample_geometry": "2d_raster",
         "sample_rank": 2,
         "sample_shape": [info["height"], info["width"]],
@@ -342,6 +355,8 @@ for sample_index, plan_row in enumerate(read_plan(), start=1):
             "prefix_distinct_values": len(set(prefix_values)),
             "prefix_min_value": min(prefix_values),
             "prefix_max_value": max(prefix_values),
+            "sample_min_value": sample_min,
+            "sample_max_value": sample_max,
         }
     )
 

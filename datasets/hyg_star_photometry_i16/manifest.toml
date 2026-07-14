@@ -1,0 +1,120 @@
+manifest_version = 1
+dataset_id = "hyg_star_photometry_i16"
+name = "HYG Star Photometry (millimagnitude int16)"
+description = "Genuine stellar photometric quantities (apparent magnitude, absolute magnitude, and B-V colour index) from the public HYG star catalogue, each emitted as one homogeneous int16 column in integer millimagnitudes."
+homepage = "https://github.com/astronexus/HYG-Database"
+
+[license]
+name = "CC BY-SA 4.0 (HYG database)"
+spdx = "CC-BY-SA-4.0"
+url = "https://github.com/astronexus/HYG-Database"
+citation = "HYG database (astronexus/HYG-Database), compiled from the Hipparcos, Yale Bright Star, and Gliese catalogues."
+notes = "The HYG database is distributed for free public use; preserve attribution to the HYG compilation and its underlying catalogues."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public astronomical star catalogue. Only numeric photometric measurements are extracted."
+usage_notes = "Astronomical photometry; no personal data. Magnitudes are signed (bright stars are negative), so int16 is the correct width."
+
+[[origins]]
+id = "hyg_github"
+name = "HYG Database (GitHub)"
+url = "https://github.com/astronexus/HYG-Database"
+type = "file_download"
+notes = "Single self-describing CSV of ~120k stars with magnitude, absolute magnitude, and colour-index columns."
+
+[[resources]]
+id = "hyg_csv"
+origin = "hyg_github"
+url = "datasets/hyg_star_photometry_i16/download.sh"
+type = "csv"
+version = "hygdata_v3_or_current"
+access = "Download script fetches the HYG CSV (first candidate URL carrying mag/absmag/ci columns; override with HYG_CSV_URL)."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/hyg_star_photometry_i16/hyg.csv"
+notes = "One catalogue CSV; each retained photometric column becomes one sample of ~120k stars."
+
+[local_paths]
+downloads = "downloads/hyg_star_photometry_i16/"
+filtered = "filtered/hyg_star_photometry_i16/"
+index = "index/hyg_star_photometry_i16/"
+samples = "samples/hyg_star_photometry_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/hyg_star_photometry_i16/samples.jsonl"
+summary = "Parse the HYG catalogue CSV and emit one int16 sample per photometric column, scaling each magnitude/colour value to integer millimagnitudes."
+deterministic_notes = "Fixed source CSV, fixed column set (mag, absmag, ci), rows parsed in source order. Each value is scaled to integer millimagnitudes (value x 1000, rounded) and stored as little-endian int16; rows with a blank, unparseable, or out-of-int16-range value for a column are excluded from that column only. Constant or under-populated columns are rejected. This fills the astronomy-photometry gap in the local corpus and mirrors the downstream star-catalogue magnitude series (sao_MAG)."
+
+[[series]]
+id = "hyg_star_apparent_mag_mmag_i16"
+description = "Apparent visual magnitude in integer millimagnitudes."
+semantic_meaning = "Apparent visual magnitude of each catalogued star, scaled to integer millimagnitudes (mag x 1000). Brighter stars are more negative."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "Magnitude is a real-valued photometric measurement; it is represented here as integer millimagnitudes (a standard astronomical precision unit) so the native quantity fits a signed 16-bit width. One sample = the whole catalogue column."
+source_resources = ["hyg_csv"]
+filtered_input_path = "filtered/hyg_star_photometry_i16/ingest_stats.json"
+filtering = "Keep the 'mag' column of every row with a parseable value whose millimagnitude scaling fits int16."
+missing_value_policy = "Rows with a blank, unparseable, or out-of-int16-range apparent magnitude are excluded from this column."
+conversion = "value_mmag = round(mag * 1000); stored as little-endian int16 in source order."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw int16 millimagnitude column"
+sample_geometry = "1d_sequence"
+sample_rank = 1
+sample_axes = ["star"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/hyg_star_photometry_i16/hyg_star_apparent_mag_mmag_i16/"
+
+[[series]]
+id = "hyg_star_absolute_mag_mmag_i16"
+description = "Absolute visual magnitude in integer millimagnitudes."
+semantic_meaning = "Absolute visual magnitude of each catalogued star, scaled to integer millimagnitudes (absmag x 1000)."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "Absolute magnitude is a real-valued photometric quantity; represented as integer millimagnitudes to fit a signed 16-bit width. One sample = the whole catalogue column."
+source_resources = ["hyg_csv"]
+filtered_input_path = "filtered/hyg_star_photometry_i16/ingest_stats.json"
+filtering = "Keep the 'absmag' column of every row with a parseable value whose millimagnitude scaling fits int16."
+missing_value_policy = "Rows with a blank, unparseable, or out-of-int16-range absolute magnitude are excluded from this column."
+conversion = "value_mmag = round(absmag * 1000); stored as little-endian int16 in source order."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw int16 millimagnitude column"
+sample_geometry = "1d_sequence"
+sample_rank = 1
+sample_axes = ["star"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/hyg_star_photometry_i16/hyg_star_absolute_mag_mmag_i16/"
+
+[[series]]
+id = "hyg_star_color_index_mmag_i16"
+description = "Johnson B-V colour index in integer millimagnitudes."
+semantic_meaning = "Johnson B-V colour index of each catalogued star (a temperature proxy), scaled to integer millimagnitudes (ci x 1000)."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "Colour index is a real-valued photometric measurement (difference of two magnitudes); represented as integer millimagnitudes to fit a signed 16-bit width. One sample = the whole catalogue column."
+source_resources = ["hyg_csv"]
+filtered_input_path = "filtered/hyg_star_photometry_i16/ingest_stats.json"
+filtering = "Keep the 'ci' column of every row with a parseable value whose millimagnitude scaling fits int16."
+missing_value_policy = "Rows with a blank, unparseable, or out-of-int16-range colour index are excluded from this column."
+conversion = "value_mmag = round(ci * 1000); stored as little-endian int16 in source order."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw int16 millimagnitude column"
+sample_geometry = "1d_sequence"
+sample_rank = 1
+sample_axes = ["star"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/hyg_star_photometry_i16/hyg_star_color_index_mmag_i16/"

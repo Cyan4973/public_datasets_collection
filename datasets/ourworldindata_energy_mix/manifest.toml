@@ -1,7 +1,40 @@
 manifest_version = 1
 dataset_id = "ourworldindata_energy_mix"
 name = "Our World in Data Energy Mix"
-description = "Pinned OWID energy mix CSV with row-level annual mix shares."
+description = "Annual Our World in Data energy-mix share columns (fossil fuels, nuclear, renewables) over entity-year rows, emitted as homogeneous float32 column samples."
+homepage = "https://ourworldindata.org/energy-mix"
+
+[license]
+name = "CC BY 4.0"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Our World in Data, Energy Mix."
+notes = "OWID data is released under CC BY 4.0; preserve attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Our World in Data grapher CSV only."
+usage_notes = "Public country/region-level energy statistics suitable for reproducible numeric dataset collection."
+
+[[origins]]
+id = "owid_grapher"
+name = "Our World in Data Grapher"
+url = "https://ourworldindata.org/energy-mix"
+type = "file_download"
+notes = "Public OWID grapher CSV export."
+
+[[resources]]
+id = "main"
+origin = "owid_grapher"
+url = "https://ourworldindata.org/grapher/sub-energy-fossil-renewables-nuclear.csv?v=1&csvType=full&useColumnShortNames=false"
+type = "csv"
+version = "full"
+access = "Single fixed OWID grapher CSV URL."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/ourworldindata_energy_mix/ourworldindata_energy_mix.csv"
+notes = "Annual entity rows with fossil-fuel, nuclear, and renewable energy-mix share columns."
 
 [local_paths]
 downloads = "downloads/ourworldindata_energy_mix/"
@@ -14,3 +47,71 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/ourworldindata_energy_mix/samples.jsonl"
+summary = "Download the OWID energy-mix CSV and emit one native float32 column sample per energy-mix share (fossil fuels, nuclear, renewables) over entity-year rows."
+deterministic_notes = "Fixed input URL and fixed share columns. Rows are parsed in source order; rows with all three shares blank are skipped. Text-length and calendar (year) helper columns are intentionally not emitted -- only the three genuine energy-share quantities are collected."
+
+[[series]]
+id = "owid_energy_mix_fossil_fuels_f32"
+description = "Fossil-fuel share of energy."
+semantic_meaning = "Annual share of primary energy from fossil fuels for an entity-year row."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/ourworldindata_energy_mix/ingest_stats.json"
+filtering = "Keep rows with at least one parseable fossil/nuclear/renewable share; take the fossil-fuel value."
+missing_value_policy = "Blank fossil-fuel values are stored as 0.0 when other shares are present; rows with all three shares blank are skipped."
+conversion = "Parse the CSV in source order and write the fossil-fuel share as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 energy-share column"
+sample_geometry = "table_column"
+sample_rank = 1
+sample_axes = ["entity_year_row"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/ourworldindata_energy_mix/owid_energy_mix_fossil_fuels_f32/"
+
+[[series]]
+id = "owid_energy_mix_nuclear_f32"
+description = "Nuclear share of energy."
+semantic_meaning = "Annual share of primary energy from nuclear power for an entity-year row."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/ourworldindata_energy_mix/ingest_stats.json"
+filtering = "Keep rows with at least one parseable fossil/nuclear/renewable share; take the nuclear value."
+missing_value_policy = "Blank nuclear values are stored as 0.0 when other shares are present; rows with all three shares blank are skipped."
+conversion = "Parse the CSV in source order and write the nuclear share as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 energy-share column"
+sample_geometry = "table_column"
+sample_rank = 1
+sample_axes = ["entity_year_row"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/ourworldindata_energy_mix/owid_energy_mix_nuclear_f32/"
+
+[[series]]
+id = "owid_energy_mix_renewables_f32"
+description = "Renewables share of energy."
+semantic_meaning = "Annual share of primary energy from renewables for an entity-year row."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtered_input_path = "filtered/ourworldindata_energy_mix/ingest_stats.json"
+filtering = "Keep rows with at least one parseable fossil/nuclear/renewable share; take the renewables value."
+missing_value_policy = "Blank renewables values are stored as 0.0 when other shares are present; rows with all three shares blank are skipped."
+conversion = "Parse the CSV in source order and write the renewables share as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 energy-share column"
+sample_geometry = "table_column"
+sample_rank = 1
+sample_axes = ["entity_year_row"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/ourworldindata_energy_mix/owid_energy_mix_renewables_f32/"

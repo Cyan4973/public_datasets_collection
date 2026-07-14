@@ -17,12 +17,19 @@ import json, os
 from pathlib import Path
 root=Path(os.environ['REPO_ROOT']) / os.environ['DATA_DIR']
 stats=json.loads((Path(os.environ['FILTER_DIR'])/'ingest_stats.json').read_text())
+import struct
+EXPECTED={'owid_energy_mix_fossil_fuels_f32','owid_energy_mix_nuclear_f32','owid_energy_mix_renewables_f32'}
 rows=[json.loads(line) for line in (Path(os.environ['INDEX_DIR'])/'samples.jsonl').read_text().splitlines() if line.strip()]
-if len(rows) != 6: raise SystemExit(f'unexpected row count {len(rows)}')
+if {r['series_id'] for r in rows} != EXPECTED: raise SystemExit(f"unexpected series {sorted(r['series_id'] for r in rows)}")
 for row in rows:
+ if row['numeric_kind'] != 'float' or int(row['bit_width']) != 32: raise SystemExit(f"not float32 {row['series_id']}")
  p=root / row['sample_path']
  if not p.is_file(): raise SystemExit(f"missing sample {row['sample_path']}")
  if row['sample_size_bytes'] != p.stat().st_size: raise SystemExit(f"size mismatch {row['sample_path']}")
+ if row['value_count']*4 != row['sample_size_bytes']: raise SystemExit(f"bad sizing {row['sample_path']}")
+ vals=[v for (v,) in struct.iter_unpack('<f', p.read_bytes())]
+ if len(vals) != row['value_count']: raise SystemExit(f"count mismatch {row['sample_path']}")
+ if len(set(vals)) <= 1: raise SystemExit(f"constant sample {row['sample_path']}")
 print(f"verified_samples={len(rows)} rows_total={stats['rows_total']} rows_skipped={stats['rows_skipped']}")
 PY
 echo "[$(date -Is)] verify done dataset=$DATASET_ID"

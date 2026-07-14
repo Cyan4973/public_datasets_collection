@@ -22,12 +22,9 @@ repo_root=Path(os.environ['REPO_ROOT']); data_root=repo_root/os.environ['DATA_DI
 download_dir=Path(os.environ['DOWNLOAD_DIR']); filter_dir=Path(os.environ['FILTER_DIR']); index_dir=Path(os.environ['INDEX_DIR']); samples_dir=Path(os.environ['SAMPLES_DIR'])
 path=download_dir/'ourworldindata_energy_mix.csv'
 meta={
- 'owid_energy_mix_year_u16':('uint',16,'H'),
+ 'owid_energy_mix_fossil_fuels_f32':('float',32,'f'),
  'owid_energy_mix_nuclear_f32':('float',32,'f'),
  'owid_energy_mix_renewables_f32':('float',32,'f'),
- 'owid_energy_mix_fossil_fuels_f32':('float',32,'f'),
- 'owid_energy_mix_entity_length_u16':('uint',16,'H'),
- 'owid_energy_mix_code_length_u8':('uint',8,'B'),
 }
 vals={sid:[] for sid in meta}
 for sid in vals:
@@ -46,12 +43,9 @@ with path.open('r', encoding='utf-8', newline='') as f:
    if nuclear == '' and renew == '' and fossil == '':
     rows_skipped += 1
     continue
-   vals['owid_energy_mix_year_u16'].append(int(row['Year']))
+   vals['owid_energy_mix_fossil_fuels_f32'].append(float(fossil or 0))
    vals['owid_energy_mix_nuclear_f32'].append(float(nuclear or 0))
    vals['owid_energy_mix_renewables_f32'].append(float(renew or 0))
-   vals['owid_energy_mix_fossil_fuels_f32'].append(float(fossil or 0))
-   vals['owid_energy_mix_entity_length_u16'].append(len(row.get('Entity','')))
-   vals['owid_energy_mix_code_length_u8'].append(len((row.get('Code') or '').strip()))
   except Exception:
    rows_skipped += 1
 rows=[]

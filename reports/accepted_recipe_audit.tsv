@@ -12,7 +12,6 @@ nasa_eonet_events	ok	20115	73755	3	6705	13410	0	0	0	1	none	none
 binance_ticker_24hr	ok	21564	115008	6	3594	14376	0	0	0	1	none	none
 nasa_donki_flr	ok	22484	89936	7	3212	12848	0	0	0	1	none	none
 openflights_airports	ok	23094	153960	3	7698	61584	0	0	0	1	none	none
-statsbomb_world_cup_final	ok	26802	44670	9	2978	2978	0	0	0	1	none	none
 nvd_cpe_match_feed	ok	30000	100000	3	10000	40000	0	0	0	1	none	none
 eia_petroleum_barrel_prices	ok	33764	270112	16	1339	10712	0	0	0	1	none	none
 ourworldindata_energy_mix	ok	38274	108443	6	6379	19137	0	0	0	1	none	none
@@ -132,6 +131,7 @@ europe_pmc_search	ok	1127748	2631412	6	187958	375916	187958	751832	1	1	none	none
 eeg_physionet	ok	1178880	2357760	30	39200	78400	0	0	0	1	none	none
 census_acs_pums_ca_person_2023_i64	ok	1265252	10122016	4	334276	2674208	0	0	0	1	none	none
 macrostrat_units	ok	1422089	5688356	11	129262	517048	0	0	0	1	none	none
+statsbomb_open_events_numeric	ok	1512053	6048212	450	3442.5	13770	1668027	2780045	450	1	none	none
 usgs_nwis_water_temperature_daily	ok	1680861	13446888	200	8567	68536	0	0	0	1	none	none
 noaa_ghcn_daily_snwd_by_station	ok	1725872	3451744	58	28052.5	56105	0	0	0	1	none	none
 gas_sensor_array_drift_uci	ok	1794390	14257750	129	13910	111280	0	0	0	1	none	none
@@ -158,6 +158,7 @@ usgs_daily_values_large	ok	3733419	29867352	1800	2192	17536	0	0	0	1	none	none
 citibike_2024_01_station_ids_u16	ok	3776170	7552340	16	180600	361200	0	0	0	1	none	none
 ncbi_gene_human	ok	4794554	19178216	4	1198638.5	4794554	0	0	0	1	none	none
 beijing_air_quality_uci	ok	5753775	46030200	180	32141.5	257132	0	0	0	1	none	none
+bam_read_mapq_u8	ok	6170563	6170563	14	435368	435368	0	0	0	1	none	none
 noaa_tides_water_level	ok	7287492	58299936	42	175440	1403520	0	0	0	1	none	none
 unicode_bmp_gutenberg	ok	8700484	17400968	12	490769	981538	0	0	0	1	none	none
 fsdd_pcm_u8	ok	10498424	10498424	3000	3358.5	3358.5	0	0	0	1	none	none
@@ -208,5 +209,6 @@ medmnist_pathmnist_images_u8	ok	252087360	252087360	107180	2352	2352	0	0	0	1	non
 nsynth_test_notes_i16	ok	262144000	524288000	4096	64000	128000	0	0	0	1	none	none
 sentinel2_l2a_reflectance_cogs_u16	ok	308098800	616197600	6	30140100	60280200	0	0	0	1	none	none
 librispeech_dev_clean_i16	ok	310337932	620675864	2703	94720	189440	0	0	0	1	none	none
+sentinel1_grd_measurement_u16	ok	365856036	731712072	4	91464009	182928018	0	0	0	1	none	none
 pfam_seed_alignments_u8	ok	411242401	411242401	22719	6150	6150	0	0	0	1	none	none
 nasa_pds_themis_ir_mosaic_u8	ok	948687484	948687484	2	474343742	474343742	0	0	0	1	none	none

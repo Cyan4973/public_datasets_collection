@@ -1,0 +1,189 @@
+manifest_version = 1
+dataset_id = "statsbomb_open_events_numeric"
+name = "StatsBomb Open Match Event Numeric Fields"
+description = "Per-event numeric fields extracted from a bounded, multi-competition set of StatsBomb open-data association-football match event streams: one sample per match, homogeneous pitch-coordinate and duration quantities."
+homepage = "https://github.com/statsbomb/open-data"
+
+[license]
+name = "StatsBomb Open Data"
+spdx = "LicenseRef-StatsBomb"
+url = "https://github.com/statsbomb/open-data"
+citation = "StatsBomb Open Data (https://github.com/statsbomb/open-data). Free public data provided by StatsBomb for research and education; preserve StatsBomb attribution."
+notes = "Only numeric per-event fields are extracted (pitch coordinates, event duration, and event timing). No player names or identifiers are retained."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public sports analytics event data. Only numeric per-event measurements are extracted."
+usage_notes = "Free StatsBomb open data; preserve attribution. Numeric fields share one pitch-coordinate and unit system across competitions, so matches are homogeneous."
+
+[[origins]]
+id = "statsbomb_open_data"
+name = "StatsBomb Open Data (GitHub)"
+url = "https://github.com/statsbomb/open-data"
+type = "bulk_download"
+notes = "Public GitHub repository of match event streams (data/events/<match_id>.json), match lists (data/matches/<competition_id>/<season_id>.json), and the competition index (data/competitions.json)."
+
+[[resources]]
+id = "statsbomb_event_streams"
+origin = "statsbomb_open_data"
+url = "datasets/statsbomb_open_events_numeric/download.sh"
+type = "bounded_bulk_selection"
+version = "open_data_master_multi_competition"
+access = "Download script resolves the competition index, walks a bounded number of matches per competition-season, and downloads each match event stream (resumable, JSON-validated). Override the match set with STATSBOMB_MATCHES_FILE."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/statsbomb_open_events_numeric/"
+notes = "Default selection is up to MATCH_LIMIT matches (default 150) spread across competition-seasons (PER_SEASON_LIMIT each), bounded by an aggregate download cap. One match event stream is one natural record."
+
+[local_paths]
+downloads = "downloads/statsbomb_open_events_numeric/"
+filtered = "filtered/statsbomb_open_events_numeric/"
+index = "index/statsbomb_open_events_numeric/"
+samples = "samples/statsbomb_open_events_numeric/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/statsbomb_open_events_numeric/samples.jsonl"
+summary = "Download a bounded multi-competition set of StatsBomb match event streams and emit one raw little-endian numeric sample per match for each per-event field."
+deterministic_notes = "Deterministic competition/season ordering and per-season match cap, one sample per match's event stream (no concatenation across matches), events with missing/invalid fields dropped per series, constant or under-populated per-match samples rejected, and a 1 GB primary-output cap. Categorical event/team/play-pattern codes are intentionally not emitted; per-event timing fields are auxiliary and do not count toward acceptance."
+
+[[series]]
+id = "statsbomb_event_location_x"
+description = "Event pitch x-coordinate."
+semantic_meaning = "Horizontal position on the pitch (StatsBomb coordinate system, ~0-120) where a match event occurred."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "One sample per match: the x-coordinate of every located event, in event order, as raw little-endian float32."
+source_resources = ["statsbomb_event_streams"]
+filtered_input_path = "filtered/statsbomb_open_events_numeric/ingest_stats.json"
+filtering = "Keep the x-coordinate of events whose location is a finite 2+ element list; drop events without a valid location. Reject per-match samples below the minimum value count or with a single distinct value."
+missing_value_policy = "Events lacking a valid finite location are excluded; under-populated or constant per-match samples are rejected."
+conversion = "Take location[0] of each located event and store it as little-endian float32 in event order."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw per-match float32 event x-coordinate sequence"
+sample_geometry = "1d_sequence"
+sample_rank = 1
+sample_axes = ["event"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/statsbomb_open_events_numeric/statsbomb_event_location_x/"
+
+[[series]]
+id = "statsbomb_event_location_y"
+description = "Event pitch y-coordinate."
+semantic_meaning = "Vertical position on the pitch (StatsBomb coordinate system, ~0-80) where a match event occurred."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "One sample per match: the y-coordinate of every located event, in event order, as raw little-endian float32."
+source_resources = ["statsbomb_event_streams"]
+filtered_input_path = "filtered/statsbomb_open_events_numeric/ingest_stats.json"
+filtering = "Keep the y-coordinate of events whose location is a finite 2+ element list; drop events without a valid location. Reject per-match samples below the minimum value count or with a single distinct value."
+missing_value_policy = "Events lacking a valid finite location are excluded; under-populated or constant per-match samples are rejected."
+conversion = "Take location[1] of each located event and store it as little-endian float32 in event order."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw per-match float32 event y-coordinate sequence"
+sample_geometry = "1d_sequence"
+sample_rank = 1
+sample_axes = ["event"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/statsbomb_open_events_numeric/statsbomb_event_location_y/"
+
+[[series]]
+id = "statsbomb_event_duration"
+description = "Event duration in seconds."
+semantic_meaning = "Duration in seconds of a match event (e.g. the time a pass, carry, or duel spans)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "One sample per match: the duration of every event that reports one, in event order, as raw little-endian float32."
+source_resources = ["statsbomb_event_streams"]
+filtered_input_path = "filtered/statsbomb_open_events_numeric/ingest_stats.json"
+filtering = "Keep the duration of events with a finite numeric duration; drop events without one. Reject per-match samples below the minimum value count or with a single distinct value."
+missing_value_policy = "Events without a finite duration are excluded; under-populated or constant per-match samples are rejected."
+conversion = "Store each event's duration as little-endian float32 in event order."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw per-match float32 event duration sequence"
+sample_geometry = "1d_sequence"
+sample_rank = 1
+sample_axes = ["event"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/statsbomb_open_events_numeric/statsbomb_event_duration/"
+
+[[series]]
+id = "statsbomb_event_minute"
+description = "Event match minute."
+semantic_meaning = "Match minute at which an event occurred (0 through extra time)."
+role = "auxiliary"
+representation_class = "native_numeric"
+representation_notes = "Auxiliary per-event timing field, emitted for completeness; does not count toward acceptance. One sample per match as raw little-endian uint16."
+source_resources = ["statsbomb_event_streams"]
+filtered_input_path = "filtered/statsbomb_open_events_numeric/ingest_stats.json"
+filtering = "Keep the integer minute of each event within uint16 range. Reject per-match samples below the minimum value count or with a single distinct value."
+missing_value_policy = "Events with a non-integer or out-of-range minute are excluded; under-populated or constant per-match samples are rejected."
+conversion = "Store each event's minute as little-endian uint16 in event order."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw per-match uint16 event minute sequence"
+sample_geometry = "1d_sequence"
+sample_rank = 1
+sample_axes = ["event"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/statsbomb_open_events_numeric/statsbomb_event_minute/"
+
+[[series]]
+id = "statsbomb_event_second"
+description = "Event second within the minute."
+semantic_meaning = "Second within the match minute (0-59) at which an event occurred."
+role = "auxiliary"
+representation_class = "native_numeric"
+representation_notes = "Auxiliary per-event timing field, emitted for completeness; does not count toward acceptance. One sample per match as raw uint8."
+source_resources = ["statsbomb_event_streams"]
+filtered_input_path = "filtered/statsbomb_open_events_numeric/ingest_stats.json"
+filtering = "Keep the integer second of each event within uint8 range. Reject per-match samples below the minimum value count or with a single distinct value."
+missing_value_policy = "Events with a non-integer or out-of-range second are excluded; under-populated or constant per-match samples are rejected."
+conversion = "Store each event's second as uint8 in event order."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw per-match uint8 event second sequence"
+sample_geometry = "1d_sequence"
+sample_rank = 1
+sample_axes = ["event"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/statsbomb_open_events_numeric/statsbomb_event_second/"
+
+[[series]]
+id = "statsbomb_event_possession"
+description = "Possession sequence number."
+semantic_meaning = "Monotonic possession sequence index within a match, incremented as possession changes."
+role = "auxiliary"
+representation_class = "native_numeric"
+representation_notes = "Auxiliary per-event sequence field, emitted for completeness; does not count toward acceptance. One sample per match as raw little-endian uint16."
+source_resources = ["statsbomb_event_streams"]
+filtered_input_path = "filtered/statsbomb_open_events_numeric/ingest_stats.json"
+filtering = "Keep the integer possession number of each event within uint16 range. Reject per-match samples below the minimum value count or with a single distinct value."
+missing_value_policy = "Events with a non-integer or out-of-range possession are excluded; under-populated or constant per-match samples are rejected."
+conversion = "Store each event's possession number as little-endian uint16 in event order."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw per-match uint16 possession sequence"
+sample_geometry = "1d_sequence"
+sample_rank = 1
+sample_axes = ["event"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/statsbomb_open_events_numeric/statsbomb_event_possession/"

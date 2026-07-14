@@ -1,0 +1,114 @@
+manifest_version = 1
+dataset_id = "gaia_dr3_astrometry_f32"
+name = "Gaia DR3 Astrometry (parallax and proper motions)"
+description = "Stellar parallax and proper motions from the ESA Gaia DR3 gaia_source catalogue, emitted as raw float32 series (one per astrometric quantity)."
+homepage = "https://gea.esac.esa.int/archive/"
+
+[license]
+name = "CC BY 4.0"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Gaia Collaboration, Gaia DR3, ESA/Gaia/DPAC. Data released under CC BY 4.0."
+notes = "ESA Gaia data is released under CC BY 4.0 with the standard acknowledgement."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official ESA Gaia DR3 bulk distribution (gaia_source) only."
+usage_notes = "Public astronomical catalogue intended for reproducible numeric dataset collection."
+
+[[origins]]
+id = "official"
+name = "ESA Gaia Archive"
+url = "https://gea.esac.esa.int/archive/"
+type = "data_portal"
+notes = "Official ESA Gaia mission archive; bulk gaia_source files served from the Gaia CDN."
+
+[[resources]]
+id = "main"
+origin = "official"
+url = "https://cdn.gea.esac.esa.int/Gaia/gdr3/gaia_source/"
+type = "directory"
+version = "accessed_by_user"
+access = "Direct public download of bulk GaiaSource_*.csv.gz files; file names resolved by discovery."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/gaia_dr3_astrometry_f32/"
+notes = "download.sh resolves file names via the directory checksum manifest, then autoindex HTML; overridable with GAIA_BASE_URL / GAIA_CSV_URL / GAIA_CSV_URLS_FILE. Each file is a gzipped CSV of the five-parameter astrometric solution."
+
+[local_paths]
+downloads = "downloads/gaia_dr3_astrometry_f32/"
+filtered = "filtered/gaia_dr3_astrometry_f32/"
+index = "index/gaia_dr3_astrometry_f32/"
+samples = "samples/gaia_dr3_astrometry_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/gaia_dr3_astrometry_f32/samples.jsonl"
+summary = "Discover and download a bounded set of Gaia DR3 gaia_source bulk CSV files, then stream-parse the parallax, pmra, and pmdec columns into raw float32 series, one sample per source file."
+deterministic_notes = "Each bulk gaia_source file is the natural record boundary and yields one sample per series. Rows without a value for a given column (two-parameter solutions) are skipped for that series only; source and index preserve catalogue row order. Values are parsed from the published CSV text into little-endian float32 (astrometric real precision is well within float32); recorded min/max are computed from the stored float32 values. Default GAIA_MAX_FILES=2. Writes durable logs and samples.jsonl under index/gaia_dr3_astrometry_f32/."
+
+[[series]]
+id = "gaia_parallax_mas_f32"
+description = "Gaia DR3 stellar parallax."
+semantic_meaning = "Absolute stellar parallax in milliarcseconds (mas) from the Gaia DR3 five-parameter astrometric solution."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtering = "Extract the parallax column of each gaia_source row that has a value; one sample per source file."
+missing_value_policy = "Rows without a parallax (two-parameter solutions) are skipped for this series; constant or empty samples are rejected by build and verify."
+conversion = "Parse the published parallax text (mas) into raw little-endian float32 in catalogue row order."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 array"
+sample_geometry = "1d_sequence"
+sample_rank = 1
+sample_axes = ["source"]
+sample_count = 2
+total_size_bytes = 0
+output_path = "samples/gaia_dr3_astrometry_f32/gaia_parallax_mas_f32/"
+
+[[series]]
+id = "gaia_pmra_masyr_f32"
+description = "Gaia DR3 proper motion in right ascension."
+semantic_meaning = "Proper motion in right ascension (pmra*, mas/yr, including the cos(dec) factor) from the Gaia DR3 five-parameter astrometric solution."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtering = "Extract the pmra column of each gaia_source row that has a value; one sample per source file."
+missing_value_policy = "Rows without a pmra (two-parameter solutions) are skipped for this series; constant or empty samples are rejected by build and verify."
+conversion = "Parse the published pmra text (mas/yr) into raw little-endian float32 in catalogue row order."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 array"
+sample_geometry = "1d_sequence"
+sample_rank = 1
+sample_axes = ["source"]
+sample_count = 2
+total_size_bytes = 0
+output_path = "samples/gaia_dr3_astrometry_f32/gaia_pmra_masyr_f32/"
+
+[[series]]
+id = "gaia_pmdec_masyr_f32"
+description = "Gaia DR3 proper motion in declination."
+semantic_meaning = "Proper motion in declination (pmdec, mas/yr) from the Gaia DR3 five-parameter astrometric solution."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["main"]
+filtering = "Extract the pmdec column of each gaia_source row that has a value; one sample per source file."
+missing_value_policy = "Rows without a pmdec (two-parameter solutions) are skipped for this series; constant or empty samples are rejected by build and verify."
+conversion = "Parse the published pmdec text (mas/yr) into raw little-endian float32 in catalogue row order."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 array"
+sample_geometry = "1d_sequence"
+sample_rank = 1
+sample_axes = ["source"]
+sample_count = 2
+total_size_bytes = 0
+output_path = "samples/gaia_dr3_astrometry_f32/gaia_pmdec_masyr_f32/"

@@ -139,6 +139,7 @@ noaa_ghcn_daily_tmax_by_station	ok	2350732	4701464	59	41953	83906	0	0	0	1	none	n
 noaa_ghcn_daily_prcp_by_station	ok	2374291	4748582	59	41780	83560	0	0	0	1	none	none
 ptbxl_physionet	ok	2400000	9600000	200	12000	48000	0	0	0	1	none	none
 openf1_belgium_2023_car_data_native	ok	2526120	3368160	120	21051	21051	0	0	0	1	none	none
+gaia_dr3_astrometry_f32	ok	2671368	10685472	6	445228	1780912	0	0	0	1	none	none
 openalex_authors_large	ok	2815400	7239600	7	402200	804400	0	0	0	1	none	none
 openalex_author_topic_count_u8	ok	2858800	2858800	1	2858800	2858800	0	0	0	1	none	none
 sensorless_drive_diagnosis_uci	ok	2866941	22525965	49	58509	468072	0	0	0	1	none	none

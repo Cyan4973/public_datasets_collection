@@ -50,3 +50,787 @@ verify_script = "verify.sh"
 sample_index_path = "index/covertype_uci/samples.jsonl"
 summary = "Download pinned upstream resources, build local raw numeric samples only from local files, and generate a machine-readable sample index."
 deterministic_notes = "Build preserves row order, emits one sample per column, writes durable logs, and emits samples.jsonl under index/covertype_uci/."
+
+[[series]]
+id = "cov_col_01"
+description = "Forest-covertype cartographic feature column 001."
+semantic_meaning = "Forest-covertype cartographic feature column 001."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_01/"
+
+[[series]]
+id = "cov_col_02"
+description = "Forest-covertype cartographic feature column 002."
+semantic_meaning = "Forest-covertype cartographic feature column 002."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_02/"
+
+[[series]]
+id = "cov_col_03"
+description = "Forest-covertype cartographic feature column 003."
+semantic_meaning = "Forest-covertype cartographic feature column 003."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_03/"
+
+[[series]]
+id = "cov_col_04"
+description = "Forest-covertype cartographic feature column 004."
+semantic_meaning = "Forest-covertype cartographic feature column 004."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_04/"
+
+[[series]]
+id = "cov_col_05"
+description = "Forest-covertype cartographic feature column 005."
+semantic_meaning = "Forest-covertype cartographic feature column 005."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian int16."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_05/"
+
+[[series]]
+id = "cov_col_06"
+description = "Forest-covertype cartographic feature column 006."
+semantic_meaning = "Forest-covertype cartographic feature column 006."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_06/"
+
+[[series]]
+id = "cov_col_07"
+description = "Forest-covertype cartographic feature column 007."
+semantic_meaning = "Forest-covertype cartographic feature column 007."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_07/"
+
+[[series]]
+id = "cov_col_08"
+description = "Forest-covertype cartographic feature column 008."
+semantic_meaning = "Forest-covertype cartographic feature column 008."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_08/"
+
+[[series]]
+id = "cov_col_09"
+description = "Forest-covertype cartographic feature column 009."
+semantic_meaning = "Forest-covertype cartographic feature column 009."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_09/"
+
+[[series]]
+id = "cov_col_10"
+description = "Forest-covertype cartographic feature column 010."
+semantic_meaning = "Forest-covertype cartographic feature column 010."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_10/"
+
+[[series]]
+id = "cov_col_11"
+description = "Forest-covertype cartographic feature column 011."
+semantic_meaning = "Forest-covertype cartographic feature column 011."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_11/"
+
+[[series]]
+id = "cov_col_12"
+description = "Forest-covertype cartographic feature column 012."
+semantic_meaning = "Forest-covertype cartographic feature column 012."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_12/"
+
+[[series]]
+id = "cov_col_13"
+description = "Forest-covertype cartographic feature column 013."
+semantic_meaning = "Forest-covertype cartographic feature column 013."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_13/"
+
+[[series]]
+id = "cov_col_14"
+description = "Forest-covertype cartographic feature column 014."
+semantic_meaning = "Forest-covertype cartographic feature column 014."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_14/"
+
+[[series]]
+id = "cov_col_15"
+description = "Forest-covertype cartographic feature column 015."
+semantic_meaning = "Forest-covertype cartographic feature column 015."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_15/"
+
+[[series]]
+id = "cov_col_16"
+description = "Forest-covertype cartographic feature column 016."
+semantic_meaning = "Forest-covertype cartographic feature column 016."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_16/"
+
+[[series]]
+id = "cov_col_17"
+description = "Forest-covertype cartographic feature column 017."
+semantic_meaning = "Forest-covertype cartographic feature column 017."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_17/"
+
+[[series]]
+id = "cov_col_18"
+description = "Forest-covertype cartographic feature column 018."
+semantic_meaning = "Forest-covertype cartographic feature column 018."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_18/"
+
+[[series]]
+id = "cov_col_19"
+description = "Forest-covertype cartographic feature column 019."
+semantic_meaning = "Forest-covertype cartographic feature column 019."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_19/"
+
+[[series]]
+id = "cov_col_20"
+description = "Forest-covertype cartographic feature column 020."
+semantic_meaning = "Forest-covertype cartographic feature column 020."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_20/"
+
+[[series]]
+id = "cov_col_23"
+description = "Forest-covertype cartographic feature column 021."
+semantic_meaning = "Forest-covertype cartographic feature column 021."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_23/"
+
+[[series]]
+id = "cov_col_24"
+description = "Forest-covertype cartographic feature column 022."
+semantic_meaning = "Forest-covertype cartographic feature column 022."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_24/"
+
+[[series]]
+id = "cov_col_25"
+description = "Forest-covertype cartographic feature column 023."
+semantic_meaning = "Forest-covertype cartographic feature column 023."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_25/"
+
+[[series]]
+id = "cov_col_26"
+description = "Forest-covertype cartographic feature column 024."
+semantic_meaning = "Forest-covertype cartographic feature column 024."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_26/"
+
+[[series]]
+id = "cov_col_27"
+description = "Forest-covertype cartographic feature column 025."
+semantic_meaning = "Forest-covertype cartographic feature column 025."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_27/"
+
+[[series]]
+id = "cov_col_28"
+description = "Forest-covertype cartographic feature column 026."
+semantic_meaning = "Forest-covertype cartographic feature column 026."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_28/"
+
+[[series]]
+id = "cov_col_30"
+description = "Forest-covertype cartographic feature column 027."
+semantic_meaning = "Forest-covertype cartographic feature column 027."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_30/"
+
+[[series]]
+id = "cov_col_31"
+description = "Forest-covertype cartographic feature column 028."
+semantic_meaning = "Forest-covertype cartographic feature column 028."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_31/"
+
+[[series]]
+id = "cov_col_32"
+description = "Forest-covertype cartographic feature column 029."
+semantic_meaning = "Forest-covertype cartographic feature column 029."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_32/"
+
+[[series]]
+id = "cov_col_33"
+description = "Forest-covertype cartographic feature column 030."
+semantic_meaning = "Forest-covertype cartographic feature column 030."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_33/"
+
+[[series]]
+id = "cov_col_34"
+description = "Forest-covertype cartographic feature column 031."
+semantic_meaning = "Forest-covertype cartographic feature column 031."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_34/"
+
+[[series]]
+id = "cov_col_35"
+description = "Forest-covertype cartographic feature column 032."
+semantic_meaning = "Forest-covertype cartographic feature column 032."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_35/"
+
+[[series]]
+id = "cov_col_36"
+description = "Forest-covertype cartographic feature column 033."
+semantic_meaning = "Forest-covertype cartographic feature column 033."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_36/"
+
+[[series]]
+id = "cov_col_37"
+description = "Forest-covertype cartographic feature column 034."
+semantic_meaning = "Forest-covertype cartographic feature column 034."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_37/"
+
+[[series]]
+id = "cov_col_38"
+description = "Forest-covertype cartographic feature column 035."
+semantic_meaning = "Forest-covertype cartographic feature column 035."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_38/"
+
+[[series]]
+id = "cov_col_40"
+description = "Forest-covertype cartographic feature column 036."
+semantic_meaning = "Forest-covertype cartographic feature column 036."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_40/"
+
+[[series]]
+id = "cov_col_41"
+description = "Forest-covertype cartographic feature column 037."
+semantic_meaning = "Forest-covertype cartographic feature column 037."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_41/"
+
+[[series]]
+id = "cov_col_42"
+description = "Forest-covertype cartographic feature column 038."
+semantic_meaning = "Forest-covertype cartographic feature column 038."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_42/"
+
+[[series]]
+id = "cov_col_43"
+description = "Forest-covertype cartographic feature column 039."
+semantic_meaning = "Forest-covertype cartographic feature column 039."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_43/"
+
+[[series]]
+id = "cov_col_44"
+description = "Forest-covertype cartographic feature column 040."
+semantic_meaning = "Forest-covertype cartographic feature column 040."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_44/"
+
+[[series]]
+id = "cov_col_45"
+description = "Forest-covertype cartographic feature column 041."
+semantic_meaning = "Forest-covertype cartographic feature column 041."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_45/"
+
+[[series]]
+id = "cov_col_46"
+description = "Forest-covertype cartographic feature column 042."
+semantic_meaning = "Forest-covertype cartographic feature column 042."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_46/"
+
+[[series]]
+id = "cov_col_47"
+description = "Forest-covertype cartographic feature column 043."
+semantic_meaning = "Forest-covertype cartographic feature column 043."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_47/"
+
+[[series]]
+id = "cov_col_48"
+description = "Forest-covertype cartographic feature column 044."
+semantic_meaning = "Forest-covertype cartographic feature column 044."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_48/"
+
+[[series]]
+id = "cov_col_49"
+description = "Forest-covertype cartographic feature column 045."
+semantic_meaning = "Forest-covertype cartographic feature column 045."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_49/"
+
+[[series]]
+id = "cov_col_52"
+description = "Forest-covertype cartographic feature column 046."
+semantic_meaning = "Forest-covertype cartographic feature column 046."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_52/"
+
+[[series]]
+id = "cov_col_53"
+description = "Forest-covertype cartographic feature column 047."
+semantic_meaning = "Forest-covertype cartographic feature column 047."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_53/"
+
+[[series]]
+id = "cov_col_54"
+description = "Forest-covertype cartographic feature column 048."
+semantic_meaning = "Forest-covertype cartographic feature column 048."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_54/"
+
+[[series]]
+id = "cov_col_55"
+description = "Forest-covertype cartographic feature column 049."
+semantic_meaning = "Forest-covertype cartographic feature column 049."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covertype_uci/cov_col_55/"

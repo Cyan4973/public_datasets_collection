@@ -14,3 +14,83 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/geonames_postal_fixed/samples.jsonl"
+
+[[series]]
+id = "geonames_postal_code_u32"
+description = "Numeric postal code."
+semantic_meaning = "Numeric postal code."
+role = "auxiliary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/geonames_postal_fixed/geonames_postal_code_u32/"
+
+[[series]]
+id = "geonames_postal_latitude_f64"
+description = "Postal-place latitude (degrees)."
+semantic_meaning = "Postal-place latitude (degrees)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/geonames_postal_fixed/geonames_postal_latitude_f64/"
+
+[[series]]
+id = "geonames_postal_longitude_f64"
+description = "Postal-place longitude (degrees)."
+semantic_meaning = "Postal-place longitude (degrees)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/geonames_postal_fixed/geonames_postal_longitude_f64/"
+
+[[series]]
+id = "geonames_postal_admin2_code_u16"
+description = "Administrative level-2 code."
+semantic_meaning = "Administrative level-2 code."
+role = "auxiliary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/geonames_postal_fixed/geonames_postal_admin2_code_u16/"
+
+[[series]]
+id = "geonames_postal_accuracy_u8"
+description = "Coordinate accuracy code."
+semantic_meaning = "Coordinate accuracy code."
+role = "auxiliary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/geonames_postal_fixed/geonames_postal_accuracy_u8/"

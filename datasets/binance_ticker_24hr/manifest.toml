@@ -14,3 +14,99 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/binance_ticker_24hr/samples.jsonl"
+
+[[series]]
+id = "binance_price_change_pct"
+description = "24h price change percent."
+semantic_meaning = "24h price change percent."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/binance_ticker_24hr/binance_price_change_pct/"
+
+[[series]]
+id = "binance_weighted_avg_price"
+description = "24h volume-weighted average price."
+semantic_meaning = "24h volume-weighted average price."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/binance_ticker_24hr/binance_weighted_avg_price/"
+
+[[series]]
+id = "binance_last_price"
+description = "Last trade price."
+semantic_meaning = "Last trade price."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/binance_ticker_24hr/binance_last_price/"
+
+[[series]]
+id = "binance_quote_volume"
+description = "24h quote-asset volume."
+semantic_meaning = "24h quote-asset volume."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/binance_ticker_24hr/binance_quote_volume/"
+
+[[series]]
+id = "binance_count"
+description = "24h trade count."
+semantic_meaning = "24h trade count."
+role = "auxiliary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/binance_ticker_24hr/binance_count/"
+
+[[series]]
+id = "binance_open_time_ms"
+description = "Window open time (ms epoch)."
+semantic_meaning = "Window open time (ms epoch)."
+role = "auxiliary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint64."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/binance_ticker_24hr/binance_open_time_ms/"

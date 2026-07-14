@@ -50,3 +50,83 @@ verify_script = "verify.sh"
 sample_index_path = "index/usgs_sitefile_all_large/samples.jsonl"
 summary = "Download the pinned USGS site file, parse the tab-delimited rows, keep rows with required numeric fields, and emit homogeneous raw little-endian numeric samples."
 deterministic_notes = "Fixed query parameters, header-driven column selection, source-order row retention."
+
+[[series]]
+id = "usgs_site_no_u64"
+description = "USGS site number."
+semantic_meaning = "USGS site number."
+role = "auxiliary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint64."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/usgs_sitefile_all_large/usgs_site_no_u64/"
+
+[[series]]
+id = "usgs_dec_lat_f64"
+description = "Monitoring-site latitude (decimal degrees)."
+semantic_meaning = "Monitoring-site latitude (decimal degrees)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/usgs_sitefile_all_large/usgs_dec_lat_f64/"
+
+[[series]]
+id = "usgs_dec_long_f64"
+description = "Monitoring-site longitude (decimal degrees)."
+semantic_meaning = "Monitoring-site longitude (decimal degrees)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/usgs_sitefile_all_large/usgs_dec_long_f64/"
+
+[[series]]
+id = "usgs_county_cd_u16"
+description = "County FIPS code."
+semantic_meaning = "County FIPS code."
+role = "auxiliary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/usgs_sitefile_all_large/usgs_county_cd_u16/"
+
+[[series]]
+id = "usgs_huc_cd_u64"
+description = "Hydrologic unit code."
+semantic_meaning = "Hydrologic unit code."
+role = "auxiliary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint64."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/usgs_sitefile_all_large/usgs_huc_cd_u64/"

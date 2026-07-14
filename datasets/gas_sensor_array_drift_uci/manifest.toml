@@ -50,3 +50,2067 @@ verify_script = "verify.sh"
 sample_index_path = "index/gas_sensor_array_drift_uci/samples.jsonl"
 summary = "Download pinned upstream resources, build local raw numeric samples only from local files, and generate a machine-readable sample index."
 deterministic_notes = "Build preserves batch order batch1..batch10 and within-file line order, emits one label sample and one sample per feature column, writes durable logs, and emits samples.jsonl under index/gas_sensor_array_drift_uci/."
+
+[[series]]
+id = "gas_label"
+description = "Gas-sensor-array-drift feature column 001."
+semantic_meaning = "Gas-sensor-array-drift feature column 001."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_label/"
+
+[[series]]
+id = "gas_feat_001"
+description = "Gas-sensor-array-drift feature column 002."
+semantic_meaning = "Gas-sensor-array-drift feature column 002."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_001/"
+
+[[series]]
+id = "gas_feat_002"
+description = "Gas-sensor-array-drift feature column 003."
+semantic_meaning = "Gas-sensor-array-drift feature column 003."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_002/"
+
+[[series]]
+id = "gas_feat_003"
+description = "Gas-sensor-array-drift feature column 004."
+semantic_meaning = "Gas-sensor-array-drift feature column 004."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_003/"
+
+[[series]]
+id = "gas_feat_004"
+description = "Gas-sensor-array-drift feature column 005."
+semantic_meaning = "Gas-sensor-array-drift feature column 005."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_004/"
+
+[[series]]
+id = "gas_feat_005"
+description = "Gas-sensor-array-drift feature column 006."
+semantic_meaning = "Gas-sensor-array-drift feature column 006."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_005/"
+
+[[series]]
+id = "gas_feat_006"
+description = "Gas-sensor-array-drift feature column 007."
+semantic_meaning = "Gas-sensor-array-drift feature column 007."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_006/"
+
+[[series]]
+id = "gas_feat_007"
+description = "Gas-sensor-array-drift feature column 008."
+semantic_meaning = "Gas-sensor-array-drift feature column 008."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_007/"
+
+[[series]]
+id = "gas_feat_008"
+description = "Gas-sensor-array-drift feature column 009."
+semantic_meaning = "Gas-sensor-array-drift feature column 009."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_008/"
+
+[[series]]
+id = "gas_feat_009"
+description = "Gas-sensor-array-drift feature column 010."
+semantic_meaning = "Gas-sensor-array-drift feature column 010."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_009/"
+
+[[series]]
+id = "gas_feat_010"
+description = "Gas-sensor-array-drift feature column 011."
+semantic_meaning = "Gas-sensor-array-drift feature column 011."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_010/"
+
+[[series]]
+id = "gas_feat_011"
+description = "Gas-sensor-array-drift feature column 012."
+semantic_meaning = "Gas-sensor-array-drift feature column 012."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_011/"
+
+[[series]]
+id = "gas_feat_012"
+description = "Gas-sensor-array-drift feature column 013."
+semantic_meaning = "Gas-sensor-array-drift feature column 013."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_012/"
+
+[[series]]
+id = "gas_feat_013"
+description = "Gas-sensor-array-drift feature column 014."
+semantic_meaning = "Gas-sensor-array-drift feature column 014."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_013/"
+
+[[series]]
+id = "gas_feat_014"
+description = "Gas-sensor-array-drift feature column 015."
+semantic_meaning = "Gas-sensor-array-drift feature column 015."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_014/"
+
+[[series]]
+id = "gas_feat_015"
+description = "Gas-sensor-array-drift feature column 016."
+semantic_meaning = "Gas-sensor-array-drift feature column 016."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_015/"
+
+[[series]]
+id = "gas_feat_016"
+description = "Gas-sensor-array-drift feature column 017."
+semantic_meaning = "Gas-sensor-array-drift feature column 017."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_016/"
+
+[[series]]
+id = "gas_feat_017"
+description = "Gas-sensor-array-drift feature column 018."
+semantic_meaning = "Gas-sensor-array-drift feature column 018."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_017/"
+
+[[series]]
+id = "gas_feat_018"
+description = "Gas-sensor-array-drift feature column 019."
+semantic_meaning = "Gas-sensor-array-drift feature column 019."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_018/"
+
+[[series]]
+id = "gas_feat_019"
+description = "Gas-sensor-array-drift feature column 020."
+semantic_meaning = "Gas-sensor-array-drift feature column 020."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_019/"
+
+[[series]]
+id = "gas_feat_020"
+description = "Gas-sensor-array-drift feature column 021."
+semantic_meaning = "Gas-sensor-array-drift feature column 021."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_020/"
+
+[[series]]
+id = "gas_feat_021"
+description = "Gas-sensor-array-drift feature column 022."
+semantic_meaning = "Gas-sensor-array-drift feature column 022."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_021/"
+
+[[series]]
+id = "gas_feat_022"
+description = "Gas-sensor-array-drift feature column 023."
+semantic_meaning = "Gas-sensor-array-drift feature column 023."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_022/"
+
+[[series]]
+id = "gas_feat_023"
+description = "Gas-sensor-array-drift feature column 024."
+semantic_meaning = "Gas-sensor-array-drift feature column 024."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_023/"
+
+[[series]]
+id = "gas_feat_024"
+description = "Gas-sensor-array-drift feature column 025."
+semantic_meaning = "Gas-sensor-array-drift feature column 025."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_024/"
+
+[[series]]
+id = "gas_feat_025"
+description = "Gas-sensor-array-drift feature column 026."
+semantic_meaning = "Gas-sensor-array-drift feature column 026."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_025/"
+
+[[series]]
+id = "gas_feat_026"
+description = "Gas-sensor-array-drift feature column 027."
+semantic_meaning = "Gas-sensor-array-drift feature column 027."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_026/"
+
+[[series]]
+id = "gas_feat_027"
+description = "Gas-sensor-array-drift feature column 028."
+semantic_meaning = "Gas-sensor-array-drift feature column 028."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_027/"
+
+[[series]]
+id = "gas_feat_028"
+description = "Gas-sensor-array-drift feature column 029."
+semantic_meaning = "Gas-sensor-array-drift feature column 029."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_028/"
+
+[[series]]
+id = "gas_feat_029"
+description = "Gas-sensor-array-drift feature column 030."
+semantic_meaning = "Gas-sensor-array-drift feature column 030."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_029/"
+
+[[series]]
+id = "gas_feat_030"
+description = "Gas-sensor-array-drift feature column 031."
+semantic_meaning = "Gas-sensor-array-drift feature column 031."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_030/"
+
+[[series]]
+id = "gas_feat_031"
+description = "Gas-sensor-array-drift feature column 032."
+semantic_meaning = "Gas-sensor-array-drift feature column 032."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_031/"
+
+[[series]]
+id = "gas_feat_032"
+description = "Gas-sensor-array-drift feature column 033."
+semantic_meaning = "Gas-sensor-array-drift feature column 033."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_032/"
+
+[[series]]
+id = "gas_feat_033"
+description = "Gas-sensor-array-drift feature column 034."
+semantic_meaning = "Gas-sensor-array-drift feature column 034."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_033/"
+
+[[series]]
+id = "gas_feat_034"
+description = "Gas-sensor-array-drift feature column 035."
+semantic_meaning = "Gas-sensor-array-drift feature column 035."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_034/"
+
+[[series]]
+id = "gas_feat_035"
+description = "Gas-sensor-array-drift feature column 036."
+semantic_meaning = "Gas-sensor-array-drift feature column 036."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_035/"
+
+[[series]]
+id = "gas_feat_036"
+description = "Gas-sensor-array-drift feature column 037."
+semantic_meaning = "Gas-sensor-array-drift feature column 037."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_036/"
+
+[[series]]
+id = "gas_feat_037"
+description = "Gas-sensor-array-drift feature column 038."
+semantic_meaning = "Gas-sensor-array-drift feature column 038."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_037/"
+
+[[series]]
+id = "gas_feat_038"
+description = "Gas-sensor-array-drift feature column 039."
+semantic_meaning = "Gas-sensor-array-drift feature column 039."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_038/"
+
+[[series]]
+id = "gas_feat_039"
+description = "Gas-sensor-array-drift feature column 040."
+semantic_meaning = "Gas-sensor-array-drift feature column 040."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_039/"
+
+[[series]]
+id = "gas_feat_040"
+description = "Gas-sensor-array-drift feature column 041."
+semantic_meaning = "Gas-sensor-array-drift feature column 041."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_040/"
+
+[[series]]
+id = "gas_feat_041"
+description = "Gas-sensor-array-drift feature column 042."
+semantic_meaning = "Gas-sensor-array-drift feature column 042."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_041/"
+
+[[series]]
+id = "gas_feat_042"
+description = "Gas-sensor-array-drift feature column 043."
+semantic_meaning = "Gas-sensor-array-drift feature column 043."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_042/"
+
+[[series]]
+id = "gas_feat_043"
+description = "Gas-sensor-array-drift feature column 044."
+semantic_meaning = "Gas-sensor-array-drift feature column 044."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_043/"
+
+[[series]]
+id = "gas_feat_044"
+description = "Gas-sensor-array-drift feature column 045."
+semantic_meaning = "Gas-sensor-array-drift feature column 045."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_044/"
+
+[[series]]
+id = "gas_feat_045"
+description = "Gas-sensor-array-drift feature column 046."
+semantic_meaning = "Gas-sensor-array-drift feature column 046."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_045/"
+
+[[series]]
+id = "gas_feat_046"
+description = "Gas-sensor-array-drift feature column 047."
+semantic_meaning = "Gas-sensor-array-drift feature column 047."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_046/"
+
+[[series]]
+id = "gas_feat_047"
+description = "Gas-sensor-array-drift feature column 048."
+semantic_meaning = "Gas-sensor-array-drift feature column 048."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_047/"
+
+[[series]]
+id = "gas_feat_048"
+description = "Gas-sensor-array-drift feature column 049."
+semantic_meaning = "Gas-sensor-array-drift feature column 049."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_048/"
+
+[[series]]
+id = "gas_feat_049"
+description = "Gas-sensor-array-drift feature column 050."
+semantic_meaning = "Gas-sensor-array-drift feature column 050."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_049/"
+
+[[series]]
+id = "gas_feat_050"
+description = "Gas-sensor-array-drift feature column 051."
+semantic_meaning = "Gas-sensor-array-drift feature column 051."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_050/"
+
+[[series]]
+id = "gas_feat_051"
+description = "Gas-sensor-array-drift feature column 052."
+semantic_meaning = "Gas-sensor-array-drift feature column 052."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_051/"
+
+[[series]]
+id = "gas_feat_052"
+description = "Gas-sensor-array-drift feature column 053."
+semantic_meaning = "Gas-sensor-array-drift feature column 053."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_052/"
+
+[[series]]
+id = "gas_feat_053"
+description = "Gas-sensor-array-drift feature column 054."
+semantic_meaning = "Gas-sensor-array-drift feature column 054."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_053/"
+
+[[series]]
+id = "gas_feat_054"
+description = "Gas-sensor-array-drift feature column 055."
+semantic_meaning = "Gas-sensor-array-drift feature column 055."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_054/"
+
+[[series]]
+id = "gas_feat_055"
+description = "Gas-sensor-array-drift feature column 056."
+semantic_meaning = "Gas-sensor-array-drift feature column 056."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_055/"
+
+[[series]]
+id = "gas_feat_056"
+description = "Gas-sensor-array-drift feature column 057."
+semantic_meaning = "Gas-sensor-array-drift feature column 057."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_056/"
+
+[[series]]
+id = "gas_feat_057"
+description = "Gas-sensor-array-drift feature column 058."
+semantic_meaning = "Gas-sensor-array-drift feature column 058."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_057/"
+
+[[series]]
+id = "gas_feat_058"
+description = "Gas-sensor-array-drift feature column 059."
+semantic_meaning = "Gas-sensor-array-drift feature column 059."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_058/"
+
+[[series]]
+id = "gas_feat_059"
+description = "Gas-sensor-array-drift feature column 060."
+semantic_meaning = "Gas-sensor-array-drift feature column 060."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_059/"
+
+[[series]]
+id = "gas_feat_060"
+description = "Gas-sensor-array-drift feature column 061."
+semantic_meaning = "Gas-sensor-array-drift feature column 061."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_060/"
+
+[[series]]
+id = "gas_feat_061"
+description = "Gas-sensor-array-drift feature column 062."
+semantic_meaning = "Gas-sensor-array-drift feature column 062."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_061/"
+
+[[series]]
+id = "gas_feat_062"
+description = "Gas-sensor-array-drift feature column 063."
+semantic_meaning = "Gas-sensor-array-drift feature column 063."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_062/"
+
+[[series]]
+id = "gas_feat_063"
+description = "Gas-sensor-array-drift feature column 064."
+semantic_meaning = "Gas-sensor-array-drift feature column 064."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_063/"
+
+[[series]]
+id = "gas_feat_064"
+description = "Gas-sensor-array-drift feature column 065."
+semantic_meaning = "Gas-sensor-array-drift feature column 065."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_064/"
+
+[[series]]
+id = "gas_feat_065"
+description = "Gas-sensor-array-drift feature column 066."
+semantic_meaning = "Gas-sensor-array-drift feature column 066."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_065/"
+
+[[series]]
+id = "gas_feat_066"
+description = "Gas-sensor-array-drift feature column 067."
+semantic_meaning = "Gas-sensor-array-drift feature column 067."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_066/"
+
+[[series]]
+id = "gas_feat_067"
+description = "Gas-sensor-array-drift feature column 068."
+semantic_meaning = "Gas-sensor-array-drift feature column 068."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_067/"
+
+[[series]]
+id = "gas_feat_068"
+description = "Gas-sensor-array-drift feature column 069."
+semantic_meaning = "Gas-sensor-array-drift feature column 069."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_068/"
+
+[[series]]
+id = "gas_feat_069"
+description = "Gas-sensor-array-drift feature column 070."
+semantic_meaning = "Gas-sensor-array-drift feature column 070."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_069/"
+
+[[series]]
+id = "gas_feat_070"
+description = "Gas-sensor-array-drift feature column 071."
+semantic_meaning = "Gas-sensor-array-drift feature column 071."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_070/"
+
+[[series]]
+id = "gas_feat_071"
+description = "Gas-sensor-array-drift feature column 072."
+semantic_meaning = "Gas-sensor-array-drift feature column 072."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_071/"
+
+[[series]]
+id = "gas_feat_072"
+description = "Gas-sensor-array-drift feature column 073."
+semantic_meaning = "Gas-sensor-array-drift feature column 073."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_072/"
+
+[[series]]
+id = "gas_feat_073"
+description = "Gas-sensor-array-drift feature column 074."
+semantic_meaning = "Gas-sensor-array-drift feature column 074."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_073/"
+
+[[series]]
+id = "gas_feat_074"
+description = "Gas-sensor-array-drift feature column 075."
+semantic_meaning = "Gas-sensor-array-drift feature column 075."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_074/"
+
+[[series]]
+id = "gas_feat_075"
+description = "Gas-sensor-array-drift feature column 076."
+semantic_meaning = "Gas-sensor-array-drift feature column 076."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_075/"
+
+[[series]]
+id = "gas_feat_076"
+description = "Gas-sensor-array-drift feature column 077."
+semantic_meaning = "Gas-sensor-array-drift feature column 077."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_076/"
+
+[[series]]
+id = "gas_feat_077"
+description = "Gas-sensor-array-drift feature column 078."
+semantic_meaning = "Gas-sensor-array-drift feature column 078."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_077/"
+
+[[series]]
+id = "gas_feat_078"
+description = "Gas-sensor-array-drift feature column 079."
+semantic_meaning = "Gas-sensor-array-drift feature column 079."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_078/"
+
+[[series]]
+id = "gas_feat_079"
+description = "Gas-sensor-array-drift feature column 080."
+semantic_meaning = "Gas-sensor-array-drift feature column 080."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_079/"
+
+[[series]]
+id = "gas_feat_080"
+description = "Gas-sensor-array-drift feature column 081."
+semantic_meaning = "Gas-sensor-array-drift feature column 081."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_080/"
+
+[[series]]
+id = "gas_feat_081"
+description = "Gas-sensor-array-drift feature column 082."
+semantic_meaning = "Gas-sensor-array-drift feature column 082."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_081/"
+
+[[series]]
+id = "gas_feat_082"
+description = "Gas-sensor-array-drift feature column 083."
+semantic_meaning = "Gas-sensor-array-drift feature column 083."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_082/"
+
+[[series]]
+id = "gas_feat_083"
+description = "Gas-sensor-array-drift feature column 084."
+semantic_meaning = "Gas-sensor-array-drift feature column 084."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_083/"
+
+[[series]]
+id = "gas_feat_084"
+description = "Gas-sensor-array-drift feature column 085."
+semantic_meaning = "Gas-sensor-array-drift feature column 085."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_084/"
+
+[[series]]
+id = "gas_feat_085"
+description = "Gas-sensor-array-drift feature column 086."
+semantic_meaning = "Gas-sensor-array-drift feature column 086."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_085/"
+
+[[series]]
+id = "gas_feat_086"
+description = "Gas-sensor-array-drift feature column 087."
+semantic_meaning = "Gas-sensor-array-drift feature column 087."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_086/"
+
+[[series]]
+id = "gas_feat_087"
+description = "Gas-sensor-array-drift feature column 088."
+semantic_meaning = "Gas-sensor-array-drift feature column 088."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_087/"
+
+[[series]]
+id = "gas_feat_088"
+description = "Gas-sensor-array-drift feature column 089."
+semantic_meaning = "Gas-sensor-array-drift feature column 089."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_088/"
+
+[[series]]
+id = "gas_feat_089"
+description = "Gas-sensor-array-drift feature column 090."
+semantic_meaning = "Gas-sensor-array-drift feature column 090."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_089/"
+
+[[series]]
+id = "gas_feat_090"
+description = "Gas-sensor-array-drift feature column 091."
+semantic_meaning = "Gas-sensor-array-drift feature column 091."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_090/"
+
+[[series]]
+id = "gas_feat_091"
+description = "Gas-sensor-array-drift feature column 092."
+semantic_meaning = "Gas-sensor-array-drift feature column 092."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_091/"
+
+[[series]]
+id = "gas_feat_092"
+description = "Gas-sensor-array-drift feature column 093."
+semantic_meaning = "Gas-sensor-array-drift feature column 093."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_092/"
+
+[[series]]
+id = "gas_feat_093"
+description = "Gas-sensor-array-drift feature column 094."
+semantic_meaning = "Gas-sensor-array-drift feature column 094."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_093/"
+
+[[series]]
+id = "gas_feat_094"
+description = "Gas-sensor-array-drift feature column 095."
+semantic_meaning = "Gas-sensor-array-drift feature column 095."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_094/"
+
+[[series]]
+id = "gas_feat_095"
+description = "Gas-sensor-array-drift feature column 096."
+semantic_meaning = "Gas-sensor-array-drift feature column 096."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_095/"
+
+[[series]]
+id = "gas_feat_096"
+description = "Gas-sensor-array-drift feature column 097."
+semantic_meaning = "Gas-sensor-array-drift feature column 097."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_096/"
+
+[[series]]
+id = "gas_feat_097"
+description = "Gas-sensor-array-drift feature column 098."
+semantic_meaning = "Gas-sensor-array-drift feature column 098."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_097/"
+
+[[series]]
+id = "gas_feat_098"
+description = "Gas-sensor-array-drift feature column 099."
+semantic_meaning = "Gas-sensor-array-drift feature column 099."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_098/"
+
+[[series]]
+id = "gas_feat_099"
+description = "Gas-sensor-array-drift feature column 100."
+semantic_meaning = "Gas-sensor-array-drift feature column 100."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_099/"
+
+[[series]]
+id = "gas_feat_100"
+description = "Gas-sensor-array-drift feature column 101."
+semantic_meaning = "Gas-sensor-array-drift feature column 101."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_100/"
+
+[[series]]
+id = "gas_feat_101"
+description = "Gas-sensor-array-drift feature column 102."
+semantic_meaning = "Gas-sensor-array-drift feature column 102."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_101/"
+
+[[series]]
+id = "gas_feat_102"
+description = "Gas-sensor-array-drift feature column 103."
+semantic_meaning = "Gas-sensor-array-drift feature column 103."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_102/"
+
+[[series]]
+id = "gas_feat_103"
+description = "Gas-sensor-array-drift feature column 104."
+semantic_meaning = "Gas-sensor-array-drift feature column 104."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_103/"
+
+[[series]]
+id = "gas_feat_104"
+description = "Gas-sensor-array-drift feature column 105."
+semantic_meaning = "Gas-sensor-array-drift feature column 105."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_104/"
+
+[[series]]
+id = "gas_feat_105"
+description = "Gas-sensor-array-drift feature column 106."
+semantic_meaning = "Gas-sensor-array-drift feature column 106."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_105/"
+
+[[series]]
+id = "gas_feat_106"
+description = "Gas-sensor-array-drift feature column 107."
+semantic_meaning = "Gas-sensor-array-drift feature column 107."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_106/"
+
+[[series]]
+id = "gas_feat_107"
+description = "Gas-sensor-array-drift feature column 108."
+semantic_meaning = "Gas-sensor-array-drift feature column 108."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_107/"
+
+[[series]]
+id = "gas_feat_108"
+description = "Gas-sensor-array-drift feature column 109."
+semantic_meaning = "Gas-sensor-array-drift feature column 109."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_108/"
+
+[[series]]
+id = "gas_feat_109"
+description = "Gas-sensor-array-drift feature column 110."
+semantic_meaning = "Gas-sensor-array-drift feature column 110."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_109/"
+
+[[series]]
+id = "gas_feat_110"
+description = "Gas-sensor-array-drift feature column 111."
+semantic_meaning = "Gas-sensor-array-drift feature column 111."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_110/"
+
+[[series]]
+id = "gas_feat_111"
+description = "Gas-sensor-array-drift feature column 112."
+semantic_meaning = "Gas-sensor-array-drift feature column 112."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_111/"
+
+[[series]]
+id = "gas_feat_112"
+description = "Gas-sensor-array-drift feature column 113."
+semantic_meaning = "Gas-sensor-array-drift feature column 113."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_112/"
+
+[[series]]
+id = "gas_feat_113"
+description = "Gas-sensor-array-drift feature column 114."
+semantic_meaning = "Gas-sensor-array-drift feature column 114."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_113/"
+
+[[series]]
+id = "gas_feat_114"
+description = "Gas-sensor-array-drift feature column 115."
+semantic_meaning = "Gas-sensor-array-drift feature column 115."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_114/"
+
+[[series]]
+id = "gas_feat_115"
+description = "Gas-sensor-array-drift feature column 116."
+semantic_meaning = "Gas-sensor-array-drift feature column 116."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_115/"
+
+[[series]]
+id = "gas_feat_116"
+description = "Gas-sensor-array-drift feature column 117."
+semantic_meaning = "Gas-sensor-array-drift feature column 117."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_116/"
+
+[[series]]
+id = "gas_feat_117"
+description = "Gas-sensor-array-drift feature column 118."
+semantic_meaning = "Gas-sensor-array-drift feature column 118."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_117/"
+
+[[series]]
+id = "gas_feat_118"
+description = "Gas-sensor-array-drift feature column 119."
+semantic_meaning = "Gas-sensor-array-drift feature column 119."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_118/"
+
+[[series]]
+id = "gas_feat_119"
+description = "Gas-sensor-array-drift feature column 120."
+semantic_meaning = "Gas-sensor-array-drift feature column 120."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_119/"
+
+[[series]]
+id = "gas_feat_120"
+description = "Gas-sensor-array-drift feature column 121."
+semantic_meaning = "Gas-sensor-array-drift feature column 121."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_120/"
+
+[[series]]
+id = "gas_feat_121"
+description = "Gas-sensor-array-drift feature column 122."
+semantic_meaning = "Gas-sensor-array-drift feature column 122."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_121/"
+
+[[series]]
+id = "gas_feat_122"
+description = "Gas-sensor-array-drift feature column 123."
+semantic_meaning = "Gas-sensor-array-drift feature column 123."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_122/"
+
+[[series]]
+id = "gas_feat_123"
+description = "Gas-sensor-array-drift feature column 124."
+semantic_meaning = "Gas-sensor-array-drift feature column 124."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_123/"
+
+[[series]]
+id = "gas_feat_124"
+description = "Gas-sensor-array-drift feature column 125."
+semantic_meaning = "Gas-sensor-array-drift feature column 125."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_124/"
+
+[[series]]
+id = "gas_feat_125"
+description = "Gas-sensor-array-drift feature column 126."
+semantic_meaning = "Gas-sensor-array-drift feature column 126."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_125/"
+
+[[series]]
+id = "gas_feat_126"
+description = "Gas-sensor-array-drift feature column 127."
+semantic_meaning = "Gas-sensor-array-drift feature column 127."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_126/"
+
+[[series]]
+id = "gas_feat_127"
+description = "Gas-sensor-array-drift feature column 128."
+semantic_meaning = "Gas-sensor-array-drift feature column 128."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_127/"
+
+[[series]]
+id = "gas_feat_128"
+description = "Gas-sensor-array-drift feature column 129."
+semantic_meaning = "Gas-sensor-array-drift feature column 129."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/gas_sensor_array_drift_uci/gas_feat_128/"

@@ -50,3 +50,307 @@ verify_script = "verify.sh"
 sample_index_path = "index/susy_uci/samples.jsonl"
 summary = "Download pinned upstream resources, build local raw numeric samples only from local files, and generate a machine-readable sample index."
 deterministic_notes = "Build preserves row order, emits one label sample and one sample per feature column, writes durable logs, and emits samples.jsonl under index/susy_uci/."
+
+[[series]]
+id = "susy_label"
+description = "SUSY particle-physics feature column 001."
+semantic_meaning = "SUSY particle-physics feature column 001."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/susy_uci/susy_label/"
+
+[[series]]
+id = "susy_feat_001"
+description = "SUSY particle-physics feature column 002."
+semantic_meaning = "SUSY particle-physics feature column 002."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/susy_uci/susy_feat_001/"
+
+[[series]]
+id = "susy_feat_002"
+description = "SUSY particle-physics feature column 003."
+semantic_meaning = "SUSY particle-physics feature column 003."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/susy_uci/susy_feat_002/"
+
+[[series]]
+id = "susy_feat_003"
+description = "SUSY particle-physics feature column 004."
+semantic_meaning = "SUSY particle-physics feature column 004."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/susy_uci/susy_feat_003/"
+
+[[series]]
+id = "susy_feat_004"
+description = "SUSY particle-physics feature column 005."
+semantic_meaning = "SUSY particle-physics feature column 005."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/susy_uci/susy_feat_004/"
+
+[[series]]
+id = "susy_feat_005"
+description = "SUSY particle-physics feature column 006."
+semantic_meaning = "SUSY particle-physics feature column 006."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/susy_uci/susy_feat_005/"
+
+[[series]]
+id = "susy_feat_006"
+description = "SUSY particle-physics feature column 007."
+semantic_meaning = "SUSY particle-physics feature column 007."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/susy_uci/susy_feat_006/"
+
+[[series]]
+id = "susy_feat_007"
+description = "SUSY particle-physics feature column 008."
+semantic_meaning = "SUSY particle-physics feature column 008."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/susy_uci/susy_feat_007/"
+
+[[series]]
+id = "susy_feat_008"
+description = "SUSY particle-physics feature column 009."
+semantic_meaning = "SUSY particle-physics feature column 009."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/susy_uci/susy_feat_008/"
+
+[[series]]
+id = "susy_feat_009"
+description = "SUSY particle-physics feature column 010."
+semantic_meaning = "SUSY particle-physics feature column 010."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/susy_uci/susy_feat_009/"
+
+[[series]]
+id = "susy_feat_010"
+description = "SUSY particle-physics feature column 011."
+semantic_meaning = "SUSY particle-physics feature column 011."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/susy_uci/susy_feat_010/"
+
+[[series]]
+id = "susy_feat_011"
+description = "SUSY particle-physics feature column 012."
+semantic_meaning = "SUSY particle-physics feature column 012."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/susy_uci/susy_feat_011/"
+
+[[series]]
+id = "susy_feat_012"
+description = "SUSY particle-physics feature column 013."
+semantic_meaning = "SUSY particle-physics feature column 013."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/susy_uci/susy_feat_012/"
+
+[[series]]
+id = "susy_feat_013"
+description = "SUSY particle-physics feature column 014."
+semantic_meaning = "SUSY particle-physics feature column 014."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/susy_uci/susy_feat_013/"
+
+[[series]]
+id = "susy_feat_014"
+description = "SUSY particle-physics feature column 015."
+semantic_meaning = "SUSY particle-physics feature column 015."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/susy_uci/susy_feat_014/"
+
+[[series]]
+id = "susy_feat_015"
+description = "SUSY particle-physics feature column 016."
+semantic_meaning = "SUSY particle-physics feature column 016."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/susy_uci/susy_feat_015/"
+
+[[series]]
+id = "susy_feat_016"
+description = "SUSY particle-physics feature column 017."
+semantic_meaning = "SUSY particle-physics feature column 017."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/susy_uci/susy_feat_016/"
+
+[[series]]
+id = "susy_feat_017"
+description = "SUSY particle-physics feature column 018."
+semantic_meaning = "SUSY particle-physics feature column 018."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/susy_uci/susy_feat_017/"
+
+[[series]]
+id = "susy_feat_018"
+description = "SUSY particle-physics feature column 019."
+semantic_meaning = "SUSY particle-physics feature column 019."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/susy_uci/susy_feat_018/"

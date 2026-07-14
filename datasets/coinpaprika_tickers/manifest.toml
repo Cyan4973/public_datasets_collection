@@ -14,3 +14,131 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/coinpaprika_tickers/samples.jsonl"
+
+[[series]]
+id = "coinpaprika_rank"
+description = "Market-cap rank."
+semantic_meaning = "Market-cap rank."
+role = "auxiliary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/coinpaprika_tickers/coinpaprika_rank/"
+
+[[series]]
+id = "coinpaprika_price_usd"
+description = "Price (USD)."
+semantic_meaning = "Price (USD)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/coinpaprika_tickers/coinpaprika_price_usd/"
+
+[[series]]
+id = "coinpaprika_market_cap_usd"
+description = "Market capitalization (USD)."
+semantic_meaning = "Market capitalization (USD)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/coinpaprika_tickers/coinpaprika_market_cap_usd/"
+
+[[series]]
+id = "coinpaprika_volume_24h_usd"
+description = "24h trading volume (USD)."
+semantic_meaning = "24h trading volume (USD)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/coinpaprika_tickers/coinpaprika_volume_24h_usd/"
+
+[[series]]
+id = "coinpaprika_volume_24h_change_pct_f64"
+description = "24h volume change percent."
+semantic_meaning = "24h volume change percent."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/coinpaprika_tickers/coinpaprika_volume_24h_change_pct_f64/"
+
+[[series]]
+id = "coinpaprika_market_cap_change_24h_pct_f64"
+description = "24h market-cap change percent."
+semantic_meaning = "24h market-cap change percent."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/coinpaprika_tickers/coinpaprika_market_cap_change_24h_pct_f64/"
+
+[[series]]
+id = "coinpaprika_percent_change_7d_f64"
+description = "7-day price change percent."
+semantic_meaning = "7-day price change percent."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/coinpaprika_tickers/coinpaprika_percent_change_7d_f64/"
+
+[[series]]
+id = "coinpaprika_ath_price_usd_f64"
+description = "All-time-high price (USD)."
+semantic_meaning = "All-time-high price (USD)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/coinpaprika_tickers/coinpaprika_ath_price_usd_f64/"

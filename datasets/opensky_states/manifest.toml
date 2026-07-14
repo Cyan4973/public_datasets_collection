@@ -14,3 +14,83 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/opensky_states/samples.jsonl"
+
+[[series]]
+id = "opensky_longitude"
+description = "Aircraft longitude (degrees)."
+semantic_meaning = "Aircraft longitude (degrees)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/opensky_states/opensky_longitude/"
+
+[[series]]
+id = "opensky_latitude"
+description = "Aircraft latitude (degrees)."
+semantic_meaning = "Aircraft latitude (degrees)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/opensky_states/opensky_latitude/"
+
+[[series]]
+id = "opensky_geo_altitude_m"
+description = "Aircraft geometric altitude (m)."
+semantic_meaning = "Aircraft geometric altitude (m)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/opensky_states/opensky_geo_altitude_m/"
+
+[[series]]
+id = "opensky_velocity_mps"
+description = "Aircraft ground velocity (m/s)."
+semantic_meaning = "Aircraft ground velocity (m/s)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/opensky_states/opensky_velocity_mps/"
+
+[[series]]
+id = "opensky_heading_deg"
+description = "Aircraft true track / heading (degrees)."
+semantic_meaning = "Aircraft true track / heading (degrees)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/opensky_states/opensky_heading_deg/"

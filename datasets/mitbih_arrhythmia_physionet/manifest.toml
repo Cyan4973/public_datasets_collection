@@ -50,3 +50,83 @@ verify_script = "verify.sh"
 sample_index_path = "index/mitbih_arrhythmia_physionet/samples.jsonl"
 summary = "Download PhysioNet MIT-BIH records, decode WFDB format 212 to native int16 per lead family, and generate a machine-readable sample index."
 deterministic_notes = "Build preserves one sample per source record and lead family, writes durable logs, and emits samples.jsonl under index/mitbih_arrhythmia_physionet/."
+
+[[series]]
+id = "mitbih_mlii_1d_var"
+description = "Windowed variance of ECG lead MLII."
+semantic_meaning = "Windowed variance of ECG lead MLII."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian int16."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/mitbih_arrhythmia_physionet/mitbih_mlii_1d_var/"
+
+[[series]]
+id = "mitbih_v5_1d_var"
+description = "Windowed variance of ECG lead V5."
+semantic_meaning = "Windowed variance of ECG lead V5."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian int16."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/mitbih_arrhythmia_physionet/mitbih_v5_1d_var/"
+
+[[series]]
+id = "mitbih_v1_1d_var"
+description = "Windowed variance of ECG lead V1."
+semantic_meaning = "Windowed variance of ECG lead V1."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian int16."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/mitbih_arrhythmia_physionet/mitbih_v1_1d_var/"
+
+[[series]]
+id = "mitbih_v2_1d_var"
+description = "Windowed variance of ECG lead V2."
+semantic_meaning = "Windowed variance of ECG lead V2."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian int16."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/mitbih_arrhythmia_physionet/mitbih_v2_1d_var/"
+
+[[series]]
+id = "mitbih_v4_1d_var"
+description = "Windowed variance of ECG lead V4."
+semantic_meaning = "Windowed variance of ECG lead V4."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian int16."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/mitbih_arrhythmia_physionet/mitbih_v4_1d_var/"

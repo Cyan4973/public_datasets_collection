@@ -50,3 +50,1459 @@ verify_script = "verify.sh"
 sample_index_path = "index/yearpredictionmsd_uci/samples.jsonl"
 summary = "Download pinned upstream resources, build local raw numeric samples only from local files, and generate a machine-readable sample index."
 deterministic_notes = "Build preserves row order, emits one target-year sample and one sample per feature column, writes durable logs, and emits samples.jsonl under index/yearpredictionmsd_uci/."
+
+[[series]]
+id = "msd_year"
+description = "Million-Song timbre feature column 001."
+semantic_meaning = "Million-Song timbre feature column 001."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_year/"
+
+[[series]]
+id = "msd_feat_001"
+description = "Million-Song timbre feature column 002."
+semantic_meaning = "Million-Song timbre feature column 002."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_001/"
+
+[[series]]
+id = "msd_feat_002"
+description = "Million-Song timbre feature column 003."
+semantic_meaning = "Million-Song timbre feature column 003."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_002/"
+
+[[series]]
+id = "msd_feat_003"
+description = "Million-Song timbre feature column 004."
+semantic_meaning = "Million-Song timbre feature column 004."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_003/"
+
+[[series]]
+id = "msd_feat_004"
+description = "Million-Song timbre feature column 005."
+semantic_meaning = "Million-Song timbre feature column 005."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_004/"
+
+[[series]]
+id = "msd_feat_005"
+description = "Million-Song timbre feature column 006."
+semantic_meaning = "Million-Song timbre feature column 006."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_005/"
+
+[[series]]
+id = "msd_feat_006"
+description = "Million-Song timbre feature column 007."
+semantic_meaning = "Million-Song timbre feature column 007."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_006/"
+
+[[series]]
+id = "msd_feat_007"
+description = "Million-Song timbre feature column 008."
+semantic_meaning = "Million-Song timbre feature column 008."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_007/"
+
+[[series]]
+id = "msd_feat_008"
+description = "Million-Song timbre feature column 009."
+semantic_meaning = "Million-Song timbre feature column 009."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_008/"
+
+[[series]]
+id = "msd_feat_009"
+description = "Million-Song timbre feature column 010."
+semantic_meaning = "Million-Song timbre feature column 010."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_009/"
+
+[[series]]
+id = "msd_feat_010"
+description = "Million-Song timbre feature column 011."
+semantic_meaning = "Million-Song timbre feature column 011."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_010/"
+
+[[series]]
+id = "msd_feat_011"
+description = "Million-Song timbre feature column 012."
+semantic_meaning = "Million-Song timbre feature column 012."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_011/"
+
+[[series]]
+id = "msd_feat_012"
+description = "Million-Song timbre feature column 013."
+semantic_meaning = "Million-Song timbre feature column 013."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_012/"
+
+[[series]]
+id = "msd_feat_013"
+description = "Million-Song timbre feature column 014."
+semantic_meaning = "Million-Song timbre feature column 014."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_013/"
+
+[[series]]
+id = "msd_feat_014"
+description = "Million-Song timbre feature column 015."
+semantic_meaning = "Million-Song timbre feature column 015."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_014/"
+
+[[series]]
+id = "msd_feat_015"
+description = "Million-Song timbre feature column 016."
+semantic_meaning = "Million-Song timbre feature column 016."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_015/"
+
+[[series]]
+id = "msd_feat_016"
+description = "Million-Song timbre feature column 017."
+semantic_meaning = "Million-Song timbre feature column 017."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_016/"
+
+[[series]]
+id = "msd_feat_017"
+description = "Million-Song timbre feature column 018."
+semantic_meaning = "Million-Song timbre feature column 018."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_017/"
+
+[[series]]
+id = "msd_feat_018"
+description = "Million-Song timbre feature column 019."
+semantic_meaning = "Million-Song timbre feature column 019."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_018/"
+
+[[series]]
+id = "msd_feat_019"
+description = "Million-Song timbre feature column 020."
+semantic_meaning = "Million-Song timbre feature column 020."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_019/"
+
+[[series]]
+id = "msd_feat_020"
+description = "Million-Song timbre feature column 021."
+semantic_meaning = "Million-Song timbre feature column 021."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_020/"
+
+[[series]]
+id = "msd_feat_021"
+description = "Million-Song timbre feature column 022."
+semantic_meaning = "Million-Song timbre feature column 022."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_021/"
+
+[[series]]
+id = "msd_feat_022"
+description = "Million-Song timbre feature column 023."
+semantic_meaning = "Million-Song timbre feature column 023."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_022/"
+
+[[series]]
+id = "msd_feat_023"
+description = "Million-Song timbre feature column 024."
+semantic_meaning = "Million-Song timbre feature column 024."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_023/"
+
+[[series]]
+id = "msd_feat_024"
+description = "Million-Song timbre feature column 025."
+semantic_meaning = "Million-Song timbre feature column 025."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_024/"
+
+[[series]]
+id = "msd_feat_025"
+description = "Million-Song timbre feature column 026."
+semantic_meaning = "Million-Song timbre feature column 026."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_025/"
+
+[[series]]
+id = "msd_feat_026"
+description = "Million-Song timbre feature column 027."
+semantic_meaning = "Million-Song timbre feature column 027."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_026/"
+
+[[series]]
+id = "msd_feat_027"
+description = "Million-Song timbre feature column 028."
+semantic_meaning = "Million-Song timbre feature column 028."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_027/"
+
+[[series]]
+id = "msd_feat_028"
+description = "Million-Song timbre feature column 029."
+semantic_meaning = "Million-Song timbre feature column 029."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_028/"
+
+[[series]]
+id = "msd_feat_029"
+description = "Million-Song timbre feature column 030."
+semantic_meaning = "Million-Song timbre feature column 030."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_029/"
+
+[[series]]
+id = "msd_feat_030"
+description = "Million-Song timbre feature column 031."
+semantic_meaning = "Million-Song timbre feature column 031."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_030/"
+
+[[series]]
+id = "msd_feat_031"
+description = "Million-Song timbre feature column 032."
+semantic_meaning = "Million-Song timbre feature column 032."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_031/"
+
+[[series]]
+id = "msd_feat_032"
+description = "Million-Song timbre feature column 033."
+semantic_meaning = "Million-Song timbre feature column 033."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_032/"
+
+[[series]]
+id = "msd_feat_033"
+description = "Million-Song timbre feature column 034."
+semantic_meaning = "Million-Song timbre feature column 034."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_033/"
+
+[[series]]
+id = "msd_feat_034"
+description = "Million-Song timbre feature column 035."
+semantic_meaning = "Million-Song timbre feature column 035."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_034/"
+
+[[series]]
+id = "msd_feat_035"
+description = "Million-Song timbre feature column 036."
+semantic_meaning = "Million-Song timbre feature column 036."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_035/"
+
+[[series]]
+id = "msd_feat_036"
+description = "Million-Song timbre feature column 037."
+semantic_meaning = "Million-Song timbre feature column 037."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_036/"
+
+[[series]]
+id = "msd_feat_037"
+description = "Million-Song timbre feature column 038."
+semantic_meaning = "Million-Song timbre feature column 038."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_037/"
+
+[[series]]
+id = "msd_feat_038"
+description = "Million-Song timbre feature column 039."
+semantic_meaning = "Million-Song timbre feature column 039."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_038/"
+
+[[series]]
+id = "msd_feat_039"
+description = "Million-Song timbre feature column 040."
+semantic_meaning = "Million-Song timbre feature column 040."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_039/"
+
+[[series]]
+id = "msd_feat_040"
+description = "Million-Song timbre feature column 041."
+semantic_meaning = "Million-Song timbre feature column 041."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_040/"
+
+[[series]]
+id = "msd_feat_041"
+description = "Million-Song timbre feature column 042."
+semantic_meaning = "Million-Song timbre feature column 042."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_041/"
+
+[[series]]
+id = "msd_feat_042"
+description = "Million-Song timbre feature column 043."
+semantic_meaning = "Million-Song timbre feature column 043."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_042/"
+
+[[series]]
+id = "msd_feat_043"
+description = "Million-Song timbre feature column 044."
+semantic_meaning = "Million-Song timbre feature column 044."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_043/"
+
+[[series]]
+id = "msd_feat_044"
+description = "Million-Song timbre feature column 045."
+semantic_meaning = "Million-Song timbre feature column 045."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_044/"
+
+[[series]]
+id = "msd_feat_045"
+description = "Million-Song timbre feature column 046."
+semantic_meaning = "Million-Song timbre feature column 046."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_045/"
+
+[[series]]
+id = "msd_feat_046"
+description = "Million-Song timbre feature column 047."
+semantic_meaning = "Million-Song timbre feature column 047."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_046/"
+
+[[series]]
+id = "msd_feat_047"
+description = "Million-Song timbre feature column 048."
+semantic_meaning = "Million-Song timbre feature column 048."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_047/"
+
+[[series]]
+id = "msd_feat_048"
+description = "Million-Song timbre feature column 049."
+semantic_meaning = "Million-Song timbre feature column 049."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_048/"
+
+[[series]]
+id = "msd_feat_049"
+description = "Million-Song timbre feature column 050."
+semantic_meaning = "Million-Song timbre feature column 050."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_049/"
+
+[[series]]
+id = "msd_feat_050"
+description = "Million-Song timbre feature column 051."
+semantic_meaning = "Million-Song timbre feature column 051."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_050/"
+
+[[series]]
+id = "msd_feat_051"
+description = "Million-Song timbre feature column 052."
+semantic_meaning = "Million-Song timbre feature column 052."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_051/"
+
+[[series]]
+id = "msd_feat_052"
+description = "Million-Song timbre feature column 053."
+semantic_meaning = "Million-Song timbre feature column 053."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_052/"
+
+[[series]]
+id = "msd_feat_053"
+description = "Million-Song timbre feature column 054."
+semantic_meaning = "Million-Song timbre feature column 054."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_053/"
+
+[[series]]
+id = "msd_feat_054"
+description = "Million-Song timbre feature column 055."
+semantic_meaning = "Million-Song timbre feature column 055."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_054/"
+
+[[series]]
+id = "msd_feat_055"
+description = "Million-Song timbre feature column 056."
+semantic_meaning = "Million-Song timbre feature column 056."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_055/"
+
+[[series]]
+id = "msd_feat_056"
+description = "Million-Song timbre feature column 057."
+semantic_meaning = "Million-Song timbre feature column 057."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_056/"
+
+[[series]]
+id = "msd_feat_057"
+description = "Million-Song timbre feature column 058."
+semantic_meaning = "Million-Song timbre feature column 058."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_057/"
+
+[[series]]
+id = "msd_feat_058"
+description = "Million-Song timbre feature column 059."
+semantic_meaning = "Million-Song timbre feature column 059."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_058/"
+
+[[series]]
+id = "msd_feat_059"
+description = "Million-Song timbre feature column 060."
+semantic_meaning = "Million-Song timbre feature column 060."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_059/"
+
+[[series]]
+id = "msd_feat_060"
+description = "Million-Song timbre feature column 061."
+semantic_meaning = "Million-Song timbre feature column 061."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_060/"
+
+[[series]]
+id = "msd_feat_061"
+description = "Million-Song timbre feature column 062."
+semantic_meaning = "Million-Song timbre feature column 062."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_061/"
+
+[[series]]
+id = "msd_feat_062"
+description = "Million-Song timbre feature column 063."
+semantic_meaning = "Million-Song timbre feature column 063."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_062/"
+
+[[series]]
+id = "msd_feat_063"
+description = "Million-Song timbre feature column 064."
+semantic_meaning = "Million-Song timbre feature column 064."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_063/"
+
+[[series]]
+id = "msd_feat_064"
+description = "Million-Song timbre feature column 065."
+semantic_meaning = "Million-Song timbre feature column 065."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_064/"
+
+[[series]]
+id = "msd_feat_065"
+description = "Million-Song timbre feature column 066."
+semantic_meaning = "Million-Song timbre feature column 066."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_065/"
+
+[[series]]
+id = "msd_feat_066"
+description = "Million-Song timbre feature column 067."
+semantic_meaning = "Million-Song timbre feature column 067."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_066/"
+
+[[series]]
+id = "msd_feat_067"
+description = "Million-Song timbre feature column 068."
+semantic_meaning = "Million-Song timbre feature column 068."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_067/"
+
+[[series]]
+id = "msd_feat_068"
+description = "Million-Song timbre feature column 069."
+semantic_meaning = "Million-Song timbre feature column 069."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_068/"
+
+[[series]]
+id = "msd_feat_069"
+description = "Million-Song timbre feature column 070."
+semantic_meaning = "Million-Song timbre feature column 070."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_069/"
+
+[[series]]
+id = "msd_feat_070"
+description = "Million-Song timbre feature column 071."
+semantic_meaning = "Million-Song timbre feature column 071."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_070/"
+
+[[series]]
+id = "msd_feat_071"
+description = "Million-Song timbre feature column 072."
+semantic_meaning = "Million-Song timbre feature column 072."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_071/"
+
+[[series]]
+id = "msd_feat_072"
+description = "Million-Song timbre feature column 073."
+semantic_meaning = "Million-Song timbre feature column 073."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_072/"
+
+[[series]]
+id = "msd_feat_073"
+description = "Million-Song timbre feature column 074."
+semantic_meaning = "Million-Song timbre feature column 074."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_073/"
+
+[[series]]
+id = "msd_feat_074"
+description = "Million-Song timbre feature column 075."
+semantic_meaning = "Million-Song timbre feature column 075."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_074/"
+
+[[series]]
+id = "msd_feat_075"
+description = "Million-Song timbre feature column 076."
+semantic_meaning = "Million-Song timbre feature column 076."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_075/"
+
+[[series]]
+id = "msd_feat_076"
+description = "Million-Song timbre feature column 077."
+semantic_meaning = "Million-Song timbre feature column 077."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_076/"
+
+[[series]]
+id = "msd_feat_077"
+description = "Million-Song timbre feature column 078."
+semantic_meaning = "Million-Song timbre feature column 078."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_077/"
+
+[[series]]
+id = "msd_feat_078"
+description = "Million-Song timbre feature column 079."
+semantic_meaning = "Million-Song timbre feature column 079."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_078/"
+
+[[series]]
+id = "msd_feat_079"
+description = "Million-Song timbre feature column 080."
+semantic_meaning = "Million-Song timbre feature column 080."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_079/"
+
+[[series]]
+id = "msd_feat_080"
+description = "Million-Song timbre feature column 081."
+semantic_meaning = "Million-Song timbre feature column 081."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_080/"
+
+[[series]]
+id = "msd_feat_081"
+description = "Million-Song timbre feature column 082."
+semantic_meaning = "Million-Song timbre feature column 082."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_081/"
+
+[[series]]
+id = "msd_feat_082"
+description = "Million-Song timbre feature column 083."
+semantic_meaning = "Million-Song timbre feature column 083."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_082/"
+
+[[series]]
+id = "msd_feat_083"
+description = "Million-Song timbre feature column 084."
+semantic_meaning = "Million-Song timbre feature column 084."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_083/"
+
+[[series]]
+id = "msd_feat_084"
+description = "Million-Song timbre feature column 085."
+semantic_meaning = "Million-Song timbre feature column 085."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_084/"
+
+[[series]]
+id = "msd_feat_085"
+description = "Million-Song timbre feature column 086."
+semantic_meaning = "Million-Song timbre feature column 086."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_085/"
+
+[[series]]
+id = "msd_feat_086"
+description = "Million-Song timbre feature column 087."
+semantic_meaning = "Million-Song timbre feature column 087."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_086/"
+
+[[series]]
+id = "msd_feat_087"
+description = "Million-Song timbre feature column 088."
+semantic_meaning = "Million-Song timbre feature column 088."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_087/"
+
+[[series]]
+id = "msd_feat_088"
+description = "Million-Song timbre feature column 089."
+semantic_meaning = "Million-Song timbre feature column 089."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_088/"
+
+[[series]]
+id = "msd_feat_089"
+description = "Million-Song timbre feature column 090."
+semantic_meaning = "Million-Song timbre feature column 090."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_089/"
+
+[[series]]
+id = "msd_feat_090"
+description = "Million-Song timbre feature column 091."
+semantic_meaning = "Million-Song timbre feature column 091."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/yearpredictionmsd_uci/msd_feat_090/"

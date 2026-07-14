@@ -50,3 +50,51 @@ verify_script = "verify.sh"
 sample_index_path = "index/chbmit_physionet/samples.jsonl"
 summary = "Download a deterministic trimmed CHB-MIT EDF subset, extract three bipolar EEG channel families as native int16, and generate a machine-readable sample index."
 deterministic_notes = "Build preserves per-record sample identity, resolves channel aliases deterministically, and shards only oversized samples into deterministic contiguous pieces."
+
+[[series]]
+id = "chbmit_f7_t7_1d_var"
+description = "Windowed variance of EEG bipolar channel F7-T7."
+semantic_meaning = "Windowed variance of EEG bipolar channel F7-T7."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian int16."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/chbmit_physionet/chbmit_f7_t7_1d_var/"
+
+[[series]]
+id = "chbmit_fz_cz_1d_var"
+description = "Windowed variance of EEG bipolar channel Fz-Cz."
+semantic_meaning = "Windowed variance of EEG bipolar channel Fz-Cz."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian int16."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/chbmit_physionet/chbmit_fz_cz_1d_var/"
+
+[[series]]
+id = "chbmit_f8_t8_1d_var"
+description = "Windowed variance of EEG bipolar channel F8-T8."
+semantic_meaning = "Windowed variance of EEG bipolar channel F8-T8."
+role = "primary"
+representation_class = "derived_operational_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian int16."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/chbmit_physionet/chbmit_f8_t8_1d_var/"

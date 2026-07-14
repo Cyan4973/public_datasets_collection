@@ -15,3 +15,82 @@ build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/ncbi_assembly_refseq_summary/samples.jsonl"
 
+[[series]]
+id = "ncbi_assembly_taxid"
+description = "NCBI taxonomy identifier."
+semantic_meaning = "NCBI taxonomy identifier."
+role = "auxiliary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/ncbi_assembly_refseq_summary/ncbi_assembly_taxid/"
+
+[[series]]
+id = "ncbi_assembly_genome_size"
+description = "Total genome size (base pairs)."
+semantic_meaning = "Total genome size (base pairs)."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint64."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/ncbi_assembly_refseq_summary/ncbi_assembly_genome_size/"
+
+[[series]]
+id = "ncbi_assembly_gc_percent"
+description = "Genome GC content percentage."
+semantic_meaning = "Genome GC content percentage."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/ncbi_assembly_refseq_summary/ncbi_assembly_gc_percent/"
+
+[[series]]
+id = "ncbi_assembly_total_gene_count"
+description = "Total gene count."
+semantic_meaning = "Total gene count."
+role = "auxiliary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/ncbi_assembly_refseq_summary/ncbi_assembly_total_gene_count/"
+
+[[series]]
+id = "ncbi_assembly_protein_coding_gene_count"
+description = "Protein-coding gene count."
+semantic_meaning = "Protein-coding gene count."
+role = "auxiliary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint32."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/ncbi_assembly_refseq_summary/ncbi_assembly_protein_coding_gene_count/"

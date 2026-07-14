@@ -17,9 +17,11 @@ exec > >(tee "$LOG_FILE" "$LATEST_LOG") 2>&1
 echo "[$(date -Is)] build start dataset=$DATASET_ID"
 export REPO_ROOT DATA_DIR EXTRACT_DIR FILTER_DIR INDEX_DIR SAMPLES_DIR
 python3 - <<'PY'
-import csv, json, os, sys
+import csv, json, os, shutil, sys
 from array import array
 from pathlib import Path
+
+SERIES_ID = "electricity_load_kw"
 
 repo = Path(os.environ["REPO_ROOT"])
 data_dir = os.environ["DATA_DIR"]
@@ -41,14 +43,18 @@ n = len(meters)
 little = sys.byteorder == "little"
 chunk_rows = 10000
 
+# Every meter measures the same quantity (client electricity load, kW, 15-min
+# cadence), so all meters are samples of ONE homogeneous series -- one sample
+# per meter -- not a series per meter.
+shutil.rmtree(samples_dir, ignore_errors=True)
+series_dir = samples_dir / SERIES_ID
+series_dir.mkdir(parents=True, exist_ok=True)
 meter_info = []
 files = []
 for name in meters:
-    sid = name.strip().replace('"', "").lower().replace("_", "")
-    outdir = samples_dir / sid
-    outdir.mkdir(parents=True, exist_ok=True)
-    out = outdir / "series.bin"
-    meter_info.append((sid, out))
+    meter = name.strip().replace('"', "").lower().replace("_", "")
+    out = series_dir / f"{meter}.bin"
+    meter_info.append((meter, out))
     files.append(out.open("wb"))
 
 bufs = [array("f") for _ in range(n)]
@@ -94,12 +100,26 @@ filter_dir.mkdir(parents=True, exist_ok=True)
     encoding="utf-8",
 )
 index_dir.mkdir(parents=True, exist_ok=True)
+# Drop meters whose entire series is constant (a client with no readings at all);
+# a long leading zero-run before a client comes online is normal and kept.
+kept = 0
+dropped = []
 with (index_dir / "samples.jsonl").open("w", encoding="utf-8") as out:
-    for sid, path in meter_info:
+    for meter, path in meter_info:
+        a = array("f")
+        a.frombytes(path.read_bytes())
+        if not little:
+            a.byteswap()
+        if min(a) == max(a):
+            path.unlink()
+            dropped.append(meter)
+            continue
         size = path.stat().st_size
         out.write(json.dumps({
             "dataset_id": "electricity_load_diagrams_uci",
-            "series_id": sid,
+            "series_id": SERIES_ID,
+            "role": "primary",
+            "meter": meter,
             "sample_path": str(path.relative_to(repo / data_dir)),
             "numeric_kind": "float",
             "bit_width": 32,
@@ -108,5 +128,9 @@ with (index_dir / "samples.jsonl").open("w", encoding="utf-8") as out:
             "sample_size_bytes": size,
             "value_count": rows,
         }, sort_keys=True) + "\n")
+        kept += 1
+if kept < 50:
+    raise SystemExit(f"only {kept} non-constant meter samples")
+print(f"kept={kept} dropped_constant={len(dropped)}")
 PY
 echo "[$(date -Is)] build done dataset=$DATASET_ID"

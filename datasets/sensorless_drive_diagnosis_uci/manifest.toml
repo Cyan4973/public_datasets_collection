@@ -50,3 +50,787 @@ verify_script = "verify.sh"
 sample_index_path = "index/sensorless_drive_diagnosis_uci/samples.jsonl"
 summary = "Download pinned upstream resources, build local raw numeric samples only from local files, and generate a machine-readable sample index."
 deterministic_notes = "Build preserves row order, emits one label sample and one sample per feature column, writes durable logs, and emits samples.jsonl under index/sensorless_drive_diagnosis_uci/."
+
+[[series]]
+id = "sdd_label"
+description = "Sensorless-drive current-signal feature column 001."
+semantic_meaning = "Sensorless-drive current-signal feature column 001."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_label/"
+
+[[series]]
+id = "sdd_feat_001"
+description = "Sensorless-drive current-signal feature column 002."
+semantic_meaning = "Sensorless-drive current-signal feature column 002."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_001/"
+
+[[series]]
+id = "sdd_feat_002"
+description = "Sensorless-drive current-signal feature column 003."
+semantic_meaning = "Sensorless-drive current-signal feature column 003."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_002/"
+
+[[series]]
+id = "sdd_feat_003"
+description = "Sensorless-drive current-signal feature column 004."
+semantic_meaning = "Sensorless-drive current-signal feature column 004."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_003/"
+
+[[series]]
+id = "sdd_feat_004"
+description = "Sensorless-drive current-signal feature column 005."
+semantic_meaning = "Sensorless-drive current-signal feature column 005."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_004/"
+
+[[series]]
+id = "sdd_feat_005"
+description = "Sensorless-drive current-signal feature column 006."
+semantic_meaning = "Sensorless-drive current-signal feature column 006."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_005/"
+
+[[series]]
+id = "sdd_feat_006"
+description = "Sensorless-drive current-signal feature column 007."
+semantic_meaning = "Sensorless-drive current-signal feature column 007."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_006/"
+
+[[series]]
+id = "sdd_feat_007"
+description = "Sensorless-drive current-signal feature column 008."
+semantic_meaning = "Sensorless-drive current-signal feature column 008."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_007/"
+
+[[series]]
+id = "sdd_feat_008"
+description = "Sensorless-drive current-signal feature column 009."
+semantic_meaning = "Sensorless-drive current-signal feature column 009."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_008/"
+
+[[series]]
+id = "sdd_feat_009"
+description = "Sensorless-drive current-signal feature column 010."
+semantic_meaning = "Sensorless-drive current-signal feature column 010."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_009/"
+
+[[series]]
+id = "sdd_feat_010"
+description = "Sensorless-drive current-signal feature column 011."
+semantic_meaning = "Sensorless-drive current-signal feature column 011."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_010/"
+
+[[series]]
+id = "sdd_feat_011"
+description = "Sensorless-drive current-signal feature column 012."
+semantic_meaning = "Sensorless-drive current-signal feature column 012."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_011/"
+
+[[series]]
+id = "sdd_feat_012"
+description = "Sensorless-drive current-signal feature column 013."
+semantic_meaning = "Sensorless-drive current-signal feature column 013."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_012/"
+
+[[series]]
+id = "sdd_feat_013"
+description = "Sensorless-drive current-signal feature column 014."
+semantic_meaning = "Sensorless-drive current-signal feature column 014."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_013/"
+
+[[series]]
+id = "sdd_feat_014"
+description = "Sensorless-drive current-signal feature column 015."
+semantic_meaning = "Sensorless-drive current-signal feature column 015."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_014/"
+
+[[series]]
+id = "sdd_feat_015"
+description = "Sensorless-drive current-signal feature column 016."
+semantic_meaning = "Sensorless-drive current-signal feature column 016."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_015/"
+
+[[series]]
+id = "sdd_feat_016"
+description = "Sensorless-drive current-signal feature column 017."
+semantic_meaning = "Sensorless-drive current-signal feature column 017."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_016/"
+
+[[series]]
+id = "sdd_feat_017"
+description = "Sensorless-drive current-signal feature column 018."
+semantic_meaning = "Sensorless-drive current-signal feature column 018."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_017/"
+
+[[series]]
+id = "sdd_feat_018"
+description = "Sensorless-drive current-signal feature column 019."
+semantic_meaning = "Sensorless-drive current-signal feature column 019."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_018/"
+
+[[series]]
+id = "sdd_feat_019"
+description = "Sensorless-drive current-signal feature column 020."
+semantic_meaning = "Sensorless-drive current-signal feature column 020."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_019/"
+
+[[series]]
+id = "sdd_feat_020"
+description = "Sensorless-drive current-signal feature column 021."
+semantic_meaning = "Sensorless-drive current-signal feature column 021."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_020/"
+
+[[series]]
+id = "sdd_feat_021"
+description = "Sensorless-drive current-signal feature column 022."
+semantic_meaning = "Sensorless-drive current-signal feature column 022."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_021/"
+
+[[series]]
+id = "sdd_feat_022"
+description = "Sensorless-drive current-signal feature column 023."
+semantic_meaning = "Sensorless-drive current-signal feature column 023."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_022/"
+
+[[series]]
+id = "sdd_feat_023"
+description = "Sensorless-drive current-signal feature column 024."
+semantic_meaning = "Sensorless-drive current-signal feature column 024."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_023/"
+
+[[series]]
+id = "sdd_feat_024"
+description = "Sensorless-drive current-signal feature column 025."
+semantic_meaning = "Sensorless-drive current-signal feature column 025."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_024/"
+
+[[series]]
+id = "sdd_feat_025"
+description = "Sensorless-drive current-signal feature column 026."
+semantic_meaning = "Sensorless-drive current-signal feature column 026."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_025/"
+
+[[series]]
+id = "sdd_feat_026"
+description = "Sensorless-drive current-signal feature column 027."
+semantic_meaning = "Sensorless-drive current-signal feature column 027."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_026/"
+
+[[series]]
+id = "sdd_feat_027"
+description = "Sensorless-drive current-signal feature column 028."
+semantic_meaning = "Sensorless-drive current-signal feature column 028."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_027/"
+
+[[series]]
+id = "sdd_feat_028"
+description = "Sensorless-drive current-signal feature column 029."
+semantic_meaning = "Sensorless-drive current-signal feature column 029."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_028/"
+
+[[series]]
+id = "sdd_feat_029"
+description = "Sensorless-drive current-signal feature column 030."
+semantic_meaning = "Sensorless-drive current-signal feature column 030."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_029/"
+
+[[series]]
+id = "sdd_feat_030"
+description = "Sensorless-drive current-signal feature column 031."
+semantic_meaning = "Sensorless-drive current-signal feature column 031."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_030/"
+
+[[series]]
+id = "sdd_feat_031"
+description = "Sensorless-drive current-signal feature column 032."
+semantic_meaning = "Sensorless-drive current-signal feature column 032."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_031/"
+
+[[series]]
+id = "sdd_feat_032"
+description = "Sensorless-drive current-signal feature column 033."
+semantic_meaning = "Sensorless-drive current-signal feature column 033."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_032/"
+
+[[series]]
+id = "sdd_feat_033"
+description = "Sensorless-drive current-signal feature column 034."
+semantic_meaning = "Sensorless-drive current-signal feature column 034."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_033/"
+
+[[series]]
+id = "sdd_feat_034"
+description = "Sensorless-drive current-signal feature column 035."
+semantic_meaning = "Sensorless-drive current-signal feature column 035."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_034/"
+
+[[series]]
+id = "sdd_feat_035"
+description = "Sensorless-drive current-signal feature column 036."
+semantic_meaning = "Sensorless-drive current-signal feature column 036."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_035/"
+
+[[series]]
+id = "sdd_feat_036"
+description = "Sensorless-drive current-signal feature column 037."
+semantic_meaning = "Sensorless-drive current-signal feature column 037."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_036/"
+
+[[series]]
+id = "sdd_feat_037"
+description = "Sensorless-drive current-signal feature column 038."
+semantic_meaning = "Sensorless-drive current-signal feature column 038."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_037/"
+
+[[series]]
+id = "sdd_feat_038"
+description = "Sensorless-drive current-signal feature column 039."
+semantic_meaning = "Sensorless-drive current-signal feature column 039."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_038/"
+
+[[series]]
+id = "sdd_feat_039"
+description = "Sensorless-drive current-signal feature column 040."
+semantic_meaning = "Sensorless-drive current-signal feature column 040."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_039/"
+
+[[series]]
+id = "sdd_feat_040"
+description = "Sensorless-drive current-signal feature column 041."
+semantic_meaning = "Sensorless-drive current-signal feature column 041."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_040/"
+
+[[series]]
+id = "sdd_feat_041"
+description = "Sensorless-drive current-signal feature column 042."
+semantic_meaning = "Sensorless-drive current-signal feature column 042."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_041/"
+
+[[series]]
+id = "sdd_feat_042"
+description = "Sensorless-drive current-signal feature column 043."
+semantic_meaning = "Sensorless-drive current-signal feature column 043."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_042/"
+
+[[series]]
+id = "sdd_feat_043"
+description = "Sensorless-drive current-signal feature column 044."
+semantic_meaning = "Sensorless-drive current-signal feature column 044."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_043/"
+
+[[series]]
+id = "sdd_feat_044"
+description = "Sensorless-drive current-signal feature column 045."
+semantic_meaning = "Sensorless-drive current-signal feature column 045."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_044/"
+
+[[series]]
+id = "sdd_feat_045"
+description = "Sensorless-drive current-signal feature column 046."
+semantic_meaning = "Sensorless-drive current-signal feature column 046."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_045/"
+
+[[series]]
+id = "sdd_feat_046"
+description = "Sensorless-drive current-signal feature column 047."
+semantic_meaning = "Sensorless-drive current-signal feature column 047."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_046/"
+
+[[series]]
+id = "sdd_feat_047"
+description = "Sensorless-drive current-signal feature column 048."
+semantic_meaning = "Sensorless-drive current-signal feature column 048."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_047/"
+
+[[series]]
+id = "sdd_feat_048"
+description = "Sensorless-drive current-signal feature column 049."
+semantic_meaning = "Sensorless-drive current-signal feature column 049."
+role = "primary"
+representation_class = "native_numeric"
+missing_value_policy = "Records missing or with an unparseable value for this field are skipped by the build; constant or empty samples are rejected."
+conversion = "Extract this field from each source record in order and store as raw little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous numeric array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/sensorless_drive_diagnosis_uci/sdd_feat_048/"

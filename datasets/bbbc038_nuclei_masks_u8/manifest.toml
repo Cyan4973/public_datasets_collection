@@ -1,0 +1,75 @@
+manifest_version = 1
+dataset_id = "bbbc038_nuclei_masks_u8"
+name = "BBBC038 Nuclei Masks"
+description = "BBBC038 microscopy nuclei segmentation mask PNGs decoded into one uint8 mask sample per source PNG."
+homepage = "https://bbbc.broadinstitute.org/BBBC038"
+
+[license]
+name = "BBBC038 public dataset terms"
+spdx = ""
+url = "https://bbbc.broadinstitute.org/BBBC038"
+citation = "Broad Bioimage Benchmark Collection BBBC038."
+notes = "Use official BBBC038 source archives and preserve source attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public microscopy benchmark images and masks."
+usage_notes = "Public scientific imaging data; no personal data expected."
+
+[[origins]]
+id = "bbbc038"
+name = "Broad Bioimage Benchmark Collection BBBC038"
+url = "https://bbbc.broadinstitute.org/BBBC038"
+type = "data_portal"
+notes = "Official BBBC038 source page."
+
+[[resources]]
+id = "bbbc038_mask_archives"
+origin = "bbbc038"
+url = "https://data.broadinstitute.org/bbbc/BBBC038/"
+type = "bounded_url_selection"
+version = "default_stage1_train_masks"
+access = "Download script fetches exact ZIP URLs, or exact URLs supplied with BBBC038_URLS_FILE."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/bbbc038_nuclei_masks_u8/"
+notes = "Default source is the BBBC038 stage1 training archive, expected to contain per-image masks directories."
+
+[local_paths]
+downloads = "downloads/bbbc038_nuclei_masks_u8/"
+extracted = "extracted/bbbc038_nuclei_masks_u8/"
+filtered = "filtered/bbbc038_nuclei_masks_u8/"
+index = "index/bbbc038_nuclei_masks_u8/"
+samples = "samples/bbbc038_nuclei_masks_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/bbbc038_nuclei_masks_u8/samples.jsonl"
+summary = "Download BBBC038 mask archives, decode source PNG mask images locally, and emit one raw uint8 mask sample per qualifying PNG."
+deterministic_notes = "Build sorts archives and PNG paths, preserves one source mask PNG as one natural sample, rejects tiny or constant masks, and writes durable logs plus samples.jsonl."
+
+[[series]]
+id = "bbbc038_nuclei_mask_u8"
+description = "BBBC038 source nuclei mask PNG decoded bytes."
+semantic_meaning = "One source-provided nuclei segmentation mask image decoded to uint8 mask values in row-major order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The recipe preserves decoded source mask bytes. It does not train on compressed PNG bytes."
+source_resources = ["bbbc038_mask_archives"]
+filtered_input_path = "filtered/bbbc038_nuclei_masks_u8/ingest_stats.json"
+filtering = "Keep only grayscale or indexed PNG masks with at least BBBC038_MIN_VALUES pixels and nonconstant decoded content."
+missing_value_policy = "Malformed PNGs, RGB-only images, tiny masks, and constant masks are rejected or skipped and recorded in build stats."
+conversion = "Decode PNG IDAT scanlines with stdlib zlib, undo PNG filters, and write one raw uint8 sample per mask PNG."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 mask grid"
+sample_geometry = "2d_microscopy_segmentation_mask"
+sample_rank = 2
+sample_axes = ["y", "x"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/bbbc038_nuclei_masks_u8/bbbc038_nuclei_mask_u8/"

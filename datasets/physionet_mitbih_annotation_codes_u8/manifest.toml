@@ -1,0 +1,74 @@
+manifest_version = 1
+dataset_id = "physionet_mitbih_annotation_codes_u8"
+name = "PhysioNet MIT-BIH Annotation Codes"
+description = "Official WFDB annotation type-code streams from MIT-BIH Arrhythmia Database records, emitted as one uint8 sample per source record."
+homepage = "https://physionet.org/content/mitdb/1.0.0/"
+
+[license]
+name = "PhysioNet public distribution terms"
+spdx = ""
+url = "https://physionet.org/content/mitdb/1.0.0/"
+citation = "MIT-BIH Arrhythmia Database, PhysioNet."
+notes = "Official PhysioNet distribution only."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public PhysioNet teaching/research database."
+usage_notes = "Public source intended for reproducible numeric dataset collection."
+
+[[origins]]
+id = "physionet_mitdb"
+name = "PhysioNet MIT-BIH Arrhythmia Database"
+url = "https://physionet.org/content/mitdb/1.0.0/"
+type = "data_portal"
+notes = "Official upstream dataset page."
+
+[[resources]]
+id = "wfdb_annotation_records"
+origin = "physionet_mitdb"
+url = "https://physionet.org/files/mitdb/1.0.0/"
+type = "api_directory"
+version = "1.0.0"
+access = "Download script fetches RECORDS, ANNOTATORS, optional README files, and .atr annotation files for selected records."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/physionet_mitbih_annotation_codes_u8/"
+notes = "Does not download .dat waveform payloads."
+
+[local_paths]
+downloads = "downloads/physionet_mitbih_annotation_codes_u8/"
+filtered = "filtered/physionet_mitbih_annotation_codes_u8/"
+index = "index/physionet_mitbih_annotation_codes_u8/"
+samples = "samples/physionet_mitbih_annotation_codes_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/physionet_mitbih_annotation_codes_u8/samples.jsonl"
+summary = "Download MIT-BIH WFDB annotation files, parse local .atr records, skip WFDB format-control annotations, and emit one raw uint8 annotation-code sample per qualifying record."
+deterministic_notes = "Record order follows RECORDS.selected if present, otherwise RECORDS. Samples preserve source annotation order, filter out tiny or constant records, and write durable logs plus samples.jsonl."
+
+[[series]]
+id = "mitbih_wfdb_annotation_type_u8"
+description = "WFDB annotation type codes from MIT-BIH .atr files."
+semantic_meaning = "Official nonzero WFDB annotation type codes for clinical events in one MIT-BIH record, in annotation order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The WFDB annotation word stores annotation type as a numeric code. Format-control annotations such as SKIP/NUM/SUB/CHN/AUX are parsing metadata and are not emitted."
+source_resources = ["wfdb_annotation_records"]
+filtered_input_path = "filtered/physionet_mitbih_annotation_codes_u8/ingest_stats.json"
+filtering = "Keep records with at least MITBIH_ANN_MIN_VALUES emitted type codes and nonconstant code sequences."
+missing_value_policy = "Missing RECORDS, malformed .atr files, unsupported annotation control records, tiny records, and constant records are rejected or skipped and recorded in build stats."
+conversion = "Parse each WFDB .atr annotation word, preserve official annotation type codes 1..49 as uint8 values, and write one raw sample per record."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 annotation-code sequence"
+sample_geometry = "1d_event_code_sequence"
+sample_rank = 1
+sample_axes = ["annotation_order"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/physionet_mitbih_annotation_codes_u8/mitbih_wfdb_annotation_type_u8/"

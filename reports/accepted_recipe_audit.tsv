@@ -53,6 +53,7 @@ nomis_employment	ok	92145	221148	5	18429	36858	0	0	0	1	none	none
 gbif_occurrence_2024_coordinate_sample	ok	95952	527736	8	11994	47976	0	0	0	1	none	none
 noaa_ghcn_daily_wesd_by_station	ok	102494	204988	24	5845	11690	0	0	0	1	none	none
 worldclim_tavg_10m	ok	103680	414720	6	17280	69120	0	0	0	1	none	none
+physionet_mitbih_annotation_codes_u8	ok	112647	112647	48	2299	2299	0	0	0	1	none	none
 taginfo_tags_popular	ok	113896	911168	8	14237	113896	28474	42711	2	1	none	none
 figshare_articles_large	ok	119994	679966	6	19999	119994	0	0	0	1	none	none
 openml_runs_large	ok	120000	560000	6	20000	80000	0	0	0	1	none	none
@@ -107,6 +108,7 @@ gdelt_events_goldstein_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	none
 gdelt_events_nummentions_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	none
 gdelt_events_numsources_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	none
 wwpdb_mmcif_atom_coords_f32	ok	742731	2970924	8	15910.5	63642	0	0	0	1	none	none
+jrc_global_surface_water_occurrence_u8	ok	786432	786432	12	65536	65536	0	0	0	1	none	none
 taginfo_keys_all	ok	800000	5100000	8	100000	800000	0	0	0	1	none	none
 binance_usdm_futures_bookdepth_btc_eth_2024_w01	ok	806360	6450880	28	28800	230400	806360	6450880	28	1	none	none
 noaa_coops_water_level	ok	876000	7008000	5	175200	1401600	0	0	0	1	none	none
@@ -206,3 +208,4 @@ librispeech_dev_clean_i16	ok	310337932	620675864	2703	94720	189440	0	0	0	1	none	
 sentinel1_grd_measurement_u16	ok	365856036	731712072	4	91464009	182928018	0	0	0	1	none	none
 pfam_seed_alignments_u8	ok	411242401	411242401	22719	6150	6150	0	0	0	1	none	none
 nasa_pds_themis_ir_mosaic_u8	ok	948687484	948687484	2	474343742	474343742	0	0	0	1	none	none
+bbbc038_nuclei_masks_u8	ok	949747588	949747588	3468	129600	129600	0	0	0	1	none	none

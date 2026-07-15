@@ -1,0 +1,75 @@
+manifest_version = 1
+dataset_id = "jrc_global_surface_water_occurrence_u8"
+name = "JRC Global Surface Water Occurrence UInt8"
+description = "Selected internal GeoTIFF tile chunks from JRC Global Surface Water occurrence rasters, decoded to source-native uint8 occurrence grids."
+homepage = "https://global-surface-water.appspot.com/"
+
+[license]
+name = "Copernicus/JRC Global Surface Water open data"
+spdx = "LicenseRef-Copernicus-JRC-GSW"
+url = "https://global-surface-water.appspot.com/"
+citation = "Pekel, J.-F. et al. High-resolution mapping of global surface water and its long-term changes. Nature 540, 418-422 (2016)."
+notes = "Preserve JRC Global Surface Water attribution and product citation."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public global surface-water occurrence rasters from the JRC Global Surface Water public bucket."
+usage_notes = "Public Earth-observation derived hydrology product; preserve source attribution."
+
+[[origins]]
+id = "jrc_global_surface_water"
+name = "JRC Global Surface Water public object storage"
+url = "https://storage.googleapis.com/global-surface-water/"
+type = "public_data_portal"
+notes = "Public Google Cloud Storage distribution for Global Surface Water raster layers."
+
+[[resources]]
+id = "gsw_occurrence_2021_tiles"
+origin = "jrc_global_surface_water"
+url = "https://storage.googleapis.com/global-surface-water/downloads2021/occurrence/"
+type = "geotiff_collection"
+version = "v1_4_2021"
+access = "Download script fetches bounded TIFF header ranges and selected internal tile byte ranges from fixed public URLs."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/jrc_global_surface_water_occurrence_u8/"
+notes = "Default selection covers six occurrence rasters and bounded internal tiles to stay far under the 1 GB primary-output cap."
+
+[local_paths]
+downloads = "downloads/jrc_global_surface_water_occurrence_u8/"
+filtered = "filtered/jrc_global_surface_water_occurrence_u8/"
+index = "index/jrc_global_surface_water_occurrence_u8/"
+samples = "samples/jrc_global_surface_water_occurrence_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/jrc_global_surface_water_occurrence_u8/samples.jsonl"
+summary = "Fetch deterministic header and internal tile byte ranges, decode LZW/Deflate/uncompressed TIFF chunks, and emit one uint8 occurrence grid per source internal tile."
+deterministic_notes = "Build is local-only after download. Fixed source URLs, fixed header range size, deterministic interior tile positions, source-native byte values, and no concatenation or resampling."
+
+[[series]]
+id = "global_surface_water_occurrence_u8"
+description = "JRC Global Surface Water occurrence byte grids."
+semantic_meaning = "Per-pixel surface-water occurrence percentage codes, with 255 preserved as no data."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source GeoTIFF occurrence layer stores values as uint8 pixels. The recipe preserves source byte codes after lossless TIFF tile decompression."
+source_resources = ["gsw_occurrence_2021_tiles"]
+filtered_input_path = "filtered/jrc_global_surface_water_occurrence_u8/ingest_stats.json"
+filtering = "Keep selected non-constant internal GeoTIFF tiles from a fixed set of occurrence rasters; reject malformed metadata and nodata-dominated decoded tiles."
+missing_value_policy = "Preserve 255 no-data values. Reject any decoded values outside 0..100 and 255."
+conversion = "Parse local TIFF headers and selected compressed tile chunks, decompress LZW/Deflate/uncompressed tile data, undo horizontal predictor if present, and write one raw uint8 grid per selected internal tile."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 occurrence grid"
+sample_geometry = "2d_occurrence_raster_tile"
+sample_rank = 2
+sample_axes = ["y", "x"]
+natural_record_kind = "jrc_gsw_occurrence_cog_internal_tile"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/jrc_global_surface_water_occurrence_u8/global_surface_water_occurrence_u8/"

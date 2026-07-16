@@ -1,0 +1,75 @@
+manifest_version = 1
+dataset_id = "usda_fia_ca_tree_measurements_f32"
+name = "USDA FIA California Tree Measurements Float32"
+description = "Tree-level field inventory measurement columns from the California USDA Forest Inventory and Analysis TREE table."
+homepage = "https://apps.fs.usda.gov/fia/datamart/"
+
+[license]
+name = "U.S. Government public data"
+spdx = "LicenseRef-US-Public-Domain"
+url = "https://www.fs.usda.gov/research/products/dataandtools/tools/fia-datamart"
+citation = "USDA Forest Service, Forest Inventory and Analysis Program. FIA DataMart."
+notes = "Preserve USDA Forest Service FIA attribution and DataMart citation."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public tree-level forestry inventory table from USDA Forest Service FIA DataMart."
+usage_notes = "Tree measurement fields only; identifier, code, and categorical fields are excluded."
+
+[[origins]]
+id = "usda_fia_datamart"
+name = "USDA Forest Inventory and Analysis DataMart"
+url = "https://apps.fs.usda.gov/fia/datamart/"
+type = "public_government_dataset"
+notes = "Official FIA state table download portal."
+
+[[resources]]
+id = "ca_tree_zip"
+origin = "usda_fia_datamart"
+url = "https://apps.fs.usda.gov/fia/datamart/CSV/CA_TREE.zip"
+type = "zip_csv_archive"
+version = "California TREE table current DataMart export"
+access = "Download script fetches the fixed state TREE ZIP URL and validates the CSV member, schema, and row-count floor."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/usda_fia_ca_tree_measurements_f32/CA_TREE.zip"
+notes = "Build emits retained non-ID measurement columns from the California TREE table."
+
+[local_paths]
+downloads = "downloads/usda_fia_ca_tree_measurements_f32/"
+filtered = "filtered/usda_fia_ca_tree_measurements_f32/"
+index = "index/usda_fia_ca_tree_measurements_f32/"
+samples = "samples/usda_fia_ca_tree_measurements_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/usda_fia_ca_tree_measurements_f32/samples.jsonl"
+summary = "Download the California FIA TREE ZIP, parse selected numeric tree measurement columns, exclude identifier/code columns, and emit one float32 sample per retained field."
+deterministic_notes = "Build is local-only after download. It preserves source row order, rounds numeric measurements to float32, emits finite non-constant fields with at least 50,000 values, requires at least 20 samples and 1,000,000 total primary values, and enforces the 1 GB primary-output cap."
+
+[[series]]
+id = "fia_ca_tree_*_f32"
+description = "California FIA TREE table measurement columns."
+semantic_meaning = "Per-tree forestry field inventory measurements including diameter, height, stocking, biomass, carbon, and volume variables."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source CSV stores decimal numeric measurement fields; the build writes IEEE-754 little-endian float32 arrays and excludes identifiers, code fields, and categorical columns."
+source_resources = ["ca_tree_zip"]
+filtered_input_path = "filtered/usda_fia_ca_tree_measurements_f32/ingest_stats.json"
+filtering = "Keep finite non-constant measurement fields with at least 50,000 values; reject the dataset unless at least 20 samples and 1,000,000 total values are emitted."
+missing_value_policy = "Blank, malformed, and non-finite field values are skipped per column."
+conversion = "Parse retained numeric CSV values as Python float, round to float32, and write little-endian float32 values preserving source row order."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 FIA tree measurement column"
+sample_geometry = "table_column"
+sample_rank = 1
+sample_axes = ["tree_record"]
+natural_record_kind = "usda_fia_tree_measurement_column"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/usda_fia_ca_tree_measurements_f32/"

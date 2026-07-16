@@ -1,0 +1,75 @@
+manifest_version = 1
+dataset_id = "uci_superconductivity_material_features_f64"
+name = "UCI Superconductivity Material Features Float64"
+description = "Numeric elemental/material descriptors and critical temperature from the UCI Superconductivity dataset train.csv table."
+homepage = "https://archive.ics.uci.edu/dataset/464/superconductivty+data"
+
+[license]
+name = "UCI Machine Learning Repository terms"
+spdx = "LicenseRef-UCI-ML-Repository"
+url = "https://archive.ics.uci.edu/"
+citation = "Hamidieh, K. A data-driven statistical model for predicting the critical temperature of a superconductor. Computational Materials Science 2018."
+notes = "Preserve UCI and dataset citation."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public materials-informatics table from the UCI Machine Learning Repository."
+usage_notes = "Superconductor material descriptors and critical-temperature target; formula strings are not emitted."
+
+[[origins]]
+id = "uci_superconductivity"
+name = "UCI Superconductivity Data"
+url = "https://archive.ics.uci.edu/dataset/464/superconductivty+data"
+type = "public_research_dataset"
+notes = "Public superconductivity materials dataset."
+
+[[resources]]
+id = "superconduct_zip"
+origin = "uci_superconductivity"
+url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00464/superconduct.zip"
+type = "zip_csv_archive"
+version = "UCI superconductivity train.csv"
+access = "Download script fetches the fixed direct UCI ZIP URL and validates train.csv."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/uci_superconductivity_material_features_f64/"
+notes = "Build emits numeric train.csv columns only; unique_m.csv formula strings are ignored."
+
+[local_paths]
+downloads = "downloads/uci_superconductivity_material_features_f64/"
+filtered = "filtered/uci_superconductivity_material_features_f64/"
+index = "index/uci_superconductivity_material_features_f64/"
+samples = "samples/uci_superconductivity_material_features_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/uci_superconductivity_material_features_f64/samples.jsonl"
+summary = "Download the UCI Superconductivity ZIP, parse train.csv numeric columns, ignore formula strings, and emit one float64 sample per descriptor or target column."
+deterministic_notes = "Build is local-only after download. It preserves train.csv row order, emits finite non-constant numeric columns, ignores unique_m.csv and nonnumeric formula strings, and enforces acceptance floors plus the 1 GB primary-output cap."
+
+[[series]]
+id = "superconductivity_*_f64"
+description = "Superconductivity numeric material descriptor columns."
+semantic_meaning = "Per-material elemental composition descriptors, statistical material descriptors, and critical temperature from the UCI superconductivity train table."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source train.csv stores decimal numeric material descriptors; the build writes IEEE-754 little-endian float64 arrays without using formula strings."
+source_resources = ["superconduct_zip"]
+filtered_input_path = "filtered/uci_superconductivity_material_features_f64/ingest_stats.json"
+filtering = "Keep finite non-constant numeric train.csv columns with at least 1000 values."
+missing_value_policy = "Malformed, non-finite, and nonnumeric field values are filtered per column."
+conversion = "Parse retained numeric CSV values as Python float and write little-endian float64 values preserving source row order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 material descriptor column"
+sample_geometry = "table_column"
+sample_rank = 1
+sample_axes = ["material"]
+natural_record_kind = "uci_superconductivity_train_numeric_column"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/uci_superconductivity_material_features_f64/"

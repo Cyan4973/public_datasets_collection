@@ -1,0 +1,75 @@
+manifest_version = 1
+dataset_id = "noaa_marinecadastre_ais_2024_01_01_f32"
+name = "NOAA MarineCadastre AIS 2024-01-01 Float32"
+description = "Numeric maritime vessel movement and vessel-state fields from NOAA MarineCadastre AIS reports for 2024-01-01."
+homepage = "https://marinecadastre.gov/ais/"
+
+[license]
+name = "U.S. Government public data"
+spdx = "LicenseRef-US-Public-Domain"
+url = "https://marinecadastre.gov/ais/"
+citation = "NOAA Office for Coastal Management and Bureau of Ocean Energy Management. MarineCadastre AIS data."
+notes = "Preserve NOAA MarineCadastre attribution and source date."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public AIS vessel report data from NOAA MarineCadastre."
+usage_notes = "Identifier-like and textual vessel metadata fields are excluded from primary samples."
+
+[[origins]]
+id = "noaa_marinecadastre_ais"
+name = "NOAA MarineCadastre AIS Data"
+url = "https://marinecadastre.gov/ais/"
+type = "public_government_dataset"
+notes = "Official public AIS data service."
+
+[[resources]]
+id = "ais_2024_01_01_zip"
+origin = "noaa_marinecadastre_ais"
+url = "https://coast.noaa.gov/htdata/CMSP/AISDataHandler/2024/AIS_2024_01_01.zip"
+type = "zip_csv_archive"
+version = "AIS daily CSV 2024-01-01"
+access = "Download script fetches the fixed daily ZIP URL and validates CSV schema and row-count floor."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/noaa_marinecadastre_ais_2024_01_01_f32/AIS_2024_01_01.zip"
+notes = "Download defaults to 800 MB maximum and clamps any override to a hard 1 GB cap."
+
+[local_paths]
+downloads = "downloads/noaa_marinecadastre_ais_2024_01_01_f32/"
+filtered = "filtered/noaa_marinecadastre_ais_2024_01_01_f32/"
+index = "index/noaa_marinecadastre_ais_2024_01_01_f32/"
+samples = "samples/noaa_marinecadastre_ais_2024_01_01_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_marinecadastre_ais_2024_01_01_f32/samples.jsonl"
+summary = "Download one NOAA MarineCadastre AIS daily ZIP, parse selected numeric movement and vessel-state fields, and emit one float32 sample per retained field."
+deterministic_notes = "Build is local-only after download. It preserves source row order per field, excludes MMSI and text metadata, writes finite numeric values as float32, requires at least 8 samples and 8,000,000 total values, and enforces the 1 GB primary-output cap."
+
+[[series]]
+id = "noaa_ais_20240101_*_f32"
+description = "NOAA MarineCadastre AIS numeric field streams for 2024-01-01."
+semantic_meaning = "Per-AIS-report movement and vessel-state fields such as latitude, longitude, speed over ground, course over ground, heading, vessel type, navigation status, dimensions, draft, and cargo."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source CSV stores numeric AIS fields as text; the build writes IEEE-754 little-endian float32 arrays and excludes identifiers and text fields."
+source_resources = ["ais_2024_01_01_zip"]
+filtered_input_path = "filtered/noaa_marinecadastre_ais_2024_01_01_f32/ingest_stats.json"
+filtering = "Keep finite non-constant numeric AIS fields with at least 500,000 values."
+missing_value_policy = "Blank, malformed, and non-finite values are skipped per field."
+conversion = "Parse retained numeric CSV values as Python float, round to float32, and write little-endian float32 values preserving source row order."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 NOAA AIS numeric field"
+sample_geometry = "table_column"
+sample_rank = 1
+sample_axes = ["ais_report"]
+natural_record_kind = "noaa_marinecadastre_ais_numeric_field"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/noaa_marinecadastre_ais_2024_01_01_f32/"

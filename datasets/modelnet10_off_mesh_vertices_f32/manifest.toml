@@ -1,0 +1,75 @@
+manifest_version = 1
+dataset_id = "modelnet10_off_mesh_vertices_f32"
+name = "ModelNet10 OFF Mesh Vertices Float32"
+description = "Native OFF mesh vertex coordinate arrays from the Princeton ModelNet10 3D shape dataset."
+homepage = "https://modelnet.cs.princeton.edu/"
+
+[license]
+name = "ModelNet dataset terms"
+spdx = "LicenseRef-ModelNet-Terms"
+url = "https://modelnet.cs.princeton.edu/"
+citation = "Z. Wu et al. 3D ShapeNets: A Deep Representation for Volumetric Shapes. CVPR 2015."
+notes = "Preserve Princeton ModelNet attribution and citation."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public 3D CAD-style object mesh dataset from Princeton ModelNet."
+usage_notes = "Mesh vertex coordinates only; face indices, filenames, classes, and split names are metadata only."
+
+[[origins]]
+id = "princeton_modelnet"
+name = "Princeton ModelNet"
+url = "https://modelnet.cs.princeton.edu/"
+type = "public_research_dataset"
+notes = "ModelNet10 3D object mesh dataset."
+
+[[resources]]
+id = "modelnet10_zip"
+origin = "princeton_modelnet"
+url = "http://3dvision.princeton.edu/projects/2014/3DShapeNets/ModelNet10.zip"
+type = "zip_off_archive"
+version = "ModelNet10"
+access = "Download script fetches the fixed Princeton 3DShapeNets ModelNet10 ZIP URL, with known legacy fallbacks, and validates OFF member count, class count, and train/test split coverage."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/modelnet10_off_mesh_vertices_f32/ModelNet10.zip"
+notes = "Download defaults to 800 MB maximum and clamps any override to a hard 1 GB cap. The modelnet.cs URL returned 404 in this hunt, so the script tries the older Princeton 3DShapeNets path first."
+
+[local_paths]
+downloads = "downloads/modelnet10_off_mesh_vertices_f32/"
+filtered = "filtered/modelnet10_off_mesh_vertices_f32/"
+index = "index/modelnet10_off_mesh_vertices_f32/"
+samples = "samples/modelnet10_off_mesh_vertices_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/modelnet10_off_mesh_vertices_f32/samples.jsonl"
+summary = "Download the ModelNet10 ZIP, parse OFF mesh vertex blocks, and emit one float32 vertex-coordinate array per retained mesh."
+deterministic_notes = "Build is local-only after download. It ignores ZIP resource-fork artifacts, preserves source vertex order for real OFF meshes, writes interleaved x/y/z float32 coordinates, excludes face indices and labels from primary data, requires at least 4,000 meshes and 3,000,000 total coordinate values, and enforces the 1 GB primary-output cap."
+
+[[series]]
+id = "modelnet10_*_vertices_f32"
+description = "ModelNet10 OFF mesh vertex coordinate arrays."
+semantic_meaning = "Per-object 3D mesh vertex coordinates from ModelNet10 object categories, one natural sample per OFF mesh."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source OFF files store decimal vertex coordinates; the build writes IEEE-754 little-endian float32 arrays with shape [vertex_count, 3]."
+source_resources = ["modelnet10_zip"]
+filtered_input_path = "filtered/modelnet10_off_mesh_vertices_f32/ingest_stats.json"
+filtering = "Keep valid OFF meshes with finite non-constant vertex coordinates and at least 100 vertices."
+missing_value_policy = "Malformed, truncated, non-finite, or too-small OFF meshes are rejected."
+conversion = "Parse source vertex coordinates as Python float, round to float32, and write little-endian float32 values preserving source vertex order."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 OFF mesh vertex coordinate array"
+sample_geometry = "mesh_vertex_coordinates"
+sample_rank = 2
+sample_axes = ["vertex", "coordinate"]
+natural_record_kind = "modelnet10_off_mesh_vertices"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/modelnet10_off_mesh_vertices_f32/"

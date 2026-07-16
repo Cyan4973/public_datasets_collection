@@ -1,0 +1,99 @@
+manifest_version = 1
+dataset_id = "snap_roadnet_edges_i32"
+name = "SNAP Road Network Edge Endpoints Int32"
+description = "Road-network graph edge endpoint columns from SNAP roadNet-CA, roadNet-PA, and roadNet-TX."
+homepage = "https://snap.stanford.edu/data/"
+
+[license]
+name = "SNAP dataset terms"
+spdx = "LicenseRef-SNAP-Dataset-Terms"
+url = "https://snap.stanford.edu/data/"
+citation = "Jure Leskovec and Andrej Krevl. SNAP Datasets: Stanford Large Network Dataset Collection."
+notes = "Preserve SNAP attribution and individual roadNet dataset citations."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public road-network edge-list graph datasets from the Stanford SNAP collection."
+usage_notes = "Graph node endpoint IDs only; comment headers and metadata lines are not emitted."
+
+[[origins]]
+id = "snap_road_networks"
+name = "SNAP road network datasets"
+url = "https://snap.stanford.edu/data/"
+type = "public_research_dataset"
+notes = "Road networks of California, Pennsylvania, and Texas from the SNAP collection."
+
+[[resources]]
+id = "roadnet_ca"
+origin = "snap_road_networks"
+url = "https://snap.stanford.edu/data/roadNet-CA.txt.gz"
+type = "gzipped_edge_list"
+version = "SNAP roadNet-CA"
+access = "Download script fetches the fixed SNAP gzip URL and validates edge count and int32 endpoint range."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/snap_roadnet_edges_i32/roadNet-CA.txt.gz"
+notes = "California road-network edge list."
+
+[[resources]]
+id = "roadnet_pa"
+origin = "snap_road_networks"
+url = "https://snap.stanford.edu/data/roadNet-PA.txt.gz"
+type = "gzipped_edge_list"
+version = "SNAP roadNet-PA"
+access = "Download script fetches the fixed SNAP gzip URL and validates edge count and int32 endpoint range."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/snap_roadnet_edges_i32/roadNet-PA.txt.gz"
+notes = "Pennsylvania road-network edge list."
+
+[[resources]]
+id = "roadnet_tx"
+origin = "snap_road_networks"
+url = "https://snap.stanford.edu/data/roadNet-TX.txt.gz"
+type = "gzipped_edge_list"
+version = "SNAP roadNet-TX"
+access = "Download script fetches the fixed SNAP gzip URL and validates edge count and int32 endpoint range."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/snap_roadnet_edges_i32/roadNet-TX.txt.gz"
+notes = "Texas road-network edge list."
+
+[local_paths]
+downloads = "downloads/snap_roadnet_edges_i32/"
+filtered = "filtered/snap_roadnet_edges_i32/"
+index = "index/snap_roadnet_edges_i32/"
+samples = "samples/snap_roadnet_edges_i32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/snap_roadnet_edges_i32/samples.jsonl"
+summary = "Download three SNAP road-network gzipped edge lists, parse source and destination node endpoints, and emit one int32 sample per state-endpoint column."
+deterministic_notes = "Build is local-only after download. It preserves source edge order, emits signed little-endian int32 endpoint columns, validates nonnegative endpoints and no self-loops, requires all three states and 10,000,000 total endpoint values, and enforces the 1 GB primary-output cap."
+
+[[series]]
+id = "snap_roadnet_*_node_i32"
+description = "SNAP road-network source and destination node endpoint columns."
+semantic_meaning = "Per-edge graph endpoint node IDs for California, Pennsylvania, and Texas road-network topology."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source edge-list files store node endpoint integers; the build writes little-endian signed int32 endpoint arrays without remapping IDs or synthesizing graph topology."
+source_resources = ["roadnet_ca", "roadnet_pa", "roadnet_tx"]
+filtered_input_path = "filtered/snap_roadnet_edges_i32/ingest_stats.json"
+filtering = "Keep source and destination endpoint columns for each of the three roadNet edge lists after validating edge counts and int32 endpoint range."
+missing_value_policy = "Malformed edge rows are rejected during download/build validation."
+conversion = "Parse retained endpoint integers as Python int and write little-endian signed int32 preserving source edge order."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous int32 SNAP road-network edge endpoint column"
+sample_geometry = "graph_edge_endpoint_column"
+sample_rank = 1
+sample_axes = ["edge"]
+natural_record_kind = "snap_roadnet_edge_endpoint_column"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/snap_roadnet_edges_i32/"

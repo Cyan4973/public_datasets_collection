@@ -1,0 +1,75 @@
+manifest_version = 1
+dataset_id = "nhtsa_fars_2022_crash_tables_f64"
+name = "NHTSA FARS 2022 Crash Tables Float64"
+description = "Numeric fields from NHTSA Fatality Analysis Reporting System 2022 ACCIDENT, PERSON, and VEHICLE tables."
+homepage = "https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars"
+
+[license]
+name = "U.S. Government public data"
+spdx = "LicenseRef-US-Public-Domain"
+url = "https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars"
+citation = "National Highway Traffic Safety Administration. Fatality Analysis Reporting System, 2022 National CSV."
+notes = "Preserve NHTSA FARS attribution and year/source metadata."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public official traffic fatality investigation tables from NHTSA FARS."
+usage_notes = "Identifier-like fields and string fields are excluded; retained values are public crash, person, vehicle, roadway, timing, environment, and coded investigation variables."
+
+[[origins]]
+id = "nhtsa_fars"
+name = "NHTSA Fatality Analysis Reporting System"
+url = "https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars"
+type = "public_government_dataset"
+notes = "Official U.S. traffic fatality crash investigation dataset."
+
+[[resources]]
+id = "fars2022_zip"
+origin = "nhtsa_fars"
+url = "https://static.nhtsa.gov/nhtsa/downloads/FARS/2022/National/FARS2022NationalCSV.zip"
+type = "zip_csv_archive"
+version = "2022 National CSV"
+access = "Download script fetches the fixed official ZIP URL and validates ACCIDENT, PERSON, and VEHICLE CSV members."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/nhtsa_fars_2022_crash_tables_f64/FARS2022NationalCSV.zip"
+notes = "Download defaults to 250 MB maximum and clamps any override to a hard 1 GB cap."
+
+[local_paths]
+downloads = "downloads/nhtsa_fars_2022_crash_tables_f64/"
+filtered = "filtered/nhtsa_fars_2022_crash_tables_f64/"
+index = "index/nhtsa_fars_2022_crash_tables_f64/"
+samples = "samples/nhtsa_fars_2022_crash_tables_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nhtsa_fars_2022_crash_tables_f64/samples.jsonl"
+summary = "Download the NHTSA FARS 2022 national CSV ZIP, parse numeric non-ID fields from ACCIDENT, PERSON, and VEHICLE tables, and emit one float64 sample per retained table field."
+deterministic_notes = "Build is local-only after download. It preserves source row order, excludes identifier-like and string fields, emits finite non-constant numeric fields with at least 30,000 values, requires at least 40 samples and 2,000,000 total values, and enforces the 1 GB primary-output cap."
+
+[[series]]
+id = "fars2022_*_f64"
+description = "NHTSA FARS 2022 numeric crash table fields."
+semantic_meaning = "Per-record public fatal-crash investigation variables from ACCIDENT, PERSON, and VEHICLE tables, including timing, roadway, crash, person, and vehicle fields."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source CSV stores numeric values as text; the build writes IEEE-754 little-endian float64 arrays and excludes obvious identifiers and string columns."
+source_resources = ["fars2022_zip"]
+filtered_input_path = "filtered/nhtsa_fars_2022_crash_tables_f64/ingest_stats.json"
+filtering = "Keep finite non-constant numeric fields with at least 30,000 values from ACCIDENT, PERSON, and VEHICLE tables."
+missing_value_policy = "Blank, malformed, and non-finite field values are skipped per column."
+conversion = "Parse retained numeric CSV values as Python float and write little-endian float64 values preserving source row order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 FARS table field"
+sample_geometry = "table_column"
+sample_rank = 1
+sample_axes = ["crash_person_or_vehicle_record"]
+natural_record_kind = "nhtsa_fars_numeric_table_column"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/nhtsa_fars_2022_crash_tables_f64/"

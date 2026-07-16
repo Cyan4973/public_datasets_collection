@@ -64,6 +64,7 @@ fred_treasury_yields_daily_bundle	ok	142482	569928	11	13865	55460	0	0	0	1	none	n
 weathergov_stations	ok	146184	974560	3	48728	389824	0	0	0	1	none	none
 seismic_waveform_i32	ok	168000	672000	12	12000	48000	0	0	0	1	none	none
 usgs_sitefile_all_large	ok	180808	1446464	2	90404	723232	271212	1627272	3	1	none	none
+magic_gamma_telescope_event_features_f64	ok	190200	1521600	10	19020	152160	0	0	0	1	none	none
 openml_tasks_large	ok	197900	752020	10	19790	79160	0	0	0	1	none	none
 movielens_latest_small	ok	201672	806688	2	100836	403344	0	0	0	1	none	none
 usgs_nwis_ph_daily	ok	202184	1617472	36	4561.5	36492	0	0	0	1	none	none

@@ -1,0 +1,75 @@
+manifest_version = 1
+dataset_id = "magic_gamma_telescope_event_features_f64"
+name = "MAGIC Gamma Telescope Event Features Float64"
+description = "Numeric Cherenkov telescope event-image parameters from the UCI MAGIC Gamma Telescope dataset."
+homepage = "https://archive.ics.uci.edu/dataset/159/magic+gamma+telescope"
+
+[license]
+name = "UCI Machine Learning Repository terms"
+spdx = "LicenseRef-UCI-ML-Repository"
+url = "https://archive.ics.uci.edu/"
+citation = "Bock, R. K. et al. MAGIC Gamma Telescope dataset, UCI Machine Learning Repository."
+notes = "Preserve UCI and MAGIC dataset attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public scientific event-feature dataset from the UCI Machine Learning Repository."
+usage_notes = "Cherenkov telescope event features; gamma/hadron class labels are not emitted."
+
+[[origins]]
+id = "uci_magic_gamma_telescope"
+name = "UCI MAGIC Gamma Telescope"
+url = "https://archive.ics.uci.edu/dataset/159/magic+gamma+telescope"
+type = "public_research_dataset"
+notes = "Public MAGIC Gamma Telescope benchmark dataset."
+
+[[resources]]
+id = "magic04_data"
+origin = "uci_magic_gamma_telescope"
+url = "https://archive.ics.uci.edu/ml/machine-learning-databases/magic/magic04.data"
+type = "csv"
+version = "magic04"
+access = "Download script fetches the fixed direct UCI data file and validates row count and schema."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/magic_gamma_telescope_event_features_f64/"
+notes = "Build emits the ten numeric event-feature columns and skips the final class-label column."
+
+[local_paths]
+downloads = "downloads/magic_gamma_telescope_event_features_f64/"
+filtered = "filtered/magic_gamma_telescope_event_features_f64/"
+index = "index/magic_gamma_telescope_event_features_f64/"
+samples = "samples/magic_gamma_telescope_event_features_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/magic_gamma_telescope_event_features_f64/samples.jsonl"
+summary = "Download the MAGIC Gamma Telescope data file, parse ten numeric event-feature columns, skip the class label, and emit one float64 sample per feature."
+deterministic_notes = "Build is local-only after download. It preserves source row order, emits all ten numeric feature columns, rejects malformed/non-finite rows, skips the gamma/hadron label, and enforces acceptance floors plus the 1 GB primary-output cap."
+
+[[series]]
+id = "magic_gamma_*_f64"
+description = "MAGIC Gamma Telescope numeric event-image feature columns."
+semantic_meaning = "Per-event Cherenkov telescope image parameters used to distinguish gamma-ray and hadron events, one source feature column per sample."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source CSV stores decimal numeric event-image parameters; the build writes IEEE-754 little-endian float64 arrays without label encoding."
+source_resources = ["magic04_data"]
+filtered_input_path = "filtered/magic_gamma_telescope_event_features_f64/ingest_stats.json"
+filtering = "Keep all ten finite non-constant numeric feature columns."
+missing_value_policy = "Malformed rows, non-finite values, and unexpected labels are rejected during build."
+conversion = "Parse retained numeric CSV values as Python float and write little-endian float64 values preserving source row order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 Cherenkov event feature column"
+sample_geometry = "table_column"
+sample_rank = 1
+sample_axes = ["event"]
+natural_record_kind = "magic_gamma_telescope_event_feature_column"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/magic_gamma_telescope_event_features_f64/"

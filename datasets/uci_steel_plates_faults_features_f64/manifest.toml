@@ -1,0 +1,75 @@
+manifest_version = 1
+dataset_id = "uci_steel_plates_faults_features_f64"
+name = "UCI Steel Plates Faults Features Float64"
+description = "Numeric geometric, luminosity, material, and index features for steel-plate surface fault regions from the UCI Steel Plates Faults dataset."
+homepage = "https://archive.ics.uci.edu/dataset/198/steel+plates+faults"
+
+[license]
+name = "UCI Machine Learning Repository terms"
+spdx = "LicenseRef-UCI-ML-Repository"
+url = "https://archive.ics.uci.edu/"
+citation = "Semeion Research Center of Sciences of Communication. Steel Plates Faults dataset, UCI Machine Learning Repository."
+notes = "Preserve UCI and dataset attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public industrial quality-control feature table from the UCI Machine Learning Repository."
+usage_notes = "Steel-plate fault feature columns only; final class-label indicator columns are not emitted."
+
+[[origins]]
+id = "uci_steel_plates_faults"
+name = "UCI Steel Plates Faults"
+url = "https://archive.ics.uci.edu/dataset/198/steel+plates+faults"
+type = "public_research_dataset"
+notes = "Public steel surface fault classification benchmark dataset."
+
+[[resources]]
+id = "faults_nna"
+origin = "uci_steel_plates_faults"
+url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00198/Faults.NNA"
+type = "whitespace_numeric_table"
+version = "Faults.NNA"
+access = "Download script fetches the fixed direct UCI file and validates row count, 34-column schema, and one-hot label columns."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/uci_steel_plates_faults_features_f64/Faults.NNA"
+notes = "Build emits the first 27 numeric feature columns and skips the final seven class-label indicator columns."
+
+[local_paths]
+downloads = "downloads/uci_steel_plates_faults_features_f64/"
+filtered = "filtered/uci_steel_plates_faults_features_f64/"
+index = "index/uci_steel_plates_faults_features_f64/"
+samples = "samples/uci_steel_plates_faults_features_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/uci_steel_plates_faults_features_f64/samples.jsonl"
+summary = "Download the UCI Steel Plates Faults numeric table, parse the 27 feature columns, skip the seven class-label columns, and emit one float64 sample per feature."
+deterministic_notes = "Build is local-only after download. It preserves source row order, emits finite non-constant feature columns, rejects malformed rows and invalid one-hot labels, and enforces acceptance floors plus the 1 GB primary-output cap."
+
+[[series]]
+id = "steel_plates_faults_*_f64"
+description = "Steel-plate surface fault numeric feature columns."
+semantic_meaning = "Per-fault-region geometric extents, luminosity measurements, steel-type indicators, plate thickness, and derived defect indices from steel surface inspection."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source table stores decimal numeric features; the build writes IEEE-754 little-endian float64 arrays without class-label encoding."
+source_resources = ["faults_nna"]
+filtered_input_path = "filtered/uci_steel_plates_faults_features_f64/ingest_stats.json"
+filtering = "Keep all 27 finite non-constant source feature columns with at least 1000 values."
+missing_value_policy = "Malformed rows, non-finite values, and invalid labels are rejected during build."
+conversion = "Parse retained numeric table values as Python float and write little-endian float64 values preserving source row order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 steel fault feature column"
+sample_geometry = "table_column"
+sample_rank = 1
+sample_axes = ["fault_region"]
+natural_record_kind = "uci_steel_plate_fault_feature_column"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/uci_steel_plates_faults_features_f64/"

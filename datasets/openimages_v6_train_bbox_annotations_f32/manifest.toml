@@ -1,0 +1,75 @@
+manifest_version = 1
+dataset_id = "openimages_v6_train_bbox_annotations_f32"
+name = "Open Images V6 Train Bounding-Box Annotation Numeric Fields"
+description = "Bounded public Open Images V6 train bounding-box annotation geometry, click-coordinate, and signed flag streams."
+homepage = "https://storage.googleapis.com/openimages/web/index.html"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Kuznetsova et al. The Open Images Dataset V4: Unified image classification, object detection, and visual relationship detection at scale. IJCV 2020. Open Images V6 annotations."
+notes = "Preserve Open Images and Google attribution. This recipe uses annotations only, not image payloads."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public object-detection annotations from the Open Images dataset."
+usage_notes = "Image identifiers and label identifiers are not emitted as primary samples; the recipe emits only normalized numeric boxes and annotation flags."
+
+[[origins]]
+id = "openimages_v6"
+name = "Open Images V6"
+url = "https://storage.googleapis.com/openimages/web/download_v6.html"
+type = "public_research_dataset"
+notes = "Public Open Images annotation CSV hosted on Google Cloud Storage."
+
+[[resources]]
+id = "oidv6_train_bbox_csv_prefix"
+origin = "openimages_v6"
+url = "https://storage.googleapis.com/openimages/v6/oidv6-train-annotations-bbox.csv"
+type = "http_byte_range_csv"
+version = "Open Images V6 train bounding-box annotation CSV byte prefix"
+access = "Download script requests bytes 0..OPENIMAGES_BBOX_RANGE_BYTES-1 from the public 2.25 GB CSV and validates complete rows in the bounded prefix."
+size_bytes = 2258447590
+sha256 = ""
+local_path = "downloads/openimages_v6_train_bbox_annotations_f32/oidv6-train-annotations-bbox.range.csv"
+notes = "Default byte range is 900 MB and overrides are clamped to a hard 1 GB cap."
+
+[local_paths]
+downloads = "downloads/openimages_v6_train_bbox_annotations_f32/"
+filtered = "filtered/openimages_v6_train_bbox_annotations_f32/"
+index = "index/openimages_v6_train_bbox_annotations_f32/"
+samples = "samples/openimages_v6_train_bbox_annotations_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/openimages_v6_train_bbox_annotations_f32/samples.jsonl"
+summary = "Download a bounded prefix of the Open Images V6 train bounding-box annotation CSV, skip a final partial row if present, parse numeric bbox/click-coordinate fields and signed annotation flags, and emit one homogeneous stream per retained field."
+deterministic_notes = "Build is local-only after download. It preserves source row order, excludes image ids, label ids, and text fields, filters constant numeric fields, requires at least 3,000,000 complete rows, and enforces the 1 GB primary-output cap."
+
+[[series]]
+id = "openimages_v6_train_bbox_numeric_fields"
+description = "Open Images V6 train bounding-box normalized coordinate, click-coordinate, and signed flag fields."
+semantic_meaning = "Per-object annotation geometry and annotation-state flags: confidence, xmin, xmax, ymin, ymax, eight xclick/yclick coordinates, occlusion, truncation, group, depiction, and inside-image status, with constant fields filtered out. Open Images -1 flag sentinels are preserved."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Bounding-box coordinate and confidence columns are source decimal values in [0,1] written as little-endian float32. Click-coordinate columns are source decimal values in [-1,1], where -1 is the Open Images missing-click sentinel. Annotation flags are source -1/0/1 values written as signed int8. Image ids, label ids, and text metadata are excluded."
+source_resources = ["oidv6_train_bbox_csv_prefix"]
+filtered_input_path = "filtered/openimages_v6_train_bbox_annotations_f32/ingest_stats.json"
+filtering = "Keep complete CSV rows from the bounded byte prefix; skip at most one partial trailing row; filter constant numeric fields."
+missing_value_policy = "Malformed rows, missing numeric fields, flags outside -1/0/1, bbox coordinates outside [0,1], click coordinates outside [-1,1], and invalid min/max ordering are fatal. Open Images -1 click-coordinate and flag sentinels are preserved."
+conversion = "Parse source decimal bbox coordinates, click coordinates, and confidence as float32 and source annotation flags as signed int8, preserving row order."
+numeric_kind = "mixed"
+bit_width = 0
+endianness = "little"
+sample_format = "raw homogeneous float32 coordinate streams and signed int8 flag streams"
+sample_geometry = "annotation_field"
+sample_rank = 1
+sample_axes = ["bounding_box_annotation"]
+natural_record_kind = "openimages_bounding_box_annotation"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/openimages_v6_train_bbox_annotations_f32/openimages_v6_train_bbox_numeric_fields/"

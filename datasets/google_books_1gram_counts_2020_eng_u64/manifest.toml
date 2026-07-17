@@ -1,0 +1,123 @@
+manifest_version = 1
+dataset_id = "google_books_1gram_counts_2020_eng_u64"
+name = "Google Books 2020 English 1-Gram Yearly Counts"
+description = "Bounded integer yearly count streams from one Google Books Ngram 2020 English 1-gram shard."
+homepage = "https://storage.googleapis.com/books/ngrams/books/datasetsv3.html"
+
+[license]
+name = "Google Books Ngram Dataset Terms"
+spdx = "LicenseRef-Google-Books-Ngram"
+url = "https://storage.googleapis.com/books/ngrams/books/datasetsv3.html"
+citation = "Google Books Ngram Viewer Datasets, Version 20200217, English 1-grams."
+notes = "Preserve Google Books Ngram attribution and dataset version."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public aggregate word-frequency observations from digitized books."
+usage_notes = "The recipe excludes token text from primary samples and emits only year and aggregate count fields."
+
+[[origins]]
+id = "google_books_ngrams"
+name = "Google Books Ngram Viewer Datasets"
+url = "https://storage.googleapis.com/books/ngrams/books/datasetsv3.html"
+type = "public_research_dataset"
+notes = "Public Google Books Ngram 2020 data shards hosted on Google Cloud Storage."
+
+[[resources]]
+id = "eng_1gram_20200217_shard_00000"
+origin = "google_books_ngrams"
+url = "https://storage.googleapis.com/books/ngrams/books/20200217/eng/1-00000-of-00024.gz"
+type = "gzip_tsv_ngram_counts"
+version = "Google Books Ngram 20200217 English 1-gram shard 00000 of 00024"
+access = "Download script fetches one fixed gzip shard and validates tab-separated ngram yearly observations."
+size_bytes = 265116429
+sha256 = ""
+local_path = "downloads/google_books_1gram_counts_2020_eng_u64/eng_1gram_20200217_00000_of_00024.gz"
+notes = "Public source object is about 265 MB; download overrides are clamped to a hard 1 GB cap."
+
+[local_paths]
+downloads = "downloads/google_books_1gram_counts_2020_eng_u64/"
+filtered = "filtered/google_books_1gram_counts_2020_eng_u64/"
+index = "index/google_books_1gram_counts_2020_eng_u64/"
+samples = "samples/google_books_1gram_counts_2020_eng_u64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/google_books_1gram_counts_2020_eng_u64/samples.jsonl"
+summary = "Download one Google Books Ngram 2020 English 1-gram gzip shard, parse yearly observation triples, and emit year, match-count, and volume-count streams."
+deterministic_notes = "Build is local-only after download. It preserves source line and observation order, excludes token text, writes year as uint16 and counts as uint64, requires at least 20,000,000 observations, and truncates at an observation boundary before the 1 GB primary-output cap."
+
+[[series]]
+id = "google_books_1gram_year_u16"
+description = "Year field for Google Books 1-gram yearly observations."
+semantic_meaning = "Calendar year associated with each ngram count observation."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Source years are decimal integers; the build writes them as little-endian uint16."
+source_resources = ["eng_1gram_20200217_shard_00000"]
+filtered_input_path = "filtered/google_books_1gram_counts_2020_eng_u64/ingest_stats.json"
+filtering = "Keep valid yearly observations from the selected shard until the primary byte cap is reached."
+missing_value_policy = "Malformed rows, missing observation triples, negative counts, and out-of-range years are fatal."
+conversion = "Parse source decimal year as integer and write little-endian uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 Google Books yearly observation field"
+sample_geometry = "observation_field"
+sample_rank = 1
+sample_axes = ["ngram_year_observation"]
+natural_record_kind = "google_books_1gram_yearly_observation"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/google_books_1gram_counts_2020_eng_u64/google_books_1gram_yearly_counts/year_u16.bin"
+
+[[series]]
+id = "google_books_1gram_match_count_u64"
+description = "Match-count field for Google Books 1-gram yearly observations."
+semantic_meaning = "Total number of ngram matches observed in books for a token and year."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Source counts are decimal integers; the build writes them as little-endian uint64."
+source_resources = ["eng_1gram_20200217_shard_00000"]
+filtered_input_path = "filtered/google_books_1gram_counts_2020_eng_u64/ingest_stats.json"
+filtering = "Keep valid yearly observations from the selected shard until the primary byte cap is reached."
+missing_value_policy = "Malformed rows, missing observation triples, negative counts, and out-of-range years are fatal."
+conversion = "Parse source decimal match_count as integer and write little-endian uint64."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous uint64 Google Books match-count field"
+sample_geometry = "observation_field"
+sample_rank = 1
+sample_axes = ["ngram_year_observation"]
+natural_record_kind = "google_books_1gram_yearly_observation"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/google_books_1gram_counts_2020_eng_u64/google_books_1gram_yearly_counts/match_count_u64.bin"
+
+[[series]]
+id = "google_books_1gram_volume_count_u64"
+description = "Volume-count field for Google Books 1-gram yearly observations."
+semantic_meaning = "Number of book volumes in which the ngram was observed for a token and year."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Source counts are decimal integers; the build writes them as little-endian uint64."
+source_resources = ["eng_1gram_20200217_shard_00000"]
+filtered_input_path = "filtered/google_books_1gram_counts_2020_eng_u64/ingest_stats.json"
+filtering = "Keep valid yearly observations from the selected shard until the primary byte cap is reached."
+missing_value_policy = "Malformed rows, missing observation triples, negative counts, and out-of-range years are fatal."
+conversion = "Parse source decimal volume_count as integer and write little-endian uint64."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous uint64 Google Books volume-count field"
+sample_geometry = "observation_field"
+sample_rank = 1
+sample_axes = ["ngram_year_observation"]
+natural_record_kind = "google_books_1gram_yearly_observation"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/google_books_1gram_counts_2020_eng_u64/google_books_1gram_yearly_counts/volume_count_u64.bin"

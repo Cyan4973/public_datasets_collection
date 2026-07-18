@@ -1,0 +1,75 @@
+manifest_version = 1
+dataset_id = "google_localized_narratives_ade20k_traces_f32"
+name = "Google Localized Narratives ADE20K Trace Float32"
+description = "Mouse-trace trajectory and record-count streams extracted from Google Localized Narratives ADE20K train annotations."
+homepage = "https://google.github.io/localized-narratives/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Pont-Tuset et al. Connecting Vision and Language with Localized Narratives. ECCV 2020."
+notes = "Preserve Google Localized Narratives attribution and citation. This recipe uses annotation JSONL only, not source images."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public annotation file from the Google Localized Narratives bucket."
+usage_notes = "Annotation trajectories and captions are public research data; source image payloads are not downloaded by this recipe."
+
+[[origins]]
+id = "google_localized_narratives"
+name = "Google Localized Narratives"
+url = "https://storage.googleapis.com/localized-narratives/"
+type = "public_research_dataset"
+notes = "Public Google Cloud Storage bucket for Localized Narratives annotations."
+
+[[resources]]
+id = "ade20k_train_localized_narratives_jsonl"
+origin = "google_localized_narratives"
+url = "https://storage.googleapis.com/localized-narratives/annotations/ade20k_train_localized_narratives.jsonl"
+type = "jsonl_annotations"
+version = "ADE20K train localized narratives"
+access = "Download script fetches one fixed public JSONL annotation file."
+size_bytes = 802749301
+sha256 = ""
+local_path = "downloads/google_localized_narratives_ade20k_traces_f32/ade20k_train_localized_narratives.jsonl"
+notes = "Observed object size from Google Cloud Storage listing is 802,749,301 bytes."
+
+[local_paths]
+downloads = "downloads/google_localized_narratives_ade20k_traces_f32/"
+filtered = "filtered/google_localized_narratives_ade20k_traces_f32/"
+index = "index/google_localized_narratives_ade20k_traces_f32/"
+samples = "samples/google_localized_narratives_ade20k_traces_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/google_localized_narratives_ade20k_traces_f32/samples.jsonl"
+summary = "Download one fixed Localized Narratives ADE20K train JSONL annotation file, extract normalized mouse trace x/y/time streams plus per-record trace and caption counts, and emit homogeneous float32/uint32 streams."
+deterministic_notes = "Build is local-only after download. It preserves annotation row order, accepts trace points only when coordinates are normalized finite values and time is nonnegative, writes one stream per numeric field, and enforces size/count floors and the 1 GB primary-output cap."
+
+[[series]]
+id = "localized_narratives_ade20k_trace_fields"
+description = "Localized Narratives ADE20K mouse-trace and record-count fields."
+semantic_meaning = "Human annotation mouse trajectory coordinates/times and per-record trace/caption summary counts."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Trace coordinates and times are parsed from JSON numeric values and written as IEEE-754 little-endian float32; per-record counts are written as little-endian uint32."
+source_resources = ["ade20k_train_localized_narratives_jsonl"]
+filtered_input_path = "filtered/google_localized_narratives_ade20k_traces_f32/ingest_stats.json"
+filtering = "Keep finite trace points with x/y in [0,1] and nonnegative time; preserve zero trace-count records in per-record count streams."
+missing_value_policy = "Malformed JSON, missing source file, non-object records, non-finite trace values, out-of-range coordinates, and undersized trace totals are fatal. Records without trace points are represented with zero in the points-per-record stream."
+conversion = "Parse JSONL annotations, extract trace-like x/y/time triples, and write homogeneous field streams in source order."
+numeric_kind = "mixed"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 and uint32 annotation streams"
+sample_geometry = "human_annotation_trace_stream"
+sample_rank = 1
+sample_axes = ["annotation_point_or_record"]
+natural_record_kind = "localized_narratives_ade20k_annotation_field"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/google_localized_narratives_ade20k_traces_f32/localized_narratives_ade20k_trace_fields/"

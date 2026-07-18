@@ -1,0 +1,75 @@
+manifest_version = 1
+dataset_id = "google_open_buildings_v3_s2_073_geometry_f32"
+name = "Google Open Buildings V3 S2 073 Geometry Float32"
+description = "Building-footprint centroid, area, confidence, and polygon vertex streams from one public Google Open Buildings v3 S2 tile."
+homepage = "https://sites.research.google/open-buildings/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Google Research Open Buildings dataset, version 3."
+notes = "Preserve Google Open Buildings attribution and dataset version."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public ML-derived building footprint polygons from satellite imagery."
+usage_notes = "The recipe excludes plus codes and emits only numeric geometry, area, and confidence fields."
+
+[[origins]]
+id = "google_open_buildings"
+name = "Google Open Buildings"
+url = "https://sites.research.google/open-buildings/"
+type = "public_research_dataset"
+notes = "Public building footprint polygons hosted on Google Cloud Storage."
+
+[[resources]]
+id = "open_buildings_v3_s2_073_csv_gzip"
+origin = "google_open_buildings"
+url = "https://storage.googleapis.com/open-buildings-data/v3/polygons_s2_level_4_gzip/073_buildings.csv.gz"
+type = "gzip_csv_building_footprints"
+version = "Open Buildings v3 S2 level-4 tile 073"
+access = "Download script fetches one fixed public gzip CSV object and validates centroid, area, confidence, and WKT polygon fields."
+size_bytes = 139127240
+sha256 = ""
+local_path = "downloads/google_open_buildings_v3_s2_073_geometry_f32/073_buildings.csv.gz"
+notes = "Compressed source object is about 139 MB; overrides are clamped to a hard 1 GB cap."
+
+[local_paths]
+downloads = "downloads/google_open_buildings_v3_s2_073_geometry_f32/"
+filtered = "filtered/google_open_buildings_v3_s2_073_geometry_f32/"
+index = "index/google_open_buildings_v3_s2_073_geometry_f32/"
+samples = "samples/google_open_buildings_v3_s2_073_geometry_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/google_open_buildings_v3_s2_073_geometry_f32/samples.jsonl"
+summary = "Download one Open Buildings v3 gzip CSV tile, parse numeric centroid/area/confidence fields and WKT polygon vertices, and emit four float32 geometry streams."
+deterministic_notes = "Build is local-only after download. It preserves source row and vertex order, excludes text plus-code fields, writes little-endian float32 arrays, requires at least 500,000 buildings and 2,500,000 polygon vertex pairs, and truncates at a building boundary before the 1 GB primary-output cap."
+
+[[series]]
+id = "open_buildings_v3_s2_073_geometry_f32"
+description = "Google Open Buildings v3 S2 073 building centroid, area, confidence, and polygon vertex streams."
+semantic_meaning = "Per-building centroid latitude/longitude, footprint area, model confidence, and WKT polygon vertex longitude/latitude pairs."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source CSV stores centroid, area, confidence, and polygon coordinates as decimal text. The build writes each retained numeric field as IEEE-754 little-endian float32."
+source_resources = ["open_buildings_v3_s2_073_csv_gzip"]
+filtered_input_path = "filtered/google_open_buildings_v3_s2_073_geometry_f32/ingest_stats.json"
+filtering = "Keep valid source rows until the primary-output cap is reached; reject malformed WKT, out-of-range coordinates, nonpositive area, and confidence outside [0,1]."
+missing_value_policy = "Missing required fields, malformed rows, malformed polygon vertices, non-finite values, and out-of-range numeric values are fatal."
+conversion = "Parse decimal centroid, area, confidence, and WKT polygon vertex coordinates as float and write little-endian float32 streams preserving source order."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 building-footprint geometry streams"
+sample_geometry = "building_footprint_geometry_fields"
+sample_rank = 1
+sample_axes = ["building_or_vertex"]
+natural_record_kind = "google_open_buildings_footprint_geometry"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/google_open_buildings_v3_s2_073_geometry_f32/open_buildings_v3_s2_073_geometry_f32/"

@@ -1,0 +1,72 @@
+manifest_version = 1
+dataset_id = "ncbi_refseq_viral_genomes_u8"
+name = "NCBI RefSeq Viral Genome FASTA Bytes"
+description = "Native FASTA sequence-letter bytes from the NCBI RefSeq viral genomic FASTA release file."
+homepage = "https://ftp.ncbi.nlm.nih.gov/refseq/release/viral/"
+
+[license]
+name = "NCBI public data"
+spdx = "LicenseRef-NCBI-Public-Data"
+url = "https://www.ncbi.nlm.nih.gov/home/about/policies/"
+citation = "O'Leary NA et al. Reference sequence (RefSeq) database at NCBI: current status, taxonomic expansion, and functional annotation. Nucleic Acids Research."
+notes = "NCBI RefSeq data are publicly distributed by NCBI; attribution to NCBI RefSeq is required."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NCBI RefSeq FTP release file only."
+usage_notes = "Public viral reference sequences are appropriate biological sequence material."
+
+[[origins]]
+id = "ncbi_refseq"
+name = "NCBI RefSeq viral release"
+url = "https://ftp.ncbi.nlm.nih.gov/refseq/release/viral/"
+type = "data_portal"
+notes = "Official RefSeq bulk release directory for viral sequences."
+
+[[resources]]
+id = "viral_genomic_fna"
+origin = "ncbi_refseq"
+url = "https://ftp.ncbi.nlm.nih.gov/refseq/release/viral/viral.1.1.genomic.fna.gz"
+type = "gzip_fasta"
+version = "RefSeq viral release shard viral.1.1"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/ncbi_refseq_viral_genomes_u8/viral.1.1.genomic.fna.gz"
+notes = "Gzip-compressed RefSeq viral genomic FASTA shard. The download script rejects archives above 1 GB by default."
+
+[local_paths]
+downloads = "downloads/ncbi_refseq_viral_genomes_u8/"
+extracted = "extracted/ncbi_refseq_viral_genomes_u8/"
+filtered = "filtered/ncbi_refseq_viral_genomes_u8/"
+index = "index/ncbi_refseq_viral_genomes_u8/"
+samples = "samples/ncbi_refseq_viral_genomes_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/ncbi_refseq_viral_genomes_u8/samples.jsonl"
+summary = "Validate the local RefSeq viral FASTA gzip, strip FASTA headers and line wrapping, and emit one raw uint8 sample per viral sequence record."
+deterministic_notes = "Build is local-only, preserves source sequence-letter bytes and source record order, rejects unexpected sequence symbols, and does not concatenate records. Verification requires at least 1,000 records and 10,000,000 primary bytes by default."
+
+[[series]]
+id = "refseq_viral_genome_bases"
+description = "RefSeq viral genomic sequence-letter bytes."
+semantic_meaning = "ASCII FASTA base symbols for each viral genome or genome segment record."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "FASTA stores sequence symbols as source bytes; the recipe removes only container headers and line wrapping."
+source_resources = ["viral_genomic_fna"]
+filtered_input_path = "filtered/ncbi_refseq_viral_genomes_u8/ingest_stats.json"
+filtering = "Keep all non-empty records in the RefSeq viral genomic FASTA shard."
+missing_value_policy = "Reference ambiguity symbols are preserved; malformed gzip, empty records, duplicate accessions, or unexpected non-IUPAC symbols are fatal."
+conversion = "Strip FASTA headers/newlines and write source sequence-letter bytes unchanged as one raw .bin sample per FASTA record."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 byte array"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/ncbi_refseq_viral_genomes_u8/refseq_viral_genome_bases/"

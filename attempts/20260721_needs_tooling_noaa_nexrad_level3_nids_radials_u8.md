@@ -1,8 +1,8 @@
-# Needs Tooling: noaa_nexrad_level3_nids_radials_u8
+# Accepted: noaa_nexrad_level3_nids_radials_u8
 
 Date: 2026-07-21
 
-Status: needs_tooling
+Status: accepted on 2026-07-21
 
 Source:
 - https://unidata-nexrad-level3.s3.amazonaws.com/
@@ -28,10 +28,13 @@ Missing capability:
   blocks, packet codes, radial/raster packet payloads, and product-code-specific
   value interpretation.
 
-Reason not accepted now:
-- The previous active recipe did not implement the product parser and therefore
-  preserved product-message bytes as `uint8`.
+Acceptance outcome:
+- The replacement recipe `datasets/noaa_nexrad_level3_nids_radials_u8` was
+  accepted after implementing a local NIDS packet-16 parser.
+- The accepted local run decoded 96 N0Q product files into 15,897,600 primary
+  uint8 radial-bin values.
 
 Retry condition:
-- Retry after adding or approving a local parser that verifies one coherent
-  product code and extracts documented native 8-bit product values.
+- Already accepted for the bounded N0Q packet-16 shape. Future NEXRAD Level-III
+  products should remain separate unless they share the same documented packet
+  semantics.

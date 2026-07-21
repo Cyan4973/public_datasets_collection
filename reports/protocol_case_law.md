@@ -212,3 +212,5 @@ NEXRAD Level-III remains valuable, but NIDS product-message bytes are not an
 8-bit radar series. A valid successor must parse the product message and emit
 documented packet/product values, keeping WMO/AWIPS text, NIDS headers, block
 wrappers, and packet metadata auxiliary only.
+The accepted successor is `noaa_nexrad_level3_nids_radials_u8`, which decodes
+packet-16 radial bins for a bounded N0Q selection.

@@ -1,0 +1,75 @@
+manifest_version = 1
+dataset_id = "noaa_nexrad_level3_nids_radials_u8"
+name = "NOAA NEXRAD Level-III NIDS Digital Radials"
+description = "Decoded uint8 packet-16 digital radial bin values from one coherent NOAA NEXRAD Level-III product code."
+homepage = "https://www.ncei.noaa.gov/products/radar/next-generation-weather-radar"
+
+[license]
+name = "NOAA public data"
+spdx = "LicenseRef-NOAA-Public-Data"
+url = "https://www.noaa.gov/nodd/datasets"
+citation = "NOAA NEXRAD Level-III archive via NOAA/NCEI and Unidata public archives."
+notes = "NOAA data are public U.S. government data; preserve NOAA/NCEI attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public operational weather radar products only."
+usage_notes = "Decoded product bin values only; NIDS message headers and block wrappers are not primary samples."
+
+[[origins]]
+id = "unidata_nexrad_level3"
+name = "Unidata NEXRAD Level-III archive"
+url = "https://unidata-nexrad-level3.s3.amazonaws.com/"
+type = "public_s3_bucket"
+notes = "Public S3-compatible Level-III archive."
+
+[[resources]]
+id = "bounded_level3_products"
+origin = "unidata_nexrad_level3"
+url = "https://unidata-nexrad-level3.s3.amazonaws.com/"
+type = "s3_prefix_selection"
+version = "station_date_product_at_user_download_time"
+access = "Download script lists one station/date/product prefix or reads exact keys/URLs."
+size_bytes = 1833134
+sha256 = ""
+local_path = "downloads/noaa_nexrad_level3_nids_radials_u8/"
+notes = "Defaults target N0Q only; do not mix product codes."
+
+[local_paths]
+downloads = "downloads/noaa_nexrad_level3_nids_radials_u8/"
+filtered = "filtered/noaa_nexrad_level3_nids_radials_u8/"
+index = "index/noaa_nexrad_level3_nids_radials_u8/"
+samples = "samples/noaa_nexrad_level3_nids_radials_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_nexrad_level3_nids_radials_u8/samples.jsonl"
+summary = "Download a bounded set of one NEXRAD Level-III product code, parse NIDS symbology packet 16, and emit one decoded uint8 radial-bin matrix per product file."
+deterministic_notes = "Default discovery uses a fixed station/date/product prefix and sorted object keys. Build is local-only, strips the WMO/AWIPS prelude, locates the bzip2-compressed NIDS symbology data, requires one symbology layer and packet code 16, and emits only decoded radial bin bytes."
+
+[[series]]
+id = "nexrad_l3_packet16_radial_bins_u8"
+description = "Decoded packet-16 NIDS digital radial bin values."
+semantic_meaning = "One Level-III digital radial product as a radial-by-range-bin matrix of uint8 product bin codes."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Primary values are decoded packet-16 bin bytes after NIDS message parsing and bzip2 decompression, not product-message bytes."
+source_resources = ["bounded_level3_products"]
+filtered_input_path = "filtered/noaa_nexrad_level3_nids_radials_u8/ingest_stats.json"
+filtering = "Keep files matching one product code whose NIDS symbology block contains one packet-16 radial data packet with consistent radial and bin counts."
+missing_value_policy = "Missing files, mixed product codes, missing bzip2 symbology data, unsupported packet codes, malformed radial records, empty samples, and constant samples are fatal or skipped as documented in build stats."
+conversion = "Strip WMO/AWIPS prelude, parse NIDS message/symbology structure, decompress the bzip2 symbology payload, parse packet-16 radial records, and write the concatenated uint8 bin values in radial order."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 packet-16 radial bin matrix"
+sample_geometry = "nids_packet16_radial_bins"
+sample_rank = 2
+sample_axes = ["radial", "range_bin"]
+natural_record_kind = "nexrad_level3_packet16_product"
+sample_count = 96
+total_size_bytes = 15897600
+output_path = "samples/noaa_nexrad_level3_nids_radials_u8/nexrad_l3_packet16_radial_bins_u8/"

@@ -110,8 +110,10 @@ Unblocked datasets:
 Current state:
 - `noaa_nexrad_level3_products_u8` has been rejected because it preserved
   NIDS product-message bytes as primary `uint8` samples.
-- Public Level-III files are reachable and useful, but the previous recipe did
-  not decode product packets into radar values.
+- `noaa_nexrad_level3_nids_radials_u8` has been moved out of `needs_tooling`
+  and into an accepted recipe.
+- The local parser now decodes NIDS symbology packet 16 into radial bin values
+  for the bounded N0Q selection.
 
 Expected value:
 - Adds operational weather-radar radial or raster products
@@ -139,5 +141,5 @@ Reasoning:
 - `Seismic window selection` is no longer an open tooling blocker for the current external-registry backlog
 - BridgeData V2 is valuable enough to revisit, but only with real decoding
   rather than serialized payload bytes
-- NEXRAD Level-III is valuable enough to revisit, but only with product-packet
-  parsing rather than message-byte preservation
+- NEXRAD Level-III packet-16 decoding is now implemented for the accepted
+  bounded N0Q recipe

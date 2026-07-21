@@ -12,7 +12,8 @@ Already represented in `datasets/` or prior successful 8-bit reports:
 - segmentation and label rasters: `coco_panoptic_val2017_labels_u8`, `msd_hippocampus_segmentation_labels_u8`, `esa_worldcover_landcover_tiles_u8`
 - remote sensing / geospatial byte materials: `statlog_landsat_satellite_u8`, `nasa_pds_themis_ir_mosaic_u8`, `dc_lidar_2015_classification_u8`, prior `natural_earth_vector_shp_u8`, prior `geofabrik_liechtenstein_osm_pbf_u8`
 - weather radar: `noaa_nexrad_level3_products_u8` was later retired because it
-  preserved NIDS product-message bytes instead of decoded radar values
+  preserved NIDS product-message bytes instead of decoded radar values; the
+  decoded successor `noaa_nexrad_level3_nids_radials_u8` is now accepted
 - biology and medicine: `ena_fastq_quality_phred`, `encode_methylation_pct_u8`, `bam_read_mapq_u8`, `pfam_seed_alignments_u8`, prior `ncbi_refseq_viral_genomes_u8`
 - audio and model/binary artifacts: `fsdd_pcm_u8`, `smollm2_135m_q8_gguf_weights`, prior `google_fonts_ofl_ttf_u8`
 

@@ -1,12 +1,12 @@
 # Numeric New Domains Hunt: NOAA GOES-16 ABI Cloud Mask NetCDF
 
-## Recommendation
+## Historical Recommendation
 
-Stage `noaa_goes16_abi_cloud_mask_netcdf_u8`, using a bounded sorted prefix
-selection of public GOES-16 ABI Level-2 full-disk Cloud Mask NetCDF products
-from the Google Cloud public data mirror.
+This recommendation is obsolete. `noaa_goes16_abi_cloud_mask_netcdf_u8` was
+later retired and rejected because it copied complete NetCDF/HDF5 product files
+as raw bytes instead of decoding the cloud-mask variable.
 
-## Why This Adds New Territory
+## Original Rationale
 
 - Domain: operational geostationary satellite cloud-mask products.
 - Shape: one complete NetCDF/HDF5 scientific product container per scan.
@@ -34,18 +34,9 @@ The recipe enforces:
 - total download floor: 250,000,000 bytes
 - primary-output hard cap: 1,000,000,000 bytes
 
-## Script To Run
+## Retired Script
 
-```bash
-bash staging/noaa_goes16_abi_cloud_mask_netcdf_u8/download.sh
-```
-
-After the download succeeds, build and verify locally:
-
-```bash
-bash staging/noaa_goes16_abi_cloud_mask_netcdf_u8/build.sh
-bash staging/noaa_goes16_abi_cloud_mask_netcdf_u8/verify.sh
-```
+Do not run this recipe. The tracked dataset recipe was removed after rejection.
 
 ## Rejected Candidates In This Pass
 
@@ -61,7 +52,13 @@ bash staging/noaa_goes16_abi_cloud_mask_netcdf_u8/verify.sh
   to accepted segmentation-label datasets plus the accepted Open Images
   bounding-box annotation recipe.
 
-## Acceptance Outcome
+## Retirement Outcome
+
+This recipe was later retired and rejected after policy review. Its output was
+not a true `uint8` cloud-mask series; it was opaque NetCDF/HDF5 container
+serialization bytes.
+
+## Former Acceptance Outcome
 
 The GOES-16 ABI full-disk Cloud Mask NetCDF selection downloaded, built, and
 verified successfully.

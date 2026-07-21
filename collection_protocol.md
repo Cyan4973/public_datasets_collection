@@ -10,26 +10,29 @@ This repository stores reproducible recipes, not dataset payloads. Accepted reci
 2. The payload must be real source material, not a synthetic local numericization.
    Native numeric content is allowed. Pinned derived operational numeric representations are allowed only when they are stable machine-facing artifacts. Arbitrary remaps, gratuitous width mirrors, selector-gap streams, helper overlays, and similar local inventions are out.
 
-3. Intrinsically thin scopes are not acceptable.
+3. Primary numeric series must be decoded typed values, not opaque file-container bytes.
+   Treating arbitrary serialized bytes as `uint8` is not acceptable. NetCDF/HDF5, ZIP, NPY, FITS, PNG, TFRecord, database, checkpoint, and other container formats must be decoded to the intended source variable, tensor, raster, record field, or other typed payload before they can be primary series. If the recipe cannot decode the format without an acceptable dependency/tooling path, reject or defer the dataset instead of preserving complete file bytes as a shortcut.
+
+4. Intrinsically thin scopes are not acceptable.
    Single entities, single snapshots, single pages, single arbitrary queries, ranked feeds, or other bounded slices that remain tiny even after exhausting the documented scope do not belong in `datasets/`.
 
-4. Acceptance floors apply to primary payload only.
+5. Acceptance floors apply to primary payload only.
    Coordinate helpers, calendar decompositions, alignment arrays, IDs, masks, flags, and similar auxiliary metadata may be emitted if justified, but they must not help a recipe pass acceptance.
 
-5. Aggregate-only salvage is not acceptable.
+6. Aggregate-only salvage is not acceptable.
    A recipe must reach the floor through materially sized primary samples, not by multiplying trivial ones. Current floor: at least `10,000` primary values total or at least `100 KB` primary sample bytes, plus median primary sample size at least `1,000` values.
 
-6. Dataset size must stay operationally bounded.
+7. Dataset size must stay operationally bounded.
    Accepted primary output must not exceed `1,000,000,000` bytes total. When the full upstream source is too large, the recipe must define a coherent bounded subset that can be downloaded, built, and validated directly without first fetching the oversized full source.
 
-7. Sample boundaries must respect the natural record boundary.
+8. Sample boundaries must respect the natural record boundary.
    A recipe must not concatenate many smaller natural records into large physical sample files to pass the median-sample floor. If the actual primary natural records are below the median floor, the recipe is below floor even when split-level, table-level, or archive-level concatenations are large.
    Grouping by class, label, prompt, split, shard, source file, or archive is not a valid escape hatch when the upstream material has smaller independent records such as images, drawings, utterances, TFRecord payloads, FASTA records, or match/event files. The correct response is to emit natural records as samples, explicitly lower or waive a floor in a reviewed policy note, or reject the dataset.
 
-8. Claimed scope must match realized output.
+9. Claimed scope must match realized output.
    If a recipe claims `50` sites, `20` years, or some other coverage, the accepted output must actually realize that scope or be explicitly narrowed before acceptance.
 
-9. Accepted recipes must be public, permissively licensed, safe, and locally reproducible.
+10. Accepted recipes must be public, permissively licensed, safe, and locally reproducible.
    The user must have run the current `download.sh`, and the current `build.sh` and `verify.sh` must succeed against local files.
 
 ## Minimal Mechanics
@@ -51,6 +54,7 @@ This repository stores reproducible recipes, not dataset payloads. Accepted reci
 - `role = "auxiliary"` means the series exists only to preserve alignment, coordinates, timestamps, bookkeeping, or similar metadata and must not count toward acceptance.
 - Legacy manifests that omit `role` are audited with a narrow helper-series inference until they are migrated.
 - New or touched primary `[[series]]` entries must declare a specific `natural_record_kind`. Values that describe an aggregation artifact rather than a source boundary, such as class stacks, row streams, contiguous streams, shard payloads, or generic payload streams, are not acceptable.
+- New or touched primary `[[series]]` entries must not use opaque container/file bytes as the compression target. Disallowed primary representations include generic file bytes, complete product/container bytes, serialized container payloads, compressed archive bytes, and dependency-avoidance copies of wrappers instead of decoded source variables.
 - Each accepted recipe must generate a machine-readable sample index under `.data/index/<dataset_id>/samples.jsonl` containing one row per sample file with `dataset_id`, `series_id`, `sample_path`, `numeric_kind`, `bit_width`, `endianness`, `element_size_bytes`, `sample_size_bytes`, and `value_count`.
 
 ## Batch Execution

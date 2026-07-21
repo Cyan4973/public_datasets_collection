@@ -69,6 +69,28 @@ AMBIGUOUS_NATURAL_RECORD_KINDS = {
     "shard_payload",
 }
 
+OPAQUE_PRIMARY_REPRESENTATION_CLASSES = {
+    "container_bytes",
+    "container_payload_bytes",
+    "file_bytes",
+    "opaque_bytes",
+    "serialized_bytes",
+}
+
+OPAQUE_PRIMARY_TEXT_PATTERNS = [
+    ("complete_file_bytes", ["complete", "file bytes"]),
+    ("complete_container_bytes", ["complete", "container", "bytes"]),
+    ("complete_product_bytes", ["complete", "product", "bytes"]),
+    ("container_bytes", ["container bytes"]),
+    ("file_container_bytes", ["file-container bytes"]),
+    ("hdf5_product_bytes", ["hdf5", "product", "bytes"]),
+    ("netcdf_product_bytes", ["netcdf", "product", "bytes"]),
+    ("opaque_bytes", ["opaque", "bytes"]),
+    ("serialized_payload", ["serialized", "payload"]),
+    ("copy_complete_source", ["copy", "complete", "source", "unchanged"]),
+    ("preserve_complete_product", ["preserve", "complete", "product", "bytes"]),
+]
+
 
 def git_lines(*args: str) -> list[str]:
     result = subprocess.run(
@@ -97,6 +119,24 @@ def changed_dataset_manifests() -> set[Path]:
 
 def role_of(series: dict[str, object]) -> str:
     return str(series.get("role", "primary"))
+
+
+def joined_series_text(series: dict[str, object]) -> str:
+    values: list[str] = []
+    for key in [
+        "description",
+        "semantic_meaning",
+        "representation_class",
+        "representation_notes",
+        "conversion",
+        "sample_format",
+        "sample_geometry",
+        "natural_record_kind",
+    ]:
+        value = series.get(key)
+        if isinstance(value, str):
+            values.append(value)
+    return " ".join(values).lower()
 
 
 def load_status_registry(errors: list[str]) -> dict[str, dict[str, str]]:
@@ -238,6 +278,21 @@ def check_natural_boundaries(errors: list[str]) -> None:
                     f"{manifest_path}: primary series {series_id} needs a specific natural_record_kind; "
                     f"got {natural_record_kind!r}."
                 )
+            representation_class = str(series.get("representation_class", "")).strip()
+            if representation_class in OPAQUE_PRIMARY_REPRESENTATION_CLASSES:
+                errors.append(
+                    f"{manifest_path}: primary series {series_id} uses opaque "
+                    f"representation_class={representation_class!r}; decode the "
+                    "source variable/field or reject/defer the dataset."
+                )
+            series_text = joined_series_text(series)
+            for pattern_name, needles in OPAQUE_PRIMARY_TEXT_PATTERNS:
+                if all(needle in series_text for needle in needles):
+                    errors.append(
+                        f"{manifest_path}: primary series {series_id} appears to use "
+                        f"opaque container/file bytes pattern={pattern_name}; decode "
+                        "the source variable/field or reject/defer the dataset."
+                    )
 
 
 def main() -> int:

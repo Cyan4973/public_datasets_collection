@@ -1,8 +1,12 @@
 # 8-Bit New-Domain Hunt: Natural Earth Vector Shapefile Geometry
 
-## Recommendation
+## Superseded
 
-Run the existing staged recipe `natural_earth_vector_shp_u8`.
+Do not run the staged recipe `natural_earth_vector_shp_u8`. It was rejected on
+2026-07-21 because it treated whole Shapefile containers as `uint8` primary
+series. Use the decoded successor `natural_earth_10m_geometry_xy_f64` instead.
+
+## Original Recommendation
 
 ## Why This Adds New Territory
 
@@ -34,16 +38,8 @@ The recipe enforces:
 
 ## Script To Run
 
-```bash
-bash staging/natural_earth_vector_shp_u8/download.sh
-```
-
-After the download succeeds, build and verify locally:
-
-```bash
-bash staging/natural_earth_vector_shp_u8/build.sh
-bash staging/natural_earth_vector_shp_u8/verify.sh
-```
+Do not run the original staged script. The recipe has been rejected and the
+staging copy has been removed.
 
 ## Rejected Candidates In This Pass
 
@@ -57,7 +53,11 @@ bash staging/natural_earth_vector_shp_u8/verify.sh
   collection already has Open Images bounding-box annotations and multiple mask
   or segmentation datasets.
 
-## Acceptance Outcome
+## Historical Acceptance Outcome
+
+This outcome was later overturned by the 2026-07-21 opaque-container cleanup.
+The byte recipe is rejected and superseded by
+`natural_earth_10m_geometry_xy_f64`.
 
 Accepted after user download and local processing.
 

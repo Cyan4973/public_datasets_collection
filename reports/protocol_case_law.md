@@ -197,9 +197,18 @@ Reject:
 Reject primary series that preserve file-format, container, or serialized record
 bytes as a shortcut for real decoding.
 
+To prevent repeats, every new or touched primary series must name the decoded
+upstream `source_format` and `source_field`. The field must identify the actual
+typed material being emitted, such as a NetCDF variable, Shapefile record member,
+protobuf tensor field, image raster after container decode, table column, or
+documented symbol stream. Names such as complete file, archive member, product
+bytes, serialized payload, or raw container payload are rejection evidence, not
+field documentation.
+
 The following recipe was removed on 2026-07-21:
 
 - `google_robotics_bridge_tfrecord_u8`
+- `natural_earth_vector_shp_u8`
 - `noaa_nexrad_level3_products_u8`
 
 BridgeData V2 remains valuable, but TFRecord/protobuf payload bytes are not an
@@ -214,3 +223,9 @@ documented packet/product values, keeping WMO/AWIPS text, NIDS headers, block
 wrappers, and packet metadata auxiliary only.
 The accepted successor is `noaa_nexrad_level3_nids_radials_u8`, which decodes
 packet-16 radial bins for a bounded N0Q selection.
+
+Natural Earth vector geometry remains valuable, but Shapefile bytes are not an
+8-bit geometry series. A valid successor must parse documented Shapefile records
+and emit typed coordinate arrays. The accepted successor is
+`natural_earth_10m_geometry_xy_f64`, which decodes polygon and polyline feature
+coordinates as native float64 XY samples.

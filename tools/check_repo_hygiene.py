@@ -43,7 +43,6 @@ LEGACY_OPAQUE_PRIMARY_VIOLATIONS = {
     # Known active recipes awaiting one-by-one review. These are not precedent;
     # keeping them explicit prevents new opaque-byte recipes from hiding among
     # old cleanup targets.
-    "natural_earth_vector_shp_u8",
 }
 
 BLIND_CONCAT_PATTERNS = [
@@ -74,6 +73,23 @@ AMBIGUOUS_NATURAL_RECORD_KINDS = {
     "payload_stream",
     "row_stream",
     "shard_payload",
+}
+
+OPAQUE_SOURCE_FIELDS = {
+    "",
+    "archive_member",
+    "bytes",
+    "complete_file",
+    "complete_file_bytes",
+    "complete_product",
+    "complete_product_bytes",
+    "container_bytes",
+    "container_payload",
+    "file_bytes",
+    "raw_bytes",
+    "raw_payload",
+    "serialized_payload",
+    "serialized_record",
 }
 
 OPAQUE_PRIMARY_REPRESENTATION_CLASSES = {
@@ -142,6 +158,8 @@ def joined_series_text(series: dict[str, object]) -> str:
         "sample_format",
         "sample_geometry",
         "natural_record_kind",
+        "source_format",
+        "source_field",
     ]:
         value = series.get(key)
         if isinstance(value, str):
@@ -286,6 +304,17 @@ def check_natural_boundaries(errors: list[str]) -> None:
                     errors.append(
                         f"{manifest_path}: primary series {series_id} needs a specific natural_record_kind; "
                         f"got {natural_record_kind!r}."
+                    )
+                source_format = str(series.get("source_format", "")).strip()
+                source_field = str(series.get("source_field", "")).strip()
+                if not source_format:
+                    errors.append(
+                        f"{manifest_path}: primary series {series_id} needs source_format naming the decoded upstream format."
+                    )
+                if source_field.lower() in OPAQUE_SOURCE_FIELDS:
+                    errors.append(
+                        f"{manifest_path}: primary series {series_id} needs source_field naming the decoded typed field; "
+                        f"got {source_field!r}."
                     )
             if dataset_id in LEGACY_OPAQUE_PRIMARY_VIOLATIONS:
                 continue

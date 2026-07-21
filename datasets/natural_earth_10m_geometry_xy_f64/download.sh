@@ -3,14 +3,10 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 DATA_DIR="${DATA_DIR:-.data}"
-DATASET_ID="natural_earth_vector_shp_u8"
+DATASET_ID="natural_earth_10m_geometry_xy_f64"
 LOG_DIR="$REPO_ROOT/$DATA_DIR/logs/$DATASET_ID"
 DOWNLOAD_DIR="$REPO_ROOT/$DATA_DIR/downloads/$DATASET_ID"
-EXTRACT_DIR="$REPO_ROOT/$DATA_DIR/extracted/$DATASET_ID"
-FILTER_DIR="$REPO_ROOT/$DATA_DIR/filtered/$DATASET_ID"
-INDEX_DIR="$REPO_ROOT/$DATA_DIR/index/$DATASET_ID"
-SAMPLES_DIR="$REPO_ROOT/$DATA_DIR/samples/$DATASET_ID"
-mkdir -p "$LOG_DIR" "$DOWNLOAD_DIR" "$EXTRACT_DIR" "$FILTER_DIR" "$INDEX_DIR" "$SAMPLES_DIR"
+mkdir -p "$LOG_DIR" "$DOWNLOAD_DIR"
 
 RUN_TS="$(date +%Y%m%d_%H%M%S)"
 LOG_FILE="$LOG_DIR/download.$RUN_TS.log"
@@ -45,20 +41,29 @@ python3 - <<'PY'
 from __future__ import annotations
 
 import os
+import struct
 import zipfile
 from pathlib import Path
 
 download_dir = Path(os.environ["DOWNLOAD_DIR"])
 zips = sorted((download_dir / "zips").glob("*.zip"))
-if len(zips) < 10:
-    raise SystemExit(f"too few Natural Earth ZIPs: {len(zips)}")
+if len(zips) != 12:
+    raise SystemExit(f"expected 12 Natural Earth ZIPs, found {len(zips)}")
 for path in zips:
     with zipfile.ZipFile(path) as zf:
         shp = [name for name in zf.namelist() if name.lower().endswith(".shp")]
         if len(shp) != 1:
             raise SystemExit(f"{path.name}: expected exactly one .shp member, found {shp}")
-        if zf.getinfo(shp[0]).file_size < 1024:
-            raise SystemExit(f"{path.name}: .shp member too small")
+        payload = zf.read(shp[0])
+    if len(payload) < 100:
+        raise SystemExit(f"{path.name}: .shp member too small")
+    file_code = struct.unpack(">I", payload[:4])[0]
+    version = struct.unpack("<I", payload[28:32])[0]
+    shape_type = struct.unpack("<I", payload[32:36])[0]
+    if file_code != 9994 or version != 1000:
+        raise SystemExit(f"{path.name}: invalid shapefile header")
+    if shape_type not in {1, 3, 5}:
+        raise SystemExit(f"{path.name}: unexpected shapefile shape_type={shape_type}")
 print(f"semantic_validation=ok zip_files={len(zips)}")
 PY
 

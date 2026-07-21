@@ -15,7 +15,6 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DATA_DIR = ".data"
 DATASET_IDS = [
     "google_fonts_ofl_ttf_u8",
-    "natural_earth_vector_shp_u8",
 ]
 MIN_VALUES = 10_000
 MIN_BYTES = 100 * 1024

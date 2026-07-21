@@ -1,9 +1,17 @@
 # Numeric New Domains Hunt: Google Robotics Bridge TFRecord
 
-## Recommendation
+Historical status: rejected on 2026-07-21.
 
-Stage `google_robotics_bridge_tfrecord_u8`, using one fixed public Google
-Research Robotics BridgeData V2 TFRecord shard.
+This report is retained as history. The recommended recipe fixed a
+record-boundary issue but still used serialized TFRecord/protobuf payload bytes
+as the primary `uint8` material. That is not an acceptable decoded numeric
+series. Retry BridgeData V2 only as a decoded successor, for example by
+extracting `steps/observation/image` into real `480x640x3` uint8 frame samples.
+
+## Historical Recommendation
+
+The obsolete recommendation was to stage `google_robotics_bridge_tfrecord_u8`,
+using one fixed public Google Research Robotics BridgeData V2 TFRecord shard.
 
 ## Why This Adds New Territory
 
@@ -14,10 +22,10 @@ Research Robotics BridgeData V2 TFRecord shard.
 - Difference from accepted datasets: the catalog has depth-camera rasters and
   many scientific/finance/geospatial tables, but not robot control
   demonstration records.
-- Numeric representation: dependency-free TFRecord framing extraction emits one
-  primary uint8 sample per TFRecord payload record. The uint32 record-length and
-  masked-CRC streams are auxiliary TFRecord framing metadata, not a standalone
-  32-bit robotics dataset.
+- Rejected numeric representation: dependency-free TFRecord framing extraction
+  emitted one primary uint8 sample per TFRecord payload record. The uint32
+  record-length and masked-CRC streams were auxiliary TFRecord framing metadata,
+  not a standalone 32-bit robotics dataset.
 
 ## Materiality
 
@@ -35,13 +43,13 @@ The recipe enforces:
 - record floor: 16 records
 - primary-output hard cap: 1,000,000,000 bytes
 
-## Script To Run
+## Obsolete Script
 
 ```bash
 bash staging/google_robotics_bridge_tfrecord_u8/download.sh
 ```
 
-After the download succeeds, build and verify locally:
+After the download succeeded, the obsolete local build and verify commands were:
 
 ```bash
 bash staging/google_robotics_bridge_tfrecord_u8/build.sh
@@ -60,9 +68,10 @@ bash staging/google_robotics_bridge_tfrecord_u8/verify.sh
 - FEC bulk campaign-finance files remain blocked from this environment and were
   already noted as rejected in an earlier hunt.
 
-## Acceptance Outcome
+## Historical Acceptance Outcome
 
-The BridgeData V2 TFRecord shard downloaded, built, and verified successfully.
+The BridgeData V2 TFRecord shard downloaded, built, and verified successfully
+under the obsolete serialized-payload recipe.
 
 - source shard bytes: 435,280,257
 - downloaded bytes including metadata: 435,311,894
@@ -84,5 +93,6 @@ values and 60 masked-CRC values. They exist only to document framing and should
 not be counted as independent robotics-domain 32-bit series.
 
 The original accepted recipe briefly represented the 30 payload records as one
-concatenated primary byte stream. That has been corrected: each TFRecord payload
-is now emitted as its own primary sample, preserving the source record boundary.
+concatenated primary byte stream. That was corrected by emitting each TFRecord
+payload as its own sample, but this was still not enough: the payloads remained
+serialized TFRecord/protobuf bytes rather than decoded camera frames or tensors.

@@ -71,13 +71,42 @@ Current state:
 - the fixed 12-window IRIS selection is now implemented locally
 - seismic window selection is no longer an open tooling blocker for the current external-registry backlog
 
+## 5. TFRecord / RLDS Image Decode Workflow
+
+Missing capability:
+- Reproducible TF Example/protobuf feature extraction from local TFRecord shards
+- PNG frame decoding for TFDS image features
+- Sample-index helpers that preserve decoded observation-frame boundaries
+
+Unblocked datasets:
+- [google_robotics_bridge_image_frames_u8](./20260721_needs_tooling_google_robotics_bridge_image_frames_u8.md)
+
+Current state:
+- `google_robotics_bridge_tfrecord_u8` has been rejected because it preserved
+  serialized TFRecord/protobuf payload bytes as primary `uint8` samples.
+- The BridgeData V2 source remains valuable, and the local shard has enough
+  decoded image material to satisfy the corpus floor while staying below 1 GB.
+
+Expected value:
+- Adds robot-learning visual observation frames from manipulation trajectories
+- Avoids accepting TFRecord, protobuf, or PNG container bytes as a shortcut
+
+Acceptance bar:
+- Decode documented TFDS/RLDS fields from local files only
+- Emit one decoded `480x640x3` uint8 camera frame per primary sample
+- Keep TFRecord framing and protobuf/image-container metadata auxiliary only
+- Verify frame shape, count, byte total, and non-degenerate pixel content
+
 ## Priority
 
 Recommended implementation order:
-1. No remaining tooling blockers in the current external-registry backlog
+1. TFRecord / RLDS image decode, if robot-learning visual trajectories remain a
+   desired domain
 
 Reasoning:
 - `EDF` is done locally
 - `WFDB` is done locally
 - `Raster / image` is no longer an open tooling blocker for the current external-registry backlog
 - `Seismic window selection` is no longer an open tooling blocker for the current external-registry backlog
+- BridgeData V2 is valuable enough to revisit, but only with real decoding
+  rather than serialized payload bytes

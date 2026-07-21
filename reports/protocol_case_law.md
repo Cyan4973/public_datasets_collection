@@ -191,3 +191,18 @@ Reject:
 - helper overlays
 - synthetic feature engineering
 - duplicated views of the same underlying fact solely to inflate volume
+
+## Opaque Container Bytes
+
+Reject primary series that preserve file-format, container, or serialized record
+bytes as a shortcut for real decoding.
+
+The following recipe was removed on 2026-07-21:
+
+- `google_robotics_bridge_tfrecord_u8`
+
+BridgeData V2 remains valuable, but TFRecord/protobuf payload bytes are not an
+8-bit numeric series. A valid successor must decode documented source fields,
+such as `steps/observation/image`, and emit the decoded typed values as natural
+samples. TFRecord framing, protobuf structure, image container bytes, CRCs,
+lengths, and source offsets may be auxiliary metadata only.

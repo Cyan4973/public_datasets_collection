@@ -37,6 +37,9 @@ not acceptable.
 reason: individual Quick, Draw! bitmap drawings are only 784 uint8 values, and
 prompt-class concatenation is not acceptable.
 
-`google_robotics_bridge_tfrecord_u8` was repaired separately: each TFRecord
-payload record is now a primary sample, and TFRecord lengths/CRCs are auxiliary
-metadata only.
+`google_robotics_bridge_tfrecord_u8` fixed the earlier blind-concatenation
+mistake by emitting one TFRecord payload per sample, but it still preserved
+serialized TFRecord/protobuf payload bytes as the primary `uint8` material. It
+has therefore been retired and rejected under the decoded typed-value rule. A
+future BridgeData recipe must decode documented fields, such as camera frames,
+before promotion.

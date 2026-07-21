@@ -39,6 +39,14 @@ LEGACY_NATURAL_BOUNDARY_VIOLATIONS = {
     # until the recipes are repaired or retired; do not add new entries lightly.
 }
 
+LEGACY_OPAQUE_PRIMARY_VIOLATIONS = {
+    # Known active recipes awaiting one-by-one review. These are not precedent;
+    # keeping them explicit prevents new opaque-byte recipes from hiding among
+    # old cleanup targets.
+    "natural_earth_vector_shp_u8",
+    "noaa_nexrad_level3_products_u8",
+}
+
 BLIND_CONCAT_PATTERNS = [
     (
         "grouped_by_floor",
@@ -87,6 +95,9 @@ OPAQUE_PRIMARY_TEXT_PATTERNS = [
     ("netcdf_product_bytes", ["netcdf", "product", "bytes"]),
     ("opaque_bytes", ["opaque", "bytes"]),
     ("serialized_payload", ["serialized", "payload"]),
+    ("serialized_record_payload", ["serialized", "record", "payload"]),
+    ("tfrecord_payload_bytes", ["tfrecord", "payload", "bytes"]),
+    ("protobuf_payload_bytes", ["protobuf", "payload", "bytes"]),
     ("copy_complete_source", ["copy", "complete", "source", "unchanged"]),
     ("preserve_complete_product", ["preserve", "complete", "product", "bytes"]),
 ]
@@ -251,9 +262,6 @@ def check_natural_boundaries(errors: list[str]) -> None:
                         f"  dataset: {dataset_id} pattern={pattern_name} path={manifest_path}"
                     )
 
-        if manifest_path not in changed_manifests:
-            continue
-
         try:
             manifest = tomllib.loads(text)
         except tomllib.TOMLDecodeError as exc:
@@ -265,19 +273,23 @@ def check_natural_boundaries(errors: list[str]) -> None:
                 continue
             series_id = str(series.get("id", f"series_{index}"))
             role = role_of(series)
-            if role not in {"primary", "auxiliary"}:
-                errors.append(
-                    f"{manifest_path}: series {series_id} must declare role='primary' or role='auxiliary'."
-                )
-                continue
+            if manifest_path in changed_manifests:
+                if role not in {"primary", "auxiliary"}:
+                    errors.append(
+                        f"{manifest_path}: series {series_id} must declare role='primary' or role='auxiliary'."
+                    )
+                    continue
             if role != "primary":
                 continue
-            natural_record_kind = str(series.get("natural_record_kind", "")).strip()
-            if natural_record_kind in AMBIGUOUS_NATURAL_RECORD_KINDS:
-                errors.append(
-                    f"{manifest_path}: primary series {series_id} needs a specific natural_record_kind; "
-                    f"got {natural_record_kind!r}."
-                )
+            if manifest_path in changed_manifests:
+                natural_record_kind = str(series.get("natural_record_kind", "")).strip()
+                if natural_record_kind in AMBIGUOUS_NATURAL_RECORD_KINDS:
+                    errors.append(
+                        f"{manifest_path}: primary series {series_id} needs a specific natural_record_kind; "
+                        f"got {natural_record_kind!r}."
+                    )
+            if dataset_id in LEGACY_OPAQUE_PRIMARY_VIOLATIONS:
+                continue
             representation_class = str(series.get("representation_class", "")).strip()
             if representation_class in OPAQUE_PRIMARY_REPRESENTATION_CLASSES:
                 errors.append(

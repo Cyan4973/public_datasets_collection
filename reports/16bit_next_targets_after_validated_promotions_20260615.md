@@ -135,9 +135,13 @@ with different semantics. All listed targets have a public/government-open
 license or terms basis; none require downloading the whole upstream corpus
 before bounding the subset.
 
+Historical note: consult `attempts/dataset_status.tsv` before using this table
+as a current candidate list. `nasa_pds_sharad_radargram_i16` was later
+superseded by the accepted `nasa_pds_sharad_radargram_f32` recipe.
+
 | priority | dataset_id | material | license / terms basis | natural sample | expected scale | parser path | main risk |
 |---:|---|---|---|---|---|---|---|
-| 1 | `nasa_pds_sharad_radargram_i16` | Mars radargram image products | NASA PDS public planetary data. | one PDS image/radargram product | likely 10s-100s MB from selected products | Python stdlib PDS3 label + raw image parser, accept only 16-bit integer products | Previous seed page exposed no direct payload links; needs exact product URLs. |
+| superseded | `nasa_pds_sharad_radargram_i16` | Mars radargram image products | NASA PDS public planetary data. | one PDS image/radargram product | likely 10s-100s MB from selected products | Python stdlib PDS3 label + raw image parser | Superseded by `nasa_pds_sharad_radargram_f32`; selected products are native 32-bit float, not 16-bit integer. |
 | 2 | `nasa_pds_crism_trdr_i16` | Mars hyperspectral instrument cubes | NASA PDS public planetary data. | one PDS cube/image product | bounded subset should fit under 1 GB | Python stdlib PDS3 label + raw cube parser, accept only 16-bit integer samples | Exact direct products needed; some products may use layout details the simple parser must reject. |
 | 3 | `nasa_aviris_classic_hyperspectral_i16` | airborne hyperspectral ENVI cubes | NASA/JPL public science data. | one ENVI scene/cube | likely 100s MB for a small selected scene set | Python stdlib ENVI `.hdr` + raw binary parser, accept only int16/uint16 interleaves | Prior discovery found FTP links; must find stable HTTPS product URLs before retry. |
 | 4 | `nasa_sdo_aia_fits_i16` | solar EUV/UV FITS images | NASA open-data policy and SDO public data access. | one FITS image | selected wavelength/time sample likely 100s MB | Python stdlib FITS parser, accept only `BITPIX = 16` images | Existing data.gov route failed; exact JSOC index found by search, but file-level FITS names still need discovery. |

@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import csv
 from pathlib import Path
 import subprocess
 import sys
@@ -11,20 +12,26 @@ import tomllib
 
 ALLOWED_STAGING_PATHS = {"staging/README.md"}
 
-REJECTED_DATASET_IDS = {
-    "fmnist_px_u8": (
-        "Rejected on 2026-07-21: natural records are individual 28x28 images "
-        "with 784 uint8 values; class-level concatenation is forbidden."
-    ),
-    "google_quickdraw_bitmap_classes_u8": (
-        "Rejected on 2026-07-21: natural records are individual 28x28 drawings "
-        "with 784 uint8 values; prompt-class concatenation is forbidden."
-    ),
-    "mnist_px_u8": (
-        "Rejected on 2026-07-21: natural records are individual 28x28 images "
-        "with 784 uint8 values; class-level concatenation is forbidden."
-    ),
+STATUS_REGISTRY_PATH = Path("attempts/dataset_status.tsv")
+STATUS_REGISTRY_COLUMNS = [
+    "dataset_id",
+    "status",
+    "active_path",
+    "evidence_path",
+    "replacement_id",
+    "reason",
+    "retry_condition",
+]
+ALLOWED_DATASET_STATUSES = {
+    "accepted",
+    "blocked",
+    "deferred",
+    "needs_tooling",
+    "rejected",
+    "superseded",
+    "transient_failure",
 }
+NON_ACTIVE_DATASET_STATUSES = ALLOWED_DATASET_STATUSES - {"accepted"}
 
 LEGACY_NATURAL_BOUNDARY_VIOLATIONS = {
     # Historical accepted recipes that grouped independent small images/drawings
@@ -92,14 +99,102 @@ def role_of(series: dict[str, object]) -> str:
     return str(series.get("role", "primary"))
 
 
+def load_status_registry(errors: list[str]) -> dict[str, dict[str, str]]:
+    if not STATUS_REGISTRY_PATH.exists():
+        errors.append(f"Missing dataset status registry: {STATUS_REGISTRY_PATH}")
+        return {}
+
+    with STATUS_REGISTRY_PATH.open("r", encoding="utf-8", newline="") as fh:
+        reader = csv.DictReader(fh, delimiter="\t")
+        if reader.fieldnames != STATUS_REGISTRY_COLUMNS:
+            errors.append(
+                f"{STATUS_REGISTRY_PATH}: expected TSV columns {STATUS_REGISTRY_COLUMNS}, "
+                f"got {reader.fieldnames}"
+            )
+            return {}
+
+        registry: dict[str, dict[str, str]] = {}
+        for line_number, row in enumerate(reader, 2):
+            dataset_id = (row.get("dataset_id") or "").strip()
+            status = (row.get("status") or "").strip()
+            if not dataset_id:
+                errors.append(f"{STATUS_REGISTRY_PATH}:{line_number}: missing dataset_id")
+                continue
+            if dataset_id in registry:
+                errors.append(
+                    f"{STATUS_REGISTRY_PATH}:{line_number}: duplicate dataset_id "
+                    f"{dataset_id}"
+                )
+                continue
+            if status not in ALLOWED_DATASET_STATUSES:
+                errors.append(
+                    f"{STATUS_REGISTRY_PATH}:{line_number}: invalid status {status!r} "
+                    f"for {dataset_id}"
+                )
+            registry[dataset_id] = {
+                key: (value or "").strip() for key, value in row.items()
+            }
+
+    return registry
+
+
+def check_status_registry(
+    errors: list[str], registry: dict[str, dict[str, str]]
+) -> None:
+    for dataset_id, row in sorted(registry.items()):
+        status = row["status"]
+        active_path = row["active_path"]
+        evidence_path = row["evidence_path"]
+        replacement_id = row["replacement_id"]
+
+        if evidence_path and not Path(evidence_path).exists():
+            errors.append(
+                f"{STATUS_REGISTRY_PATH}: evidence_path for {dataset_id} does not exist: "
+                f"{evidence_path}"
+            )
+        replacement_path = Path("datasets") / replacement_id
+        if (
+            replacement_id
+            and replacement_id not in registry
+            and not replacement_path.exists()
+        ):
+            errors.append(
+                f"{STATUS_REGISTRY_PATH}: replacement_id for {dataset_id} is not registered "
+                f"or active: {replacement_id}"
+            )
+
+        dataset_path = Path("datasets") / dataset_id
+        if status in NON_ACTIVE_DATASET_STATUSES:
+            if active_path:
+                errors.append(
+                    f"{STATUS_REGISTRY_PATH}: non-active dataset {dataset_id} "
+                    f"must not set active_path."
+                )
+            if dataset_path.exists():
+                errors.append(
+                    f"Non-active dataset is present under datasets/: {dataset_id} "
+                    f"status={status}"
+                )
+                errors.append(f"  reason: {row['reason']}")
+        elif status == "accepted":
+            if not active_path:
+                errors.append(
+                    f"{STATUS_REGISTRY_PATH}: accepted dataset {dataset_id} needs active_path."
+                )
+            elif not Path(active_path).exists():
+                errors.append(
+                    f"{STATUS_REGISTRY_PATH}: active_path for accepted dataset {dataset_id} "
+                    f"does not exist: {active_path}"
+                )
+            if not dataset_path.exists():
+                errors.append(
+                    f"{STATUS_REGISTRY_PATH}: accepted dataset {dataset_id} is not present "
+                    f"under datasets/."
+                )
+
+
 def check_natural_boundaries(errors: list[str]) -> None:
     changed_manifests = changed_dataset_manifests()
-
-    for dataset_id, reason in sorted(REJECTED_DATASET_IDS.items()):
-        dataset_path = Path("datasets") / dataset_id
-        if dataset_path.exists():
-            errors.append(f"Rejected dataset is present under datasets/: {dataset_id}")
-            errors.append(f"  {reason}")
 
     for manifest_path in sorted(Path("datasets").glob("*/manifest.toml")):
         dataset_id = manifest_path.parent.name
@@ -194,6 +289,8 @@ def main() -> int:
         errors.append("Staged additions/modifications under .data/ are forbidden.")
         errors.extend(f"  staged: {path}" for path in staged_data)
 
+    registry = load_status_registry(errors)
+    check_status_registry(errors, registry)
     check_natural_boundaries(errors)
 
     if errors:

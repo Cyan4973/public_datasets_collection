@@ -1,5 +1,9 @@
 # 16-bit Hunt Round 3 Dataset State
 
+Historical report. For current machine-readable dispositions, consult
+`attempts/dataset_status.tsv` before treating any failed/deferred row here as a
+candidate to run.
+
 The user ran `staging/source_variety_batch_20260614_16b/download.sh` after the proxy fix. Two candidates downloaded payloads during the original run. `tcia_nsclc_radiomics_ct_i16` was promoted to `datasets/` as accepted-but-low-variety material. A later focused retry repaired and promoted `smithsonian_openaccess_gltf_indices_u16`.
 
 Acceptance floor used here: at least `10,000` primary values or `100 KB` primary sample bytes, median primary sample size at least `1,000` values, and accepted primary output at most `1,000,000,000` bytes.
@@ -14,7 +18,7 @@ Acceptance floor used here: at least `10,000` primary values or `100 KB` primary
 | `nasa_aviris_classic_hyperspectral_i16` | failed | not run | 0 | 0 | n/a | source discovery selected FTP links unusable in this environment |
 | `usgs_sidescan_sonar_tiff_u16` | failed | not run | 0 | 0 | n/a | selected data.gov seed returned HTTP 404 |
 | `usgs_chirp_segy_i16` | failed | not run | 0 | 0 | n/a | seed pages exposed no direct `.sgy` / `.segy` payload links |
-| `nasa_pds_sharad_radargram_i16` | failed | not run | 0 | 0 | n/a | seed page exposed no direct selected payload links |
+| `nasa_pds_sharad_radargram_i16` | failed | not run | 0 | 0 | n/a | superseded: source later proved to be 32-bit float and was accepted as `nasa_pds_sharad_radargram_f32` |
 | `nasa_pds_crism_trdr_i16` | failed | not run | 0 | 0 | n/a | seed page exposed no direct selected payload links |
 | `usgs_3dep_las_intensity_u16` | failed | not run | 0 | 0 | n/a | registry page exposed no direct `.las` payload links |
 | `noaa_passive_acoustic_pcm16` | failed | not run | 0 | 0 | n/a | product page exposed no direct WAV/archive payload links |
@@ -100,4 +104,11 @@ Weakness: accepted output is only three natural samples, all from related Smiths
 
 `usgs_sidescan_sonar_tiff_u16` failed because the selected data.gov seed returned HTTP 404. It needs a corrected USGS package page or exact TIFF URLs.
 
-`usgs_chirp_segy_i16`, `nasa_pds_sharad_radargram_i16`, `nasa_pds_crism_trdr_i16`, `usgs_3dep_las_intensity_u16`, and `noaa_passive_acoustic_pcm16` did not expose direct matching payload links from their seed pages. They need exact URL lists before rerun; no local payload exists to evaluate.
+`nasa_pds_sharad_radargram_i16` was superseded after later repair work showed
+the selected SHARAD radargram products are native 32-bit float, not 16-bit. Use
+`nasa_pds_sharad_radargram_f32` instead.
+
+`usgs_chirp_segy_i16`, `nasa_pds_crism_trdr_i16`,
+`usgs_3dep_las_intensity_u16`, and `noaa_passive_acoustic_pcm16` did not expose
+direct matching payload links from their seed pages. They need exact URL lists
+before rerun; no local payload exists to evaluate.

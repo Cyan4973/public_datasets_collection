@@ -1,6 +1,8 @@
 # 16-bit Next Hunt: License-First Candidate Slate
 
 This is a review slate only. No download scripts have been written and no dataset payloads have been fetched by the agent.
+Some entries were later deferred or superseded; consult
+`attempts/dataset_status.tsv` before treating this historical slate as current.
 
 Selection rules used here:
 
@@ -16,7 +18,7 @@ Selection rules used here:
 |---:|---|---|---|---|---|---|---|
 | 1 | `dwd_radolan_rw_precip_i16` | German weather-radar precipitation composites | DWD Open Data area; DWD data distributed under German open-data attribution terms / GeoNutzV-style terms. Source: `https://www.dwd.de/EN/ourservices/cdc/cdc.html` | one RADOLAN RW composite file | choose a bounded hourly or daily window, likely hundreds of 900x900 int16 grids and <1 GB raw | Python stdlib binary parser | Radar/weather domain, but raster composites differ materially from existing station weather tables. |
 | 2 | `noaa_nexrad_level2_moment_i16` | NEXRAD radar radial moment data | NOAA/NCEI public data; AWS Open Data registry. Sources: `https://registry.opendata.aws/noaa-nexrad/`, `https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ncdc:C00345/html` | one radar volume or moment sweep | bounded station/day subset, expected hundreds of MB | Python stdlib parser for selected uncompressed/bzip2 blocks | Parser is more complex than RADOLAN; keep only if implementation remains transparent. |
-| 3 | `sdss_corrected_frame_fits_i16` | astronomical CCD corrected imaging frames | SDSS public data release with publication/citation policy. Source: `https://www.sdss.org/collaboration/publication-policy/` | one FITS frame | dozens of frames, likely 100-500 MB | Python stdlib FITS parser, only admit `BITPIX=16` images | Deferred after first user-run script attempt: selected directory URLs returned HTTP 503 and produced no local payload. |
+| 3 | `sdss_corrected_frame_fits_i16` | astronomical CCD corrected imaging frames | SDSS public data release with publication/citation policy. Source: `https://www.sdss.org/collaboration/publication-policy/` | one FITS frame | dozens of frames, likely 100-500 MB | Python stdlib FITS parser, only admit `BITPIX=16` images | Deferred; see `attempts/dataset_status.tsv` and `attempts/20260614_deferred_sdss_corrected_frame_fits_i16.md`. |
 | 4 | `sdo_aia_fits_i16` | solar EUV/UV FITS images | NASA open science/data policy; SDO public data access. Sources: `https://sdo.gsfc.nasa.gov/data/dataaccess.php`, `https://earthdata.nasa.gov/nasa-data-policy` | one AIA FITS image | bounded wavelength/time sample, likely 100s MB | Python stdlib FITS parser, only admit `BITPIX=16` images | Avoid too many astronomy FITS recipes in one batch. |
 | 5 | `nasa_pds_mola_megdr_i16` | Mars MOLA gridded elevation rasters | NASA PDS public planetary data; PDS Geosciences MGS/MOLA catalog. Source: `https://pds-geosciences.wustl.edu/missions/mgs/mola.html` | one PDS IMG tile | selected global/regional tiles, likely 100s MB | Python stdlib PDS label + raw IMG parser | Topography overlaps Skadi in data geometry, but planetary source and instrument differ. |
 | 6 | `nasa_pds_themis_ir_mosaic_i16` | Mars THEMIS thermal-infrared controlled mosaics | NASA/PDS/USGS public planetary data. Source: `https://astrogeology.usgs.gov/search/map/mars-themis-controlled-mosaics-and-final-smithed-kernels` | one PDS/IMG or raw mosaic tile | selected regional mosaics, likely 100s MB | Python stdlib PDS label + raw IMG parser | Confirm product is integer 16-bit before scripting. |

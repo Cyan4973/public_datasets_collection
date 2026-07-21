@@ -3,15 +3,26 @@
 This directory records dataset acquisition attempts that did not produce an
 accepted recipe.
 
-Use one markdown file per attempt, named:
+`dataset_status.tsv` is the machine-readable status registry for attempt IDs
+that are easy to confuse with active candidates. Check it before treating any
+historical report, runbook, or attempt file as a current recommendation.
+
+Use one markdown file per non-accepted attempt, named:
 
 - `YYYYMMDD_<status>_<dataset_id>.md`
 
-Allowed status values:
+Registry status values:
+- `accepted`
 - `rejected`
 - `blocked`
+- `deferred`
 - `transient_failure`
 - `needs_tooling`
+- `superseded`
+
+Attempt filenames normally use only non-accepted statuses. `accepted` and
+`superseded` are registry statuses used to connect old IDs to active successor
+recipes.
 
 Record an attempt here when any of the following happens:
 - the source is no longer reachable
@@ -34,6 +45,12 @@ Each attempt record should include:
 
 The goal is to preserve negative results so future sessions do not repeat the
 same dead ends blindly.
+
+For `rejected`, `blocked`, `deferred`, `transient_failure`, `needs_tooling`, or
+`superseded` rows in `dataset_status.tsv`, the dataset ID must not appear as an
+active recipe under `datasets/`. If a retry succeeds, update the registry row to
+`accepted` and set `active_path`, or add a new accepted successor and mark the
+old ID `superseded`.
 
 For `needs_tooling` attempts, also maintain a grouped roadmap in
 `needs_tooling_roadmap.md` so related decoder or importer gaps are tracked as

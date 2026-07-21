@@ -15,7 +15,9 @@ Research Robotics BridgeData V2 TFRecord shard.
   many scientific/finance/geospatial tables, but not robot control
   demonstration records.
 - Numeric representation: dependency-free TFRecord framing extraction emits a
-  large uint8 payload stream plus uint32 record-length and masked-CRC streams.
+  large primary uint8 payload stream. The uint32 record-length and masked-CRC
+  streams are auxiliary TFRecord framing metadata, not a standalone 32-bit
+  robotics dataset.
 
 ## Materiality
 
@@ -66,8 +68,17 @@ The BridgeData V2 TFRecord shard downloaded, built, and verified successfully.
 - downloaded bytes including metadata: 435,311,894
 - TFRecord records: 30
 - payload bytes: 435,279,777
-- primary samples: 3
-- primary values: 435,279,867
-- primary bytes: 435,280,137
+- primary samples: 1
+- primary values/bytes: 435,279,777
+- auxiliary framing samples: 2
+- auxiliary framing values: 90
+- auxiliary framing bytes: 360
 - output cap behavior: one fixed shard processed; primary output remained below
   the 1 GB cap
+
+## Clarification
+
+There is no accepted dataset named `robotics_bridge_container_u32`. The two
+uint32 streams in this recipe are TFRecord container metadata: 30 payload-length
+values and 60 masked-CRC values. They exist only to document framing and should
+not be counted as independent robotics-domain 32-bit series.

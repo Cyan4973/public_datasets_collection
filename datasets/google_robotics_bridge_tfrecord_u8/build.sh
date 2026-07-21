@@ -112,7 +112,8 @@ write_u32_values(crc_path, masked_crcs)
 
 length_bytes = length_path.stat().st_size
 crc_bytes = crc_path.stat().st_size
-primary_bytes = payload_bytes + length_bytes + crc_bytes
+primary_bytes = payload_bytes
+auxiliary_bytes = length_bytes + crc_bytes
 if primary_bytes > MAX_PRIMARY_BYTES:
     raise SystemExit(f"primary output exceeds cap: {primary_bytes} > {MAX_PRIMARY_BYTES}")
 
@@ -140,7 +141,7 @@ rows = [
     {
         "dataset_id": DATASET_ID,
         "series_id": "bridge_train_00000_tfrecord_record_lengths_u32",
-        "role": "primary",
+        "role": "auxiliary",
         "sample_path": length_path.relative_to(data_root).as_posix(),
         "numeric_kind": "uint",
         "bit_width": 32,
@@ -161,7 +162,7 @@ rows = [
     {
         "dataset_id": DATASET_ID,
         "series_id": "bridge_train_00000_tfrecord_masked_crc_u32",
-        "role": "primary",
+        "role": "auxiliary",
         "sample_path": crc_path.relative_to(data_root).as_posix(),
         "numeric_kind": "uint",
         "bit_width": 32,
@@ -189,7 +190,10 @@ stats = {
     "record_count": record_count,
     "payload_bytes": payload_bytes,
     "primary_sample_bytes": primary_bytes,
-    "primary_values": payload_bytes + record_count + len(masked_crcs),
+    "primary_values": payload_bytes,
+    "auxiliary_sample_bytes": auxiliary_bytes,
+    "auxiliary_values": record_count + len(masked_crcs),
+    "total_sample_bytes": primary_bytes + auxiliary_bytes,
     "min_record_payload_bytes": min(record_lengths),
     "max_record_payload_bytes": max(record_lengths),
     "series_count": len(rows),
@@ -201,7 +205,7 @@ with (index_dir / "samples.jsonl").open("w", encoding="utf-8") as fh:
 
 print(
     f"built samples={len(rows)} records={record_count} payload_bytes={payload_bytes} "
-    f"primary_bytes={primary_bytes}"
+    f"primary_bytes={primary_bytes} auxiliary_bytes={auxiliary_bytes}"
 )
 PY
 

@@ -1,13 +1,14 @@
 # Google Robotics Bridge TFRecord UInt8
 
-Candidate recipe for one bounded public Google Research Robotics BridgeData V2
-TFRecord shard.
+Recipe for one bounded public Google Research Robotics BridgeData V2 TFRecord
+shard.
 
 The target material is robot manipulation demonstration data: TFDS/RLDS
 examples containing uint8 camera observations and float32 rewards, states,
 actions, and language embeddings. This recipe keeps the dependency surface
-small by preserving the natural TFRecord record payload bytes and record
-framing metadata as numeric streams.
+small by preserving the natural TFRecord record payload bytes as the sole
+primary series. TFRecord record lengths and masked CRCs are emitted only as
+auxiliary framing metadata; they are not a standalone 32-bit robotics dataset.
 
 Run:
 

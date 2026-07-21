@@ -60,8 +60,11 @@ for row in rows:
         raise SystemExit(f"missing sample: {row['sample_path']}")
     if path.stat().st_size != int(row["sample_size_bytes"]):
         raise SystemExit(f"sample size mismatch: {row['sample_path']}")
-    if row.get("role") != "primary":
-        raise SystemExit(f"unexpected role: {row}")
+if payload_row.get("role") != "primary":
+    raise SystemExit("payload stream must be primary")
+for row in (length_row, crc_row):
+    if row.get("role") != "auxiliary":
+        raise SystemExit(f"container framing stream must be auxiliary: {row['series_id']}")
 
 payload_path = root / payload_row["sample_path"]
 payload_size = payload_path.stat().st_size
@@ -98,17 +101,20 @@ crc_path = root / crc_row["sample_path"]
 if crc_path.stat().st_size != crc_count * 4:
     raise SystemExit("CRC sample size mismatch")
 
-primary_bytes = payload_size + length_path.stat().st_size + crc_path.stat().st_size
+primary_bytes = payload_size
+auxiliary_bytes = length_path.stat().st_size + crc_path.stat().st_size
 if primary_bytes > MAX_PRIMARY_BYTES:
     raise SystemExit(f"primary bytes exceed cap: {primary_bytes}")
 if int(stats["primary_sample_bytes"]) != primary_bytes:
     raise SystemExit("stats/index byte mismatch")
+if int(stats.get("auxiliary_sample_bytes", -1)) != auxiliary_bytes:
+    raise SystemExit("stats/index auxiliary byte mismatch")
 if int(stats["record_count"]) != record_count or int(stats["payload_bytes"]) != payload_size:
     raise SystemExit("stats/index record mismatch")
 
 print(
     f"verified dataset={DATASET_ID} samples={len(rows)} records={record_count} "
-    f"payload_bytes={payload_size} primary_bytes={primary_bytes}"
+    f"payload_bytes={payload_size} primary_bytes={primary_bytes} auxiliary_bytes={auxiliary_bytes}"
 )
 PY
 

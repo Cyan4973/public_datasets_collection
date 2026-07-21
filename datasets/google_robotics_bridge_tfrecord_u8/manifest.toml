@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "google_robotics_bridge_tfrecord_u8"
 name = "Google Robotics Bridge TFRecord UInt8"
-description = "One bounded public Google Research Robotics BridgeData V2 TFRecord shard, preserved as numeric TFRecord payload and framing streams."
+description = "One bounded public Google Research Robotics BridgeData V2 TFRecord shard, preserved as a primary uint8 TFRecord payload stream with auxiliary framing streams."
 homepage = "https://rail-berkeley.github.io/bridgedata/"
 
 [license]
@@ -59,8 +59,8 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/google_robotics_bridge_tfrecord_u8/samples.jsonl"
-summary = "Download one fixed BridgeData V2 TFRecord shard, validate TFDS metadata and TFRecord framing, concatenate record payload bytes, and emit record length and masked CRC streams."
-deterministic_notes = "Build is local-only after download. It preserves TFRecord record order, strips only the TFRecord length/CRC framing from the large payload stream, writes frame metadata separately, and enforces a 1 GB primary-output cap."
+summary = "Download one fixed BridgeData V2 TFRecord shard, validate TFDS metadata and TFRecord framing, concatenate record payload bytes, and emit record length and masked CRC streams as auxiliary metadata."
+deterministic_notes = "Build is local-only after download. It preserves TFRecord record order, strips only the TFRecord length/CRC framing from the large payload stream, writes frame metadata separately as auxiliary metadata, and enforces a 1 GB primary-output cap on the payload stream."
 
 [[series]]
 id = "bridge_train_00000_tfrecord_payload_u8"
@@ -90,9 +90,9 @@ output_path = "samples/google_robotics_bridge_tfrecord_u8/bridge_tfrecord_payloa
 id = "bridge_train_00000_tfrecord_record_lengths_u32"
 description = "TFRecord payload length for each record in the selected BridgeData V2 shard."
 semantic_meaning = "Per-record serialized demonstration payload byte lengths."
-role = "primary"
+role = "auxiliary"
 representation_class = "native_numeric"
-representation_notes = "Lengths are native unsigned integer fields from the TFRecord container framing."
+representation_notes = "Lengths are native unsigned integer fields from the TFRecord container framing. They are auxiliary metadata for the payload stream, not an accepted standalone 32-bit robotics dataset."
 source_resources = ["bridge_train_tfrecord_00000"]
 filtered_input_path = "filtered/google_robotics_bridge_tfrecord_u8/ingest_stats.json"
 filtering = "Preserve one length per accepted TFRecord record."
@@ -114,9 +114,9 @@ output_path = "samples/google_robotics_bridge_tfrecord_u8/bridge_tfrecord_record
 id = "bridge_train_00000_tfrecord_masked_crc_u32"
 description = "TFRecord masked CRC fields for each record length and payload."
 semantic_meaning = "Per-record TFRecord framing checksum values: length CRC and data CRC."
-role = "primary"
+role = "auxiliary"
 representation_class = "native_numeric"
-representation_notes = "The source stores both CRC fields as little-endian uint32 framing values."
+representation_notes = "The source stores both CRC fields as little-endian uint32 framing values. They are auxiliary metadata for integrity/framing, not an accepted standalone 32-bit robotics dataset."
 source_resources = ["bridge_train_tfrecord_00000"]
 filtered_input_path = "filtered/google_robotics_bridge_tfrecord_u8/ingest_stats.json"
 filtering = "Preserve two masked CRC values per accepted TFRecord record."

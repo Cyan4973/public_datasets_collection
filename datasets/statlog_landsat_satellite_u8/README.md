@@ -18,10 +18,12 @@ reflectance DN values in row order. The four bands:
 | `landsat_band_nir2_u8` | near-infrared 2 | ~0.8–1.1 µm |
 
 This fills a genuine local gap: the corpus has Mars thermal-IR (`nasa_pds_themis_ir_mosaic_u8`),
-land-cover *class* labels (`esa_worldcover_landcover_tiles_u8`), and weather radar
-(`noaa_nexrad_level3_products_u8`), but no **optical satellite reflectance**. The
-DN values are the sensor's *native* 8-bit representation (not a width mirror). The
-trailing class label is categorical metadata and is **not** collected.
+land-cover *class* labels (`esa_worldcover_landcover_tiles_u8`), but no
+**optical satellite reflectance**. The retired `noaa_nexrad_level3_products_u8`
+recipe is not counted as coverage because it preserved product-message bytes
+instead of decoded radar values. The DN values here are the sensor's *native*
+8-bit representation (not a width mirror). The trailing class label is
+categorical metadata and is **not** collected.
 
 ## Usage
 

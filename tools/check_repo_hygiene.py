@@ -44,7 +44,6 @@ LEGACY_OPAQUE_PRIMARY_VIOLATIONS = {
     # keeping them explicit prevents new opaque-byte recipes from hiding among
     # old cleanup targets.
     "natural_earth_vector_shp_u8",
-    "noaa_nexrad_level3_products_u8",
 }
 
 BLIND_CONCAT_PATTERNS = [

@@ -200,9 +200,15 @@ bytes as a shortcut for real decoding.
 The following recipe was removed on 2026-07-21:
 
 - `google_robotics_bridge_tfrecord_u8`
+- `noaa_nexrad_level3_products_u8`
 
 BridgeData V2 remains valuable, but TFRecord/protobuf payload bytes are not an
 8-bit numeric series. A valid successor must decode documented source fields,
 such as `steps/observation/image`, and emit the decoded typed values as natural
 samples. TFRecord framing, protobuf structure, image container bytes, CRCs,
 lengths, and source offsets may be auxiliary metadata only.
+
+NEXRAD Level-III remains valuable, but NIDS product-message bytes are not an
+8-bit radar series. A valid successor must parse the product message and emit
+documented packet/product values, keeping WMO/AWIPS text, NIDS headers, block
+wrappers, and packet metadata auxiliary only.

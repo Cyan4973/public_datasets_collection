@@ -11,7 +11,8 @@ Already represented in `datasets/` or prior successful 8-bit reports:
 - medium image pixels: `cifar10_pixels_u8`, `medmnist_pathmnist_images_u8`
 - segmentation and label rasters: `coco_panoptic_val2017_labels_u8`, `msd_hippocampus_segmentation_labels_u8`, `esa_worldcover_landcover_tiles_u8`
 - remote sensing / geospatial byte materials: `statlog_landsat_satellite_u8`, `nasa_pds_themis_ir_mosaic_u8`, `dc_lidar_2015_classification_u8`, prior `natural_earth_vector_shp_u8`, prior `geofabrik_liechtenstein_osm_pbf_u8`
-- weather radar bytes: `noaa_nexrad_level3_products_u8`
+- weather radar: `noaa_nexrad_level3_products_u8` was later retired because it
+  preserved NIDS product-message bytes instead of decoded radar values
 - biology and medicine: `ena_fastq_quality_phred`, `encode_methylation_pct_u8`, `bam_read_mapq_u8`, `pfam_seed_alignments_u8`, prior `ncbi_refseq_viral_genomes_u8`
 - audio and model/binary artifacts: `fsdd_pcm_u8`, `smollm2_135m_q8_gguf_weights`, prior `google_fonts_ofl_ttf_u8`
 
@@ -29,7 +30,7 @@ Also avoid replaying known failures: `mnist_px_u8` and `fmnist_px_u8` were retir
 | 6 | `jrc_global_surface_water_occurrence_u8` | surface-water climatology | Global Surface Water occurrence / seasonality byte grids | one official GeoTIFF tile or one internal COG tile | Adds hydrologic long-run occurrence percentages, not ordinary land-cover classes. | Large COGs need bounded range/tile extraction; avoid mixing occurrence, change, seasonality, and transitions in one recipe. |
 | 7 | `noaa_ims_snow_ice_cover_u8` | operational snow and ice charts | IMS snow/ice category codes | one daily grid | Adds operational categorical cryosphere charts with weather-map cadence. | Upstream encodings vary by era and resolution; exact product/year selection must avoid mixing ASCII grids, GeoTIFFs, and GRIB variants unless the emitted primary target is identical. |
 | 8 | `usgs_sidescan_sonar_tiff_u8` | marine acoustic imagery | uncompressed or losslessly decoded sidescan sonar grayscale bytes | one source sonar mosaic TIFF | Adds seafloor acoustic backscatter texture, not optical or radar imagery. | Needs exact permissive USGS product URLs and strict TIFF preflight; many candidate mosaics are compressed, 16-bit, or poorly documented. |
-| 9 | `noaa_nexrad_level2_reflectivity_u8` | raw radar volumes | decoded Level-II reflectivity moment bins when the source moment is byte-coded | one sweep or one moment field from a station volume | Adds raw polar-volume radar structure, deeper than the accepted Level-III product-message byte recipe. | Parser complexity is high; mixed 8/16-bit moments and bzip2 block structure must be handled without treating compressed bytes as primary. |
+| 9 | `noaa_nexrad_level2_reflectivity_u8` | raw radar volumes | decoded Level-II reflectivity moment bins when the source moment is byte-coded | one sweep or one moment field from a station volume | Adds raw polar-volume radar structure; Level-III product-message bytes were later rejected, so radar recipes must decode product values. | Parser complexity is high; mixed 8/16-bit moments and bzip2 block structure must be handled without treating compressed bytes as primary. |
 | 10 | `modis_active_fire_mask_u8` | satellite fire detection | MODIS/VIIRS fire-mask class bytes from active-fire products | one source granule mask plane | Adds event-like thermal anomaly classification over swaths. | Many NASA products require Earthdata flow and HDF parsing; public/permissive access and exact native uint8 SDS fields must be verified before scripting. |
 
 ## Recommended First Pass

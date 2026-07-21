@@ -97,6 +97,35 @@ Acceptance bar:
 - Keep TFRecord framing and protobuf/image-container metadata auxiliary only
 - Verify frame shape, count, byte total, and non-degenerate pixel content
 
+## 6. NEXRAD Level-III NIDS Decode Workflow
+
+Missing capability:
+- Reproducible NIDS Level-III product-message parsing from local files
+- Product-code-specific extraction of documented radial or raster packet values
+- Header/block metadata preservation as auxiliary data only
+
+Unblocked datasets:
+- [noaa_nexrad_level3_nids_radials_u8](./20260721_needs_tooling_noaa_nexrad_level3_nids_radials_u8.md)
+
+Current state:
+- `noaa_nexrad_level3_products_u8` has been rejected because it preserved
+  NIDS product-message bytes as primary `uint8` samples.
+- Public Level-III files are reachable and useful, but the previous recipe did
+  not decode product packets into radar values.
+
+Expected value:
+- Adds operational weather-radar radial or raster products
+- Keeps one coherent product code instead of mixing heterogeneous Level-III
+  products
+
+Acceptance bar:
+- Decode documented NIDS packet/product values from local files only
+- Emit typed radar bin/radial/raster values as primary samples
+- Keep WMO/AWIPS headers, NIDS message headers, block wrappers, source offsets,
+  and packet metadata auxiliary only
+- Verify product code, packet type, sample count, byte total, and
+  non-degenerate radar values
+
 ## Priority
 
 Recommended implementation order:
@@ -110,3 +139,5 @@ Reasoning:
 - `Seismic window selection` is no longer an open tooling blocker for the current external-registry backlog
 - BridgeData V2 is valuable enough to revisit, but only with real decoding
   rather than serialized payload bytes
+- NEXRAD Level-III is valuable enough to revisit, but only with product-packet
+  parsing rather than message-byte preservation

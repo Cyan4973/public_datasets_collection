@@ -8,16 +8,16 @@ Research Robotics BridgeData V2 TFRecord shard.
 ## Why This Adds New Territory
 
 - Domain: robot manipulation demonstrations / robot-learning trajectories.
-- Shape: a large TFRecord shard of serialized RLDS examples, with source
-  metadata describing uint8 camera observations and float32 rewards, states,
-  actions, and language embeddings.
+- Shape: 30 variable-size TFRecord record payloads from one serialized RLDS
+  shard, with source metadata describing uint8 camera observations and float32
+  rewards, states, actions, and language embeddings.
 - Difference from accepted datasets: the catalog has depth-camera rasters and
   many scientific/finance/geospatial tables, but not robot control
   demonstration records.
-- Numeric representation: dependency-free TFRecord framing extraction emits a
-  large primary uint8 payload stream. The uint32 record-length and masked-CRC
-  streams are auxiliary TFRecord framing metadata, not a standalone 32-bit
-  robotics dataset.
+- Numeric representation: dependency-free TFRecord framing extraction emits one
+  primary uint8 sample per TFRecord payload record. The uint32 record-length and
+  masked-CRC streams are auxiliary TFRecord framing metadata, not a standalone
+  32-bit robotics dataset.
 
 ## Materiality
 
@@ -68,7 +68,7 @@ The BridgeData V2 TFRecord shard downloaded, built, and verified successfully.
 - downloaded bytes including metadata: 435,311,894
 - TFRecord records: 30
 - payload bytes: 435,279,777
-- primary samples: 1
+- primary samples: 30
 - primary values/bytes: 435,279,777
 - auxiliary framing samples: 2
 - auxiliary framing values: 90
@@ -82,3 +82,7 @@ There is no accepted dataset named `robotics_bridge_container_u32`. The two
 uint32 streams in this recipe are TFRecord container metadata: 30 payload-length
 values and 60 masked-CRC values. They exist only to document framing and should
 not be counted as independent robotics-domain 32-bit series.
+
+The original accepted recipe briefly represented the 30 payload records as one
+concatenated primary byte stream. That has been corrected: each TFRecord payload
+is now emitted as its own primary sample, preserving the source record boundary.

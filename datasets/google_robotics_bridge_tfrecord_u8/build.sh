@@ -26,6 +26,7 @@ import json
 import os
 import shutil
 import struct
+import statistics
 from pathlib import Path
 
 DATASET_ID = "google_robotics_bridge_tfrecord_u8"
@@ -66,16 +67,16 @@ payload_dir.mkdir(parents=True, exist_ok=True)
 length_dir.mkdir(parents=True, exist_ok=True)
 crc_dir.mkdir(parents=True, exist_ok=True)
 
-payload_path = payload_dir / "bridge_train_00000_payload_bytes.bin"
 length_path = length_dir / "bridge_train_00000_record_lengths.bin"
 crc_path = crc_dir / "bridge_train_00000_masked_crcs.bin"
 
+payload_rows: list[dict[str, object]] = []
 record_lengths: list[int] = []
 masked_crcs: list[int] = []
 payload_bytes = 0
 source_bytes = shard.stat().st_size
 
-with shard.open("rb") as src, payload_path.open("wb") as payload_out:
+with shard.open("rb") as src:
     while True:
         offset = src.tell()
         length_bytes = src.read(8)
@@ -89,17 +90,44 @@ with shard.open("rb") as src, payload_path.open("wb") as payload_out:
             raise SystemExit(f"truncated TFRecord length CRC at offset {offset}")
         if length == 0 or length > source_bytes:
             raise SystemExit(f"bad TFRecord payload length {length} at offset {offset}")
+        if length > 0xFFFFFFFF:
+            raise SystemExit(f"TFRecord payload length exceeds uint32 range: {length}")
         data = src.read(length)
         if len(data) != length:
             raise SystemExit(f"truncated TFRecord payload at offset {offset}")
         data_crc_bytes = src.read(4)
         if len(data_crc_bytes) != 4:
             raise SystemExit(f"truncated TFRecord data CRC at offset {offset}")
-        payload_out.write(data)
+        record_index = len(record_lengths)
+        payload_path = payload_dir / f"bridge_train_00000_record_{record_index:05d}_payload.bin"
+        payload_path.write_bytes(data)
         record_lengths.append(length)
         masked_crcs.append(struct.unpack("<I", length_crc_bytes)[0])
         masked_crcs.append(struct.unpack("<I", data_crc_bytes)[0])
         payload_bytes += length
+        payload_rows.append(
+            {
+                "dataset_id": DATASET_ID,
+                "series_id": "bridge_train_00000_tfrecord_payload_u8",
+                "role": "primary",
+                "sample_path": payload_path.relative_to(data_root).as_posix(),
+                "numeric_kind": "uint",
+                "bit_width": 8,
+                "endianness": "little",
+                "element_size_bytes": 1,
+                "sample_size_bytes": length,
+                "value_count": length,
+                "sample_format": "single TFRecord record payload bytes",
+                "sample_geometry": "serialized_robotics_episode_record",
+                "sample_rank": 1,
+                "sample_shape": [length],
+                "sample_axes": ["byte"],
+                "natural_record_kind": "bridge_tfrecord_record_payload",
+                "source_file": SHARD_FILE,
+                "source_record_index": record_index,
+                "source_offset": offset,
+            }
+        )
 
 record_count = len(record_lengths)
 if record_count < MIN_RECORDS:
@@ -117,27 +145,7 @@ auxiliary_bytes = length_bytes + crc_bytes
 if primary_bytes > MAX_PRIMARY_BYTES:
     raise SystemExit(f"primary output exceeds cap: {primary_bytes} > {MAX_PRIMARY_BYTES}")
 
-rows = [
-    {
-        "dataset_id": DATASET_ID,
-        "series_id": "bridge_train_00000_tfrecord_payload_u8",
-        "role": "primary",
-        "sample_path": payload_path.relative_to(data_root).as_posix(),
-        "numeric_kind": "uint",
-        "bit_width": 8,
-        "endianness": "little",
-        "element_size_bytes": 1,
-        "sample_size_bytes": payload_bytes,
-        "value_count": payload_bytes,
-        "sample_format": "concatenated TFRecord record payload bytes",
-        "sample_geometry": "serialized_robotics_episode_records",
-        "sample_rank": 1,
-        "sample_shape": [payload_bytes],
-        "sample_axes": ["byte"],
-        "natural_record_kind": "bridge_tfrecord_shard_payload",
-        "source_file": SHARD_FILE,
-        "record_count": record_count,
-    },
+rows = payload_rows + [
     {
         "dataset_id": DATASET_ID,
         "series_id": "bridge_train_00000_tfrecord_record_lengths_u32",
@@ -189,14 +197,16 @@ stats = {
     "source_bytes": source_bytes,
     "record_count": record_count,
     "payload_bytes": payload_bytes,
+    "primary_sample_count": len(payload_rows),
     "primary_sample_bytes": primary_bytes,
     "primary_values": payload_bytes,
     "auxiliary_sample_bytes": auxiliary_bytes,
     "auxiliary_values": record_count + len(masked_crcs),
     "total_sample_bytes": primary_bytes + auxiliary_bytes,
     "min_record_payload_bytes": min(record_lengths),
+    "median_record_payload_bytes": statistics.median(record_lengths),
     "max_record_payload_bytes": max(record_lengths),
-    "series_count": len(rows),
+    "series_count": 3,
 }
 (filter_dir / "ingest_stats.json").write_text(json.dumps(stats, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 with (index_dir / "samples.jsonl").open("w", encoding="utf-8") as fh:
@@ -204,7 +214,7 @@ with (index_dir / "samples.jsonl").open("w", encoding="utf-8") as fh:
         fh.write(json.dumps(row, sort_keys=True) + "\n")
 
 print(
-    f"built samples={len(rows)} records={record_count} payload_bytes={payload_bytes} "
+    f"built primary_samples={len(payload_rows)} auxiliary_samples=2 records={record_count} payload_bytes={payload_bytes} "
     f"primary_bytes={primary_bytes} auxiliary_bytes={auxiliary_bytes}"
 )
 PY

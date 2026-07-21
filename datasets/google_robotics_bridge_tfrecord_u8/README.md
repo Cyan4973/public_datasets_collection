@@ -6,9 +6,9 @@ shard.
 The target material is robot manipulation demonstration data: TFDS/RLDS
 examples containing uint8 camera observations and float32 rewards, states,
 actions, and language embeddings. This recipe keeps the dependency surface
-small by preserving the natural TFRecord record payload bytes as the sole
-primary series. TFRecord record lengths and masked CRCs are emitted only as
-auxiliary framing metadata; they are not a standalone 32-bit robotics dataset.
+small by preserving each natural TFRecord record payload as its own primary
+sample. TFRecord record lengths and masked CRCs are emitted only as auxiliary
+framing metadata; they are not a standalone 32-bit robotics dataset.
 
 Run:
 

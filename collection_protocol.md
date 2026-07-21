@@ -24,6 +24,7 @@ This repository stores reproducible recipes, not dataset payloads. Accepted reci
 
 7. Sample boundaries must respect the natural record boundary.
    A recipe must not concatenate many smaller natural records into large physical sample files to pass the median-sample floor. If the actual primary natural records are below the median floor, the recipe is below floor even when split-level, table-level, or archive-level concatenations are large.
+   Grouping by class, label, prompt, split, shard, source file, or archive is not a valid escape hatch when the upstream material has smaller independent records such as images, drawings, utterances, TFRecord payloads, FASTA records, or match/event files. The correct response is to emit natural records as samples, explicitly lower or waive a floor in a reviewed policy note, or reject the dataset.
 
 8. Claimed scope must match realized output.
    If a recipe claims `50` sites, `20` years, or some other coverage, the accepted output must actually realize that scope or be explicitly narrowed before acceptance.
@@ -49,6 +50,7 @@ This repository stores reproducible recipes, not dataset payloads. Accepted reci
 - `role = "primary"` means the series is part of the actual compression target and counts toward acceptance.
 - `role = "auxiliary"` means the series exists only to preserve alignment, coordinates, timestamps, bookkeeping, or similar metadata and must not count toward acceptance.
 - Legacy manifests that omit `role` are audited with a narrow helper-series inference until they are migrated.
+- New or touched primary `[[series]]` entries must declare a specific `natural_record_kind`. Values that describe an aggregation artifact rather than a source boundary, such as class stacks, row streams, contiguous streams, shard payloads, or generic payload streams, are not acceptable.
 - Each accepted recipe must generate a machine-readable sample index under `.data/index/<dataset_id>/samples.jsonl` containing one row per sample file with `dataset_id`, `series_id`, `sample_path`, `numeric_kind`, `bit_width`, `endianness`, `element_size_bytes`, `sample_size_bytes`, and `value_count`.
 
 ## Batch Execution

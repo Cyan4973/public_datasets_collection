@@ -1,8 +1,11 @@
 # Numeric New Domains Hunt: Google Quick, Draw! Bitmap Classes
 
-## Recommendation
+## Historical Recommendation
 
-Stage `google_quickdraw_bitmap_classes_u8`, using six public Google Quick, Draw! full bitmap class arrays.
+This recommendation is obsolete. `google_quickdraw_bitmap_classes_u8` was later
+retired and rejected because its natural records are individual 28x28 drawings
+with 784 uint8 values each; prompt-class bitmap stacks are blind
+concatenations.
 
 ## Why This Adds New Territory
 
@@ -25,25 +28,24 @@ The recipe enforces:
 - verify primary-byte floor: 400,000,000 bytes
 - primary-output hard cap: 1,000,000,000 bytes
 
-## Script To Run
+## Retired Script
 
-```bash
-bash staging/google_quickdraw_bitmap_classes_u8/download.sh
-```
-
-After the download succeeds, build and verify locally:
-
-```bash
-bash staging/google_quickdraw_bitmap_classes_u8/build.sh
-bash staging/google_quickdraw_bitmap_classes_u8/verify.sh
-```
+Do not run this recipe. The tracked dataset recipe was removed after rejection.
 
 ## Rejected Candidates In This Pass
 
 - BTS TranStats airline on-time data was not retried because earlier repo reports already rejected it without exact verified archive URLs.
 - GitHub Archive would have added software event telemetry, but `data.gharchive.org` is blocked from this environment.
 
-## Acceptance Outcome
+## Retirement Outcome
+
+This recipe was later retired and rejected after the natural-record boundary
+audit. The accepted output below was a prompt-class stack representation, not an
+honest natural-record representation. Each individual Quick, Draw! bitmap
+drawing is a 28x28 uint8 image with 784 values, which is below the repository
+floor. Prompt-class concatenation is not acceptable.
+
+## Former Acceptance Outcome
 
 The Quick, Draw! bitmap class recipe downloaded, built, and verified successfully.
 

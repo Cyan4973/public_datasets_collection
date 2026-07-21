@@ -24,11 +24,7 @@ The intended choices are:
 
 ## Known Legacy Violations
 
-These accepted recipes are known legacy exceptions and should be repaired or
-retired instead of copied as patterns:
-
-- `google_quickdraw_bitmap_classes_u8`: groups independent 28x28 drawings into
-  class-level bitmap stacks
+No accepted recipe is currently exempted from the blind-concatenation guardrail.
 
 `mnist_px_u8` has been retired and rejected: individual MNIST images are only
 784 uint8 values, and class-level concatenation is not acceptable.
@@ -36,6 +32,10 @@ retired instead of copied as patterns:
 `fmnist_px_u8` has been retired and rejected for the same reason: individual
 Fashion-MNIST images are only 784 uint8 values, and class-level concatenation is
 not acceptable.
+
+`google_quickdraw_bitmap_classes_u8` has been retired and rejected for the same
+reason: individual Quick, Draw! bitmap drawings are only 784 uint8 values, and
+prompt-class concatenation is not acceptable.
 
 `google_robotics_bridge_tfrecord_u8` was repaired separately: each TFRecord
 payload record is now a primary sample, and TFRecord lengths/CRCs are auxiliary

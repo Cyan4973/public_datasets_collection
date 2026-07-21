@@ -16,6 +16,10 @@ REJECTED_DATASET_IDS = {
         "Rejected on 2026-07-21: natural records are individual 28x28 images "
         "with 784 uint8 values; class-level concatenation is forbidden."
     ),
+    "google_quickdraw_bitmap_classes_u8": (
+        "Rejected on 2026-07-21: natural records are individual 28x28 drawings "
+        "with 784 uint8 values; prompt-class concatenation is forbidden."
+    ),
     "mnist_px_u8": (
         "Rejected on 2026-07-21: natural records are individual 28x28 images "
         "with 784 uint8 values; class-level concatenation is forbidden."
@@ -26,7 +30,6 @@ LEGACY_NATURAL_BOUNDARY_VIOLATIONS = {
     # Historical accepted recipes that grouped independent small images/drawings
     # into class-level samples to clear sample-size floors. Keep these explicit
     # until the recipes are repaired or retired; do not add new entries lightly.
-    "google_quickdraw_bitmap_classes_u8",
 }
 
 BLIND_CONCAT_PATTERNS = [

@@ -185,8 +185,6 @@ nasa_pds_sharad_radargram_f32	ok	47106000	188424000	10	4658400	18633600	0	0	0	1	
 binance_usdm_futures_bookticker_2024_w01	ok	48000000	384000000	24	2000000	16000000	0	0	0	1	none	none
 electricity_load_diagrams_uci	ok	51894720	207578880	370	140256	561024	0	0	0	1	none	none
 esa_worldcover_landcover_tiles_u8	ok	54525952	54525952	52	1048576	1048576	0	0	0	1	none	none
-mnist_px_u8	ok	54880000	54880000	20	2569952	2569952	0	0	0	1	none	none
-fmnist_px_u8	ok	54880000	54880000	20	2744000	2744000	0	0	0	1	none	none
 noaa_ndbc_stdmet_historical	ok	56949977	455599816	273	224130	1793040	0	0	0	1	none	none
 mitbih_arrhythmia_u8	ok	59150000	59150000	91	650000	650000	0	0	0	1	none	none
 mitbih_arrhythmia_physionet	ok	62400000	124800000	96	650000	1300000	0	0	0	1	none	none

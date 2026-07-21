@@ -8,14 +8,14 @@ Goal: identify fresh `uint8` / byte-valued public numeric materials that are not
 
 Already represented in `datasets/` or prior successful 8-bit reports:
 
-- small and medium image pixels: `mnist_px_u8`, `fmnist_px_u8`, `cifar10_pixels_u8`, `medmnist_pathmnist_images_u8`
+- medium image pixels: `cifar10_pixels_u8`, `medmnist_pathmnist_images_u8`
 - segmentation and label rasters: `coco_panoptic_val2017_labels_u8`, `msd_hippocampus_segmentation_labels_u8`, `esa_worldcover_landcover_tiles_u8`
 - remote sensing / geospatial byte materials: `statlog_landsat_satellite_u8`, `nasa_pds_themis_ir_mosaic_u8`, `dc_lidar_2015_classification_u8`, prior `natural_earth_vector_shp_u8`, prior `geofabrik_liechtenstein_osm_pbf_u8`
 - weather radar bytes: `noaa_nexrad_level3_products_u8`
 - biology and medicine: `ena_fastq_quality_phred`, `encode_methylation_pct_u8`, `bam_read_mapq_u8`, `pfam_seed_alignments_u8`, prior `ncbi_refseq_viral_genomes_u8`
 - audio and model/binary artifacts: `fsdd_pcm_u8`, `smollm2_135m_q8_gguf_weights`, prior `google_fonts_ofl_ttf_u8`
 
-Also avoid replaying known failures: PASCAL VOC 2012 masks were rejected on license terms, several 28x28 / small-row UCI materials failed the natural-record floor, and raw symbolic remappings such as dependency labels or slot labels are out of scope.
+Also avoid replaying known failures: `mnist_px_u8` and `fmnist_px_u8` were retired because the natural records are 784-byte images, PASCAL VOC 2012 masks were rejected on license terms, several other 28x28 / small-row UCI materials failed the natural-record floor, and raw symbolic remappings such as dependency labels or slot labels are out of scope.
 
 ## Best New Candidates
 

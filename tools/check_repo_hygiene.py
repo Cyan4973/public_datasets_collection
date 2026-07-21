@@ -11,12 +11,21 @@ import tomllib
 
 ALLOWED_STAGING_PATHS = {"staging/README.md"}
 
+REJECTED_DATASET_IDS = {
+    "fmnist_px_u8": (
+        "Rejected on 2026-07-21: natural records are individual 28x28 images "
+        "with 784 uint8 values; class-level concatenation is forbidden."
+    ),
+    "mnist_px_u8": (
+        "Rejected on 2026-07-21: natural records are individual 28x28 images "
+        "with 784 uint8 values; class-level concatenation is forbidden."
+    ),
+}
+
 LEGACY_NATURAL_BOUNDARY_VIOLATIONS = {
     # Historical accepted recipes that grouped independent small images/drawings
     # into class-level samples to clear sample-size floors. Keep these explicit
     # until the recipes are repaired or retired; do not add new entries lightly.
-    "mnist_px_u8",
-    "fmnist_px_u8",
     "google_quickdraw_bitmap_classes_u8",
 }
 
@@ -82,6 +91,12 @@ def role_of(series: dict[str, object]) -> str:
 
 def check_natural_boundaries(errors: list[str]) -> None:
     changed_manifests = changed_dataset_manifests()
+
+    for dataset_id, reason in sorted(REJECTED_DATASET_IDS.items()):
+        dataset_path = Path("datasets") / dataset_id
+        if dataset_path.exists():
+            errors.append(f"Rejected dataset is present under datasets/: {dataset_id}")
+            errors.append(f"  {reason}")
 
     for manifest_path in sorted(Path("datasets").glob("*/manifest.toml")):
         dataset_id = manifest_path.parent.name

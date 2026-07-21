@@ -8,7 +8,7 @@ Goal: find new `uint8` / byte-oriented public datasets whose natural samples hav
 
 Already represented or staged nearby:
 
-- 2D image pixels: `mnist_px_u8`, `fmnist_px_u8`, `cifar10_pixels_u8`, `medmnist_pathmnist_images_u8`
+- 2D image pixels: `cifar10_pixels_u8`, `medmnist_pathmnist_images_u8`
 - medical / sensor byte sequences: `mitbih_arrhythmia_u8`, `fsdd_pcm_u8`, `ena_fastq_quality_phred`, `encode_methylation_pct_u8`
 - machine artifacts and vector formats: `smollm2_135m_q8_gguf_weights`, `google_fonts_ofl_ttf_u8`, `natural_earth_vector_shp_u8`, `geofabrik_liechtenstein_osm_pbf_u8`
 - nucleotide/text derivatives nearby: `ucsc_hg38_chromosomes_u8`, `ncbi_refseq_viral_genomes_u8`, `unicode_bmp_gutenberg`, `tokens_*_gutenberg`
@@ -35,7 +35,7 @@ If VOC terms are not acceptable, use `pfam_seed_alignments_u8` next. It avoids i
 
 ## Rejected Or Low-Priority Ideas
 
-- More MNIST/SVHN-like image datasets: valid `uint8`, but they do not add a new shape.
+- More MNIST/Fashion-MNIST/SVHN-like image datasets: valid `uint8`, but they do not add a new shape; `mnist_px_u8` and `fmnist_px_u8` were later retired because their natural 28x28 image records are below the floor.
 - UCI small-row feature tables: natural records are short rows and repeat the `uci_letter_recognition_u8` failure mode.
 - More Project Gutenberg byte encodings: the repo already has Gutenberg UTF-16 and token-ID datasets; raw UTF-8 would be a width/encoding neighbor rather than a new material shape.
 - More GHCN/CO-OPS weather flags as `uint8`: likely helper/categorical metadata, not a strong primary compression target.

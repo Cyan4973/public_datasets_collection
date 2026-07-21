@@ -27,10 +27,15 @@ The intended choices are:
 These accepted recipes are known legacy exceptions and should be repaired or
 retired instead of copied as patterns:
 
-- `mnist_px_u8`: groups independent 28x28 digit images by split and class
-- `fmnist_px_u8`: groups independent 28x28 garment images by split and class
 - `google_quickdraw_bitmap_classes_u8`: groups independent 28x28 drawings into
   class-level bitmap stacks
+
+`mnist_px_u8` has been retired and rejected: individual MNIST images are only
+784 uint8 values, and class-level concatenation is not acceptable.
+
+`fmnist_px_u8` has been retired and rejected for the same reason: individual
+Fashion-MNIST images are only 784 uint8 values, and class-level concatenation is
+not acceptable.
 
 `google_robotics_bridge_tfrecord_u8` was repaired separately: each TFRecord
 payload record is now a primary sample, and TFRecord lengths/CRCs are auxiliary

@@ -1,0 +1,78 @@
+manifest_version = 1
+dataset_id = "noaa_stormevents_details_2024_f64"
+name = "NOAA Storm Events Detail Numeric Fields 2024"
+description = "Decoded float64 numeric fields from NOAA/NCEI Storm Events 2024 detail records."
+homepage = "https://www.ncei.noaa.gov/products/storm-events-database"
+
+[license]
+name = "NOAA public data"
+spdx = "LicenseRef-NOAA-Public-Data"
+url = "https://www.noaa.gov/nodd/datasets"
+citation = "NOAA National Centers for Environmental Information Storm Events Database."
+notes = "NOAA data are public U.S. government data; preserve NOAA/NCEI attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official public NOAA/NCEI Storm Events CSV gzip only."
+usage_notes = "Public severe-weather event reports; this recipe extracts only numeric detail fields."
+
+[[origins]]
+id = "noaa_ncei_stormevents"
+name = "NOAA NCEI Storm Events Database"
+url = "https://www.ncei.noaa.gov/pub/data/swdi/stormevents/csvfiles/"
+type = "public_data_portal"
+notes = "Official public CSV distribution for Storm Events details, fatalities, and locations files."
+
+[[resources]]
+id = "stormevents_details_2024"
+origin = "noaa_ncei_stormevents"
+url = "https://www.ncei.noaa.gov/pub/data/swdi/stormevents/csvfiles/"
+type = "gzip_csv_file"
+version = "d2024_latest_correction_at_user_download_time"
+access = "Download script discovers the newest public StormEvents_details d2024 correction gzip from the NOAA/NCEI CSV directory, with exact fallback URLs and optional NOAA_STORMEVENTS_DETAILS_URL override."
+size_bytes = 12693422
+sha256 = ""
+local_path = "downloads/noaa_stormevents_details_2024_f64/"
+notes = "Fixed detail-record year d2024, newest available correction snapshot. The download script rejects HTML/API error payloads, malformed gzip, and missing required numeric columns."
+
+[local_paths]
+downloads = "downloads/noaa_stormevents_details_2024_f64/"
+filtered = "filtered/noaa_stormevents_details_2024_f64/"
+index = "index/noaa_stormevents_details_2024_f64/"
+samples = "samples/noaa_stormevents_details_2024_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_stormevents_details_2024_f64/samples.jsonl"
+summary = "Download the NOAA Storm Events 2024 details gzip CSV, parse selected numeric event-detail fields locally, and emit one float64 sample per source field."
+deterministic_notes = "Build is local-only after download. It preserves source row order per field, skips blank/not-applicable values independently per source field, parses documented K/M/B damage suffixes to numeric dollar amounts, rejects malformed selected values, and never emits compressed gzip or CSV bytes as primary samples."
+
+[[series]]
+id = "noaa_stormevents_detail_numeric_f64"
+description = "NOAA Storm Events 2024 detail numeric fields."
+semantic_meaning = "Per-event severe-weather detail fields such as event coordinates, meteorological magnitude, direct/indirect casualty counts, and property/crop damage amounts."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source CSV exposes these fields as decimal numeric text or documented damage shorthand. The build writes decoded numeric values as little-endian float64 arrays, not gzip or CSV file bytes."
+source_resources = ["stormevents_details_2024"]
+source_format = "gzip_csv"
+source_field = "StormEvents_details.{BEGIN_LAT,BEGIN_LON,END_LAT,END_LON,MAGNITUDE,INJURIES_DIRECT,INJURIES_INDIRECT,DEATHS_DIRECT,DEATHS_INDIRECT,DAMAGE_PROPERTY,DAMAGE_CROPS}"
+filtered_input_path = "filtered/noaa_stormevents_details_2024_f64/ingest_stats.json"
+filtering = "Keep selected numeric columns with at least 1000 decoded finite values and nonconstant content."
+missing_value_policy = "Blank selected field values are skipped as not applicable for that field. Malformed nonblank selected values, non-finite values, missing required columns, malformed gzip, and empty output are fatal."
+conversion = "Parse decimal values as float64. Parse NOAA damage shorthand suffixes K, M, and B as thousand, million, and billion dollars respectively. Emit one raw float64 sample per selected source field preserving source row order after field-local blank skips."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 source-field column"
+sample_geometry = "event_detail_table_field"
+sample_rank = 1
+sample_shape = []
+sample_axes = ["event_record"]
+natural_record_kind = "noaa_stormevents_detail_year_field"
+sample_count = 11
+total_size_bytes = 4748592
+output_path = "samples/noaa_stormevents_details_2024_f64/noaa_stormevents_detail_numeric_f64/"

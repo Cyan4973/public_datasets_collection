@@ -1,0 +1,78 @@
+manifest_version = 1
+dataset_id = "sentinel2_l2a_scene_classification_u8"
+name = "Sentinel-2 L2A Scene Classification Uint8"
+description = "Selected Sentinel-2 Level-2A scene-classification COGs decoded into native uint8 class-code rasters."
+homepage = "https://registry.opendata.aws/sentinel-2-l2a-cogs/"
+
+[license]
+name = "Copernicus Sentinel Data Terms and Conditions"
+spdx = "LicenseRef-Copernicus-Sentinel"
+url = "https://sentinels.copernicus.eu/documents/d/sentinel/sentinel-data-legal-notice"
+citation = "Contains modified Copernicus Sentinel data processed by ESA and distributed as public Element84 Cloud Optimized GeoTIFFs."
+notes = "Sentinel data are free and open under Copernicus Sentinel Data Terms and Conditions. Preserve attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public satellite scene-classification rasters from the Element84 Sentinel-2 COG bucket."
+usage_notes = "Scene Classification Layer class codes only; no RGB imagery or personal data."
+
+[[origins]]
+id = "element84_sentinel_cogs"
+name = "Element84 Sentinel-2 L2A COGs"
+url = "https://sentinel-cogs.s3.us-west-2.amazonaws.com/"
+type = "public_s3_bucket"
+notes = "Free public bucket, not requester-pays."
+
+[[resources]]
+id = "selected_scl_cogs"
+origin = "element84_sentinel_cogs"
+url = "staging/sentinel2_l2a_scene_classification_u8/download.sh"
+type = "fixed_cloud_optimized_geotiff_selection"
+version = "two_low_cloud_scenes_august_2023"
+access = "Download script fetches two exact public SCL.tif assets from Sentinel-2 L2A COG scene directories already used by the accepted Sentinel-2 reflectance recipe."
+size_bytes = 560263
+sha256 = ""
+local_path = "downloads/sentinel2_l2a_scene_classification_u8/"
+notes = "Compressed source files are small COGs; decoded primary output is one full uint8 SCL raster per source scene."
+
+[local_paths]
+downloads = "downloads/sentinel2_l2a_scene_classification_u8/"
+filtered = "filtered/sentinel2_l2a_scene_classification_u8/"
+index = "index/sentinel2_l2a_scene_classification_u8/"
+samples = "samples/sentinel2_l2a_scene_classification_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/sentinel2_l2a_scene_classification_u8/samples.jsonl"
+summary = "Download fixed Sentinel-2 L2A SCL GeoTIFFs, decode their TIFF tiles locally, and emit one raw uint8 scene-classification raster per source scene."
+deterministic_notes = "Fixed exact S3 object URLs, no live STAC dependency, lossless TIFF decompression, no band stacking, no image concatenation, and a hard 1 GB primary-output cap."
+
+[[series]]
+id = "sentinel2_l2a_scene_class_u8"
+description = "Sentinel-2 Level-2A Scene Classification Layer class codes."
+semantic_meaning = "Per-pixel SCL category code classifying no-data, saturated/defective pixels, dark area, cloud shadow, vegetation, non-vegetated surface, water, cloud probabilities, cirrus, and snow/ice."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source COG stores the SCL band as uint8 category pixels. The build decodes TIFF tiles and writes the source class-code values rather than bytes from the GeoTIFF wrapper."
+source_resources = ["selected_scl_cogs"]
+source_format = "cloud_optimized_geotiff"
+source_field = "SCL.band_1.scene_classification_code"
+filtered_input_path = "filtered/sentinel2_l2a_scene_classification_u8/ingest_stats.json"
+filtering = "Keep fixed single-band uint8 SCL TIFF assets whose decoded values are official SCL class codes and whose rasters are nonconstant."
+missing_value_policy = "Preserve official class 0 no-data. Missing assets, non-uint8 TIFFs, unsupported TIFF compression, malformed tile/strip tables, truncated tiles, unexpected class codes, empty rasters, and constant rasters are fatal."
+conversion = "Parse TIFF metadata, decompress uncompressed/Deflate/LZW tiles or strips, undo horizontal predictor if present, crop edge tiles to the source raster shape, and write one raw uint8 raster per SCL asset."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw Sentinel-2 SCL uint8 raster"
+sample_geometry = "2d_scene_classification_raster"
+sample_rank = 2
+sample_shape = []
+sample_axes = ["y", "x"]
+natural_record_kind = "sentinel2_l2a_scl_scene_raster"
+sample_count = 2
+total_size_bytes = 60280200
+output_path = "samples/sentinel2_l2a_scene_classification_u8/sentinel2_l2a_scene_class_u8/"

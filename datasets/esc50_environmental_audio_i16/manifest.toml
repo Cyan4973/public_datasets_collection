@@ -1,0 +1,51 @@
+manifest_version = 1
+dataset_id = "esc50_environmental_audio_i16"
+name = "ESC-50 Environmental Audio I16"
+description = "Environmental sound classification dataset ESC-50, 2000 5-sec WAV PCM16 clips, 50 classes (dog, rain, etc.), native int16, domain urban/environmental acoustic monitoring distinct from speech/music/marine."
+homepage = "https://github.com/karoldvl/ESC-50"
+[license]
+name = "Creative Commons Attribution Non-Commercial"
+spdx = ""
+url = "https://github.com/karoldvl/ESC-50"
+[[origins]]
+id = "esc50_github"
+name = "ESC-50 GitHub"
+url = "https://github.com/karoldvl/ESC-50"
+type = "github_release"
+[[resources]]
+id = "esc50_zip"
+origin = "esc50_github"
+url = "https://github.com/karoldvl/ESC-50/archive/master.zip"
+type = "zip_archive"
+local_path = "downloads/esc50_environmental_audio_i16/"
+[local_paths]
+downloads = "downloads/esc50_environmental_audio_i16/"
+extracted = "extracted/esc50_environmental_audio_i16/"
+filtered = "filtered/esc50_environmental_audio_i16/"
+index = "index/esc50_environmental_audio_i16/"
+samples = "samples/esc50_environmental_audio_i16/"
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/esc50_environmental_audio_i16/samples.jsonl"
+[[series]]
+id = "esc50_audio_i16"
+description = "Environmental audio WAV PCM16"
+semantic_meaning = "Urban/environmental acoustic waveform"
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["esc50_zip"]
+source_format = "wav"
+source_field = "pcm_payload"
+natural_record_kind = "esc50_audio_clip"
+numeric_kind = "int"
+bit_width = 16
+sample_format = "raw homogeneous int16 waveform"
+sample_geometry = "1d_waveform"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/esc50_environmental_audio_i16/esc50_audio_i16/"
+filtering = "Keep only WAV PCM16 mono 44.1kHz 5-sec clips"
+missing_value_policy = "Malformed WAV or non-PCM16 rejected"
+conversion = "Copy PCM bytes unchanged"

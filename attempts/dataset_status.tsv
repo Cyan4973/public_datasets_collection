@@ -55,3 +55,4 @@ noaa_nexrad_level2_moments_i16	blocked		attempts/20260722_blocked_noaa_nexrad_le
 bbbc007_microscopy_tiff_u16	rejected		attempts/20260722_rejected_bbbc007_microscopy_tiff_u16.md		RGB 8-bit (bits=[8,8,8] spp=3), not 16-bit	Not retryable as 16-bit
 tcia_brain_mri_u16	transient_failure		attempts/20260722_failed_tcia_brain_mri_u16.md		TCIA API JSON decode error for TCGA-GBM	Use working MRI collection or handle JSON errors, provide exact UIDs
 landsat8_l1tp_bayarea_multispectral_u16	needs_tooling		attempts/20260722_needs_tooling_landsat8_l1tp_bayarea_multispectral_u16.md		Tiled LZW + predictor 2, needs GDAL or LZW tiled parser	Extend tiff parser to LZW tiled + predictor or add GDAL
+pdal_sample_las_intensity_u16	transient_failure		attempts/20260722_failed_pdal_sample_las_intensity_u16.md		GitHub archive contains LFS pointers (130 bytes), not real LAS	Use LFS media URLs or direct S3 .las with XML parser

@@ -49,3 +49,4 @@ noaa_passive_acoustic_pcm16	blocked		attempts/20260722_blocked_noaa_passive_acou
 usgs_chirp_segy_i16	transient_failure		attempts/20260722_failed_usgs_chirp_segy_i16.md		Downloaded 2 zips contain GIF/CSV not SEG-Y; real 18.5GB segy.zip skipped as oversized	Pin exact small .sgy files via URL file or increase file cap with bounded trace extraction
 nasa_aviris_classic_hyperspectral_i16	blocked		attempts/20260722_blocked_nasa_aviris_classic_hyperspectral_i16.md		Free data page has no direct ENVI file links	Need direct ENVI hdr/img URLs or Earthdata authenticated DAAC
 sdss_corrected_frame_fits_i16	transient_failure		attempts/20260722_transient_failure_sdss_corrected_frame_fits_i16.md		data.sdss.org 503 for directory listings	Retry with exact frame URLs or LOCAL_DIR
+bbbc004_microscopy_tiff_u16	rejected		attempts/20260722_rejected_bbbc004_microscopy_tiff_u16.md		TIFFs are 8-bit PackBits (bits=8, comp=32773), not 16-bit	Not retryable as 16-bit; could be u8 candidate

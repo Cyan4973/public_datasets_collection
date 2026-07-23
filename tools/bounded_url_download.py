@@ -126,13 +126,31 @@ def discover_github_gltf(asset_limit: int, timeout: int) -> list[str]:
 def discover_tcia_series(collection: str, series_limit: int, timeout: int) -> list[str]:
     base = "https://services.cancerimagingarchive.net/nbia-api/services/v1"
     url = f"{base}/getSeries?Collection={urllib.parse.quote(collection)}"
-    series = json.loads(fetch_text(url, timeout))
+    try:
+        text = fetch_text(url, timeout)
+    except Exception as exc:
+        print(f"warning: TCIA getSeries fetch failed for collection {collection}: {exc}", file=sys.stderr)
+        return []
+    try:
+        series = json.loads(text)
+    except Exception as exc:
+        # API returned HTML error or empty, not JSON array
+        snippet = text[:500].replace("\n", " ")
+        print(f"warning: TCIA getSeries returned non-JSON for {collection}: {exc} snippet={snippet!r}", file=sys.stderr)
+        return []
+    if not isinstance(series, list):
+        print(f"warning: TCIA getSeries unexpected type for {collection}: {type(series)}", file=sys.stderr)
+        return []
     urls: list[str] = []
     for row in series[:series_limit]:
+        if not isinstance(row, dict):
+            continue
         uid = row.get("SeriesInstanceUID")
         if not uid:
             continue
         urls.append(f"{base}/getImage?SeriesInstanceUID={urllib.parse.quote(str(uid))}")
+    if not urls:
+        print(f"warning: TCIA getSeries returned 0 series for collection {collection}", file=sys.stderr)
     return urls
 
 

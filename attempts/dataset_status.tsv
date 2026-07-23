@@ -53,3 +53,4 @@ zenodo_forest_hyperspectral_envi_i16	blocked		attempts/20260722_blocked_zenodo_f
 usgs_3dep_las_intensity_u16	blocked		attempts/20260722_blocked_usgs_3dep_las_intensity_u16.md		Seed https://registry.opendata.aws/usgs-lidar/ has no direct .las hrefs, discovery 0	Implement S3 ListObjectsV2 XML parser for usgs-lidar-public or pin exact .las URLs
 noaa_nexrad_level2_moments_i16	blocked		attempts/20260722_blocked_noaa_nexrad_level2_moments_i16.md		S3 ListBucket 403 for prefix, needs exact keys file	Provide NEXRAD_KEYS_FILE or use NCEI HTTP directory listing
 bbbc007_microscopy_tiff_u16	rejected		attempts/20260722_rejected_bbbc007_microscopy_tiff_u16.md		RGB 8-bit (bits=[8,8,8] spp=3), not 16-bit	Not retryable as 16-bit
+tcia_brain_mri_u16	transient_failure		attempts/20260722_failed_tcia_brain_mri_u16.md		TCIA API JSON decode error for TCGA-GBM	Use working MRI collection or handle JSON errors, provide exact UIDs

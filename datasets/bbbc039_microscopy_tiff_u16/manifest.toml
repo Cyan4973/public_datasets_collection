@@ -1,0 +1,54 @@
+manifest_version = 1
+dataset_id = "bbbc039_microscopy_tiff_u16"
+name = "BBBC039 Microscopy TIFF UInt16"
+description = "Fluorescence microscopy 16-bit TIFF from BBBC039 (nuclei, U2OS), native uint16, distinct from BBBC021 drug screen: nuclei-only, different staining."
+homepage = "https://bbbc.broadinstitute.org/BBBC039"
+[license]
+name = "BBBC public dataset terms"
+spdx = ""
+url = "https://bbbc.broadinstitute.org/BBBC039"
+[[origins]]
+id = "bbbc039"
+name = "BBBC039"
+url = "https://bbbc.broadinstitute.org/BBBC039"
+type = "data_portal"
+[[resources]]
+id = "bbbc039_images"
+origin = "bbbc039"
+url = "https://data.broadinstitute.org/bbbc/BBBC039/"
+type = "bounded_url_selection"
+local_path = "downloads/bbbc039_microscopy_tiff_u16/"
+[local_paths]
+downloads = "downloads/bbbc039_microscopy_tiff_u16/"
+extracted = "extracted/bbbc039_microscopy_tiff_u16/"
+filtered = "filtered/bbbc039_microscopy_tiff_u16/"
+index = "index/bbbc039_microscopy_tiff_u16/"
+samples = "samples/bbbc039_microscopy_tiff_u16/"
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/bbbc039_microscopy_tiff_u16/samples.jsonl"
+[[series]]
+id = "bbbc039_microscopy_u16"
+description = "Fluorescence microscopy uint16 nuclei intensities"
+semantic_meaning = "Photon-counting nuclei fluorescence intensities from U2OS cells"
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["bbbc039_images"]
+source_format = "tiff"
+source_field = "grayscale_strip_payload"
+natural_record_kind = "bbbc039_microscopy_image"
+numeric_kind = "uint"
+bit_width = 16
+endianness = "source_declared"
+sample_format = "raw homogeneous uint16 microscopy raster"
+sample_geometry = "2d_microscopy_raw"
+sample_rank = 2
+sample_axes = ["y", "x"]
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/bbbc039_microscopy_tiff_u16/bbbc039_microscopy_u16/"
+filtering = "Keep only uncompressed single-sample 16-bit grayscale TIFFs"
+missing_value_policy = "Malformed, compressed, non-16-bit TIFFs rejected"
+conversion = "Copy TIFF strip bytes unchanged"

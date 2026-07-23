@@ -72,3 +72,15 @@ Alternatively, accept as `f32` dataset (`polyhaven_hdri_exr_f32`) if project dec
 
 Would add graphics HDR lighting domain (multi-exposure 360° capture), distinct from ML weight tensors (`hf_smolllm2_135m_safetensors_f16`) despite both being f16.
 
+
+## Reclassification
+
+Per policy "if 32-bit instead of 16-bit, reclassify not discard", this material was reclassified as `polyhaven_hdri_exr_f32`:
+
+- Native FLOAT32 channel planes from ZIP-compressed EXR (zlib)
+- Build implemented in `staging/polyhaven_hdri_exr_f32/build.sh` supporting ZIP decompression
+- Result: 4 samples, 8,388,608 bytes, 2,097,152 values, passes floor
+- Promoted to `datasets/polyhaven_hdri_exr_f32/`
+
+The f16 candidate remains deferred until true HALF assets are found.
+

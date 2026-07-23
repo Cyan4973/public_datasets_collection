@@ -1,0 +1,59 @@
+manifest_version = 1
+dataset_id = "polyhaven_hdri_exr_f32"
+name = "Poly Haven HDRI EXR Float32"
+description = "CC0 HDR environment maps preserved as native OpenEXR float32 channel planes, reclassified from f16 attempt where 1k assets proved to be 32-bit FLOAT PIZ/ZIP."
+homepage = "https://polyhaven.com/hdris"
+
+[license]
+name = "CC0 1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://polyhaven.com/license"
+notes = "Poly Haven assets are published under CC0."
+
+[[origins]]
+id = "polyhaven_api"
+name = "Poly Haven API"
+url = "https://api.polyhaven.com/"
+type = "public_api"
+
+[[resources]]
+id = "bounded_hdri_exr"
+origin = "polyhaven_api"
+type = "api_asset_selection"
+local_path = "downloads/polyhaven_hdri_exr_f32/"
+notes = "Downloads a bounded set of small EXR HDRIs from the public API. Native FLOAT32, many PIZ compressed, some ZIP."
+
+[local_paths]
+downloads = "downloads/polyhaven_hdri_exr_f32/"
+extracted = "extracted/polyhaven_hdri_exr_f32/"
+filtered = "filtered/polyhaven_hdri_exr_f32/"
+index = "index/polyhaven_hdri_exr_f32/"
+samples = "samples/polyhaven_hdri_exr_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/polyhaven_hdri_exr_f32/samples.jsonl"
+summary = "Extract one native float32 EXR channel plane per accepted HDRI channel, supporting ZIP/zlib scanline compression."
+
+[[series]]
+id = "hdri_float_planes_f32"
+description = "OpenEXR float32 HDRI channel planes."
+natural_record_kind = "polyhaven_hdri_exr_file"
+semantic_meaning = "Scene-linear HDR environment radiance channels."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["bounded_hdri_exr"]
+source_format = "openexr"
+source_field = "channel_scanline_FLOAT"
+missing_value_policy = "Non-FLOAT channels, PIZ compression (needs wavelet decoder), malformed chunks, or truncated payloads are rejected/skipped."
+conversion = "Decompress ZIP/zlib scanline chunks and copy native float32 channel bytes."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw OpenEXR FLOAT32 channel plane"
+sample_geometry = "2d_raster"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/polyhaven_hdri_exr_f32/hdri_float_planes_f32/"

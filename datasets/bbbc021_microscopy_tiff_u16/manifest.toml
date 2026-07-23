@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "bbbc021_microscopy_tiff_u16"
+name = "BBBC021 Fluorescence Microscopy TIFF UInt16"
+description = "Raw fluorescence microscopy 16-bit TIFF images from BBBC021 (U2OS cell drug screening), preserved as native uncompressed 16-bit raster samples."
+homepage = "https://bbbc.broadinstitute.org/BBBC021"
+
+[license]
+name = "BBBC public dataset terms"
+spdx = ""
+url = "https://bbbc.broadinstitute.org/BBBC021"
+citation = "Caie et al., Broad Bioimage Benchmark Collection BBBC021 — U2OS cell drug screen."
+notes = "Public microscopy images for benchmarking; preserve citation and source attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public fluorescence microscopy benchmark images from Broad Institute BBBC."
+usage_notes = "Public scientific cell imaging, no personal data."
+
+[[origins]]
+id = "bbbc021"
+name = "Broad Bioimage Benchmark Collection BBBC021"
+url = "https://bbbc.broadinstitute.org/BBBC021"
+type = "data_portal"
+notes = "Official BBBC021 page listing 16-bit TIFF fluorescence images."
+
+[[resources]]
+id = "bbbc021_raw_images"
+origin = "bbbc021"
+url = "https://data.broadinstitute.org/bbbc/BBBC021/"
+type = "bounded_url_selection"
+version = "2020-01-01"
+access = "Download script fetches exact TIFF/ZIP URLs, or exact URLs supplied with BBBC021_URLS_FILE."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/bbbc021_microscopy_tiff_u16/"
+notes = "Default seed scrapes Broad BBBC021 archive index for TIFF images; bounded to 200 files and 1 GB."
+
+[local_paths]
+downloads = "downloads/bbbc021_microscopy_tiff_u16/"
+extracted = "extracted/bbbc021_microscopy_tiff_u16/"
+filtered = "filtered/bbbc021_microscopy_tiff_u16/"
+index = "index/bbbc021_microscopy_tiff_u16/"
+samples = "samples/bbbc021_microscopy_tiff_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/bbbc021_microscopy_tiff_u16/samples.jsonl"
+summary = "Extract one uncompressed native 16-bit fluorescence TIFF per source image, detecting raw photon-counting fluorescence microscopy distinct from CT and satellite."
+deterministic_notes = "Build sorts TIFF paths, preserves one source microscopy image as one natural sample, rejects compressed RGB or 8-bit TIFF, and writes logs plus samples.jsonl."
+
+[[series]]
+id = "bbbc021_microscopy_u16"
+description = "Raw fluorescence microscopy TIFF intensities."
+semantic_meaning = "Photon-counting fluorescence intensities from stained U2OS cells, per microscopy field illumination."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["bbbc021_raw_images"]
+source_format = "tiff"
+source_field = "grayscale_strip_payload"
+filtered_input_path = "filtered/bbbc021_microscopy_tiff_u16/ingest_stats.json"
+filtering = "Keep only uncompressed single-sample 16-bit grayscale TIFFs with plausible microscopy dimensions; reject JPEG-compressed, RGB, multi-sample, or truncated TIFFs."
+missing_value_policy = "Malformed TIFFs, compressed TIFFs, non-16-bit depths, or truncated strips are rejected and logged."
+conversion = "Copy TIFF strip bytes unchanged preserving source little-endian order; do not re-encode or tile."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "source_declared"
+sample_format = "raw homogeneous uint16 microscopy raster"
+sample_geometry = "2d_microscopy_raw"
+sample_rank = 2
+sample_axes = ["y", "x"]
+natural_record_kind = "bbbc021_microscopy_image"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/bbbc021_microscopy_tiff_u16/bbbc021_microscopy_u16/"

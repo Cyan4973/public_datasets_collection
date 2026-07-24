@@ -1,0 +1,75 @@
+manifest_version = 1
+dataset_id = "covid19_google_mobility_f64"
+name = "COVID-19 Google Mobility Trends Float64"
+description = "Google mobility percent change from baseline (retail, grocery, parks, transit, workplace, residential) from COVID-19 Open Data, float64 time series per location."
+homepage = "https://storage.googleapis.com/covid19-open-data/"
+
+[license]
+name = "CC BY 4.0"
+spdx = "CC-BY-4.0"
+url = "https://github.com/GoogleCloudPlatform/covid-19-open-data"
+citation = "Google COVID-19 Open Data, mobility trends from Google."
+notes = "Public dataset under CC BY."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official GCS bucket covid19-open-data mobility.csv"
+usage_notes = "Human mobility behavior during pandemic."
+
+[[origins]]
+id = "covid19_open_data"
+name = "COVID-19 Open Data GCS"
+url = "https://storage.googleapis.com/covid19-open-data/"
+type = "bucket"
+
+[[resources]]
+id = "mobility_csv"
+origin = "covid19_open_data"
+url = "https://storage.googleapis.com/covid19-open-data/v3/mobility.csv"
+type = "csv"
+version = "v3_2022"
+access = "Direct GCS public CSV download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/covid19_google_mobility_f64/mobility.csv"
+
+[local_paths]
+downloads = "downloads/covid19_google_mobility_f64/"
+filtered = "filtered/covid19_google_mobility_f64/"
+index = "index/covid19_google_mobility_f64/"
+samples = "samples/covid19_google_mobility_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/covid19_google_mobility_f64/samples.jsonl"
+summary = "Parse mobility CSV, extract 6 mobility percent change columns as f64."
+deterministic_notes = "Local build only, preserves row order."
+
+[[series]]
+id = "covid19_*_f64"
+description = "Google mobility percent change from baseline (retail, grocery, parks, transit, workplaces, residential) from COVID-19 Open Data."
+semantic_meaning = "Per-record human mobility change percentages derived from aggregated smartphone location, one mobility category per sample."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Source CSV stores decimal percent change values; build writes IEEE-754 little-endian float64 arrays preserving source row order, skipping blanks."
+source_resources = ["mobility_csv"]
+source_format = "covid19_mobility_csv"
+source_field = "mobility_retail_and_recreation,mobility_grocery_and_pharmacy,mobility_parks,mobility_transit_stations,mobility_workplaces,mobility_residential"
+filtered_input_path = "filtered/covid19_google_mobility_f64/ingest_stats.json"
+filtering = "Keep all finite values across six mobility columns; each column becomes one sample."
+missing_value_policy = "Blank or non-finite mobility values skipped per column; rows with all blank mobility are skipped."
+conversion = "Parse retained decimal values as Python float and write little-endian float64 preserving source order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 pandemic mobility percent change column"
+sample_geometry = "table_column"
+sample_rank = 1
+sample_axes = ["record"]
+natural_record_kind = "covid19_mobility_column"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covid19_google_mobility_f64/"

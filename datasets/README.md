@@ -44,3 +44,11 @@ For examples and edge cases, use:
 - `collection_protocol.md`
 - `reports/protocol_case_law.md`
 - `reports/family_homogeneity_policy.md`
+
+Where is ground truth?
+- `datasets/<id>/` — accepted recipes (committed). This file lists them, not `.data/samples/`.
+- `staging/<id>/` — drafts, gitignored except README.
+- `attempts/dataset_status.tsv` — registry of rejected/blocked/deferred/transient_failure/needs_tooling/superseded + evidence paths.
+- `reports/accepted_recipe_audit.tsv` — generated audit from committed manifests + `.data/index/` (use to check sizes, not `.data/samples/` alone).
+- `.data/` — ephemeral scratch (downloads, extracted, filtered, samples, index, logs). See `.data/README.md` signpost. A subdir existing there does NOT mean accepted.
+- Never key corpus checks on volatile paths like `source_sample` / `sample_path` / `.data/index/...`; key on stable `dataset_id`, `replacement_id`, `active_path`.

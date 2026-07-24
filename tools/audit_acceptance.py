@@ -1,4 +1,16 @@
 #!/usr/bin/env python3
+"""
+Accepted-recipe audit keyed on stable dataset_id.
+
+Authoritative layers:
+- datasets/<id>/manifest.toml committed recipes
+- attempts/dataset_status.tsv registry (accepted/rejected/blocked/...)
+- .data/index/<id>/samples.jsonl only for sizes, after grounding on above
+- .data/samples/ is ephemeral scratch, NOT authoritative (see .data/README.md)
+
+Cross-reference MUST use stable dataset_id / replacement_id / active_path,
+NOT volatile source_sample / sample_path / .data/index/... strings.
+"""
 from __future__ import annotations
 
 import json

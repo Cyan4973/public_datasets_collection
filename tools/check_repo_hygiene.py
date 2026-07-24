@@ -11,6 +11,7 @@ import tomllib
 
 
 ALLOWED_STAGING_PATHS = {"staging/README.md"}
+ALLOWED_DATA_PATHS = {".data/README.md"}
 
 STATUS_REGISTRY_PATH = Path("attempts/dataset_status.tsv")
 STATUS_REGISTRY_COLUMNS = [
@@ -367,21 +368,31 @@ def main() -> int:
         )
         errors.extend(f"  staged: {path}" for path in staged_staging)
 
-    tracked_data = git_lines("ls-files", ".data")
+    tracked_data = [
+        path for path in git_lines("ls-files", ".data") if path not in ALLOWED_DATA_PATHS
+    ]
     if tracked_data:
-        errors.append("Tracked .data payload material is forbidden.")
+        errors.append(
+            "Tracked .data payload material is forbidden; only .data/README.md may be tracked."
+        )
         errors.extend(f"  tracked: {path}" for path in tracked_data)
 
-    staged_data = git_lines(
-        "diff",
-        "--cached",
-        "--name-only",
-        "--diff-filter=ACMR",
-        "--",
-        ".data",
-    )
+    staged_data = [
+        path
+        for path in git_lines(
+            "diff",
+            "--cached",
+            "--name-only",
+            "--diff-filter=ACMR",
+            "--",
+            ".data",
+        )
+        if path not in ALLOWED_DATA_PATHS
+    ]
     if staged_data:
-        errors.append("Staged additions/modifications under .data/ are forbidden.")
+        errors.append(
+            "Staged additions/modifications under .data/ are forbidden except .data/README.md."
+        )
         errors.extend(f"  staged: {path}" for path in staged_data)
 
     registry = load_status_registry(errors)

@@ -55,3 +55,8 @@ old ID `superseded`.
 For `needs_tooling` attempts, also maintain a grouped roadmap in
 `needs_tooling_roadmap.md` so related decoder or importer gaps are tracked as
 shared tooling work instead of isolated one-off failures.
+
+Authoritative vs ephemeral:
+- Do NOT decide corpus membership from `.data/samples/` — it mixes accepted output, staging experiments, removed-recipe remnants, and orphan pulls with no metadata. See `.data/README.md`.
+- Start from committed layers: `datasets/` (accepted), `staging/` (drafts), `reports/accepted_recipe_audit.tsv` (audit), and this registry file (`dataset_status.tsv`).
+- Cross-reference by stable `dataset_id`, `replacement_id`, `active_path` — NOT by volatile `source_sample` / `sample_path` / `.data/index/...` strings that break on rename/rebuild.

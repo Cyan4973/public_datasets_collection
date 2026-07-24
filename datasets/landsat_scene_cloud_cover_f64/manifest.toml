@@ -1,0 +1,73 @@
+manifest_version = 1
+dataset_id = "landsat_scene_cloud_cover_f64"
+name = "Landsat Scene Cloud Cover Float64"
+description = "Landsat scene cloud cover percentage from GCS public Landsat index.csv.gz, float64, distinct sensor from Sentinel2."
+homepage = "https://storage.googleapis.com/gcp-public-data-landsat/"
+
+[license]
+name = "USGS / NASA public domain"
+spdx = "CC0-1.0"
+url = "https://landsat.usgs.gov/"
+citation = "USGS/NASA Landsat program, GCS public mirror."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official GCS public Landsat index.csv.gz from gcp-public-data-landsat bucket."
+usage_notes = "Optical satellite scene QA metric."
+
+[[origins]]
+id = "gcp_landsat"
+name = "GCP Public Landsat"
+url = "https://console.cloud.google.com/storage/browser/gcp-public-data-landsat"
+type = "bucket"
+
+[[resources]]
+id = "landsat_index_csv_gz"
+origin = "gcp_landsat"
+url = "https://storage.googleapis.com/gcp-public-data-landsat/index.csv.gz"
+type = "gzip_csv"
+version = "2022_index"
+access = "Direct GCS public file."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/landsat_scene_cloud_cover_f64/index.csv.gz"
+
+[local_paths]
+downloads = "downloads/landsat_scene_cloud_cover_f64/"
+filtered = "filtered/landsat_scene_cloud_cover_f64/"
+index = "index/landsat_scene_cloud_cover_f64/"
+samples = "samples/landsat_scene_cloud_cover_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/landsat_scene_cloud_cover_f64/samples.jsonl"
+summary = "Parse Landsat index CSV, extract CLOUD_COVER column as f64."
+deterministic_notes = "Local build only."
+
+[[series]]
+id = "landsat_cloud_cover_f64"
+description = "Landsat scene cloud cover percent."
+semantic_meaning = "Cloud cover QA metric per Landsat scene."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["landsat_index_csv_gz"]
+source_format = "landsat_index_csv_gz"
+source_field = "CLOUD_COVER"
+filtered_input_path = "filtered/landsat_scene_cloud_cover_f64/ingest_stats.json"
+filtering = "Keep finite CLOUD_COVER 0-100."
+missing_value_policy = "Skip blank/non-finite."
+conversion = "Parse float64 LE."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 cloud cover"
+sample_geometry = "table_column"
+sample_rank = 1
+sample_axes = ["scene"]
+natural_record_kind = "landsat_scene_cloud_cover_column"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/landsat_scene_cloud_cover_f64/cloud_cover_f64/"

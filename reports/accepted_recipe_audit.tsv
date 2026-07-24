@@ -160,6 +160,7 @@ beijing_air_quality_uci	ok	4219435	33755480	132	32141.5	257132	1534340	12274720	
 ncbi_gene_human	ok	4794554	19178216	4	1198638.5	4794554	0	0	0	1	none	none
 landsat_scene_cloud_cover_f64	ok	5000000	40000000	1	5000000	40000000	0	0	0	1	none	none
 natural_earth_10m_geometry_xy_f64	ok	5312502	42500016	1166	1461	11688	0	0	0	1	none	none
+covid19_hospitalizations_u64	ok	6025565	48204520	9	191923	1535384	0	0	0	1	none	none
 bam_read_mapq_u8	ok	6170563	6170563	14	435368	435368	0	0	0	1	none	none
 noaa_tides_water_level	ok	7287492	58299936	42	175440	1403520	0	0	0	1	none	none
 unicode_bmp_gutenberg	ok	8700484	17400968	12	490769	981538	0	0	0	1	none	none

@@ -1,0 +1,104 @@
+# Accepted after user-run download and successful local build/verification.
+manifest_version = 1
+dataset_id = "nasa_pds_gravity_harmonics_f64"
+name = "NASA GRAIL GRGM1200A Bouguer Gravity Harmonics Float64"
+description = "Decoded double-precision cosine and sine spherical-harmonic coefficients from the degree-1200 GRAIL GRGM1200A lunar Bouguer gravity model."
+homepage = "https://pgda.gsfc.nasa.gov/products/50"
+
+[license]
+name = "U.S. Government Public Domain"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://science.nasa.gov/learn/basics-of-space-flight/chapter2-2/"
+citation = "NASA Planetary Geodynamics Data Archive; cite the selected gravity model and mission documentation recorded by the downloader."
+notes = "NASA scientific data are public U.S. government data; preserve model authorship and mission acknowledgement."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NASA planetary gravity-model product page or an exact user-supplied official product URL."
+usage_notes = "Global planetary gravity-field expansion coefficients; no personal data."
+
+[[origins]]
+id = "nasa_pgda"
+name = "NASA Planetary Geodynamics Data Archive"
+url = "https://pgda.gsfc.nasa.gov/"
+type = "data_portal"
+notes = "NASA archive for planetary geodesy and gravity products."
+
+[[resources]]
+id = "grgm1200a_bouguer_model"
+origin = "nasa_pgda"
+url = "http://pds-geosciences.wustl.edu/grail/grail-l-lgrs-5-rdr-v1/grail_1001/shadr/gggrx_1200a_bouguer_sha.tab"
+type = "spherical_harmonic_model"
+version = "GRAIL GRGM1200A Bouguer SHA, degree/order 1200"
+access = "Direct public download of the exact NASA PDS GRAIL SHADR table."
+size_bytes = 88059844
+sha256 = "3ad34406cbfc22a32d1f9ecad47a12d3449ddb2c848ea62e6049be9472afbf95"
+local_path = "downloads/nasa_pds_gravity_harmonics_f64/gravity_product"
+notes = "The first header record carries model radius, GM, degree/order, and normalization metadata; 721,800 following coefficient rows cover degrees 1 through 1200."
+
+[local_paths]
+downloads = "downloads/nasa_pds_gravity_harmonics_f64/"
+filtered = "filtered/nasa_pds_gravity_harmonics_f64/"
+index = "index/nasa_pds_gravity_harmonics_f64/"
+samples = "samples/nasa_pds_gravity_harmonics_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_pds_gravity_harmonics_f64/samples.jsonl"
+summary = "Decode a high-degree gravity model coefficient table and emit the dimensionless Cnm and Snm coefficient fields as raw little-endian float64 arrays."
+deterministic_notes = "Exact realized payload URL and SHA-256 are recorded; plain, gzip, and ZIP wrappers are decoded; coefficient rows must be unique degree/order pairs with at least 10,000 rows and maximum degree at least 100; source row order is preserved."
+
+[[series]]
+id = "gravity_cosine_cnm_f64"
+description = "Normalized cosine spherical-harmonic gravity coefficients Cnm."
+semantic_meaning = "Dimensionless cosine coefficients of a planetary gravitational-potential spherical-harmonic expansion, preserving source degree/order row order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Scientific-notation coefficient fields are parsed directly as IEEE-754 float64; degree/order indices and wrapper material are excluded."
+source_resources = ["grgm1200a_bouguer_model"]
+source_format = "PDS SHADR/SHA or ICGEM-style gravity coefficient table"
+source_field = "Cnm cosine gravity coefficient"
+filtered_input_path = "filtered/nasa_pds_gravity_harmonics_f64/model_stats.json"
+filtering = "Keep one finite Cnm value per unique valid degree/order coefficient row."
+missing_value_policy = "Coefficient rows must contain both Cnm and Snm. Duplicate degree/order pairs, malformed recognized rows, non-finite values, fewer than 10,000 rows, or maximum degree below 100 are fatal."
+conversion = "Parse decimal/scientific notation and write values in source row order as IEEE-754 little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 coefficient field"
+sample_geometry = "triangular_spherical_harmonic_coefficient_field"
+sample_rank = 1
+sample_axes = ["degree_order_row"]
+natural_record_kind = "planetary_gravity_model_coefficient_field"
+sample_count = 1
+total_size_bytes = 5774400
+output_path = "samples/nasa_pds_gravity_harmonics_f64/gravity_cosine_cnm_f64/"
+
+[[series]]
+id = "gravity_sine_snm_f64"
+description = "Normalized sine spherical-harmonic gravity coefficients Snm."
+semantic_meaning = "Dimensionless sine coefficients of a planetary gravitational-potential spherical-harmonic expansion, preserving source degree/order row order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Scientific-notation coefficient fields are parsed directly as IEEE-754 float64; degree/order indices and wrapper material are excluded."
+source_resources = ["grgm1200a_bouguer_model"]
+source_format = "PDS SHADR/SHA or ICGEM-style gravity coefficient table"
+source_field = "Snm sine gravity coefficient"
+filtered_input_path = "filtered/nasa_pds_gravity_harmonics_f64/model_stats.json"
+filtering = "Keep one finite Snm value per unique valid degree/order coefficient row."
+missing_value_policy = "Coefficient rows must contain both Cnm and Snm. Duplicate degree/order pairs, malformed recognized rows, non-finite values, fewer than 10,000 rows, or maximum degree below 100 are fatal."
+conversion = "Parse decimal/scientific notation and write values in source row order as IEEE-754 little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 coefficient field"
+sample_geometry = "triangular_spherical_harmonic_coefficient_field"
+sample_rank = 1
+sample_axes = ["degree_order_row"]
+natural_record_kind = "planetary_gravity_model_coefficient_field"
+sample_count = 1
+total_size_bytes = 5774400
+output_path = "samples/nasa_pds_gravity_harmonics_f64/gravity_sine_snm_f64/"

@@ -1,0 +1,128 @@
+# Accepted after user-run download and successful local build/verification.
+manifest_version = 1
+dataset_id = "noaa_cors_rinex_observations_f64"
+name = "NOAA CORS RINEX GNSS Observations Float64"
+description = "Raw satellite-navigation pseudorange, carrier-phase, and signal-strength observations decoded from NOAA CORS RINEX station-day files."
+homepage = "https://registry.opendata.aws/noaa-ncn/"
+
+[license]
+name = "U.S. Government Public Domain"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://www.noaa.gov/information-technology/open-data-dissemination"
+citation = "NOAA National Geodetic Survey Continuously Operating Reference Stations Network."
+notes = "NOAA CORS observations are public U.S. government data; preserve NOAA/NGS attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Historical GNSS receiver observations from the official NOAA CORS public AWS bucket."
+usage_notes = "Station-level geodetic instrument observations; no personal data."
+
+[[origins]]
+id = "noaa_cors_aws"
+name = "NOAA CORS Network on AWS"
+url = "https://noaa-cors-pds.s3.amazonaws.com/"
+type = "public_s3_bucket"
+notes = "Official NOAA Open Data Dissemination Program bucket."
+
+[[resources]]
+id = "cors_rinex_2024_001"
+origin = "noaa_cors_aws"
+url = "https://noaa-cors-pds.s3.amazonaws.com/?list-type=2&prefix=rinex/2024/001/"
+type = "s3_prefix_selection"
+version = "2024-day-001-rinex-observation-files"
+access = "Deterministic sorted selection of historical RINEX observation objects, with exact selected URLs and checksums recorded locally."
+size_bytes = 24974679
+sha256 = ""
+local_path = "downloads/noaa_cors_rinex_observations_f64/"
+notes = "Defaults to twelve sorted station-day observation files from a fixed historical day; RINEX_URLS_FILE can provide exact alternatives."
+
+[local_paths]
+downloads = "downloads/noaa_cors_rinex_observations_f64/"
+filtered = "filtered/noaa_cors_rinex_observations_f64/"
+index = "index/noaa_cors_rinex_observations_f64/"
+samples = "samples/noaa_cors_rinex_observations_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_cors_rinex_observations_f64/samples.jsonl"
+summary = "Download a deterministic fixed-day NOAA CORS RINEX selection, parse actual satellite observation fields, and emit little-endian float64 samples per station-day and observation code."
+deterministic_notes = "Fixed year/day prefix; sorted object keys; bounded file count and byte caps; gzip and RINEX observation-header validation; local-only RINEX 2 parser; source order preserved; blank observations skipped; one natural sample per station-day/observation-code stream."
+
+[[series]]
+id = "gnss_pseudorange_m_f64"
+description = "GNSS code and precision-code pseudorange observations."
+semantic_meaning = "Receiver-to-satellite pseudorange measurements in meters, separated into natural samples by station-day and RINEX C*/P* observation code."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Published decimal RINEX observation fields parsed directly as float64."
+source_resources = ["cors_rinex_2024_001"]
+source_format = "RINEX 2 observation file"
+source_field = "C*/P* pseudorange observation fields"
+filtered_input_path = "filtered/noaa_cors_rinex_observations_f64/observation_stats.json"
+filtering = "Keep finite C* and P* observation values from ordinary observation epochs; skip blank fields and sub-1,000-value station-day/code samples."
+missing_value_policy = "Blank observation fields are missing and skipped. Malformed numeric fields, malformed epochs, non-finite values, and inconsistent observation layouts are fatal."
+conversion = "Parse fixed-width RINEX observation fields and write IEEE-754 little-endian float64 values in source epoch/satellite order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 array"
+sample_geometry = "station_day_observation_code_stream"
+sample_rank = 1
+sample_axes = ["observation"]
+natural_record_kind = "gnss_station_day_observation_code"
+sample_count = 45
+total_size_bytes = 14283992
+output_path = "samples/noaa_cors_rinex_observations_f64/gnss_pseudorange_m_f64/"
+
+[[series]]
+id = "gnss_carrier_phase_cycles_f64"
+description = "GNSS carrier-phase observations."
+semantic_meaning = "Carrier-phase measurements in cycles, separated into natural samples by station-day and RINEX L* observation code."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["cors_rinex_2024_001"]
+source_format = "RINEX 2 observation file"
+source_field = "L* carrier-phase observation fields"
+filtered_input_path = "filtered/noaa_cors_rinex_observations_f64/observation_stats.json"
+filtering = "Keep finite L* observation values and samples with at least 1,000 values."
+missing_value_policy = "Blank fields are skipped; malformed or non-finite populated fields are fatal."
+conversion = "Parse fixed-width RINEX fields into little-endian float64 without rescaling."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 array"
+sample_geometry = "station_day_observation_code_stream"
+sample_rank = 1
+sample_axes = ["observation"]
+natural_record_kind = "gnss_station_day_observation_code"
+sample_count = 35
+total_size_bytes = 11147944
+output_path = "samples/noaa_cors_rinex_observations_f64/gnss_carrier_phase_cycles_f64/"
+
+[[series]]
+id = "gnss_signal_strength_dbhz_f64"
+description = "GNSS signal-strength observations."
+semantic_meaning = "Receiver-reported signal strength or carrier-to-noise density in the RINEX S* field convention, separated by station-day and observation code."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["cors_rinex_2024_001"]
+source_format = "RINEX 2 observation file"
+source_field = "S* signal-strength observation fields"
+filtered_input_path = "filtered/noaa_cors_rinex_observations_f64/observation_stats.json"
+filtering = "Keep finite S* observation values and samples with at least 1,000 values."
+missing_value_policy = "Blank fields are skipped; malformed or non-finite populated fields are fatal."
+conversion = "Parse fixed-width RINEX fields into little-endian float64 without rescaling."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 array"
+sample_geometry = "station_day_observation_code_stream"
+sample_rank = 1
+sample_axes = ["observation"]
+natural_record_kind = "gnss_station_day_observation_code"
+sample_count = 35
+total_size_bytes = 11161952
+output_path = "samples/noaa_cors_rinex_observations_f64/gnss_signal_strength_dbhz_f64/"

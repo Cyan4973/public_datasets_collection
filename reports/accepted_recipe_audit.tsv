@@ -200,6 +200,7 @@ covertype_uci	ok	28469588	34279708	49	581012	581012	0	0	0	1	none	none
 binance_usdm_futures_aggtrades_btc_eth_2024_w01	ok	30405852	243246816	28	882679	7061432	76014630	501696558	70	1	none	none
 wikimedia_clickstream_enwiki	ok	35605767	142423068	1	35605767	142423068	0	0	0	1	none	none
 pglib_opf_matpower_cases_numeric	ok	39285570	314284560	639	14406	115248	0	0	0	1	none	none
+figshare_rmd17_trajectories_f64	ok	39600000	316800000	10	3600000	28800000	0	0	0	1	none	none
 hsl_gtfs_static_schedule_numeric	ok	44453630	226392932	8	5809272	25274372	0	0	0	1	none	none
 encode_methylation_pct_u8	ok	44773596	44773596	24	1804995	1804995	0	0	0	1	none	none
 yearpredictionmsd_uci	ok	46896395	186554890	91	515345	2061380	0	0	0	1	none	none

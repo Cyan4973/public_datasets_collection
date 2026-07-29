@@ -1,0 +1,103 @@
+manifest_version = 1
+dataset_id = "figshare_rmd17_trajectories_f64"
+name = "Revised MD17 Molecular Coordinates and Forces Float64"
+description = "Native float64 atomic coordinate and force trajectory tensors for a bounded five-molecule selection from the revised MD17 molecular-dynamics dataset."
+homepage = "https://doi.org/10.6084/m9.figshare.12672038.v3"
+
+[license]
+name = "CC0 1.0"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "Christensen, A. S. and von Lilienfeld, O. A., Revised MD17 dataset, Figshare, version 3."
+notes = "The pinned Figshare record declares CC0. Preserve dataset authorship and DOI citation as scholarly attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Published atomistic molecular-dynamics benchmark arrays from a versioned Figshare research-data record."
+usage_notes = "Synthetic molecular configurations, energies, and forces; no personal data."
+
+[[origins]]
+id = "figshare_rmd17_v3"
+name = "Revised MD17 dataset, version 3"
+url = "https://api.figshare.com/v2/articles/12672038/versions/3"
+type = "versioned_research_data_record"
+notes = "Pinned Figshare article version; payload selection is recorded by the downloader."
+
+[[resources]]
+id = "rmd17_bounded_molecule_files"
+origin = "figshare_rmd17_v3"
+url = "https://api.figshare.com/v2/articles/12672038/versions/3"
+type = "figshare_npz_or_archive_selection"
+version = "figshare_article_12672038_v3"
+access = "Download script queries pinned metadata and selects exact files containing the five configured molecule NPZ members, with per-file and aggregate caps."
+size_bytes = 1066301513
+sha256 = "cddeea2ec2c4b22a9de16a9a65a3eeedac5b29da9c99c20bbff0153912bf922b"
+local_path = "downloads/figshare_rmd17_trajectories_f64/"
+notes = "Realized source filenames, URLs, sizes, and Figshare checksums are written to download_plan.tsv and download_inventory.tsv."
+
+[local_paths]
+downloads = "downloads/figshare_rmd17_trajectories_f64/"
+filtered = "filtered/figshare_rmd17_trajectories_f64/"
+index = "index/figshare_rmd17_trajectories_f64/"
+samples = "samples/figshare_rmd17_trajectories_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/figshare_rmd17_trajectories_f64/samples.jsonl"
+summary = "Download a pinned rMD17 payload selection, locate five molecule NPZ files, require native C-order little-endian float64 coordinate and force arrays, and emit one raw tensor per molecule and field."
+deterministic_notes = "Build is local-only. It preserves source molecule, configuration, atom, component, and byte order; rejects float32, Fortran order, malformed shapes, non-finite values, duplicate molecules, or output above 1 GB. Verification independently rereads NPY headers and byte-compares every emitted value."
+
+[[series]]
+id = "rmd17_coordinates_f64"
+description = "Atomic Cartesian coordinate tensors from revised MD17 trajectories."
+semantic_meaning = "Atom positions for each molecular configuration, in the dataset's coordinate units."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Accepted only when the source NPY header explicitly declares little-endian float64; source data bytes are copied unchanged."
+source_resources = ["rmd17_bounded_molecule_files"]
+source_format = "NumPy NPZ containing NPY tensor"
+source_field = "coords (or legacy alias R)"
+filtered_input_path = "filtered/figshare_rmd17_trajectories_f64/ingest_stats.json"
+filtering = "Keep the configured molecules only when coordinates and forces are finite C-order float64 tensors with identical configuration×atom×3 shapes."
+missing_value_policy = "Missing molecule files, arrays, configurations, atoms, or non-finite values fail the build; no imputation or frame dropping."
+conversion = "Copy the source NPY float64 data payload unchanged into one raw row-major tensor per molecule."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw row-major float64 molecular coordinate tensor"
+sample_geometry = "molecular_trajectory_tensor"
+sample_rank = 3
+sample_axes = ["configuration", "atom", "xyz_component"]
+natural_record_kind = "rmd17_molecule_coordinate_trajectory"
+sample_count = 5
+total_size_bytes = 158400000
+output_path = "samples/figshare_rmd17_trajectories_f64/rmd17_coordinates_f64/"
+
+[[series]]
+id = "rmd17_forces_f64"
+description = "Atomic Cartesian force tensors from revised MD17 trajectories."
+semantic_meaning = "Force vector on each atom for each molecular configuration, in the dataset's force units."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Accepted only when the source NPY header explicitly declares little-endian float64; source data bytes are copied unchanged."
+source_resources = ["rmd17_bounded_molecule_files"]
+source_format = "NumPy NPZ containing NPY tensor"
+source_field = "forces (or legacy alias F)"
+filtered_input_path = "filtered/figshare_rmd17_trajectories_f64/ingest_stats.json"
+filtering = "Keep the configured molecules only when coordinates and forces are finite C-order float64 tensors with identical configuration×atom×3 shapes."
+missing_value_policy = "Missing molecule files, arrays, configurations, atoms, or non-finite values fail the build; no imputation or frame dropping."
+conversion = "Copy the source NPY float64 data payload unchanged into one raw row-major tensor per molecule."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw row-major float64 molecular force tensor"
+sample_geometry = "molecular_trajectory_tensor"
+sample_rank = 3
+sample_axes = ["configuration", "atom", "xyz_component"]
+natural_record_kind = "rmd17_molecule_force_trajectory"
+sample_count = 5
+total_size_bytes = 158400000
+output_path = "samples/figshare_rmd17_trajectories_f64/rmd17_forces_f64/"

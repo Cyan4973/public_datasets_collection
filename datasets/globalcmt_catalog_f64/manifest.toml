@@ -1,0 +1,202 @@
+manifest_version = 1
+dataset_id = "globalcmt_catalog_f64"
+name = "Global CMT Earthquake Moment Tensor Catalog Float64"
+description = "Six earthquake moment tensor component series reconstructed from the Global Centroid Moment Tensor catalog's five-line NDK records as float64 values in dyne-centimeters."
+homepage = "https://www.globalcmt.org/"
+
+[license]
+name = "Global CMT public dataset terms"
+spdx = "LicenseRef-Global-CMT"
+url = "https://www.globalcmt.org/"
+citation = "Ekström, G., Nettles, M., Dziewonski, A.M., Global CMT project."
+notes = "The Global CMT site permits research use and requests citation of the project references; preserve attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Global CMT NDK release from the project's Columbia/LDEO catalog archive."
+usage_notes = "Earthquake source physics, suitable for seismology moment tensor compression."
+
+[[origins]]
+id = "globalcmt"
+name = "Global CMT Project"
+url = "https://www.globalcmt.org/"
+type = "public_research_dataset"
+notes = "Public NDK catalog files list centroid moment tensors."
+
+[[resources]]
+id = "cmt_ndk_1976_2020"
+origin = "globalcmt"
+url = "https://www.ldeo.columbia.edu/~gcmt/projects/CMT/catalog/jan76_dec20.ndk"
+type = "text_catalog"
+version = "jan76_dec20"
+access = "Download script fetches this exact fixed release from the Global CMT project's canonical Columbia/LDEO catalog archive and validates every five-line NDK record before accepting it."
+size_bytes = 23016960
+sha256 = "baed5ad29a69b57344c6025b27769b1012858aa6b5c807f984696d573c0f0eb4"
+local_path = "downloads/globalcmt_catalog_f64/jan76_dec20.ndk"
+notes = "Pinned historical release; the local inventory records measured size and SHA-256."
+
+[local_paths]
+downloads = "downloads/globalcmt_catalog_f64/"
+filtered = "filtered/globalcmt_catalog_f64/"
+index = "index/globalcmt_catalog_f64/"
+samples = "samples/globalcmt_catalog_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/globalcmt_catalog_f64/samples.jsonl"
+summary = "Download one pinned Global CMT NDK release, strictly parse its fixed five-line records, and emit one float64 event series for each of six tensor components."
+deterministic_notes = "Build is local-only. It requires complete five-line NDK records, reconstructs each component from the line-four mantissa and shared decimal exponent, preserves source order, and enforces event, median, and output-size floors. Verification independently reparses the source and compares every value."
+
+[[series]]
+id = "globalcmt_mrr_f64"
+description = "Moment tensor component Mrr (dyne-cm) from Global CMT."
+semantic_meaning = "Radial-radial component of centroid moment tensor."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The NDK numeric field is reconstructed from its decimal mantissa and shared base-10 exponent, then written as IEEE-754 float64 little-endian."
+source_resources = ["cmt_ndk_1976_2020"]
+source_format = "globalcmt_ndk_text"
+source_field = "Mrr"
+filtered_input_path = "filtered/globalcmt_catalog_f64/ingest_stats.json"
+filtering = "No event filtering; every record must pass strict structural and numeric validation."
+missing_value_policy = "The pinned NDK tensor fields are required; malformed or non-finite records fail the build."
+conversion = "Reconstruct Mrr in dyne-centimeters as decimal mantissa * 10**exponent, convert to float64, and write little-endian values in source order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 moment tensor component time series"
+sample_geometry = "event_series"
+sample_rank = 1
+sample_axes = ["earthquake_event"]
+natural_record_kind = "globalcmt_moment_tensor_component_column"
+sample_count = 1
+total_size_bytes = 454656
+output_path = "samples/globalcmt_catalog_f64/globalcmt_mrr_f64/"
+
+[[series]]
+id = "globalcmt_mtt_f64"
+description = "Moment tensor component Mtt."
+semantic_meaning = "Theta-theta component."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["cmt_ndk_1976_2020"]
+source_format = "globalcmt_ndk_text"
+source_field = "Mtt"
+filtered_input_path = "filtered/globalcmt_catalog_f64/ingest_stats.json"
+filtering = "No event filtering; every record must pass strict structural and numeric validation."
+missing_value_policy = "The pinned NDK tensor fields are required; malformed or non-finite records fail the build."
+conversion = "Reconstruct Mtt in dyne-centimeters from its NDK mantissa and shared exponent; write float64 little-endian in source order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 moment tensor component time series"
+sample_geometry = "event_series"
+sample_rank = 1
+sample_axes = ["earthquake_event"]
+natural_record_kind = "globalcmt_moment_tensor_component_column"
+sample_count = 1
+total_size_bytes = 454656
+output_path = "samples/globalcmt_catalog_f64/globalcmt_mtt_f64/"
+
+[[series]]
+id = "globalcmt_mpp_f64"
+description = "Moment tensor component Mpp."
+semantic_meaning = "Phi-phi component."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["cmt_ndk_1976_2020"]
+source_format = "globalcmt_ndk_text"
+source_field = "Mpp"
+filtered_input_path = "filtered/globalcmt_catalog_f64/ingest_stats.json"
+filtering = "No event filtering; every record must pass strict structural and numeric validation."
+missing_value_policy = "The pinned NDK tensor fields are required; malformed or non-finite records fail the build."
+conversion = "Reconstruct Mpp in dyne-centimeters from its NDK mantissa and shared exponent; write float64 little-endian in source order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 moment tensor component time series"
+sample_geometry = "event_series"
+sample_rank = 1
+sample_axes = ["earthquake_event"]
+natural_record_kind = "globalcmt_moment_tensor_component_column"
+sample_count = 1
+total_size_bytes = 454656
+output_path = "samples/globalcmt_catalog_f64/globalcmt_mpp_f64/"
+
+[[series]]
+id = "globalcmt_mrt_f64"
+description = "Moment tensor component Mrt."
+semantic_meaning = "Radial-theta component."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["cmt_ndk_1976_2020"]
+source_format = "globalcmt_ndk_text"
+source_field = "Mrt"
+filtered_input_path = "filtered/globalcmt_catalog_f64/ingest_stats.json"
+filtering = "No event filtering; every record must pass strict structural and numeric validation."
+missing_value_policy = "The pinned NDK tensor fields are required; malformed or non-finite records fail the build."
+conversion = "Reconstruct Mrt in dyne-centimeters from its NDK mantissa and shared exponent; write float64 little-endian in source order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 moment tensor component time series"
+sample_geometry = "event_series"
+sample_rank = 1
+sample_axes = ["earthquake_event"]
+natural_record_kind = "globalcmt_moment_tensor_component_column"
+sample_count = 1
+total_size_bytes = 454656
+output_path = "samples/globalcmt_catalog_f64/globalcmt_mrt_f64/"
+
+[[series]]
+id = "globalcmt_mrp_f64"
+description = "Moment tensor component Mrp."
+semantic_meaning = "Radial-phi component."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["cmt_ndk_1976_2020"]
+source_format = "globalcmt_ndk_text"
+source_field = "Mrp"
+filtered_input_path = "filtered/globalcmt_catalog_f64/ingest_stats.json"
+filtering = "No event filtering; every record must pass strict structural and numeric validation."
+missing_value_policy = "The pinned NDK tensor fields are required; malformed or non-finite records fail the build."
+conversion = "Reconstruct Mrp in dyne-centimeters from its NDK mantissa and shared exponent; write float64 little-endian in source order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 moment tensor component time series"
+sample_geometry = "event_series"
+sample_rank = 1
+sample_axes = ["earthquake_event"]
+natural_record_kind = "globalcmt_moment_tensor_component_column"
+sample_count = 1
+total_size_bytes = 454656
+output_path = "samples/globalcmt_catalog_f64/globalcmt_mrp_f64/"
+
+[[series]]
+id = "globalcmt_mtp_f64"
+description = "Moment tensor component Mtp."
+semantic_meaning = "Theta-phi component."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["cmt_ndk_1976_2020"]
+source_format = "globalcmt_ndk_text"
+source_field = "Mtp"
+filtered_input_path = "filtered/globalcmt_catalog_f64/ingest_stats.json"
+filtering = "No event filtering; every record must pass strict structural and numeric validation."
+missing_value_policy = "The pinned NDK tensor fields are required; malformed or non-finite records fail the build."
+conversion = "Reconstruct Mtp in dyne-centimeters from its NDK mantissa and shared exponent; write float64 little-endian in source order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 moment tensor component time series"
+sample_geometry = "event_series"
+sample_rank = 1
+sample_axes = ["earthquake_event"]
+natural_record_kind = "globalcmt_moment_tensor_component_column"
+sample_count = 1
+total_size_bytes = 454656
+output_path = "samples/globalcmt_catalog_f64/globalcmt_mtp_f64/"

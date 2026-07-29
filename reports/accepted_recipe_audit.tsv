@@ -85,6 +85,7 @@ uniprot_protein_sizes	ok	294084	882252	74	2048	6834	0	0	0	1	none	none
 jpl_close_approaches	ok	297934	2383472	7	42562	340496	0	0	0	1	none	none
 gbif_datasets	ok	300000	1200000	3	100000	200000	0	0	0	1	none	none
 nasa_power_daily_precip_temperature	ok	321420	2571360	20	16071	128568	0	0	0	1	none	none
+globalcmt_catalog_f64	ok	340992	2727936	6	56832	454656	0	0	0	1	none	none
 noaa_coops_water_temperature	ok	346842	2774736	2	173421	1387368	0	0	0	1	none	none
 usgs_water_sites_rdb	ok	347330	2500776	5	69466	555728	69466	555728	1	1	none	none
 who_gho_observations	ok	348104	1435929	8	43513	130539	0	0	0	1	none	none

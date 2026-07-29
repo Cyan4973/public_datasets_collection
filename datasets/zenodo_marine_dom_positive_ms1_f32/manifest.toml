@@ -1,0 +1,104 @@
+# Accepted after user-run download and successful local build/verification.
+manifest_version = 1
+dataset_id = "zenodo_marine_dom_positive_ms1_f32"
+name = "Marine DOM Positive-Ion MS1 Centroid Spectra Float32"
+description = "Native float32 m/z and intensity arrays from positive-ion MS1 centroid spectra in two 2D-LC-MS/MS marine dissolved-organic-matter fraction runs."
+homepage = "https://zenodo.org/records/10054333"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Zenodo record 10054333, 2D-LC-MS/MS based non-targeted metabolomics of marine DOM (.mzML files)."
+notes = "The downloader verifies the record's CC BY 4.0 identifier before fetching exact files."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Two exact versioned mzML files from a fixed open Zenodo metabolomics record."
+usage_notes = "Chemical instrument spectra from marine dissolved organic matter."
+
+[[origins]]
+id = "zenodo_10054333"
+name = "Zenodo"
+url = "https://zenodo.org/records/10054333"
+type = "repository"
+notes = "Open mzML distribution for one coherent marine-DOM study."
+
+[[resources]]
+id = "positive_fraction_10_12_replicates"
+origin = "zenodo_10054333"
+url = "https://zenodo.org/api/records/10054333"
+type = "versioned_record_files"
+version = "2D_Frac_10-12a.mzML and 2D_Frac_10-12b.mzML"
+access = "Direct content links resolved from fixed Zenodo record metadata."
+size_bytes = 76710628
+sha256 = ""
+local_path = "downloads/zenodo_marine_dom_positive_ms1_f32/"
+notes = "Exact positive-ion pooled late-fraction replicate runs; Zenodo MD5 and local SHA-256 values are recorded."
+
+[local_paths]
+downloads = "downloads/zenodo_marine_dom_positive_ms1_f32/"
+filtered = "filtered/zenodo_marine_dom_positive_ms1_f32/"
+index = "index/zenodo_marine_dom_positive_ms1_f32/"
+samples = "samples/zenodo_marine_dom_positive_ms1_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_marine_dom_positive_ms1_f32/samples.jsonl"
+summary = "Decode mzML arrays and emit one native float32 m/z sample and one native float32 intensity sample for every positive-ion centroid MS1 spectrum."
+deterministic_notes = "Fixed record and filenames; license, size, MD5, XML, CV semantics, precision, compression, polarity, and MS level validated; all qualifying MS1 spectra retained in acquisition order; no spectrum-length filtering or concatenation."
+
+[[series]]
+id = "positive_ms1_mz_f32"
+description = "Positive-ion MS1 centroid mass-to-charge arrays."
+semantic_meaning = "Centroid peak mass-to-charge ratios in m/z units, one natural sample per positive-ion MS1 survey spectrum."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Only arrays explicitly tagged as m/z and 32-bit float are retained."
+source_resources = ["positive_fraction_10_12_replicates"]
+source_format = "PSI mzML centroid spectrum"
+source_field = "positive MS1 spectrum.binaryDataArray[m/z array, 32-bit float]"
+filtered_input_path = "filtered/zenodo_marine_dom_positive_ms1_f32/spectrum_stats.json"
+filtering = "Keep every positive-polarity, MS-level-1, centroid spectrum with a valid native float32 m/z array."
+missing_value_policy = "Missing arrays, malformed payloads, length mismatches, non-finite values, and undeclared or wrong precision are fatal."
+conversion = "Base64-decode and zlib-decompress as declared, then write raw IEEE-754 little-endian float32 without rescaling."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 spectrum array"
+sample_geometry = "centroid_peak_mz_array"
+sample_rank = 1
+sample_axes = ["centroid_peak"]
+natural_record_kind = "positive_ion_ms1_centroid_spectrum"
+sample_count = 1401
+total_size_bytes = 12464028
+output_path = "samples/zenodo_marine_dom_positive_ms1_f32/positive_ms1_mz_f32/"
+
+[[series]]
+id = "positive_ms1_intensity_f32"
+description = "Positive-ion MS1 centroid signal-intensity arrays."
+semantic_meaning = "Centroid peak signal intensities, one natural sample per positive-ion MS1 survey spectrum."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Only arrays explicitly tagged as intensity and 32-bit float are retained."
+source_resources = ["positive_fraction_10_12_replicates"]
+source_format = "PSI mzML centroid spectrum"
+source_field = "positive MS1 spectrum.binaryDataArray[intensity array, 32-bit float]"
+filtered_input_path = "filtered/zenodo_marine_dom_positive_ms1_f32/spectrum_stats.json"
+filtering = "Keep every positive-polarity, MS-level-1, centroid spectrum with a valid native float32 intensity array."
+missing_value_policy = "Missing arrays, malformed payloads, length mismatches, non-finite values, and undeclared or wrong precision are fatal."
+conversion = "Base64-decode and zlib-decompress as declared, then write raw IEEE-754 little-endian float32 without rescaling."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 spectrum array"
+sample_geometry = "centroid_peak_intensity_array"
+sample_rank = 1
+sample_axes = ["centroid_peak"]
+natural_record_kind = "positive_ion_ms1_centroid_spectrum"
+sample_count = 1401
+total_size_bytes = 12464028
+output_path = "samples/zenodo_marine_dom_positive_ms1_f32/positive_ms1_intensity_f32/"

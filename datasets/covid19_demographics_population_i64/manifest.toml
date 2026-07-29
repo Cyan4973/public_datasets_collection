@@ -1,0 +1,73 @@
+manifest_version = 1
+dataset_id = "covid19_demographics_population_i64"
+name = "COVID-19 Demographics Population Int64"
+description = "Global population demographics (total, male, female, age brackets) from COVID-19 Open Data demographics.csv, int64."
+homepage = "https://storage.googleapis.com/covid19-open-data/"
+
+[license]
+name = "CC BY 4.0"
+spdx = "CC-BY-4.0"
+url = "https://github.com/GoogleCloudPlatform/covid-19-open-data"
+citation = "Google COVID-19 Open Data demographics."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official GCS bucket covid19-open-data demographics.csv"
+usage_notes = "Global population demographics."
+
+[[origins]]
+id = "covid19_open_data"
+name = "COVID-19 Open Data GCS"
+url = "https://storage.googleapis.com/covid19-open-data/"
+type = "bucket"
+
+[[resources]]
+id = "demographics_csv"
+origin = "covid19_open_data"
+url = "https://storage.googleapis.com/covid19-open-data/v3/demographics.csv"
+type = "csv"
+version = "v3_2022"
+access = "Direct GCS public CSV."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/covid19_demographics_population_i64/demographics.csv"
+
+[local_paths]
+downloads = "downloads/covid19_demographics_population_i64/"
+filtered = "filtered/covid19_demographics_population_i64/"
+index = "index/covid19_demographics_population_i64/"
+samples = "samples/covid19_demographics_population_i64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/covid19_demographics_population_i64/samples.jsonl"
+summary = "Parse demographics CSV, extract population columns as i64."
+deterministic_notes = "Local build only."
+
+[[series]]
+id = "covid19_demographics_*_i64"
+description = "Global demographics population counts."
+semantic_meaning = "Per-location population counts."
+role = "primary"
+representation_class = "native_numeric"
+source_resources = ["demographics_csv"]
+source_format = "covid19_demographics_csv"
+source_field = "population,population_male,population_female,population_age_00_09,population_age_10_19,population_age_20_29"
+filtered_input_path = "filtered/covid19_demographics_population_i64/ingest_stats.json"
+filtering = "Keep finite ints."
+missing_value_policy = "Blank skipped."
+conversion = "Parse as int64 LE."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous int64 demographics count column"
+sample_geometry = "table_column"
+sample_rank = 1
+sample_axes = ["location"]
+natural_record_kind = "covid19_demographics_count_column"
+sample_count = 0
+total_size_bytes = 0
+output_path = "samples/covid19_demographics_population_i64/"

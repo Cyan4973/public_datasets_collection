@@ -54,6 +54,7 @@ nomis_employment	ok	92145	221148	5	18429	36858	0	0	0	1	none	none
 gbif_occurrence_2024_coordinate_sample	ok	95952	527736	8	11994	47976	0	0	0	1	none	none
 noaa_ghcn_daily_wesd_by_station	ok	102494	204988	24	5845	11690	0	0	0	1	none	none
 worldclim_tavg_10m	ok	103680	414720	6	17280	69120	0	0	0	1	none	none
+covid19_demographics_population_i64	ok	108618	868944	6	17428	139424	0	0	0	1	none	none
 physionet_mitbih_annotation_codes_u8	ok	112647	112647	48	2299	2299	0	0	0	1	none	none
 taginfo_tags_popular	ok	113896	911168	8	14237	113896	28474	42711	2	1	none	none
 figshare_articles_large	ok	119994	679966	6	19999	119994	0	0	0	1	none	none

@@ -1,0 +1,98 @@
+manifest_version = 1
+dataset_id = "dc_lidar_2015_gps_time_f64"
+name = "District of Columbia 2015 LiDAR GPS Time Float64"
+description = "Native IEEE-754 float64 GPS-time point attributes extracted in acquisition order from three public uncompressed LAS point-cloud tiles."
+homepage = "https://registry.opendata.aws/dc-lidar-2015/"
+
+[license]
+name = "District of Columbia public open data"
+spdx = "LicenseRef-DC-Open-Data"
+url = "https://registry.opendata.aws/dc-lidar-2015/"
+citation = "District of Columbia Classified Point Cloud LiDAR 2015, AWS Open Data Registry."
+notes = "Public AWS Open Data dataset; preserve District of Columbia and AWS Open Data attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Three exact public government point-cloud tiles from the DC LiDAR 2015 S3 bucket."
+usage_notes = "Airborne-LiDAR acquisition GPS-time streams; no personal data expected."
+
+[[origins]]
+id = "dc_lidar_2015_s3"
+name = "District of Columbia Classified Point Cloud LiDAR 2015"
+url = "https://dc-lidar-2015.s3.amazonaws.com/"
+type = "public_s3_bucket"
+notes = "Public S3 bucket containing uncompressed LAS files under Classified_LAS/."
+
+[[resources]]
+id = "dc_lidar_tile_1812"
+origin = "dc_lidar_2015_s3"
+url = "https://dc-lidar-2015.s3.amazonaws.com/Classified_LAS/1812.las"
+type = "las_point_cloud"
+version = "2015_tile_1812"
+access = "Exact public object; downloader validates size and SHA-256."
+size_bytes = 223634623
+sha256 = "757e683b350eb02678b1ca2d5406e4b31c3e0f8e726c5453b645058637b89660"
+local_path = "downloads/dc_lidar_2015_gps_time_f64/las/1812.las"
+
+[[resources]]
+id = "dc_lidar_tile_2016"
+origin = "dc_lidar_2015_s3"
+url = "https://dc-lidar-2015.s3.amazonaws.com/Classified_LAS/2016.las"
+type = "las_point_cloud"
+version = "2015_tile_2016"
+access = "Exact public object; downloader validates size and SHA-256."
+size_bytes = 331834948
+sha256 = "27fdb047a5aa4d329fdfc660c2420c99c4406e6284c329616545eab1cdb98488"
+local_path = "downloads/dc_lidar_2015_gps_time_f64/las/2016.las"
+
+[[resources]]
+id = "dc_lidar_tile_2315"
+origin = "dc_lidar_2015_s3"
+url = "https://dc-lidar-2015.s3.amazonaws.com/Classified_LAS/2315.las"
+type = "las_point_cloud"
+version = "2015_tile_2315"
+access = "Exact public object; downloader validates size and SHA-256."
+size_bytes = 95485012
+sha256 = "59fef9e2cca40bf696a9adff8a3cfb90de2857e6e8f002f2cfcec1c796d42bbe"
+local_path = "downloads/dc_lidar_2015_gps_time_f64/las/2315.las"
+
+[local_paths]
+downloads = "downloads/dc_lidar_2015_gps_time_f64/"
+filtered = "filtered/dc_lidar_2015_gps_time_f64/"
+index = "index/dc_lidar_2015_gps_time_f64/"
+samples = "samples/dc_lidar_2015_gps_time_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/dc_lidar_2015_gps_time_f64/samples.jsonl"
+summary = "Acquire three exact uncompressed LAS tiles, require point format 6, and copy each record's native eight-byte GPS-time field into one float64 sample per tile."
+deterministic_notes = "Build is local-only, validates LAS headers and record bounds, preserves source point order and source float64 bytes, rejects non-finite or constant streams, and enforces median and output-size floors. Verification independently re-extracts and byte-compares every value."
+
+[[series]]
+id = "dc_lidar_gps_time_f64"
+description = "LAS point-record GPS time in acquisition order."
+semantic_meaning = "High-resolution GPS time associated with each airborne-LiDAR return."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "LAS point format 6 stores GPS time as a native little-endian eight-byte IEEE-754 value at point-record offset 22."
+source_resources = ["dc_lidar_tile_1812", "dc_lidar_tile_2016", "dc_lidar_tile_2315"]
+source_format = "LAS 1.4 point data record format 6"
+source_field = "GPS Time"
+filtered_input_path = "filtered/dc_lidar_2015_gps_time_f64/ingest_stats.json"
+filtering = "Keep all point records from the three pinned files after strict header, layout, bounds, finiteness, and non-constant validation."
+missing_value_policy = "GPS time is required by point format 6; malformed, truncated, or non-finite records fail the build. No values are dropped or imputed."
+conversion = "Copy bytes 22 through 29 of every 30-byte LAS point record unchanged into a raw little-endian float64 array."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 LAS GPS-time array"
+sample_geometry = "las_point_attribute_stream"
+sample_rank = 1
+sample_axes = ["point"]
+natural_record_kind = "las_tile"
+sample_count = 3
+total_size_bytes = 173580256
+output_path = "samples/dc_lidar_2015_gps_time_f64/dc_lidar_gps_time_f64/"

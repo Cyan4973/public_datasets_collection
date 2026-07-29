@@ -1,0 +1,103 @@
+manifest_version = 1
+dataset_id = "tum_rgbd_groundtruth_pose_f64"
+name = "TUM RGB-D Ground-Truth Pose Trajectory Float64"
+description = "Motion-capture ground-truth translation and unit-quaternion trajectory matrices from the TUM RGB-D freiburg1_xyz SLAM benchmark sequence."
+homepage = "https://cvg.cit.tum.de/data/datasets/rgbd-dataset"
+
+[license]
+name = "CC BY 4.0"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "J. Sturm et al., A Benchmark for the Evaluation of RGB-D SLAM Systems, IROS 2012 (TUM RGB-D dataset)."
+notes = "Preserve TUM RGB-D benchmark attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Published motion-capture ground truth for a public indoor RGB-D SLAM benchmark sequence."
+usage_notes = "Robot/camera translation and orientation trajectory; no personal data expected."
+
+[[origins]]
+id = "tum_rgbd"
+name = "TUM RGB-D Benchmark (Computer Vision Group, TU Munich)"
+url = "https://cvg.cit.tum.de/data/datasets/rgbd-dataset"
+type = "bulk_download"
+notes = "Official per-sequence archive containing groundtruth.txt and sensor frames."
+
+[[resources]]
+id = "tum_freiburg1_xyz_archive"
+origin = "tum_rgbd"
+url = "https://cvg.cit.tum.de/rgbd/dataset/freiburg1/rgbd_dataset_freiburg1_xyz.tgz"
+type = "tgz_sequence_archive"
+version = "freiburg1_xyz"
+access = "Exact official archive; downloader validates byte size, SHA-256, groundtruth member, and pose-row count."
+size_bytes = 448204271
+sha256 = "a0236d97b8c30cd93b653656d2b6c293ff7c982a4130ef2a1a8beecdb124ef98"
+local_path = "downloads/tum_rgbd_groundtruth_pose_f64/rgbd_dataset_freiburg1_xyz.tgz"
+notes = "Only rgbd_dataset_freiburg1_xyz/groundtruth.txt is decoded by this recipe."
+
+[local_paths]
+downloads = "downloads/tum_rgbd_groundtruth_pose_f64/"
+filtered = "filtered/tum_rgbd_groundtruth_pose_f64/"
+index = "index/tum_rgbd_groundtruth_pose_f64/"
+samples = "samples/tum_rgbd_groundtruth_pose_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/tum_rgbd_groundtruth_pose_f64/samples.jsonl"
+summary = "Validate one exact TUM RGB-D sequence archive, parse its eight-column ground-truth table, use timestamps for ordering only, and emit row-major float64 translation and quaternion matrices."
+deterministic_notes = "Build is local-only, requires exactly 3,000 strictly time-ordered finite poses, validates near-unit quaternions, preserves source row/component order, and enforces acceptance floors. Verification independently reparses and compares every value."
+
+[[series]]
+id = "tum_rgbd_translation_f64"
+description = "Motion-capture translation trajectory as row-major XYZ triples."
+semantic_meaning = "Camera/robot ground-truth position in metres for each ordered pose."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Published decimal translation measurements are parsed directly as IEEE-754 float64; no narrower binary representation is widened."
+source_resources = ["tum_freiburg1_xyz_archive"]
+source_format = "TUM RGB-D groundtruth text table"
+source_field = "tx ty tz"
+filtered_input_path = "filtered/tum_rgbd_groundtruth_pose_f64/ingest_stats.json"
+filtering = "Keep all 3,000 finite poses after strict eight-column and increasing-timestamp validation."
+missing_value_policy = "Malformed, missing, non-finite, duplicate-time, or out-of-order rows fail the build; no rows are dropped or imputed."
+conversion = "Parse tx, ty, tz decimal fields as float64 and write little-endian row-major XYZ triples in source order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "row-major float64 translation matrix"
+sample_geometry = "pose_translation_trajectory"
+sample_rank = 2
+sample_axes = ["pose", "xyz_component"]
+natural_record_kind = "tum_rgbd_groundtruth_sequence_translation_trajectory"
+sample_count = 1
+total_size_bytes = 72000
+output_path = "samples/tum_rgbd_groundtruth_pose_f64/tum_rgbd_translation_f64/"
+
+[[series]]
+id = "tum_rgbd_quaternion_f64"
+description = "Motion-capture orientation trajectory as row-major XYZW unit quaternions."
+semantic_meaning = "Camera/robot ground-truth orientation for each ordered pose."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Published decimal quaternion components are parsed directly as IEEE-754 float64; no narrower binary representation is widened."
+source_resources = ["tum_freiburg1_xyz_archive"]
+source_format = "TUM RGB-D groundtruth text table"
+source_field = "qx qy qz qw"
+filtered_input_path = "filtered/tum_rgbd_groundtruth_pose_f64/ingest_stats.json"
+filtering = "Keep all 3,000 finite poses whose published quaternion norm remains within 0.001 of unity."
+missing_value_policy = "Malformed, missing, non-finite, or invalid-quaternion rows fail the build; no rows are dropped, normalized, or imputed."
+conversion = "Parse qx, qy, qz, qw decimal fields as float64 and write little-endian row-major XYZW quaternions in source order without renormalization."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "row-major float64 quaternion matrix"
+sample_geometry = "pose_orientation_trajectory"
+sample_rank = 2
+sample_axes = ["pose", "xyzw_component"]
+natural_record_kind = "tum_rgbd_groundtruth_sequence_orientation_trajectory"
+sample_count = 1
+total_size_bytes = 96000
+output_path = "samples/tum_rgbd_groundtruth_pose_f64/tum_rgbd_quaternion_f64/"

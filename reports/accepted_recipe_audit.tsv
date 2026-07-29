@@ -8,6 +8,7 @@ binance_ticker_24hr	ok	14376	71880	4	3594	14376	7188	43128	2	1	none	none
 ourworldindata_energy_mix	ok	19137	76548	3	6379	25516	0	0	0	1	none	none
 internetarchive_advancedsearch	ok	20000	120000	2	10000	60000	0	0	0	1	none	none
 nasa_eonet_events	ok	20115	73755	3	6705	13410	0	0	0	1	none	none
+tum_rgbd_groundtruth_pose_f64	ok	21000	168000	2	10500	84000	0	0	0	1	none	none
 nasa_donki_flr	ok	22484	89936	7	3212	12848	0	0	0	1	none	none
 openflights_airports	ok	23094	153960	3	7698	61584	0	0	0	1	none	none
 usgs_fdsn_events_large	ok	28264	84792	2	14132	42396	56528	183716	4	1	none	none

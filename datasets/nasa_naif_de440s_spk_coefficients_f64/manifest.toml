@@ -1,0 +1,78 @@
+# Accepted after user-run download and successful local build/verification.
+manifest_version = 1
+dataset_id = "nasa_naif_de440s_spk_coefficients_f64"
+name = "NASA/JPL DE440s SPK Chebyshev Coefficients Float64"
+description = "Native float64 Chebyshev position coefficients decoded from the NASA/JPL DE440s planetary ephemeris SPK kernel."
+homepage = "https://naif.jpl.nasa.gov/naif/data_generic.html"
+
+[license]
+name = "U.S. Government Public Domain"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://www.nasa.gov/nasa-brand-center/images-and-media/"
+citation = "NASA Navigation and Ancillary Information Facility (NAIF); JPL planetary ephemeris DE440s."
+notes = "NASA/JPL government data; preserve NAIF/JPL acknowledgement and kernel provenance."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Exact public generic planetary SPK kernel served by NASA/JPL NAIF."
+usage_notes = "Numerical solar-system ephemeris model coefficients; no personal or sensitive content."
+
+[[origins]]
+id = "nasa_jpl_naif"
+name = "NASA/JPL Navigation and Ancillary Information Facility"
+url = "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/"
+type = "repository"
+notes = "Official NAIF generic-kernel archive."
+
+[[resources]]
+id = "de440s_spk"
+origin = "nasa_jpl_naif"
+url = "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440s.bsp"
+type = "file"
+version = "DE440s"
+access = "Direct public HTTPS download of the exact named generic SPK kernel."
+size_bytes = 32726016
+sha256 = "c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2"
+local_path = "downloads/nasa_naif_de440s_spk_coefficients_f64/de440s.bsp"
+notes = "The downloader validates DAF/SPK identity and records the realized SHA-256."
+
+[local_paths]
+downloads = "downloads/nasa_naif_de440s_spk_coefficients_f64/"
+filtered = "filtered/nasa_naif_de440s_spk_coefficients_f64/"
+index = "index/nasa_naif_de440s_spk_coefficients_f64/"
+samples = "samples/nasa_naif_de440s_spk_coefficients_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_naif_de440s_spk_coefficients_f64/samples.jsonl"
+summary = "Validate the local DAF/SPK kernel, follow its segment summaries, decode type-2 SPK records, and emit the stored double-precision position Chebyshev coefficients as one sample per ephemeris segment."
+deterministic_notes = "Exact versioned kernel URL; DAF byte order is read from the binary-format identifier; summary and array addresses are bounds checked; MID, RADIUS, and segment-directory trailer words are excluded as bookkeeping; coefficient order remains record-major, component-major, degree-major; output is always little-endian float64."
+
+[[series]]
+id = "spk_type2_position_chebyshev_f64"
+description = "DE440s type-2 SPK position Chebyshev coefficients."
+semantic_meaning = "Double-precision Chebyshev polynomial coefficients used by JPL DE440s to reconstruct Cartesian target positions relative to their segment centers."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "SPK DAF arrays store the coefficient words natively as IEEE-754 doubles; the recipe decodes the kernel structure instead of preserving file bytes."
+source_resources = ["de440s_spk"]
+source_format = "NAIF DAF/SPK type 2"
+source_field = "segment.position_chebyshev_coefficients"
+filtered_input_path = "filtered/nasa_naif_de440s_spk_coefficients_f64/segment_stats.json"
+filtering = "Keep valid type-2 ephemeris segments and their X/Y/Z coefficient sets; exclude per-record MID/RADIUS domain bookkeeping and the four-word segment directory trailer."
+missing_value_policy = "SPK coefficients have no missing-value sentinel. Missing files, unsupported byte order, malformed summary chains, invalid array bounds, non-integral record metadata, non-finite coefficients, empty/tiny segments, and unsupported segment types are rejected or explicitly reported; at least one valid type-2 segment is required."
+conversion = "Decode DAF summaries and SPK type-2 records, preserve coefficient source order, and write raw IEEE-754 little-endian float64 arrays with one sample per SPK segment."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 Chebyshev coefficient array"
+sample_geometry = "spk_segment_record_component_degree"
+sample_rank = 1
+sample_axes = ["coefficient"]
+natural_record_kind = "naif_spk_ephemeris_segment"
+sample_count = 12
+total_size_bytes = 30907200
+output_path = "samples/nasa_naif_de440s_spk_coefficients_f64/spk_type2_position_chebyshev_f64/"

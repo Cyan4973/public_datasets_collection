@@ -1,0 +1,98 @@
+manifest_version = 1
+dataset_id = "osm_daily_way_references_i64"
+name = "OpenStreetMap Daily Way-Node References Int64"
+description = "Ordered signed 64-bit node-reference streams decoded from edited ways in immutable OpenStreetMap daily replication diffs."
+homepage = "https://planet.openstreetmap.org/replication/day/"
+
+[license]
+name = "Open Database License 1.0"
+spdx = "ODbL-1.0"
+url = "https://opendatacommons.org/licenses/odbl/1-0/"
+citation = "© OpenStreetMap contributors, available under the Open Database License."
+notes = "Preserve OpenStreetMap contributor attribution and ODbL notices."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public versioned OpenStreetMap database replication diffs; only way topology references are retained."
+usage_notes = "Graph topology identifiers from public map edits; no user/account fields are emitted."
+
+[[origins]]
+id = "osm_planet_daily_replication"
+name = "OpenStreetMap Planet Daily Replication"
+url = "https://planet.openstreetmap.org/replication/day/"
+type = "versioned_replication_feed"
+notes = "Each numbered daily sequence is immutable; this recipe pins sequences 5066 through 5068."
+
+[[resources]]
+id = "osm_daily_diff_5066"
+origin = "osm_planet_daily_replication"
+url = "https://planet.openstreetmap.org/replication/day/000/005/066.osc.gz"
+type = "versioned_osm_change_gzip"
+version = "daily_replication_sequence_5066_2026-07-27"
+access = "Exact immutable daily replication diff; downloader validates size, SHA-256, gzip integrity, and XML semantics."
+size_bytes = 92648123
+sha256 = "4e4330eda9c18a11d8648ba9497401e5b81102ad22f8aae06436094f914563c7"
+local_path = "downloads/osm_daily_way_references_i64/diffs/sequence_000005066.osc.gz"
+
+[[resources]]
+id = "osm_daily_diff_5067"
+origin = "osm_planet_daily_replication"
+url = "https://planet.openstreetmap.org/replication/day/000/005/067.osc.gz"
+type = "versioned_osm_change_gzip"
+version = "daily_replication_sequence_5067_2026-07-28"
+access = "Exact immutable daily replication diff; downloader validates size, SHA-256, gzip integrity, and XML semantics."
+size_bytes = 98493917
+sha256 = "765b9dd66fc45ae9cfd6f5a27f230c2cc9c40706e79c7cddd5b4454e6f4667b5"
+local_path = "downloads/osm_daily_way_references_i64/diffs/sequence_000005067.osc.gz"
+
+[[resources]]
+id = "osm_daily_diff_5068"
+origin = "osm_planet_daily_replication"
+url = "https://planet.openstreetmap.org/replication/day/000/005/068.osc.gz"
+type = "versioned_osm_change_gzip"
+version = "daily_replication_sequence_5068_2026-07-29"
+access = "Exact immutable daily replication diff; downloader validates size, SHA-256, gzip integrity, and XML semantics."
+size_bytes = 97949914
+sha256 = "fbe8f275940c4a6eb9e51a7bd36faaa1f5e38a44d80427c45430b306b6b6dd2d"
+local_path = "downloads/osm_daily_way_references_i64/diffs/sequence_000005068.osc.gz"
+
+[local_paths]
+downloads = "downloads/osm_daily_way_references_i64/"
+filtered = "filtered/osm_daily_way_references_i64/"
+index = "index/osm_daily_way_references_i64/"
+samples = "samples/osm_daily_way_references_i64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/osm_daily_way_references_i64/samples.jsonl"
+summary = "Download pinned OSM daily replication sequences 5066-5068, stream-parse XML ways, and emit each diff's ordered nd/@ref values as one little-endian int64 sample."
+deterministic_notes = "Build is local-only, rejects malformed XML, invalid/nonpositive/out-of-range references, samples below the floor, or datasets above 1 GB. Verification independently reparses every diff and compares every emitted int64 value."
+
+[[series]]
+id = "osm_way_node_reference_i64"
+description = "Ordered node references forming edited OpenStreetMap ways."
+semantic_meaning = "Node identifiers referenced by way geometry/topology, preserving daily diff, way, and within-way order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The OSM XML ref attribute is a signed 64-bit identifier domain; accepted samples must contain values above 2^32-1."
+source_resources = ["osm_daily_diff_5066", "osm_daily_diff_5067", "osm_daily_diff_5068"]
+source_format = "gzip-compressed OpenStreetMap change XML"
+source_field = "osmChange/*/way/nd/@ref"
+filtered_input_path = "filtered/osm_daily_way_references_i64/ingest_stats.json"
+filtering = "Keep every positive in-range nd/@ref from created or modified ways, in source order; deleted ways without node lists contribute no values."
+missing_value_policy = "Missing or malformed ref attributes fail the build; no references are dropped or imputed."
+conversion = "Parse each decimal ref as signed int64 and write little-endian values in source order, one sample per daily replication diff."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous signed int64 way-node reference array"
+sample_geometry = "graph_topology_reference_stream"
+sample_rank = 1
+sample_axes = ["ordered_way_reference"]
+natural_record_kind = "osm_daily_replication_diff_way_reference_stream"
+sample_count = 3
+total_size_bytes = 170461328
+output_path = "samples/osm_daily_way_references_i64/osm_way_node_reference_i64/"

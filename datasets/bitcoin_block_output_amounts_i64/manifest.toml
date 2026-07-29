@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "bitcoin_block_output_amounts_i64"
+name = "Bitcoin Raw Block Transaction Output Amounts Int64"
+description = "Native signed 64-bit satoshi amounts decoded from transaction outputs in twelve fixed historical Bitcoin blocks."
+homepage = "https://blockstream.info/"
+
+[license]
+name = "Public factual Bitcoin blockchain data"
+spdx = "LicenseRef-Bitcoin-Blockchain-Public-Data"
+url = "https://github.com/bitcoin/bitcoin/blob/master/COPYING"
+citation = "Bitcoin blockchain protocol data; retrieved through the Blockstream Esplora public API."
+notes = "Only public factual transaction-output amounts are retained. Bitcoin Core software is MIT-licensed; no scripts, addresses, or arbitrary transaction payloads are emitted."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public immutable blockchain records addressed by historical block height and cryptographic block hash."
+usage_notes = "Only aggregate protocol-level output amounts in satoshis are emitted; transaction hashes, addresses, and scripts are excluded."
+
+[[origins]]
+id = "blockstream_esplora_bitcoin_mainnet"
+name = "Blockstream Esplora Bitcoin Mainnet API"
+url = "https://blockstream.info/api/"
+type = "public_blockchain_api"
+notes = "Height lookup and raw-block endpoints for immutable Bitcoin mainnet blocks."
+
+[[resources]]
+id = "bitcoin_blocks_840000_840011"
+origin = "blockstream_esplora_bitcoin_mainnet"
+url = "https://blockstream.info/api/block-height/840000"
+type = "bounded_raw_bitcoin_block_selection"
+version = "pinned_mainnet_heights_840000_840011"
+access = "Downloader uses twelve frozen height-to-block-hash mappings and validates each raw block's exact size, SHA-256, header hash, transaction parse, and Merkle root."
+size_bytes = 18874397
+sha256 = ""
+local_path = "downloads/bitcoin_block_output_amounts_i64/blocks/"
+notes = "The exact per-block hash, size, and SHA-256 map is frozen in download.sh and documented in reports/64bit_bitcoin_block_amounts_development_20260729.md."
+
+[local_paths]
+downloads = "downloads/bitcoin_block_output_amounts_i64/"
+filtered = "filtered/bitcoin_block_output_amounts_i64/"
+index = "index/bitcoin_block_output_amounts_i64/"
+samples = "samples/bitcoin_block_output_amounts_i64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/bitcoin_block_output_amounts_i64/samples.jsonl"
+summary = "Resolve fixed historical Bitcoin heights, validate raw block hashes and Merkle roots, parse legacy and SegWit transactions, and emit native eight-byte output amounts in block order."
+deterministic_notes = "Build is local-only. The parser enforces canonical CompactSize integers, transaction/block bounds, valid nonnegative MoneyRange amounts, exact transaction counts, complete byte consumption, block-header hashes, and Merkle roots. Verification independently reparses and byte-compares every amount."
+
+[[series]]
+id = "bitcoin_transaction_output_amount_i64"
+description = "Ordered native Bitcoin transaction-output amounts in satoshis."
+semantic_meaning = "The value assigned to each transaction output, preserving block and transaction order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Bitcoin serializes CTxOut value as an eight-byte little-endian signed integer; the recipe copies those source bytes unchanged after protocol validation."
+source_resources = ["bitcoin_blocks_840000_840011"]
+source_format = "Bitcoin mainnet raw block serialization"
+source_field = "transaction output nValue"
+filtered_input_path = "filtered/bitcoin_block_output_amounts_i64/ingest_stats.json"
+filtering = "Keep every valid transaction output amount from the twelve pinned blocks after complete block, transaction, hash, Merkle-root, and MoneyRange validation."
+missing_value_policy = "Malformed transactions, invalid values, truncated blocks, count mismatches, hash mismatches, or Merkle mismatches fail the build; no outputs are dropped or imputed."
+conversion = "Copy each transaction output's native eight little-endian nValue bytes unchanged into one ordered signed-int64 sample per block."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous signed int64 satoshi amount array"
+sample_geometry = "block_transaction_output_value_stream"
+sample_rank = 1
+sample_axes = ["ordered_transaction_output"]
+natural_record_kind = "bitcoin_mainnet_block_output_amount_stream"
+sample_count = 12
+total_size_bytes = 1347136
+output_path = "samples/bitcoin_block_output_amounts_i64/bitcoin_transaction_output_amount_i64/"

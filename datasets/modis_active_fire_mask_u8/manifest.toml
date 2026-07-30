@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "modis_active_fire_mask_u8"
+name = "Terra MODIS 8-Day Active-Fire Mask UInt8"
+description = "Complete source-native uint8 active-fire confidence mask tiles from the Terra MODIS MOD14A2 Collection 6.1 8-day product, sampled across four regions and three seasons."
+homepage = "https://planetarycomputer.microsoft.com/dataset/modis-14A2-061"
+
+[license]
+name = "Creative Commons Zero 1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://lpdaac.usgs.gov/data/data-citation-and-policies/"
+citation = "Giglio, L. MODIS/Terra Thermal Anomalies/Fire 8-Day L3 Global 1km SIN Grid V061. NASA EOSDIS Land Processes DAAC. https://doi.org/10.5067/MODIS/MOD14A2.061"
+notes = "The Planetary Computer collection delegates its license link to the official LP DAAC data-policy page. That policy states that, unless marked with a specific use restriction, data from a NASA-led mission are CC0 and have no use restrictions. This MOD14A2 collection identifies NASA LP DAAC as producer/licensor and carries no separate product restriction. Preserve the product DOI, NASA/LP DAAC attribution, collection version, item IDs, and dates."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public NASA Earth-observation fire-classification grids mirrored by Microsoft Planetary Computer; no personal or sensitive data."
+usage_notes = "CC0 NASA mission data suitable for commercial model training; retain source provenance and strongly recommended citation."
+
+[[origins]]
+id = "planetary_computer_modis"
+name = "Microsoft Planetary Computer MODIS Collection 6.1 mirror"
+url = "https://planetarycomputer.microsoft.com/api/stac/v1/collections/modis-14A2-061"
+type = "stac_collection"
+notes = "Planetary Computer hosts Cloud Optimized GeoTIFF conversions of the NASA LP DAAC MOD14A2.061 product and identifies NASA LP DAAC as producer and licensor."
+
+[[resources]]
+id = "mod14a2_061_firemask_cogs"
+origin = "planetary_computer_modis"
+url = "https://modiseuwest.blob.core.windows.net/modis-061-cogs/MOD14A2/"
+type = "cloud_optimized_geotiff_collection"
+version = "MOD14A2 Collection 6.1; twelve exact 2024 item IDs pinned in download.sh"
+access = "Public Planetary Computer container access using a short-lived SAS token; exact public asset paths are pinned."
+size_bytes = 426570
+sha256 = ""
+local_path = "downloads/modis_active_fire_mask_u8/rasters/"
+notes = "Four fixed MODIS sinusoidal tiles at day-of-year 001, 129, and 257 of 2024. Each FireMask asset is a single-band 1200x1200 uint8 Deflate COG."
+
+[local_paths]
+downloads = "downloads/modis_active_fire_mask_u8/"
+filtered = "filtered/modis_active_fire_mask_u8/"
+index = "index/modis_active_fire_mask_u8/"
+samples = "samples/modis_active_fire_mask_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/modis_active_fire_mask_u8/samples.jsonl"
+summary = "Download twelve exact MOD14A2.061 FireMask COGs, strictly decode each primary-resolution Deflate tile plane, and emit one complete raw uint8 1200x1200 grid per source item."
+deterministic_notes = "The scope fixes Terra rather than Aqua, collection 6.1, calendar year 2024, four named MODIS tiles, three exact 8-day composite start dates, and exact item IDs. The decoder ignores the two overview IFDs and preserves every primary-grid class byte in row-major order without cropping, concatenation, resampling, or class remapping."
+
+[[series]]
+id = "modis_8day_active_fire_mask_u8"
+description = "MOD14A2 8-day maximum fire-mask classification grids."
+semantic_meaning = "Per-pixel maximum MODIS fire-mask class over an 8-day composite: missing/not processed, water, cloud, non-fire land, unknown, or low/nominal/high-confidence fire."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The Planetary Computer COG stores the official FireMask class plane as uint8; the recipe only removes TIFF tiling and Deflate compression."
+source_resources = ["mod14a2_061_firemask_cogs"]
+source_format = "cloud_optimized_geotiff"
+source_field = "FireMask.band_1.maximum_fire_mask_class_over_8_day_composite"
+filtered_input_path = "filtered/modis_active_fire_mask_u8/ingest_stats.json"
+filtering = "Keep all 1,440,000 primary-resolution pixels from each of twelve pinned complete tiles. Require a nonconstant grid, at least 0.1% minority values, and at least one fire-confidence pixel per sample."
+missing_value_policy = "Preserve all documented class codes 0 through 9, including missing/not-processed codes if present. Missing files, unexpected TIFF structure, unsupported codes, truncated tiles, degenerate grids, and samples without fire-confidence pixels are fatal."
+conversion = "Parse the classic TIFF primary IFD, Deflate-decompress its nine 512x512 internal tiles, crop only TIFF edge padding, restore the complete 1200x1200 raster in row-major order, and write the unchanged uint8 class bytes."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 categorical grid"
+sample_geometry = "1200x1200_modis_sinusoidal_tile"
+sample_rank = 2
+sample_axes = ["y", "x"]
+natural_record_kind = "complete_mod14a2_8_day_firemask_tile"
+sample_count = 12
+total_size_bytes = 17280000
+output_path = "samples/modis_active_fire_mask_u8/modis_8day_active_fire_mask_u8/"

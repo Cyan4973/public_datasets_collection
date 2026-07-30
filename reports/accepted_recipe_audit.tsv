@@ -189,6 +189,7 @@ binance_spot_1m_klines_2024_q1	ok	14152320	106928640	324	44640	357120	3144960	25
 household_power_uci	ok	14344960	71724800	7	2049280	16394240	0	0	0	1	none	none
 noaa_nexrad_level3_nids_radials_u8	ok	15897600	15897600	96	165600	165600	0	0	0	1	none	none
 msd_hippocampus_segmentation_labels_u8	ok	16221128	16221128	258	62829	62829	0	0	0	1	none	none
+modis_active_fire_mask_u8	ok	17280000	17280000	12	1440000	1440000	0	0	0	1	none	none
 ncbi_taxdump	ok	18084993	57095412	5	2840433	11361732	0	0	0	1	none	none
 google_open_buildings_v3_s2_073_geometry_f32	ok	21297542	85190168	4	2173642.5	8694570	0	0	0	1	none	none
 osm_daily_way_references_i64	ok	21307666	170461328	3	6908370	55266960	0	0	0	1	none	none

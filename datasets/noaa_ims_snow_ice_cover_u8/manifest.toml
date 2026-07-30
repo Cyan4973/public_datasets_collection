@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "noaa_ims_snow_ice_cover_u8"
+name = "NOAA IMS Northern Hemisphere Snow and Ice Cover UInt8"
+description = "Monthly-spaced complete 4 km daily IMS snow/ice category grids from one fixed year, decoded from official ASCII products to uint8."
+homepage = "https://nsidc.org/data/g02156/versions/1"
+
+[license]
+name = "U.S. Government Public Domain"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://www.noaa.gov/information-technology/open-data-dissemination"
+citation = "U.S. National Ice Center. IMS Daily Northern Hemisphere Snow and Ice Analysis at 1 km, 4 km, and 24 km Resolutions, Version 1. NSIDC DAAC. https://doi.org/10.7265/N52R3PMC"
+notes = "IMS is an official U.S. Government NOAA/USNIC product distributed through NSIDC. Preserve the product citation, NOAA/USNIC/NSIDC attribution, source dates, and DOI."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official daily environmental analysis grids only; no personal or sensitive data."
+usage_notes = "Public U.S. Government Earth-observation product suitable for model training with attribution and provenance retained."
+
+[[origins]]
+id = "nsidc_noaa"
+name = "NSIDC NOAA data distribution"
+url = "https://noaadata.apps.nsidc.org/NOAA/G02156/"
+type = "official_data_archive"
+notes = "Official NSIDC distribution for NOAA product G02156."
+
+[[resources]]
+id = "ims_4km_2024_ascii"
+origin = "nsidc_noaa"
+url = "https://noaadata.apps.nsidc.org/NOAA/G02156/4km/2024/"
+type = "gzip_ascii_grid_collection"
+version = "G02156 Version 1; IMS product version 1.3; calendar year 2024"
+access = "Twelve exact monthly-spaced daily .asc.gz files downloaded directly from the official year directory."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/noaa_ims_snow_ice_cover_u8/grids/"
+notes = "The downloader supports IMS_BASE_URL override but preserves the exact pinned filenames and validates gzip payloads."
+
+[local_paths]
+downloads = "downloads/noaa_ims_snow_ice_cover_u8/"
+filtered = "filtered/noaa_ims_snow_ice_cover_u8/"
+index = "index/noaa_ims_snow_ice_cover_u8/"
+samples = "samples/noaa_ims_snow_ice_cover_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_ims_snow_ice_cover_u8/samples.jsonl"
+summary = "Download twelve exact official gzip ASCII grids, parse the documented 30-line headers, and emit one complete 6144x6144 uint8 category grid per analysis day."
+deterministic_notes = "The scope is one product, resolution, product version, and calendar year. Dates are the first day of each month in leap year 2024. Source grid order is preserved without cropping, resampling, remapping, or concatenation."
+
+[[series]]
+id = "ims_snow_ice_category_u8"
+description = "IMS Northern Hemisphere daily snow/ice analysis category grids."
+semantic_meaning = "Per-cell IMS surface category code: outside-grid/background, open water, land, sea/lake ice, or snow-covered land."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The official ASCII product stores integer category codes 0..4. The recipe changes only their physical representation to one unsigned byte per code."
+source_resources = ["ims_4km_2024_ascii"]
+source_format = "gzip_compressed_ims_ascii_grid"
+source_field = "IMS 4 km daily snow_and_ice_category grid cells after the documented 30-line header"
+filtered_input_path = "filtered/noaa_ims_snow_ice_cover_u8/ingest_stats.json"
+filtering = "Keep all 6144x6144 cells from each of the twelve pinned complete daily grids."
+missing_value_policy = "Preserve every documented source code 0..4, including background/outside-domain code 0. Missing files, malformed headers, unexpected codes, wrong grid dimensions, truncated grids, and constant grids are fatal."
+conversion = "Parse the source ASCII category tokens in row-major order and write each unchanged integer code as uint8."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 category grid"
+sample_geometry = "6144x6144_northern_hemisphere_grid"
+sample_rank = 2
+sample_axes = ["y", "x"]
+natural_record_kind = "complete_ims_daily_4km_analysis_grid"
+sample_count = 12
+total_size_bytes = 452984832
+output_path = "samples/noaa_ims_snow_ice_cover_u8/ims_snow_ice_category_u8/"

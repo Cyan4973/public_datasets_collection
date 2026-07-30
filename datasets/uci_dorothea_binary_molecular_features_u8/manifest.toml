@@ -1,0 +1,78 @@
+manifest_version = 1
+dataset_id = "uci_dorothea_binary_molecular_features_u8"
+name = "UCI DOROTHEA Binary Molecular Feature Vectors UInt8"
+description = "The documented 100,000-dimensional sparse binary molecular feature vectors from all DOROTHEA compound records, decoded losslessly to uint8."
+homepage = "https://archive.ics.uci.edu/dataset/169/dorothea"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "DOROTHEA, UCI Machine Learning Repository, dataset 169."
+notes = "The official UCI dataset record identifies the dataset license as CC BY 4.0. Training and commercial reuse are permitted with attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public drug-discovery benchmark composed of anonymous chemical-compound feature vectors; no patient or human-subject data."
+usage_notes = "Retain UCI and original benchmark attribution. Labels are not emitted by this recipe."
+
+[[origins]]
+id = "uci"
+name = "UCI Machine Learning Repository"
+url = "https://archive.ics.uci.edu/dataset/169/dorothea"
+type = "data_portal"
+notes = "Official UCI DOROTHEA dataset record."
+
+[[resources]]
+id = "dorothea_archive"
+origin = "uci"
+url = "https://archive.ics.uci.edu/static/public/169/dorothea.zip"
+type = "zip_archive"
+version = "UCI dataset 169"
+access = "Direct public download from UCI."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/uci_dorothea_binary_molecular_features_u8/dorothea.zip"
+notes = "Archive is expected to contain dorothea_train.data, dorothea_valid.data, and dorothea_test.data sparse binary matrices."
+
+[local_paths]
+downloads = "downloads/uci_dorothea_binary_molecular_features_u8/"
+extracted = "extracted/uci_dorothea_binary_molecular_features_u8/"
+filtered = "filtered/uci_dorothea_binary_molecular_features_u8/"
+index = "index/uci_dorothea_binary_molecular_features_u8/"
+samples = "samples/uci_dorothea_binary_molecular_features_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/uci_dorothea_binary_molecular_features_u8/samples.jsonl"
+summary = "Validate the official sparse matrices and decode every compound row into its documented 100,000-position binary feature vector."
+deterministic_notes = "Feature indices are interpreted as documented one-based positions. Train, validation, and test records remain separate natural samples in source row order. Labels are excluded, and no rows or splits are concatenated."
+
+[[series]]
+id = "dorothea_molecular_feature_vector_u8"
+description = "DOROTHEA 100,000-dimensional binary molecular descriptor vectors."
+semantic_meaning = "Presence (1) or absence (0) of each documented DOROTHEA molecular feature for one chemical compound."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The upstream material is explicitly a sparse binary input matrix. Expanding each sorted one-based index list to its equivalent 100,000-position 0/1 vector is a lossless decoding of that matrix, not a feature remap."
+source_resources = ["dorothea_archive"]
+source_format = "whitespace_delimited_sparse_binary_index_rows"
+source_field = "documented_100000_binary_molecular_input_features"
+filtered_input_path = "filtered/uci_dorothea_binary_molecular_features_u8/ingest_stats.json"
+filtering = "Keep every compound row from the official train, validation, and test sparse feature matrices."
+missing_value_policy = "Missing splits, malformed or duplicate indices, indices outside 1..100000, empty rows, all-zero vectors, and all-one vectors are fatal. Unlisted feature positions are documented zeros."
+conversion = "For each source row, initialize a 100,000-element uint8 zero vector and set each documented one-based sparse feature index to 1."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 binary feature vector"
+sample_geometry = "100000_dimensional_compound_feature_vector"
+sample_rank = 1
+sample_axes = ["feature_index"]
+natural_record_kind = "dorothea_compound_feature_vector"
+sample_count = 1950
+total_size_bytes = 195000000
+output_path = "samples/uci_dorothea_binary_molecular_features_u8/dorothea_molecular_feature_vector_u8/"

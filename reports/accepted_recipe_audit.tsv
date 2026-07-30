@@ -132,6 +132,7 @@ ncbi_assembly_refseq_summary	ok	1045878	6275268	2	522939	3137634	1568625	6274500
 nih_reporter_projects	ok	1064676	6388056	90	11664	66162	0	0	0	1	none	none
 europe_pmc_search	ok	1127748	2631412	6	187958	375916	187958	751832	1	1	none	none
 eeg_physionet	ok	1178880	2357760	30	39200	78400	0	0	0	1	none	none
+uci_mhealth_activity_state_u8	ok	1215745	1215745	10	120960	120960	0	0	0	1	none	none
 census_acs_pums_ca_person_2023_i64	ok	1265252	10122016	4	334276	2674208	0	0	0	1	none	none
 macrostrat_units	ok	1422089	5688356	11	129262	517048	0	0	0	1	none	none
 nasa_pds_gravity_harmonics_f64	ok	1443600	11548800	2	721800	5774400	0	0	0	1	none	none

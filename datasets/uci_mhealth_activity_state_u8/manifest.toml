@@ -1,0 +1,78 @@
+manifest_version = 1
+dataset_id = "uci_mhealth_activity_state_u8"
+name = "UCI MHEALTH Activity-State Timelines UInt8"
+description = "Documented activity-ID timelines from the ten MHEALTH subject recordings, stored as one uint8 sequence per recording."
+homepage = "https://archive.ics.uci.edu/dataset/319/mhealth+dataset"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Banos, O. et al. MHEALTH Dataset. UCI Machine Learning Repository. https://doi.org/10.24432/C5TW22"
+notes = "The official UCI dataset record identifies the dataset license as CC BY 4.0. Training and commercial reuse are permitted with attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "The source is a public human-activity research dataset with pseudonymous subject numbers. This recipe emits only activity IDs, not physiological signals, demographics, or identities."
+usage_notes = "Retain UCI and creator attribution. Do not infer identity or health status from the activity-state streams."
+
+[[origins]]
+id = "uci"
+name = "UCI Machine Learning Repository"
+url = "https://archive.ics.uci.edu/dataset/319/mhealth+dataset"
+type = "data_portal"
+notes = "Official UCI MHEALTH dataset record."
+
+[[resources]]
+id = "mhealth_archive"
+origin = "uci"
+url = "https://archive.ics.uci.edu/static/public/319/mhealth+dataset.zip"
+type = "zip_archive"
+version = "UCI dataset 319"
+access = "Direct public download from UCI."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/uci_mhealth_activity_state_u8/mhealth_dataset.zip"
+notes = "Archive must contain exactly one mHealth_subjectN.log recording for each subject N=1..10."
+
+[local_paths]
+downloads = "downloads/uci_mhealth_activity_state_u8/"
+extracted = "extracted/uci_mhealth_activity_state_u8/"
+filtered = "filtered/uci_mhealth_activity_state_u8/"
+index = "index/uci_mhealth_activity_state_u8/"
+samples = "samples/uci_mhealth_activity_state_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/uci_mhealth_activity_state_u8/samples.jsonl"
+summary = "Download and validate the official archive, then extract only the final activity-label column into one uint8 sequence per subject recording."
+deterministic_notes = "All ten source recordings are retained in numeric subject order. Row order and every documented activity code are preserved. No sensor channels, timestamps, labels remapped by the recipe, or cross-subject concatenations are emitted."
+
+[[series]]
+id = "mhealth_activity_id_u8"
+description = "MHEALTH activity-state code at each 50 Hz observation."
+semantic_meaning = "Documented activity ID 0..12 for each observation in one subject's continuous MHEALTH recording; 0 denotes the null/no-activity class and 1..12 denote the protocol activities."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source log stores the activity annotation as a numeric integer field. The recipe preserves its value and order, changing only the physical representation to one unsigned byte per observation."
+source_resources = ["mhealth_archive"]
+source_format = "whitespace_delimited_mhealth_subject_log"
+source_field = "column_24_activity_label"
+filtered_input_path = "filtered/uci_mhealth_activity_state_u8/ingest_stats.json"
+filtering = "Keep the final activity-label field from every valid row in each of the ten complete subject recordings."
+missing_value_policy = "Missing subjects, malformed rows, non-integral labels, labels outside 0..12, empty recordings, and constant recordings are fatal. Code 0 is a documented state and is preserved."
+conversion = "Parse source column 24 as its documented integer activity ID and write it unchanged as uint8 in source row order."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 activity-state sequence"
+sample_geometry = "1d_subject_recording_timeline"
+sample_rank = 1
+sample_axes = ["observation_order"]
+natural_record_kind = "complete_mhealth_subject_recording"
+sample_count = 10
+total_size_bytes = 1215745
+output_path = "samples/uci_mhealth_activity_state_u8/mhealth_activity_id_u8/"

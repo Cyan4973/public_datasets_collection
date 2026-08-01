@@ -1,0 +1,84 @@
+manifest_version = 1
+dataset_id = "openneuro_ds000030_t1w_mri_f32"
+name = "OpenNeuro ds000030 T1w MRI Float32"
+description = "Complete native float32 T1-weighted structural MRI volumes from a bounded CC0 OpenNeuro ds000030 selection."
+homepage = "https://openneuro.org/datasets/ds000030/versions/1.0.0"
+
+[license]
+name = "Creative Commons CC0 1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "UCLA Consortium for Neuropsychiatric Phenomics LA5c Study, OpenNeuro ds000030, DOI 10.18112/openneuro.ds000030.v1.0.0."
+notes = "OpenNeuro dataset_description.json explicitly declares License=CC0; preserve the requested dataset citation."
+
+[safety]
+contains_sensitive_data = true
+contains_personal_data = false
+provenance_notes = "Public deidentified human structural MRI data released by the study authors through OpenNeuro."
+usage_notes = "The source study includes healthy participants and participants with psychiatric diagnoses. This recipe retains only deidentified T1w voxel arrays and no participant tables, diagnoses, demographics, or free text."
+
+[[origins]]
+id = "openneuro_ds000030"
+name = "UCLA Consortium for Neuropsychiatric Phenomics LA5c Study"
+url = "https://openneuro.org/datasets/ds000030/versions/1.0.0"
+type = "public_bids_dataset"
+version = "1.0.0"
+
+[[resources]]
+id = "dataset_description"
+origin = "openneuro_ds000030"
+url = "https://s3.amazonaws.com/openneuro.org/ds000030/dataset_description.json"
+type = "bids_dataset_description"
+version = "1.0.0"
+access = "Exact public S3 object; downloader requires License=CC0."
+local_path = "downloads/openneuro_ds000030_t1w_mri_f32/dataset_description.json"
+
+[[resources]]
+id = "selected_t1w_volumes"
+origin = "openneuro_ds000030"
+url = "https://s3.amazonaws.com/openneuro.org/ds000030/"
+type = "exact_object_selection"
+version = "1.0.0"
+access = "Twenty exact public S3 objects pinned by selection.tsv byte size and single-part ETag/MD5."
+size_bytes = 241392401
+local_path = "downloads/openneuro_ds000030_t1w_mri_f32/volumes/"
+
+[local_paths]
+downloads = "downloads/openneuro_ds000030_t1w_mri_f32/"
+filtered = "filtered/openneuro_ds000030_t1w_mri_f32/"
+index = "index/openneuro_ds000030_t1w_mri_f32/"
+samples = "samples/openneuro_ds000030_t1w_mri_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/openneuro_ds000030_t1w_mri_f32/samples.jsonl"
+summary = "Validate the CC0 release, acquire 20 exact T1w NIfTI objects, and emit one native float32 voxel array per complete 3D volume."
+deterministic_notes = "Selection keys, sizes, and hashes are tracked. Build accepts only NIfTI-1 single-file 3D datatype-16/bitpix-32 identity-scaled volumes, preserves voxel order and float32 values, normalizes output byte order to little-endian, rejects malformed, non-finite, or constant volumes, and enforces corpus floors and the 1 GB cap."
+
+[[series]]
+id = "openneuro_t1w_mri_f32"
+description = "Stored float32 T1-weighted structural MRI voxel volumes."
+semantic_meaning = "T1-weighted magnetic-resonance signal intensity over a complete anatomical brain volume."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Only source NIfTI datatype 16 with bitpix 32 and identity scaling is admitted; no intensity quantization or physical-value conversion is applied."
+source_resources = ["selected_t1w_volumes"]
+source_format = "NIfTI-1 single-file gzip"
+source_field = "3D image voxel payload"
+filtered_input_path = "filtered/openneuro_ds000030_t1w_mri_f32/ingest_stats.json"
+filtering = "Keep selected complete 3D T1w volumes that are valid, native float32, identity-scaled, finite, nonconstant, and within aggregate output limits."
+missing_value_policy = "Missing objects, size/hash mismatches, gzip errors, malformed headers, non-3D shapes, non-float32 datatypes, nonidentity scaling, truncated payloads, non-finite values, and constant volumes fail the build. No voxels are dropped or imputed."
+conversion = "Copy the complete source float32 voxel payload in source order, byte-swapping only when necessary to emit canonical little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 MRI voxel array"
+sample_geometry = "3d_mri_volume"
+sample_rank = 3
+sample_axes = ["i", "j", "k"]
+natural_record_kind = "t1w_nifti_volume"
+sample_count = 20
+total_size_bytes = 922746880
+output_path = "samples/openneuro_ds000030_t1w_mri_f32/openneuro_t1w_mri_f32/"

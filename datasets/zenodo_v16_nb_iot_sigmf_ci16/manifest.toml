@@ -1,0 +1,94 @@
+manifest_version = 1
+dataset_id = "zenodo_v16_nb_iot_sigmf_ci16"
+name = "V16 Beacon NB-IoT SigMF Complex Int16"
+description = "Native interleaved signed-int16 I/Q RF recordings of one V16 automotive emergency beacon's NB-IoT uplink and downlink."
+homepage = "https://zenodo.org/records/18202739"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Daniel Estévez, Recording of the NB-IoT uplink/downlink of a V16 beacon, Zenodo records 18202739 and 19771729."
+notes = "Both exact Zenodo records declare CC BY 4.0; preserve author, record, and DOI attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public test-beacon RF recordings released by the author through Zenodo."
+usage_notes = "Spectrum recordings of a V16 test beacon; no personal or user-content fields are included."
+
+[[origins]]
+id = "zenodo_18202739"
+name = "Recording of the NB-IoT uplink of a V16 beacon"
+url = "https://zenodo.org/records/18202739"
+type = "zenodo_record"
+version = "10.5281/zenodo.18202739"
+
+[[origins]]
+id = "zenodo_19771729"
+name = "Recording of the NB-IoT downlink of a V16 beacon"
+url = "https://zenodo.org/records/19771729"
+type = "zenodo_record"
+version = "10.5281/zenodo.19771729"
+
+[[resources]]
+id = "uplink_sigmf"
+origin = "zenodo_18202739"
+url = "https://zenodo.org/api/records/18202739/files/V16-beacon-NB-IoT-uplink-20251231.sigmf-data/content"
+type = "sigmf_ci16_recording"
+version = "2025-12-31"
+access = "Exact public data/meta pair pinned by size, MD5, and data SHA-512."
+size_bytes = 438824272
+sha256 = ""
+local_path = "downloads/zenodo_v16_nb_iot_sigmf_ci16/V16-beacon-NB-IoT-uplink-20251231.sigmf-data"
+
+[[resources]]
+id = "downlink_sigmf"
+origin = "zenodo_19771729"
+url = "https://zenodo.org/api/records/19771729/files/V16-beacon-NB-IoT-downlink-20251231.sigmf-data/content"
+type = "sigmf_ci16_recording"
+version = "2025-12-31"
+access = "Exact public data/meta pair pinned by size, MD5, and data SHA-512."
+size_bytes = 438824272
+sha256 = ""
+local_path = "downloads/zenodo_v16_nb_iot_sigmf_ci16/V16-beacon-NB-IoT-downlink-20251231.sigmf-data"
+
+[local_paths]
+downloads = "downloads/zenodo_v16_nb_iot_sigmf_ci16/"
+filtered = "filtered/zenodo_v16_nb_iot_sigmf_ci16/"
+index = "index/zenodo_v16_nb_iot_sigmf_ci16/"
+samples = "samples/zenodo_v16_nb_iot_sigmf_ci16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_v16_nb_iot_sigmf_ci16/samples.jsonl"
+summary = "Validate two exact CC BY 4.0 SigMF pairs and preserve each complete native ci16_le I/Q recording as one natural sample."
+deterministic_notes = "Selection keys, sizes, MD5, and SigMF SHA-512 hashes are tracked. Build requires ci16_le, one channel, 320 kHz, one capture at sample zero, finite metadata, even I/Q framing, nonconstant I and Q components, and aggregate output below 1 GB. Output bytes are source-identical."
+
+[[series]]
+id = "v16_nb_iot_iq_ci16"
+description = "Interleaved signed-int16 in-phase and quadrature RF ADC samples."
+semantic_meaning = "Complex baseband NB-IoT uplink/downlink waveform captured from a V16 emergency beacon test."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "SigMF metadata explicitly declares ci16_le; every four source bytes are one complex sample consisting of little-endian int16 I followed by int16 Q."
+source_resources = ["uplink_sigmf", "downlink_sigmf"]
+source_format = "SigMF raw data plus JSON metadata"
+source_field = "interleaved complex I/Q sample stream"
+filtered_input_path = "filtered/zenodo_v16_nb_iot_sigmf_ci16/ingest_stats.json"
+filtering = "Keep both exact complete recordings after license, hash, datatype, sample-rate, channel-count, capture-boundary, size, and nonconstant-component validation."
+missing_value_policy = "Missing data/meta files, size/hash mismatches, malformed JSON, non-ci16 datatype, incomplete I/Q frames, or constant I/Q components fail the build. No samples are dropped or imputed."
+conversion = "Preserve every source byte unchanged as little-endian interleaved signed-int16 I/Q values."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous interleaved signed-int16 I/Q array"
+sample_geometry = "complex_time_series"
+sample_rank = 2
+sample_axes = ["complex_sample", "component_iq"]
+natural_record_kind = "sigmf_recording"
+sample_count = 2
+total_size_bytes = 877648544
+output_path = "samples/zenodo_v16_nb_iot_sigmf_ci16/v16_nb_iot_iq_ci16/"

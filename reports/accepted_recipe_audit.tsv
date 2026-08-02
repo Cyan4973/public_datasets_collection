@@ -142,6 +142,7 @@ usgs_nwis_water_temperature_daily	ok	1680861	13446888	200	8567	68536	0	0	0	1	non
 noaa_ghcn_daily_snwd_by_station	ok	1725872	3451744	58	28052.5	56105	0	0	0	1	none	none
 uci_superconductivity_material_features_f64	ok	1743566	13948528	82	21263	170104	0	0	0	1	none	none
 gas_sensor_array_drift_uci	ok	1794390	14257750	129	13910	111280	0	0	0	1	none	none
+zenodo_silicon_diffraction_tiff_u16	ok	1843200	3686400	1	1843200	3686400	0	0	0	1	none	none
 tokens_bert_gutenberg	ok	2011943	4023886	12	113744.5	227489	0	0	0	1	none	none
 noaa_ghcn_daily_snow_by_station	ok	2077730	4155460	59	36089	72178	0	0	0	1	none	none
 polyhaven_hdri_exr_f32	ok	2097152	8388608	4	524288	2097152	0	0	0	1	none	none

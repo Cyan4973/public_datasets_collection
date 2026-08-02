@@ -1,0 +1,76 @@
+manifest_version = 1
+dataset_id = "zenodo_silicon_diffraction_tiff_u16"
+name = "Silicon EBSD Diffraction Pattern UInt16"
+description = "Native uint16 electron backscatter diffraction detector pattern from a silicon single crystal, losslessly decoded from PackBits TIFF."
+homepage = "https://zenodo.org/records/1450892"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Ben Britton, Silicon Single Crystal Diffraction Pattern, Zenodo, DOI 10.5281/zenodo.1450892."
+notes = "The exact Zenodo record declares CC BY 4.0; preserve author, title, record, DOI, and AstroEBSD paper attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public silicon single-crystal EBSD detector pattern released by its author through Zenodo."
+usage_notes = "Materials-science detector intensity data with no human-subject, identity, or personal fields."
+
+[[origins]]
+id = "zenodo_1450892"
+name = "Silicon Single Crystal Diffraction Pattern"
+url = "https://zenodo.org/records/1450892"
+type = "zenodo_record"
+version = "10.5281/zenodo.1450892"
+
+[[resources]]
+id = "silicon_ebsd_tiff"
+origin = "zenodo_1450892"
+url = "https://zenodo.org/api/records/1450892/files/Si_pattern1.tif/content"
+type = "packbits_tiff_uint16_detector"
+version = "record-1450892"
+access = "Exact public object pinned by size and MD5."
+size_bytes = 3715496
+md5 = "fb93782184b1b324eed85c1e377cc505"
+local_path = "downloads/zenodo_silicon_diffraction_tiff_u16/Si_pattern1.tif"
+
+[local_paths]
+downloads = "downloads/zenodo_silicon_diffraction_tiff_u16/"
+filtered = "filtered/zenodo_silicon_diffraction_tiff_u16/"
+index = "index/zenodo_silicon_diffraction_tiff_u16/"
+samples = "samples/zenodo_silicon_diffraction_tiff_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_silicon_diffraction_tiff_u16/samples.jsonl"
+summary = "Validate one exact PackBits TIFF, decode all 64 strips independently, and emit its scalar uint16 EBSD detector plane."
+deterministic_notes = "Source identity, size, MD5, record title, and CC BY 4.0 license are enforced. Build requires standard little-endian TIFF, 1600x1152 scalar uint16 pixels, PackBits compression, 64 strips of 18 rows, orientation 1, planar configuration 1, predictor 1, and exact decoded strip sizes. It scans every decoded pixel and enforces the measured nondegenerate statistics."
+
+[[series]]
+id = "silicon_ebsd_detector_u16"
+description = "Silicon single-crystal EBSD detector intensity pattern."
+semantic_meaning = "Per-pixel electron backscatter diffraction detector intensity used for crystallographic pattern indexing."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "TIFF declares one unsigned 16-bit sample per pixel. PackBits is lossless byte compression; the emitted values are the native decoded detector words."
+source_resources = ["silicon_ebsd_tiff"]
+source_format = "Little-endian scalar uint16 PackBits TIFF"
+source_field = "Decoded first-image detector pixel plane"
+filtered_input_path = "filtered/zenodo_silicon_diffraction_tiff_u16/ingest_stats.json"
+filtering = "Keep the complete 1152x1600 detector pattern after strict TIFF layout, strip, decoded-size, and value-distribution validation."
+missing_value_policy = "Missing sources, identity/hash changes, malformed TIFF tags, strip bound errors, PackBits errors, decoded-size mismatches, low cardinality, or overwhelming zeros fail the build. No pixels are dropped or imputed."
+conversion = "Decode each TIFF PackBits strip, concatenate decoded rows in strip order, interpret every two-byte word as little-endian uint16, and emit the detector elements in row-major order."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 EBSD detector plane"
+sample_geometry = "2d_ebsd_diffraction_pattern"
+sample_rank = 2
+sample_axes = ["detector_y", "detector_x"]
+natural_record_kind = "ebsd_detector_frame"
+sample_count = 1
+total_size_bytes = 3686400
+output_path = "samples/zenodo_silicon_diffraction_tiff_u16/silicon_ebsd_detector_u16/"

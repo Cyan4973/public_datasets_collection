@@ -1,0 +1,92 @@
+manifest_version = 1
+dataset_id = "zenodo_adcp_pd0_i16"
+name = "Lower South San Francisco Bay ADCP Velocity Int16"
+description = "Three complete RDI PD0 acoustic Doppler current-profiler recordings containing native signed-int16 earth-coordinate water velocities over time and depth."
+homepage = "https://zenodo.org/records/5015459"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Salinity and Velocity in Lower South San Francisco Bay, Zenodo, DOI 10.6078/D14H5K."
+notes = "The exact Zenodo record declares CC BY 4.0; preserve the record title, DOI, creators, and requested attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public environmental observations of currents in Lower South San Francisco Bay."
+usage_notes = "Physical water-velocity measurements with no human subjects, identity, or personal fields."
+
+[[origins]]
+id = "zenodo_5015459"
+name = "Salinity and Velocity in Lower South San Francisco Bay"
+url = "https://zenodo.org/records/5015459"
+type = "zenodo_record"
+version = "10.6078/D14H5K"
+
+[[resources]]
+id = "line2_adcp1000"
+origin = "zenodo_5015459"
+url = "https://zenodo.org/api/records/5015459/files/line2_ADCP1000.000/content"
+type = "rdi_pd0_adcp_recording"
+size_bytes = 24813664
+md5 = "04c27147b68aecb5e6feef84702d9b5e"
+local_path = "downloads/zenodo_adcp_pd0_i16/line2_ADCP1000.000"
+
+[[resources]]
+id = "line2_adcp1001"
+origin = "zenodo_5015459"
+url = "https://zenodo.org/api/records/5015459/files/line2_ADCP1001.000/content"
+type = "rdi_pd0_adcp_recording"
+size_bytes = 46960000
+md5 = "8e1631f12dd8caa61c2dc76a31efb642"
+local_path = "downloads/zenodo_adcp_pd0_i16/line2_ADCP1001.000"
+
+[[resources]]
+id = "line3_adcp2001"
+origin = "zenodo_5015459"
+url = "https://zenodo.org/api/records/5015459/files/line3_ADCP2001.000/content"
+type = "rdi_pd0_adcp_recording"
+size_bytes = 10962812
+md5 = "3f8da2d38e4f6783f5fdff1dff82f3a1"
+local_path = "downloads/zenodo_adcp_pd0_i16/line3_ADCP2001.000"
+
+[local_paths]
+downloads = "downloads/zenodo_adcp_pd0_i16/"
+filtered = "filtered/zenodo_adcp_pd0_i16/"
+index = "index/zenodo_adcp_pd0_i16/"
+samples = "samples/zenodo_adcp_pd0_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_adcp_pd0_i16/samples.jsonl"
+summary = "Validate every RDI PD0 ensemble and emit one complete time-by-depth-by-component native int16 velocity field per source recording."
+deterministic_notes = "Source sizes/MD5s, PD0 framing, exact ensemble lengths, offset tables, block IDs, geometry, earth-coordinate transform byte, every ensemble checksum, ensemble counts, decoded payload hashes, and measured statistics are enforced."
+
+[[series]]
+id = "adcp_earth_velocity_i16"
+description = "Earth-coordinate ADCP water-velocity fields across measurement ensembles and 51 depth cells."
+semantic_meaning = "Four signed velocity values for each acoustic depth cell and measurement ensemble after the instrument's declared earth-coordinate transformation."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The PD0 velocity block natively stores little-endian signed 16-bit words. Extraction preserves their numeric values and the -32768 invalid-velocity sentinel."
+source_resources = ["line2_adcp1000", "line2_adcp1001", "line3_adcp2001"]
+source_format = "RDI/Teledyne PD0 ensembles with fixed leader, variable leader, velocity, correlation, echo-intensity, and percent-good blocks"
+source_field = "PD0 velocity block 0x0100 under coordinate-transform byte 0x1f"
+filtered_input_path = "filtered/zenodo_adcp_pd0_i16/ingest_stats.json"
+filtering = "Keep all 70,474 complete velocity blocks from the three pinned recordings after strict full-file framing, checksum, layout, hash, and distribution validation."
+missing_value_policy = "The native -32768 invalid-velocity sentinel is retained as part of the measured field. Missing files, malformed ensembles, checksum failures, layout changes, or changed hashes/statistics fail the build; no values are dropped or imputed."
+conversion = "Parse each PD0 ensemble, validate its typed 0x0100 velocity field, and append the field's little-endian int16 values in ensemble order while preserving depth-cell and component order."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous int16 ADCP velocity field"
+sample_geometry = "3d_adcp_velocity_field"
+sample_rank = 3
+sample_axes = ["measurement_ensemble", "depth_cell", "earth_velocity_component"]
+natural_record_kind = "complete_adcp_recording"
+sample_count = 3
+total_size_bytes = 28753392
+output_path = "samples/zenodo_adcp_pd0_i16/adcp_earth_velocity_i16/"

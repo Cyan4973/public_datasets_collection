@@ -1,0 +1,75 @@
+manifest_version = 1
+dataset_id = "polyhaven_material_displacement_png_u16"
+name = "Poly Haven Material Displacement Maps UInt16"
+description = "Eight CC0 native grayscale16 PBR displacement maps spanning painted wood, concrete, wallpaper, stone, rusted metal, bark, sand, and denim."
+homepage = "https://polyhaven.com/textures"
+
+[license]
+name = "CC0 1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://polyhaven.com/license"
+notes = "Poly Haven states that all assets are in the public domain under CC0 and may be used for any purpose without attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public synthetic-content production assets published by Poly Haven under CC0."
+usage_notes = "Material-surface displacement maps with no people, identity, or personal fields."
+
+[[origins]]
+id = "polyhaven_textures"
+name = "Poly Haven Textures"
+url = "https://polyhaven.com/textures"
+type = "public_asset_library"
+version = "objects pinned 2026-08-02"
+
+[[resources]]
+id = "material_displacement_pngs"
+origin = "polyhaven_textures"
+url = "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/"
+type = "bounded_exact_grayscale16_png_selection"
+version = "eight objects pinned by size and MD5"
+access = "Direct public objects; exact per-file URLs, sizes, and MD5 values are enforced by download.sh and the decoder."
+size_bytes = 12131207
+local_path = "downloads/polyhaven_material_displacement_png_u16/"
+notes = "Eight 1K displacement maps; corresponding 2K versions are deliberately excluded to avoid resolution duplicates."
+
+[local_paths]
+downloads = "downloads/polyhaven_material_displacement_png_u16/"
+filtered = "filtered/polyhaven_material_displacement_png_u16/"
+index = "index/polyhaven_material_displacement_png_u16/"
+samples = "samples/polyhaven_material_displacement_png_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/polyhaven_material_displacement_png_u16/samples.jsonl"
+summary = "Strictly decode eight pinned 1024x1024 grayscale16 displacement PNGs and emit one row-major little-endian uint16 plane per material."
+deterministic_notes = "Source size/MD5, PNG chunk CRCs and ordering, IHDR geometry/type, contiguous IDAT chunks, complete zlib stream, scanline sizes, filter types, per-map decoded SHA-256, and measured value statistics are enforced."
+
+[[series]]
+id = "material_displacement_u16"
+description = "PBR material displacement/height maps for eight diverse physical surface classes."
+semantic_meaning = "Per-texel relative surface displacement used to synthesize fine material geometry in physically based rendering."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Each PNG natively declares one unsigned 16-bit grayscale sample per texel; decoding reverses only lossless PNG filters/compression and byte order."
+source_resources = ["material_displacement_pngs"]
+source_format = "PNG grayscale, bit depth 16, color type 0, non-interlaced"
+source_field = "Complete decoded grayscale sample plane"
+filtered_input_path = "filtered/polyhaven_material_displacement_png_u16/ingest_stats.json"
+filtering = "Keep all 1024x1024 texels from each of the eight pinned maps after strict structural, hash, and distribution validation."
+missing_value_policy = "Missing or changed objects, malformed PNG chunks, unsupported layout, decode mismatches, low cardinality, or changed measured statistics fail the build. No texels are dropped or imputed."
+conversion = "Reverse PNG row filters and zlib compression, interpret each reconstructed sample as big-endian uint16 per the PNG specification, and emit the same words in little-endian row-major order."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 material displacement plane"
+sample_geometry = "2d_material_displacement_map"
+sample_rank = 2
+sample_axes = ["texture_y", "texture_x"]
+natural_record_kind = "material_displacement_map"
+sample_count = 8
+total_size_bytes = 16777216
+output_path = "samples/polyhaven_material_displacement_png_u16/material_displacement_u16/"

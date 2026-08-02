@@ -1,0 +1,87 @@
+manifest_version = 1
+dataset_id = "zenodo_venere_nir_hsi_u16"
+name = "Venere NIR Hyperspectral Cube UInt16"
+description = "Native uint16 SWIR push-broom hyperspectral detector cube of a Botticelli-inspired painting reconstruction."
+homepage = "https://zenodo.org/records/8143550"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Paolo Oliveri, Giorgia Sciutto, Cristina Malegori, and Rodigo Rocha de Oliveira, Push-broom NIR-HSI scanning of painting reconstruction, inspired by Sandro Botticelli's Venus, Zenodo, DOI 10.5281/zenodo.8143550."
+notes = "The exact Zenodo record declares CC BY 4.0; preserve authors, title, record, DOI, and associated PoliBrush paper citation."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public laboratory hyperspectral scan of a deliberately produced painting reconstruction, released by the researchers through Zenodo."
+usage_notes = "Cultural-heritage materials imaging with no human-subject, identity, or personal fields."
+
+[[origins]]
+id = "zenodo_8143550"
+name = "Push-broom NIR-HSI scanning of painting reconstruction"
+url = "https://zenodo.org/records/8143550"
+type = "zenodo_record"
+version = "10.5281/zenodo.8143550"
+
+[[resources]]
+id = "venere_envi_header"
+origin = "zenodo_8143550"
+url = "https://zenodo.org/api/records/8143550/files/venere.hdr/content"
+type = "envi_header"
+version = "record-8143550"
+access = "Exact public object pinned by size and MD5."
+size_bytes = 5918
+md5 = "9c3aaf32039f039143f60b8535a86b61"
+local_path = "downloads/zenodo_venere_nir_hsi_u16/venere.hdr"
+
+[[resources]]
+id = "venere_envi_payload"
+origin = "zenodo_8143550"
+url = "https://zenodo.org/api/records/8143550/files/venere.raw/content"
+type = "envi_bil_uint16_cube"
+version = "record-8143550"
+access = "Exact public object pinned by size and MD5; dark and white reference cubes are intentionally excluded."
+size_bytes = 90685440
+md5 = "523a952df4261d6f3692df74bdc7c699"
+local_path = "downloads/zenodo_venere_nir_hsi_u16/venere.raw"
+
+[local_paths]
+downloads = "downloads/zenodo_venere_nir_hsi_u16/"
+filtered = "filtered/zenodo_venere_nir_hsi_u16/"
+index = "index/zenodo_venere_nir_hsi_u16/"
+samples = "samples/zenodo_venere_nir_hsi_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_venere_nir_hsi_u16/samples.jsonl"
+summary = "Validate one exact ENVI header/payload pair and emit the declared native uint16 BIL detector cube as one natural sample."
+deterministic_notes = "Source identity, sizes, MD5s, record title, and CC BY 4.0 license are enforced. Build parses the ENVI header and requires 384 samples, 410 lines, 288 increasing wavelengths, BIL interleave, data type 12, zero header offset, and little-endian storage. It scans every value, enforces the measured nondegenerate range/cardinality and zero/saturation behavior, and preserves the source BIL element order. Calibration reference cubes are excluded."
+
+[[series]]
+id = "venere_nir_hsi_detector_u16"
+description = "Raw SWIR hyperspectral detector values for the scanned painting reconstruction."
+semantic_meaning = "Native uint16 detector digital numbers across 288 near/short-wave-infrared bands for each push-broom scan line and spatial sample."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The ENVI header declares data type 12, byte order 0, and BIL interleave. Values are raw sensor digital numbers, not dark/white-corrected reflectance."
+source_resources = ["venere_envi_header", "venere_envi_payload"]
+source_format = "ENVI uint16 BIL cube"
+source_field = "Declared 410x288x384 detector-value array"
+filtered_input_path = "filtered/zenodo_venere_nir_hsi_u16/ingest_stats.json"
+filtering = "Keep the complete main venere scan. Exclude separate DARKREF and WHITEREF acquisitions because they are calibration quantities rather than painting-scene detector values."
+missing_value_policy = "Missing sources, identity/hash changes, malformed header fields, size/layout changes, constant bands, low cardinality, excessive zeros, or unexpected measured statistics fail the build. No values are dropped or imputed."
+conversion = "Parse the ENVI header, validate exactly lines*bands*samples little-endian uint16 elements, and emit those detector elements in declared BIL line-band-sample order without scaling or numeric transformation."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 hyperspectral detector tensor"
+sample_geometry = "3d_hyperspectral_bil_cube"
+sample_rank = 3
+sample_axes = ["scan_line", "spectral_band", "spatial_sample"]
+natural_record_kind = "envi_hyperspectral_cube"
+sample_count = 1
+total_size_bytes = 90685440
+output_path = "samples/zenodo_venere_nir_hsi_u16/venere_nir_hsi_detector_u16/"

@@ -27,6 +27,7 @@ rhea_reactions	ok	55029	128401	3	18343	36686	0	0	0	1	none	none
 osf_preprints	ok	59997	239988	3	19999	79996	0	0	0	1	none	none
 ooni_measurements	ok	60000	240000	3	20000	80000	0	0	0	1	none	none
 anilist_media	ok	64534	172603	30	2288	5151	0	0	0	1	none	none
+zenodo_zeroswarm_modbus_registers_u16	ok	65120	130240	4	16280	32560	0	0	0	1	none	none
 scryfall_default_cards	ok	65272	180931	29	2205	5268	0	0	0	1	none	none
 library_of_congress_items	ok	66380	264316	5	15000	60000	0	0	0	1	none	none
 usgs_quakes_month	ok	68900	374024	7	9842	39376	0	0	0	1	none	none

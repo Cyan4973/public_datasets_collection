@@ -1,0 +1,120 @@
+manifest_version = 1
+dataset_id = "zenodo_leconte_chirp_segy_f32"
+name = "LeConte Bay CHIRP SEG-Y Float32"
+description = "Native IEEE-float32 marine CHIRP subsurface reflection traces from five bounded LeConte Bay SEG-Y files."
+homepage = "https://zenodo.org/records/4008565"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "LeConte Bay CHIRP Subsurface Data, Zenodo record 4008565, DOI 10.5281/zenodo.4008565."
+notes = "The exact Zenodo record declares CC BY 4.0; preserve creator, title, record, and DOI attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public marine geophysical survey data released through Zenodo."
+usage_notes = "Subsurface acoustic reflection amplitudes; no personal or user-content fields are present."
+
+[[origins]]
+id = "zenodo_4008565"
+name = "LeConte Bay CHIRP Subsurface Data"
+url = "https://zenodo.org/records/4008565"
+type = "zenodo_record"
+version = "10.5281/zenodo.4008565"
+
+[[resources]]
+id = "acrossfjord_20170916"
+origin = "zenodo_4008565"
+url = "https://zenodo.org/api/records/4008565/files/20170916063700utc_acrossfjord.jsf.sgy/content"
+type = "segy_ieee_float32"
+version = "record-4008565"
+access = "Exact public object pinned by size and MD5."
+size_bytes = 5593632
+md5 = "f8659291d02e652fd0ad1b637ce6f263"
+local_path = "downloads/zenodo_leconte_chirp_segy_f32/20170916063700utc_acrossfjord.jsf.sgy"
+
+[[resources]]
+id = "alongfjord_20170913_part2"
+origin = "zenodo_4008565"
+url = "https://zenodo.org/api/records/4008565/files/20170913032800_alongfjord.002.jsf.sgy/content"
+type = "segy_ieee_float32"
+version = "record-4008565"
+access = "Exact public object pinned by size and MD5."
+size_bytes = 18188960
+md5 = "7ec1ad982273e09cab26f0252fb1af77"
+local_path = "downloads/zenodo_leconte_chirp_segy_f32/20170913032800_alongfjord.002.jsf.sgy"
+
+[[resources]]
+id = "alongfjord_20170912_part1"
+origin = "zenodo_4008565"
+url = "https://zenodo.org/api/records/4008565/files/20170912181500_alongfjord.001.jsf.sgy/content"
+type = "segy_ieee_float32"
+version = "record-4008565"
+access = "Exact public object pinned by size and MD5."
+size_bytes = 24316656
+md5 = "e73bf3fb9f7bd1be8c047f15bbc10334"
+local_path = "downloads/zenodo_leconte_chirp_segy_f32/20170912181500_alongfjord.001.jsf.sgy"
+
+[[resources]]
+id = "alongfjord_20170913_part1"
+origin = "zenodo_4008565"
+url = "https://zenodo.org/api/records/4008565/files/20170913032800_alongfjord.001.jsf.sgy/content"
+type = "segy_ieee_float32"
+version = "record-4008565"
+access = "Exact public object pinned by size and MD5."
+size_bytes = 36287840
+md5 = "1cfa077b18cb7e41133d66e23837e781"
+local_path = "downloads/zenodo_leconte_chirp_segy_f32/20170913032800_alongfjord.001.jsf.sgy"
+
+[[resources]]
+id = "acrossfjord_20170918"
+origin = "zenodo_4008565"
+url = "https://zenodo.org/api/records/4008565/files/20170918085900utc_acrossfjord.jsf.sgy/content"
+type = "segy_ieee_float32"
+version = "record-4008565"
+access = "Exact public object pinned by size and MD5."
+size_bytes = 42666084
+md5 = "724825ec6356673a052b727f25f66b9b"
+local_path = "downloads/zenodo_leconte_chirp_segy_f32/20170918085900utc_acrossfjord.jsf.sgy"
+
+[local_paths]
+downloads = "downloads/zenodo_leconte_chirp_segy_f32/"
+filtered = "filtered/zenodo_leconte_chirp_segy_f32/"
+index = "index/zenodo_leconte_chirp_segy_f32/"
+samples = "samples/zenodo_leconte_chirp_segy_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_leconte_chirp_segy_f32/samples.jsonl"
+summary = "Validate five exact SEG-Y files and emit one little-endian IEEE-float32 sample per source trace."
+deterministic_notes = "Selection, URLs, sizes, and MD5s are pinned. Build requires standard big-endian SEG-Y with no extended textual headers and format code 5, follows per-trace sample counts, rejects truncation and non-finite values, and preserves trace order and float bit patterns while reversing only byte order per word."
+
+[[series]]
+id = "leconte_chirp_trace_f32"
+description = "Individual marine CHIRP subsurface reflection traces."
+semantic_meaning = "IEEE-float32 acoustic reflection amplitude along the two-way travel-time axis for each sequential LeConte Bay survey ping."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "SEG-Y format code 5 stores IEEE float32 samples in big-endian order. Outputs preserve every 32-bit value word and convert only to little-endian byte order."
+source_resources = ["acrossfjord_20170916", "alongfjord_20170913_part2", "alongfjord_20170912_part1", "alongfjord_20170913_part1", "acrossfjord_20170918"]
+source_format = "SEG-Y revision 1, sample format code 5"
+source_field = "Per-trace sample payload"
+filtered_input_path = "filtered/zenodo_leconte_chirp_segy_f32/ingest_stats.json"
+filtering = "Keep every complete trace from all five pinned files after header, layout, finite-value, and aggregate-size validation."
+missing_value_policy = "Missing files, size/hash mismatches, malformed headers, non-code-5 samples, zero-length traces, truncation, trailing bytes, or non-finite values fail the build. No values are dropped or imputed."
+conversion = "Reverse the four bytes of each big-endian IEEE float32 source word to emit the identical IEEE value bit pattern in little-endian order."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 trace array"
+sample_geometry = "1d_seismic_trace"
+sample_rank = 1
+sample_axes = ["two_way_travel_time"]
+natural_record_kind = "segy_trace"
+sample_count = 6895
+total_size_bytes = 125380372
+output_path = "samples/zenodo_leconte_chirp_segy_f32/leconte_chirp_trace_f32/"

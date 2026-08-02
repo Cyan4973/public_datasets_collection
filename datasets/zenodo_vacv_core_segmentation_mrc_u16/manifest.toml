@@ -1,0 +1,76 @@
+manifest_version = 1
+dataset_id = "zenodo_vacv_core_segmentation_mrc_u16"
+name = "VACV Core Segmentation MRC UInt16"
+description = "Sparse native-uint16 3D ground-truth segmentation of vaccinia-virus cores in a cryo-electron tomography volume."
+homepage = "https://zenodo.org/records/20262954"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Jiasui Liu, 3D segmentation for VACV cores, Zenodo, DOI 10.5281/zenodo.20262954."
+notes = "The exact Zenodo record declares CC BY 4.0; preserve author, title, record, and DOI attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public annotated cryo-electron tomography research data released by its author through Zenodo."
+usage_notes = "Binary segmentation of virus cores; no human-subject or personal fields are present."
+
+[[origins]]
+id = "zenodo_20262954"
+name = "3D segmentation for VACV cores"
+url = "https://zenodo.org/records/20262954"
+type = "zenodo_record"
+version = "10.5281/zenodo.20262954"
+
+[[resources]]
+id = "vacv_ground_truth_mrc"
+origin = "zenodo_20262954"
+url = "https://zenodo.org/api/records/20262954/files/032_original_ground_truth.mrc/content"
+type = "mrc_mode6_uint16_volume"
+version = "record-20262954"
+access = "Exact public object pinned by size and MD5; accompanying record JSON is retained for identity and license validation."
+size_bytes = 107649024
+md5 = "a06b214d041398b9d0f0e8702dce8d7a"
+local_path = "downloads/zenodo_vacv_core_segmentation_mrc_u16/032_original_ground_truth.mrc"
+
+[local_paths]
+downloads = "downloads/zenodo_vacv_core_segmentation_mrc_u16/"
+filtered = "filtered/zenodo_vacv_core_segmentation_mrc_u16/"
+index = "index/zenodo_vacv_core_segmentation_mrc_u16/"
+samples = "samples/zenodo_vacv_core_segmentation_mrc_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_vacv_core_segmentation_mrc_u16/samples.jsonl"
+summary = "Validate one exact MRC mode-6 volume and copy its complete native little-endian uint16 voxel payload as one natural 3D sample."
+deterministic_notes = "Source identity, size, MD5, record title, and CC BY 4.0 license are enforced. Build requires a 464x464x250 little-endian MRC mode-6 array with no extended header or trailing bytes, exactly two labels 0/255, nontrivial spatial occupancy, and the measured value count. Only the 1,024-byte container header is omitted; voxel bytes are source-identical."
+
+[[series]]
+id = "vacv_core_segmentation_volume_u16"
+description = "Sparse 3D ground-truth mask of vaccinia-virus cores."
+semantic_meaning = "Per-voxel VACV-core segmentation label: background 0 or annotated foreground 255."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source MRC mode 6 payload is native little-endian uint16. Although it uses only labels 0 and 255, its two-byte source representation and complete 3D spatial layout are preserved."
+source_resources = ["vacv_ground_truth_mrc"]
+source_format = "MRC mode 6, little-endian, 464x464x250"
+source_field = "Complete voxel data block"
+filtered_input_path = "filtered/zenodo_vacv_core_segmentation_mrc_u16/ingest_stats.json"
+filtering = "Keep the complete validated ground-truth volume, including empty boundary slices, as one natural 3D sample."
+missing_value_policy = "Missing sources, identity/hash changes, malformed headers, shape/mode/layout changes, trailing bytes, constant payloads, or unexpected label values fail the build. No voxels are dropped or imputed."
+conversion = "Parse the MRC mode-6 header, seek to its declared voxel field, validate exactly nx*ny*nz little-endian uint16 elements, and emit those elements in z-y-x order without numeric transformation."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 3D segmentation volume"
+sample_geometry = "3d_segmentation_volume"
+sample_rank = 3
+sample_axes = ["z", "y", "x"]
+natural_record_kind = "mrc_volume"
+sample_count = 1
+total_size_bytes = 107648000
+output_path = "samples/zenodo_vacv_core_segmentation_mrc_u16/vacv_core_segmentation_volume_u16/"

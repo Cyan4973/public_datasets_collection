@@ -38,16 +38,17 @@ if not any("cc-by-4.0" in value or "creative commons attribution 4.0" in value f
 PY
 mv "$RECORD_JSON.part" "$RECORD_JSON"
 
-NAME="ZeroSWARM Normal data_v2b.pcap"
-SIZE="18119840"
-MD5="9f8235fcdbfcacb32e7a70db14fc6c74"
-URL="https://zenodo.org/api/records/15082260/files/ZeroSWARM%20Normal%20data_v2b.pcap/content"
+NAME="ZeroSWARM Normal data_v2.pcap"
+SIZE="232217247"
+MD5="eee8b87e62c482fd574b6e78d32cb12b"
+URL="https://zenodo.org/api/records/15082260/files/ZeroSWARM%20Normal%20data_v2.pcap/content"
 TARGET="$DOWNLOAD_DIR/$NAME"
 if [[ -f "$TARGET" ]] && [[ "$(stat -c %s "$TARGET")" == "$SIZE" ]] && [[ "$(md5sum "$TARGET" | awk '{print $1}')" == "$MD5" ]]; then
   echo "verified cached $NAME"
 else
   rm -f "$TARGET.part"
-  curl --fail --location --retry 5 --retry-delay 2 --max-time 1800 \
+  curl --fail --location --retry 5 --retry-delay 2 --max-time 7200 \
+    --max-filesize 250000000 \
     --output "$TARGET.part" "$URL"
   ACTUAL_SIZE="$(stat -c %s "$TARGET.part")"
   ACTUAL_MD5="$(md5sum "$TARGET.part" | awk '{print $1}')"

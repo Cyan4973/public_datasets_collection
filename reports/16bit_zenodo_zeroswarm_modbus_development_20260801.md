@@ -1,4 +1,4 @@
-# Zero-SWARM Modbus Read Registers UInt16 Development — 2026-08-01
+# Zero-SWARM Modbus Read Registers UInt16 Development — 2026-08-01 / 2026-08-03
 
 `zenodo_zeroswarm_modbus_registers_u16` adds a genuinely new native-16-bit
 domain: industrial-control protocol register telemetry. The accepted material
@@ -11,15 +11,19 @@ Zenodo record `15082260`, *Modbus Normal and Malicious Network Traffic*, was
 published by George Lazaridis and Asterios Mpatziakas under CC BY 4.0 with DOI
 `10.5281/zenodo.15082260`. The bounded source is:
 
-- `ZeroSWARM Normal data_v2b.pcap`
-- source bytes: `18,119,840`
-- MD5: `9f8235fcdbfcacb32e7a70db14fc6c74`
+- `ZeroSWARM Normal data_v2.pcap`
+- source bytes: `232,217,247`
+- MD5: `eee8b87e62c482fd574b6e78d32cb12b`
 
 The exact record JSON is retained and validated for record ID, title, and
-license. A larger 232 MB normal capture was not needed. Flooding and Nmap
-captures were excluded because the intended quantity is normal operational
-telemetry, not attack mechanics. Three unrelated Wi-Fi PCAP search results
-were rejected as metadata-query false positives.
+license. The recipe originally used the 18.1 MB `v2b` normal capture, but a
+2026-08-03 expansion probe established that the 232 MB `v2` capture provides
+14.54 times as many observations per register and substantially broader
+holding-register ranges. The smaller streams are not verbatim slices of the
+large streams, but they represent the same Factory I/O loop and would add only
+6.9% beyond the large run, so `v2` replaces rather than supplements `v2b`.
+Flooding and Nmap captures remain excluded because the intended quantity is
+normal operational telemetry, not attack mechanics.
 
 ## Protocol decoding and selection
 
@@ -30,11 +34,13 @@ client/server flow, transaction ID, unit ID, and function code. This restores
 the requested starting address before values are assigned to a register
 series.
 
-Preflight decoded 195,362 Modbus/TCP packets, 162,801 complete ADUs, and 97,680
-addressed register words. All 32,560 target read responses were correlated;
-none was uncorrelated. Six candidate register streams existed, but the two
-function-16 write streams closely mirrored holding-register ranges and
-transition counts, so writes were excluded to avoid overweighting the control
+Preflight decoded 2,840,579 Modbus/TCP packets, 2,367,125 complete ADUs, and
+1,420,270 addressed register words. It correlated 473,423 read responses. The
+capture also contains exactly seven response ADUs whose requests are absent,
+so their start addresses cannot be recovered; they are excluded and the exact
+diagnostic count is enforced. Six candidate register streams existed, but the
+two function-16 write streams closely mirror holding-register ranges and
+transitions, so writes remain excluded to avoid overweighting the control
 loop. The four retained samples are:
 
 - unit 1 input registers 0 and 1
@@ -50,12 +56,15 @@ word is decoded from network byte order and emitted as the same uint16 value
 in little-endian corpus order. Capture and response order are preserved.
 
 - primary samples: `4`
-- values per sample: `16,280`
-- total primary values: `65,120`
-- bytes per sample: `32,560`
-- total primary bytes: `130,240`
+- input-register values per sample: `236,711`
+- holding-register values per sample: `236,712`
+- total primary values: `946,846`
+- input-register bytes per sample: `473,422`
+- holding-register bytes per sample: `473,424`
+- total primary bytes: `1,893,692`
 - input-register range: `[0, 100]`, 101 distinct values per sample
-- holding-register ranges: `[18, 76]` and `[18, 74]`
+- holding-register ranges: `[3, 423]` and `[3, 311]`, with 421 and 309
+  distinct values respectively
 
 Build and verification passed. Verification rechecks source size/MD5 and
 Zenodo identity/license metadata, reparses the complete PCAP, reconstructs the

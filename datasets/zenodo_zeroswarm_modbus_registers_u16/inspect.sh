@@ -13,6 +13,6 @@ RUN_TS="$(date +%Y%m%d_%H%M%S)"
 exec > >(tee "$LOG_DIR/inspect.$RUN_TS.log" "$LOG_DIR/inspect.latest.log") 2>&1
 echo "[$(date -Is)] inspect start dataset=$DATASET_ID"
 python3 "$RECIPE_DIR/scripts/inspect_modbus_pcap.py" \
-  --pcap "$DOWNLOAD_DIR/ZeroSWARM Normal data_v2b.pcap" \
+  --pcap "$DOWNLOAD_DIR/ZeroSWARM Normal data_v2.pcap" \
   --report "$FILTERED_DIR/preflight.json"
 echo "[$(date -Is)] inspect done dataset=$DATASET_ID"

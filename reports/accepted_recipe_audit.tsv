@@ -27,7 +27,6 @@ rhea_reactions	ok	55029	128401	3	18343	36686	0	0	0	1	none	none
 osf_preprints	ok	59997	239988	3	19999	79996	0	0	0	1	none	none
 ooni_measurements	ok	60000	240000	3	20000	80000	0	0	0	1	none	none
 anilist_media	ok	64534	172603	30	2288	5151	0	0	0	1	none	none
-zenodo_zeroswarm_modbus_registers_u16	ok	65120	130240	4	16280	32560	0	0	0	1	none	none
 scryfall_default_cards	ok	65272	180931	29	2205	5268	0	0	0	1	none	none
 library_of_congress_items	ok	66380	264316	5	15000	60000	0	0	0	1	none	none
 usgs_quakes_month	ok	68900	374024	7	9842	39376	0	0	0	1	none	none
@@ -127,6 +126,7 @@ federalregister_documents_large	ok	887298	2661894	358	2463	6824	0	0	0	1	none	non
 inspirehep_literature	ok	897494	2403434	195	5000	10000	0	0	0	1	none	none
 nasa_power_daily_solar_flux	ok	898551	7188408	60	14976	119808	0	0	0	1	none	none
 smithsonian_openaccess_gltf_indices_u16	ok	899964	1799928	3	299988	599976	0	0	0	1	none	none
+zenodo_zeroswarm_modbus_registers_u16	ok	946846	1893692	4	236711.5	473423	0	0	0	1	none	none
 nasa_power_daily_surface_state	ok	964260	7714080	60	16071	128568	0	0	0	1	none	none
 nasa_power_daily_temperature_extremes	ok	964260	7714080	60	16071	128568	0	0	0	1	none	none
 usgs_nwis_specific_conductance_daily	ok	984131	7873048	120	8317.5	66540	0	0	0	1	none	none

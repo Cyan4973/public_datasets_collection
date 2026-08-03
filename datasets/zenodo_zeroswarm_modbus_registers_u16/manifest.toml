@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "zenodo_zeroswarm_modbus_registers_u16"
 name = "Zero-SWARM Modbus Read Registers UInt16"
-description = "Protocol-native uint16 input- and holding-register time series extracted from a normal Factory I/O Modbus/TCP capture."
+description = "Protocol-native uint16 input- and holding-register time series extracted from a 232 MB normal Factory I/O Modbus/TCP capture."
 homepage = "https://zenodo.org/records/15082260"
 
 [license]
@@ -25,15 +25,15 @@ type = "zenodo_record"
 version = "1.0 / 10.5281/zenodo.15082260"
 
 [[resources]]
-id = "zeroswarm_normal_v2b_pcap"
+id = "zeroswarm_normal_v2_pcap"
 origin = "zenodo_15082260"
-url = "https://zenodo.org/api/records/15082260/files/ZeroSWARM%20Normal%20data_v2b.pcap/content"
+url = "https://zenodo.org/api/records/15082260/files/ZeroSWARM%20Normal%20data_v2.pcap/content"
 type = "classic_pcap_modbus_tcp"
 version = "record-15082260"
 access = "Exact public object pinned by size and MD5; accompanying record JSON is retained for license validation."
-size_bytes = 18119840
-md5 = "9f8235fcdbfcacb32e7a70db14fc6c74"
-local_path = "downloads/zenodo_zeroswarm_modbus_registers_u16/ZeroSWARM Normal data_v2b.pcap"
+size_bytes = 232217247
+md5 = "eee8b87e62c482fd574b6e78d32cb12b"
+local_path = "downloads/zenodo_zeroswarm_modbus_registers_u16/ZeroSWARM Normal data_v2.pcap"
 
 [local_paths]
 downloads = "downloads/zenodo_zeroswarm_modbus_registers_u16/"
@@ -46,8 +46,8 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/zenodo_zeroswarm_modbus_registers_u16/samples.jsonl"
-summary = "Decode one pinned normal Modbus/TCP capture and emit one uint16 sequence per server-read register address."
-deterministic_notes = "Source identity, size, MD5, record title, and CC BY 4.0 license are enforced. The parser accepts classic Ethernet/IPv4/TCP PCAP, decodes complete port-502 Modbus ADUs, correlates function-3/4 responses to requests using flow, transaction, unit, and function identifiers, and preserves response packet order. Only four exact read-register streams are emitted."
+summary = "Decode the pinned large normal Modbus/TCP capture and emit one uint16 sequence per server-read register address."
+deterministic_notes = "Source identity, size, MD5, record title, and CC BY 4.0 license are enforced. The parser accepts classic Ethernet/IPv4/TCP PCAP, decodes complete port-502 Modbus ADUs, correlates function-3/4 responses to requests using flow, transaction, unit, and function identifiers, and preserves response packet order. Only four exact read-register streams are emitted. The source contains exactly seven extra read responses lacking correlatable requests; they cannot be assigned register addresses, are excluded, and their exact count is enforced."
 
 [[series]]
 id = "zeroswarm_modbus_input_register_u16"
@@ -56,12 +56,12 @@ semantic_meaning = "Unsigned 16-bit values returned by Modbus function 4 for inp
 role = "primary"
 representation_class = "native_numeric"
 representation_notes = "Modbus registers are protocol-native unsigned 16-bit big-endian words; outputs preserve each word and convert only to little-endian corpus order."
-source_resources = ["zeroswarm_normal_v2b_pcap"]
+source_resources = ["zeroswarm_normal_v2_pcap"]
 source_format = "Classic PCAP containing Ethernet/IPv4/Modbus-TCP"
 source_field = "Function-4 response register words correlated to request start addresses"
 filtered_input_path = "filtered/zenodo_zeroswarm_modbus_registers_u16/ingest_stats.json"
-filtering = "Keep unit 1 input registers 0 and 1 from all 16,280 complete correlated responses in capture order."
-missing_value_policy = "Missing sources, identity/hash changes, malformed packets, incomplete ADUs, uncorrelated target responses, unexpected target keys/counts, or constant streams fail the build. No values are dropped or imputed."
+filtering = "Keep unit 1 input registers 0 and 1 from all 236,711 complete correlated function-4 responses in capture order."
+missing_value_policy = "Missing sources, identity/hash changes, malformed packets, unexpected target keys/counts, changed correlation totals, or constant streams fail the build. The source's exact seven unmatched responses are retained only as an enforced diagnostic count because no request exists to recover their register addresses; no correlated values are dropped or imputed."
 conversion = "Decode each two-byte network-order register word as uint16 and write the same value as little-endian uint16."
 numeric_kind = "uint"
 bit_width = 16
@@ -72,7 +72,7 @@ sample_rank = 1
 sample_axes = ["read_observation"]
 natural_record_kind = "modbus_unit_register"
 sample_count = 2
-total_size_bytes = 65120
+total_size_bytes = 946844
 output_path = "samples/zenodo_zeroswarm_modbus_registers_u16/zeroswarm_modbus_input_register_u16/"
 
 [[series]]
@@ -82,12 +82,12 @@ semantic_meaning = "Unsigned 16-bit values returned by Modbus function 3 for hol
 role = "primary"
 representation_class = "native_numeric"
 representation_notes = "Modbus registers are protocol-native unsigned 16-bit big-endian words; outputs preserve each word and convert only to little-endian corpus order."
-source_resources = ["zeroswarm_normal_v2b_pcap"]
+source_resources = ["zeroswarm_normal_v2_pcap"]
 source_format = "Classic PCAP containing Ethernet/IPv4/Modbus-TCP"
 source_field = "Function-3 response register words correlated to request start addresses"
 filtered_input_path = "filtered/zenodo_zeroswarm_modbus_registers_u16/ingest_stats.json"
-filtering = "Keep unit 1 holding registers 0 and 1 from all 16,280 complete correlated responses in capture order."
-missing_value_policy = "Missing sources, identity/hash changes, malformed packets, incomplete ADUs, uncorrelated target responses, unexpected target keys/counts, or constant streams fail the build. No values are dropped or imputed."
+filtering = "Keep unit 1 holding registers 0 and 1 from all 236,712 complete correlated function-3 responses in capture order."
+missing_value_policy = "Missing sources, identity/hash changes, malformed packets, unexpected target keys/counts, changed correlation totals, or constant streams fail the build. The source's exact seven unmatched responses are retained only as an enforced diagnostic count because no request exists to recover their register addresses; no correlated values are dropped or imputed."
 conversion = "Decode each two-byte network-order register word as uint16 and write the same value as little-endian uint16."
 numeric_kind = "uint"
 bit_width = 16
@@ -98,5 +98,5 @@ sample_rank = 1
 sample_axes = ["read_observation"]
 natural_record_kind = "modbus_unit_register"
 sample_count = 2
-total_size_bytes = 65120
+total_size_bytes = 946848
 output_path = "samples/zenodo_zeroswarm_modbus_registers_u16/zeroswarm_modbus_holding_register_u16/"

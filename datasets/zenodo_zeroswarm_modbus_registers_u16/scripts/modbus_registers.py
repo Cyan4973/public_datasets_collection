@@ -14,10 +14,9 @@ from inspect_modbus_pcap import inspect
 
 
 DATASET_ID = "zenodo_zeroswarm_modbus_registers_u16"
-SOURCE_NAME = "ZeroSWARM Normal data_v2b.pcap"
-SOURCE_SIZE = 18_119_840
-SOURCE_MD5 = "9f8235fcdbfcacb32e7a70db14fc6c74"
-EXPECTED_COUNT = 16_280
+SOURCE_NAME = "ZeroSWARM Normal data_v2.pcap"
+SOURCE_SIZE = 232_217_247
+SOURCE_MD5 = "eee8b87e62c482fd574b6e78d32cb12b"
 SERIES_BY_OPERATION = {
     "input_read": "zeroswarm_modbus_input_register_u16",
     "holding_read": "zeroswarm_modbus_holding_register_u16",
@@ -28,6 +27,14 @@ EXPECTED_KEYS = {
     (1, "holding_read", 0),
     (1, "holding_read", 1),
 }
+EXPECTED_COUNTS = {
+    (1, "input_read", 0): 236_711,
+    (1, "input_read", 1): 236_711,
+    (1, "holding_read", 0): 236_712,
+    (1, "holding_read", 1): 236_712,
+}
+EXPECTED_CORRELATED_READ_RESPONSES = 473_423
+EXPECTED_UNCORRELATED_READ_RESPONSES = 7
 
 
 def md5(path: Path) -> str:
@@ -66,11 +73,15 @@ def encode(values: list[int]) -> bytes:
 
 def selected_series(pcap: Path) -> tuple[dict[str, object], dict[tuple[int, str, int], list[int]]]:
     report, decoded = inspect(pcap, include_series=True)
+    if int(report.get("correlated_read_responses", -1)) != EXPECTED_CORRELATED_READ_RESPONSES:
+        raise SystemExit("unexpected correlated read-response count")
+    if int(report.get("uncorrelated_read_responses", -1)) != EXPECTED_UNCORRELATED_READ_RESPONSES:
+        raise SystemExit("unexpected uncorrelated read-response count")
     selected = {key: decoded[key] for key in EXPECTED_KEYS if key in decoded}
     if set(selected) != EXPECTED_KEYS:
         raise SystemExit(f"unexpected target register keys: {sorted(selected)}")
     for key, values in selected.items():
-        if len(values) != EXPECTED_COUNT:
+        if len(values) != EXPECTED_COUNTS[key]:
             raise SystemExit(f"unexpected observation count for {key}: {len(values)}")
         if len(set(values)) < 2:
             raise SystemExit(f"constant target register stream: {key}")

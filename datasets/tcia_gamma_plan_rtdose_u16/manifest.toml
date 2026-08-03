@@ -1,0 +1,101 @@
+manifest_version = 1
+dataset_id = "tcia_gamma_plan_rtdose_u16"
+name = "TCIA GammaPlan RTDOSE UInt16"
+description = "Native unsigned 16-bit physical radiotherapy dose grids from three Elekta GammaPlan DICOM RTDOSE objects in distinct de-identified vestibular-schwannoma studies."
+homepage = "https://doi.org/10.7937/TCIA.9YTJ-5Q73"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Vestibular-Schwannoma-SEG, The Cancer Imaging Archive, DOI 10.7937/TCIA.9YTJ-5Q73."
+notes = "TCIA's live series metadata and the LICENSE file embedded in every downloaded archive explicitly declare CC BY 4.0. Preserve collection and DOI attribution and follow TCIA's data usage policy, including its prohibition on re-identification."
+
+[safety]
+contains_sensitive_data = true
+contains_personal_data = false
+provenance_notes = "The source is a public TCIA collection of de-identified human radiotherapy data. TCIA states that the collection was processed under its Basic Application Confidentiality Profile."
+usage_notes = "The recipe emits only typed physical-dose grid values and no DICOM demographic or identifier fields. Do not attempt participant re-identification or linkage."
+
+[[origins]]
+id = "tcia_vestibular_schwannoma_seg"
+name = "Vestibular-Schwannoma-SEG"
+url = "https://doi.org/10.7937/TCIA.9YTJ-5Q73"
+type = "tcia_collection"
+version = "10.7937/TCIA.9YTJ-5Q73"
+
+[[origins]]
+id = "tcia_nbia_api"
+name = "TCIA NBIA REST API"
+url = "https://services.cancerimagingarchive.net/nbia-api/services/v1"
+type = "public_api"
+
+[[resources]]
+id = "gamma_plan_rtdose_01"
+origin = "tcia_nbia_api"
+url = "https://services.cancerimagingarchive.net/nbia-api/services/v1/getImage?SeriesInstanceUID=1.3.6.1.4.1.14519.5.2.1.324778227810006693629648508840410665135"
+type = "tcia_series_zip_with_single_dicom_rtdose"
+version = "1.3.6.1.4.1.14519.5.2.1.324778227810006693629648508840410665135"
+size_bytes = 8200242
+local_path = "downloads/tcia_gamma_plan_rtdose_u16/01_1.3.6.1.4.1.14519.5.2.1.324778227810006693629648508840410665135.zip"
+notes = "The recorded size is the uncompressed source DICOM object reported by TCIA; the API response ZIP also contains TCIA's LICENSE text."
+
+[[resources]]
+id = "gamma_plan_rtdose_02"
+origin = "tcia_nbia_api"
+url = "https://services.cancerimagingarchive.net/nbia-api/services/v1/getImage?SeriesInstanceUID=1.3.6.1.4.1.14519.5.2.1.9363649087805920279178314503691639909"
+type = "tcia_series_zip_with_single_dicom_rtdose"
+version = "1.3.6.1.4.1.14519.5.2.1.9363649087805920279178314503691639909"
+size_bytes = 8243092
+local_path = "downloads/tcia_gamma_plan_rtdose_u16/02_1.3.6.1.4.1.14519.5.2.1.9363649087805920279178314503691639909.zip"
+notes = "The recorded size is the uncompressed source DICOM object reported by TCIA; the API response ZIP also contains TCIA's LICENSE text."
+
+[[resources]]
+id = "gamma_plan_rtdose_03"
+origin = "tcia_nbia_api"
+url = "https://services.cancerimagingarchive.net/nbia-api/services/v1/getImage?SeriesInstanceUID=1.3.6.1.4.1.14519.5.2.1.161268545793977743134322234540269044021"
+type = "tcia_series_zip_with_single_dicom_rtdose"
+version = "1.3.6.1.4.1.14519.5.2.1.161268545793977743134322234540269044021"
+size_bytes = 8560602
+local_path = "downloads/tcia_gamma_plan_rtdose_u16/03_1.3.6.1.4.1.14519.5.2.1.161268545793977743134322234540269044021.zip"
+notes = "The recorded size is the uncompressed source DICOM object reported by TCIA; the API response ZIP also contains TCIA's LICENSE text."
+
+[local_paths]
+downloads = "downloads/tcia_gamma_plan_rtdose_u16/"
+filtered = "filtered/tcia_gamma_plan_rtdose_u16/"
+index = "index/tcia_gamma_plan_rtdose_u16/"
+samples = "samples/tcia_gamma_plan_rtdose_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/tcia_gamma_plan_rtdose_u16/samples.jsonl"
+summary = "Validate three pinned CC BY 4.0 TCIA RTDOSE objects and copy each complete native unsigned-16 Pixel Data field as one 3D volume."
+deterministic_notes = "The downloader pins three SeriesInstanceUIDs from distinct studies and checks live collection, modality, license, object count, source size, ZIP structure, and embedded license. Build accepts only uncompressed Implicit VR Little Endian RT Dose Storage objects from Elekta GammaPlan with MONOCHROME2, GY/PHYSICAL/PLAN semantics, one sample per voxel, BitsAllocated=BitsStored=16, HighBit=15, PixelRepresentation=0, positive DoseGridScaling, nondegenerate values, and an exact frames*rows*columns*2 Pixel Data length. Verification reparses all source objects and byte-compares every emitted sample."
+
+[[series]]
+id = "gamma_plan_physical_dose_grid_u16"
+description = "Three-dimensional GammaPlan physical radiotherapy dose grids."
+semantic_meaning = "Per-voxel stored physical treatment-dose magnitude for a complete planned vestibular-schwannoma radiotherapy volume; physical gray values equal stored uint16 values multiplied by the source object's DoseGridScaling."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "DICOM natively stores these RTDOSE Pixel Data fields as unsigned 16-bit little-endian values. The recipe preserves stored integers rather than applying the per-volume floating-point physical scaling."
+source_resources = ["gamma_plan_rtdose_01", "gamma_plan_rtdose_02", "gamma_plan_rtdose_03"]
+source_format = "DICOM RT Dose Storage, uncompressed Implicit VR Little Endian"
+source_field = "Pixel Data (7FE0,0010), interpreted with DoseGridScaling (3004,000E)"
+filtered_input_path = "filtered/tcia_gamma_plan_rtdose_u16/ingest_stats.json"
+filtering = "Keep all voxels from the three pinned, validated RTDOSE objects as three separate natural 3D volumes."
+missing_value_policy = "No voxels are dropped or imputed. Missing series, changed metadata/license/size, malformed archives, unsupported transfer syntax, wrong RTDOSE/vendor/model/dose semantics, non-uint16 pixel representation, invalid scaling/geometry, truncated or trailing Pixel Data, or degenerate stored values fail the recipe."
+conversion = "Remove the DICOM container and copy the complete Pixel Data value field byte-for-byte in source frame-row-column order; record DoseGridScaling as metadata without applying it."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 DICOM RTDOSE Pixel Data"
+sample_geometry = "3d_dose_volume"
+sample_rank = 3
+sample_axes = ["z", "y", "x"]
+natural_record_kind = "dicom_rtdose_object"
+sample_count = 3
+total_size_bytes = 24994568
+output_path = "samples/tcia_gamma_plan_rtdose_u16/gamma_plan_physical_dose_grid_u16/"

@@ -162,6 +162,7 @@ sensorless_drive_diagnosis_uci	ok	2866941	22525965	49	58509	468072	0	0	0	1	none	
 zenodo_accelerometer_pcm16	ok	2880000	5760000	60	48000	96000	0	0	0	1	none	none
 gdc_somatic_mutations	ok	3323270	13293080	23	133731	534924	0	0	0	1	none	none
 imdb_title_ratings	ok	3358804	13435216	2	1679402	6717608	0	0	0	1	none	none
+tcia_eclipse_rtdose_u32	ok	3510285	14041140	3	1199128	4796512	0	0	0	1	none	none
 metacpan_releases_search_large	ok	3597093	14388372	9	399677	1598708	0	0	0	1	none	none
 jhu_covid19_confirmed_us_daily	ok	3664458	14657832	3206	1143	4572	0	0	0	1	none	none
 usgs_daily_values_large	ok	3733419	29867352	1800	2192	17536	0	0	0	1	none	none
@@ -186,6 +187,7 @@ binance_usdm_futures_1m_klines_2024_q1	ok	11793600	89107200	270	44640	357120	262
 har_smartphone_uci	ok	11864448	94915584	18	659136	5273088	0	0	0	1	none	none
 crossref_works_large_retry	ok	11996320	59981600	8	1499540	5998160	0	0	0	1	none	none
 noaa_isd_lite	ok	12103704	20912475	502	26015	51830	0	0	0	1	none	none
+tcia_gamma_plan_rtdose_u16	ok	12497284	24994568	3	4119984	8239968	0	0	0	1	none	none
 nhtsa_fars_2022_crash_tables_f64	ok	12662622	101300976	190	60765	486120	0	0	0	1	none	none
 skadi_srtm_hgt	ok	12967201	25934402	1	12967201	25934402	0	0	0	1	none	none
 usda_fia_ca_tree_measurements_f32	ok	13318757	53275028	43	348210	1392840	0	0	0	1	none	none

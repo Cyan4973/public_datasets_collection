@@ -1,0 +1,101 @@
+manifest_version = 1
+dataset_id = "tcia_eclipse_rtdose_u32"
+name = "TCIA Eclipse RTDOSE UInt32"
+description = "Native unsigned 32-bit physical radiotherapy dose grids from three Varian Eclipse DICOM RTDOSE objects in distinct de-identified pancreatic studies."
+homepage = "https://doi.org/10.7937/TCIA.ESHQ-4D90"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Pancreatic-CT-CBCT-SEG, The Cancer Imaging Archive, DOI 10.7937/TCIA.ESHQ-4D90."
+notes = "TCIA's live series metadata and the LICENSE file embedded in every downloaded archive explicitly declare CC BY 4.0. Preserve collection and DOI attribution and follow TCIA's data usage policy, including its prohibition on re-identification."
+
+[safety]
+contains_sensitive_data = true
+contains_personal_data = false
+provenance_notes = "The source is a public TCIA collection of de-identified human radiotherapy data processed under TCIA's de-identification policy."
+usage_notes = "The recipe emits only typed physical-dose grid values and no DICOM demographic or identifier fields. Do not attempt participant re-identification or linkage."
+
+[[origins]]
+id = "tcia_pancreatic_ct_cbct_seg"
+name = "Pancreatic-CT-CBCT-SEG"
+url = "https://doi.org/10.7937/TCIA.ESHQ-4D90"
+type = "tcia_collection"
+version = "10.7937/TCIA.ESHQ-4D90"
+
+[[origins]]
+id = "tcia_nbia_api"
+name = "TCIA NBIA REST API"
+url = "https://services.cancerimagingarchive.net/nbia-api/services/v1"
+type = "public_api"
+
+[[resources]]
+id = "eclipse_rtdose_01"
+origin = "tcia_nbia_api"
+url = "https://services.cancerimagingarchive.net/nbia-api/services/v1/getImage?SeriesInstanceUID=1.3.6.1.4.1.14519.5.2.1.337132488476568438964794321553967230469"
+type = "tcia_series_zip_with_single_dicom_rtdose"
+version = "1.3.6.1.4.1.14519.5.2.1.337132488476568438964794321553967230469"
+size_bytes = 8383680
+local_path = "downloads/tcia_eclipse_rtdose_u32/01_1.3.6.1.4.1.14519.5.2.1.337132488476568438964794321553967230469.zip"
+notes = "The recorded size is the uncompressed source DICOM object reported by TCIA; the API response ZIP also contains TCIA's LICENSE text."
+
+[[resources]]
+id = "eclipse_rtdose_02"
+origin = "tcia_nbia_api"
+url = "https://services.cancerimagingarchive.net/nbia-api/services/v1/getImage?SeriesInstanceUID=1.3.6.1.4.1.14519.5.2.1.132957944596075614237465645641313092885"
+type = "tcia_series_zip_with_single_dicom_rtdose"
+version = "1.3.6.1.4.1.14519.5.2.1.132957944596075614237465645641313092885"
+size_bytes = 8771960
+local_path = "downloads/tcia_eclipse_rtdose_u32/02_1.3.6.1.4.1.14519.5.2.1.132957944596075614237465645641313092885.zip"
+notes = "The recorded size is the uncompressed source DICOM object reported by TCIA; the API response ZIP also contains TCIA's LICENSE text."
+
+[[resources]]
+id = "eclipse_rtdose_03"
+origin = "tcia_nbia_api"
+url = "https://services.cancerimagingarchive.net/nbia-api/services/v1/getImage?SeriesInstanceUID=1.3.6.1.4.1.14519.5.2.1.277895508499534253640451142336498460409"
+type = "tcia_series_zip_with_single_dicom_rtdose"
+version = "1.3.6.1.4.1.14519.5.2.1.277895508499534253640451142336498460409"
+size_bytes = 9839814
+local_path = "downloads/tcia_eclipse_rtdose_u32/03_1.3.6.1.4.1.14519.5.2.1.277895508499534253640451142336498460409.zip"
+notes = "The recorded size is the uncompressed source DICOM object reported by TCIA; the API response ZIP also contains TCIA's LICENSE text."
+
+[local_paths]
+downloads = "downloads/tcia_eclipse_rtdose_u32/"
+filtered = "filtered/tcia_eclipse_rtdose_u32/"
+index = "index/tcia_eclipse_rtdose_u32/"
+samples = "samples/tcia_eclipse_rtdose_u32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/tcia_eclipse_rtdose_u32/samples.jsonl"
+summary = "Validate three pinned CC BY 4.0 TCIA Eclipse RTDOSE objects and copy each complete native unsigned-32 Pixel Data field as one 3D volume."
+deterministic_notes = "The downloader pins three SeriesInstanceUIDs from distinct studies and checks live collection, modality, body region, vendor/model, Eclipse description, license, object count, source size, ZIP structure, and embedded license. Build accepts only uncompressed Implicit VR Little Endian RT Dose Storage objects with MONOCHROME2, GY/PHYSICAL/PLAN semantics, one sample per voxel, BitsAllocated=BitsStored=32, HighBit=31, PixelRepresentation=0, positive DoseGridScaling, nondegenerate values, and an exact frames*rows*columns*4 Pixel Data length. Verification reparses all source objects and byte-compares every emitted sample."
+
+[[series]]
+id = "eclipse_physical_dose_grid_u32"
+description = "Three-dimensional Eclipse physical radiotherapy dose grids."
+semantic_meaning = "Per-voxel stored physical treatment-dose magnitude for a complete planned pancreatic radiotherapy volume; physical gray values equal stored uint32 values multiplied by the source object's DoseGridScaling."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "DICOM natively stores these RTDOSE Pixel Data fields as unsigned 32-bit little-endian values. The recipe preserves stored integers rather than applying the per-volume floating-point physical scaling."
+source_resources = ["eclipse_rtdose_01", "eclipse_rtdose_02", "eclipse_rtdose_03"]
+source_format = "DICOM RT Dose Storage, uncompressed Implicit VR Little Endian"
+source_field = "Pixel Data (7FE0,0010), interpreted with DoseGridScaling (3004,000E)"
+filtered_input_path = "filtered/tcia_eclipse_rtdose_u32/ingest_stats.json"
+filtering = "Keep all voxels from the three pinned, validated RTDOSE objects as three separate natural 3D volumes."
+missing_value_policy = "No voxels are dropped or imputed. Missing series, changed metadata/license/size, malformed archives, unsupported transfer syntax, wrong RTDOSE/vendor/model/anatomy/dose semantics, non-uint32 pixel representation, invalid scaling/geometry, truncated or trailing Pixel Data, or degenerate stored values fail the recipe."
+conversion = "Remove the DICOM container and copy the complete Pixel Data value field byte-for-byte in source frame-row-column order; record DoseGridScaling as metadata without applying it."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous uint32 DICOM RTDOSE Pixel Data"
+sample_geometry = "3d_dose_volume"
+sample_rank = 3
+sample_axes = ["z", "y", "x"]
+natural_record_kind = "dicom_rtdose_object"
+sample_count = 3
+total_size_bytes = 14041140
+output_path = "samples/tcia_eclipse_rtdose_u32/eclipse_physical_dose_grid_u32/"

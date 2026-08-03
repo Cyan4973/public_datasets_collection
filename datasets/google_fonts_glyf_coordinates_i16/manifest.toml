@@ -1,0 +1,105 @@
+manifest_version = 1
+dataset_id = "google_fonts_glyf_coordinates_i16"
+name = "Google Fonts TrueType Glyph Coordinates Int16"
+description = "Exact signed-int16 design-unit point coordinates reconstructed from simple TrueType glyph contours in three Apache-2.0 Google Fonts."
+homepage = "https://github.com/google/fonts"
+
+[license]
+name = "Apache License 2.0"
+spdx = "Apache-2.0"
+url = "https://www.apache.org/licenses/LICENSE-2.0"
+citation = "Google Fonts repository and the Aclonica, Roboto Slab, and Special Elite font families."
+notes = "Each selected family contains the same complete Apache License 2.0 text. Preserve license and attribution notices when redistributing source or derived material."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public open-source vector font files from the official Google Fonts repository."
+usage_notes = "Typographic outline geometry with no user, identity, or personal records."
+
+[[origins]]
+id = "google_fonts_repo"
+name = "Google Fonts GitHub repository"
+url = "https://github.com/google/fonts"
+type = "git_repository"
+version = "2796410152d4f9524b68ed46e69c1b60f8e0f7c3"
+
+[[resources]]
+id = "aclonica_ttf"
+origin = "google_fonts_repo"
+url = "https://raw.githubusercontent.com/google/fonts/2796410152d4f9524b68ed46e69c1b60f8e0f7c3/apache/aclonica/Aclonica-Regular.ttf"
+type = "truetype_font"
+version = "git blob bbe191d026edc985b049f313f7d3f60a76713a49"
+size_bytes = 68732
+sha256 = "774a49351cc62a469b56972e9769679ce818a3de15b409ad5f1b6244ee84d85b"
+local_path = "downloads/google_fonts_glyf_coordinates_i16/aclonica__Aclonica-Regular.ttf"
+
+[[resources]]
+id = "robotoslab_ttf"
+origin = "google_fonts_repo"
+url = "https://raw.githubusercontent.com/google/fonts/2796410152d4f9524b68ed46e69c1b60f8e0f7c3/apache/robotoslab/RobotoSlab%5Bwght%5D.ttf"
+type = "truetype_variable_font"
+version = "git blob 1c46b300eda3677f604575ede4cd80f0d139c3be"
+size_bytes = 251880
+sha256 = "786ae192477447d33c6672c3055fba7cbfe45184c9a79e77a14f15716ca05b16"
+local_path = "downloads/google_fonts_glyf_coordinates_i16/robotoslab__RobotoSlab_wght_.ttf"
+
+[[resources]]
+id = "specialelite_ttf"
+origin = "google_fonts_repo"
+url = "https://raw.githubusercontent.com/google/fonts/2796410152d4f9524b68ed46e69c1b60f8e0f7c3/apache/specialelite/SpecialElite-Regular.ttf"
+type = "truetype_font"
+version = "git blob 6654876f95f11cb2b55c7c4254727ef68dbea74c"
+size_bytes = 166180
+sha256 = "a776fcb4ceb8bdf03e2967688ebdad42680de5b91a7e62c17e718ae212d14bc4"
+local_path = "downloads/google_fonts_glyf_coordinates_i16/specialelite__SpecialElite-Regular.ttf"
+
+[[resources]]
+id = "family_license_files"
+origin = "google_fonts_repo"
+url = "https://raw.githubusercontent.com/google/fonts/2796410152d4f9524b68ed46e69c1b60f8e0f7c3/apache/"
+type = "apache_2_license_texts"
+version = "identical per-family LICENSE.txt objects"
+size_bytes = 34074
+local_path = "downloads/google_fonts_glyf_coordinates_i16/*__LICENSE.txt"
+notes = "Each of the three license files is 11,358 bytes and has the declared SHA-256."
+
+[local_paths]
+downloads = "downloads/google_fonts_glyf_coordinates_i16/"
+filtered = "filtered/google_fonts_glyf_coordinates_i16/"
+index = "index/google_fonts_glyf_coordinates_i16/"
+samples = "samples/google_fonts_glyf_coordinates_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/google_fonts_glyf_coordinates_i16/samples.jsonl"
+summary = "Decode every simple glyph from three pinned TrueType glyf tables and emit one font-level interleaved x/y int16 coordinate stream per font."
+deterministic_notes = "Commit, source size/SHA-256/Git-blob identity, family license text, SFNT table bounds, head magic, maxp glyph count, loca offsets, glyf flag runs, coordinate deltas, per-glyph bounds, simple/composite/empty counts, glyph-boundary hashes, decoded hashes, and statistics are enforced."
+
+[[series]]
+id = "truetype_simple_glyph_coordinates_i16"
+description = "Absolute x/y design-unit points from simple TrueType glyph contours."
+semantic_meaning = "Vector-outline control and on-curve point coordinates in each font's 2048-unit em square, ordered by glyph index and point order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "TrueType stores losslessly compressed coordinate deltas and flags; the decoder reconstructs the font's exact signed design-unit coordinates. No rasterization, scaling, interpolation, or quantization is applied."
+source_resources = ["aclonica_ttf", "robotoslab_ttf", "specialelite_ttf"]
+source_format = "TrueType SFNT with head, maxp, loca, and glyf tables"
+source_field = "Simple-glyph xCoordinates and yCoordinates reconstructed from glyf flags/deltas"
+filtered_input_path = "filtered/google_fonts_glyf_coordinates_i16/ingest_stats.json"
+filtering = "Keep all points from nonempty simple glyphs in glyph-index order. Inventory but exclude composite glyphs because they reference and transform already represented simple outlines; exclude empty glyphs."
+missing_value_policy = "Malformed tables, invalid offsets/flags/deltas, coordinate overflow, bounding-box mismatches, changed hashes/statistics, or missing sources/licenses fail the build. There are no missing coordinate values and no imputation."
+conversion = "Decode repeat-compressed glyph flags, reconstruct x and y from signed/unsigned TrueType delta forms, interleave each point as x then y, and serialize the exact signed coordinates as little-endian int16."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous interleaved int16 TrueType outline coordinates"
+sample_geometry = "2d_truetype_outline_points"
+sample_rank = 2
+sample_axes = ["simple_glyph_point", "xy_coordinate"]
+natural_record_kind = "font_simple_glyph_outline_set"
+sample_count = 3
+total_size_bytes = 287284
+output_path = "samples/google_fonts_glyf_coordinates_i16/truetype_simple_glyph_coordinates_i16/"

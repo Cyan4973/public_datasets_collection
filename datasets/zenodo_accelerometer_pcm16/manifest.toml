@@ -1,0 +1,76 @@
+manifest_version = 1
+dataset_id = "zenodo_accelerometer_pcm16"
+name = "Honeybee Accelerometer Vibration PCM16"
+description = "Sixty documented one-second honeybee-vibration accelerometer segments restored from a CC BY 4.0 listening-oriented mono PCM16 WAV concatenation."
+homepage = "https://zenodo.org/records/7018660"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Harriet Hall, Audio D18, Zenodo, DOI 10.5281/zenodo.7018660."
+notes = "Preserve the author, title, DOI, Zenodo record, and CC BY 4.0 attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public accelerometer measurements of honeybee vibrations, released by the author through Zenodo."
+usage_notes = "Animal/mechanical vibration signals with no human subjects, identity, or personal fields."
+
+[[origins]]
+id = "zenodo_7018660"
+name = "Audio D18"
+url = "https://zenodo.org/records/7018660"
+type = "zenodo_record"
+version = "10.5281/zenodo.7018660"
+
+[[resources]]
+id = "honeybee_accelerometer_wav"
+origin = "zenodo_7018660"
+url = "https://zenodo.org/api/records/7018660/files/D%2018.wav/content"
+type = "pcm16_accelerometer_wav"
+version = "record-7018660"
+access = "Exact public object pinned by size and MD5."
+size_bytes = 5760044
+md5 = "118ac1ee5a3ff3bc491b3103b06119b9"
+local_path = "downloads/zenodo_accelerometer_pcm16/D 18.wav"
+
+[local_paths]
+downloads = "downloads/zenodo_accelerometer_pcm16/"
+filtered = "filtered/zenodo_accelerometer_pcm16/"
+index = "index/zenodo_accelerometer_pcm16/"
+samples = "samples/zenodo_accelerometer_pcm16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_accelerometer_pcm16/samples.jsonl"
+summary = "Validate the pinned mono PCM16 WAV and restore the author-documented 60 one-second accelerometer point boundaries."
+deterministic_notes = "Zenodo identity/title/license/description, source size/MD5, canonical RIFF/WAVE layout, PCM declaration, payload SHA-256, aggregate statistics, exact 60x48000 segmentation, per-segment nondegeneracy, hashes, and emitted bytes are enforced."
+
+[[series]]
+id = "honeybee_accelerometer_pcm16"
+description = "One-second honeybee-vibration accelerometer amplitude segments."
+semantic_meaning = "PCM amplitude samples representing physical vibrations measured by an accelerometer in a honeybee experiment."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "The author published accelerometer data as a listening-oriented mono PCM16 WAV constructed from 60 one-second points. Values are preserved exactly; only the documented point boundaries are restored. The recipe does not claim these PCM units are calibrated acceleration units or the original ADC scale."
+source_resources = ["honeybee_accelerometer_wav"]
+source_format = "Canonical RIFF/WAVE mono little-endian integer PCM16 at 48 kHz"
+source_field = "Complete WAVE data chunk, divided at author-documented one-second point boundaries"
+filtered_input_path = "filtered/zenodo_accelerometer_pcm16/ingest_stats.json"
+filtering = "Keep all 2,880,000 PCM values and split the published one-minute listening concatenation into the documented 60 one-second accelerometer points."
+missing_value_policy = "Missing or changed metadata/source, a changed description or license, malformed/non-PCM16 WAVE layout, changed hashes/statistics, or a non-60-second payload fails the build. No values are dropped or imputed."
+conversion = "Remove the 44-byte RIFF/WAVE container header, preserve every native little-endian signed-16-bit PCM word, and split the payload into 60 consecutive 48,000-value samples."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous mono PCM16 accelerometer segment"
+sample_geometry = "1d_accelerometer_vibration_segment"
+sample_rank = 1
+sample_axes = ["time_sample"]
+natural_record_kind = "one_second_accelerometer_point"
+sample_count = 60
+total_size_bytes = 5760000
+output_path = "samples/zenodo_accelerometer_pcm16/honeybee_accelerometer_pcm16/"

@@ -1,0 +1,110 @@
+manifest_version = 1
+dataset_id = "zenodo_sanger_abif_i16"
+name = "Zenodo Sanger ABIF Dye-Channel Traces Int16"
+description = "Processed native signed-int16 dye-channel fluorescence traces from 63 permissively licensed Sanger sequencing chromatograms."
+homepage = "https://zenodo.org/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Five pinned Zenodo records: 10829882, 14001236, 15945185, 17172684, and 7840070."
+notes = "Every selected immutable Zenodo record explicitly declares CC BY 4.0. Preserve record-level titles, creators, DOIs, and attribution metadata."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public Sanger chromatograms from cultured cell lines, mouse, cane toad, and environmental bacterial samples. Patient- and family-organized records found during discovery are deliberately excluded."
+usage_notes = "The emitted material consists only of instrument fluorescence traces; base calls, identifiers, quality scores, and clinical records are excluded."
+
+[[origins]]
+id = "zenodo_abif_records"
+name = "Five CC BY 4.0 Zenodo Sanger chromatogram records"
+url = "https://zenodo.org/"
+type = "zenodo_records"
+version = "record IDs 10829882,14001236,15945185,17172684,7840070"
+
+[[resources]]
+id = "zenodo_10829882_abif"
+origin = "zenodo_abif_records"
+url = "https://zenodo.org/api/records/10829882"
+type = "zenodo_record_abif_files"
+size_bytes = 4624860
+local_path = "downloads/zenodo_sanger_abif_i16/10829882/"
+notes = "14 HeLa PINK1 cell-line chromatograms; exact per-file sizes and MD5s are pinned in source_inventory.json."
+
+[[resources]]
+id = "zenodo_14001236_abif"
+origin = "zenodo_abif_records"
+url = "https://zenodo.org/api/records/14001236"
+type = "zenodo_record_abif_files"
+size_bytes = 726791
+local_path = "downloads/zenodo_sanger_abif_i16/14001236/"
+notes = "2 mouse Prex2 verification chromatograms."
+
+[[resources]]
+id = "zenodo_15945185_abif"
+origin = "zenodo_abif_records"
+url = "https://zenodo.org/api/records/15945185"
+type = "zenodo_record_abif_files"
+size_bytes = 9848986
+local_path = "downloads/zenodo_sanger_abif_i16/15945185/"
+notes = "38 cane-toad CRISPR chromatograms."
+
+[[resources]]
+id = "zenodo_17172684_abif"
+origin = "zenodo_abif_records"
+url = "https://zenodo.org/api/records/17172684"
+type = "zenodo_record_abif_files"
+size_bytes = 1841863
+local_path = "downloads/zenodo_sanger_abif_i16/17172684/"
+notes = "6 environmental bacterial 16S chromatograms."
+
+[[resources]]
+id = "zenodo_7840070_abif"
+origin = "zenodo_abif_records"
+url = "https://zenodo.org/api/records/7840070"
+type = "zenodo_record_abif_files"
+size_bytes = 1076848
+local_path = "downloads/zenodo_sanger_abif_i16/7840070/"
+notes = "3 cultured-cell-line methylation chromatograms."
+
+[local_paths]
+downloads = "downloads/zenodo_sanger_abif_i16/"
+filtered = "filtered/zenodo_sanger_abif_i16/"
+index = "index/zenodo_sanger_abif_i16/"
+samples = "samples/zenodo_sanger_abif_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_sanger_abif_i16/samples.jsonl"
+summary = "Strictly decode the four processed ABIF DATA9-DATA12 fluorescence arrays and emit one complete dye-channel trace per sample."
+deterministic_notes = "Record IDs, licenses, per-record file counts and byte totals, every source MD5, ABIF identity/version/directory bounds, zero directory padding, exact trace tags/types/sizes/lengths, nonconstant distributions, output hashes, and byte-for-byte independent verification are enforced."
+
+[[series]]
+id = "sanger_processed_dye_trace_i16"
+description = "Variable-length processed Sanger dye-channel electropherogram traces."
+semantic_meaning = "Detector fluorescence intensity over electrophoretic scan time for one processed dye channel in one Sanger sequencing run."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "ABIF DATA9-DATA12 natively contain signed 16-bit processed trace values. Only byte order changes from ABIF big-endian to canonical little-endian; no scaling, clipping, smoothing, or baseline correction is performed."
+source_resources = ["zenodo_10829882_abif", "zenodo_14001236_abif", "zenodo_15945185_abif", "zenodo_17172684_abif", "zenodo_7840070_abif"]
+source_format = "Applied Biosystems ABIF chromatogram"
+source_field = "Processed electropherogram arrays DATA9, DATA10, DATA11, and DATA12 with ABIF element type short"
+filtered_input_path = "filtered/zenodo_sanger_abif_i16/ingest_stats.json"
+filtering = "Retain all four complete processed channels from every one of the 63 pinned non-clinical chromatograms. Exclude base calls, quality scores, raw DATA1-DATA8 arrays, metadata, and container bytes."
+missing_value_policy = "No trace values are dropped or imputed. Missing files/channels, inconsistent channel lengths, wrong element types, malformed directories, checksum changes, constant traces, or changed aggregate statistics fail the recipe."
+conversion = "Decode each source big-endian ABIF short array and serialize the identical signed numeric values as little-endian int16."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous signed-int16 fluorescence trace"
+sample_geometry = "1d_electropherogram_channel"
+sample_rank = 1
+sample_axes = ["electrophoretic_scan_time"]
+natural_record_kind = "complete_processed_dye_channel"
+sample_count = 252
+total_size_bytes = 6101144
+output_path = "samples/zenodo_sanger_abif_i16/sanger_processed_dye_trace_i16/"

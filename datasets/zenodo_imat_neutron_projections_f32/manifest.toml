@@ -1,0 +1,76 @@
+manifest_version = 1
+dataset_id = "zenodo_imat_neutron_projections_f32"
+name = "IMAT Golden-Ratio Neutron Tomography Projections Float32"
+description = "Complete native-float32 white-beam neutron-tomography projection sequence acquired with a 512x512 MCP detector at the IMAT beamline."
+homepage = "https://zenodo.org/records/4273969"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Jørgensen, Jakob Sauer, et al. (2021), Neutron tomography data of high-purity metal rods using golden-ratio angular acquisition (IMAT, ISIS), Zenodo, DOI 10.5281/zenodo.4273969."
+notes = "The exact Zenodo record declares CC BY 4.0. Preserve the record DOI, title, creators, and beamline attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public physical-science detector data for high-purity metal rods, released by the experiment authors through Zenodo."
+usage_notes = "Instrument projection intensities and scan geometry contain no human-subject, identity, or personal fields."
+
+[[origins]]
+id = "zenodo_4273969"
+name = "Neutron tomography data of high-purity metal rods using golden-ratio angular acquisition (IMAT, ISIS)"
+url = "https://zenodo.org/records/4273969"
+type = "zenodo_record"
+version = "10.5281/zenodo.4273969"
+
+[[resources]]
+id = "imat_white_beam_archive"
+origin = "zenodo_4273969"
+url = "https://zenodo.org/api/records/4273969/files/imat_rod_phantom_white_beam.zip/content"
+type = "zip_of_uncompressed_float32_tiff_projections"
+version = "record-4273969"
+access = "Exact public object pinned by size and MD5."
+size_bytes = 168192038
+md5 = "9abc2df64fdf58cb4e194cbf29131b27"
+local_path = "downloads/zenodo_imat_neutron_projections_f32/imat_rod_phantom_white_beam.zip"
+
+[local_paths]
+downloads = "downloads/zenodo_imat_neutron_projections_f32/"
+filtered = "filtered/zenodo_imat_neutron_projections_f32/"
+index = "index/zenodo_imat_neutron_projections_f32/"
+samples = "samples/zenodo_imat_neutron_projections_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_imat_neutron_projections_f32/samples.jsonl"
+summary = "Validate the pinned CC BY 4.0 ZIP, strictly decode all 186 scalar IEEE-float32 TIFF projection planes, and emit one source-identical numeric sample per acquisition angle."
+deterministic_notes = "Record identity, license, archive size and MD5, exact member set, angle count/order, TIFF structure, dimensions, bit width, sample format, compression, strip bounds, finite values, nonconstant distributions, output hashes, and byte-for-byte independent verification are enforced."
+
+[[series]]
+id = "imat_neutron_projection_f32"
+description = "White-beam neutron-transmission projection detector planes."
+semantic_meaning = "Per-pixel neutron detector intensity for one angular view of a high-purity metal-rod phantom in a golden-ratio tomography acquisition."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Every TIFF declares one 32-bit IEEE floating-point sample per pixel. The decoder isolates the single uncompressed pixel strip and preserves its source little-endian row-major representation exactly."
+source_resources = ["imat_white_beam_archive"]
+source_format = "ZIP containing classic little-endian scalar float32 TIFF files"
+source_field = "Complete first-image pixel strip from proj_0000.tiff through proj_0185.tiff"
+filtered_input_path = "filtered/zenodo_imat_neutron_projections_f32/ingest_stats.json"
+filtering = "Keep all 186 complete 512x512 projection frames in acquisition-index order. Exclude TIFF metadata, ZIP framing, angle text, and scan-parameter text from numeric outputs."
+missing_value_policy = "No detector values are dropped or imputed. Missing projections, non-finite values, malformed TIFF layouts, unexpected member names, duplicates, constant planes, or source identity changes fail the recipe."
+conversion = "Decode the typed TIFF image field and emit its uncompressed little-endian IEEE-float32 pixel elements verbatim into one .bin sample per projection."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 neutron detector plane"
+sample_geometry = "2d_neutron_tomography_projection"
+sample_rank = 2
+sample_axes = ["detector_y", "detector_x"]
+natural_record_kind = "complete_angular_projection_frame"
+sample_count = 186
+total_size_bytes = 195035136
+output_path = "samples/zenodo_imat_neutron_projections_f32/imat_neutron_projection_f32/"

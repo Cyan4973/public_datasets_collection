@@ -196,6 +196,7 @@ maestro_midi_notes	ok	14042884	14042884	2500	4542	4542	0	0	0	1	none	none
 binance_spot_1m_klines_2024_q1	ok	14152320	106928640	324	44640	357120	3144960	25159680	72	1	none	none
 household_power_uci	ok	14344960	71724800	7	2049280	16394240	0	0	0	1	none	none
 zenodo_adcp_pd0_i16	ok	14376696	28753392	3	4311744	8623488	0	0	0	1	none	none
+zenodo_lecroy_oscilloscope_i16	ok	15000034	30000068	21	500002	1000004	0	0	0	1	none	none
 noaa_nexrad_level3_nids_radials_u8	ok	15897600	15897600	96	165600	165600	0	0	0	1	none	none
 msd_hippocampus_segmentation_labels_u8	ok	16221128	16221128	258	62829	62829	0	0	0	1	none	none
 modis_active_fire_mask_u8	ok	17280000	17280000	12	1440000	1440000	0	0	0	1	none	none

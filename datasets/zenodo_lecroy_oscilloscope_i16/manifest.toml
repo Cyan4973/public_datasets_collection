@@ -1,0 +1,74 @@
+manifest_version = 1
+dataset_id = "zenodo_lecroy_oscilloscope_i16"
+name = "Hypervelocity-Impact LeCroy Oscilloscope Int16"
+description = "Twenty-one native signed-int16 RF-antenna and photomultiplier oscilloscope traces from three hypervelocity dust impacts."
+homepage = "https://zenodo.org/records/7939431"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Fereydooni, Kimia; Lee, Nicolas; Elschot, Sigrid. Hypervelocity impact RF/optical measurements. Zenodo. DOI 10.5281/zenodo.7939431."
+notes = "The exact immutable Zenodo record declares CC BY 4.0. Preserve creator, title, DOI, and license attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Laboratory patch-antenna and photomultiplier measurements of dust impacts at the Max Planck Institute for Nuclear Physics accelerator."
+usage_notes = "Physical instrument traces with no human subjects, identities, or personal fields."
+
+[[origins]]
+id = "zenodo_7939431"
+name = "Hypervelocity impact RF/optical measurements"
+url = "https://zenodo.org/records/7939431"
+type = "zenodo_record"
+version = "10.5281/zenodo.7939431"
+
+[[resources]]
+id = "lecroy_trc_files"
+origin = "zenodo_7939431"
+url = "https://zenodo.org/api/records/7939431"
+type = "lecroy_trc_collection"
+size_bytes = 30007565
+local_path = "downloads/zenodo_lecroy_oscilloscope_i16/"
+notes = "21 direct LeCroy TRC files; exact filenames, sizes, URLs, and MD5s are pinned in source_inventory.json."
+
+[local_paths]
+downloads = "downloads/zenodo_lecroy_oscilloscope_i16/"
+filtered = "filtered/zenodo_lecroy_oscilloscope_i16/"
+index = "index/zenodo_lecroy_oscilloscope_i16/"
+samples = "samples/zenodo_lecroy_oscilloscope_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_lecroy_oscilloscope_i16/samples.jsonl"
+summary = "Strictly validate every complete LeCroy WAVEDESC file and extract its source-identical signed-int16 WAVE_ARRAY_1 payload."
+deterministic_notes = "Record identity/title/license, exact file count and aggregate bytes, every MD5, WAVEDESC byte order and WORD type, block sizes, full-file bounds, waveform counts, subarray geometry, scale metadata, distributions, payload uniqueness, output hashes, and byte comparisons are enforced."
+
+[[series]]
+id = "hypervelocity_impact_adc_i16"
+description = "Complete oscilloscope ADC traces from RF patch antennas and a photomultiplier tube during hypervelocity dust impacts."
+semantic_meaning = "Digitized detector voltage over time for one antenna or optical-detector channel during one accelerator impact shot."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Each LeCroy WAVE_ARRAY_1 natively stores little-endian signed 16-bit ADC words. Extraction copies the declared waveform bytes unchanged; voltage gain, offset, and time interval remain index metadata."
+source_resources = ["lecroy_trc_files"]
+source_format = "LeCroy binary waveform with WAVEDESC descriptor"
+source_field = "WAVE_ARRAY_1 under COMM_TYPE=WORD and COMM_ORDER=LOFIRST"
+filtered_input_path = "filtered/zenodo_lecroy_oscilloscope_i16/ingest_stats.json"
+filtering = "Retain the complete sole subarray from all 21 pinned RF/optical traces: seven channels for each of impact shots 00865, 00931, and 01156. Exclude descriptors and scale metadata from primary bytes."
+missing_value_policy = "No ADC values are dropped or imputed. Missing files, checksum changes, non-WORD data, ambiguous byte order, malformed bounds, multiple/invalid subarrays, constant or duplicate payloads, or changed distributions fail the recipe."
+conversion = "Parse and validate the LeCroy structure, locate the typed WAVE_ARRAY_1 field, and copy that declared array unchanged as little-endian signed int16."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous signed-int16 oscilloscope ADC trace"
+sample_geometry = "1d_oscilloscope_trace"
+sample_rank = 1
+sample_axes = ["sample_time"]
+natural_record_kind = "complete_oscilloscope_channel_acquisition"
+sample_count = 21
+total_size_bytes = 30000068
+output_path = "samples/zenodo_lecroy_oscilloscope_i16/hypervelocity_impact_adc_i16/"

@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "zenodo_tem_tilt_series_i16"
+name = "SARS-CoV-2 TEM Tilt-Series Int16"
+description = "A bounded half-rate sequence of dense native-int16 transmission-electron-tomography projections of extracellular SARS-CoV-2 particles in Vero cell cultures."
+homepage = "https://zenodo.org/records/3985424"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Laue, Michael; Kauter, Anne; Hoffmann, Tobias; Michel, Janine; Nitsche, Andreas (2020), Electron microscopy of SARS-CoV-2 particles - Dataset 05, Zenodo, DOI 10.5281/zenodo.3985424."
+notes = "The exact Zenodo record declares CC BY 4.0. Preserve the record DOI, creators, title, and related-publication attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public transmission-electron-microscopy images of extracellular virus particles in laboratory Vero cell cultures, released by Robert Koch Institute researchers."
+usage_notes = "The emitted material contains only microscope detector intensities and tilt geometry; it contains no participant, clinical, demographic, or identifying fields."
+
+[[origins]]
+id = "zenodo_3985424"
+name = "Electron microscopy of SARS-CoV-2 particles - Dataset 05"
+url = "https://zenodo.org/records/3985424"
+type = "zenodo_record"
+version = "10.5281/zenodo.3985424"
+
+[[resources]]
+id = "sarscov2_009_raw_tilt_mrc_ranges"
+origin = "zenodo_3985424"
+url = "https://zenodo.org/api/records/3985424/files/Dataset_05_SARS-CoV-2_009.mrc/content"
+type = "http_ranges_from_uncompressed_mrc_mode1_tilt_stack"
+version = "record-3985424"
+access = "Immutable public object pinned by whole-object size and MD5; exact header and complete projection ranges are acquired directly."
+size_bytes = 1048708096
+md5 = "5cb0286e5a75ce2d330efa8c7e1440ae"
+local_path = "downloads/zenodo_tem_tilt_series_i16/"
+notes = "The oversized whole object is not downloaded. The exact 132,096-byte MRC/FEI header and 63 even-indexed 8,388,608-byte projection ranges are selected. Concatenated selected projection SHA-256: 931d9bd9099d92bc9a50e574023eab8f52bba0d4ac006494e151c4b38ee876cb."
+
+[local_paths]
+downloads = "downloads/zenodo_tem_tilt_series_i16/"
+filtered = "filtered/zenodo_tem_tilt_series_i16/"
+index = "index/zenodo_tem_tilt_series_i16/"
+samples = "samples/zenodo_tem_tilt_series_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_tem_tilt_series_i16/samples.jsonl"
+summary = "Validate the immutable CC BY 4.0 source and directly range-fetch every other complete projection from the uncompressed MRC mode-1 tilt stack, preserving a full-angle half-rate sequence below the corpus byte cap."
+deterministic_notes = "Record identity, license, source object size and MD5 metadata, exact header-range SHA-256, selected indices and offsets, concatenated selected-byte SHA-256, legacy FEI geometry, all 125 tilt angles, frame dimensions, value distributions, output hashes, and byte-for-byte independent verification are enforced."
+
+[[series]]
+id = "sarscov2_tem_projection_i16"
+description = "Raw transmission-electron-tomography detector projections across specimen tilt angle."
+semantic_meaning = "Per-pixel signed detector intensity for one angular projection of ultrathin Vero-cell sections containing extracellular SARS-CoV-2 particles."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source MRC declares mode 1 signed 16-bit pixels. Although the detector is described as 12-bit, the acquisition software natively stores its raw values in signed-int16 words; the selected pixel records retain those source words exactly."
+source_resources = ["sarscov2_009_raw_tilt_mrc_ranges"]
+source_format = "Legacy FEI little-endian MRC mode 1 with a 131072-byte extended header"
+source_field = "Complete 2048x2048 projection pixel records at even acquisition indices 0 through 124"
+filtered_input_path = "filtered/zenodo_tem_tilt_series_i16/ingest_stats.json"
+filtering = "Keep 63 complete even-indexed projections, providing deterministic approximately two-degree sampling across the full -62 to +62 degree source tilt range. Exclude odd-indexed projections solely to satisfy the 1,000,000,000-byte corpus cap without cropping or splitting natural records."
+missing_value_policy = "No values within retained projections are dropped or imputed. Missing ranges, changed source identity, malformed FEI/MRC geometry, invalid angles, duplicates, constant or low-cardinality frames, range hash changes, or aggregate digest changes fail the recipe."
+conversion = "Decode the typed MRC mode-1 image records and emit their little-endian signed-int16 pixel elements verbatim as one .bin sample per retained projection."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous signed-int16 electron-microscope detector plane"
+sample_geometry = "2d_tem_tilt_projection"
+sample_rank = 2
+sample_axes = ["detector_y", "detector_x"]
+natural_record_kind = "complete_tilt_projection_frame"
+sample_count = 63
+total_size_bytes = 528482304
+output_path = "samples/zenodo_tem_tilt_series_i16/sarscov2_tem_projection_i16/"

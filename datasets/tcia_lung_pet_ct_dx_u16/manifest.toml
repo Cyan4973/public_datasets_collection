@@ -1,0 +1,92 @@
+manifest_version = 1
+dataset_id = "tcia_lung_pet_ct_dx_u16"
+name = "TCIA Lung-PET-CT-Dx Whole-Body PET UInt16"
+description = "Three complete native-uint16 whole-body corrected PET volumes from distinct TCIA Lung-PET-CT-Dx studies."
+homepage = "https://www.cancerimagingarchive.net/collection/lung-pet-ct-dx/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Lung-PET-CT-Dx collection, The Cancer Imaging Archive."
+notes = "The live NBIA series metadata and embedded LICENSE file in every downloaded archive explicitly declare CC BY 4.0. TCIA attribution and non-reidentification conditions remain applicable."
+
+[safety]
+contains_sensitive_data = true
+contains_personal_data = false
+provenance_notes = "Public deidentified human whole-body PET data released through TCIA."
+usage_notes = "This recipe retains only stored PET voxel arrays and technical scaling/geometry metadata. It excludes patient identifiers, diagnoses, demographics, free text, and CT images. Users must follow TCIA's prohibition on reidentification."
+
+[[origins]]
+id = "tcia_lung_pet_ct_dx"
+name = "TCIA Lung-PET-CT-Dx"
+url = "https://services.cancerimagingarchive.net/nbia-api/services/v1"
+type = "public_api"
+version = "three pinned SeriesInstanceUIDs from distinct studies"
+
+[[resources]]
+id = "pet_series_01"
+origin = "tcia_lung_pet_ct_dx"
+url = "https://services.cancerimagingarchive.net/nbia-api/services/v1/getImage?SeriesInstanceUID=1.3.6.1.4.1.14519.5.2.1.6655.2359.139687047425239659671031900378"
+type = "dicom_pet_series"
+size_bytes = 11457758
+local_path = "downloads/tcia_lung_pet_ct_dx_u16/01_1.3.6.1.4.1.14519.5.2.1.6655.2359.139687047425239659671031900378.zip"
+notes = "136 DICOM slices from one study; TCIA-generated ZIP container size is not stable, while the exact DICOM source byte total is pinned."
+
+[[resources]]
+id = "pet_series_02"
+origin = "tcia_lung_pet_ct_dx"
+url = "https://services.cancerimagingarchive.net/nbia-api/services/v1/getImage?SeriesInstanceUID=1.3.6.1.4.1.14519.5.2.1.6655.2359.172915770919067984477698394110"
+type = "dicom_pet_series"
+size_bytes = 12215784
+local_path = "downloads/tcia_lung_pet_ct_dx_u16/02_1.3.6.1.4.1.14519.5.2.1.6655.2359.172915770919067984477698394110.zip"
+notes = "145 DICOM slices from one study."
+
+[[resources]]
+id = "pet_series_03"
+origin = "tcia_lung_pet_ct_dx"
+url = "https://services.cancerimagingarchive.net/nbia-api/services/v1/getImage?SeriesInstanceUID=1.3.6.1.4.1.14519.5.2.1.6655.2359.226901752069119903728752256048"
+type = "dicom_pet_series"
+size_bytes = 14394514
+local_path = "downloads/tcia_lung_pet_ct_dx_u16/03_1.3.6.1.4.1.14519.5.2.1.6655.2359.226901752069119903728752256048.zip"
+notes = "171 DICOM slices from one study."
+
+[local_paths]
+downloads = "downloads/tcia_lung_pet_ct_dx_u16/"
+filtered = "filtered/tcia_lung_pet_ct_dx_u16/"
+index = "index/tcia_lung_pet_ct_dx_u16/"
+samples = "samples/tcia_lung_pet_ct_dx_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/tcia_lung_pet_ct_dx_u16/samples.jsonl"
+summary = "Validate all 452 uncompressed PET DICOM slices, order each series geometrically, and emit one complete source-native uint16 voxel volume per study."
+deterministic_notes = "Pinned series/study identities, live collection/modality/description/license/image counts/source bytes, archive membership, embedded licenses, DICOM SOP class and transfer syntax, series geometry, slice identities/positions, uint16 pixel semantics, BQML/correction metadata, per-slice rescale transforms, distributions, volume hashes, and byte comparisons are enforced."
+
+[[series]]
+id = "whole_body_pet_activity_u16"
+description = "Complete stored-value whole-body corrected PET volumes from distinct lung-cancer studies."
+semantic_meaning = "Source-native reconstructed PET radiotracer-activity voxel codes in BQML-calibrated slices before application of each slice's DICOM rescale slope."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "All slices natively store uncompressed little-endian unsigned 16-bit pixels with BitsStored=16. Per-slice RescaleSlope values are retained in the index and are not applied, preserving the exact source integer representation."
+source_resources = ["pet_series_01", "pet_series_02", "pet_series_03"]
+source_format = "DICOM PET Image Storage, Explicit VR Little Endian"
+source_field = "Pixel Data (7FE0,0010) ordered by ImagePositionPatient"
+filtered_input_path = "filtered/tcia_lung_pet_ct_dx_u16/ingest_stats.json"
+filtering = "Retain all slices from the three pinned PET WB Corrected series, sorted by unique ImagePositionPatient. Exclude DICOM headers, CT series, identifiers, and physical-value conversion."
+missing_value_policy = "No stored voxels are dropped or imputed. Missing slices, changed identities/counts/licenses, compressed transfer syntax, inconsistent geometry or semantics, non-uint16 pixels, duplicate positions/instances, invalid scale factors, malformed bounds, or changed hashes/statistics fail the recipe."
+conversion = "Parse each DICOM slice, validate the typed Pixel Data field, order slices geometrically, and concatenate their source-identical little-endian uint16 payloads into one volume per series."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 stored PET voxel volume"
+sample_geometry = "3d_pet_volume"
+sample_rank = 3
+sample_axes = ["z", "y", "x"]
+natural_record_kind = "complete_dicom_pet_series"
+sample_count = 3
+total_size_bytes = 36160000
+output_path = "samples/tcia_lung_pet_ct_dx_u16/whole_body_pet_activity_u16/"

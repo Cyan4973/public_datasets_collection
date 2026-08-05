@@ -183,6 +183,7 @@ covid19_vaccinations_u64	ok	8697443	69579544	6	935708	7485664	0	0	0	1	none	none
 unicode_bmp_gutenberg	ok	8700484	17400968	12	490769	981538	0	0	0	1	none	none
 fsdd_pcm_u8	ok	10498424	10498424	3000	3358.5	3358.5	0	0	0	1	none	none
 fsdd_spoken_digits	ok	10498424	20996848	3000	3358.5	6717	0	0	0	1	none	none
+zenodo_polarfront_ek60_power_i16	ok	10969908	21939816	3441	3188	6376	0	0	0	1	none	none
 noaa_ndbc_wave_spectral_density_f64	ok	11719309	93754472	24	427159.5	3417276	0	0	0	1	none	none
 binance_usdm_futures_1m_klines_2024_q1	ok	11793600	89107200	270	44640	357120	2620800	20966400	60	1	none	none
 har_smartphone_uci	ok	11864448	94915584	18	659136	5273088	0	0	0	1	none	none

@@ -1,0 +1,76 @@
+manifest_version = 1
+dataset_id = "zenodo_polarfront_ek60_power_i16"
+name = "PolarFront EK60 Water-Column Backscatter Power Int16"
+description = "Native signed-int16 acoustic backscatter power vectors from synchronized 18, 38, and 120 kHz Simrad EK60 pings during the PolarFront 2022-05 cruise."
+homepage = "https://zenodo.org/records/7473204"
+
+[license]
+name = "Creative Commons CC0 1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "PolarFront Consortium (2022), Split-beam echosounder data from keel-mounted EK60 during PolarFront 2022-05 cruise, Zenodo, DOI 10.5281/zenodo.7473204."
+notes = "The exact Zenodo record declares CC0. Retain the record DOI and PolarFront Consortium attribution as scientific provenance."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public scientific hydroacoustic observations from a research cruise, released by the PolarFront Consortium."
+usage_notes = "Only acoustic power-bin vectors and non-identifying instrument metadata are emitted. NMEA navigation text is excluded."
+
+[[origins]]
+id = "zenodo_7473204"
+name = "Split-beam echosounder data from keel-mounted EK60 during PolarFront 2022-05 cruise"
+url = "https://zenodo.org/records/7473204"
+type = "zenodo_record"
+version = "10.5281/zenodo.7473204"
+
+[[resources]]
+id = "polarfront_ek60_raw"
+origin = "zenodo_7473204"
+url = "https://zenodo.org/api/records/7473204/files/PolarFront0522-D20220524-T060111.raw/content"
+type = "simrad_ek60_raw0_recording"
+version = "record-7473204"
+access = "Exact public object pinned by size and MD5."
+size_bytes = 45896704
+md5 = "944f3af1aea3a51cfa7ef7912dde10ba"
+local_path = "downloads/zenodo_polarfront_ek60_power_i16/PolarFront0522-D20220524-T060111.raw"
+
+[local_paths]
+downloads = "downloads/zenodo_polarfront_ek60_power_i16/"
+filtered = "filtered/zenodo_polarfront_ek60_power_i16/"
+index = "index/zenodo_polarfront_ek60_power_i16/"
+samples = "samples/zenodo_polarfront_ek60_power_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_polarfront_ek60_power_i16/samples.jsonl"
+summary = "Validate every Simrad datagram, require exact three-frequency synchronized ping groups, and emit each RAW0 native-int16 power field as one complete depth-bin vector."
+deterministic_notes = "Record identity, CC0 license, source size and MD5, all datagram lengths/trailers/types, CON0 identity, RAW0 modes and geometry, channel/frequency order, timestamps, sample counts, excluded angle layout, value distributions, hashes, and byte-for-byte independent verification are enforced."
+
+[[series]]
+id = "ek60_ping_channel_power_i16"
+description = "Per-channel EK60 water-column acoustic power vectors."
+semantic_meaning = "Raw logarithmic acoustic echo-power code over 3,188 range bins for one EK60 ping and transducer frequency."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Simrad RAW0 mode 3 stores a signed-int16 power word followed separately by an int8 alongship/athwartship angle pair for every range bin. The recipe emits only the documented power words, preserving their source little-endian representation."
+source_resources = ["polarfront_ek60_raw"]
+source_format = "Simrad ER60/EK60 little-endian length-framed datagrams"
+source_field = "RAW0 power array for channels 1, 2, and 3"
+filtered_input_path = "filtered/zenodo_polarfront_ek60_power_i16/ingest_stats.json"
+filtering = "Keep all 1,147 synchronized pings and all three power channels at 18, 38, and 120 kHz. Exclude CON0 configuration bytes, NME0 navigation text, RAW0 angle pairs, and datagram framing."
+missing_value_policy = "No power bins are dropped or imputed. Missing channels, inconsistent timestamps, wrong modes/counts/frequencies, malformed datagrams, duplicates, low-cardinality vectors, source identity changes, or unexpected datagram types fail the recipe."
+conversion = "Parse each RAW0 mode-3 datagram and emit its first 3,188 little-endian signed-int16 power elements verbatim as one vector."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous signed-int16 EK60 acoustic power vector"
+sample_geometry = "ek60_ping_channel_range_profile"
+sample_rank = 1
+sample_axes = ["range_bin"]
+natural_record_kind = "complete_ping_channel_power_profile"
+sample_count = 3441
+total_size_bytes = 21939816
+output_path = "samples/zenodo_polarfront_ek60_power_i16/ek60_ping_channel_power_i16/"

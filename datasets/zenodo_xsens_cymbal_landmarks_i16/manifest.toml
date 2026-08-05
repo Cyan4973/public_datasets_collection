@@ -1,0 +1,76 @@
+manifest_version = 1
+dataset_id = "zenodo_xsens_cymbal_landmarks_i16"
+name = "Xsens Cymbal-Performance Anatomical Landmarks Int16"
+description = "Native signed-int16 full-body anatomical-landmark trajectories from 71 Xsens inertial motion-capture recordings of structured cymbal performances."
+homepage = "https://zenodo.org/records/21710617"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Jensenius, Alexander Refsum; Godøy, Rolf Inge; Voldsund, Arve; Løken, Bjørn Arne (2026), Cymbal percussion: multimodal motion capture, audio and video (2011), Zenodo, DOI 10.5281/zenodo.21710617."
+notes = "The exact Zenodo record declares CC BY 4.0. Preserve the record DOI, title, creators, and University of Oslo/fourMs attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = true
+provenance_notes = "Public full-body motion-capture trajectories of an unnamed adult percussionist recorded at the University of Oslo in 2011. Body-motion patterns can have biometric character even though the selected C3D files contain no name or demographics."
+usage_notes = "Use only under the public CC BY 4.0 terms. Do not attempt performer identification, linkage, or biometric profiling. This recipe excludes audio, video, optical-camera data, free-text take descriptions, and identity fields."
+
+[[origins]]
+id = "zenodo_21710617"
+name = "Cymbal percussion: multimodal motion capture, audio and video (2011)"
+url = "https://zenodo.org/records/21710617"
+type = "zenodo_record"
+version = "10.5281/zenodo.21710617"
+
+[[resources]]
+id = "xsens_c3d_archive"
+origin = "zenodo_21710617"
+url = "https://zenodo.org/api/records/21710617/files/XsensC3D.zip/content"
+type = "zip_of_xsens_integer_c3d_recordings"
+version = "record-21710617"
+access = "Exact public object pinned by size and MD5."
+size_bytes = 14540671
+md5 = "472a8466aa7cbe42e1536412a232ba41"
+local_path = "downloads/zenodo_xsens_cymbal_landmarks_i16/XsensC3D.zip"
+
+[local_paths]
+downloads = "downloads/zenodo_xsens_cymbal_landmarks_i16/"
+filtered = "filtered/zenodo_xsens_cymbal_landmarks_i16/"
+index = "index/zenodo_xsens_cymbal_landmarks_i16/"
+samples = "samples/zenodo_xsens_cymbal_landmarks_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_xsens_cymbal_landmarks_i16/samples.jsonl"
+summary = "Validate the pinned archive and all C3D parameters, decode the XYZ words for 64 named anatomical landmarks, and emit one complete source-order tensor per performance take."
+deterministic_notes = "Record identity, license, archive size and MD5, exact member set, Intel processor layout, positive point scale, 64 exact labels, millimetre units, 120 Hz rate, zero analog/force channels, zero fourth point words, frame geometry, zero block padding, value distributions, output hashes, and independent byte verification are enforced."
+
+[[series]]
+id = "xsens_anatomical_landmarks_xyz_i16"
+description = "Full-body anatomical-landmark XYZ trajectories during cymbal performances."
+semantic_meaning = "Raw signed coordinate words for 64 Xsens body-model landmarks sampled at 120 Hz; physical millimetres equal raw value times the per-take positive point scale."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Every source C3D declares positive POINT:SCALE and therefore native signed-int16 point storage. The decoder selects the three documented XYZ words from each four-word point record; the fourth residual/camera word is separately validated as zero and is not numeric coordinate material."
+source_resources = ["xsens_c3d_archive"]
+source_format = "Intel little-endian integer-storage C3D exported by Xsens MVN Studio 3.0"
+source_field = "POINT XYZ words for all 64 labelled landmarks and every frame"
+filtered_input_path = "filtered/zenodo_xsens_cymbal_landmarks_i16/ingest_stats.json"
+filtering = "Retain every frame and all 64 XYZ landmark triples from each of the 71 complete C3D takes. Exclude C3D headers, parameter records, zero residual/camera words, ZIP framing, naming text, audio, video, and optical captures."
+missing_value_policy = "No coordinate words are dropped or imputed. Missing or invalid points, nonzero residual/camera words, malformed parameters, changed labels/units, duplicates, constant or low-cardinality tensors, or source identity changes fail the recipe."
+conversion = "Decode each integer C3D point record and emit its three little-endian signed-int16 XYZ elements verbatim in frame-major, landmark-major order."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous signed-int16 anatomical-landmark XYZ tensor"
+sample_geometry = "xsens_landmark_trajectory_tensor"
+sample_rank = 3
+sample_axes = ["time_frame", "anatomical_landmark", "coordinate_xyz"]
+natural_record_kind = "complete_motion_capture_take"
+sample_count = 71
+total_size_bytes = 29128320
+output_path = "samples/zenodo_xsens_cymbal_landmarks_i16/xsens_anatomical_landmarks_xyz_i16/"

@@ -1,0 +1,155 @@
+manifest_version = 1
+dataset_id = "zenodo_metaclean_fcs_u32"
+name = "MetaClean Positive-Control Flow Cytometry UInt32"
+description = "Native uint32 event-by-detector-channel matrices from nine MetaClean3.0 flow-cytometry positive-control FCS files."
+homepage = "https://zenodo.org/records/10639508"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Yue, Alice (2024), MetaClean3.0: Robust and accurate removal of low-quality event measurements in cytometry, Zenodo, DOI 10.5281/zenodo.10639508."
+notes = "The exact Zenodo record declares CC BY 4.0. Preserve the record DOI, title, creator, and attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "The source record describes these files as positive controls used to validate a flow-cytometry quality-control method; it provides no participant identities or clinical labels."
+usage_notes = "The recipe emits only instrument event measurements and channel names. FCS text metadata and instrument bookkeeping fields are excluded from samples."
+
+[[origins]]
+id = "zenodo_10639508"
+name = "MetaClean3.0: Robust and accurate removal of low-quality event measurements in cytometry"
+url = "https://zenodo.org/records/10639508"
+type = "zenodo_record"
+version = "10.5281/zenodo.10639508"
+
+[[resources]]
+id = "metaclean_step3a"
+origin = "zenodo_10639508"
+url = "https://zenodo.org/api/records/10639508/files/CleanPositiveControl_bubbles_Panel_step3a_fcs_folder_Step3-A.fcs/content"
+type = "fcs_3_1_list_mode_uint32"
+version = "record-10639508"
+size_bytes = 5495522
+md5 = "a5f6c6f42d6752562d4be767215890a4"
+local_path = "downloads/zenodo_metaclean_fcs_u32/CleanPositiveControl_bubbles_Panel_step3a_fcs_folder_Step3-A.fcs"
+
+[[resources]]
+id = "metaclean_step3e"
+origin = "zenodo_10639508"
+url = "https://zenodo.org/api/records/10639508/files/CleanPositiveControl_bubbles_Panel_step3e_fcs_folder_Step3-E.fcs/content"
+type = "fcs_3_1_list_mode_uint32"
+version = "record-10639508"
+size_bytes = 3956130
+md5 = "19f81378fbc604efc7cc67dc53190f68"
+local_path = "downloads/zenodo_metaclean_fcs_u32/CleanPositiveControl_bubbles_Panel_step3e_fcs_folder_Step3-E.fcs"
+
+[[resources]]
+id = "metaclean_step3g"
+origin = "zenodo_10639508"
+url = "https://zenodo.org/api/records/10639508/files/CleanPositiveControl_bubbles_Panel_step3g_fcs_folder_Step3-G.fcs/content"
+type = "fcs_3_1_list_mode_uint32"
+version = "record-10639508"
+size_bytes = 2803194
+md5 = "fed38b19dfa2f21a1a7b719167a2f060"
+local_path = "downloads/zenodo_metaclean_fcs_u32/CleanPositiveControl_bubbles_Panel_step3g_fcs_folder_Step3-G.fcs"
+
+[[resources]]
+id = "metaclean_step2a"
+origin = "zenodo_10639508"
+url = "https://zenodo.org/api/records/10639508/files/CleanPositiveControl_lowmedhigh_Panel_step2a_fcs_folder_Step2-A.fcs/content"
+type = "fcs_3_1_list_mode_uint32"
+version = "record-10639508"
+size_bytes = 7738682
+md5 = "260f1957d9481ed5297aff9035e97bbb"
+local_path = "downloads/zenodo_metaclean_fcs_u32/CleanPositiveControl_lowmedhigh_Panel_step2a_fcs_folder_Step2-A.fcs"
+
+[[resources]]
+id = "metaclean_step2b"
+origin = "zenodo_10639508"
+url = "https://zenodo.org/api/records/10639508/files/CleanPositiveControl_lowmedhigh_Panel_step2b_fcs_folder_Step2-B.fcs/content"
+type = "fcs_3_1_list_mode_uint32"
+version = "record-10639508"
+size_bytes = 8072342
+md5 = "83cfca450305f5158b0d7f452996af45"
+local_path = "downloads/zenodo_metaclean_fcs_u32/CleanPositiveControl_lowmedhigh_Panel_step2b_fcs_folder_Step2-B.fcs"
+
+[[resources]]
+id = "metaclean_step2c"
+origin = "zenodo_10639508"
+url = "https://zenodo.org/api/records/10639508/files/CleanPositiveControl_lowmedhigh_Panel_step2c_fcs_folder_Step2-C.fcs/content"
+type = "fcs_3_1_list_mode_uint32"
+version = "record-10639508"
+size_bytes = 7238058
+md5 = "0c847b068bc7e383b2a2bfa8658723f4"
+local_path = "downloads/zenodo_metaclean_fcs_u32/CleanPositiveControl_lowmedhigh_Panel_step2c_fcs_folder_Step2-C.fcs"
+
+[[resources]]
+id = "metaclean_step1a"
+origin = "zenodo_10639508"
+url = "https://zenodo.org/api/records/10639508/files/CleanPositiveControl_lowtohigh_Panel_step1a_fcs_folder_Step1-A.fcs/content"
+type = "fcs_3_1_list_mode_uint32"
+version = "record-10639508"
+size_bytes = 6665074
+md5 = "f1e8af92bd08ac7c14e94c3675a5b358"
+local_path = "downloads/zenodo_metaclean_fcs_u32/CleanPositiveControl_lowtohigh_Panel_step1a_fcs_folder_Step1-A.fcs"
+
+[[resources]]
+id = "metaclean_step1b"
+origin = "zenodo_10639508"
+url = "https://zenodo.org/api/records/10639508/files/CleanPositiveControl_lowtohigh_Panel_step1b_fcs_folder_Step1-B.fcs/content"
+type = "fcs_3_1_list_mode_uint32"
+version = "record-10639508"
+size_bytes = 6421998
+md5 = "d3005042bbe9e9d10503aa415b972d70"
+local_path = "downloads/zenodo_metaclean_fcs_u32/CleanPositiveControl_lowtohigh_Panel_step1b_fcs_folder_Step1-B.fcs"
+
+[[resources]]
+id = "metaclean_step1c"
+origin = "zenodo_10639508"
+url = "https://zenodo.org/api/records/10639508/files/CleanPositiveControl_lowtohigh_Panel_step1c_fcs_folder_Step1-C.fcs/content"
+type = "fcs_3_1_list_mode_uint32"
+version = "record-10639508"
+size_bytes = 7129786
+md5 = "9806929b5dbfd691abc9922a889a6dd5"
+local_path = "downloads/zenodo_metaclean_fcs_u32/CleanPositiveControl_lowtohigh_Panel_step1c_fcs_folder_Step1-C.fcs"
+
+[local_paths]
+downloads = "downloads/zenodo_metaclean_fcs_u32/"
+filtered = "filtered/zenodo_metaclean_fcs_u32/"
+index = "index/zenodo_metaclean_fcs_u32/"
+samples = "samples/zenodo_metaclean_fcs_u32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_metaclean_fcs_u32/samples.jsonl"
+summary = "Validate nine pinned FCS 3.1 files and emit one complete event-major matrix per file using the shared 64 measurement parameters."
+deterministic_notes = "Record identity, CC BY 4.0 license, complete filename inventory, source sizes and MD5s, FCS HEADER/TEXT/DATA geometry, list-mode uint32 representation, exact shared 67-parameter schema, exclusive DATA-end convention, 64 selected measurement parameters, full-file value distributions, payload uniqueness, event-row uniqueness, output hashes, and byte-exact independent verification are enforced."
+
+[[series]]
+id = "metaclean_event_measurements_u32"
+description = "Flow-cytometry scatter, fluorescence, pulse-shape, and time measurements for each positive-control event."
+semantic_meaning = "Native unsigned detector and acquisition measurements arranged as source-order cytometry events by 64 measurement channels."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "FCS declares integer list-mode storage with every parameter using 32 bits and little-endian byte order. Selected words are copied without numeric conversion."
+source_resources = ["metaclean_step3a", "metaclean_step3e", "metaclean_step3g", "metaclean_step2a", "metaclean_step2b", "metaclean_step2c", "metaclean_step1a", "metaclean_step1b", "metaclean_step1c"]
+source_format = "FCS 3.1 list-mode event data"
+source_field = "Parameters 4 through 67: 63 scatter/fluorescence pulse measurements plus TIME"
+filtered_input_path = "filtered/zenodo_metaclean_fcs_u32/ingest_stats.json"
+filtering = "Keep all events and the shared 64 measurement parameters in source event-major order. Exclude the first three instrument bookkeeping fields TLSW, TMSW, and Event Info, plus FCS container metadata."
+missing_value_policy = "No selected event measurements are dropped or imputed. Changed sources, license, schema, width, byte order, DATA geometry, event counts, degenerate selected channels, duplicate samples, duplicate event rows, or unexpected values fail the recipe."
+conversion = "For each FCS event, copy the contiguous little-endian uint32 words for parameters 4 through 67; concatenate events in their original order."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous uint32 FCS event-by-measurement matrix"
+sample_geometry = "2d_flow_cytometry_event_channel_matrix"
+sample_rank = 2
+sample_axes = ["event", "measurement_channel"]
+natural_record_kind = "complete_fcs_positive_control"
+sample_count = 9
+total_size_bytes = 52947968
+output_path = "samples/zenodo_metaclean_fcs_u32/metaclean_event_measurements_u32/"

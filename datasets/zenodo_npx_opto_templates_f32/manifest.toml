@@ -1,0 +1,135 @@
+manifest_version = 1
+dataset_id = "zenodo_npx_opto_templates_f32"
+name = "Neuropixels Opto Kilosort Template Float32 Tensors"
+description = "Native float32 Kilosort spike-waveform template tensors from 14 mouse visual-cortex Neuropixels Opto sessions."
+homepage = "https://zenodo.org/records/18461445"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Socha, Karolina; Krumin, Michael; Carandini, Matteo (2026), Recordings with prototype Neuropixels Opto probes in the mouse cerebral cortex, Zenodo, DOI 10.5281/zenodo.18461445."
+notes = "The exact Zenodo record declares CC BY 4.0. Preserve the record DOI, title, creators, and related-publication attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public electrophysiology recordings from four laboratory mice, including three ChRmine-expressing animals and one control animal."
+usage_notes = "Samples contain only derived numeric spike-waveform templates. Animal/session identifiers and NPY/container metadata remain in the index for provenance but are not part of numeric sample bytes."
+
+[[origins]]
+id = "zenodo_18461445"
+name = "Recordings with prototype Neuropixels Opto probes in the mouse cerebral cortex"
+url = "https://zenodo.org/records/18461445"
+type = "zenodo_record"
+version = "10.5281/zenodo.18461445"
+
+[[resources]]
+id = "npx_opto_ks097_zip_ranges"
+origin = "zenodo_18461445"
+url = "https://zenodo.org/api/records/18461445/files/KS097.zip/content"
+type = "http_ranges_from_zip64_kilosort_npy_members"
+version = "record-18461445"
+size_bytes = 2849010911
+md5 = "c1b8917fc0bf8d2458cdc6ba2daf9abf"
+local_path = "downloads/zenodo_npx_opto_templates_f32/"
+
+[[resources]]
+id = "npx_opto_optopus010_zip_ranges"
+origin = "zenodo_18461445"
+url = "https://zenodo.org/api/records/18461445/files/Optopus010.zip/content"
+type = "http_ranges_from_zip64_kilosort_npy_members"
+version = "record-18461445"
+size_bytes = 6994767776
+md5 = "14c76c515cdd93f72480604f77e97115"
+local_path = "downloads/zenodo_npx_opto_templates_f32/"
+
+[[resources]]
+id = "npx_opto_optopus012_zip_ranges"
+origin = "zenodo_18461445"
+url = "https://zenodo.org/api/records/18461445/files/Optopus012.zip/content"
+type = "http_ranges_from_zip64_kilosort_npy_members"
+version = "record-18461445"
+size_bytes = 10042106675
+md5 = "964600a0ab708f998e56dc2b99046b40"
+local_path = "downloads/zenodo_npx_opto_templates_f32/"
+
+[[resources]]
+id = "npx_opto_optopus013_0228_zip_ranges"
+origin = "zenodo_18461445"
+url = "https://zenodo.org/api/records/18461445/files/Optopus013_2023-02-28.zip/content"
+type = "http_ranges_from_zip64_kilosort_npy_members"
+version = "record-18461445"
+size_bytes = 1939786577
+md5 = "199c1774979e41f4c70d2fe79b1c64da"
+local_path = "downloads/zenodo_npx_opto_templates_f32/"
+
+[[resources]]
+id = "npx_opto_optopus013_0303_zip_ranges"
+origin = "zenodo_18461445"
+url = "https://zenodo.org/api/records/18461445/files/Optopus013_2023-03-03.zip/content"
+type = "http_ranges_from_zip64_kilosort_npy_members"
+version = "record-18461445"
+size_bytes = 1771771208
+md5 = "1db0ecb01c194192b81e0dfd6e9ba809"
+local_path = "downloads/zenodo_npx_opto_templates_f32/"
+
+[[resources]]
+id = "npx_opto_optopus013_0305_zip_ranges"
+origin = "zenodo_18461445"
+url = "https://zenodo.org/api/records/18461445/files/Optopus013_2023-03-05.zip/content"
+type = "http_ranges_from_zip64_kilosort_npy_members"
+version = "record-18461445"
+size_bytes = 3621759825
+md5 = "b06c28b64e421d6774093a8ac3350449"
+local_path = "downloads/zenodo_npx_opto_templates_f32/"
+
+[[resources]]
+id = "npx_opto_optopus013_0306_zip_ranges"
+origin = "zenodo_18461445"
+url = "https://zenodo.org/api/records/18461445/files/Optopus013_2023-03-06.zip/content"
+type = "http_ranges_from_zip64_kilosort_npy_members"
+version = "record-18461445"
+size_bytes = 5393877522
+md5 = "1bd6771b39cd50c4b59010fefbf020e9"
+local_path = "downloads/zenodo_npx_opto_templates_f32/"
+
+[local_paths]
+downloads = "downloads/zenodo_npx_opto_templates_f32/"
+filtered = "filtered/zenodo_npx_opto_templates_f32/"
+index = "index/zenodo_npx_opto_templates_f32/"
+samples = "samples/zenodo_npx_opto_templates_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_npx_opto_templates_f32/samples.jsonl"
+summary = "Validate seven pinned ZIP/ZIP64 archives, directly range-extract 14 exact Kilosort templates.npy members, and emit one source-order float32 payload tensor per session."
+deterministic_notes = "Record identity, CC BY 4.0 license, parent archive sizes and MD5 metadata, ZIP/ZIP64 central and local headers, exact member paths/sizes/CRC32, NPY version/dtype/shape/order, full payload hashes, value distributions, finiteness, sparsity, sample/template uniqueness, and byte-exact independent verification are enforced."
+
+[[series]]
+id = "npx_opto_kilosort_templates_f32"
+description = "Kilosort 4 spike-waveform template tensors for mouse Neuropixels Opto recording sessions."
+semantic_meaning = "Mean extracellular spike-waveform templates arranged by Kilosort template identity, 61 waveform time samples, and the session's retained probe channels."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Every selected NPY member declares little-endian float32 (`<f4`) in C order. The recipe removes only the 128-byte NPY header and preserves the complete numeric payload byte-for-byte."
+source_resources = ["npx_opto_ks097_zip_ranges", "npx_opto_optopus010_zip_ranges", "npx_opto_optopus012_zip_ranges", "npx_opto_optopus013_0228_zip_ranges", "npx_opto_optopus013_0303_zip_ranges", "npx_opto_optopus013_0305_zip_ranges", "npx_opto_optopus013_0306_zip_ranges"]
+source_format = "Deflate-compressed NPY v1.0 members inside ZIP/ZIP64 session archives"
+source_field = "raw_ephys_data/probe00/kilosort4.0_spks_2/templates.npy float32 payload"
+filtered_input_path = "filtered/zenodo_npx_opto_templates_f32/ingest_stats.json"
+filtering = "Keep all 4,363 Kilosort templates, all 61 waveform samples, and all retained channels from each of 14 sessions. Exclude NPY headers, ZIP framing, spike/event tables, behavioral metadata, and other derived arrays."
+missing_value_policy = "No template values are dropped or imputed. Changed archive/member identity, malformed ZIP/ZIP64 or NPY structures, wrong dtype/order/shape, non-finite values, degenerate or duplicate templates, duplicate samples, or unexpected aggregate statistics fail the recipe."
+conversion = "Inflate each exact ZIP member, validate its NPY header, remove the 128-byte header, and copy the complete little-endian float32 C-order payload verbatim."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 Kilosort spike-template tensor"
+sample_geometry = "3d_kilosort_template_time_channel_tensor"
+sample_rank = 3
+sample_axes = ["spike_template", "waveform_time_sample", "probe_channel"]
+natural_record_kind = "complete_kilosort_session_template_tensor"
+sample_count = 14
+total_size_bytes = 140419072
+output_path = "samples/zenodo_npx_opto_templates_f32/npx_opto_kilosort_templates_f32/"

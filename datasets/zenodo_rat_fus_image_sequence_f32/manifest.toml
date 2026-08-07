@@ -1,0 +1,75 @@
+manifest_version = 1
+dataset_id = "zenodo_rat_fus_image_sequence_f32"
+name = "Awake-Rat Functional-Ultrasound Image Sequence Float32"
+description = "One complete native float32 functional-ultrasound intensity image sequence from an awake-rat stroke experiment."
+homepage = "https://zenodo.org/records/10074382"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Brunner, Clément (2023), Functional ultrasound imaging of stroke in awake rats, Zenodo, DOI 10.5281/zenodo.10074382."
+notes = "The exact Zenodo record declares CC BY 4.0. Preserve the record DOI, creator, title, and associated eLife article attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public functional-ultrasound image data from an awake rat in a pre-stroke baseline session."
+usage_notes = "Only the numeric functional-ultrasound image-intensity tensor is emitted. MATLAB timing and experiment metadata are excluded."
+
+[[origins]]
+id = "zenodo_10074382"
+name = "Functional ultrasound imaging of stroke in awake rats"
+url = "https://zenodo.org/records/10074382"
+type = "zenodo_record"
+version = "10.5281/zenodo.10074382"
+
+[[resources]]
+id = "rat3_prestroke_mat_i_range"
+origin = "zenodo_10074382"
+url = "https://zenodo.org/api/records/10074382/files/Rat3_181205-AwakeStroke_PreStroke.mat/content"
+type = "http_range_from_matlab_v5_single_array"
+version = "record-10074382"
+size_bytes = 430884352
+md5 = "b42f8b101498efeee14383f6f4c59ad7"
+local_path = "downloads/zenodo_rat_fus_image_sequence_f32/Rat3_PreStroke_I_f32le.bin"
+
+[local_paths]
+downloads = "downloads/zenodo_rat_fus_image_sequence_f32/"
+filtered = "filtered/zenodo_rat_fus_image_sequence_f32/"
+index = "index/zenodo_rat_fus_image_sequence_f32/"
+samples = "samples/zenodo_rat_fus_image_sequence_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_rat_fus_image_sequence_f32/samples.jsonl"
+summary = "Validate the pinned MATLAB v5 source and exact top-level I matrix metadata, range-fetch only its native float32 data element, and emit the complete source-order tensor."
+deterministic_notes = "Record identity and license, source file size and MD5 metadata, MATLAB version/endianness, matrix tag/name/class/shape/storage type/offset, complete payload SHA256, finiteness, frame distributions and uniqueness, and byte-identical output are enforced."
+
+[[series]]
+id = "rat_fus_intensity_sequence_f32"
+description = "Complete pre-stroke functional-ultrasound intensity image sequence from an awake rat."
+semantic_meaning = "Processed functional-ultrasound image intensity over two image axes and sequential time frames."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The MATLAB v5 I matrix is mxSINGLE_CLASS stored as little-endian miSINGLE. Its full numeric data element is retained in MATLAB column-major source order."
+source_resources = ["rat3_prestroke_mat_i_range"]
+source_format = "Little-endian MATLAB v5 top-level numeric matrix"
+source_field = "Top-level I matrix real-data element, mxSINGLE_CLASS / miSINGLE"
+filtered_input_path = "filtered/zenodo_rat_fus_image_sequence_f32/ingest_stats.json"
+filtering = "Keep all 107,712,000 values from the complete 187x128x4500 I tensor. Exclude MATLAB framing and the float64 t and t0 timing arrays."
+missing_value_policy = "No image values are dropped or imputed. Changed source identity or matrix metadata, non-finite values, degenerate or duplicate frames, or changed aggregate distributions fail the recipe."
+conversion = "Decode the validated MATLAB data-element boundary and emit its complete little-endian float32 numeric field without arithmetic conversion, byte swapping, or reordering."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 functional-ultrasound intensity tensor"
+sample_geometry = "3d_functional_ultrasound_image_time_tensor"
+sample_rank = 3
+sample_axes = ["image_row", "image_column", "time_frame"]
+natural_record_kind = "complete_functional_ultrasound_acquisition_tensor"
+sample_count = 1
+total_size_bytes = 430848000
+output_path = "samples/zenodo_rat_fus_image_sequence_f32/rat_fus_intensity_sequence_f32/"

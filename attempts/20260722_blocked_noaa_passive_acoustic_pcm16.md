@@ -36,3 +36,21 @@ Parser `wav` is sound; only discovery needs fixing.
 
 Would add hydrophone bioacoustics domain, distinct from speech/music.
 
+## 2026-08-07 AWS-registry retry
+
+A replacement preflight attempted to validate the presumed
+`noaa-passive-bioacoustic-pds` bucket before listing or probing any objects.
+The AWS Open Data registry repository and recursive catalog tree were fetched
+successfully, but the catalog contains no passive-acoustic or bioacoustic
+dataset entry. Four plausible raw registry filenames also returned HTTP 404:
+
+- `datasets/noaa-passive-bioacoustic-pds.yaml`
+- `datasets/noaa-passive-bioacoustic.yaml`
+- `datasets/noaa-passive-acoustic-data.yaml`
+- `datasets/noaa-passive-acoustic.yaml`
+
+Therefore the proposed AWS route was not authoritative and no bucket listing,
+audio header, or dataset payload was fetched. Do not retry guessed bucket or
+registry names. The candidate remains blocked until an exact official NOAA
+directory, object URL, or verified bucket ARN is available together with a
+collection-specific training-compatible use statement.

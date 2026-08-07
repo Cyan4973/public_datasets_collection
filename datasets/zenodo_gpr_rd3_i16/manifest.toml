@@ -1,0 +1,105 @@
+manifest_version = 1
+dataset_id = "zenodo_gpr_rd3_i16"
+name = "Svalbard Glacier Ground-Penetrating Radar Int16 Profiles"
+description = "Native signed-int16 MALA ProEx ground-penetrating-radar transects from a snow-depth survey over Svalbard glaciers."
+homepage = "https://zenodo.org/records/6856164"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Luks, Bartłomiej; Larose, Catherine; Spolaor, Andrea; Zoelly, Christian; Gallet, Jean-Charles (2022), GPR snow depth survey over Svalbard Glaciers, Zenodo, DOI 10.5281/zenodo.6856164."
+notes = "The exact Zenodo record declares CC BY 4.0. Preserve the DOI, title, creators, and source attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public geophysical snowpack survey measurements from five named Svalbard glaciers."
+usage_notes = "Samples contain only numeric radar return amplitudes. Position files and operator/customer fields are excluded from emitted bytes."
+
+[[origins]]
+id = "zenodo_6856164"
+name = "GPR snow depth survey over Svalbard Glaciers"
+url = "https://zenodo.org/records/6856164"
+type = "zenodo_record"
+version = "10.5281/zenodo.6856164"
+
+[[resources]]
+id = "gpr_longyearbreen_zip"
+origin = "zenodo_6856164"
+url = "https://zenodo.org/api/records/6856164/files/GPR_Longyearbreen_20180401.zip/content"
+type = "zip_mala_rd3_rad"
+version = "record-6856164"
+size_bytes = 13693641
+md5 = "6f90028a1ab79c92415be9fea8188430"
+local_path = "downloads/zenodo_gpr_rd3_i16/GPR_Longyearbreen_20180401.zip"
+
+[[resources]]
+id = "gpr_maritbreen_philipbreen_zip"
+origin = "zenodo_6856164"
+url = "https://zenodo.org/api/records/6856164/files/GPR_Maritbreen_Philipbreen_20180327.zip/content"
+type = "zip_mala_rd3_rad"
+version = "record-6856164"
+size_bytes = 25126662
+md5 = "b9debb7a5ddcc2afa827229c8c23f55a"
+local_path = "downloads/zenodo_gpr_rd3_i16/GPR_Maritbreen_Philipbreen_20180327.zip"
+
+[[resources]]
+id = "gpr_slakbreen_zip"
+origin = "zenodo_6856164"
+url = "https://zenodo.org/api/records/6856164/files/GPR_Slakbreen_20180330.zip/content"
+type = "zip_mala_rd3_rad"
+version = "record-6856164"
+size_bytes = 43518498
+md5 = "6269a1de328e03e53d650ccb6fc6806d"
+local_path = "downloads/zenodo_gpr_rd3_i16/GPR_Slakbreen_20180330.zip"
+
+[[resources]]
+id = "gpr_holtedahlfonna_zip"
+origin = "zenodo_6856164"
+url = "https://zenodo.org/api/records/6856164/files/GPR_Holtedahlfonna_20180324.zip/content"
+type = "zip_mala_rd3_rad"
+version = "record-6856164"
+size_bytes = 41095332
+md5 = "b86e744409b5132b6045470dfcfda21c"
+local_path = "downloads/zenodo_gpr_rd3_i16/GPR_Holtedahlfonna_20180324.zip"
+
+[local_paths]
+downloads = "downloads/zenodo_gpr_rd3_i16/"
+filtered = "filtered/zenodo_gpr_rd3_i16/"
+index = "index/zenodo_gpr_rd3_i16/"
+samples = "samples/zenodo_gpr_rd3_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_gpr_rd3_i16/samples.jsonl"
+summary = "Validate four pinned Zenodo ZIP archives and their 12 exact MALA RD3/RAD pairs, then emit each complete RD3 transect byte-for-byte."
+deterministic_notes = "Record identity and license, archive sizes and MD5s, exact RD3/RAD member inventories, ZIP member sizes/CRCs, RAD geometry and SHORT FLAG, complete payload hashes, value distributions, trace uniqueness, and byte-identical outputs are enforced."
+
+[[series]]
+id = "svalbard_gpr_radargram_i16"
+description = "Complete MALA ProEx 800 MHz snowpack ground-penetrating-radar survey transects."
+semantic_meaning = "Signed radar return amplitude at successive two-way-travel-time samples for each along-track GPR survey trace."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Each RAD control file declares 1,024 samples, the exact trace count, and SHORT FLAG:1. RD3 uses native little-endian signed 16-bit words; complete source bytes are retained without reordering."
+source_resources = ["gpr_longyearbreen_zip", "gpr_maritbreen_philipbreen_zip", "gpr_slakbreen_zip", "gpr_holtedahlfonna_zip"]
+source_format = "MALA ProEx RD3 binary radargram with RAD text control file"
+source_field = "Complete RD3 signed-short radar return matrix"
+filtered_input_path = "filtered/zenodo_gpr_rd3_i16/ingest_stats.json"
+filtering = "Keep all 98,628 traces and all 1,024 samples per trace from 12 complete RD3 profiles. Exclude RAD control text, COR positions, MRK markers, and ZIP framing."
+missing_value_policy = "No radar values are dropped or imputed. Missing files, changed archive/member identity, malformed RAD geometry, non-short storage, constant traces, duplicate profiles/traces, or changed aggregate distributions fail the recipe."
+conversion = "Interpret each headerless RD3 data block as the RAD-declared trace-major little-endian signed-int16 matrix and emit that numeric block without arithmetic conversion or reordering."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous signed-int16 MALA GPR radargram"
+sample_geometry = "2d_gpr_trace_time_sample_radargram"
+sample_rank = 2
+sample_axes = ["survey_trace", "two_way_travel_time_sample"]
+natural_record_kind = "complete_gpr_survey_transect"
+sample_count = 12
+total_size_bytes = 201990144
+output_path = "samples/zenodo_gpr_rd3_i16/svalbard_gpr_radargram_i16/"

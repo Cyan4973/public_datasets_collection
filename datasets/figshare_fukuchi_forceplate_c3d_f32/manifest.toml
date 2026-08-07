@@ -1,0 +1,76 @@
+manifest_version = 1
+dataset_id = "figshare_fukuchi_forceplate_c3d_f32"
+name = "Fukuchi Walking Force-Platform Analog Float32"
+description = "Native float32 force-platform analog matrices from unique overground and treadmill walking trials by 42 healthy volunteers."
+homepage = "https://figshare.com/articles/dataset/5722711"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Fukuchi, Claudiane; Fukuchi, Reginaldo; Duarte, Marcos, A public data set of overground and treadmill walking kinematics and kinetics of healthy individuals, Figshare, DOI 10.6084/m9.figshare.5722711.v5."
+notes = "The exact Figshare article declares CC BY 4.0. Preserve the article DOI, title, authors, version, and related publication attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = true
+provenance_notes = "De-identified subject-coded force-platform recordings from 42 healthy volunteers, including young and older adults. Walking dynamics can have biometric character even without names or demographics."
+usage_notes = "Use only under CC BY 4.0. Do not attempt participant identification, linkage, health inference, or biometric profiling. The recipe excludes the participant spreadsheet, anthropometrics, and point-coordinate trajectories."
+
+[[origins]]
+id = "figshare_5722711_v5"
+name = "A public data set of overground and treadmill walking kinematics and kinetics of healthy individuals"
+url = "https://figshare.com/articles/dataset/5722711"
+type = "figshare_article"
+version = "10.6084/m9.figshare.5722711.v5"
+
+[[resources]]
+id = "original_c3d_archive"
+origin = "figshare_5722711_v5"
+url = "https://ndownloader.figshare.com/files/10058995"
+type = "zip_of_c3d_trials"
+version = "figshare-file-10058995"
+access = "Exact original C3D archive pinned by Figshare identity, size, and MD5."
+size_bytes = 732874413
+md5 = "5d93531eab7acc8ebe786145cd26eea8"
+local_path = "downloads/figshare_fukuchi_forceplate_c3d_f32/WBDSc3d.zip"
+
+[local_paths]
+downloads = "downloads/figshare_fukuchi_forceplate_c3d_f32/"
+filtered = "filtered/figshare_fukuchi_forceplate_c3d_f32/"
+index = "index/figshare_fukuchi_forceplate_c3d_f32/"
+samples = "samples/figshare_fukuchi_forceplate_c3d_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/figshare_fukuchi_forceplate_c3d_f32/samples.jsonl"
+summary = "Validate the pinned archive and every C3D member, retain each unique complete walking-trial analog block sequence, and preserve its little-endian float32 source words without rescaling."
+deterministic_notes = "Article identity/license, archive size/MD5, member inventory/CRC, C3D processor and float storage, trial naming, force-platform channel schemas/rates/units, finiteness, exact duplicate selection, distributions, output hashes, and byte-identical verification are enforced."
+
+[[series]]
+id = "walking_forceplate_analog_f32"
+description = "Complete source-order force-platform analog matrices for overground and treadmill walking trials."
+semantic_meaning = "C3D-stored float32 analog fields labelled as force and moment channels from synchronized force platforms during walking. Physical calibration requires the source C3D scale, offset, and force-platform metadata retained in the sample index."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Negative POINT:SCALE selects native float32 C3D point and analog records. ANALOG:BITS=16 describes acquisition metadata, not the stored field width. Float32 analog words are emitted verbatim without calibration or quantization."
+source_resources = ["original_c3d_archive"]
+source_format = "Intel little-endian floating-storage C3D"
+source_field = "Per-frame native float32 analog blocks for labelled force-platform channels"
+filtered_input_path = "filtered/figshare_fukuchi_forceplate_c3d_f32/ingest_stats.json"
+filtering = "Retain all 1,966 unique dynamic walking-trial analog payloads. Exclude 50 static calibrations, three later archive-order exact duplicates, point coordinates/residuals, C3D framing, the duplicate gait-event archive, ASCII exports, and participant metadata."
+missing_value_policy = "No retained float32 value is dropped or imputed. Non-finite values, changed schemas, malformed geometry, unexpected duplicates, degenerate trials, or source drift fail the recipe."
+conversion = "Decode each point-frame boundary, select its native little-endian float32 analog elements after the point records, and emit those elements verbatim in frame order."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 C3D analog tensor"
+sample_geometry = "walking_trial_forceplate_analog_tensor"
+sample_rank = 3
+sample_axes = ["point_frame", "analog_subsample", "force_moment_channel"]
+natural_record_kind = "complete_walking_trial_forceplatform_acquisition"
+sample_count = 1966
+total_size_bytes = 335431768
+output_path = "samples/figshare_fukuchi_forceplate_c3d_f32/walking_forceplate_analog_f32/"

@@ -1,0 +1,75 @@
+manifest_version = 1
+dataset_id = "zenodo_open_ephys_continuous_i16"
+name = "Open Ephys Mouse Extracellular Voltage Int16 Streams"
+description = "Four synchronized native signed-int16 extracellular neural voltage channels from a mouse Open Ephys recording."
+homepage = "https://zenodo.org/records/20726062"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Buccino, Alessio Paolo; Halcrow, Chris (2026), SpikeInterface Training Dataset, Zenodo, DOI 10.5281/zenodo.20726062."
+notes = "The exact Zenodo record declares CC BY 4.0. Preserve the DOI, title, creators, and attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public extracellular electrophysiology from a mouse running in an open field, recorded with tetrodes aimed at medial entorhinal cortex."
+usage_notes = "Only numeric electrode voltage samples are emitted. Timestamps, record numbers, event data, ADC/AUX streams, and behavioral context are excluded."
+
+[[origins]]
+id = "zenodo_20726062"
+name = "SpikeInterface Training Dataset"
+url = "https://zenodo.org/records/20726062"
+type = "zenodo_record"
+version = "10.5281/zenodo.20726062"
+
+[[resources]]
+id = "open_ephys_tetrode_session_zip_ranges"
+origin = "zenodo_20726062"
+url = "https://zenodo.org/api/records/20726062/files/1544_2023-04-21_09-55-34_of.zip/content"
+type = "http_ranges_from_zip_legacy_open_ephys_continuous_members"
+version = "record-20726062"
+size_bytes = 2163918465
+md5 = "cc6b78838ff4c48e101fe698edff1989"
+local_path = "downloads/zenodo_open_ephys_continuous_i16/"
+
+[local_paths]
+downloads = "downloads/zenodo_open_ephys_continuous_i16/"
+filtered = "filtered/zenodo_open_ephys_continuous_i16/"
+index = "index/zenodo_open_ephys_continuous_i16/"
+samples = "samples/zenodo_open_ephys_continuous_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_open_ephys_continuous_i16/samples.jsonl"
+summary = "Validate the pinned Zenodo archive and four exact legacy Open Ephys channel members, validate every fixed record, and emit only source-order int16 sample words."
+deterministic_notes = "Record identity and license, archive size and MD5, member ZIP sizes/CRCs, Open Ephys header fields, all 65,033 timestamps/counts/markers per channel, complete source/payload hashes, value distributions, block uniqueness, and byte-identical outputs are enforced."
+
+[[series]]
+id = "mouse_extracellular_voltage_i16be"
+description = "Synchronized 30 kHz extracellular voltage streams from four tetrode electrode channels."
+semantic_meaning = "Raw extracellular electrode voltage ADC codes over time from a mouse medial-entorhinal-cortex recording."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Legacy Open Ephys v0.4 stores each 1,024-sample record as big-endian signed-int16 words. The decoder validates and removes the file header and per-record timestamp/count/number/marker framing, retaining every neural sample word in source order."
+source_resources = ["open_ephys_tetrode_session_zip_ranges"]
+source_format = "Legacy Open Ephys v0.4 .continuous fixed-record stream"
+source_field = "Per-record big-endian signed-int16 extracellular voltage sample array"
+filtered_input_path = "filtered/zenodo_open_ephys_continuous_i16/ingest_stats.json"
+filtering = "Select neural channels CH1, CH6, CH11, and CH16 as a deterministic spread over the 16 numbered electrode channels. Keep all 65,033 records and 1,024 samples per record. Exclude other CH channels, ADC/AUX streams, headers, timestamps, record numbers, and markers."
+missing_value_policy = "No selected voltage samples are dropped or imputed. Missing files, changed archive/member identity, malformed framing, timestamp discontinuities, partial records, constant/duplicate blocks, duplicate channels, or changed aggregate distributions fail the recipe."
+conversion = "Decode each validated Open Ephys record and concatenate its declared big-endian signed-int16 sample field in chronological source order; no numeric scaling, byte swapping, or reordering is applied."
+numeric_kind = "int"
+bit_width = 16
+endianness = "big"
+sample_format = "raw homogeneous big-endian signed-int16 extracellular voltage stream"
+sample_geometry = "1d_continuous_extracellular_voltage_channel"
+sample_rank = 1
+sample_axes = ["time_sample"]
+natural_record_kind = "complete_open_ephys_channel_stream"
+sample_count = 4
+total_size_bytes = 532750336
+output_path = "samples/zenodo_open_ephys_continuous_i16/mouse_extracellular_voltage_i16be/"

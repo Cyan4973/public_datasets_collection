@@ -1,0 +1,78 @@
+manifest_version = 1
+dataset_id = "isric_soilgrids_clay_i16"
+name = "ISRIC SoilGrids Surface Clay Content Int16"
+description = "Geographically dispersed native signed-int16 SoilGrids mean clay-content raster tiles for the 0-5 cm soil layer."
+homepage = "https://www.isric.org/explore/soilgrids"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Poggio, L., de Sousa, L.M., Batjes, N.H., Heuvelink, G.B.M., Kempen, B., Ribeiro, E., and Rossiter, D.G. (2021). SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty. SOIL 7, 217-240. DOI: 10.5194/soil-7-217-2021."
+notes = "ISRIC's official SoilGrids page explicitly publishes the data under CC BY 4.0. Preserve the SoilGrids, ISRIC, author, article, DOI, and license attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official global modeled soil-property rasters from ISRIC SoilGrids."
+usage_notes = "These are modeled environmental predictions, not human or identifying data. ISRIC cautions that global products require care when used at local scales."
+
+[[origins]]
+id = "isric_soilgrids"
+name = "ISRIC SoilGrids"
+url = "https://www.isric.org/explore/soilgrids"
+type = "official_data_portal"
+notes = "Official SoilGrids publication and access page."
+
+[[resources]]
+id = "soilgrids_clay_0_5cm_mean_tiles"
+origin = "isric_soilgrids"
+url = "https://files.isric.org/soilgrids/latest/data/clay/clay_0-5cm_mean.vrt"
+type = "pinned_geotiff_tile_selection"
+version = "SoilGrids 2.0 latest snapshot"
+access = "Direct public HTTPS download under CC BY 4.0."
+size_bytes = 104067284
+sha256 = ""
+local_path = "downloads/isric_soilgrids_clay_i16/"
+notes = "The selection was derived from VRT snapshot SHA-256 ad1a77d56090bf543e3600bc48d4cd6fa80f8e1a9eb37177044de65a64848ede. Exact 256 source URLs, sizes, and TIFF SHA-256 values are pinned in sources.tsv."
+
+[local_paths]
+downloads = "downloads/isric_soilgrids_clay_i16/"
+filtered = "filtered/isric_soilgrids_clay_i16/"
+index = "index/isric_soilgrids_clay_i16/"
+samples = "samples/isric_soilgrids_clay_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/isric_soilgrids_clay_i16/samples.jsonl"
+summary = "Validate and decode 256 geographically dispersed complete SoilGrids native-int16 GeoTIFF tiles, preserving stored clay values and nodata codes in canonical little-endian row-major order."
+deterministic_notes = "The recipe pins every URL, source size, source SHA-256, VRT-derived mosaic offset, source geometry, sample type, and selection ordinal. It independently enforces classic-TIFF byte order, all typed raster tags, strip bounds, nodata, value ranges, uniqueness, every output byte, index rows, and aggregate statistics."
+
+[[series]]
+id = "soilgrids_clay_0_5cm_mean_i16"
+description = "Mean modeled clay-content raster tiles for the 0-5 cm soil layer."
+semantic_meaning = "Source-stored SoilGrids mean clay-content codes for surface soil cells, with -32768 denoting nodata."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The official VRT and every selected GeoTIFF declare signed Int16 cells. Valid stored values are the published clay-content map codes; -32768 is the explicit GDAL nodata code."
+source_resources = ["soilgrids_clay_0_5cm_mean_tiles"]
+source_format = "Classic little-endian uncompressed GeoTIFF with signed-int16 band 1"
+source_field = "clay_0-5cm_mean GeoTIFF band 1"
+filtered_input_path = "filtered/isric_soilgrids_clay_i16/ingest_stats.json"
+filtering = "From 10,169 complete 450x450 Int16 sources declared by the official VRT, keep 256 tiles chosen by deterministic farthest-point coverage over normalized global VRT offsets. Keep every cell from each chosen tile."
+missing_value_policy = "Preserve the source -32768 nodata code as a numeric value; do not drop, mask, fill, or impute any cell. Missing, changed, malformed, constant, duplicate, or implausibly decoded tiles fail the recipe."
+conversion = "Validate every TIFF field and uncompressed row strip, concatenate strips in declared row order, and emit the source-identical signed values as canonical little-endian int16. No physical scaling or reprojection is applied."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian signed-int16 raster tile"
+sample_geometry = "fixed_450x450_soil_property_raster"
+sample_rank = 2
+sample_axes = ["projected_y", "projected_x"]
+sample_shape = [450, 450]
+natural_record_kind = "complete_soilgrids_source_tiff_tile"
+sample_count = 256
+total_size_bytes = 103680000
+output_path = "samples/isric_soilgrids_clay_i16/soilgrids_clay_0_5cm_mean_i16/"

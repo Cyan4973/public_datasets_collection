@@ -1,0 +1,106 @@
+manifest_version = 1
+dataset_id = "physionet_bidmc_ppg_resp_i16"
+name = "PhysioNet BIDMC PPG and Respiration Raw Waveforms"
+description = "Complete native signed-int16 photoplethysmographic and respiratory waveform channels from 53 public clinical WFDB records."
+homepage = "https://physionet.org/content/bidmc/1.0.0/"
+
+[license]
+name = "Open Data Commons Attribution License v1.0"
+spdx = "ODC-By-1.0"
+url = "https://opendatacommons.org/licenses/by/1-0/"
+citation = "Pimentel, M.A.F. et al. Towards a Robust Estimation of Respiratory Rate from Pulse Oximeters. IEEE Transactions on Biomedical Engineering 64(8), 1914-1923. DOI: 10.1109/TBME.2016.2613124. BIDMC PPG and Respiration Dataset, PhysioNet, DOI: 10.13026/C2208R."
+notes = "PhysioNet declares ODC Attribution 1.0 for the dataset files. Preserve dataset, author, DOI, article, and PhysioNet attribution."
+
+[safety]
+contains_sensitive_data = true
+contains_personal_data = true
+provenance_notes = "Public clinical waveform data from 53 critically ill patients. Upstream WFDB headers contain record codes and demographic/context fields; the recipe emits none of those fields."
+usage_notes = "Treat the source as sensitive human clinical material. Emitted samples contain only deinterleaved PLETH or RESP integer waveforms; no age, sex, ward/location, date, annotation, ECG, or other metadata is included."
+
+[[origins]]
+id = "physionet_bidmc_1_0_0"
+name = "BIDMC PPG and Respiration Dataset"
+url = "https://physionet.org/content/bidmc/1.0.0/"
+type = "data_portal"
+version = "1.0.0"
+notes = "Official public PhysioNet distribution, DOI 10.13026/C2208R."
+
+[[resources]]
+id = "bidmc_wfdb_records"
+origin = "physionet_bidmc_1_0_0"
+url = "https://physionet.org/files/bidmc/1.0.0/"
+type = "wfdb_format_16_records"
+version = "1.0.0"
+access = "Direct public download under ODC Attribution 1.0."
+size_bytes = 34200570
+sha256 = ""
+local_path = "downloads/physionet_bidmc_ppg_resp_i16/"
+notes = "Fifty-three .hea/.dat pairs. Each file is checked against the official SHA256SUMS.txt; size_bytes counts the interleaved .dat payloads."
+
+[local_paths]
+downloads = "downloads/physionet_bidmc_ppg_resp_i16/"
+filtered = "filtered/physionet_bidmc_ppg_resp_i16/"
+index = "index/physionet_bidmc_ppg_resp_i16/"
+samples = "samples/physionet_bidmc_ppg_resp_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/physionet_bidmc_ppg_resp_i16/samples.jsonl"
+summary = "Validate all 53 official WFDB records, deinterleave the native format-16 PLETH and RESP channels, and emit one canonical little-endian int16 sample per channel and record."
+deterministic_notes = "The recipe pins record identities, official source SHA-256 values, WFDB geometry, initial values, per-channel checksums, selected channel names, sample shape, aggregate sizes, output hashes, and index metadata."
+
+[[series]]
+id = "bidmc_pleth_adc_i16"
+description = "Complete eight-minute photoplethysmographic optical pulse waveform ADC sequences."
+semantic_meaning = "Successive native integer codes from the bedside monitor's PLETH optical blood-volume pulse channel."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The WFDB headers declare scalar format 16, which stores two-byte little-endian signed integers. Values remain raw stored ADC codes rather than being converted through channel gain."
+source_resources = ["bidmc_wfdb_records"]
+source_format = "Interleaved WFDB format 16"
+source_field = "PLETH"
+filtered_input_path = "filtered/physionet_bidmc_ppg_resp_i16/ingest_stats.json"
+filtering = "Keep the one complete PLETH channel from each of all 53 records; discard every other channel and all header comments or metadata."
+missing_value_policy = "No selected values are dropped or imputed. Missing, malformed, checksum-invalid, constant, duplicate, or changed records fail the recipe."
+conversion = "Deinterleave the complete native PLETH value stream and serialize the unchanged signed values as canonical little-endian int16."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian signed-int16 ADC sequence"
+sample_geometry = "fixed_length_clinical_waveform_1d"
+sample_rank = 1
+sample_axes = ["time_sample"]
+sample_shape = [60001]
+natural_record_kind = "complete_bidmc_eight_minute_waveform_channel"
+sample_count = 53
+total_size_bytes = 6360106
+output_path = "samples/physionet_bidmc_ppg_resp_i16/bidmc_pleth_adc_i16/"
+
+[[series]]
+id = "bidmc_respiration_adc_i16"
+description = "Complete eight-minute respiratory waveform ADC sequences."
+semantic_meaning = "Successive native integer codes from the bedside monitor's RESP respiratory channel."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The WFDB headers declare scalar format 16, which stores two-byte little-endian signed integers. Values remain raw stored ADC codes rather than being converted through channel gain."
+source_resources = ["bidmc_wfdb_records"]
+source_format = "Interleaved WFDB format 16"
+source_field = "RESP"
+filtered_input_path = "filtered/physionet_bidmc_ppg_resp_i16/ingest_stats.json"
+filtering = "Keep the one complete RESP channel from each of all 53 records; discard every other channel and all header comments or metadata."
+missing_value_policy = "No selected values are dropped or imputed. Missing, malformed, checksum-invalid, constant, duplicate, or changed records fail the recipe."
+conversion = "Deinterleave the complete native RESP value stream and serialize the unchanged signed values as canonical little-endian int16."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian signed-int16 ADC sequence"
+sample_geometry = "fixed_length_clinical_waveform_1d"
+sample_rank = 1
+sample_axes = ["time_sample"]
+sample_shape = [60001]
+natural_record_kind = "complete_bidmc_eight_minute_waveform_channel"
+sample_count = 53
+total_size_bytes = 6360106
+output_path = "samples/physionet_bidmc_ppg_resp_i16/bidmc_respiration_adc_i16/"

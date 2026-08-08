@@ -1,0 +1,79 @@
+manifest_version = 1
+dataset_id = "tcia_cmmd_mammography_u16"
+name = "TCIA CMMD Native UInt16 Mammography"
+description = "Two complete high-resolution native unsigned-16-bit mammography Pixel Data planes from the sole double-byte CMMD series outlier."
+homepage = "https://doi.org/10.7937/tcia.eqde-4b16"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Cui, C., Li, L., Cai, H., Fan, Z., Zhang, L., Dan, T., Li, J., and Wang, J. (2021). The Chinese Mammography Database (CMMD): An online mammography database with biopsy confirmed types for machine diagnosis of breast. The Cancer Imaging Archive. DOI: 10.7937/tcia.eqde-4b16."
+notes = "TCIA series metadata and the downloaded archive's embedded LICENSE both declare CC BY 4.0. Preserve CMMD, author, TCIA, DOI, and license attribution."
+
+[safety]
+contains_sensitive_data = true
+contains_personal_data = true
+provenance_notes = "De-identified human clinical mammography from TCIA CMMD. The source DICOM objects contain patient/study metadata, but the recipe emits only Pixel Data."
+usage_notes = "Treat the source and output as sensitive clinical imaging. Do not attempt participant re-identification or linkage. Emitted samples exclude DICOM identifiers, dates, diagnoses, demographics, and all other metadata."
+
+[[origins]]
+id = "tcia_cmmd"
+name = "The Cancer Imaging Archive Chinese Mammography Database"
+url = "https://doi.org/10.7937/tcia.eqde-4b16"
+type = "tcia_collection"
+version = "CMMD release 2021-04-06"
+notes = "Official TCIA collection metadata reports 1,775 MG series under CC BY 4.0."
+
+[[resources]]
+id = "cmmd_native_u16_series"
+origin = "tcia_cmmd"
+url = "https://services.cancerimagingarchive.net/nbia-api/services/v1/getImage?SeriesInstanceUID=1.3.6.1.4.1.14519.5.2.1.1239.1759.338921544064671779799433793481"
+type = "tcia_series_zip_with_two_dicom_mammograms"
+version = "SeriesInstanceUID 1.3.6.1.4.1.14519.5.2.1.1239.1759.338921544064671779799433793481"
+access = "Direct public TCIA API download under CC BY 4.0."
+size_bytes = 17567732
+sha256 = ""
+local_path = "downloads/tcia_cmmd_mammography_u16/cmmd_mammography_u16.zip"
+notes = "Size counts the two uncompressed DICOM source objects. Their exact sizes and SHA-256 hashes and the embedded license hash are enforced by the recipe."
+
+[local_paths]
+downloads = "downloads/tcia_cmmd_mammography_u16/"
+filtered = "filtered/tcia_cmmd_mammography_u16/"
+index = "index/tcia_cmmd_mammography_u16/"
+samples = "samples/tcia_cmmd_mammography_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/tcia_cmmd_mammography_u16/samples.jsonl"
+summary = "Validate the exact CC BY 4.0 CMMD series and its two DICOM objects, then emit each complete source-native little-endian uint16 Pixel Data plane as one sample."
+deterministic_notes = "The recipe pins collection, series/study identities, image count, source bytes, embedded license, DICOM member sizes and SHA-256 values, transfer syntax, SOP class, modality, pixel schema, laterality, lossless status, geometry, output hashes, and every index/statistic field."
+
+[[series]]
+id = "cmmd_mammography_pixel_u16"
+description = "Complete high-resolution left-breast mammography projection pixel planes."
+semantic_meaning = "Source-stored for-presentation digital mammography pixel values for one complete X-ray projection image."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Both DICOM objects declare BitsAllocated=16, BitsStored=16, HighBit=15, PixelRepresentation=0, one MONOCHROME2 sample per pixel, and lossless Explicit VR Little Endian storage."
+source_resources = ["cmmd_native_u16_series"]
+source_format = "DICOM Digital Mammography X-Ray Image Storage - For Presentation, Explicit VR Little Endian"
+source_field = "Pixel Data (7FE0,0010)"
+filtered_input_path = "filtered/tcia_cmmd_mammography_u16/ingest_stats.json"
+filtering = "Keep both complete DICOM mammograms from the collection's sole series whose reported bytes per image are approximately double the other 1,774 CMMD series. Exclude all DICOM metadata."
+missing_value_policy = "No pixels are dropped, masked, cropped, filled, or imputed. Missing, changed, compressed, malformed, duplicate, low-cardinality, or schema-incompatible images fail the recipe."
+conversion = "Copy each complete native Pixel Data field byte-for-byte in source row-major order. No windowing, inversion, rescaling, normalization, or image transformation is applied."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian unsigned-int16 mammography plane"
+sample_geometry = "fixed_2294x1914_mammography_projection"
+sample_rank = 2
+sample_axes = ["image_y", "image_x"]
+sample_shape = [2294, 1914]
+natural_record_kind = "complete_dicom_mammogram_pixel_plane"
+sample_count = 2
+total_size_bytes = 17562864
+output_path = "samples/tcia_cmmd_mammography_u16/cmmd_mammography_pixel_u16/"

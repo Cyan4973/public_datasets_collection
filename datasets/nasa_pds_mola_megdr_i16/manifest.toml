@@ -1,0 +1,79 @@
+manifest_version = 1
+dataset_id = "nasa_pds_mola_megdr_i16"
+name = "NASA PDS MOLA MEGDR Mars Topography Int16"
+description = "Four complete native signed-int16 Mars Orbiter Laser Altimeter global topography quadrants at 64 pixels per degree."
+homepage = "https://pds-geosciences.wustl.edu/missions/mgs/mola.html"
+
+[license]
+name = "NASA PDS Public Data"
+spdx = "LicenseRef-NASA-PDS"
+url = "https://pds.nasa.gov/"
+citation = "Mars Global Surveyor MOLA Team, Mission Experiment Gridded Data Record (MEGDR), MGS-M-MOLA-5-MEGDR-L3-V1.0, NASA Planetary Data System."
+notes = "NASA PDS public scientific mission data produced by the MGS MOLA Team at Goddard Space Flight Center; preserve the mission, instrument, data-set ID, and PDS attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public planetary topography derived from Mars Global Surveyor laser-altimeter observations."
+usage_notes = "Numeric samples contain only gridded Mars topographic elevations and no terrestrial personal or sensitive information."
+
+[[origins]]
+id = "pds_mgs_mola_megdr"
+name = "PDS Geosciences MGS MOLA MEGDR"
+url = "https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/"
+type = "public_data_portal"
+version = "MGS-M-MOLA-5-MEGDR-L3-V1.0 product version 2.0"
+notes = "Official NASA PDS Geosciences archive for Mars Global Surveyor MOLA gridded products."
+
+[[resources]]
+id = "mola_megdr_64ppd_topography_quadrants"
+origin = "pds_mgs_mola_megdr"
+url = "https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg064/"
+type = "bounded_pds3_detached_image_selection"
+version = "MEGT00N000GB, MEGT00N180GB, MEGT90N000GB, MEGT90N180GB"
+access = "The download script fetches four fixed PDS3 label/IMG pairs and validates product family, signed-int16 storage, geometry, and exact payload sizes."
+size_bytes = 530841600
+sha256 = ""
+local_path = "downloads/nasa_pds_mola_megdr_i16/"
+notes = "The four natural 90-degree-latitude by 180-degree-longitude quadrants provide complete global coverage at 64 pixels/degree. Individual source SHA-256 values are recorded in download_inventory.json and the development report."
+
+[local_paths]
+downloads = "downloads/nasa_pds_mola_megdr_i16/"
+filtered = "filtered/nasa_pds_mola_megdr_i16/"
+index = "index/nasa_pds_mola_megdr_i16/"
+samples = "samples/nasa_pds_mola_megdr_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_pds_mola_megdr_i16/samples.jsonl"
+summary = "Validate four fixed MOLA MEGDR PDS3 topography products, byte-swap their complete big-endian signed-int16 raster payloads, and emit one little-endian sample per natural quadrant."
+deterministic_notes = "Exact product IDs, official URLs, labels, 5760x11520 geometry, MSB_INTEGER/SAMPLE_BITS=16 declarations, per-file sizes and SHA-256 values, output sizes, ranges, and hashes are validated."
+
+[[series]]
+id = "mola_megdr_topography_i16"
+description = "Complete 64-pixels/degree MOLA median-topography quadrants covering Mars."
+semantic_meaning = "Median observed or source-interpolated Mars topography in meters, defined as planetary radius minus the GMM3 areoid radius at each latitude/longitude grid cell."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Each PDS IMAGE object declares MSB_INTEGER, SAMPLE_BITS=16, UNIT=METER, and a 5760x11520 grid. Only byte order changes for the corpus convention."
+source_resources = ["mola_megdr_64ppd_topography_quadrants"]
+source_format = "PDS3 detached headerless big-endian signed-int16 IMAGE"
+source_field = "MEDIAN_TOPOGRAPHY"
+filtered_input_path = "filtered/nasa_pds_mola_megdr_i16/ingest_stats.json"
+filtering = "Keep all 66,355,200 cells from each of four complete natural topography quadrants. Exclude lower-resolution duplicates and related areoid, count, and radius product families."
+missing_value_policy = "PDS states that cells without direct observations contain supplied interpolated values, so no sentinel filtering or imputation is performed. Missing pairs, changed labels, wrong geometry or width, truncated payloads, constant rasters, or hash/range mismatches fail the recipe."
+conversion = "Byte-swap each source MSB_INTEGER word to canonical little-endian signed int16 without arithmetic conversion, resampling, cropping, splitting, or concatenating quadrants."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous signed-int16 planetary topography raster"
+sample_geometry = "planetary_topography_quadrant_2d"
+sample_rank = 2
+sample_shape = [5760, 11520]
+sample_axes = ["latitude", "longitude"]
+natural_record_kind = "mola_megdr_topography_quadrant"
+sample_count = 4
+total_size_bytes = 530841600
+output_path = "samples/nasa_pds_mola_megdr_i16/mola_megdr_topography_i16/"

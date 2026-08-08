@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "nasa_heasarc_nicer_pi_i16"
+name = "NASA HEASARC NICER X-ray Photon PI Int16 Events"
+description = "Native signed-int16 pulse-invariant X-ray energy-channel event sequences from 31 complete NICER/XTI cleaned observations."
+homepage = "https://heasarc.gsfc.nasa.gov/docs/nicer/"
+
+[license]
+name = "NASA SMD Open Scientific Data Policy"
+spdx = "LicenseRef-NASA-SMD-Open-Data"
+url = "https://science.nasa.gov/researchers/science-data/science-information-policy/"
+citation = "NASA HEASARC NICER archive; NICER/XTI mission and observation teams. Preserve observation IDs, target names, mission attribution, and HEASARC acknowledgement."
+notes = "NASA SMD states that information produced from SMD-funded scientific research is held as a public trust, made publicly available, and openly shared. These are public NASA mission observations from the official HEASARC archive."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public X-ray photon-event observations of astronomical sources from NASA's NICER X-ray Timing Instrument on the International Space Station."
+usage_notes = "Samples contain only pulse-invariant detector channel codes from astronomical observations. No human-subject, personal, or Earth-observation data is included."
+
+[[origins]]
+id = "nasa_heasarc_nicer"
+name = "NASA HEASARC NICER Observation Archive"
+url = "https://heasarc.gsfc.nasa.gov/FTP/nicer/data/obs/"
+type = "public_scientific_archive"
+version = "June 2017 cleaned event products"
+notes = "Official HEASARC archive of NICER mission observation products."
+
+[[resources]]
+id = "nicer_june_2017_cleaned_event_files"
+origin = "nasa_heasarc_nicer"
+url = "https://heasarc.gsfc.nasa.gov/FTP/nicer/data/obs/2017_06/"
+type = "pinned_gzip_fits_event_file_selection"
+version = "36 exact observation files pinned by sources.tsv"
+size_bytes = 205174726
+sha256 = "dda1282955970175fef938499abfbbeddc82e1ad239937927896af2cb10de554"
+local_path = "downloads/nasa_heasarc_nicer_pi_i16/"
+notes = "The SHA-256 identifies the tracked sources.tsv inventory; every source payload also has an individually pinned SHA-256."
+
+[local_paths]
+downloads = "downloads/nasa_heasarc_nicer_pi_i16/"
+filtered = "filtered/nasa_heasarc_nicer_pi_i16/"
+index = "index/nasa_heasarc_nicer_pi_i16/"
+samples = "samples/nasa_heasarc_nicer_pi_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_heasarc_nicer_pi_i16/samples.jsonl"
+summary = "Validate 36 pinned gzip-compressed NICER FITS event files, select complete observations with at least 1,000 events, decode the native EVENTS.PI signed-int16 column, and serialize each sequence as little-endian int16."
+deterministic_notes = "Exact source URLs, sizes, hashes, gzip integrity, FITS/NICER/XTI identity, OBS_ID, event-table geometry, all column widths, PI TFORM/scaling/unit/null semantics, fixed minimum-row selection, output uniqueness, per-sample distributions and hashes, and independent source-to-output byte equality are enforced."
+
+[[series]]
+id = "nicer_xray_pi_channel_i16"
+description = "Pulse-invariant detector energy-channel sequences for complete cleaned NICER X-ray observations."
+semantic_meaning = "Calibrated pulse-invariant X-ray detector channel assigned to each temporally ordered photon event in a cleaned NICER/XTI observation."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The NICER EVENTS binary table declares PI as FITS TFORM=1I: one signed 16-bit integer per event, with TSCAL=1, TZERO=0, TNULL=-32768, and unit chan."
+source_resources = ["nicer_june_2017_cleaned_event_files"]
+source_format = "gzip-compressed FITS with OGIP EVENTS binary table"
+source_field = "EVENTS.PI scalar FITS 1I column"
+filtered_input_path = "filtered/nasa_heasarc_nicer_pi_i16/ingest_stats.json"
+filtering = "Start from 36 pinned June 2017 cleaned observations selected by lexicographic observation ID before payload analysis. Keep all 31 observations whose complete EVENTS table contains at least 1,000 rows; exclude three empty tables and two tables with 21 and 389 events."
+missing_value_policy = "Preserve the source-declared signed-int16 TNULL value -32768 if present. No selected observation contains that sentinel. No selected PI event is dropped or imputed."
+conversion = "Extract every PI word in source event-row order and byte-swap FITS big-endian signed-int16 storage to canonical little-endian signed-int16. No scaling, calibration arithmetic, sorting, clipping, padding, splitting, or concatenation is applied."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian signed-int16 NICER PI channel array"
+sample_geometry = "variable_length_xray_photon_event_channel_1d"
+sample_rank = 1
+sample_axes = ["photon_event"]
+natural_record_kind = "complete_nicer_cleaned_observation_pi_event_sequence"
+sample_count = 31
+total_size_bytes = 17876780
+output_path = "samples/nasa_heasarc_nicer_pi_i16/nicer_xray_pi_channel_i16/"

@@ -50,11 +50,25 @@ under the documented big-endian interpretation versus 19,200 byte-swapped.
 - 65,534 distinct values globally
 - at least 24 distinct values and 27 transitions in every 1,024-sample block
 - 138,005 zeros, about 0.0518% of values
-- zlib-9 ratios approximately 0.788 through 0.854, median about 0.816
+- little-endian-output zlib-9 ratios approximately 0.788 through 0.854,
+  median about 0.816
 
-The decoder removes structural framing and concatenates only the source-order
-big-endian sample words. Independent verification reparses every source record
-and checks each emitted payload hash and inventory entry.
+The decoder removes structural framing, preserves source-order signed values,
+and byte-swaps the source big-endian words to the collection's canonical
+little-endian int16 representation. Independent verification reparses every
+source record and checks each emitted little-endian payload hash and inventory
+entry.
+
+## Post-acceptance byte-order correction — 2026-08-07
+
+The initial recipe mistakenly emitted the source big-endian words unchanged.
+The recipe and generated samples were corrected to little-endian, matching the
+rest of the collection's typed numeric convention. Sample count, boundaries,
+dimensions, signed values, value distributions, and total bytes are unchanged;
+only the two bytes within each int16 word are swapped. The series ID changed
+from `mouse_extracellular_voltage_i16be` to
+`mouse_extracellular_voltage_i16` so stale output paths cannot be confused
+with corrected samples.
 
 ## License and safety
 

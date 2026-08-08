@@ -19,7 +19,7 @@ import zlib
 
 
 DATASET_ID = "zenodo_open_ephys_continuous_i16"
-SERIES_ID = "mouse_extracellular_voltage_i16be"
+SERIES_ID = "mouse_extracellular_voltage_i16"
 RECORD_ID = 20_726_062
 RECORD_TITLE = "SpikeInterface Training Dataset"
 RECORD_API = f"https://zenodo.org/api/records/{RECORD_ID}"
@@ -39,12 +39,13 @@ MARKER = bytes((0, 1, 2, 3, 4, 5, 6, 7, 8, 255))
 MAX_CENTRAL_BYTES = 20 * 1024 * 1024
 MAX_COMPRESSED_MEMBER = 128 * 1024 * 1024
 
-# channel, compressed bytes, CRC32, source SHA256, numeric-payload SHA256
+# channel, compressed bytes, CRC32, source SHA256, source-payload SHA256,
+# canonical little-endian output SHA256
 CHANNELS = (
-    ("CH1", 103_221_595, "cdc989f0", "c4e3ff9e93045603342059e9fce7b69a290de1668d8926092ad2270dd9a976cb", "308fcbc088e07b63692edfa40c834b2bc14cbb42e4856504dc63ce601cd6aa08"),
-    ("CH6", 100_267_984, "1b0457a2", "0db81403dc4ec62641de21d6d55c2f07e19da8d470fa61f82235900422e67b36", "8ac1e2e196cac87c66f6b7b49ab7b5677f99cdc3ffd911962b0eefbc9be4cd93"),
-    ("CH11", 103_017_290, "bad640e1", "2c5039ebfb01827f83b3a3347100369c0393daef1dd55c781ae448cf6bf8167d", "573dc7772254d8ca11b910819d63519a43cd5508a4f641dc4a8fcee4d8e33484"),
-    ("CH16", 103_126_848, "c5029343", "755f6724ffcd2d07d3c17393a2c2577353065f6f48cd6747d96eb8c8ef777759", "f591334a854e566b356b3ed92589b5dff4b5f82f084d403e35d778198709b6ff"),
+    ("CH1", 103_221_595, "cdc989f0", "c4e3ff9e93045603342059e9fce7b69a290de1668d8926092ad2270dd9a976cb", "308fcbc088e07b63692edfa40c834b2bc14cbb42e4856504dc63ce601cd6aa08", "aa6bc339299290b5318fc27b4fc0f8f336d9daa679b876b36c64411c4de13739"),
+    ("CH6", 100_267_984, "1b0457a2", "0db81403dc4ec62641de21d6d55c2f07e19da8d470fa61f82235900422e67b36", "8ac1e2e196cac87c66f6b7b49ab7b5677f99cdc3ffd911962b0eefbc9be4cd93", "9b47c1f1b4f3fb632af5236f9e755e1897c23115c41c85ebf7e401b8d5bb7224"),
+    ("CH11", 103_017_290, "bad640e1", "2c5039ebfb01827f83b3a3347100369c0393daef1dd55c781ae448cf6bf8167d", "573dc7772254d8ca11b910819d63519a43cd5508a4f641dc4a8fcee4d8e33484", "10e8761fc4a9235d937ac776b8c98e8c4cc258df20b46d66ad230ed99b85ff1f"),
+    ("CH16", 103_126_848, "c5029343", "755f6724ffcd2d07d3c17393a2c2577353065f6f48cd6747d96eb8c8ef777759", "f591334a854e566b356b3ed92589b5dff4b5f82f084d403e35d778198709b6ff", "6278c1838f50b519293665402d8036e2bc870d7942e292c822464d15a60ff69c"),
 )
 
 
@@ -250,6 +251,14 @@ def decode_i16be(payload: bytes) -> array:
     return values
 
 
+def encode_i16le(payload: bytes) -> bytes:
+    """Preserve decoded signed values while serializing canonical LE words."""
+    values = decode_i16be(payload)
+    if sys.byteorder != "little":
+        values.byteswap()
+    return values.tobytes()
+
+
 def source_for(download_dir: Path, channel: str) -> Path:
     return download_dir / f"100_{channel}.continuous"
 
@@ -264,7 +273,7 @@ def download(args: argparse.Namespace) -> None:
     by_name = {str(member["name"]): member for member in members}
     inventory = []
     for number, profile in enumerate(CHANNELS, 1):
-        channel, compressed_size, crc, source_sha, payload_sha = profile
+        channel, compressed_size, crc, source_sha, payload_sha, output_sha = profile
         name = f"{MEMBER_PREFIX}{channel}.continuous"
         member = by_name.get(name)
         if member is None or (member["method"], member["compressed_size"], member["uncompressed_size"], f"{int(member['crc32']):08x}") != (8, compressed_size, SOURCE_BYTES, crc):
@@ -295,6 +304,7 @@ def download(args: argparse.Namespace) -> None:
             "bit_volts": 0.195, "record_count": RECORD_COUNT, "samples_per_record": BLOCK_SAMPLES,
             "continuous_sha256": source_sha, "numeric_payload_bytes": len(payload),
             "numeric_payload_sha256": payload_sha, "first_timestamp": record_report["first_timestamp"],
+            "canonical_little_endian_sha256": output_sha,
             "last_timestamp": record_report["last_timestamp"],
         })
     (args.download_dir / f"record_{RECORD_ID}.json").write_text(json.dumps(record, indent=2, sort_keys=True) + "\n")
@@ -310,7 +320,7 @@ def local_record(download_dir: Path) -> None:
 
 
 def parse_source(download_dir: Path, profile: tuple[object, ...]) -> tuple[dict[str, object], bytes, set[bytes]]:
-    channel, _compressed, _crc, source_sha, payload_sha = profile
+    channel, _compressed, _crc, source_sha, payload_sha, output_sha = profile
     path = source_for(download_dir, str(channel))
     raw = path.read_bytes() if path.is_file() else b""
     if len(raw) != SOURCE_BYTES or hashlib.sha256(raw).hexdigest() != source_sha:
@@ -337,8 +347,11 @@ def parse_source(download_dir: Path, profile: tuple[object, ...]) -> tuple[dict[
         constant_blocks += distinct == 1
         byte_start, byte_end = value_start * 2, value_end * 2
         block_hashes.add(hashlib.sha256(payload[byte_start:byte_end]).digest())
+    canonical = encode_i16le(payload)
+    if hashlib.sha256(canonical).hexdigest() != output_sha:
+        raise SystemExit(f"canonical little-endian payload changed: {channel}")
     report = {
-        "channel": channel, "output_name": f"100_{channel}_i16be.bin",
+        "channel": channel, "output_name": f"100_{channel}_i16le.bin",
         "sample_rate_hz": 30000, "bit_volts": 0.195, "record_count": RECORD_COUNT,
         "samples_per_record": BLOCK_SAMPLES, "value_count": len(values), "payload_bytes": len(payload),
         "minimum": min(values), "maximum": max(values), "zero_values": values.count(0),
@@ -348,7 +361,9 @@ def parse_source(download_dir: Path, profile: tuple[object, ...]) -> tuple[dict[
         "minimum_block_distinct_values": minimum_distinct, "minimum_block_transitions": minimum_transitions,
         "constant_blocks": constant_blocks, "unique_block_payloads": len(block_hashes),
         "within_channel_duplicate_blocks": RECORD_COUNT - len(block_hashes),
-        "numeric_payload_sha256": payload_sha, "zlib_ratio": round(len(zlib.compress(payload, 9)) / len(payload), 9),
+        "source_numeric_payload_sha256": payload_sha,
+        "canonical_little_endian_sha256": output_sha,
+        "zlib_ratio": round(len(zlib.compress(canonical, 9)) / len(canonical), 9),
         **record_report,
     }
     return report, payload, block_hashes
@@ -363,7 +378,7 @@ def scan(download_dir: Path) -> tuple[list[dict[str, object]], dict[str, object]
     timestamp_bounds = set()
     for profile in CHANNELS:
         report, payload, blocks = parse_source(download_dir, profile)
-        payload_sha = str(report["numeric_payload_sha256"])
+        payload_sha = str(report["source_numeric_payload_sha256"])
         if payload_sha in channel_hashes:
             raise SystemExit(f"duplicate channel payload: {report['channel']}")
         channel_hashes.add(payload_sha)
@@ -412,8 +427,8 @@ def scan(download_dir: Path) -> tuple[list[dict[str, object]], dict[str, object]
         "unique_channel_payloads": 4, "unique_block_payloads": 260132,
         "within_channel_duplicate_blocks": 0, "cross_channel_duplicate_blocks": 0,
         "first_timestamp": 107400, "last_timestamp": 66700168,
-        "minimum_zlib_ratio": 0.788310403, "median_zlib_ratio": 0.8162462804999999,
-        "maximum_zlib_ratio": 0.853942519,
+        "minimum_zlib_ratio": 0.788169316, "median_zlib_ratio": 0.8162612665,
+        "maximum_zlib_ratio": 0.853972162,
     }
     for key, value in expected.items():
         if summary[key] != value:
@@ -432,29 +447,30 @@ def inspect(args: argparse.Namespace) -> None:
 
 def build(args: argparse.Namespace) -> None:
     reports, summary = scan(args.download_dir)
+    if args.samples_dir.exists():
+        shutil.rmtree(args.samples_dir)
     series_dir = args.samples_dir / SERIES_ID
-    if series_dir.exists():
-        shutil.rmtree(series_dir)
     series_dir.mkdir(parents=True)
     rows = []
     for report in reports:
         raw = source_for(args.download_dir, str(report["channel"])).read_bytes()
         payload, _record_report = parse_records(raw)
+        canonical = encode_i16le(payload)
         output = series_dir / str(report["output_name"])
-        output.write_bytes(payload)
+        output.write_bytes(canonical)
         rows.append({
             "dataset_id": DATASET_ID, "series_id": SERIES_ID, "role": "primary",
             "sample_path": output.relative_to(args.data_root).as_posix(),
             "source_sample": f"downloads/{DATASET_ID}/100_{report['channel']}.continuous",
             "channel": report["channel"], "sample_rate_hz": 30000, "bit_volts": 0.195,
-            "numeric_kind": "int", "bit_width": 16, "endianness": "big", "element_size_bytes": 2,
+            "numeric_kind": "int", "bit_width": 16, "endianness": "little", "element_size_bytes": 2,
             "value_count": report["value_count"], "sample_size_bytes": report["payload_bytes"],
-            "sample_format": "raw homogeneous big-endian signed-int16 extracellular voltage stream",
+            "sample_format": "raw homogeneous little-endian signed-int16 extracellular voltage stream",
             "sample_geometry": "1d_continuous_extracellular_voltage_channel", "sample_rank": 1,
             "sample_shape": [report["value_count"]], "sample_axes": ["time_sample"],
             "natural_record_kind": "complete_open_ephys_channel_stream",
             "minimum": report["minimum"], "maximum": report["maximum"],
-            "sha256": report["numeric_payload_sha256"],
+            "sha256": report["canonical_little_endian_sha256"],
         })
     args.index.parent.mkdir(parents=True, exist_ok=True)
     args.index.write_text("".join(json.dumps(row, sort_keys=True) + "\n" for row in rows), encoding="utf-8")
@@ -482,12 +498,12 @@ def verify(args: argparse.Namespace) -> None:
     for row, report in zip(rows, reports, strict=True):
         if row.get("dataset_id") != DATASET_ID or row.get("series_id") != SERIES_ID or row.get("channel") != report["channel"]:
             raise SystemExit(f"indexed identity mismatch: {report['channel']}")
-        if row.get("numeric_kind") != "int" or row.get("bit_width") != 16 or row.get("endianness") != "big":
+        if row.get("numeric_kind") != "int" or row.get("bit_width") != 16 or row.get("endianness") != "little":
             raise SystemExit(f"indexed representation mismatch: {report['channel']}")
         output = args.data_root / str(row["sample_path"])
         expected_outputs.add(output.resolve())
-        if not output.is_file() or output.stat().st_size != PAYLOAD_BYTES or file_hash(output) != report["numeric_payload_sha256"]:
-            raise SystemExit(f"output is not byte-identical to decoded source: {report['channel']}")
+        if not output.is_file() or output.stat().st_size != PAYLOAD_BYTES or file_hash(output) != report["canonical_little_endian_sha256"]:
+            raise SystemExit(f"output is not the canonical little-endian encoding: {report['channel']}")
     actual_outputs = {path.resolve() for path in (args.data_root / "samples" / DATASET_ID).glob("*/*.bin")}
     if actual_outputs != expected_outputs or json.loads(args.stats.read_text(encoding="utf-8")) != summary:
         raise SystemExit("sample inventory or stored statistics changed")

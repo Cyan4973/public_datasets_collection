@@ -1,0 +1,130 @@
+manifest_version = 1
+dataset_id = "argo_gdac_ctd_profiles_f32"
+name = "Argo GDAC Float CTD Profile Histories Float32"
+description = "Native float32 pressure, temperature, and salinity profile-history matrices from 46 autonomous ocean floats across ten Argo data assembly centres."
+homepage = "https://argo.ucsd.edu/data/"
+
+[license]
+name = "Argo freely available data"
+spdx = "LicenseRef-Argo-Free-Unrestricted"
+url = "https://argo.ucsd.edu/data/acknowledging-argo/"
+citation = "Argo (2000). Argo float data and metadata from Global Data Assembly Centre (Argo GDAC). SEANOE. https://doi.org/10.17882/42182"
+notes = "Argo explicitly states that its data are freely available without restriction and requests acknowledgement. Preserve the Argo GDAC DOI and recommended attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public autonomous ocean-float CTD observations from the international Argo program."
+usage_notes = "Samples contain only physical ocean profile arrays. Raw variables can include source QC-invalid sensor values; do not treat every non-fill value as scientifically quality-controlled."
+
+[[origins]]
+id = "argo_gdac_ifremer"
+name = "Argo Global Data Assembly Centre at Ifremer"
+url = "https://data-argo.ifremer.fr/"
+type = "public_data_portal"
+version = "ar_index_global_meta update 20260808002101"
+notes = "Official Argo GDAC node exposing DAC-organized classic-NetCDF float files."
+
+[[resources]]
+id = "selected_argo_multi_profile_files"
+origin = "argo_gdac_ifremer"
+url = "datasets/argo_gdac_ctd_profiles_f32/download_plan.tsv"
+type = "pinned_classic_netcdf_file_selection"
+version = "46 WMO multi-profile files selected 2026-08-07"
+access = "The download script fetches 46 exact official URLs and enforces each file's byte size and SHA-256 before parsing."
+size_bytes = 239866364
+sha256 = ""
+local_path = "downloads/argo_gdac_ctd_profiles_f32/"
+notes = "The plan spans ten DACs. Per-file URLs, sizes, and SHA-256 values are pinned in download_plan.tsv."
+
+[local_paths]
+downloads = "downloads/argo_gdac_ctd_profiles_f32/"
+filtered = "filtered/argo_gdac_ctd_profiles_f32/"
+index = "index/argo_gdac_ctd_profiles_f32/"
+samples = "samples/argo_gdac_ctd_profiles_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/argo_gdac_ctd_profiles_f32/samples.jsonl"
+summary = "Validate 46 pinned classic-NetCDF multi-profile files, decode complete PRES/TEMP/PSAL record-variable matrices, and serialize their unchanged float32 words as little-endian samples."
+deterministic_notes = "Official policy language, index-based selection, source URL/size/SHA-256, NetCDF dimensions/types/record layout, fill coverage, finite non-fill values, output hashes, and source-to-output byte-order conversion are enforced without netCDF4 or xarray dependencies."
+
+[[series]]
+id = "argo_pressure_f32"
+description = "Complete raw pressure profile-history matrices for 46 Argo floats."
+semantic_meaning = "Source `PRES` sea-pressure observations in decibars, arranged by profile cycle and depth-level slot for each autonomous float."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "PRES is stored as classic-NetCDF NC_FLOAT (big-endian IEEE float32); only byte order changes in emitted samples."
+source_resources = ["selected_argo_multi_profile_files"]
+source_format = "classic NetCDF CDF1 interleaved record variables"
+source_field = "PRES"
+filtered_input_path = "filtered/argo_gdac_ctd_profiles_f32/ingest_stats.json"
+filtering = "Keep each complete retained float's N_PROF by N_LEVELS PRES matrix. WMO 3902123 is excluded because its matrix has only 4.41% non-fill coverage."
+missing_value_policy = "Preserve native float32 _FillValue=99999.0 cells so natural rectangular profile-history geometry remains intact. Require at least 1,000 non-fill values, at least 5% non-fill coverage, finite non-fill storage, and non-degenerate non-fill values. Source QC flags are not applied."
+conversion = "Decode big-endian NC_FLOAT record chunks and serialize identical float32 words as little-endian without scaling, interpolation, cropping, or reordering."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 Argo profile-history matrix"
+sample_geometry = "argo_float_profile_history_matrix_2d"
+sample_rank = 2
+sample_axes = ["profile", "depth_level"]
+natural_record_kind = "complete_argo_float_ctd_variable_matrix"
+sample_count = 46
+total_size_bytes = 18812116
+output_path = "samples/argo_gdac_ctd_profiles_f32/argo_pressure_f32/"
+
+[[series]]
+id = "argo_temperature_f32"
+description = "Complete raw temperature profile-history matrices for 46 Argo floats."
+semantic_meaning = "Source `TEMP` in-situ temperature observations in degrees Celsius, arranged by profile cycle and depth-level slot for each autonomous float."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "TEMP is stored as classic-NetCDF NC_FLOAT (big-endian IEEE float32); only byte order changes in emitted samples."
+source_resources = ["selected_argo_multi_profile_files"]
+source_format = "classic NetCDF CDF1 interleaved record variables"
+source_field = "TEMP"
+filtered_input_path = "filtered/argo_gdac_ctd_profiles_f32/ingest_stats.json"
+filtering = "Keep each complete retained float's N_PROF by N_LEVELS TEMP matrix. WMO 3902123 is excluded because its matrix has only 4.41% non-fill coverage."
+missing_value_policy = "Preserve native float32 _FillValue=99999.0 cells so natural rectangular profile-history geometry remains intact. Require at least 1,000 non-fill values, at least 5% non-fill coverage, finite non-fill storage, and non-degenerate non-fill values. Source QC flags are not applied."
+conversion = "Decode big-endian NC_FLOAT record chunks and serialize identical float32 words as little-endian without scaling, interpolation, cropping, or reordering."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 Argo profile-history matrix"
+sample_geometry = "argo_float_profile_history_matrix_2d"
+sample_rank = 2
+sample_axes = ["profile", "depth_level"]
+natural_record_kind = "complete_argo_float_ctd_variable_matrix"
+sample_count = 46
+total_size_bytes = 18812116
+output_path = "samples/argo_gdac_ctd_profiles_f32/argo_temperature_f32/"
+
+[[series]]
+id = "argo_salinity_f32"
+description = "Complete raw practical-salinity profile-history matrices for 46 Argo floats."
+semantic_meaning = "Source `PSAL` practical-salinity observations, arranged by profile cycle and depth-level slot for each autonomous float."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "PSAL is stored as classic-NetCDF NC_FLOAT (big-endian IEEE float32); only byte order changes in emitted samples."
+source_resources = ["selected_argo_multi_profile_files"]
+source_format = "classic NetCDF CDF1 interleaved record variables"
+source_field = "PSAL"
+filtered_input_path = "filtered/argo_gdac_ctd_profiles_f32/ingest_stats.json"
+filtering = "Keep each complete retained float's N_PROF by N_LEVELS PSAL matrix. WMO 3902123 is excluded because its matrix has only 4.41% non-fill coverage."
+missing_value_policy = "Preserve native float32 _FillValue=99999.0 cells so natural rectangular profile-history geometry remains intact. Require at least 1,000 non-fill values, at least 5% non-fill coverage, finite non-fill storage, and non-degenerate non-fill values. Source QC flags are not applied."
+conversion = "Decode big-endian NC_FLOAT record chunks and serialize identical float32 words as little-endian without scaling, interpolation, cropping, or reordering."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 Argo profile-history matrix"
+sample_geometry = "argo_float_profile_history_matrix_2d"
+sample_rank = 2
+sample_axes = ["profile", "depth_level"]
+natural_record_kind = "complete_argo_float_ctd_variable_matrix"
+sample_count = 46
+total_size_bytes = 18812116
+output_path = "samples/argo_gdac_ctd_profiles_f32/argo_salinity_f32/"

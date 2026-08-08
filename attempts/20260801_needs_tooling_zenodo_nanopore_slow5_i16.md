@@ -1,10 +1,19 @@
-# Needs Tooling: Zenodo Nanopore BLOW5 Raw Signal Int16
+# Accepted: Zenodo Nanopore BLOW5 Raw Signal Int16
 
 - Date: 2026-08-01
 - Candidate: `staging/zenodo_nanopore_slow5_i16`
 - Domain: Oxford Nanopore direct-RNA electrical current traces
 - Intended natural sample: one complete nanopore read's raw-signal array
 - Intended width: native signed int16
+- Status: accepted on 2026-08-08 as `datasets/zenodo_nanopore_slow5_i16`
+
+## Resolution
+
+The tooling blocker was resolved by pinning and conventionally building
+official slow5tools v1.4.0 with HDF5 disabled. Its pinned zlib+SVB-ZD fixture
+decoded successfully without package installation. The accepted recipe emits
+15,670 complete source-order reads containing 449,967,586 values and
+899,935,172 primary bytes, then independently verifies every emitted byte.
 
 ## Metadata discovery
 
@@ -36,7 +45,7 @@ map to zlib record compression and SVB-ZD signal compression. SVB-ZD combines
 signal differencing/zigzag mapping with StreamVByte-style integer coding; it
 cannot be decoded by the locally installed `zstd` executable.
 
-## Blocker
+## Former blocker
 
 Neither `slow5tools`, slow5lib, nor a compatible Python BLOW5 decoder is
 available locally. Downloading the 717 MB payload before a decoder exists

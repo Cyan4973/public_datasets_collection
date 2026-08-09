@@ -21,6 +21,13 @@ SERIES_BY_OPERATION = {
     "input_read": "zeroswarm_modbus_input_register_u16",
     "holding_read": "zeroswarm_modbus_holding_register_u16",
 }
+SERIES_BY_TRANSPORT_KEY = {
+    "ipv4_identification_request": "zeroswarm_ipv4_identification_u16",
+    "ipv4_identification_response": "zeroswarm_ipv4_identification_u16",
+    "ipv4_total_length_request": "zeroswarm_ipv4_total_length_u16",
+    "ipv4_total_length_response": "zeroswarm_ipv4_total_length_u16",
+    "tcp_window_response": "zeroswarm_tcp_receive_window_u16",
+}
 EXPECTED_KEYS = {
     (1, "input_read", 0),
     (1, "input_read", 1),
@@ -35,6 +42,13 @@ EXPECTED_COUNTS = {
 }
 EXPECTED_CORRELATED_READ_RESPONSES = 473_423
 EXPECTED_UNCORRELATED_READ_RESPONSES = 7
+EXPECTED_TRANSPORT_STATS = {
+    "ipv4_identification_request": (1_657_009, 0, 65_535, 65_536, 1_657_008, "d4ff350c20c5cc0bd3157705bd85c1bcc577ba05ee9022a33aa17e57eae53793"),
+    "ipv4_identification_response": (1_183_570, 0, 65_535, 65_536, 1_183_569, "603cac853c078f3523daeef71427112e69f2cf4727987fd82e7880cd69121c49"),
+    "ipv4_total_length_request": (1_657_009, 40, 57, 4, 1_420_293, "b2390bb30d7ccb4192c84b2d2e00d64a1a0ca43440986e1957a23a6b9a0f7e0d"),
+    "ipv4_total_length_response": (1_183_570, 51, 53, 3, 946_843, "9345b31545c268b3c2ab081a49d93175dc91d038177099f5d865e5d3d6679762"),
+    "tcp_window_response": (1_183_570, 8_206, 8_212, 7, 76_714, "3048b15ca2d96c1bc69c59702350c5133c2bf0b71d11188cdd1959eca73d73d9"),
+}
 
 
 def md5(path: Path) -> str:
@@ -71,8 +85,16 @@ def encode(values: list[int]) -> bytes:
     return words.tobytes()
 
 
-def selected_series(pcap: Path) -> tuple[dict[str, object], dict[tuple[int, str, int], list[int]]]:
-    report, decoded = inspect(pcap, include_series=True)
+def selected_series(
+    pcap: Path,
+) -> tuple[
+    dict[str, object],
+    dict[tuple[int, str, int], list[int]],
+    dict[str, list[int]],
+]:
+    report, decoded, transport = inspect(
+        pcap, include_series=True, include_transport=True
+    )
     if int(report.get("correlated_read_responses", -1)) != EXPECTED_CORRELATED_READ_RESPONSES:
         raise SystemExit("unexpected correlated read-response count")
     if int(report.get("uncorrelated_read_responses", -1)) != EXPECTED_UNCORRELATED_READ_RESPONSES:
@@ -85,12 +107,24 @@ def selected_series(pcap: Path) -> tuple[dict[str, object], dict[tuple[int, str,
             raise SystemExit(f"unexpected observation count for {key}: {len(values)}")
         if len(set(values)) < 2:
             raise SystemExit(f"constant target register stream: {key}")
-    return report, selected
+    observed_transport = report.get("transport_header_series")
+    if not isinstance(observed_transport, dict) or set(transport) != set(EXPECTED_TRANSPORT_STATS):
+        raise SystemExit("unexpected ZeroSWARM transport-header series")
+    for key, expected in EXPECTED_TRANSPORT_STATS.items():
+        stats = observed_transport.get(key, {})
+        observed = (
+            stats.get("observations"), stats.get("minimum"), stats.get("maximum"),
+            stats.get("distinct_values"), stats.get("transitions"),
+            stats.get("uint16_le_sha256"),
+        )
+        if observed != expected or len(transport[key]) != expected[0]:
+            raise SystemExit(f"unexpected transport-header statistics for {key}: {observed}")
+    return report, selected, transport
 
 
 def build(args: argparse.Namespace) -> None:
     pcap = validate_sources(args.download_dir)
-    report, selected = selected_series(pcap)
+    report, selected, transport = selected_series(pcap)
     if args.samples_dir.exists():
         shutil.rmtree(args.samples_dir)
     rows: list[dict[str, object]] = []
@@ -109,6 +143,7 @@ def build(args: argparse.Namespace) -> None:
             "sample_path": relative_output,
             "source_sample": pcap.relative_to(args.data_root).as_posix(),
             "source_file": pcap.name,
+            "sample_kind": "modbus_register",
             "unit_id": unit,
             "register_kind": operation.removesuffix("_read"),
             "register_address": address,
@@ -119,6 +154,41 @@ def build(args: argparse.Namespace) -> None:
             "endianness": "little",
             "sample_geometry": "1d_industrial_register_time_series",
             "natural_record_kind": "modbus_unit_register",
+            "minimum": min(values),
+            "maximum": max(values),
+            "distinct_values": len(set(values)),
+            "transitions": sum(left != right for left, right in zip(values, values[1:])),
+            "sha256": hashlib.sha256(payload).hexdigest(),
+        })
+        stats = series_stats.setdefault(series_id, {"sample_count": 0, "value_count": 0, "total_size_bytes": 0})
+        stats["sample_count"] = int(stats["sample_count"]) + 1
+        stats["value_count"] = int(stats["value_count"]) + len(values)
+        stats["total_size_bytes"] = int(stats["total_size_bytes"]) + len(payload)
+    for key, values in sorted(transport.items()):
+        series_id = SERIES_BY_TRANSPORT_KEY[key]
+        family_dir = args.samples_dir / series_id
+        family_dir.mkdir(parents=True, exist_ok=True)
+        direction = "request" if key.endswith("_request") else "response"
+        output = family_dir / f"{direction}_n{len(values)}.bin"
+        payload = encode(values)
+        output.write_bytes(payload)
+        relative_output = output.relative_to(args.data_root).as_posix()
+        rows.append({
+            "dataset_id": DATASET_ID,
+            "series_id": series_id,
+            "sample_path": relative_output,
+            "source_sample": pcap.relative_to(args.data_root).as_posix(),
+            "source_file": pcap.name,
+            "sample_kind": "transport_header",
+            "transport_key": key,
+            "packet_direction": direction,
+            "value_count": len(values),
+            "sample_size_bytes": len(payload),
+            "numeric_kind": "uint",
+            "bit_width": 16,
+            "endianness": "little",
+            "sample_geometry": "1d_modbus_tcp_packet_header_time_series",
+            "natural_record_kind": "pcap_transport_field_direction",
             "minimum": min(values),
             "maximum": max(values),
             "distinct_values": len(set(values)),
@@ -148,30 +218,40 @@ def build(args: argparse.Namespace) -> None:
 
 def verify(args: argparse.Namespace) -> None:
     pcap = validate_sources(args.download_dir)
-    _, selected = selected_series(pcap)
+    _, selected, transport = selected_series(pcap)
     if not args.index.is_file() or not args.stats.is_file():
         raise SystemExit("missing index or stats; run build first")
     rows = [json.loads(line) for line in args.index.read_text().splitlines() if line.strip()]
-    if len(rows) != len(EXPECTED_KEYS):
+    if len(rows) != len(EXPECTED_KEYS) + len(EXPECTED_TRANSPORT_STATS):
         raise SystemExit(f"unexpected index row count: {len(rows)}")
     expected_outputs: set[Path] = set()
     total_values = 0
     total_bytes = 0
     for row in rows:
-        operation = f"{row['register_kind']}_read"
-        key = (int(row["unit_id"]), operation, int(row["register_address"]))
-        if key not in selected:
-            raise SystemExit(f"index contains unexpected register key: {key}")
-        expected = encode(selected[key])
+        if row.get("sample_kind") == "modbus_register":
+            operation = f"{row['register_kind']}_read"
+            key = (int(row["unit_id"]), operation, int(row["register_address"]))
+            if key not in selected:
+                raise SystemExit(f"index contains unexpected register key: {key}")
+            expected = encode(selected[key])
+            expected_count = len(selected[key])
+        elif row.get("sample_kind") == "transport_header":
+            transport_key = str(row.get("transport_key", ""))
+            if transport_key not in transport:
+                raise SystemExit(f"index contains unexpected transport key: {transport_key}")
+            expected = encode(transport[transport_key])
+            expected_count = len(transport[transport_key])
+        else:
+            raise SystemExit("index row has unknown sample kind")
         output = args.data_root / str(row["sample_path"])
         if not output.is_file() or output.read_bytes() != expected:
             raise SystemExit(f"output mismatch: {output}")
         if row.get("sha256") != hashlib.sha256(expected).hexdigest():
             raise SystemExit(f"indexed hash mismatch: {output}")
-        if int(row["value_count"]) != len(selected[key]) or int(row["sample_size_bytes"]) != len(expected):
+        if int(row["value_count"]) != expected_count or int(row["sample_size_bytes"]) != len(expected):
             raise SystemExit(f"indexed size mismatch: {output}")
         expected_outputs.add(output.resolve())
-        total_values += len(selected[key])
+        total_values += expected_count
         total_bytes += len(expected)
     actual_outputs = {path.resolve() for path in args.data_root.joinpath("samples", DATASET_ID).glob("*/*.bin")}
     if actual_outputs != expected_outputs:

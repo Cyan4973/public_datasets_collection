@@ -1,7 +1,7 @@
 manifest_version = 1
 dataset_id = "zenodo_zeroswarm_modbus_registers_u16"
-name = "Zero-SWARM Modbus Read Registers UInt16"
-description = "Protocol-native uint16 input- and holding-register time series extracted from a 232 MB normal Factory I/O Modbus/TCP capture."
+name = "Zero-SWARM Modbus/TCP UInt16 Telemetry"
+description = "Protocol-native uint16 register and transport-header time series extracted from a 232 MB normal Factory I/O Modbus/TCP capture."
 homepage = "https://zenodo.org/records/15082260"
 
 [license]
@@ -15,7 +15,7 @@ notes = "The exact Zenodo record declares CC BY 4.0; preserve authors, title, re
 contains_sensitive_data = false
 contains_personal_data = false
 provenance_notes = "Public synthetic Factory I/O testbed traffic released by its authors through Zenodo."
-usage_notes = "The source PCAP contains network headers, but outputs contain only anonymous protocol register words; no addresses, timestamps, payload framing, or identifiers are emitted."
+usage_notes = "Outputs contain anonymous register words and selected non-address transport fields. IP/MAC addresses, ports, timestamps, payload framing, transaction IDs, sequence/acknowledgment numbers, and checksums are not emitted."
 
 [[origins]]
 id = "zenodo_15082260"
@@ -46,8 +46,8 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/zenodo_zeroswarm_modbus_registers_u16/samples.jsonl"
-summary = "Decode the pinned large normal Modbus/TCP capture and emit one uint16 sequence per server-read register address."
-deterministic_notes = "Source identity, size, MD5, record title, and CC BY 4.0 license are enforced. The parser accepts classic Ethernet/IPv4/TCP PCAP, decodes complete port-502 Modbus ADUs, correlates function-3/4 responses to requests using flow, transaction, unit, and function identifiers, and preserves response packet order. Only four exact read-register streams are emitted. The source contains exactly seven extra read responses lacking correlatable requests; they cannot be assigned register addresses, are excluded, and their exact count is enforced."
+summary = "Decode the pinned normal Modbus/TCP capture and emit uint16 register streams plus IPv4 identification, IPv4 total-length, and TCP response-window sequences."
+deterministic_notes = "Source identity, size, MD5, record title, and CC BY 4.0 license are enforced. The parser accepts classic Ethernet/IPv4/unfragmented-TCP PCAP, decodes port-502 packets and Modbus ADUs, correlates function-3/4 responses to requests, and preserves packet order. Exact counts, ranges, cardinalities, transitions, and SHA-256 values are enforced for four register samples and five transport-header samples. Checksums, addresses, ports, TCP sequence/acknowledgment values, the constant request window, and seven uncorrelatable read responses are excluded."
 
 [[series]]
 id = "zeroswarm_modbus_input_register_u16"
@@ -100,3 +100,81 @@ natural_record_kind = "modbus_unit_register"
 sample_count = 2
 total_size_bytes = 946848
 output_path = "samples/zenodo_zeroswarm_modbus_registers_u16/zeroswarm_modbus_holding_register_u16/"
+
+[[series]]
+id = "zeroswarm_ipv4_identification_u16"
+description = "IPv4 Identification values for Modbus/TCP request and response packets."
+semantic_meaning = "Native unsigned 16-bit IPv4 Identification field in capture order, one sample for client requests and one for server responses."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "IPv4 Identification is a protocol-native network-order uint16 field. Both retained directions traverse the full 0-65535 range with sequential counter structure."
+source_resources = ["zeroswarm_normal_v2_pcap"]
+source_format = "Classic PCAP containing Ethernet/IPv4/Modbus-TCP"
+source_field = "IPv4 Identification header field"
+filtered_input_path = "filtered/zenodo_zeroswarm_modbus_registers_u16/ingest_stats.json"
+filtering = "Keep the Identification field from every validated unfragmented IPv4/TCP port-502 packet, split into request and response samples while preserving capture order."
+missing_value_policy = "Malformed, fragmented, non-IPv4, non-TCP, and non-port-502 packets are outside this series. Every field from the 2,840,579 qualifying packets is retained; no value is imputed."
+conversion = "Decode each two-byte network-order field as uint16 and write the identical value as little-endian uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 IPv4 identification time series"
+sample_geometry = "1d_modbus_tcp_packet_header_time_series"
+sample_rank = 1
+sample_axes = ["packet"]
+natural_record_kind = "pcap_transport_field_direction"
+sample_count = 2
+total_size_bytes = 5681158
+output_path = "samples/zenodo_zeroswarm_modbus_registers_u16/zeroswarm_ipv4_identification_u16/"
+
+[[series]]
+id = "zeroswarm_ipv4_total_length_u16"
+description = "IPv4 total packet lengths for Modbus/TCP requests and responses."
+semantic_meaning = "Native unsigned 16-bit IPv4 Total Length field in capture order, one sample for client requests and one for server responses."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "IPv4 Total Length is a protocol-native network-order uint16 field describing the complete IPv4 datagram length in bytes."
+source_resources = ["zeroswarm_normal_v2_pcap"]
+source_format = "Classic PCAP containing Ethernet/IPv4/Modbus-TCP"
+source_field = "IPv4 Total Length header field"
+filtered_input_path = "filtered/zenodo_zeroswarm_modbus_registers_u16/ingest_stats.json"
+filtering = "Keep Total Length from every validated unfragmented IPv4/TCP port-502 packet, split into request and response samples while preserving capture order."
+missing_value_policy = "Every field from the 2,840,579 qualifying packets is retained; malformed or out-of-scope packets contribute no row and no value is imputed."
+conversion = "Decode each two-byte network-order field as uint16 and write the identical value as little-endian uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 IPv4 total-length time series"
+sample_geometry = "1d_modbus_tcp_packet_header_time_series"
+sample_rank = 1
+sample_axes = ["packet"]
+natural_record_kind = "pcap_transport_field_direction"
+sample_count = 2
+total_size_bytes = 5681158
+output_path = "samples/zenodo_zeroswarm_modbus_registers_u16/zeroswarm_ipv4_total_length_u16/"
+
+[[series]]
+id = "zeroswarm_tcp_receive_window_u16"
+description = "TCP receive-window values advertised by the Modbus server."
+semantic_meaning = "Native unsigned 16-bit TCP Window Size field for server-response packets in capture order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The TCP Window Size is a protocol-native network-order uint16 flow-control field. The request direction is excluded because it is constant at 502; the response direction has seven values and 76,714 transitions."
+source_resources = ["zeroswarm_normal_v2_pcap"]
+source_format = "Classic PCAP containing Ethernet/IPv4/Modbus-TCP"
+source_field = "TCP Window Size header field"
+filtered_input_path = "filtered/zenodo_zeroswarm_modbus_registers_u16/ingest_stats.json"
+filtering = "Keep the receive-window field from all 1,183,570 validated server-response packets. Exclude the constant request-direction field."
+missing_value_policy = "Every qualifying response field is retained; malformed or out-of-scope packets contribute no row and no value is imputed."
+conversion = "Decode each two-byte network-order field as uint16 and write the identical value as little-endian uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 TCP receive-window time series"
+sample_geometry = "1d_modbus_tcp_packet_header_time_series"
+sample_rank = 1
+sample_axes = ["response_packet"]
+natural_record_kind = "pcap_transport_field_direction"
+sample_count = 1
+total_size_bytes = 2367140
+output_path = "samples/zenodo_zeroswarm_modbus_registers_u16/zeroswarm_tcp_receive_window_u16/"

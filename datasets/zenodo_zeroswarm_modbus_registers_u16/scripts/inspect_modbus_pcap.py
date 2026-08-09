@@ -1,23 +1,34 @@
 #!/usr/bin/env python3
-"""Inspect classic PCAP for protocol-native Modbus/TCP uint16 registers.
+"""Inspect classic PCAP for protocol-native Modbus/TCP uint16 fields.
 
-The parser intentionally emits no network identities or packet metadata.
+The parser intentionally emits no network identities, timestamps, or checksums.
 """
 from __future__ import annotations
 
 import argparse
+from array import array
 from collections import Counter, defaultdict
 import hashlib
 import ipaddress
 import json
 from pathlib import Path
 import struct
+import sys
 from typing import Iterator
 
 
 MIN_REGISTER_WORDS = 10_000
 MIN_ADDRESSED_WORDS = 10_000
 MIN_REGISTER_SERIES = 4
+
+
+def uint16_le_bytes(values: list[int]) -> bytes:
+    words = array("H", values)
+    if words.itemsize != 2:
+        raise ValueError("host unsigned-short width is not 16 bits")
+    if sys.byteorder == "big":
+        words.byteswap()
+    return words.tobytes()
 
 
 def pcap_packets(path: Path) -> tuple[int, Iterator[tuple[int, bytes]]]:
@@ -65,7 +76,7 @@ def pcap_packets(path: Path) -> tuple[int, Iterator[tuple[int, bytes]]]:
     return linktype, iterator()
 
 
-def tcp_payload(frame: bytes) -> tuple[str, int, str, int, bytes] | None:
+def tcp_payload(frame: bytes) -> tuple[str, int, str, int, bytes, int, int, int] | None:
     if len(frame) < 14:
         return None
     offset = 14
@@ -84,6 +95,7 @@ def tcp_payload(frame: bytes) -> tuple[str, int, str, int, bytes] | None:
     if ihl < 20 or len(frame) < offset + ihl:
         return None
     total_length = struct.unpack_from(">H", frame, offset + 2)[0]
+    identification = struct.unpack_from(">H", frame, offset + 4)[0]
     flags_fragment = struct.unpack_from(">H", frame, offset + 6)[0]
     if frame[offset + 9] != 6 or (flags_fragment & 0x3FFF):
         return None
@@ -94,10 +106,15 @@ def tcp_payload(frame: bytes) -> tuple[str, int, str, int, bytes] | None:
     source_ip = str(ipaddress.ip_address(frame[offset + 12 : offset + 16]))
     destination_ip = str(ipaddress.ip_address(frame[offset + 16 : offset + 20]))
     source_port, destination_port = struct.unpack_from(">HH", frame, tcp_offset)
+    receive_window = struct.unpack_from(">H", frame, tcp_offset + 14)[0]
     data_offset = (frame[tcp_offset + 12] >> 4) * 4
     if data_offset < 20 or ip_end < tcp_offset + data_offset:
         return None
-    return source_ip, source_port, destination_ip, destination_port, frame[tcp_offset + data_offset : ip_end]
+    return (
+        source_ip, source_port, destination_ip, destination_port,
+        frame[tcp_offset + data_offset : ip_end], total_length,
+        identification, receive_window,
+    )
 
 
 def complete_adus(payload: bytes) -> Iterator[tuple[int, int, bytes]]:
@@ -133,8 +150,16 @@ def add_words(
 
 
 def inspect(
-    path: Path, *, include_series: bool = False
-) -> dict[str, object] | tuple[dict[str, object], dict[tuple[int, str, int], list[int]]]:
+    path: Path, *, include_series: bool = False, include_transport: bool = False
+) -> (
+    dict[str, object]
+    | tuple[dict[str, object], dict[tuple[int, str, int], list[int]]]
+    | tuple[
+        dict[str, object],
+        dict[tuple[int, str, int], list[int]],
+        dict[str, list[int]],
+    ]
+):
     linktype, packets = pcap_packets(path)
     if linktype != 1:
         raise ValueError(f"unsupported PCAP linktype {linktype}; expected Ethernet 1")
@@ -150,15 +175,25 @@ def inspect(
     addressed_words = 0
     correlated_read_responses = 0
     uncorrelated_read_responses = 0
+    transport_values: dict[str, list[int]] = defaultdict(list)
     for _, frame in packets:
         packet_count += 1
         tcp = tcp_payload(frame)
         if tcp is None:
             continue
-        source_ip, source_port, destination_ip, destination_port, payload = tcp
+        (
+            source_ip, source_port, destination_ip, destination_port, payload,
+            total_length, identification, receive_window,
+        ) = tcp
         if source_port != 502 and destination_port != 502:
             continue
         modbus_tcp_packets += 1
+        if include_transport:
+            direction = "response" if source_port == 502 else "request"
+            transport_values[f"ipv4_identification_{direction}"].append(identification)
+            transport_values[f"ipv4_total_length_{direction}"].append(total_length)
+            if direction == "response":
+                transport_values["tcp_window_response"].append(receive_window)
         for transaction, unit, pdu in complete_adus(payload):
             complete_adu_count += 1
             function = pdu[0]
@@ -200,7 +235,7 @@ def inspect(
     top_series = []
     for (unit, operation, address), count in series_counts.most_common(50):
         values = series_values[(unit, operation, address)]
-        encoded = struct.pack(f"<{len(values)}H", *values)
+        encoded = uint16_le_bytes(values)
         fingerprint = hashlib.sha256(encoded).hexdigest()
         label = f"unit={unit}/{operation}/register={address}"
         fingerprints[fingerprint].append(label)
@@ -239,6 +274,20 @@ def inspect(
         "maximum": max(all_values) if all_values else None,
         "top_register_series": top_series,
     }
+    if include_transport:
+        report["transport_header_series"] = {
+            key: {
+                "observations": len(values),
+                "distinct_values": len(set(values)),
+                "minimum": min(values),
+                "maximum": max(values),
+                "transitions": sum(left != right for left, right in zip(values, values[1:])),
+                "uint16_le_sha256": hashlib.sha256(uint16_le_bytes(values)).hexdigest(),
+            }
+            for key, values in sorted(transport_values.items())
+        }
+    if include_series and include_transport:
+        return report, dict(series_values), dict(transport_values)
     if include_series:
         return report, dict(series_values)
     return report
@@ -251,7 +300,7 @@ def main() -> None:
     args = parser.parse_args()
     if not args.pcap.is_file():
         raise SystemExit(f"missing PCAP: {args.pcap}")
-    report = inspect(args.pcap)
+    report, _, _ = inspect(args.pcap, include_series=True, include_transport=True)
     args.report.parent.mkdir(parents=True, exist_ok=True)
     args.report.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps(report, indent=2, sort_keys=True))

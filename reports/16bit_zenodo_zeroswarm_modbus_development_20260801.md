@@ -46,8 +46,32 @@ loop. The four retained samples are:
 - unit 1 input registers 0 and 1
 - unit 1 holding registers 0 and 1
 
-Packet bytes, IP addresses, ports, timestamps, transaction IDs, protocol
-framing, coil values, and request parameters are not emitted.
+Whole packet bytes, IP addresses, ports, timestamps, transaction IDs, coil
+values, and request parameters are not emitted.
+
+## Transport-header expansion — 2026-08-08
+
+The accepted source was reparsed to add native network-stack telemetry that
+was previously excluded from training output. Five new samples preserve packet
+order while omitting all endpoint identities:
+
+- IPv4 Identification request: 1,657,009 values, full `[0, 65535]` range
+- IPv4 Identification response: 1,183,570 values, full `[0, 65535]` range
+- IPv4 Total Length request: 1,657,009 values, four values in `[40, 57]`
+- IPv4 Total Length response: 1,183,570 values, three values in `[51, 53]`
+- TCP response receive window: 1,183,570 values, seven values in `[8206, 8212]`
+
+Identification fields exhibit sequential counter structure rather than hash-
+like noise. Total lengths capture request/response packet-size patterns. The
+response window has 76,714 transitions. The constant request window and all
+checksums are deliberately excluded, as are IP/MAC addresses, ports,
+timestamps, sequence/acknowledgment numbers, and payload framing.
+
+The expansion adds 6,864,728 values and 13,729,456 bytes. Combined accepted
+output is now 9 samples, 7,811,574 uint16 values, and 15,623,148 bytes.
+Every new sample has exact count, range, cardinality, transition total, and
+SHA-256 enforcement, and independent verification reparses and byte-compares
+the complete output.
 
 ## Native representation and verified output
 

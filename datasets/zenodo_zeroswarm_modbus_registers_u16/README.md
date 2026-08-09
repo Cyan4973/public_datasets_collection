@@ -1,4 +1,4 @@
-# Zero-SWARM Modbus Read Registers UInt16
+# Zero-SWARM Modbus/TCP UInt16 Telemetry
 
 This candidate targets protocol-native unsigned 16-bit register values from
 the CC BY 4.0 Zenodo record *Modbus Normal and Malicious Network Traffic*
@@ -16,8 +16,13 @@ observations each, all in packet order. Seven unmatched response ADUs are
 excluded because no request is available to recover their register addresses;
 that exact count is enforced. Write sequences are intentionally excluded
 because they closely mirror the holding-register ranges and transitions.
-Packet bytes, timestamps, IP addresses, ports, transaction IDs, and coil
-values are not emitted.
+The same packet pass also emits five transport-header samples: request and
+response IPv4 Identification counters, request and response IPv4 Total Length,
+and the server-response TCP receive window. These are native network-order
+uint16 fields converted to little endian. The request window is excluded
+because it is constant. Checksums are excluded because they are intentionally
+noise-like; packet bytes, timestamps, addresses, ports, transaction IDs,
+sequence/acknowledgment numbers, and coil values are not emitted.
 
 Run:
 
@@ -31,4 +36,4 @@ bash datasets/zenodo_zeroswarm_modbus_registers_u16/verify.sh
 The exact source object, size, MD5, record identity, and CC BY 4.0 declaration
 are validated before extraction.
 
-Validated output: four samples, 946,846 uint16 values, and 1,893,692 bytes.
+Validated output: nine samples, 7,811,574 uint16 values, and 15,623,148 bytes.

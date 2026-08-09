@@ -15,7 +15,7 @@ notes = "The exact Zenodo record declares CC BY 4.0; preserve authors, title, re
 contains_sensitive_data = false
 contains_personal_data = false
 provenance_notes = "Public synthetic Factory I/O testbed traffic released by its authors through Zenodo."
-usage_notes = "Outputs contain anonymous register words and selected non-address transport fields. IP/MAC addresses, ports, timestamps, payload framing, transaction IDs, sequence/acknowledgment numbers, and checksums are not emitted."
+usage_notes = "Outputs contain anonymous register words and selected non-address transport/protocol fields. IP/MAC addresses, ports, timestamps, TCP sequence/acknowledgment numbers, payload bodies, and checksums are not emitted."
 
 [[origins]]
 id = "zenodo_15082260"
@@ -46,8 +46,8 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/zenodo_zeroswarm_modbus_registers_u16/samples.jsonl"
-summary = "Decode the pinned normal Modbus/TCP capture and emit uint16 register streams plus IPv4 identification, IPv4 total-length, and TCP response-window sequences."
-deterministic_notes = "Source identity, size, MD5, record title, and CC BY 4.0 license are enforced. The parser accepts classic Ethernet/IPv4/unfragmented-TCP PCAP, decodes port-502 packets and Modbus ADUs, correlates function-3/4 responses to requests, and preserves packet order. Exact counts, ranges, cardinalities, transitions, and SHA-256 values are enforced for four register samples and five transport-header samples. Checksums, addresses, ports, TCP sequence/acknowledgment values, the constant request window, and seven uncorrelatable read responses are excluded."
+summary = "Decode the pinned normal Modbus/TCP capture and emit uint16 register streams plus IPv4, TCP-window, and Modbus MBAP header sequences."
+deterministic_notes = "Source identity, size, MD5, record title, and CC BY 4.0 license are enforced. The parser accepts classic Ethernet/IPv4/unfragmented-TCP PCAP, decodes port-502 packets and Modbus ADUs, correlates function-3/4 responses to requests, and preserves packet order. Exact counts, ranges, cardinalities, transitions, and SHA-256 values are enforced for four register samples and nine network/protocol-header samples. Checksums, addresses, ports, TCP sequence/acknowledgment values, the constant request window, and seven uncorrelatable read responses are excluded."
 
 [[series]]
 id = "zeroswarm_modbus_input_register_u16"
@@ -178,3 +178,55 @@ natural_record_kind = "pcap_transport_field_direction"
 sample_count = 1
 total_size_bytes = 2367140
 output_path = "samples/zenodo_zeroswarm_modbus_registers_u16/zeroswarm_tcp_receive_window_u16/"
+
+[[series]]
+id = "zeroswarm_modbus_transaction_id_u16"
+description = "Modbus Application Protocol transaction identifiers for request and response ADUs."
+semantic_meaning = "Native unsigned 16-bit MBAP Transaction Identifier in ADU order, one sample for client requests and one for server responses."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The MBAP Transaction Identifier is a protocol-native network-order uint16 used to match Modbus/TCP requests and responses. Both directions traverse the full 0-65535 range with counter structure."
+source_resources = ["zeroswarm_normal_v2_pcap"]
+source_format = "Classic PCAP containing Ethernet/IPv4/Modbus-TCP"
+source_field = "MBAP Transaction Identifier"
+filtered_input_path = "filtered/zenodo_zeroswarm_modbus_registers_u16/ingest_stats.json"
+filtering = "Keep the transaction identifier from every syntactically complete Modbus ADU, split into 1,183,563 request and 1,183,562 response values while preserving capture and within-packet ADU order."
+missing_value_policy = "Every complete ADU contributes one value. Truncated or malformed ADUs are outside the series; no retained identifier is dropped or imputed."
+conversion = "Decode each two-byte network-order field as uint16 and write the identical value as little-endian uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 Modbus transaction-identifier time series"
+sample_geometry = "1d_modbus_tcp_adu_header_time_series"
+sample_rank = 1
+sample_axes = ["modbus_adu"]
+natural_record_kind = "pcap_modbus_header_field_direction"
+sample_count = 2
+total_size_bytes = 4734250
+output_path = "samples/zenodo_zeroswarm_modbus_registers_u16/zeroswarm_modbus_transaction_id_u16/"
+
+[[series]]
+id = "zeroswarm_modbus_mbap_length_u16"
+description = "Modbus Application Protocol length fields for request and response ADUs."
+semantic_meaning = "Native unsigned 16-bit MBAP Length field in ADU order, one sample for client requests and one for server responses."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The MBAP Length is a protocol-native network-order uint16 specifying the following unit-identifier and PDU byte count."
+source_resources = ["zeroswarm_normal_v2_pcap"]
+source_format = "Classic PCAP containing Ethernet/IPv4/Modbus-TCP"
+source_field = "MBAP Length"
+filtered_input_path = "filtered/zenodo_zeroswarm_modbus_registers_u16/ingest_stats.json"
+filtering = "Keep the length field from every syntactically complete Modbus ADU, split into request and response samples while preserving capture and within-packet ADU order."
+missing_value_policy = "Every complete ADU contributes one value. Truncated, malformed, protocol-nonzero, or out-of-range-length ADUs are outside the series; no retained value is imputed."
+conversion = "Decode each two-byte network-order field as uint16 and write the identical value as little-endian uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 Modbus MBAP-length time series"
+sample_geometry = "1d_modbus_tcp_adu_header_time_series"
+sample_rank = 1
+sample_axes = ["modbus_adu"]
+natural_record_kind = "pcap_modbus_header_field_direction"
+sample_count = 2
+total_size_bytes = 4734250
+output_path = "samples/zenodo_zeroswarm_modbus_registers_u16/zeroswarm_modbus_mbap_length_u16/"

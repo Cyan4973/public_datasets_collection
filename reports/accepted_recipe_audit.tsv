@@ -178,7 +178,6 @@ bam_read_mapq_u8	ok	6170563	6170563	14	435368	435368	0	0	0	1	none	none
 zenodo_marine_dom_positive_ms1_f32	ok	6232014	24928056	2802	2368	9472	0	0	0	1	none	none
 physionet_bidmc_ppg_resp_i16	ok	6360106	12720212	106	60001	120002	0	0	0	1	none	none
 noaa_tides_water_level	ok	7287492	58299936	42	175440	1403520	0	0	0	1	none	none
-zenodo_zeroswarm_modbus_registers_u16	ok	7811574	15623148	9	1183570	2367140	0	0	0	1	none	none
 polyhaven_material_displacement_png_u16	ok	8388608	16777216	8	1048576	2097152	0	0	0	1	none	none
 covid19_vaccinations_u64	ok	8697443	69579544	6	935708	7485664	0	0	0	1	none	none
 unicode_bmp_gutenberg	ok	8700484	17400968	12	490769	981538	0	0	0	1	none	none
@@ -193,6 +192,7 @@ har_smartphone_uci	ok	11864448	94915584	18	659136	5273088	0	0	0	1	none	none
 crossref_works_large_retry	ok	11996320	59981600	8	1499540	5998160	0	0	0	1	none	none
 noaa_isd_lite	ok	12103704	20912475	502	26015	51830	0	0	0	1	none	none
 tcia_gamma_plan_rtdose_u16	ok	12497284	24994568	3	4119984	8239968	0	0	0	1	none	none
+zenodo_zeroswarm_modbus_registers_u16	ok	12545824	25091648	13	1183563	2367126	0	0	0	1	none	none
 nhtsa_fars_2022_crash_tables_f64	ok	12662622	101300976	190	60765	486120	0	0	0	1	none	none
 skadi_srtm_hgt	ok	12967201	25934402	1	12967201	25934402	0	0	0	1	none	none
 zenodo_metaclean_fcs_u32	ok	13236992	52947968	9	1589248	6356992	0	0	0	1	none	none

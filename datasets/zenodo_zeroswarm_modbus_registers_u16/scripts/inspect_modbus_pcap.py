@@ -117,7 +117,7 @@ def tcp_payload(frame: bytes) -> tuple[str, int, str, int, bytes, int, int, int]
     )
 
 
-def complete_adus(payload: bytes) -> Iterator[tuple[int, int, bytes]]:
+def complete_adus(payload: bytes) -> Iterator[tuple[int, int, bytes, int]]:
     offset = 0
     while offset + 8 <= len(payload):
         transaction, protocol, length = struct.unpack_from(">HHH", payload, offset)
@@ -130,7 +130,7 @@ def complete_adus(payload: bytes) -> Iterator[tuple[int, int, bytes]]:
         pdu = payload[offset + 7 : end]
         if not pdu:
             return
-        yield transaction, unit, pdu
+        yield transaction, unit, pdu, length
         offset = end
 
 
@@ -194,8 +194,11 @@ def inspect(
             transport_values[f"ipv4_total_length_{direction}"].append(total_length)
             if direction == "response":
                 transport_values["tcp_window_response"].append(receive_window)
-        for transaction, unit, pdu in complete_adus(payload):
+        for transaction, unit, pdu, mbap_length in complete_adus(payload):
             complete_adu_count += 1
+            if include_transport:
+                transport_values[f"modbus_transaction_id_{direction}"].append(transaction)
+                transport_values[f"modbus_mbap_length_{direction}"].append(mbap_length)
             function = pdu[0]
             direction = "response" if source_port == 502 else "request"
             function_counts[f"{direction}_fc_{function}"] += 1

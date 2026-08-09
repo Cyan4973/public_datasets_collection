@@ -21,8 +21,13 @@ response IPv4 Identification counters, request and response IPv4 Total Length,
 and the server-response TCP receive window. These are native network-order
 uint16 fields converted to little endian. The request window is excluded
 because it is constant. Checksums are excluded because they are intentionally
-noise-like; packet bytes, timestamps, addresses, ports, transaction IDs,
-sequence/acknowledgment numbers, and coil values are not emitted.
+noise-like; packet bytes, timestamps, addresses, ports, TCP sequence/
+acknowledgment numbers, and coil values are not emitted.
+
+Four additional protocol-header samples contain request/response Modbus MBAP
+Transaction Identifier and Length fields. Transaction IDs retain their
+sequential counter structure; MBAP lengths retain request/response message-size
+patterns. No heterogeneous header fields are mixed into one sample.
 
 Run:
 
@@ -36,4 +41,5 @@ bash datasets/zenodo_zeroswarm_modbus_registers_u16/verify.sh
 The exact source object, size, MD5, record identity, and CC BY 4.0 declaration
 are validated before extraction.
 
-Validated output: nine samples, 7,811,574 uint16 values, and 15,623,148 bytes.
+Validated output: thirteen samples, 12,545,824 uint16 values, and 25,091,648
+bytes.

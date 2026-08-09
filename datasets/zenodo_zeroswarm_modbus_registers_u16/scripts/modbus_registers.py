@@ -27,6 +27,10 @@ SERIES_BY_TRANSPORT_KEY = {
     "ipv4_total_length_request": "zeroswarm_ipv4_total_length_u16",
     "ipv4_total_length_response": "zeroswarm_ipv4_total_length_u16",
     "tcp_window_response": "zeroswarm_tcp_receive_window_u16",
+    "modbus_transaction_id_request": "zeroswarm_modbus_transaction_id_u16",
+    "modbus_transaction_id_response": "zeroswarm_modbus_transaction_id_u16",
+    "modbus_mbap_length_request": "zeroswarm_modbus_mbap_length_u16",
+    "modbus_mbap_length_response": "zeroswarm_modbus_mbap_length_u16",
 }
 EXPECTED_KEYS = {
     (1, "input_read", 0),
@@ -48,6 +52,10 @@ EXPECTED_TRANSPORT_STATS = {
     "ipv4_total_length_request": (1_657_009, 40, 57, 4, 1_420_293, "b2390bb30d7ccb4192c84b2d2e00d64a1a0ca43440986e1957a23a6b9a0f7e0d"),
     "ipv4_total_length_response": (1_183_570, 51, 53, 3, 946_843, "9345b31545c268b3c2ab081a49d93175dc91d038177099f5d865e5d3d6679762"),
     "tcp_window_response": (1_183_570, 8_206, 8_212, 7, 76_714, "3048b15ca2d96c1bc69c59702350c5133c2bf0b71d11188cdd1959eca73d73d9"),
+    "modbus_transaction_id_request": (1_183_563, 0, 65_535, 65_536, 1_183_554, "8677bace3e664f966d2fd5da56f49562dbf9031c371f190e5c689b2613390974"),
+    "modbus_transaction_id_response": (1_183_562, 0, 65_535, 65_536, 1_183_555, "0df9be846e07ce45a880a0a41d35e3de7f9c0aa5285cf5bb50e28ac61d588144"),
+    "modbus_mbap_length_request": (1_183_563, 6, 11, 3, 946_842, "e3e7b5259f708b4f60dd2dfab83659af42211614c21bc94db2a050be49e63fcd"),
+    "modbus_mbap_length_response": (1_183_562, 5, 7, 3, 946_843, "8574052aac6de279b612bb3f7c7ed57882a9592720e62b22cbdfc67f19ffc5e2"),
 }
 
 

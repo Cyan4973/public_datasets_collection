@@ -1,0 +1,78 @@
+manifest_version = 1
+dataset_id = "nasa_pds_mastcamz_raw_i16"
+name = "NASA PDS Mars 2020 Mastcam-Z Raw Int16 EDR Frames"
+description = "Fifty-two complete native signed-int16 Mastcam-Z detector frames from the first two sols of the Mars 2020 Perseverance mission."
+homepage = "https://pds-imaging.jpl.nasa.gov/data/mars2020/mars2020_mastcamz_ops_raw/"
+
+[license]
+name = "NASA SMD Open Scientific Data Policy"
+spdx = "LicenseRef-NASA-SMD-Open-Data"
+url = "https://science.nasa.gov/researchers/science-data/science-information-policy/"
+citation = "NASA/JPL-Caltech/ASU/MSSS, Mars 2020 Mastcam-Z raw operations archive, NASA Planetary Data System. Preserve mission, instrument, product identifiers, and PDS attribution."
+notes = "NASA SMD states that information produced from SMD-funded scientific research is held as a public trust, made publicly available, and openly shared. These public Mars mission products are served by the official NASA PDS Imaging archive."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public robotic camera observations of Mars from the Perseverance rover's Mastcam-Z instrument."
+usage_notes = "Samples contain only Martian detector-image DN values; PDS/VICAR headers and mission metadata are excluded from emitted numeric samples."
+
+[[origins]]
+id = "nasa_pds_mars2020_mastcamz_raw"
+name = "NASA PDS Imaging Mars 2020 Mastcam-Z Operations Raw Archive"
+url = "https://pds-imaging.jpl.nasa.gov/data/mars2020/mars2020_mastcamz_ops_raw/"
+type = "public_scientific_archive"
+version = "bounded sol 1 and sol 2 EDR selection discovered 2026-08-08"
+notes = "Official NASA PDS Imaging archive of Mars 2020 Mastcam-Z raw operations products."
+
+[[resources]]
+id = "mastcamz_sol1_sol2_full_edr_frames"
+origin = "nasa_pds_mars2020_mastcamz_raw"
+url = "https://pds-imaging.jpl.nasa.gov/data/mars2020/mars2020_mastcamz_ops_raw/data/sol/"
+type = "pinned_pds4_label_and_img_selection"
+version = "52 exact EDR label/IMG pairs pinned by sources.tsv"
+size_bytes = 207384320
+sha256 = "7b132784c971f042af5cd396c1136bacd87b199bcb3a8e414b149404b8e4459e"
+local_path = "downloads/nasa_pds_mastcamz_raw_i16/"
+notes = "The SHA-256 identifies the tracked source-plan TSV. Each XML label hash is pinned there and every IMG hash is pinned in payloads.sha256 (plan SHA-256 e56f2e28cdc0122ff9f6ffb7352a3d56e99d04723351eaf1f107c91e5398ea91)."
+
+[local_paths]
+downloads = "downloads/nasa_pds_mastcamz_raw_i16/"
+filtered = "filtered/nasa_pds_mastcamz_raw_i16/"
+index = "index/nasa_pds_mastcamz_raw_i16/"
+samples = "samples/nasa_pds_mastcamz_raw_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_pds_mastcamz_raw_i16/samples.jsonl"
+summary = "Validate 52 pinned PDS4 label/IMG pairs, extract each complete SignedMSB2 Array_2D_Image, and byte-swap the big-endian source words to canonical little-endian signed int16."
+deterministic_notes = "Exact products, URLs, label and payload hashes, file and array sizes, PDS logical identifiers, EDR identity, SignedMSB2 type, 1200x1648 geometry, array offset, 12-bit mask, MCZ_LUT0/1 expanded-companding metadata, output hashes, uniqueness, distributions, and source-to-output equality are enforced."
+
+[[series]]
+id = "mastcamz_edr_detector_i16"
+description = "Full left- and right-camera Mastcam-Z EDR detector planes from rover sols 1 and 2."
+semantic_meaning = "Mastcam-Z detector digital-number values for raw Mars surface, instrument, and calibration observations across multiple optical filters."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "PDS4 declares each Array_2D_Image element as SignedMSB2 with 12 significant sample bits in each signed 16-bit word. Hardware-companded MCZ_LUT0 or MCZ_LUT1 values are already represented in expanded form by the EDR."
+source_resources = ["mastcamz_sol1_sol2_full_edr_frames"]
+source_format = "PDS4 IMG containing a header followed by a big-endian SignedMSB2 Array_2D_Image"
+source_field = "PDS4 Array_2D_Image detector plane"
+filtered_input_path = "filtered/nasa_pds_mastcamz_raw_i16/ingest_stats.json"
+filtering = "Keep all 52 full 1200x1648 two-dimensional EDR arrays found in the bounded sol-1/sol-2 discovery prefix. Exclude non-EDR, byte-width, and three-band products."
+missing_value_policy = "Preserve every source pixel, including the PDS-declared zero missing/invalid constant. No pixel is dropped, imputed, masked, or remapped."
+conversion = "Extract the entire declared array and reverse the two bytes of each SignedMSB2 word to canonical little-endian signed int16. No arithmetic conversion, decompanding, calibration, crop, resampling, splitting, or concatenation is applied."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian signed-int16 Mastcam-Z detector plane"
+sample_geometry = "fixed_1200x1648_mastcamz_edr_frame"
+sample_rank = 2
+sample_shape = [1200, 1648]
+sample_axes = ["detector_line", "detector_sample"]
+natural_record_kind = "mastcamz_edr_detector_frame"
+sample_count = 52
+total_size_bytes = 205670400
+output_path = "samples/nasa_pds_mastcamz_raw_i16/mastcamz_edr_detector_i16/"

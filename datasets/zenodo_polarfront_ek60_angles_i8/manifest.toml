@@ -1,0 +1,102 @@
+manifest_version = 1
+dataset_id = "zenodo_polarfront_ek60_angles_i8"
+name = "PolarFront EK60 Split-Beam Angles Int8"
+description = "Native signed-int8 alongship and athwartship split-beam angle-code profiles from synchronized 18, 38, and 120 kHz Simrad EK60 pings during the PolarFront 2022-05 cruise."
+homepage = "https://zenodo.org/records/7473204"
+
+[license]
+name = "Creative Commons CC0 1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "PolarFront Consortium (2022), Split-beam echosounder data from keel-mounted EK60 during PolarFront 2022-05 cruise, Zenodo, DOI 10.5281/zenodo.7473204."
+notes = "The exact Zenodo record declares CC0. Retain the record DOI and PolarFront Consortium attribution as scientific provenance."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public scientific hydroacoustic observations from a research cruise, released by the PolarFront Consortium."
+usage_notes = "Only split-beam angle-code profiles and non-identifying instrument metadata are emitted. NMEA navigation text is excluded."
+
+[[origins]]
+id = "zenodo_7473204"
+name = "Split-beam echosounder data from keel-mounted EK60 during PolarFront 2022-05 cruise"
+url = "https://zenodo.org/records/7473204"
+type = "zenodo_record"
+version = "10.5281/zenodo.7473204"
+
+[[resources]]
+id = "polarfront_ek60_raw"
+origin = "zenodo_7473204"
+url = "https://zenodo.org/api/records/7473204/files/PolarFront0522-D20220524-T060111.raw/content"
+type = "simrad_ek60_raw0_recording"
+version = "record-7473204"
+access = "Exact public object pinned by size and MD5; the downloader first reuses the validated accepted power-family cache."
+size_bytes = 45896704
+md5 = "944f3af1aea3a51cfa7ef7912dde10ba"
+local_path = "downloads/zenodo_polarfront_ek60_angles_i8/PolarFront0522-D20220524-T060111.raw"
+
+[local_paths]
+downloads = "downloads/zenodo_polarfront_ek60_angles_i8/"
+filtered = "filtered/zenodo_polarfront_ek60_angles_i8/"
+index = "index/zenodo_polarfront_ek60_angles_i8/"
+samples = "samples/zenodo_polarfront_ek60_angles_i8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_polarfront_ek60_angles_i8/samples.jsonl"
+summary = "Validate every Simrad datagram, require exact three-frequency synchronized ping groups, and deinterleave each RAW0 mode-3 signed-byte angle pair into complete alongship and athwartship range profiles."
+deterministic_notes = "Record identity, CC0 license, source size and MD5, all datagram lengths/trailers/types, CON0 identity, RAW0 modes and geometry, channel/frequency order, timestamps, component distributions, hashes, and byte-for-byte independent source re-decoding are enforced."
+
+[[series]]
+id = "ek60_ping_channel_alongship_angle_i8"
+description = "Per-channel EK60 alongship split-beam angle-code profiles."
+semantic_meaning = "Native signed electrical alongship angle code over 3,188 range bins for one EK60 ping and transducer frequency."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The first byte of each documented RAW0 mode-3 angle pair is emitted as signed int8. One-byte values are endianness invariant and are labeled little-endian for corpus consistency."
+source_resources = ["polarfront_ek60_raw"]
+source_format = "Simrad ER60/EK60 little-endian length-framed RAW0 mode-3 datagrams"
+source_field = "RAW0 angle array first signed-byte component (alongship)"
+filtered_input_path = "filtered/zenodo_polarfront_ek60_angles_i8/ingest_stats.json"
+filtering = "Keep all 1,147 synchronized pings and all three angle channels at 18, 38, and 120 kHz. Exclude power words, CON0 configuration bytes, NME0 navigation text, and datagram framing."
+missing_value_policy = "No angle bins are dropped or imputed. Missing channels, inconsistent timestamps, wrong modes/counts/frequencies, malformed datagrams, duplicates, degenerate profiles, source identity changes, or unexpected datagram types fail the recipe."
+conversion = "Deinterleave the first signed byte from every RAW0 mode-3 angle pair in range-bin order; the signed-int8 bit patterns are unchanged."
+numeric_kind = "int"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous signed-int8 EK60 alongship angle-code vector"
+sample_geometry = "ek60_ping_channel_range_profile"
+sample_rank = 1
+sample_axes = ["range_bin"]
+natural_record_kind = "complete_ping_channel_alongship_angle_profile"
+sample_count = 3441
+total_size_bytes = 10969908
+output_path = "samples/zenodo_polarfront_ek60_angles_i8/ek60_ping_channel_alongship_angle_i8/"
+
+[[series]]
+id = "ek60_ping_channel_athwartship_angle_i8"
+description = "Per-channel EK60 athwartship split-beam angle-code profiles."
+semantic_meaning = "Native signed electrical athwartship angle code over 3,188 range bins for one EK60 ping and transducer frequency."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The second byte of each documented RAW0 mode-3 angle pair is emitted as signed int8. One-byte values are endianness invariant and are labeled little-endian for corpus consistency."
+source_resources = ["polarfront_ek60_raw"]
+source_format = "Simrad ER60/EK60 little-endian length-framed RAW0 mode-3 datagrams"
+source_field = "RAW0 angle array second signed-byte component (athwartship)"
+filtered_input_path = "filtered/zenodo_polarfront_ek60_angles_i8/ingest_stats.json"
+filtering = "Keep all 1,147 synchronized pings and all three angle channels at 18, 38, and 120 kHz. Exclude power words, CON0 configuration bytes, NME0 navigation text, and datagram framing."
+missing_value_policy = "No angle bins are dropped or imputed. Missing channels, inconsistent timestamps, wrong modes/counts/frequencies, malformed datagrams, duplicates, degenerate profiles, source identity changes, or unexpected datagram types fail the recipe."
+conversion = "Deinterleave the second signed byte from every RAW0 mode-3 angle pair in range-bin order; the signed-int8 bit patterns are unchanged."
+numeric_kind = "int"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous signed-int8 EK60 athwartship angle-code vector"
+sample_geometry = "ek60_ping_channel_range_profile"
+sample_rank = 1
+sample_axes = ["range_bin"]
+natural_record_kind = "complete_ping_channel_athwartship_angle_profile"
+sample_count = 3441
+total_size_bytes = 10969908
+output_path = "samples/zenodo_polarfront_ek60_angles_i8/ek60_ping_channel_athwartship_angle_i8/"

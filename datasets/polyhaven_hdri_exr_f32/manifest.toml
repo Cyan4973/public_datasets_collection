@@ -1,31 +1,91 @@
 manifest_version = 1
 dataset_id = "polyhaven_hdri_exr_f32"
-name = "Poly Haven HDRI EXR Float32"
-description = "CC0 HDR environment maps preserved as native OpenEXR float32 channel planes, reclassified from f16 attempt where 1k assets proved to be 32-bit FLOAT PIZ/ZIP."
+name = "Poly Haven HDRI OpenEXR Float32 Planes"
+description = "Nine native float32 RGB radiance planes decoded from three CC0 Poly Haven HDR environment maps at 1k, 4k, and 8k resolutions."
 homepage = "https://polyhaven.com/hdris"
 
 [license]
 name = "CC0 1.0 Universal"
 spdx = "CC0-1.0"
 url = "https://polyhaven.com/license"
-notes = "Poly Haven assets are published under CC0."
+citation = "Poly Haven HDRIs: abandoned_greenhouse, brown_photostudio_02, and golden_gate_hills."
+notes = "Poly Haven states that all assets are CC0 and may be used for any purpose, including commercial work, without attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Three public Poly Haven environment maps; the two large comparison copies are byte-identical by MD5 to official Poly Haven API objects."
+usage_notes = "Outputs contain only decoded scene-linear RGB radiance planes. EXR metadata and constant alpha planes where present are excluded."
 
 [[origins]]
-id = "polyhaven_api"
-name = "Poly Haven API"
-url = "https://api.polyhaven.com/"
-type = "public_api"
+id = "polyhaven"
+name = "Poly Haven"
+url = "https://polyhaven.com/"
+type = "public_asset_repository"
+
+[[origins]]
+id = "test_exr_htj2k_jxl"
+name = "OpenEXR, HTJ2K, JPEG-XL comparison sample index"
+url = "https://github.com/aras-p/test_exr_htj2k_jxl"
+type = "public_sample_index"
+notes = "Listed the brown_photostudio_02 8k and golden_gate_hills 4k EXRs; their exact MD5s match official Poly Haven metadata."
+
+[[origins]]
+id = "tinyexr"
+name = "TinyEXR"
+url = "https://github.com/syoyo/tinyexr"
+type = "decoder_source"
+notes = "Single-header BSD-licensed OpenEXR decoder compiled against system zlib."
 
 [[resources]]
-id = "bounded_hdri_exr"
-origin = "polyhaven_api"
-type = "api_asset_selection"
-local_path = "downloads/polyhaven_hdri_exr_f32/"
-notes = "Downloads a bounded set of small EXR HDRIs from the public API. Native FLOAT32, many PIZ compressed, some ZIP."
+id = "abandoned_greenhouse_1k"
+origin = "polyhaven"
+url = "https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/1k/abandoned_greenhouse_1k.exr"
+type = "openexr_scanline"
+version = "1k"
+size_bytes = 6115125
+md5 = "b190c4a06d12ee0b641cfe6053aa6056"
+sha256 = "3ff5b53e171333ad410f8c0b7f491d0c3f3bd25a01b6d3f1262b710389a96d64"
+local_path = "downloads/polyhaven_hdri_exr_f32/abandoned_greenhouse_1k.exr"
+
+[[resources]]
+id = "brown_photostudio_02_8k"
+origin = "polyhaven"
+url = "https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/8k/brown_photostudio_02_8k.exr"
+type = "openexr_scanline"
+version = "8k"
+size_bytes = 77556275
+md5 = "ea9d4aebdc6ab119c99daea63e547900"
+sha256 = "a1c7a7edf1bfb9cb7f9a252e7281f2f10767befdb9cb6c6a28209730a46e9642"
+local_path = "downloads/polyhaven_hdri_exr_f32/ph_brown_photostudio_02_8k.exr"
+notes = "PIZ-compressed RGB FLOAT scanline EXR; also listed at aras-p.info with byte-identical content."
+
+[[resources]]
+id = "golden_gate_hills_4k"
+origin = "polyhaven"
+url = "https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/4k/golden_gate_hills_4k.exr"
+type = "openexr_scanline"
+version = "4k"
+size_bytes = 96436466
+md5 = "7fbc8ea1646f59ef5cd0b202a4359cb6"
+sha256 = "e0d76ca478552cef5f6b03e40be4943a1f4a4908ba17e308e9598f802681215f"
+local_path = "downloads/polyhaven_hdri_exr_f32/ph_golden_gate_hills_4k.exr"
+notes = "ZIP-compressed RGBA FLOAT scanline EXR; constant alpha is excluded."
+
+[[resources]]
+id = "tinyexr_v1_0_12"
+origin = "tinyexr"
+url = "https://raw.githubusercontent.com/syoyo/tinyexr/v1.0.12/tinyexr.h"
+type = "decoder_source_header"
+version = "v1.0.12"
+size_bytes = 299406
+md5 = "30394fdbbb6fcbaaeac22b4d4f41eba3"
+sha256 = "e3eb50490af81dc3f5f067cf7f62955894d5db8f88a091c19bc4eef8e468095f"
+local_path = "tools/tinyexr_v1.0.12/tinyexr.h"
+notes = "Contains its BSD notices and incorporated OpenEXR notices in the header."
 
 [local_paths]
 downloads = "downloads/polyhaven_hdri_exr_f32/"
-extracted = "extracted/polyhaven_hdri_exr_f32/"
 filtered = "filtered/polyhaven_hdri_exr_f32/"
 index = "index/polyhaven_hdri_exr_f32/"
 samples = "samples/polyhaven_hdri_exr_f32/"
@@ -35,25 +95,31 @@ download_script = "download.sh"
 build_script = "build.sh"
 verify_script = "verify.sh"
 sample_index_path = "index/polyhaven_hdri_exr_f32/samples.jsonl"
-summary = "Extract one native float32 EXR channel plane per accepted HDRI channel, supporting ZIP/zlib scanline compression."
+summary = "Validate three pinned CC0 EXRs and pinned TinyEXR source, decode PIZ/ZIP scanline data without numeric conversion, and emit one little-endian float32 sample per nonconstant RGB channel plane."
+deterministic_notes = "Official Poly Haven size/MD5 metadata, source SHA-256 values, TinyEXR version/hash/license, EXR structure/channel type/sampling/compression, exact geometries and channel sets, finite/nonconstant values, output hashes, and byte-for-byte fresh re-decoding are enforced."
 
 [[series]]
 id = "hdri_float_planes_f32"
-description = "OpenEXR float32 HDRI channel planes."
-natural_record_kind = "polyhaven_hdri_exr_file"
-semantic_meaning = "Scene-linear HDR environment radiance channels."
+description = "Scene-linear HDR environment-map RGB channel planes."
+semantic_meaning = "Native float32 scene-linear radiance values for one color channel of one complete equirectangular Poly Haven HDRI."
 role = "primary"
 representation_class = "native_numeric"
-source_resources = ["bounded_hdri_exr"]
-source_format = "openexr"
-source_field = "channel_scanline_FLOAT"
-missing_value_policy = "Non-FLOAT channels, PIZ compression (needs wavelet decoder), malformed chunks, or truncated payloads are rejected/skipped."
-conversion = "Decompress ZIP/zlib scanline chunks and copy native float32 channel bytes."
+representation_notes = "Every selected EXR channel declares OpenEXR FLOAT. TinyEXR returns the native 32-bit values without HALF/FLOAT conversion; outputs canonicalize only byte order to little-endian."
+source_resources = ["abandoned_greenhouse_1k", "brown_photostudio_02_8k", "golden_gate_hills_4k"]
+source_format = "OpenEXR v2 single-part scanline images using ZIP or PIZ lossless compression"
+source_field = "Full-resolution FLOAT channels R, G, and B"
+filtered_input_path = "filtered/polyhaven_hdri_exr_f32/ingest_stats.json"
+filtering = "Keep all complete, finite, nonconstant full-resolution FLOAT RGB planes. Exclude container metadata and constant alpha planes where present."
+missing_value_policy = "Missing or changed sources, license evidence, decoder source, malformed/unsupported EXR structure, unexpected geometry/channels/compression, subsampling, non-finite values, constant RGB planes, or byte differences on fresh re-decode fail the recipe. No retained values are dropped or imputed."
+conversion = "Losslessly decode ZIP/PIZ with pinned TinyEXR v1.0.12, preserve each FLOAT bit pattern, and write canonical little-endian float32 words in row-major order."
 numeric_kind = "float"
 bit_width = 32
 endianness = "little"
-sample_format = "raw OpenEXR FLOAT32 channel plane"
-sample_geometry = "2d_raster"
-sample_count = 0
-total_size_bytes = 0
+sample_format = "raw homogeneous little-endian OpenEXR FLOAT32 channel plane"
+sample_geometry = "2d_hdr_radiance_plane"
+sample_rank = 2
+sample_axes = ["y", "x"]
+natural_record_kind = "openexr_channel_plane"
+sample_count = 9
+total_size_bytes = 509607936
 output_path = "samples/polyhaven_hdri_exr_f32/hdri_float_planes_f32/"

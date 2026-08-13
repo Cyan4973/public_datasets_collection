@@ -1,0 +1,5 @@
+kind	name	size_bytes	md5	sha256	url	alternate_url
+exr	abandoned_greenhouse_1k.exr	6115125	b190c4a06d12ee0b641cfe6053aa6056	3ff5b53e171333ad410f8c0b7f491d0c3f3bd25a01b6d3f1262b710389a96d64	https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/1k/abandoned_greenhouse_1k.exr	-
+exr	ph_brown_photostudio_02_8k.exr	77556275	ea9d4aebdc6ab119c99daea63e547900	a1c7a7edf1bfb9cb7f9a252e7281f2f10767befdb9cb6c6a28209730a46e9642	https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/8k/brown_photostudio_02_8k.exr	https://aras-p.info/files/exr_files/ph_brown_photostudio_02_8k.exr
+exr	ph_golden_gate_hills_4k.exr	96436466	7fbc8ea1646f59ef5cd0b202a4359cb6	e0d76ca478552cef5f6b03e40be4943a1f4a4908ba17e308e9598f802681215f	https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/4k/golden_gate_hills_4k.exr	https://aras-p.info/files/exr_files/ph_golden_gate_hills_4k.exr
+tool	tinyexr.h	299406	30394fdbbb6fcbaaeac22b4d4f41eba3	e3eb50490af81dc3f5f067cf7f62955894d5db8f88a091c19bc4eef8e468095f	https://raw.githubusercontent.com/syoyo/tinyexr/v1.0.12/tinyexr.h	-

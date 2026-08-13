@@ -145,7 +145,6 @@ gas_sensor_array_drift_uci	ok	1794390	14257750	129	13910	111280	0	0	0	1	none	non
 zenodo_silicon_diffraction_tiff_u16	ok	1843200	3686400	1	1843200	3686400	0	0	0	1	none	none
 tokens_bert_gutenberg	ok	2011943	4023886	12	113744.5	227489	0	0	0	1	none	none
 noaa_ghcn_daily_snow_by_station	ok	2077730	4155460	59	36089	72178	0	0	0	1	none	none
-polyhaven_hdri_exr_f32	ok	2097152	8388608	4	524288	2097152	0	0	0	1	none	none
 tokens_t5_gutenberg	ok	2258811	4517622	12	125381.5	250763	0	0	0	1	none	none
 nist_matrix_market_sparse_matrices	ok	2300385	12268720	57	15100	71428	0	0	0	1	none	none
 noaa_ghcn_daily_tmin_by_station	ok	2343685	4687370	59	41993	83986	0	0	0	1	none	none
@@ -255,6 +254,7 @@ nasa_pds_mastcamz_raw_i16	ok	102835200	205670400	52	1977600	3955200	0	0	0	1	none
 zenodo_rat_fus_image_sequence_f32	ok	107712000	430848000	1	107712000	430848000	0	0	0	1	none	none
 geonames_alternatenames	ok	113882214	246744797	6	18980369	28470553.5	0	0	0	1	none	none
 tum_rgbd_depth_u16	ok	122880000	245760000	400	307200	614400	0	0	0	1	none	none
+polyhaven_hdri_exr_f32	ok	127401984	509607936	9	8388608	33554432	0	0	0	1	none	none
 smollm2_135m_q8_gguf_weights	ok	134479872	134479872	211	331776	331776	0	0	0	1	none	none
 hf_smolllm2_135m_safetensors_f16	ok	134515008	269030016	272	331776	663552	0	0	0	1	none	none
 modelnet10_off_mesh_vertices_f32	ok	139741776	558967104	4899	8472	33888	0	0	0	1	none	none

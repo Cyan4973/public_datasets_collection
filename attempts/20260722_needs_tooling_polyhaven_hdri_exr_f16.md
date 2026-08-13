@@ -84,3 +84,16 @@ Per policy "if 32-bit instead of 16-bit, reclassify not discard", this material 
 
 The f16 candidate remains deferred until true HALF assets are found.
 
+## 2026-08-13 follow-up
+
+The decoder/tooling portion is now resolved. Pinned TinyEXR v1.0.12 compiled
+directly against system zlib and successfully decoded both PIZ and ZIP source
+files. The expanded native-FLOAT family is documented in
+`reports/32bit_polyhaven_hdri_exr_tinyexr_expansion_20260813.md` and accepted
+as `polyhaven_hdri_exr_f32`.
+
+This does not make the attempted Poly Haven material a 16-bit family: every
+inspected channel in the selected Poly Haven EXRs still declares native FLOAT,
+not HALF. The old f16 ID is therefore superseded rather than waiting on
+tooling. A future native-HALF source should use a new dataset ID and can reuse
+the established TinyEXR path.

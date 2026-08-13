@@ -1,0 +1,127 @@
+manifest_version = 1
+dataset_id = "aswf_openexr_scanlines_f16"
+name = "ASWF OpenEXR Scanline HALF Planes"
+description = "Native IEEE-754 binary16 RGB radiance and nonconstant alpha planes from eight BSD-3-Clause OpenEXR reference images."
+homepage = "https://github.com/AcademySoftwareFoundation/openexr-images"
+
+[license]
+name = "BSD 3-Clause License"
+spdx = "BSD-3-Clause"
+url = "https://github.com/AcademySoftwareFoundation/openexr-images/blob/main/LICENSE"
+citation = "OpenEXR Project Contributors, openexr-images, ScanLines reference images."
+notes = "The repository root grants BSD-style redistribution and the ScanLines README explicitly declares SPDX-License-Identifier: BSD-3-Clause. Retain the copyright, conditions, and disclaimer."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Academy Software Foundation/OpenEXR conformance images pinned by Git blob SHA-1, size, and SHA-256."
+usage_notes = "Outputs contain only decoded native HALF channel values. Container metadata, constant alpha planes, and one source-native FLOAT depth plane are excluded."
+
+[[origins]]
+id = "aswf_openexr_images"
+name = "Academy Software Foundation openexr-images"
+url = "https://github.com/AcademySoftwareFoundation/openexr-images"
+type = "public_git_repository"
+version = "tree-e38ffb0790f62f05a6f083a6fa4cac150b3b7452"
+
+[[origins]]
+id = "tinyexr"
+name = "TinyEXR"
+url = "https://github.com/syoyo/tinyexr"
+type = "decoder_source"
+version = "v1.0.12"
+
+[[resources]]
+id = "aswf_scanlines_subset"
+origin = "aswf_openexr_images"
+type = "pinned_git_blob_selection"
+version = "eight-scanline-images"
+access = "Eight direct raw GitHub objects; every path, exact size, Git blob SHA-1, SHA-256, and URL is pinned in selection.tsv."
+local_path = "downloads/aswf_openexr_scanlines_f16/"
+notes = "Blobbies, CandleGlass, Carrots, Desk, MtTamWest, PrismsLenses, StillLife, and Tree. Cannon is not selected because its B44 compression is unsupported by pinned TinyEXR."
+
+[[resources]]
+id = "aswf_license_evidence"
+origin = "aswf_openexr_images"
+type = "license_and_provenance_text"
+version = "root-LICENSE-and-ScanLines-README"
+local_path = "downloads/aswf_openexr_scanlines_f16/metadata/"
+notes = "Pinned root LICENSE and ScanLines/README.rst Git blobs."
+
+[[resources]]
+id = "tinyexr_v1_0_12"
+origin = "tinyexr"
+url = "https://raw.githubusercontent.com/syoyo/tinyexr/v1.0.12/tinyexr.h"
+type = "decoder_source_header"
+version = "v1.0.12"
+size_bytes = 299406
+sha256 = "e3eb50490af81dc3f5f067cf7f62955894d5db8f88a091c19bc4eef8e468095f"
+local_path = "tools/tinyexr_v1.0.12/tinyexr.h"
+notes = "BSD notices are embedded in the header; compiled against system zlib."
+
+[local_paths]
+downloads = "downloads/aswf_openexr_scanlines_f16/"
+extracted = "extracted/aswf_openexr_scanlines_f16/"
+filtered = "filtered/aswf_openexr_scanlines_f16/"
+index = "index/aswf_openexr_scanlines_f16/"
+samples = "samples/aswf_openexr_scanlines_f16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/aswf_openexr_scanlines_f16/samples.jsonl"
+summary = "Validate eight licensed pinned EXRs and TinyEXR source, decode native HALF channels from ZIP/PIZ scanline images without numeric conversion, and separate RGB radiance from alpha opacity planes."
+deterministic_notes = "Git blob identities, source SHA-256s, license texts, TinyEXR source, EXR structure/type/sampling/compression, exact geometry/channel inventories, finite/nonconstant values, aggregate counts, output hashes, and fresh byte-for-byte re-decoding are enforced."
+
+[[series]]
+id = "aswf_openexr_rgb_half_f16"
+description = "Native OpenEXR HALF red, green, and blue channel planes."
+semantic_meaning = "Scene-linear color/radiance values for one RGB channel of one complete OpenEXR reference image."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Every retained channel declares OpenEXR HALF. TinyEXR keeps requested type equal to source HALF, preserving all binary16 bit patterns."
+source_resources = ["aswf_scanlines_subset"]
+source_format = "OpenEXR v2 single-part full-resolution scanline images using ZIP or PIZ lossless compression"
+source_field = "HALF channels R, G, and B"
+filtered_input_path = "filtered/aswf_openexr_scanlines_f16/ingest_stats.json"
+filtering = "Keep every complete, finite, nonconstant full-resolution HALF RGB plane from the eight selected sources."
+missing_value_policy = "Changed/missing sources, license or decoder evidence, malformed/unsupported structures, unexpected geometry/channels, subsampling, non-finite values, constants, or re-decode byte differences fail the recipe. No retained value is dropped or imputed."
+conversion = "Losslessly decode ZIP/PIZ with pinned TinyEXR, preserve each 16-bit HALF word, and emit it in canonical little-endian order."
+numeric_kind = "float"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 binary16 channel plane"
+sample_geometry = "2d_openexr_channel_plane"
+sample_rank = 2
+sample_axes = ["y", "x"]
+natural_record_kind = "openexr_channel_plane"
+sample_count = 24
+total_size_bytes = 39065472
+output_path = "samples/aswf_openexr_scanlines_f16/aswf_openexr_rgb_half_f16/"
+
+[[series]]
+id = "aswf_openexr_alpha_half_f16"
+description = "Native nonconstant OpenEXR HALF alpha channel planes."
+semantic_meaning = "Per-pixel opacity/coverage values for one complete OpenEXR reference image."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Only the three nonconstant source-native HALF alpha planes are retained; five constant alpha planes are excluded."
+source_resources = ["aswf_scanlines_subset"]
+source_format = "OpenEXR v2 single-part full-resolution scanline images using ZIP or PIZ lossless compression"
+source_field = "HALF channel A"
+filtered_input_path = "filtered/aswf_openexr_scanlines_f16/ingest_stats.json"
+filtering = "Keep the finite, nonconstant full-resolution HALF alpha planes from Blobbies, CandleGlass, and PrismsLenses."
+missing_value_policy = "Changed/missing sources, unexpected alpha inventory, non-finite values, constant retained planes, or re-decode byte differences fail the recipe. No retained value is dropped or imputed."
+conversion = "Losslessly decode ZIP/PIZ with pinned TinyEXR, preserve each 16-bit HALF word, and emit it in canonical little-endian order."
+numeric_kind = "float"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 binary16 alpha plane"
+sample_geometry = "2d_openexr_channel_plane"
+sample_rank = 2
+sample_axes = ["y", "x"]
+natural_record_kind = "openexr_channel_plane"
+sample_count = 3
+total_size_bytes = 5859200
+output_path = "samples/aswf_openexr_scanlines_f16/aswf_openexr_alpha_half_f16/"

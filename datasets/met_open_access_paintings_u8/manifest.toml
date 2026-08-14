@@ -1,0 +1,175 @@
+manifest_version = 1
+dataset_id = "met_open_access_paintings_u8"
+name = "Met Open Access European Painting RGB Planes Uint8"
+description = "Decoded original-resolution red, green, and blue uint8 color planes from ten varied public-domain European paintings in The Metropolitan Museum of Art Open Access collection."
+homepage = "https://www.metmuseum.org/about-the-met/policies-and-documents/open-access"
+
+[license]
+name = "Creative Commons CC0 1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://metmuseum.github.io/"
+citation = "The Metropolitan Museum of Art Open Access collection; retain each object ID, title, artist, and object URL recorded in the sample index."
+notes = "The official Open Access page identifies unrestricted public-domain images under CC0, and each selected API object independently declares isPublicDomain=true."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official museum reproductions of public-domain European paintings selected from The Met Collection API."
+usage_notes = "Only decoded painting pixels and non-sensitive artwork attribution are retained; API and JPEG container bytes are excluded from numeric samples."
+
+[[origins]]
+id = "met_open_access"
+name = "The Metropolitan Museum of Art Open Access"
+url = "https://metmuseum.github.io/"
+type = "museum_open_access_collection"
+version = "selection-2026-08-13"
+
+[[resources]]
+id = "met_678013"
+origin = "met_open_access"
+url = "https://images.metmuseum.org/CRDImages/ep/original/DP348637.jpg"
+type = "original_jpeg"
+version = "object-678013"
+access = "Exact public-domain primaryImage object pinned by dimensions, size, and SHA-256."
+size_bytes = 3911024
+sha256 = "766068db4c8353279c551764fd29ce877ff8566f89d9d31de2abee1a6dd51438"
+local_path = "downloads/met_open_access_paintings_u8/678013.jpg"
+
+[[resources]]
+id = "met_438490"
+origin = "met_open_access"
+url = "https://images.metmuseum.org/CRDImages/ep/original/DP145954.jpg"
+type = "original_jpeg"
+version = "object-438490"
+access = "Exact public-domain primaryImage object pinned by dimensions, size, and SHA-256."
+size_bytes = 2180339
+sha256 = "32679b69dd0d9c429442fb0d6a15edd406e50c485d5b510d7b5cafcd3a285001"
+local_path = "downloads/met_open_access_paintings_u8/438490.jpg"
+
+[[resources]]
+id = "met_436175"
+origin = "met_open_access"
+url = "https://images.metmuseum.org/CRDImages/ep/original/DP-14347-001.jpg"
+type = "original_jpeg"
+version = "object-436175"
+access = "Exact public-domain primaryImage object pinned by dimensions, size, and SHA-256."
+size_bytes = 4124042
+sha256 = "b5bee28023873dab9aaa12e464492a5cea4b0b8c26e13337d48e84e1e4a73969"
+local_path = "downloads/met_open_access_paintings_u8/436175.jpg"
+
+[[resources]]
+id = "met_438816"
+origin = "met_open_access"
+url = "https://images.metmuseum.org/CRDImages/ep/original/DP-31520-001.jpg"
+type = "original_jpeg"
+version = "object-438816"
+access = "Exact public-domain primaryImage object pinned by dimensions, size, and SHA-256."
+size_bytes = 3189948
+sha256 = "a05e69a0fb0796b5aa990634127f5390db876b4b6fb300e0f51d4b748521aab4"
+local_path = "downloads/met_open_access_paintings_u8/438816.jpg"
+
+[[resources]]
+id = "met_437313"
+origin = "met_open_access"
+url = "https://images.metmuseum.org/CRDImages/ep/original/DT1042.jpg"
+type = "original_jpeg"
+version = "object-437313"
+access = "Exact public-domain primaryImage object pinned by dimensions, size, and SHA-256."
+size_bytes = 3166048
+sha256 = "14cb35d3ff83c89e0b404f137aaba073e1315aaaaacf6c5e4776739a6e495b30"
+local_path = "downloads/met_open_access_paintings_u8/437313.jpg"
+
+[[resources]]
+id = "met_437323"
+origin = "met_open_access"
+url = "https://images.metmuseum.org/CRDImages/ep/original/DP145952.jpg"
+type = "original_jpeg"
+version = "object-437323"
+access = "Exact public-domain primaryImage object pinned by dimensions, size, and SHA-256."
+size_bytes = 2073606
+sha256 = "adc1229d6c7f9212e4174dafe026877e9e75b5c6817a64c4b44ece2dce75200e"
+local_path = "downloads/met_open_access_paintings_u8/437323.jpg"
+
+[[resources]]
+id = "met_437631"
+origin = "met_open_access"
+url = "https://images.metmuseum.org/CRDImages/ep/original/DP-23542-001.jpg"
+type = "original_jpeg"
+version = "object-437631"
+access = "Exact public-domain primaryImage object pinned by dimensions, size, and SHA-256."
+size_bytes = 3380511
+sha256 = "a7c56529494020b06bdd92284a65d035075a8b795a31b6396dc9f485a1f6265d"
+local_path = "downloads/met_open_access_paintings_u8/437631.jpg"
+
+[[resources]]
+id = "met_437854"
+origin = "met_open_access"
+url = "https://images.metmuseum.org/CRDImages/ep/original/DP-13360-001.jpg"
+type = "original_jpeg"
+version = "object-437854"
+access = "Exact public-domain primaryImage object pinned by dimensions, size, and SHA-256."
+size_bytes = 4022975
+sha256 = "13f84a78383b67b2841acc5f894598fd9131467458d126e86c886b61721d139b"
+local_path = "downloads/met_open_access_paintings_u8/437854.jpg"
+
+[[resources]]
+id = "met_437686"
+origin = "met_open_access"
+url = "https://images.metmuseum.org/CRDImages/ep/original/DP-33708-001.jpg"
+type = "original_jpeg"
+version = "object-437686"
+access = "Exact public-domain primaryImage object pinned by dimensions, size, and SHA-256."
+size_bytes = 5309501
+sha256 = "2942f55aa16c79889fdf08412f41f010f9e55bce62bad0d887ed70c58f81db29"
+local_path = "downloads/met_open_access_paintings_u8/437686.jpg"
+
+[[resources]]
+id = "met_435904"
+origin = "met_open_access"
+url = "https://images.metmuseum.org/CRDImages/ep/original/DP145929.jpg"
+type = "original_jpeg"
+version = "object-435904"
+access = "Exact public-domain primaryImage object pinned by dimensions, size, and SHA-256."
+size_bytes = 1867831
+sha256 = "344e95e1c3aa552d46c615df4b7cef37f3aea471e2e0444ddb25c79d0eacbfb9"
+local_path = "downloads/met_open_access_paintings_u8/435904.jpg"
+
+[local_paths]
+downloads = "downloads/met_open_access_paintings_u8/"
+filtered = "filtered/met_open_access_paintings_u8/"
+index = "index/met_open_access_paintings_u8/"
+samples = "samples/met_open_access_paintings_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/met_open_access_paintings_u8/samples.jsonl"
+summary = "Validate ten pinned CC0/public-domain Met objects and JPEGs, decode each once to original-resolution RGB24 with FFmpeg's single-threaded bit-exact path, and emit each R, G, and B plane separately."
+deterministic_notes = "Object IDs, public-domain flags, image/provenance URLs, source dimensions/sizes/hashes, decoder parameters, output geometry, channel order, plane hashes, distributions, and byte-for-byte re-decoding are enforced."
+
+[[series]]
+id = "met_painting_rgb_plane_u8"
+description = "Original-resolution decoded RGB color planes from public-domain European painting reproductions."
+semantic_meaning = "One red, green, or blue unsigned 8-bit intensity plane spanning one entire museum painting image; channel identity is recorded per sample."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "JPEG is the museum's intended image distribution. The recipe decodes its 8-bit three-component image to RGB24, then deinterleaves the three intended color planes without resizing, cropping, normalization, or color-space transformation beyond standard JPEG display decoding."
+source_resources = ["met_678013", "met_438490", "met_436175", "met_438816", "met_437313", "met_437323", "met_437631", "met_437854", "met_437686", "met_435904"]
+source_format = "8-bit three-component JPEG painting reproduction"
+source_field = "decoded original-resolution RGB color intensity plane"
+filtered_input_path = "filtered/met_open_access_paintings_u8/ingest_stats.json"
+filtering = "Keep all ten reviewed public-domain paintings and all three nondegenerate RGB planes from each. Exclude JPEG container bytes and all API metadata from numeric output."
+missing_value_policy = "Decoded color planes have no missing marker. Missing or changed rights metadata, source identity, dimensions, decoder, channel count, output size, or degenerate planes fail the recipe; no pixels are dropped or imputed."
+conversion = "Decode each JPEG once to original-resolution RGB24 using single-threaded FFmpeg with bitexact, accurate-rounding, and full-chroma-integer flags; deinterleave R, G, and B bytes into separate row-major planes."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 decoded painting color plane"
+sample_geometry = "2d_painting_color_plane"
+sample_rank = 2
+sample_axes = ["y", "x"]
+natural_record_kind = "decoded_painting_color_plane"
+sample_count = 30
+total_size_bytes = 329612454
+output_path = "samples/met_open_access_paintings_u8/met_painting_rgb_plane_u8/"

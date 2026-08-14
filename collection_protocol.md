@@ -64,3 +64,20 @@ This repository stores reproducible recipes, not dataset payloads. Accepted reci
 - Keep them outside the repository, typically under `/tmp/`.
 - They must call the per-dataset `download.sh` scripts and must not replace per-dataset acceptance decisions.
 - Batch runs should emit a local summary under `.data/batches/<batch_id>/`.
+
+## Evaluation-only material
+
+Material intentionally held out from training belongs under
+`evaluation/<dataset_id>/`, never `datasets/`. Its generated artifacts must
+live exclusively under `.data/evaluation/<dataset_id>/`; writing to the normal
+sample, index, or filtered-data trees is forbidden.
+
+Evaluation manifests and index rows must declare
+`intended_use = "evaluation_only"` and `training_eligible = false`. These
+recipes do not enter `attempts/dataset_status.tsv` or the accepted-recipe
+audit. If rights are unclear, say so explicitly: evaluation placement is not a
+license grant and does not authorize training or redistribution.
+
+Freeze model weights, codec logic, and hyperparameters before using a holdout.
+Material repeatedly consulted for tuning is development data, not an unseen
+evaluation set.

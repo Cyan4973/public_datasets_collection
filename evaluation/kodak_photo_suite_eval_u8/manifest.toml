@@ -1,0 +1,64 @@
+manifest_version = 1
+dataset_id = "kodak_photo_suite_eval_u8"
+name = "Kodak Lossless True Color Image Suite RGB Planes"
+description = "Evaluation-only red, green, and blue uint8 planes decoded losslessly from the classic 24-image Kodak photographic compression suite."
+homepage = "http://r0k.us/graphics/kodak/"
+collection_role = "evaluation"
+intended_use = "evaluation_only"
+training_eligible = false
+redistribution_authorized = false
+
+[rights]
+status = "unclear"
+license_name = "No explicit permissive license located"
+spdx = "NONE"
+source_url = "http://r0k.us/graphics/kodak/"
+notes = "The suite is a long-established research compression benchmark, but the canonical page does not provide a clear license authorizing training or redistribution. Keep payloads local, do not train on them, and do not interpret this recipe as a rights grant."
+
+[provenance]
+source = "Canonical r0k.us Kodak Lossless True Color Image Suite mirror"
+selection = "All kodim01.png through kodim24.png images, pinned by URL, dimensions, PNG SHA-256, and decoded RGB SHA-256."
+source_format = "noninterlaced 8-bit true-color PNG"
+decoder = "Repository stdlib-only PNG decoder with chunk CRC and filter validation"
+
+[local_paths]
+root = "evaluation/kodak_photo_suite_eval_u8/"
+downloads = "evaluation/kodak_photo_suite_eval_u8/downloads/"
+filtered = "evaluation/kodak_photo_suite_eval_u8/filtered/"
+index = "evaluation/kodak_photo_suite_eval_u8/index/"
+samples = "evaluation/kodak_photo_suite_eval_u8/samples/"
+logs = "evaluation/kodak_photo_suite_eval_u8/logs/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+selection_path = "selection.tsv"
+sample_index_path = "evaluation/kodak_photo_suite_eval_u8/index/samples.jsonl"
+summary = "Validate all 24 pinned canonical PNGs, decode their intended RGB rasters losslessly, and emit R, G, and B as separate evaluation-only samples."
+deterministic_notes = "Exact URLs, source sizes and hashes, decoded RGB hashes, PNG structure and CRCs, orientation, plane geometry, channel order, and fresh byte-for-byte verification are enforced."
+
+[[series]]
+id = "kodak_rgb_plane_u8"
+description = "RGB color intensity planes from the classic Kodak photographic suite."
+semantic_meaning = "One red, green, or blue unsigned 8-bit intensity plane from one decoded Kodak photograph."
+role = "evaluation"
+intended_use = "evaluation_only"
+training_eligible = false
+representation_class = "native_numeric"
+representation_notes = "The PNG container is decoded to its intended RGB raster; compressed PNG bytes are never evaluation samples."
+source_format = "noninterlaced 8-bit true-color PNG"
+source_field = "decoded RGB color intensity plane"
+missing_value_policy = "No missing marker exists. Wrong dimensions, color type, bit depth, CRC, source hash, decoded hash, plane identity, or stale output fails the recipe; no pixels are dropped or imputed."
+conversion = "Losslessly decode PNG scanlines, reverse PNG filters, and deinterleave R, G, and B bytes into separate row-major planes without resizing, cropping, normalization, or color conversion."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 Kodak photograph color plane"
+sample_geometry = "2d_photo_color_plane"
+sample_rank = 2
+sample_axes = ["y", "x"]
+natural_record_kind = "decoded_photo_color_plane"
+sample_count = 72
+total_size_bytes = 28311552
+output_path = "evaluation/kodak_photo_suite_eval_u8/samples/kodak_rgb_plane_u8/"

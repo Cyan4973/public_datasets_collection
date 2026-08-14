@@ -1,0 +1,2 @@
+dataset_id	status	active_path	evidence_path	intended_use	training_eligible	rights_status
+kodak_photo_suite_eval_u8	ready	evaluation/kodak_photo_suite_eval_u8/manifest.toml	reports/evaluation_kodak_photo_suite_u8_20260814.md	evaluation_only	false	unclear

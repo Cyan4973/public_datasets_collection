@@ -190,6 +190,7 @@ binance_usdm_futures_1m_klines_2024_q1	ok	11793600	89107200	270	44640	357120	262
 har_smartphone_uci	ok	11864448	94915584	18	659136	5273088	0	0	0	1	none	none
 crossref_works_large_retry	ok	11996320	59981600	8	1499540	5998160	0	0	0	1	none	none
 noaa_isd_lite	ok	12103704	20912475	502	26015	51830	0	0	0	1	none	none
+uci_metropt3_digital_states_u8	ok	12135584	12135584	8	1516948	1516948	0	0	0	1	none	none
 tcia_gamma_plan_rtdose_u16	ok	12497284	24994568	3	4119984	8239968	0	0	0	1	none	none
 zenodo_zeroswarm_modbus_registers_u16	ok	12545824	25091648	13	1183563	2367126	0	0	0	1	none	none
 nhtsa_fars_2022_crash_tables_f64	ok	12662622	101300976	190	60765	486120	0	0	0	1	none	none

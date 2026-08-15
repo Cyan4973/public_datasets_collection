@@ -1,0 +1,100 @@
+manifest_version = 1
+dataset_id = "uci_metropt3_digital_states_u8"
+name = "UCI MetroPT-3 Digital Compressor States UInt8"
+description = "Eight complete binary digital-sensor timelines from a railway air-compressor Air Production Unit, decoded from the official MetroPT-3 telemetry table."
+homepage = "https://archive.ics.uci.edu/dataset/791/metropt+3+dataset"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Davari, N., Veloso, B., Ribeiro, R., and Gama, J. (2022). MetroPT-3 Dataset. UCI Machine Learning Repository. https://doi.org/10.24432/C5VW3R."
+notes = "The official UCI dataset page identifies CC BY 4.0. Preserve the dataset DOI and creator attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Operational telemetry from digital sensors on a metro-train air-compressor Air Production Unit; the UCI record states sensitive_data=no."
+usage_notes = "Only binary equipment-state fields are emitted. Timestamp, source row index, analog measurements, maintenance/failure descriptions, and all CSV text are excluded."
+
+[[origins]]
+id = "uci_791"
+name = "UCI MetroPT-3 Dataset"
+url = "https://archive.ics.uci.edu/dataset/791/metropt+3+dataset"
+type = "uci_dataset"
+version = "10.24432/C5VW3R"
+
+[[resources]]
+id = "metropt3_archive"
+origin = "uci_791"
+url = "https://archive.ics.uci.edu/static/public/791/metropt+3+dataset.zip"
+type = "zip_archive"
+version = "UCI dataset 791, accessed 2026-08-15"
+access = "Exact official UCI archive pinned by size and SHA-256."
+size_bytes = 218381995
+sha256 = "aab991a970e58210de853bb8078ce0e63abb4d9412fdc5c79792dae3d8e1721a"
+local_path = "downloads/uci_metropt3_digital_states_u8/metropt3_dataset.zip"
+notes = "Contains MetroPT3(AirCompressor).csv, 218,300,507 bytes, SHA-256 db30ccb4ea402e3c8bf2c99db06e288d4f2a772f6928f9dbe26a920d69793e24."
+
+[[resources]]
+id = "uci_791_metadata"
+origin = "uci_791"
+url = "https://archive.ics.uci.edu/api/dataset?id=791"
+type = "json_metadata"
+version = "accessed 2026-08-15"
+access = "Official UCI API metadata pinned by size and SHA-256."
+size_bytes = 9576
+sha256 = "82b91c5ac61d01dadb53299d9be559f748c7e22904a6e4c08e313627d57e50b1"
+local_path = "downloads/uci_metropt3_digital_states_u8/uci_dataset_791.json"
+
+[[resources]]
+id = "uci_791_rights_page"
+origin = "uci_791"
+url = "https://archive.ics.uci.edu/dataset/791/metropt+3+dataset"
+type = "html_license_evidence"
+version = "accessed 2026-08-15"
+access = "Official UCI dataset page pinned as CC BY 4.0 evidence."
+size_bytes = 206466
+sha256 = "7181bb85f212ff0dec63b47c15ec17ca5f8f4ca742cbe6316b3a641fc882402e"
+local_path = "downloads/uci_metropt3_digital_states_u8/uci_dataset_791.html"
+
+[local_paths]
+downloads = "downloads/uci_metropt3_digital_states_u8/"
+extracted = "extracted/uci_metropt3_digital_states_u8/"
+filtered = "filtered/uci_metropt3_digital_states_u8/"
+index = "index/uci_metropt3_digital_states_u8/"
+samples = "samples/uci_metropt3_digital_states_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/uci_metropt3_digital_states_u8/samples.jsonl"
+summary = "Validate the pinned CC BY 4.0 UCI source and emit each of its eight documented digital sensor columns as one complete source-order uint8 timeline."
+deterministic_notes = "UCI identity, DOI, rights evidence, archive and CSV hashes, exact 17-column header, 1,516,948 rows, source spelling of every 0.0/1.0 state, signal order, histograms, transitions, longest runs, hashes, and fresh byte comparisons are enforced."
+
+[[series]]
+id = "metropt3_digital_state_u8"
+description = "Binary digital-control and status timelines from eight sensors on a railway air-compressor APU."
+semantic_meaning = "Per-observation binary electrical state for COMP, DV_eletric, Towers, MPG, LPS, Pressure_switch, Oil_level, or Caudal_impulses, with signal identity recorded per sample."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source table stores every selected signal as numeric 0.0 or 1.0. The recipe preserves each integer value and source row order, changing only physical storage to one unsigned byte per observation."
+source_resources = ["metropt3_archive", "uci_791_metadata", "uci_791_rights_page"]
+source_format = "UCI MetroPT-3 comma-separated telemetry table"
+source_field = "documented digital sensor columns COMP, DV_eletric, Towers, MPG, LPS, Pressure_switch, Oil_level, and Caudal_impulses"
+filtered_input_path = "filtered/uci_metropt3_digital_states_u8/ingest_stats.json"
+filtering = "Keep all 1,516,948 source-order observations from each of the eight documented digital sensor fields. Exclude the blank row index, timestamp, seven analog signals, and all CSV syntax."
+missing_value_policy = "No states are dropped or imputed. Missing rows or fields, changed source identity/header/count, values other than exact 0.0 or 1.0, constant signals, duplicate signals, changed distributions/transitions/runs/hashes, or stale outputs fail the recipe."
+conversion = "Parse each selected source value as its exact binary integer state and write 0 or 1 as uint8, preserving source row order and one sensor timeline per sample."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 industrial digital-state timeline"
+sample_geometry = "metropt3_sensor_timeline_1d"
+sample_rank = 1
+sample_axes = ["observation_order"]
+natural_record_kind = "metropt3_sensor_timeline"
+sample_count = 8
+total_size_bytes = 12135584
+output_path = "samples/uci_metropt3_digital_states_u8/metropt3_digital_state_u8/"

@@ -1,0 +1,76 @@
+manifest_version = 1
+dataset_id = "zenodo_crab_giant_pulse_sigmf_ci16"
+name = "Crab Giant-Pulse SigMF Complex Int16"
+description = "Native interleaved signed-int16 I/Q radio-astronomy recording containing a giant pulse from the Crab pulsar."
+homepage = "https://zenodo.org/records/13143544"
+
+[license]
+name = "Creative Commons Attribution-ShareAlike 4.0 International"
+spdx = "CC-BY-SA-4.0"
+url = "https://creativecommons.org/licenses/by-sa/4.0/"
+citation = "Stichting CAMRAS, Maxwell Fine, and Tammo Jan Dijkema, Crab giant pulse detected with the Dwingeloo radio telescope on 2024-07-30, Zenodo, doi:10.5281/zenodo.13143544."
+notes = "Zenodo record metadata declares CC BY 4.0, but the payload's embedded SigMF metadata declares CC BY-SA 4.0. This recipe conservatively applies the stricter embedded CC BY-SA 4.0 terms."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public radio-telescope capture of an astronomical source released through Zenodo by Stichting CAMRAS and named contributors."
+usage_notes = "The emitted payload contains only raw telescope I/Q samples; no personal or user-content fields are included."
+
+[[origins]]
+id = "zenodo_13143544"
+name = "Crab giant pulse detected with the Dwingeloo radio telescope on 2024-07-30"
+url = "https://zenodo.org/records/13143544"
+type = "zenodo_record"
+version = "10.5281/zenodo.13143544"
+
+[[resources]]
+id = "crab_giant_pulse_sigmf"
+origin = "zenodo_13143544"
+url = "https://zenodo.org/api/records/13143544/files/crab-giantpulse.sigmf-data/content"
+type = "sigmf_ci16_recording"
+version = "2024-07-30"
+access = "Exact public data/meta pair pinned by size and Zenodo MD5; downloader validates both the record-level CC BY and embedded file-level CC BY-SA declarations."
+size_bytes = 16000000
+sha256 = ""
+local_path = "downloads/zenodo_crab_giant_pulse_sigmf_ci16/crab-giantpulse.sigmf-data"
+
+[local_paths]
+downloads = "downloads/zenodo_crab_giant_pulse_sigmf_ci16/"
+filtered = "filtered/zenodo_crab_giant_pulse_sigmf_ci16/"
+index = "index/zenodo_crab_giant_pulse_sigmf_ci16/"
+samples = "samples/zenodo_crab_giant_pulse_sigmf_ci16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_crab_giant_pulse_sigmf_ci16/samples.jsonl"
+summary = "Validate the exact licensed SigMF pair and preserve the complete native ci16_le I/Q recording as one natural sample."
+deterministic_notes = "Record ID, names, sizes, MD5 values, datatype, DOI, embedded license, sample rate, frequency, capture boundary, and scalar count are pinned. Build requires one capture at sample zero, finite metadata, complete I/Q framing, and nonconstant I and Q components. Output bytes are source-identical."
+
+[[series]]
+id = "crab_giant_pulse_iq_ci16"
+description = "Interleaved signed-int16 in-phase and quadrature radio-telescope ADC samples spanning a Crab pulsar giant pulse."
+semantic_meaning = "Complex baseband radio-astronomy transient waveform captured by the Dwingeloo radio telescope at 410 MHz."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "SigMF metadata explicitly declares ci16_le; every four source bytes are one complex sample consisting of little-endian int16 I followed by int16 Q."
+source_resources = ["crab_giant_pulse_sigmf"]
+source_format = "SigMF raw data plus JSON metadata"
+source_field = "interleaved complex I/Q sample stream"
+filtered_input_path = "filtered/zenodo_crab_giant_pulse_sigmf_ci16/ingest_stats.json"
+filtering = "Keep the exact complete recording after license, hash, datatype, DOI, sample-rate, frequency, capture-boundary, size, framing, and nonconstant-component validation."
+missing_value_policy = "A missing data/meta file, size/hash mismatch, malformed JSON, license or DOI mismatch, non-ci16 datatype, incomplete I/Q frame, or constant I/Q component fails the build. Nothing is dropped or imputed."
+conversion = "Preserve every source byte unchanged as little-endian interleaved signed-int16 I/Q values."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous interleaved signed-int16 I/Q array"
+sample_geometry = "complex_time_series"
+sample_rank = 2
+sample_axes = ["complex_sample", "component_iq"]
+natural_record_kind = "sigmf_recording"
+sample_count = 1
+total_size_bytes = 16000000
+output_path = "samples/zenodo_crab_giant_pulse_sigmf_ci16/crab_giant_pulse_iq_ci16/"

@@ -1,0 +1,92 @@
+manifest_version = 1
+dataset_id = "aras_blender_openexr_eval"
+name = "Aras Blender OpenEXR Channel-Plane Evaluation Suite"
+description = "Evaluation-only native float16 and float32 channel planes decoded from eight public Blender OpenEXR compression-benchmark files with unclear payload rights."
+homepage = "https://github.com/aras-p/test_exr_htj2k_jxl"
+collection_role = "evaluation"
+intended_use = "evaluation_only"
+training_eligible = false
+redistribution_authorized = false
+
+[rights]
+status = "unclear"
+license_name = "No explicit license covering the external Blender EXR payloads located"
+spdx = "NONE"
+source_url = "https://github.com/aras-p/test_exr_htj2k_jxl"
+notes = "The files are publicly linked as compression benchmarks but are hosted outside the Git repository, which itself exposes no license. Public availability is not treated as training or redistribution permission. Keep payloads local, use only for evaluation where legally appropriate, and do not interpret this recipe as a rights grant."
+
+[provenance]
+source = "Eight Blender EXR files listed by Aras Pranckevičius in aras-p/test_exr_htj2k_jxl and hosted at aras-p.info"
+selection = "All eight Blender-prefixed EXR links from the benchmark list; the two linked Poly Haven files are excluded because their byte-identical CC0 originals are already in the accepted training corpus."
+source_format = "OpenEXR v2 single-part non-deep full-resolution ZIP-compressed scanline images"
+decoder = "Pinned TinyEXR v1.0.12 compiled against system zlib; requested channel type remains identical to source HALF or FLOAT"
+
+[local_paths]
+root = "evaluation/aras_blender_openexr_eval/"
+downloads = "evaluation/aras_blender_openexr_eval/downloads/"
+filtered = "evaluation/aras_blender_openexr_eval/filtered/"
+index = "evaluation/aras_blender_openexr_eval/index/"
+samples = "evaluation/aras_blender_openexr_eval/samples/"
+logs = "evaluation/aras_blender_openexr_eval/logs/"
+tools = "evaluation/aras_blender_openexr_eval/tools/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+selection_path = "selection.tsv"
+sample_index_path = "evaluation/aras_blender_openexr_eval/index/samples.jsonl"
+summary = "Validate eight pinned EXRs and pinned TinyEXR, decode all 121 native HALF/FLOAT channels as individual 2D evaluation planes, and flag constant planes as ineligible for aggregate benchmark scoring."
+deterministic_notes = "Source and tool sizes plus MD5/SHA-256 are pinned. Decode requires OpenEXR v2, single-part non-deep nontiled ZIP scanlines, exact 3840x2160 geometry, full-resolution HALF/FLOAT channels, and exact per-file channel-type counts. Verification recompiles the decoder, decodes all sources afresh, and compares every output SHA-256."
+
+[[series]]
+id = "blender_exr_channel_plane_f16"
+description = "Native OpenEXR HALF render-layer and image channel planes."
+semantic_meaning = "One complete Blender render output channel, including color, alpha, lighting-pass, noisy-image, or ambient-occlusion values."
+role = "evaluation"
+intended_use = "evaluation_only"
+training_eligible = false
+representation_class = "native_numeric"
+representation_notes = "Each source channel declares OpenEXR HALF. TinyEXR keeps requested type equal to source HALF, preserving every binary16 bit pattern; output is canonical little-endian."
+source_format = "OpenEXR v2 ZIP scanline image"
+source_field = "one full-resolution native HALF channel"
+missing_value_policy = "No values are dropped or imputed. Malformed structures, hashes, geometries, types, sampling, channel counts, or stale outputs fail the recipe."
+conversion = "Losslessly decompress one channel and write its source-native IEEE-754 binary16 bit patterns in row-major little-endian order without scaling, normalization, clipping, or color conversion."
+numeric_kind = "float"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian IEEE-754 binary16 OpenEXR channel plane"
+sample_geometry = "2d_openexr_channel_plane"
+sample_rank = 2
+sample_axes = ["y", "x"]
+natural_record_kind = "openexr_channel_plane"
+sample_count = 77
+benchmark_eligible_count = 68
+total_size_bytes = 1277337600
+output_path = "evaluation/aras_blender_openexr_eval/samples/blender_exr_channel_plane_f16/"
+
+[[series]]
+id = "blender_exr_channel_plane_f32"
+description = "Native OpenEXR FLOAT render-layer, geometric, cryptomatte, and image channel planes."
+semantic_meaning = "One complete Blender render output channel, including color, alpha, normal, position, depth, UV, or cryptomatte values."
+role = "evaluation"
+intended_use = "evaluation_only"
+training_eligible = false
+representation_class = "native_numeric"
+representation_notes = "Each source channel declares OpenEXR FLOAT. TinyEXR keeps requested type equal to source FLOAT, preserving every binary32 bit pattern; output is canonical little-endian."
+source_format = "OpenEXR v2 ZIP scanline image"
+source_field = "one full-resolution native FLOAT channel"
+missing_value_policy = "No values are dropped or imputed. Malformed structures, hashes, geometries, types, sampling, channel counts, or stale outputs fail the recipe."
+conversion = "Losslessly decompress one channel and write its source-native IEEE-754 binary32 bit patterns in row-major little-endian order without scaling, normalization, clipping, or color conversion."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian IEEE-754 binary32 OpenEXR channel plane"
+sample_geometry = "2d_openexr_channel_plane"
+sample_rank = 2
+sample_axes = ["y", "x"]
+natural_record_kind = "openexr_channel_plane"
+sample_count = 44
+benchmark_eligible_count = 43
+total_size_bytes = 1459814400
+output_path = "evaluation/aras_blender_openexr_eval/samples/blender_exr_channel_plane_f32/"

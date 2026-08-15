@@ -1,0 +1,10 @@
+kind	name	size_bytes	md5	sha256	width	height	half_channels	float_channels	url
+exr	Blender281rgb16.exr	27496316	3c7ce646b7e5fbf78e14e040d4cf3008	e6523e928e5b5544db441c88b949cf120d89b7b207a5eaa4bfb4ca8ea5d9ba4c	3840	2160	3	0	https://aras-p.info/files/exr_files/Blender281rgb16.exr
+exr	Blender281rgb32.exr	93777695	05c5e19c3e9eabf18b31096ac0dd1fb5	42c3866a3eae8c11f4ce7065a6d9f1c3a0d304d49be2c353b0d7e3bd670cae1b	3840	2160	0	3	https://aras-p.info/files/exr_files/Blender281rgb32.exr
+exr	Blender281layered16.exr	172203728	6fc1bb590e58b61e2e85f1bc9ab14de5	004fbf54e432b465956391e235fb65911fcbf2bed4188c12b81314573d0c9110	3840	2160	21	0	https://aras-p.info/files/exr_files/Blender281layered16.exr
+exr	Blender281layered32.exr	502238676	f788ea3c81c7ed991860528eab0b3821	3adaadca0fc06b97c092b1fff3d041c819f6f57f641e02d9f077955284fd8a55	3840	2160	0	21	https://aras-p.info/files/exr_files/Blender281layered32.exr
+exr	Blender35.exr	159651680	78ce5266f8c12a50069638afb3c31125	5e9f5423d113e00370bcec89740819102f33996a09cab79b2b68b3c6575a09d5	3840	2160	15	3	https://aras-p.info/files/exr_files/Blender35.exr
+exr	Blender40.exr	141932295	68a7354712a1b55daf2cfd799b73bc28	1fb741407a8fc8075cd517c62d92b99163f64710974c74cd5a532a544c7c611c	3840	2160	8	7	https://aras-p.info/files/exr_files/Blender40.exr
+exr	Blender41.exr	422401171	c07bfd94e5846375657fbba5435716c2	5819046938145a559b63e3fb1ec929d1b331d424bb4d39b9f1158f79f29b525c	3840	2160	27	10	https://aras-p.info/files/exr_files/Blender41.exr
+exr	Blender43.exr	34691621	ee40cdd66a04281ef5fb8b1e83018758	62132a72ff79c2d0a9c918b6c9c8e7a89a14f2ca65b4fca9ddcabf29d3fd6609	3840	2160	3	0	https://aras-p.info/files/exr_files/Blender43.exr
+tool	tinyexr.h	299406	30394fdbbb6fcbaaeac22b4d4f41eba3	e3eb50490af81dc3f5f067cf7f62955894d5db8f88a091c19bc4eef8e468095f	-	-	-	-	https://raw.githubusercontent.com/syoyo/tinyexr/v1.0.12/tinyexr.h

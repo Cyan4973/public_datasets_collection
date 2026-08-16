@@ -1,0 +1,67 @@
+manifest_version = 1
+dataset_id = "noaa_oisst_weekly_sst_i16_eval"
+name = "NOAA OISST V2 Weekly SST Int16 Evaluation Suite"
+description = "Evaluation-only native packed-int16 weekly global sea-surface-temperature grids from NOAA OISST V2, retained under unclear training rights."
+homepage = "https://psl.noaa.gov/data/gridded/data.noaa.oisst.v2.html"
+collection_role = "evaluation"
+intended_use = "evaluation_only"
+training_eligible = false
+redistribution_authorized = false
+
+[rights]
+status = "unclear"
+license_name = "No explicit training or redistribution license located"
+spdx = "NONE"
+source_url = "https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ncdc:C00844"
+notes = "The exact NCEI V2 metadata requires citation and refers to a separate CDR Use Agreement whose text was not exposed. Public/free access is not treated as a license. Keep payloads local, use only for evaluation where legally appropriate, do not redistribute, and do not interpret this recipe as a rights grant."
+
+[provenance]
+source = "NOAA Optimum Interpolation (OI) Sea Surface Temperature V2 weekly mean classic-NetCDF product, DOI 10.7289/V5SQ8XB5."
+selection = "The complete fixed 1989-12-31 through 2023-01-29 weekly-mean file exposed by NOAA PSL, pinned by size and SHA-256."
+source_format = "CDF1 classic NetCDF with big-endian XDR NC_SHORT SST record variable"
+decoder = "Dependency-free strict classic-NetCDF parser in scripts/oisst_eval.py"
+
+[local_paths]
+root = "evaluation/noaa_oisst_weekly_sst_i16_eval/"
+downloads = "evaluation/noaa_oisst_weekly_sst_i16_eval/downloads/"
+rights = "evaluation/noaa_oisst_weekly_sst_i16_eval/rights/"
+filtered = "evaluation/noaa_oisst_weekly_sst_i16_eval/filtered/"
+index = "evaluation/noaa_oisst_weekly_sst_i16_eval/index/"
+samples = "evaluation/noaa_oisst_weekly_sst_i16_eval/samples/"
+logs = "evaluation/noaa_oisst_weekly_sst_i16_eval/logs/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+selection_path = "selection.tsv"
+sample_index_path = "evaluation/noaa_oisst_weekly_sst_i16_eval/index/samples.jsonl"
+summary = "Validate the pinned CDF1 source, extract every complete SST record, and byte-swap native XDR NC_SHORT codes to one little-endian evaluation sample per weekly grid."
+deterministic_notes = "Source and aggregate output hashes, classic-NetCDF header and record layout, exact coordinates and seven-day start-time bounds, SST attributes, 1,727 weekly records, dimensions, stored-code ranges, per-grid hashes, uniqueness, and evaluation-isolation markers are enforced."
+
+[[series]]
+id = "oisst_weekly_global_sst_i16_eval"
+description = "Complete weekly packed sea-surface-temperature code grids."
+semantic_meaning = "Stored weekly mean sea-surface-temperature codes on the complete 180x360 one-degree global grid; physical degrees Celsius equal code times the declared 0.01 scale factor."
+role = "evaluation"
+intended_use = "evaluation_only"
+training_eligible = false
+representation_class = "native_numeric"
+representation_notes = "The source SST record variable is native NC_SHORT with scale_factor approximately 0.01 and add_offset 0. Stored integer codes are benchmarked rather than unpacked floats."
+source_format = "CDF1 classic NetCDF record variable"
+source_field = "sst(time,lat,lon) native NC_SHORT weekly record"
+missing_value_policy = "The declared 32767 missing code is preserved if present; it occurs zero times in this pinned source. No cells are dropped or imputed."
+conversion = "Read each complete big-endian XDR SST record and byte-swap every unchanged signed-int16 code to canonical little-endian order. Do not unpack scale/offset, reorder coordinates, mask, normalize, or concatenate weeks."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian signed-int16 packed SST grid"
+sample_geometry = "180x360_weekly_global_sst_grid"
+sample_rank = 2
+sample_shape = [180, 360]
+sample_axes = ["latitude_descending", "longitude_ascending"]
+natural_record_kind = "complete_oisst_weekly_global_grid"
+sample_count = 1727
+benchmark_eligible_count = 1727
+total_size_bytes = 223819200
+output_path = "evaluation/noaa_oisst_weekly_sst_i16_eval/samples/oisst_weekly_global_sst_i16_eval/"

@@ -1,0 +1,2 @@
+name	size_bytes	etag	last_modified	sha256	aggregate_output_sha256	url
+sst.wkmean.1990-present.nc	223865152	d57e940-5f40d7a8f461f	Mon, 06 Feb 2023 20:00:11 GMT	07cb78dcda836d1322897141fbdd79be1bd20190eeb10ffe6e9596588d2160f8	3f581e112a4dc720c625af18983a1beb135484318dae99fb8cafddd5847b3064	https://downloads.psl.noaa.gov/Datasets/noaa.oisst.v2/sst.wkmean.1990-present.nc

@@ -245,6 +245,7 @@ noaa_ndbc_stdmet_historical	ok	56949977	455599816	273	224130	1793040	0	0	0	1	non
 mitbih_arrhythmia_u8	ok	59150000	59150000	91	650000	650000	0	0	0	1	none	none
 sentinel2_l2a_scene_classification_u8	ok	60280200	60280200	2	30140100	30140100	0	0	0	1	none	none
 mitbih_arrhythmia_physionet	ok	62400000	124800000	96	650000	1300000	0	0	0	1	none	none
+openslr_rirs_noises_pcm16	ok	66979516	133959032	3810	15000	30000	0	0	0	1	none	none
 geonames_allcountries	ok	67174535	322437768	5	13434907	53739628	0	0	0	1	none	none
 bbbc039_microscopy_tiff_u16	ok	72384000	144768000	200	361920	723840	0	0	0	1	none	none
 noaa_marinecadastre_ais_2024_01_01_f32	ok	74224797	296899188	11	7293096	29172384	0	0	0	1	none	none

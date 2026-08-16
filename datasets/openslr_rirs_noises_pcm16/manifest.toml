@@ -1,0 +1,79 @@
+manifest_version = 1
+dataset_id = "openslr_rirs_noises_pcm16"
+name = "OpenSLR Measured Room Impulse Responses PCM16"
+description = "Complete channels from measured AIR, REVERB-2014, and RWCP room impulse response WAV files, emitted as raw little-endian signed-int16 series."
+homepage = "https://www.openslr.org/28/"
+
+[license]
+name = "Apache License 2.0"
+spdx = "Apache-2.0"
+url = "https://www.openslr.org/28/"
+citation = "A Study on Data Augmentation of Reverberant Speech for Robust Speech Recognition. ICASSP 2017. OpenSLR resource 28."
+notes = "The official OpenSLR resource page explicitly labels the complete RIRS_NOISES release as Apache 2.0."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official OpenSLR resource 28 distribution; the recipe selects measured impulse responses from the included AIR, REVERB-2014, and RWCP collections."
+usage_notes = "Acoustic room-response measurements contain no speech or personal metadata. Preserve the OpenSLR resource and paper attribution."
+
+[[origins]]
+id = "openslr_28"
+name = "OpenSLR Room Impulse Response and Noise Database"
+url = "https://www.openslr.org/28/"
+type = "data_portal"
+notes = "Official OpenSLR page identifies the resource as SLR28, describes its constituent RIR collections, and declares Apache 2.0."
+
+[[resources]]
+id = "rirs_noises_archive"
+origin = "openslr_28"
+url = "https://www.openslr.org/resources/28/rirs_noises.zip"
+type = "source_archive"
+version = "OpenSLR resource 28, published by 2017-10-03"
+access = "Direct public archive download."
+size_bytes = 1311166223
+sha256 = "3b50cfde915b3984738169b4beb341e9f6b8062ae4c2076146c5db71c2c05dc7"
+local_path = "downloads/openslr_rirs_noises_pcm16/rirs_noises.zip"
+notes = "The complete archive is pinned, but only 325 measured RIR WAV members are decoded; noise recordings and 60,000 simulated RIRs are excluded."
+
+[local_paths]
+downloads = "downloads/openslr_rirs_noises_pcm16/"
+filtered = "filtered/openslr_rirs_noises_pcm16/"
+index = "index/openslr_rirs_noises_pcm16/"
+samples = "samples/openslr_rirs_noises_pcm16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/openslr_rirs_noises_pcm16/samples.jsonl"
+summary = "Validate the pinned OpenSLR archive, select all measured AIR, REVERB-2014, and RWCP RIR WAVs, validate every WAV as 16 kHz PCM16, and emit each complete channel separately."
+deterministic_notes = "The archive SHA-256, ZIP member count, selection rules and counts, WAV layouts, aggregate payload sizes, output identities, and per-sample SHA-256 values are validated. Values are neither normalized nor resampled."
+
+[[series]]
+id = "measured_room_impulse_response_i16"
+description = "Complete individual microphone channels from measured acoustic room impulse responses."
+semantic_meaning = "Successive signed pressure-amplitude codes describing a measured room's response to an acoustic impulse at one microphone channel."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Source WAV frames are native signed 16-bit integer PCM. Multichannel WAVs are deinterleaved without numeric transformation."
+source_resources = ["rirs_noises_archive"]
+source_format = "RIFF/WAVE PCM16, including WAVE_FORMAT_EXTENSIBLE with PCM subformat"
+source_field = "AIR, REVERB-2014, and RWCP measured RIR WAV data chunks"
+filtered_input_path = "filtered/openslr_rirs_noises_pcm16/ingest_stats.json"
+filtering = "Select 107 AIR, 36 REVERB-2014, and 182 RWCP measured RIR WAVs. Exclude every noise recording and simulated response. Preserve each source channel as one natural sample."
+missing_value_policy = "Missing members, malformed RIFF chunks, non-PCM data, non-16-bit samples, unexpected rates or channel layouts, empty or constant channels, duplicate outputs, and any pinned aggregate drift are fatal."
+conversion = "Deinterleave each complete PCM channel and serialize unchanged signed values as explicit little-endian int16. No resampling, truncation, normalization, mixing, or concatenation is performed."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian signed-int16 acoustic impulse-response array"
+sample_geometry = "variable_length_room_impulse_response_1d"
+sample_rank = 1
+sample_shape = [-1]
+sample_axes = ["time_sample"]
+sample_rate_hz = 16000
+natural_record_kind = "complete_measured_room_impulse_response_wav_channel"
+sample_count = 3810
+total_size_bytes = 133959032
+output_path = "samples/openslr_rirs_noises_pcm16/measured_room_impulse_response_i16/"

@@ -1,0 +1,88 @@
+manifest_version = 1
+dataset_id = "openneuro_ds000030_fmri_bold_i16"
+name = "OpenNeuro ds000030 fMRI BOLD Int16"
+description = "Ten complete native-int16 four-dimensional BOLD fMRI runs from distinct subjects and eight tasks in the CC0 OpenNeuro ds000030 study."
+homepage = "https://openneuro.org/datasets/ds000030/versions/1.0.0"
+
+[license]
+name = "Creative Commons CC0 1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "UCLA Consortium for Neuropsychiatric Phenomics LA5c Study, OpenNeuro ds000030, DOI 10.18112/openneuro.ds000030.v1.0.0."
+notes = "The official BIDS dataset_description.json explicitly declares License=CC0; preserve the requested dataset citation."
+
+[safety]
+contains_sensitive_data = true
+contains_personal_data = false
+provenance_notes = "Public deidentified human functional MRI data released by the study authors through OpenNeuro."
+usage_notes = "The source study includes healthy participants and participants with psychiatric diagnoses. This recipe retains only deidentified BOLD voxel arrays and technical geometry/task labels; participant tables, diagnoses, demographics, events, and free text are excluded."
+
+[[origins]]
+id = "openneuro_ds000030"
+name = "UCLA Consortium for Neuropsychiatric Phenomics LA5c Study"
+url = "https://openneuro.org/datasets/ds000030/versions/1.0.0"
+type = "public_bids_dataset"
+version = "1.0.0"
+
+[[resources]]
+id = "dataset_description"
+origin = "openneuro_ds000030"
+url = "https://s3.amazonaws.com/openneuro.org/ds000030/dataset_description.json"
+type = "bids_dataset_description"
+version = "1.0.0"
+access = "Exact public S3 object; downloader requires License=CC0 and the pinned DOI."
+local_path = "downloads/openneuro_ds000030_fmri_bold_i16/dataset_description.json"
+
+[[resources]]
+id = "selected_bold_runs"
+origin = "openneuro_ds000030"
+url = "https://s3.amazonaws.com/openneuro.org/ds000030/"
+type = "exact_object_selection"
+version = "1.0.0"
+access = "Ten exact public S3 objects pinned by key, byte size, MD5/ETag, SHA-256, NIfTI geometry, and decoded payload SHA-256 in selection.tsv."
+size_bytes = 309475689
+local_path = "downloads/openneuro_ds000030_fmri_bold_i16/volumes/"
+notes = "One run from each of ten distinct subjects; all eight available BOLD task labels are represented."
+
+[local_paths]
+downloads = "downloads/openneuro_ds000030_fmri_bold_i16/"
+filtered = "filtered/openneuro_ds000030_fmri_bold_i16/"
+index = "index/openneuro_ds000030_fmri_bold_i16/"
+samples = "samples/openneuro_ds000030_fmri_bold_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/openneuro_ds000030_fmri_bold_i16/samples.jsonl"
+summary = "Validate ten exact CC0 BOLD NIfTI objects and emit each complete native-int16 4D run as one canonical little-endian sample."
+deterministic_notes = "The recipe pins source and payload hashes; enforces NIfTI-1 single-file rank-4 datatype-4/bitpix-16 identity-scaled geometry; requires 64x64x34 spatial grids, 3x3x4 mm voxels, 2-second cadence, complete payload bounds, nonconstant and unique frames, nonconstant and unique runs, exact task/subject coverage, and aggregate sizes."
+
+[[series]]
+id = "openneuro_fmri_bold_i16"
+description = "Complete stored int16 four-dimensional BOLD fMRI runs."
+semantic_meaning = "Successive native magnetic-resonance BOLD magnitude codes over a 64x64x34 brain volume and the complete acquisition time axis."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Source NIfTI images natively declare signed-int16 datatype 4 with 16 bits, little-endian storage, and identity scaling. Stored codes are preserved exactly."
+source_resources = ["selected_bold_runs"]
+source_format = "NIfTI-1 single-file gzip"
+source_field = "4D BOLD image voxel payload"
+filtered_input_path = "filtered/openneuro_ds000030_fmri_bold_i16/ingest_stats.json"
+filtering = "Keep ten complete runs chosen across ten distinct subjects and all eight available tasks after bounded headers prove native int16 representation."
+missing_value_policy = "No voxels or time points are dropped or imputed. Changed sources, malformed gzip/NIfTI structure, non-int16 or nonidentity-scaled data, wrong geometry, truncated/trailing payloads, constant or duplicate runs/frames, and aggregate drift fail the recipe."
+conversion = "Copy the complete stored voxel payload in NIfTI order. Source and output are both little-endian signed int16; no scaling, masking, resampling, normalization, spatial reordering, or temporal concatenation is performed."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian signed-int16 4D BOLD voxel array"
+sample_geometry = "variable_time_4d_fmri_bold_run"
+sample_rank = 4
+sample_shape = [64, 64, 34, -1]
+sample_axes = ["x", "y", "z", "time"]
+spatial_voxel_size_mm = [3.0, 3.0, 4.0]
+repetition_time_seconds = 2.0
+natural_record_kind = "complete_bids_bold_nifti_run"
+sample_count = 10
+total_size_bytes = 514998272
+output_path = "samples/openneuro_ds000030_fmri_bold_i16/openneuro_fmri_bold_i16/"

@@ -1,0 +1,89 @@
+manifest_version = 1
+dataset_id = "zenodo_aegis_obd_pid_u8"
+name = "AEGIS Automotive OBD PID Timelines UInt8"
+description = "Variable-length decoded OBD measurement timelines grouped by trip and PID from 35 real vehicle trips."
+homepage = "https://zenodo.org/records/820576"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Stocker, A., Kaiser, C., and Festl, A. (2017). Automotive Sensor Data. An Example Dataset from the AEGIS Big Data Project. Zenodo. https://doi.org/10.5281/zenodo.820576"
+notes = "The exact Zenodo record declares CC BY 4.0. Retain record, project, and creator attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "The source describes 35 trips by one driver and also publishes GPS tables. This recipe extracts only decoded OBD values; all GPS coordinates, timestamps, row IDs, device metadata, and driver context are excluded from sample bytes."
+usage_notes = "Use the emitted equipment telemetry only for numeric compression research. Do not join it back to source GPS or timestamps to reconstruct routes or driving behavior."
+
+[[origins]]
+id = "zenodo_820576"
+name = "Zenodo"
+url = "https://zenodo.org/records/820576"
+type = "data_repository"
+version = "record 820576"
+
+[[resources]]
+id = "aegis_archive"
+origin = "zenodo_820576"
+url = "https://zenodo.org/api/records/820576/files/Automotive-ResearchDataSet-VIF-AEGIS.zip/content"
+type = "zip_archive"
+version = "Zenodo record 820576"
+access = "Direct public download; archive identity pinned by exact size and MD5."
+size_bytes = 37204969
+sha256 = "9a19c404a680462e946abb2b780e43165e04b877f797568b363a1010c8ed2283"
+local_path = "downloads/zenodo_aegis_obd_pid_u8/Automotive-ResearchDataSet-VIF-AEGIS.zip"
+notes = "Zenodo checksum md5:8c840ca85a0af6cb5784040cb27d465a. The required member is obdData.csv, 63,583,909 bytes, SHA-256 089138f38eea82cb085ec858002dd4a29628713f7eaa6d1cd7910a1590e862a5."
+
+[[resources]]
+id = "zenodo_metadata"
+origin = "zenodo_820576"
+url = "https://zenodo.org/api/records/820576"
+type = "json_metadata"
+version = "record 820576, inspected 2026-08-18"
+access = "Official Zenodo API metadata used as identity and CC BY 4.0 evidence."
+size_bytes = 4803
+sha256 = "e3e8d96943ce0dd2de39e678906d8d3fa9faf5d421833de7030ba07749892dc8"
+local_path = "downloads/zenodo_aegis_obd_pid_u8/zenodo_record_820576.json"
+
+[local_paths]
+downloads = "downloads/zenodo_aegis_obd_pid_u8/"
+extracted = "extracted/zenodo_aegis_obd_pid_u8/"
+filtered = "filtered/zenodo_aegis_obd_pid_u8/"
+index = "index/zenodo_aegis_obd_pid_u8/"
+samples = "samples/zenodo_aegis_obd_pid_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_aegis_obd_pid_u8/samples.jsonl"
+summary = "Validate the pinned CC BY 4.0 archive, parse its documented OBD value table, and emit one lossless uint8 timeline for each qualifying trip and PID."
+deterministic_notes = "Source row order is preserved within each trip/PID group. A group is retained exactly when it has at least 1,024 observations, every published value is an exact integer in 0..255, timestamps are monotonic, and at least two values occur. No values are rounded, scaled, clipped, filled, or concatenated across trips or PIDs."
+
+[[series]]
+id = "aegis_obd_pid_value_u8"
+description = "Decoded OBD measurement values in observation order, with one sample per natural trip and PID group."
+semantic_meaning = "Published numeric `data` value for one hexadecimal OBD PID during one real vehicle trip; trip and PID identity are recorded in the sample index."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source CSV stores the selected values as exact decimal integers. The recipe preserves each numeric value unchanged and writes it as one unsigned byte."
+source_resources = ["aegis_archive", "zenodo_metadata"]
+source_format = "AEGIS five-column comma-separated OBD observation table"
+source_field = "data grouped by trip_id and obdPid"
+filtered_input_path = "filtered/zenodo_aegis_obd_pid_u8/ingest_stats.json"
+filtering = "Group all source rows by trip_id and obdPid; retain complete nonconstant monotonic groups of at least 1,024 rows whose data values are exact integers in 0..255."
+missing_value_policy = "No value is dropped or imputed within a retained group. Any blank, nonnumeric, nonintegral, negative, or above-255 value excludes the complete trip/PID group."
+conversion = "Parse the source data field as an exact decimal integer and write the unchanged value as uint8 in source row order."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 decoded OBD measurement timeline"
+sample_geometry = "variable_length_trip_pid_timeline_1d"
+sample_rank = 1
+sample_axes = ["observation_order"]
+natural_record_kind = "complete_aegis_trip_pid_timeline"
+sample_count = 156
+total_size_bytes = 679651
+output_path = "samples/zenodo_aegis_obd_pid_u8/aegis_obd_pid_value_u8/"

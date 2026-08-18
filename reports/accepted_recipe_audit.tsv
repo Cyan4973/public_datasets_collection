@@ -111,6 +111,7 @@ dataone_solr	ok	602719	2805438	7	100000	400000	0	0	0	1	none	none
 wikimedia_pageviews_daily	ok	619828	2479312	208	3472	13888	0	0	0	1	none	none
 earthquake_usgs	ok	630753	4880874	50	14515	115292	0	0	0	1	none	none
 nasa_power_daily_humidity	ok	642840	5142720	40	16071	128568	0	0	0	1	none	none
+zenodo_aegis_obd_pid_u8	ok	679651	679651	156	4140	4140	0	0	0	1	none	none
 usgs_nwis_dissolved_oxygen_daily	ok	700423	5603384	85	8398	67184	0	0	0	1	none	none
 gdelt_events_avgtone_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	none
 gdelt_events_goldstein_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	none

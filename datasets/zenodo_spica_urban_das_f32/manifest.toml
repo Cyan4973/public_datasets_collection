@@ -1,0 +1,76 @@
+manifest_version = 1
+dataset_id = "zenodo_spica_urban_das_f32"
+name = "Spica Urban Fiber-Optic DAS Waveforms"
+description = "One day of native IEEE-float32 MiniSEED waveforms from nine ordered virtual-station positions on an urban distributed-acoustic-sensing fiber."
+homepage = "https://zenodo.org/records/3549085"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Spica, Z. J., Perton, M., Martin, E. R., Beroza, G. C., and Biondi, B. (2019), Dataset used in Urban Seismic Site Characterization by Fiber-Optic Seismology, Zenodo, DOI 10.5281/zenodo.3549085."
+notes = "The exact Zenodo record declares CC BY 4.0; preserve the record title, creators, DOI, and article attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public urban geophysical waveforms released by the study authors through Zenodo; no participant or personal fields are present."
+usage_notes = "Physical DAS waveform measurements intended as numeric compression training material."
+
+[[origins]]
+id = "zenodo_3549085"
+name = "Urban Seismic Site Characterization by Fiber-Optic Seismology dataset"
+url = "https://zenodo.org/records/3549085"
+type = "zenodo_record"
+version = "10.5281/zenodo.3549085"
+
+[[resources]]
+id = "jgr_2019_archive"
+origin = "zenodo_3549085"
+url = "https://zenodo.org/api/records/3549085/files/JGR_2019-master.zip/content"
+type = "zip_of_miniseed_v2_float32"
+version = "record-3549085"
+access = "Exact public object pinned by size and MD5."
+size_bytes = 92177152
+md5 = "bd3cf8f38eeed0aadd3ebfdd1344f87d"
+local_path = "downloads/zenodo_spica_urban_das_f32/JGR_2019-master.zip"
+
+[local_paths]
+downloads = "downloads/zenodo_spica_urban_das_f32/"
+filtered = "filtered/zenodo_spica_urban_das_f32/"
+index = "index/zenodo_spica_urban_das_f32/"
+samples = "samples/zenodo_spica_urban_das_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_spica_urban_das_f32/samples.jsonl"
+summary = "Validate the pinned ZIP and its nine MiniSEED v2 encoding-4 members, then emit one little-endian float32 sample per complete deposited channel/day stream."
+deterministic_notes = "The archive URL, size, and MD5 are pinned. Member selection is the exact ordered set of positions 055 through 095 in steps of five. The decoder validates every MiniSEED record, stream identity, timestamp continuity, common 24-hour interval, 50 Hz rate, encoding, word order, finite float word, and source boundary."
+
+[[series]]
+id = "urban_das_channel_day_f32"
+description = "Day-long DAS waveform traces from ordered virtual-station positions along an urban sensing fiber."
+semantic_meaning = "Native float32 distributed-acoustic-sensing waveform amplitude over time at one deposited virtual-station position; the deposit does not state a physical amplitude unit."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "MiniSEED v2 blockette 1000 declares encoding 4 (IEEE float32) and the source word order. Output preserves every finite IEEE-754 word and canonicalizes only to little-endian bytes."
+source_resources = ["jgr_2019_archive"]
+source_format = "MiniSEED v2, blockette-1000 encoding 4"
+source_field = "IEEE float32 waveform samples in each MiniSEED data record"
+filtered_input_path = "filtered/zenodo_spica_urban_das_f32/ingest_stats.json"
+filtering = "Keep every value from each of the archive's nine complete DS.20171008.NNN.mseed channel streams, in record and sample order."
+missing_value_policy = "Missing or altered archive data, unsafe or unexpected members, malformed records, mixed stream identities, non-50-Hz records, non-encoding-4 payloads, invalid word order, truncation, non-finite IEEE values, empty traces, or unexpected outputs fail the build. No values are dropped or imputed."
+conversion = "For each record, retain its declared sample_count float32 words and convert each word from the blockette-1000-declared source byte order to little endian without numerical conversion. Concatenate records only within their existing deposited channel/day file boundary."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 time-series array"
+sample_geometry = "synchronized_1d_das_channel_day"
+sample_rank = 1
+sample_axes = ["time"]
+natural_record_kind = "deposited_daily_das_channel_trace"
+sample_count = 9
+total_size_bytes = 155520000
+output_path = "samples/zenodo_spica_urban_das_f32/urban_das_channel_day_f32/"

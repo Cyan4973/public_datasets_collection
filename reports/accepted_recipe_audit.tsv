@@ -75,6 +75,7 @@ movielens_latest_small	ok	201672	806688	2	100836	403344	0	0	0	1	none	none
 usgs_nwis_ph_daily	ok	202184	1617472	36	4561.5	36492	0	0	0	1	none	none
 gutendex_catalog_books	ok	203883	565180	3	62588	125176	78707	314828	1	1	none	none
 geonames_cities5000	ok	206700	1378000	3	68900	551200	0	0	0	1	none	none
+zenodo_lora24_indoor_rssi_i8	ok	215232	215232	21	8732	8732	0	0	0	1	none	none
 nasa_techport_projects	ok	227414	413480	11	20674	20674	0	0	0	1	none	none
 silso_sunspot_activity_indices_f32	ok	230296	921184	6	38117.5	152470	0	0	0	1	none	none
 statlog_landsat_satellite_u8	ok	231660	231660	8	28957.5	28957.5	0	0	0	1	none	none

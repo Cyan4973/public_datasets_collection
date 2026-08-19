@@ -1,0 +1,136 @@
+manifest_version = 1
+dataset_id = "zenodo_lora24_indoor_rssi_i8"
+name = "Indoor LoRa 2.4 GHz RSSI Timelines Int8"
+description = "Measured signed-int8 RSSI packet timelines from three fixed LoRa 2.4 GHz nodes in controlled exhaustive and week-long indoor experiments."
+homepage = "https://zenodo.org/records/7106074"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Fernández Hernández, C., Hochet Derévianckine, G., Iova, O., Guitton, A., and Valois, F. (2022). Dataset: Indoor Performance Evaluation of LoRa 2.4GHz. Zenodo. https://doi.org/10.5281/zenodo.7106074"
+notes = "The exact Zenodo record declares CC BY 4.0. Preserve creator and record attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Controlled radio measurements from three fixed end nodes and one gateway in an INRIA office building. The source notes that the exhaustive test ran while the building was mostly empty."
+usage_notes = "Only RSSI values and technical node/configuration labels are emitted. Packet payloads, timestamps, SNR, and building/time context are excluded."
+
+[[origins]]
+id = "zenodo_7106074"
+name = "Zenodo"
+url = "https://zenodo.org/records/7106074"
+type = "data_repository"
+version = "record 7106074"
+
+[[resources]]
+id = "exhaustive_csv"
+origin = "zenodo_7106074"
+url = "https://zenodo.org/api/records/7106074/files/Test_Exhaustive_experiment.csv/content"
+type = "csv"
+version = "Zenodo record 7106074"
+access = "Direct public download pinned by exact size and MD5."
+size_bytes = 7316621
+sha256 = "1964c70033a09030e2b9f4bab3d10f890b436ce704d8b898076608af40718543"
+local_path = "downloads/zenodo_lora24_indoor_rssi_i8/Test_Exhaustive_experiment.csv"
+notes = "Zenodo checksum md5:a9fb46df3d57f6edb345d7c1dd0da5ab."
+
+[[resources]]
+id = "long_run_csv"
+origin = "zenodo_7106074"
+url = "https://zenodo.org/api/records/7106074/files/Test_long_run.csv/content"
+type = "csv"
+version = "Zenodo record 7106074"
+access = "Direct public download pinned by exact size and MD5."
+size_bytes = 18107378
+sha256 = "1c51e72c0ef80c396d5eebe5ed64063f50357a33d125e837dafc9c9b2ac2298b"
+local_path = "downloads/zenodo_lora24_indoor_rssi_i8/Test_long_run.csv"
+notes = "Zenodo checksum md5:f027322df443cff626b675ce3397587d."
+
+[[resources]]
+id = "zenodo_metadata"
+origin = "zenodo_7106074"
+url = "https://zenodo.org/api/records/7106074"
+type = "json_metadata"
+version = "record 7106074, inspected 2026-08-18"
+access = "Official Zenodo API identity and CC BY 4.0 evidence."
+size_bytes = 7433
+sha256 = "62aec0500fbf538beda210fb50bce8c60396fee907d4a19e689d67d30bbe389d"
+local_path = "downloads/zenodo_lora24_indoor_rssi_i8/zenodo_record_7106074.json"
+
+[[resources]]
+id = "published_readme"
+origin = "zenodo_7106074"
+url = "https://zenodo.org/api/records/7106074/files/Readme/content"
+type = "text_documentation"
+version = "Zenodo record 7106074"
+access = "Published readme pinned by exact size and hash."
+size_bytes = 228
+sha256 = "b2ad757d8a771910d9a9a9a9481e3b9d53866455161b2106e2f3894b6cf5d2df"
+local_path = "downloads/zenodo_lora24_indoor_rssi_i8/Readme"
+
+[[resources]]
+id = "exhaustive_decoder"
+origin = "zenodo_7106074"
+url = "https://zenodo.org/api/records/7106074/files/plot_Exhaustive_experiment.py/content"
+type = "python_source"
+version = "Zenodo record 7106074"
+access = "Published analysis script pinned by exact size and hash."
+size_bytes = 20045
+sha256 = "8927434f8fb9d47d852395874ec619556f158d86b438f5ca59b1d81ecb1ba9b3"
+local_path = "downloads/zenodo_lora24_indoor_rssi_i8/plot_Exhaustive_experiment.py"
+notes = "Documents exhaustive node-ID and valid-packet decoding; retained as evidence and never executed."
+
+[[resources]]
+id = "long_run_decoder"
+origin = "zenodo_7106074"
+url = "https://zenodo.org/api/records/7106074/files/plot_long_run_test.py/content"
+type = "python_source"
+version = "Zenodo record 7106074"
+access = "Published analysis script pinned by exact size and hash."
+size_bytes = 15157
+sha256 = "045cc1c458cfc8abb4fbcbe83b8d5604eb946ad27645f060d926e15cbefee9e1"
+local_path = "downloads/zenodo_lora24_indoor_rssi_i8/plot_long_run_test.py"
+notes = "Documents long-run node-ID and valid-packet decoding; retained as evidence and never executed."
+
+[local_paths]
+downloads = "downloads/zenodo_lora24_indoor_rssi_i8/"
+extracted = "extracted/zenodo_lora24_indoor_rssi_i8/"
+filtered = "filtered/zenodo_lora24_indoor_rssi_i8/"
+index = "index/zenodo_lora24_indoor_rssi_i8/"
+samples = "samples/zenodo_lora24_indoor_rssi_i8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_lora24_indoor_rssi_i8/samples.jsonl"
+summary = "Validate the exact CC BY 4.0 source, apply its published valid-packet/node decoder, and emit lossless signed-int8 RSSI timelines."
+deterministic_notes = "Exhaustive measurements are grouped by fixed node across the complete configuration sweep. Week-long measurements are grouped by fixed node and the documented datarate, bandwidth, coding-rate, power, channel, and frequency configuration. Source order is preserved; no averaging, resampling, filling, or cross-link concatenation occurs."
+
+[[series]]
+id = "lora24_rssi_i8"
+description = "Received LoRa 2.4 GHz packet signal strength in dBm, emitted as fixed-link experimental timelines."
+semantic_meaning = "Gateway-reported RSSI in dBm for each valid received packet from one fixed node, optionally under one fixed week-long radio configuration."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source CSV stores RSSI as exact decimal integers inside signed-int8 range. Values are written unchanged as two's-complement int8 bytes."
+source_resources = ["exhaustive_csv", "long_run_csv", "zenodo_metadata", "published_readme", "exhaustive_decoder", "long_run_decoder"]
+source_format = "comma-separated LoRa gateway packet metadata"
+source_field = "rssi for valid size=20 node packets decoded by the published scripts"
+filtered_input_path = "filtered/zenodo_lora24_indoor_rssi_i8/ingest_stats.json"
+filtering = "Keep valid 20-byte packets whose payload prefix passes the published node decoder; group exhaustive rows by node and long-run rows by node plus fixed radio configuration."
+missing_value_policy = "No RSSI value is dropped within a retained natural group. Empty/invalid packet rows are outside the documented node-packet population. Malformed, nonintegral, out-of-int8, constant, or undersized groups fail or are excluded deterministically."
+conversion = "Parse the source RSSI as an exact integer in -128..127 and write it unchanged as signed int8 in source row order."
+numeric_kind = "int"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous signed-int8 RSSI timeline"
+sample_geometry = "variable_length_fixed_link_packet_timeline_1d"
+sample_rank = 1
+sample_axes = ["received_packet_order"]
+natural_record_kind = "complete_node_experiment_or_node_configuration_timeline"
+sample_count = 21
+total_size_bytes = 215232
+output_path = "samples/zenodo_lora24_indoor_rssi_i8/lora24_rssi_i8/"

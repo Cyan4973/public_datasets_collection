@@ -14,6 +14,7 @@ openflights_airports	ok	23094	153960	3	7698	61584	0	0	0	1	none	none
 usgs_fdsn_events_large	ok	28264	84792	2	14132	42396	56528	183716	4	1	none	none
 nvd_cpe_match_feed	ok	30000	100000	3	10000	40000	0	0	0	1	none	none
 eia_petroleum_barrel_prices	ok	33764	270112	16	1339	10712	0	0	0	1	none	none
+uci_parking_birmingham_occupancy_i16	ok	35717	71434	30	1294	2588	0	0	0	1	none	none
 arxiv_cs_lg_2024q1_metadata	ok	38360	115080	4	9590	28770	0	0	0	1	none	none
 nasa_donki_cme	ok	41650	166600	5	8330	33320	0	0	0	1	none	none
 opensky_states	ok	44580	178320	5	8536	34144	0	0	0	1	none	none

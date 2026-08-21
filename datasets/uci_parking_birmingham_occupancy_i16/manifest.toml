@@ -1,0 +1,100 @@
+manifest_version = 1
+dataset_id = "uci_parking_birmingham_occupancy_i16"
+name = "UCI Parking Birmingham Occupancy Int16"
+description = "Complete per-facility signed-integer parking-occupancy timelines from Birmingham, encoded losslessly as little-endian int16."
+homepage = "https://archive.ics.uci.edu/dataset/482/parking+birmingham"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Stolfi, D. (2017). Parking Birmingham [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C51K5Z."
+notes = "The official UCI API identifies the upstream Birmingham source as UK Open Government Licence; the current official UCI dataset page explicitly licenses this distribution under CC BY 4.0. Exact fetched evidence will be pinned before promotion."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public aggregate car-park occupancy counts released through UCI; no vehicle, person, payment, or journey identifiers are retained."
+usage_notes = "Only facility-level occupied-space counts are emitted. Facility codes, capacities, and timestamps are validation metadata."
+
+[[origins]]
+id = "uci_482"
+name = "UCI Parking Birmingham"
+url = "https://archive.ics.uci.edu/dataset/482/parking+birmingham"
+type = "uci_dataset"
+version = "UCI dataset 482"
+notes = "Dataset DOI 10.24432/C51K5Z."
+
+[[resources]]
+id = "parking_birmingham_archive"
+origin = "uci_482"
+url = "https://archive.ics.uci.edu/static/public/482/parking+birmingham.zip"
+type = "zip_archive"
+version = "UCI dataset 482"
+access = "Exact official public UCI archive pinned by size and SHA-256."
+size_bytes = 240539
+sha256 = "af7d1b1b5bb85aa6cbf0e5212d06e76470a7fbe6c42c86ea01bf4c36d3a56ad8"
+local_path = "downloads/uci_parking_birmingham_occupancy_i16/parking_birmingham.zip"
+
+[[resources]]
+id = "uci_482_metadata"
+origin = "uci_482"
+url = "https://archive.ics.uci.edu/api/dataset?id=482"
+type = "json_metadata"
+version = "UCI dataset 482"
+access = "Exact official UCI API metadata pinned by size and SHA-256."
+size_bytes = 1290
+sha256 = "f0a3495f3f957b8cf2bc0d2383258c26fbb46a91b29370509dffdd8c364bc14b"
+local_path = "downloads/uci_parking_birmingham_occupancy_i16/uci_dataset_482.json"
+
+[[resources]]
+id = "uci_482_rights_page"
+origin = "uci_482"
+url = "https://archive.ics.uci.edu/dataset/482/parking+birmingham"
+type = "html_license_evidence"
+version = "UCI dataset 482"
+access = "Exact official UCI page pinned by size and SHA-256 as rights evidence."
+size_bytes = 73604
+sha256 = "a0a74ce8f4ed4ccfd34a8e56482c5f62b5def2024576d7915e339e133f3208e2"
+local_path = "downloads/uci_parking_birmingham_occupancy_i16/uci_dataset_482.html"
+
+[local_paths]
+downloads = "downloads/uci_parking_birmingham_occupancy_i16/"
+extracted = "extracted/uci_parking_birmingham_occupancy_i16/"
+filtered = "filtered/uci_parking_birmingham_occupancy_i16/"
+index = "index/uci_parking_birmingham_occupancy_i16/"
+samples = "samples/uci_parking_birmingham_occupancy_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/uci_parking_birmingham_occupancy_i16/samples.jsonl"
+summary = "Validate the official UCI source and emit one little-endian signed-int16 reported-occupancy timeline per complete facility code."
+deterministic_notes = "Metadata, rights page, archive, and extracted CSV are pinned by exact size and SHA-256. The parser requires the documented four-column schema, stable positive facility capacity, signed-int16 occupancy, nondecreasing timestamps within each facility, byte-semantically identical fields for same-timestamp duplicate rows, nonconstant complete timelines, aggregate and median-sample floors, and fresh source/output byte comparison. Negative and above-capacity source readings are preserved and characterized."
+
+[[series]]
+id = "parking_facility_occupancy_i16"
+description = "Complete occupied-space count timeline for one Birmingham parking-facility system code."
+semantic_meaning = "Source-reported number of occupied parking spaces at each successive observation for one facility, including signed sensor/reporting anomalies."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The CSV stores occupancy as exact signed decimal integers ranging below zero for a small number of source anomalies. Values are preserved exactly and encoded in the smallest corpus integer width that covers the validated source range."
+source_resources = ["parking_birmingham_archive", "uci_482_metadata", "uci_482_rights_page"]
+source_format = "UCI comma-separated parking-occupancy table"
+source_field = "Occupancy integer column for each SystemCodeNumber facility"
+filtered_input_path = "filtered/uci_parking_birmingham_occupancy_i16/ingest_stats.json"
+filtering = "Keep every valid source-order Occupancy value for every facility code. Facility code, Capacity, and LastUpdated are used only to validate natural boundaries and temporal order."
+missing_value_policy = "Missing fields, malformed integers or timestamps, backward time, conflicting same-timestamp duplicates, changing or nonpositive facility capacity, occupancy outside signed-int16 range, constant timelines, insufficient median natural-sample length, or stale outputs fail the recipe. Exact duplicate, negative, and above-capacity source readings are preserved in order; no values are dropped or imputed."
+conversion = "Parse each exact signed decimal occupancy integer, validate -32768 <= occupancy <= 32767, and write it as a little-endian signed int16 while preserving observation order within its facility."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous signed-int16 facility-utilization timeline"
+sample_geometry = "parking_facility_time_series_1d"
+sample_rank = 1
+sample_axes = ["observation_time"]
+natural_record_kind = "complete_parking_facility_timeline"
+sample_count = 30
+total_size_bytes = 71434
+output_path = "samples/uci_parking_birmingham_occupancy_i16/parking_facility_occupancy_i16/"

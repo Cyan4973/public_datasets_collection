@@ -1,0 +1,128 @@
+manifest_version = 1
+dataset_id = "nasa_heasarc_nicer_detector_u8"
+name = "NASA HEASARC NICER Detector Address Uint8 Events"
+description = "Native unsigned-byte detector X, Y, and detector-ID event sequences from 31 complete NICER/XTI cleaned X-ray observations."
+homepage = "https://heasarc.gsfc.nasa.gov/docs/nicer/"
+
+[license]
+name = "NASA SMD Open Scientific Data Policy"
+spdx = "LicenseRef-NASA-SMD-Open-Data"
+url = "https://science.nasa.gov/researchers/science-data/science-information-policy/"
+citation = "NASA HEASARC NICER archive; NICER/XTI mission and observation teams. Preserve observation IDs, target names, mission attribution, and HEASARC acknowledgement."
+notes = "NASA SMD states that information produced from SMD-funded scientific research is held as a public trust, made publicly available, and openly shared. These are public NASA mission observations from the official HEASARC archive."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public X-ray photon-event observations of astronomical sources from NASA's NICER X-ray Timing Instrument on the International Space Station."
+usage_notes = "Samples contain only detector-address fields from astronomical photon events. No human-subject, personal, or Earth-observation data is included."
+
+[[origins]]
+id = "nasa_heasarc_nicer"
+name = "NASA HEASARC NICER Observation Archive"
+url = "https://heasarc.gsfc.nasa.gov/FTP/nicer/data/obs/"
+type = "public_scientific_archive"
+version = "June 2017 cleaned event products"
+
+[[resources]]
+id = "nicer_june_2017_cleaned_event_files"
+origin = "nasa_heasarc_nicer"
+url = "https://heasarc.gsfc.nasa.gov/FTP/nicer/data/obs/2017_06/"
+type = "shared_pinned_gzip_fits_event_file_selection"
+version = "36 exact observation files pinned by datasets/nasa_heasarc_nicer_pi_i16/sources.tsv"
+size_bytes = 205174726
+sha256 = "dda1282955970175fef938499abfbbeddc82e1ad239937927896af2cb10de554"
+local_path = "downloads/nasa_heasarc_nicer_pi_i16/"
+notes = "The SHA-256 identifies the shared tracked sources.tsv inventory; every source payload has an individually pinned SHA-256. Reusing the accepted cache avoids duplicating 205 MB locally."
+
+[local_paths]
+downloads = "downloads/nasa_heasarc_nicer_pi_i16/"
+filtered = "filtered/nasa_heasarc_nicer_detector_u8/"
+index = "index/nasa_heasarc_nicer_detector_u8/"
+samples = "samples/nasa_heasarc_nicer_detector_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_heasarc_nicer_detector_u8/samples.jsonl"
+summary = "Validate the shared pinned NICER FITS observations and emit the native RAWX, RAWY, and DET_ID unsigned-byte event sequences for every complete selected observation."
+deterministic_notes = "The decoder validates the shared 36-row source inventory and every compressed payload by exact size and SHA-256, gzip/FITS structure, NICER/XTI and OBS_ID identity, complete binary-table row geometry, and the exact TFORM/scaling/unit/null schema of all three fields. It selects all 31 observations with at least 1,000 events, checks nondegenerate output and uniqueness per series, and byte-compares every output with a fresh source parse."
+
+[[series]]
+id = "nicer_rawx_u8"
+description = "Native detector focal-plane X-address sequence for each cleaned NICER observation."
+semantic_meaning = "FITS RAWX detector pixel address of each successive cleaned X-ray photon event."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "EVENTS.RAWX is a scalar unsigned-byte FITS 1B field with TSCAL=1, TZERO=0, no TNULL, and unit pixel."
+source_resources = ["nicer_june_2017_cleaned_event_files"]
+source_format = "gzip-compressed FITS with OGIP EVENTS binary table"
+source_field = "EVENTS.RAWX scalar FITS 1B column"
+filtered_input_path = "filtered/nasa_heasarc_nicer_detector_u8/ingest_stats.json"
+filtering = "Use the same fixed 36-observation inventory as the accepted PI recipe. Keep every RAWX event from all 31 observations whose full EVENTS table contains at least 1,000 rows."
+missing_value_policy = "RAWX has no declared null sentinel. Missing columns, nonidentity scaling, schema drift, malformed FITS rows, constant samples, insufficient rows, duplicate outputs, source drift, or stale outputs fail the recipe; no event is dropped or imputed."
+conversion = "Extract each unsigned RAWX byte in FITS event-row order and emit it unchanged. No scaling, sorting, splitting, padding, or concatenation is applied."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 detector X-address array"
+sample_geometry = "variable_length_xray_photon_detector_address_1d"
+sample_rank = 1
+sample_axes = ["photon_event"]
+natural_record_kind = "nicer_observation_rawx_event_sequence"
+sample_count = 31
+total_size_bytes = 8938390
+output_path = "samples/nasa_heasarc_nicer_detector_u8/nicer_rawx_u8/"
+
+[[series]]
+id = "nicer_rawy_u8"
+description = "Native detector focal-plane Y-address sequence for each cleaned NICER observation."
+semantic_meaning = "FITS RAWY detector pixel address of each successive cleaned X-ray photon event."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "EVENTS.RAWY is a scalar unsigned-byte FITS 1B field with TSCAL=1, TZERO=0, no TNULL, and unit pixel."
+source_resources = ["nicer_june_2017_cleaned_event_files"]
+source_format = "gzip-compressed FITS with OGIP EVENTS binary table"
+source_field = "EVENTS.RAWY scalar FITS 1B column"
+filtered_input_path = "filtered/nasa_heasarc_nicer_detector_u8/ingest_stats.json"
+filtering = "Use the same fixed 36-observation inventory as the accepted PI recipe. Keep every RAWY event from all 31 observations whose full EVENTS table contains at least 1,000 rows."
+missing_value_policy = "RAWY has no declared null sentinel. Missing columns, nonidentity scaling, schema drift, malformed FITS rows, constant samples, insufficient rows, duplicate outputs, source drift, or stale outputs fail the recipe; no event is dropped or imputed."
+conversion = "Extract each unsigned RAWY byte in FITS event-row order and emit it unchanged. No scaling, sorting, splitting, padding, or concatenation is applied."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 detector Y-address array"
+sample_geometry = "variable_length_xray_photon_detector_address_1d"
+sample_rank = 1
+sample_axes = ["photon_event"]
+natural_record_kind = "nicer_observation_rawy_event_sequence"
+sample_count = 31
+total_size_bytes = 8938390
+output_path = "samples/nasa_heasarc_nicer_detector_u8/nicer_rawy_u8/"
+
+[[series]]
+id = "nicer_detector_id_u8"
+description = "Native detector-identifier sequence for each cleaned NICER observation."
+semantic_meaning = "FITS DET_ID hardware detector identifier of each successive cleaned X-ray photon event."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "EVENTS.DET_ID is a scalar unsigned-byte FITS 1B field with TSCAL=1, TZERO=0, no TNULL, and no physical unit."
+source_resources = ["nicer_june_2017_cleaned_event_files"]
+source_format = "gzip-compressed FITS with OGIP EVENTS binary table"
+source_field = "EVENTS.DET_ID scalar FITS 1B column"
+filtered_input_path = "filtered/nasa_heasarc_nicer_detector_u8/ingest_stats.json"
+filtering = "Use the same fixed 36-observation inventory as the accepted PI recipe. Keep every DET_ID event from all 31 observations whose full EVENTS table contains at least 1,000 rows."
+missing_value_policy = "DET_ID has no declared null sentinel. Missing columns, nonidentity scaling, schema drift, malformed FITS rows, constant samples, insufficient rows, duplicate outputs, source drift, or stale outputs fail the recipe; no event is dropped or imputed."
+conversion = "Extract each unsigned DET_ID byte in FITS event-row order and emit it unchanged. No scaling, sorting, splitting, padding, or concatenation is applied."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 detector-identifier array"
+sample_geometry = "variable_length_xray_photon_detector_address_1d"
+sample_rank = 1
+sample_axes = ["photon_event"]
+natural_record_kind = "nicer_observation_detector_id_event_sequence"
+sample_count = 31
+total_size_bytes = 8938390
+output_path = "samples/nasa_heasarc_nicer_detector_u8/nicer_detector_id_u8/"

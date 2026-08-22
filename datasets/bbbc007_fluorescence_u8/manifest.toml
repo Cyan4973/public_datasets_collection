@@ -1,0 +1,87 @@
+manifest_version = 1
+dataset_id = "bbbc007_fluorescence_u8"
+name = "BBBC007 Microscopy Uint8"
+description = "Native uint8 intensity planes decoded from measured Drosophila Kc167 cell microscopy TIFFs in Broad Bioimage Benchmark Collection image set BBBC007."
+homepage = "https://bbbc.broadinstitute.org/BBBC007"
+
+[license]
+name = "Creative Commons CC0 1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "Ljosa, V., Sokolnicki, K.L. & Carpenter, A.E. Annotated high-throughput microscopy image sets for validation. Nature Methods 9, 637 (2012). https://doi.org/10.1038/nmeth.2083."
+notes = "The official BBBC007 page states that, to the extent possible under law, Anne Carpenter has waived all copyright and related or neighboring rights to the Drosophila Kc167 images and ground truth, and links CC0 1.0. The fetched page is pinned as rights evidence."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public microscopy images of a Drosophila melanogaster Kc167 cell line; no human subjects or identifying metadata."
+usage_notes = "The images are published under CC0. Retain the recommended scientific citation as provenance."
+
+[[origins]]
+id = "bbbc007"
+name = "Broad Bioimage Benchmark Collection BBBC007"
+url = "https://bbbc.broadinstitute.org/BBBC007"
+type = "bioimage_benchmark_image_set"
+version = "BBBC007 version 1"
+
+[[resources]]
+id = "bbbc007_v1_images"
+origin = "bbbc007"
+url = "https://data.broadinstitute.org/bbbc/BBBC007/BBBC007_v1_images.zip"
+type = "zip_of_tiff_microscopy_images"
+version = "BBBC007 version 1"
+access = "Official BBBC image archive, pinned from the prior width-identification attempt."
+size_bytes = 6435776
+sha256 = "b7009e2fce0a3152a5c9adda916eaa699d09696f4bd02a7d05d12d041e30c6d1"
+local_path = "downloads/bbbc007_fluorescence_u8/BBBC007_v1_images.zip"
+
+[[resources]]
+id = "bbbc007_rights_page"
+origin = "bbbc007"
+url = "https://bbbc.broadinstitute.org/BBBC007"
+type = "html_identity_license_evidence"
+version = "fetched 2026-08-21"
+access = "Official BBBC page pinned by size and SHA-256 as dataset identity and CC0 rights evidence."
+size_bytes = 32288
+sha256 = "374180e569bcfb2f3b61783e8e52172bd333aecc79faf2348dba6121573ddd7e"
+local_path = "downloads/bbbc007_fluorescence_u8/BBBC007.html"
+
+[local_paths]
+downloads = "downloads/bbbc007_fluorescence_u8/"
+filtered = "filtered/bbbc007_fluorescence_u8/"
+index = "index/bbbc007_fluorescence_u8/"
+samples = "samples/bbbc007_fluorescence_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/bbbc007_fluorescence_u8/samples.jsonl"
+summary = "Validate the official BBBC source, decode supported baseline TIFF strips, and emit one full native uint8 raster plane per unique decoded plane."
+deterministic_notes = "The standard-library decoder validates the pinned ZIP, safe members, a single TIFF IFD, dimensions, unsigned 8-bit samples, grayscale or RGB photometry, chunky planar layout, orientation, strip geometry, and either uncompressed or PackBits strip payloads. Exact duplicate decoded planes are deterministically retained once. Build and verify independently reparse the archive and byte-compare every output."
+
+[[series]]
+id = "bbbc007_microscopy_plane_u8"
+description = "Full native unsigned-byte intensity plane decoded from one BBBC007 microscopy TIFF."
+semantic_meaning = "Source-provided microscopy intensity or rendered color-channel value at each pixel of one Drosophila Kc167 cell image plane."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The TIFF SampleFormat is unsigned integer (explicit or default) with BitsPerSample=8. Grayscale rasters are emitted directly; chunky RGB rasters are deinterleaved into their source R, G, and B planes. Exact duplicate planes are represented once."
+source_resources = ["bbbc007_v1_images", "bbbc007_rights_page"]
+source_format = "baseline TIFF grayscale or chunky RGB image"
+source_field = "one decoded native 8-bit grayscale or RGB raster plane"
+filtered_input_path = "filtered/bbbc007_fluorescence_u8/ingest_stats.json"
+filtering = "Decode every structurally supported TIFF in the complete official image archive. Preserve every pixel in row-major order and retain the earliest plane for each exact decoded SHA-256; omit only exact duplicate planes."
+missing_value_policy = "Unsafe or corrupt ZIP members, multiple TIFF images, unsupported TIFF tags or compression, malformed strips, non-uint8 samples, short or constant planes, insufficient coverage, hash drift, missing license evidence, or stale outputs fail the recipe. No pixels are dropped, filled, rescaled, normalized, color-converted, or quantized."
+conversion = "Decode TIFF strips (compression 1 or PackBits 32773); concatenate rows in stored top-left order; for RGB, deinterleave the native chunky samples into R, G, and B planes; write each unique plane unchanged as raw uint8 bytes."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 microscopy intensity plane"
+sample_geometry = "2d_microscopy_intensity_plane"
+sample_rank = 2
+sample_axes = ["image_y", "image_x"]
+natural_record_kind = "decoded_tiff_microscopy_image_plane"
+sample_count = 45
+total_size_bytes = 8050720
+output_path = "samples/bbbc007_fluorescence_u8/bbbc007_microscopy_plane_u8/"

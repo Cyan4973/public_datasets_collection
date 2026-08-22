@@ -1,0 +1,76 @@
+manifest_version = 1
+dataset_id = "asterisk_core_sounds_ulaw_u8"
+name = "Asterisk Core Sounds G.711 mu-law Uint8"
+description = "Native 8-bit G.711 mu-law code streams from the versioned English Asterisk Core Sounds prompt collection."
+homepage = "https://downloads.asterisk.org/pub/telephony/sounds/releases/"
+
+[license]
+name = "Creative Commons Attribution-ShareAlike 3.0 Unported"
+spdx = "CC-BY-SA-3.0"
+url = "https://creativecommons.org/licenses/by-sa/3.0/"
+citation = "Asterisk Core Sounds, English, version 1.6.1, Digium/Asterisk Project."
+notes = "LICENSE-asterisk-core-en-1.6.1 states that the copyrighted voice prompts recorded by Allison Smith are distributed under the embedded Creative Commons Attribution-ShareAlike 3.0 legal code. The recipe pins both archive and license-member identities."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Professionally recorded public telephony prompts distributed as an Asterisk sound package; no speaker identity fields or private recordings are included in sample bytes."
+usage_notes = "Use under the archive's Creative Commons attribution and share-alike terms. Preserve source/version attribution."
+
+[[origins]]
+id = "asterisk_core_sounds"
+name = "Asterisk Core Sounds"
+url = "https://downloads.asterisk.org/pub/telephony/sounds/releases/"
+type = "versioned_telephony_prompt_release"
+version = "English 1.6.1"
+
+[[resources]]
+id = "asterisk_core_sounds_en_ulaw_1_6_1"
+origin = "asterisk_core_sounds"
+url = "https://downloads.asterisk.org/pub/telephony/sounds/releases/asterisk-core-sounds-en-ulaw-1.6.1.tar.gz"
+type = "tar_gzip_of_raw_g711_mulaw_streams"
+version = "1.6.1"
+access = "Official versioned Asterisk release, pinned by exact size and SHA-256."
+size_bytes = 10241447
+sha256 = "83ec602fb1f2cb06a5194a95f855b84bae35d49d5bdb6fbd9274d5d1a5d16b0e"
+local_path = "downloads/asterisk_core_sounds_ulaw_u8/asterisk-core-sounds-en-ulaw-1.6.1.tar.gz"
+
+[local_paths]
+downloads = "downloads/asterisk_core_sounds_ulaw_u8/"
+filtered = "filtered/asterisk_core_sounds_ulaw_u8/"
+index = "index/asterisk_core_sounds_ulaw_u8/"
+samples = "samples/asterisk_core_sounds_ulaw_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/asterisk_core_sounds_ulaw_u8/samples.jsonl"
+summary = "Validate the official release and embedded license, then emit one native raw G.711 mu-law code timeline per unique spoken-prompt member."
+deterministic_notes = "The parser validates safe TAR structure, bounded expansion, embedded CC BY-SA evidence, raw .ulaw member sizes, nonconstant code streams, exact duplicate handling, natural-sample and aggregate floors, and fresh source/output byte equality. Dedicated silence utilities are outside the spoken-prompt scope."
+
+[[series]]
+id = "asterisk_prompt_mulaw_u8"
+description = "Native G.711 mu-law audio code timeline for one Asterisk spoken prompt."
+semantic_meaning = "Unsigned 8-bit G.711 mu-law companded amplitude code at each successive 8 kHz audio sample time in one prompt recording."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "Each source .ulaw member is a headerless machine-facing stream of standardized one-byte G.711 mu-law codewords. Each code deterministically represents a companded audio amplitude, and only those successive codewords are emitted."
+source_resources = ["asterisk_core_sounds_en_ulaw_1_6_1"]
+source_format = "headerless raw G.711 mu-law audio stream"
+source_field = "successive native 8-bit G.711 mu-law audio sample code"
+filtered_input_path = "filtered/asterisk_core_sounds_ulaw_u8/ingest_stats.json"
+filtering = "Include every nonempty, nonconstant .ulaw prompt member outside the dedicated silence directory. Retain the lexicographically first member for each exact payload SHA-256 and record duplicate exclusions."
+missing_value_policy = "Unsafe TAR paths or member types, absent embedded license evidence, malformed or empty members, constant nonsilence streams, insufficient archive coverage, insufficient aggregate or median natural-sample size, source drift, or stale outputs fail the recipe. No sample codes are dropped, filled, decoded, rescaled, normalized, or concatenated."
+conversion = "Read each selected headerless .ulaw member as successive unsigned G.711 mu-law codewords and write those code values byte-for-byte in source order. One source prompt remains one output sample."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 G.711 mu-law code timeline"
+sample_geometry = "g711_mulaw_prompt_time_series_1d"
+sample_rank = 1
+sample_axes = ["audio_sample_time"]
+natural_record_kind = "individual_telephony_prompt_recording"
+sample_count = 558
+total_size_bytes = 11789778
+output_path = "samples/asterisk_core_sounds_ulaw_u8/asterisk_prompt_mulaw_u8/"

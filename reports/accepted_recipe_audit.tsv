@@ -228,6 +228,7 @@ binance_spot_aggtrades_btc_eth_2024_w01	ok	26957784	215662272	28	821957	6575656	
 covertype_uci	ok	28469588	34279708	49	581012	581012	0	0	0	1	none	none
 binance_usdm_futures_aggtrades_btc_eth_2024_w01	ok	30405852	243246816	28	882679	7061432	76014630	501696558	70	1	none	none
 zenodo_leconte_chirp_segy_f32	ok	31345093	125380372	6895	4332	17328	0	0	0	1	none	none
+uci_emg_gestures_i8	ok	33265144	33265144	568	57841	57841	0	0	0	1	none	none
 zenodo_npx_opto_templates_f32	ok	35104768	140419072	14	2385161	9540644	0	0	0	1	none	none
 wikimedia_clickstream_enwiki	ok	35605767	142423068	1	35605767	142423068	0	0	0	1	none	none
 zenodo_spica_urban_das_f32	ok	38880000	155520000	9	4320000	17280000	0	0	0	1	none	none

@@ -1,0 +1,98 @@
+manifest_version = 1
+dataset_id = "uci_emg_gestures_i8"
+name = "UCI EMG Data for Gestures Int8"
+description = "Raw surface-electromyography channel timelines from Myo-armband gesture sessions for 36 participants, with UCI's exact 1e-5 decimal storage inverted to the original signed-int8 codes."
+homepage = "https://archive.ics.uci.edu/dataset/481/emg+data+for+gestures"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Krilova, N.; Kastalskiy, I.; Kazantsev, V.; Makarov, V.A.; Lobov, S. (2018). EMG Data for Gestures [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5ZP5C."
+notes = "The current official UCI dataset page declares CC BY 4.0; the downloaded official HTML page and API metadata are pinned as rights and identity evidence."
+
+[safety]
+contains_sensitive_data = true
+contains_personal_data = true
+provenance_notes = "Public deidentified research sEMG recordings organized by participant number. Muscle-activation waveforms may have biometric or health-related character even though names and demographics are absent."
+usage_notes = "Use only under CC BY 4.0. Do not attempt participant identification, health inference, linkage, or biometric profiling. Participant codes, timestamps, and gesture labels are excluded from sample bytes."
+
+[[origins]]
+id = "uci_481"
+name = "UCI EMG Data for Gestures"
+url = "https://archive.ics.uci.edu/dataset/481/emg+data+for+gestures"
+type = "uci_dataset"
+version = "UCI dataset 481"
+
+[[resources]]
+id = "emg_gestures_archive"
+origin = "uci_481"
+url = "https://archive.ics.uci.edu/static/public/481/emg+data+for+gestures.zip"
+type = "zip_of_text_emg_recordings"
+version = "UCI dataset 481"
+access = "Official public UCI archive, acquired and pinned on 2026-08-21."
+size_bytes = 17699840
+sha256 = "e82247b6478e5a1c5ad621c1f2cc1bb878547c51f01f4e6226abb2a4819ce4ee"
+local_path = "downloads/uci_emg_gestures_i8/emg_data_for_gestures.zip"
+
+[[resources]]
+id = "uci_481_metadata"
+origin = "uci_481"
+url = "https://archive.ics.uci.edu/api/dataset?id=481"
+type = "json_metadata"
+version = "UCI dataset 481"
+access = "Official UCI API metadata, acquired and pinned on 2026-08-21."
+size_bytes = 2728
+sha256 = "6a8ef398d1eacd881db91e5217a31d734669e21d891bfe3d7ee5d20fd501190e"
+local_path = "downloads/uci_emg_gestures_i8/uci_dataset_481.json"
+
+[[resources]]
+id = "uci_481_rights_page"
+origin = "uci_481"
+url = "https://archive.ics.uci.edu/dataset/481/emg+data+for+gestures"
+type = "html_license_evidence"
+version = "UCI dataset 481"
+access = "Official UCI page, acquired and pinned on 2026-08-21."
+size_bytes = 111120
+sha256 = "665c037969f6df4f86b77150af2e045e19a64c617dd1d89d261e6ea963d586f2"
+local_path = "downloads/uci_emg_gestures_i8/uci_dataset_481.html"
+
+[local_paths]
+downloads = "downloads/uci_emg_gestures_i8/"
+filtered = "filtered/uci_emg_gestures_i8/"
+index = "index/uci_emg_gestures_i8/"
+samples = "samples/uci_emg_gestures_i8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/uci_emg_gestures_i8/samples.jsonl"
+summary = "Validate every numeric EMG recording in the official archive, exactly invert the source decimal scale, and emit one signed-int8 timeline per source recording/channel."
+deterministic_notes = "The decoder validates safe ZIP structure, ten-column numeric recording tables, nondecreasing time, eight channel values exactly on a 1e-5 lattice whose recovered codes fit signed int8, bounded gesture labels, complete nonconstant channel timelines, distinct outputs, aggregate and median floors, and fresh source/output byte equality."
+
+[[series]]
+id = "semg_channel_i8"
+description = "Complete raw surface-EMG channel timeline from one participant recording session."
+semantic_meaning = "Signed raw Myo-armband surface-electromyography amplitude code at each successive observation for one electrode channel."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "UCI stores the Myo readings as exact decimal physical values on a 1e-5 lattice. Multiplication by 100000 exactly recovers codes in -128..127; each is emitted as its two's-complement int8 byte. A complete archive scan found zero off-lattice or out-of-range values."
+source_resources = ["emg_gestures_archive", "uci_481_metadata", "uci_481_rights_page"]
+source_format = "UCI delimited raw EMG recording table"
+source_field = "one of the eight raw EMG channel columns"
+filtered_input_path = "filtered/uci_emg_gestures_i8/ingest_stats.json"
+filtering = "Keep every observation from all eight EMG channels of every complete numeric recording member. Use timestamp and gesture class only for validation; exclude them from outputs."
+missing_value_policy = "Missing or malformed rows, nonnumeric fields, backward time, channel values off the exact 1e-5 lattice, recovered codes outside signed-int8, invalid gesture labels, short or constant channel timelines, duplicate channel payloads, insufficient coverage/floors, source identity changes, or stale outputs fail the recipe. No readings are dropped, imputed, rounded, clipped, or concatenated across recordings."
+conversion = "Parse each source channel token as an exact decimal, multiply by 100000, require an integral result in -128..127, and emit its two's-complement int8 byte in source row order, one source recording/channel per sample. This is exact inverse scaling, not quantization."
+numeric_kind = "int"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous signed-int8 surface-EMG timeline"
+sample_geometry = "semg_recording_channel_time_series_1d"
+sample_rank = 1
+sample_axes = ["observation_time"]
+natural_record_kind = "complete_semg_recording_channel_timeline"
+sample_count = 568
+total_size_bytes = 33265144
+output_path = "samples/uci_emg_gestures_i8/semg_channel_i8/"

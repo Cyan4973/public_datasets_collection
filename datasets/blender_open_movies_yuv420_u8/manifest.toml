@@ -1,0 +1,129 @@
+manifest_version = 1
+dataset_id = "blender_open_movies_yuv420_u8"
+name = "Blender Open Movies YUV420 Video Planes Uint8"
+description = "Deterministic temporal Y, Cb, and Cr byte-plane windows decoded from three CC BY 3.0 Blender Foundation open movies."
+homepage = "https://commons.wikimedia.org/"
+
+[license]
+name = "Creative Commons Attribution 3.0 Unported"
+spdx = "CC-BY-3.0"
+url = "https://creativecommons.org/licenses/by/3.0/"
+citation = "Big Buck Bunny, Sintel, and Tears of Steel; Blender Foundation open movie projects."
+notes = "Wikimedia Commons records each selected full-film source and generated 480p transcode as CC BY 3.0. Preserve film and Blender Foundation attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Scripted and animated open-movie frames from Blender Foundation projects; no observational or private source material."
+usage_notes = "Use under CC BY 3.0 with attribution to the named films and Blender Foundation projects."
+
+[[origins]]
+id = "wikimedia_commons_blender_open_movies"
+name = "Wikimedia Commons Blender Open Movie files"
+url = "https://commons.wikimedia.org/"
+type = "public_media_repository"
+version = "three exact Commons 480p VP9 transcodes selected 2026-08-23"
+
+[[resources]]
+id = "open_movie_480p_vp9_transcodes"
+origin = "wikimedia_commons_blender_open_movies"
+url = "https://commons.wikimedia.org/"
+type = "pinned_webm_vp9_yuv420p_selection"
+version = "three exact transcodes pinned by sources.tsv"
+access = "Direct public Wikimedia Commons transcodes; exact URLs, byte sizes, SHA-256 identities, dimensions, rates, durations, and licenses are pinned."
+size_bytes = 258722580
+sha256 = "ec1be0bf4368700a49b4c6bb93c8a37e79d5927bb63b20fb892f92665451a86d"
+local_path = "downloads/blender_open_movies_yuv420_u8/"
+notes = "The SHA-256 identifies the tracked sources.tsv inventory; each video payload has an individually pinned SHA-256."
+
+[local_paths]
+downloads = "downloads/blender_open_movies_yuv420_u8/"
+filtered = "filtered/blender_open_movies_yuv420_u8/"
+index = "index/blender_open_movies_yuv420_u8/"
+samples = "samples/blender_open_movies_yuv420_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/blender_open_movies_yuv420_u8/samples.jsonl"
+summary = "Decode four deterministic 80-frame temporal windows per film and emit separate raw uint8 Y, Cb, and Cr plane tensors."
+deterministic_notes = "Pinned source identity and ffprobe schema, fixed duration fractions, fixed frame count, single-threaded FFmpeg decoding, exact YUV420 frame layout, nondegenerate distributions, unique payloads, and fresh source/output byte comparison are enforced."
+
+[[series]]
+id = "video_luma_y_u8"
+description = "Temporal luma-plane windows decoded from three animated open movies."
+semantic_meaning = "Codec-decoded Y luma sample for every pixel across 80 consecutive video frames."
+role = "primary"
+representation_class = "decoded_native_numeric"
+representation_notes = "The pinned VP9 transcodes declare yuv420p; decoded Y bytes are preserved without RGB conversion, rescaling, or normalization."
+source_resources = ["open_movie_480p_vp9_transcodes"]
+source_format = "WebM VP9, yuv420p 8-bit"
+source_field = "Y plane from selected decoded frames"
+filtered_input_path = "filtered/blender_open_movies_yuv420_u8/ingest_stats.json"
+filtering = "Keep four fixed 80-frame windows centered at 20%, 40%, 60%, and 80% of each movie duration."
+missing_value_policy = "Changed sources, mismatched codec geometry, short decode, malformed frame layout, degenerate or duplicate windows, and stale outputs fail. No values are dropped or imputed within a window."
+conversion = "Decode VP9 deterministically to its declared yuv420p pixel format and concatenate each window's Y planes in frame order."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 temporal video luma tensor"
+sample_geometry = "3d_video_plane_window"
+sample_rank = 3
+sample_axes = ["frame", "y", "x"]
+natural_record_kind = "open_movie_temporal_plane_window"
+sample_count = 12
+total_size_bytes = 327936000
+output_path = "samples/blender_open_movies_yuv420_u8/video_luma_y_u8/"
+
+[[series]]
+id = "video_chroma_cb_u8"
+description = "Temporal blue-difference chroma-plane windows decoded from three animated open movies."
+semantic_meaning = "Codec-decoded Cb chroma sample over the 4:2:0 chroma grid across 80 consecutive video frames."
+role = "primary"
+representation_class = "decoded_native_numeric"
+representation_notes = "The pinned VP9 transcodes declare yuv420p; decoded Cb bytes retain their source chroma subsampling and are not upsampled."
+source_resources = ["open_movie_480p_vp9_transcodes"]
+source_format = "WebM VP9, yuv420p 8-bit"
+source_field = "Cb plane from selected decoded frames"
+filtered_input_path = "filtered/blender_open_movies_yuv420_u8/ingest_stats.json"
+filtering = "Keep four fixed 80-frame windows centered at 20%, 40%, 60%, and 80% of each movie duration."
+missing_value_policy = "Same strict policy as the Y series; no values are dropped or imputed within a window."
+conversion = "Decode VP9 deterministically to yuv420p and concatenate each window's native half-resolution Cb planes in frame order."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 temporal video Cb tensor"
+sample_geometry = "3d_video_plane_window"
+sample_rank = 3
+sample_axes = ["frame", "chroma_y", "chroma_x"]
+natural_record_kind = "open_movie_temporal_plane_window"
+sample_count = 12
+total_size_bytes = 81984000
+output_path = "samples/blender_open_movies_yuv420_u8/video_chroma_cb_u8/"
+
+[[series]]
+id = "video_chroma_cr_u8"
+description = "Temporal red-difference chroma-plane windows decoded from three animated open movies."
+semantic_meaning = "Codec-decoded Cr chroma sample over the 4:2:0 chroma grid across 80 consecutive video frames."
+role = "primary"
+representation_class = "decoded_native_numeric"
+representation_notes = "The pinned VP9 transcodes declare yuv420p; decoded Cr bytes retain their source chroma subsampling and are not upsampled."
+source_resources = ["open_movie_480p_vp9_transcodes"]
+source_format = "WebM VP9, yuv420p 8-bit"
+source_field = "Cr plane from selected decoded frames"
+filtered_input_path = "filtered/blender_open_movies_yuv420_u8/ingest_stats.json"
+filtering = "Keep four fixed 80-frame windows centered at 20%, 40%, 60%, and 80% of each movie duration."
+missing_value_policy = "Same strict policy as the Y series; no values are dropped or imputed within a window."
+conversion = "Decode VP9 deterministically to yuv420p and concatenate each window's native half-resolution Cr planes in frame order."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 temporal video Cr tensor"
+sample_geometry = "3d_video_plane_window"
+sample_rank = 3
+sample_axes = ["frame", "chroma_y", "chroma_x"]
+natural_record_kind = "open_movie_temporal_plane_window"
+sample_count = 12
+total_size_bytes = 81984000
+output_path = "samples/blender_open_movies_yuv420_u8/video_chroma_cr_u8/"

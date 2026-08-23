@@ -1,0 +1,8 @@
+black_painted_planks
+concrete_wall_008
+decrepit_wallpaper
+marble_cliff_01
+rusty_metal_03
+trident_maple_bark
+gravelly_sand
+denim_fabric_06

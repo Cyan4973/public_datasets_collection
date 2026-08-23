@@ -1,0 +1,76 @@
+manifest_version = 1
+dataset_id = "polyhaven_material_roughness_u8"
+name = "Poly Haven Material Roughness Maps Uint8"
+description = "Eight CC0 achromatic 8-bit JPEG PBR roughness maps spanning painted wood, concrete, wallpaper, stone, rusted metal, bark, sand, and denim."
+homepage = "https://polyhaven.com/textures"
+
+[license]
+name = "Creative Commons CC0 1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://polyhaven.com/license"
+notes = "Poly Haven states that all assets are in the public domain under CC0 and may be used for any purpose without attribution. The downloader validates the official license page and exact pinned asset API metadata."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public physical-material production assets published by Poly Haven under CC0."
+usage_notes = "PBR surface-roughness maps with no people, identities, or personal fields."
+
+[[origins]]
+id = "polyhaven_textures"
+name = "Poly Haven Textures"
+url = "https://polyhaven.com/textures"
+type = "public_asset_library"
+version = "objects pinned 2026-08-23"
+
+[[resources]]
+id = "material_roughness_jpegs"
+origin = "polyhaven_textures"
+url = "https://api.polyhaven.com/files/{asset_id}"
+type = "bounded_official_achromatic8_jpeg_selection"
+version = "eight exact 1K roughness JPEG objects pinned by sources.tsv"
+access = "Official API-resolved public objects; exact URLs, sizes, and provider MD5 values are pinned and checked against live metadata."
+size_bytes = 3620047
+sha256 = "30c3521454c9ee4fba64d888f6d61432f40ad334810e744834b956c48cfcaf4d"
+local_path = "downloads/polyhaven_material_roughness_u8/"
+notes = "The SHA-256 identifies the tracked sources.tsv inventory; the decoder also records each payload's SHA-256."
+
+[local_paths]
+downloads = "downloads/polyhaven_material_roughness_u8/"
+filtered = "filtered/polyhaven_material_roughness_u8/"
+index = "index/polyhaven_material_roughness_u8/"
+samples = "samples/polyhaven_material_roughness_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/polyhaven_material_roughness_u8/samples.jsonl"
+summary = "Resolve and validate eight official 1K roughness JPEGs, decode their achromatic 8-bit raster fields deterministically, and emit one row-major uint8 plane per material."
+deterministic_notes = "The decoder validates source size/hashes, complete JPEG marker structure, 1024x1024 dimensions, 8-bit precision, one or three components, exact decoded R=G=B equality for any three-component source, deterministic single-threaded FFmpeg decoding, nondegenerate distributions, output uniqueness, and fresh source/output byte equality."
+
+[[series]]
+id = "material_roughness_u8"
+description = "PBR material roughness maps for eight diverse physical surface classes."
+semantic_meaning = "Per-texel scalar microsurface roughness controlling specular highlight spread in physically based rendering."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Each official JPEG declares 8-bit precision. Seven are one-component grayscale; concrete_wall_008 is stored with three components whose decoded R, G, and B bytes are exactly equal at every pixel. These are Poly Haven's published byte-depth delivery representations; the recipe does not derive them by reducing the corresponding 16-bit PNG."
+source_resources = ["material_roughness_jpegs"]
+source_format = "JPEG, 8-bit precision, one grayscale component or exactly achromatic three-component encoding"
+source_field = "decoded grayscale roughness sample plane"
+filtered_input_path = "filtered/polyhaven_material_roughness_u8/ingest_stats.json"
+filtering = "Keep all 1024x1024 texels from each of the eight official 1K roughness maps after strict identity, structure, achromaticity, uniqueness, and distribution validation."
+missing_value_policy = "Missing or changed objects, absent CC0/API evidence, malformed JPEG markers, unsupported precision/components/geometry, unequal decoded RGB channels, duplicate or low-cardinality planes, decoder failure, or stale outputs fail the recipe. No texels are dropped, imputed, rescaled, normalized, or projected from color to luma."
+conversion = "Decode each official JPEG using single-threaded FFmpeg with bitexact and accurate-rounding flags. Emit the gray bytes directly for one-component files; for a three-component file, first require exact R=G=B equality at every decoded pixel and emit that common byte in row-major order."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 material roughness plane"
+sample_geometry = "2d_material_roughness_map"
+sample_rank = 2
+sample_axes = ["texture_y", "texture_x"]
+natural_record_kind = "material_roughness_map"
+sample_count = 8
+total_size_bytes = 8388608
+output_path = "samples/polyhaven_material_roughness_u8/material_roughness_u8/"

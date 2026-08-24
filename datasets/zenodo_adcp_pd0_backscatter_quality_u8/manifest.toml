@@ -1,0 +1,129 @@
+manifest_version = 1
+dataset_id = "zenodo_adcp_pd0_backscatter_quality_u8"
+name = "Lower South San Francisco Bay ADCP Backscatter and Quality Uint8"
+description = "Native uint8 correlation-magnitude, echo-intensity, and percent-good fields from three complete RDI PD0 acoustic Doppler current-profiler recordings."
+homepage = "https://zenodo.org/records/5015459"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Salinity and Velocity in Lower South San Francisco Bay, Zenodo, DOI 10.6078/D14H5K."
+notes = "The exact Zenodo record declares CC BY 4.0; preserve the record title, DOI, creators, and requested attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public environmental observations of currents and acoustic returns in Lower South San Francisco Bay."
+usage_notes = "Physical instrument measurements and quality metrics with no human subjects or personal fields."
+
+[[origins]]
+id = "zenodo_5015459"
+name = "Salinity and Velocity in Lower South San Francisco Bay"
+url = "https://zenodo.org/records/5015459"
+type = "zenodo_record"
+version = "10.6078/D14H5K"
+
+[[resources]]
+id = "shared_adcp_pd0_recordings"
+origin = "zenodo_5015459"
+url = "https://zenodo.org/records/5015459"
+type = "shared_pinned_rdi_pd0_recordings"
+version = "three exact recordings owned by zenodo_adcp_pd0_i16"
+access = "Reuses the exact size/MD5-pinned source inventory and download cache of the accepted source-owning recipe."
+size_bytes = 82736476
+sha256 = "8b60f7c7aeb54d06b6317ae52e578d1a94867f09fa8fbdc9e09f2ef9394a2d6b"
+local_path = "downloads/zenodo_adcp_pd0_i16/"
+notes = "No source bytes are duplicated. The resource identity is enforced by the same three sizes and MD5 values as zenodo_adcp_pd0_i16. The SHA-256 pins the aggregate decoded byte fields in source and field order."
+
+[local_paths]
+downloads = "downloads/zenodo_adcp_pd0_i16/"
+filtered = "filtered/zenodo_adcp_pd0_backscatter_quality_u8/"
+index = "index/zenodo_adcp_pd0_backscatter_quality_u8/"
+samples = "samples/zenodo_adcp_pd0_backscatter_quality_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_adcp_pd0_backscatter_quality_u8/samples.jsonl"
+summary = "Validate every fixed-layout PD0 ensemble and emit complete recording-level time-by-depth-by-beam tensors for the correlation, echo-intensity, and percent-good byte blocks."
+deterministic_notes = "Zenodo identity/license, source sizes/MD5s, PD0 framing, every ensemble checksum, offset tables, block IDs, geometry, exact field lengths, output uniqueness, and fresh source/output byte equality are enforced."
+
+[[series]]
+id = "adcp_correlation_magnitude_u8"
+description = "Native ADCP beam correlation-magnitude fields over time and depth."
+semantic_meaning = "Per-beam correlation magnitude for each acoustic depth cell and measurement ensemble."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "PD0 block 0x0200 stores one unsigned byte per beam and depth cell; values are copied unchanged."
+source_resources = ["shared_adcp_pd0_recordings"]
+source_format = "RDI/Teledyne PD0 fixed-layout ensembles"
+source_field = "PD0 correlation magnitude block 0x0200"
+filtered_input_path = "filtered/zenodo_adcp_pd0_backscatter_quality_u8/ingest_stats.json"
+filtering = "Keep all 70,474 validated ensembles from all three complete recordings."
+missing_value_policy = "No values are dropped or imputed; malformed framing, checksum, layout, geometry, identity, or degenerate output fails the recipe."
+conversion = "Remove PD0 record framing and concatenate the 204 uint8 field bytes from each ensemble in source order."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 ADCP correlation-magnitude field"
+sample_geometry = "3d_adcp_beam_field"
+sample_rank = 3
+sample_axes = ["measurement_ensemble", "depth_cell", "beam"]
+natural_record_kind = "complete_adcp_recording"
+sample_count = 3
+total_size_bytes = 14376696
+output_path = "samples/zenodo_adcp_pd0_backscatter_quality_u8/adcp_correlation_magnitude_u8/"
+
+[[series]]
+id = "adcp_echo_intensity_u8"
+description = "Native ADCP acoustic echo-intensity fields over time and depth."
+semantic_meaning = "Per-beam received acoustic echo-intensity code for each depth cell and measurement ensemble."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "PD0 block 0x0300 stores one unsigned byte per beam and depth cell; values are copied unchanged."
+source_resources = ["shared_adcp_pd0_recordings"]
+source_format = "RDI/Teledyne PD0 fixed-layout ensembles"
+source_field = "PD0 echo intensity block 0x0300"
+filtered_input_path = "filtered/zenodo_adcp_pd0_backscatter_quality_u8/ingest_stats.json"
+filtering = "Keep all 70,474 validated ensembles from all three complete recordings."
+missing_value_policy = "No values are dropped or imputed; malformed framing, checksum, layout, geometry, identity, or degenerate output fails the recipe."
+conversion = "Remove PD0 record framing and concatenate the 204 uint8 field bytes from each ensemble in source order."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 ADCP echo-intensity field"
+sample_geometry = "3d_adcp_beam_field"
+sample_rank = 3
+sample_axes = ["measurement_ensemble", "depth_cell", "beam"]
+natural_record_kind = "complete_adcp_recording"
+sample_count = 3
+total_size_bytes = 14376696
+output_path = "samples/zenodo_adcp_pd0_backscatter_quality_u8/adcp_echo_intensity_u8/"
+
+[[series]]
+id = "adcp_percent_good_u8"
+description = "Native ADCP percent-good quality fields over time and depth."
+semantic_meaning = "Per-beam percentage of acceptable acoustic solutions for each depth cell and measurement ensemble."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "PD0 block 0x0400 stores one unsigned percentage byte per beam and depth cell; values are copied unchanged."
+source_resources = ["shared_adcp_pd0_recordings"]
+source_format = "RDI/Teledyne PD0 fixed-layout ensembles"
+source_field = "PD0 percent-good block 0x0400"
+filtered_input_path = "filtered/zenodo_adcp_pd0_backscatter_quality_u8/ingest_stats.json"
+filtering = "Keep all 70,474 validated ensembles from all three complete recordings."
+missing_value_policy = "No values are dropped or imputed; malformed framing, checksum, layout, geometry, identity, or degenerate output fails the recipe."
+conversion = "Remove PD0 record framing and concatenate the 204 uint8 field bytes from each ensemble in source order."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 ADCP percent-good field"
+sample_geometry = "3d_adcp_beam_field"
+sample_rank = 3
+sample_axes = ["measurement_ensemble", "depth_cell", "beam"]
+natural_record_kind = "complete_adcp_recording"
+sample_count = 3
+total_size_bytes = 14376696
+output_path = "samples/zenodo_adcp_pd0_backscatter_quality_u8/adcp_percent_good_u8/"

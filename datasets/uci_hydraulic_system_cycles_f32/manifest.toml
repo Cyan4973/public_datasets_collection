@@ -1,0 +1,99 @@
+manifest_version = 1
+dataset_id = "uci_hydraulic_system_cycles_f32"
+name = "UCI Hydraulic-System 100 Hz Cycles Float32"
+description = "Pressure and motor-power waveforms from repeated 60-second operating cycles of an industrial electro-hydraulic test rig."
+homepage = "https://archive.ics.uci.edu/dataset/447/condition+monitoring+of+hydraulic+systems"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Helwig, N., Pignanelli, E., & Schütze, A. (2015). Condition Monitoring of Hydraulic Systems [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5CW21."
+notes = "The official UCI API response establishes dataset identity but does not include a license field. The pinned official UCI dataset page explicitly states that the dataset is licensed under CC BY 4.0."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public measurements from a laboratory hydraulic test rig; no people or personal identifiers are present."
+usage_notes = "Only physical pressure and motor-power signals are emitted. Operating-condition labels and file metadata remain annotations."
+
+[[origins]]
+id = "uci_447"
+name = "UCI Condition Monitoring of Hydraulic Systems"
+url = "https://archive.ics.uci.edu/dataset/447/condition+monitoring+of+hydraulic+systems"
+type = "uci_dataset"
+version = "UCI dataset 447"
+notes = "Dataset DOI 10.24432/C5CW21."
+
+[[resources]]
+id = "hydraulic_system_archive"
+origin = "uci_447"
+url = "https://archive.ics.uci.edu/static/public/447/condition+monitoring+of+hydraulic+systems.zip"
+type = "zip_archive"
+version = "UCI dataset 447"
+access = "Exact official public UCI archive pinned by size and SHA-256."
+size_bytes = 76601704
+sha256 = "24128aad2ee45eea7e6b63ebbd9992cdf25d0483a2cebefbfc13bc69079af1f2"
+local_path = "downloads/uci_hydraulic_system_cycles_f32/hydraulic_systems.zip"
+
+[[resources]]
+id = "uci_447_metadata"
+origin = "uci_447"
+url = "https://archive.ics.uci.edu/api/dataset?id=447"
+type = "json_metadata"
+version = "UCI dataset 447"
+access = "Exact official UCI API metadata pinned by size and SHA-256."
+size_bytes = 3895
+sha256 = "7c9ddaacebd5be9ad26cdecc49a4a1161408be213a1a25c0a61ca108f84f750e"
+local_path = "downloads/uci_hydraulic_system_cycles_f32/uci_dataset_447.json"
+
+[[resources]]
+id = "uci_447_rights_page"
+origin = "uci_447"
+url = "https://archive.ics.uci.edu/dataset/447/condition+monitoring+of+hydraulic+systems"
+type = "html_license_evidence"
+version = "UCI dataset 447"
+access = "Exact official UCI dataset page pinned by size and SHA-256 as license evidence."
+size_bytes = 84168
+sha256 = "1d7ba3b546540cfb65560098fd5196c3aacdbdb31bc9ab8ae044a62789a6d1c7"
+local_path = "downloads/uci_hydraulic_system_cycles_f32/uci_dataset_447.html"
+
+[local_paths]
+downloads = "downloads/uci_hydraulic_system_cycles_f32/"
+filtered = "filtered/uci_hydraulic_system_cycles_f32/"
+index = "index/uci_hydraulic_system_cycles_f32/"
+samples = "samples/uci_hydraulic_system_cycles_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/uci_hydraulic_system_cycles_f32/samples.jsonl"
+summary = "Validate the official UCI archive and licensing, then emit one little-endian float32 sample per complete 100 Hz sensor/cycle row from PS1-PS6 and EPS1."
+deterministic_notes = "The sensor set, 2,205-cycle count, 6,000-value cycle length, source row order, single float32 rounding, and little-endian output are fixed. Exactly 1,238 identical all-zero PS4 cycles are excluded; every retained cycle is nonconstant and unique. Lower-rate signals and categorical condition labels are excluded. Build and verification reparse the local archive independently."
+
+[[series]]
+id = "hydraulic_100hz_cycle_f32"
+description = "One complete 60-second, 100 Hz pressure or electrical motor-power trace from a hydraulic-system operating cycle."
+semantic_meaning = "Pressure (PS1-PS6) or electrical motor power (EPS1) measured during one repeated load cycle of an electro-hydraulic test rig."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "UCI publishes whitespace-delimited decimal measurements without a native binary width. Each finite decimal is deterministically rounded once to IEEE-754 binary32 for this operational representation."
+source_resources = ["hydraulic_system_archive", "uci_447_metadata", "uci_447_rights_page"]
+source_format = "UCI ZIP archive containing whitespace-delimited decimal matrices"
+source_field = "All 6,000 columns of each row in PS1.txt through PS6.txt and EPS1.txt"
+filtered_input_path = "filtered/uci_hydraulic_system_cycles_f32/ingest_stats.json"
+filtering = "Consider all 2,205 complete source-order rows from the seven documented 100 Hz matrices, then drop the 1,238 PS4 rows that become identical all-zero float32 samples. Exclude 10 Hz and 1 Hz sensors and all condition-label tables."
+missing_value_policy = "Missing members, blank rows, malformed or non-finite values, wrong matrix dimensions, float32 overflow, an unexpected constant-cycle count, duplicate retained cycles, or stale/extra outputs fail the recipe. No values within retained cycles are dropped or imputed."
+conversion = "Parse each source decimal as a finite number, round once to IEEE-754 binary32, and serialize every cycle row as 6,000 raw little-endian float32 words in source column order."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 sensor-cycle time series"
+sample_geometry = "hydraulic_sensor_operating_cycle_1d"
+sample_rank = 1
+sample_axes = ["time_100hz"]
+natural_record_kind = "complete_sensor_operating_cycle"
+sample_count = 14197
+total_size_bytes = 340728000
+output_path = "samples/uci_hydraulic_system_cycles_f32/hydraulic_100hz_cycle_f32/"

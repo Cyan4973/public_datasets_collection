@@ -5,7 +5,7 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 DATA_DIR="${DATA_DIR:-.data}"
 DATASET_ID="uci_hydraulic_system_cycles_f32"
-RECIPE_DIR="$REPO_ROOT/staging/$DATASET_ID"
+RECIPE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOWNLOAD_DIR="$REPO_ROOT/$DATA_DIR/downloads/$DATASET_ID"
 DISCOVERY_DIR="$REPO_ROOT/$DATA_DIR/discovery/$DATASET_ID"
 LOG_DIR="$REPO_ROOT/$DATA_DIR/logs/$DATASET_ID"

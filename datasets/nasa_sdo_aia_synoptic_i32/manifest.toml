@@ -1,0 +1,118 @@
+manifest_version = 1
+dataset_id = "nasa_sdo_aia_synoptic_i32"
+name = "NASA SDO/AIA Synoptic Int32 Images"
+description = "Ten near-synchronous signed-int32 solar synoptic images spanning the Solar Dynamics Observatory Atmospheric Imaging Assembly wavelength channels."
+homepage = "https://jsoc1.stanford.edu/data/aia/synoptic/"
+
+[license]
+name = "NASA SDO non-copyrighted imagery"
+spdx = "LicenseRef-NASA-Open-Data"
+url = "https://sdo.gsfc.nasa.gov/gallery/copyright/"
+citation = "NASA Solar Dynamics Observatory, Atmospheric Imaging Assembly; Joint Science Operations Center."
+notes = "The pinned official SDO page states that SDO images and movies are not copyrighted unless explicitly noted and requests attribution. The selected FITS headers identify SDO/AIA and contain no contrary copyright notice. NASA's pinned general guidance states that NASA content is generally not subject to U.S. copyright and describes commercial-use restrictions concerning endorsement, logos, and identifiable people; none are part of the emitted arrays."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public remote-sensing observations of the Sun from a NASA spacecraft; no people or personal identifiers are present."
+usage_notes = "Scientific solar image pixels only. FITS headers remain provenance metadata."
+
+[[origins]]
+id = "jsoc_sdo_aia_synoptic"
+name = "JSOC SDO/AIA Synoptic Archive"
+url = "https://jsoc1.stanford.edu/data/aia/synoptic/"
+type = "official_mission_data_archive"
+version = "fixed historical observation selected by discovery"
+notes = "Discovery must choose a stable dated archive path, never the mutable mostrecent directory."
+
+[[origins]]
+id = "nasa_heasarc_cfitsio"
+name = "NASA HEASARC CFITSIO"
+url = "https://heasarc.gsfc.nasa.gov/fitsio/"
+type = "official_decoder_source_project"
+version = "latest stable versioned source selected at acquisition"
+notes = "Only the official source tarball and its normal configure/make build are permitted."
+
+[[resources]]
+id = "selected_aia_synoptic_fits"
+origin = "jsoc_sdo_aia_synoptic"
+url = "https://jsoc1.stanford.edu/data/aia/synoptic/"
+type = "tiled_compressed_fits_selection"
+version = "2025-01-01 00:00/00:02 UTC"
+access = "Ten exact dated JSOC FITS URLs pinned individually by size and SHA-256 in selection.tsv."
+size_bytes = 10581120
+local_path = "downloads/nasa_sdo_aia_synoptic_i32/fits/"
+
+[[resources]]
+id = "cfitsio_source"
+origin = "nasa_heasarc_cfitsio"
+url = "https://heasarc.gsfc.nasa.gov/fitsio/"
+type = "official_decoder_source"
+version = "4.7.0"
+access = "Exact official CFITSIO 4.7.0 source tarball pinned by size and SHA-256 in tool_selection.tsv."
+size_bytes = 2163220
+sha256 = "ce573bbea8e75b429f8c3d3e86498741ba3dc9628a1530d2f65268397ad059e8"
+local_path = "downloads/nasa_sdo_aia_synoptic_i32/tool/"
+
+[[resources]]
+id = "sdo_copyright_evidence"
+origin = "jsoc_sdo_aia_synoptic"
+url = "https://sdo.gsfc.nasa.gov/gallery/copyright/"
+type = "html_license_evidence"
+version = "captured 2026-08-26"
+access = "Exact official SDO copyright page pinned by size and SHA-256."
+size_bytes = 18193
+sha256 = "e0f4c7de9bbbac0fc1abbbed3c1b116a386adae61f0e950e3f5392124b42d291"
+local_path = "downloads/nasa_sdo_aia_synoptic_i32/sdo_copyright.html"
+
+[[resources]]
+id = "nasa_media_usage_evidence"
+origin = "jsoc_sdo_aia_synoptic"
+url = "https://www.nasa.gov/nasa-brand-center/images-and-media/"
+type = "html_license_evidence"
+version = "captured 2026-08-26"
+access = "Exact official NASA media-usage page pinned by size and SHA-256."
+size_bytes = 313822
+sha256 = "e2089ae202702b52cf4225dbe7c05b21cd61738ba9cce168353a52c6715713b7"
+local_path = "downloads/nasa_sdo_aia_synoptic_i32/nasa_media_usage_guidelines.html"
+
+[local_paths]
+downloads = "downloads/nasa_sdo_aia_synoptic_i32/"
+filtered = "filtered/nasa_sdo_aia_synoptic_i32/"
+index = "index/nasa_sdo_aia_synoptic_i32/"
+samples = "samples/nasa_sdo_aia_synoptic_i32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_sdo_aia_synoptic_i32/samples.jsonl"
+summary = "Discover one fixed ten-wavelength SDO/AIA synoptic set, decode its tiled FITS images losslessly, and emit the logical signed-int32 pixels in little-endian order."
+deterministic_notes = "The fixed 2025-01-01 H0000 archive directory, earliest exposure per wavelength, exact FITS identities, FITS geometry, RICE_1 compression, scaling, rights evidence, and CFITSIO 4.7.0 source are pinned. Build and verification independently rerun funpack and compare decoded pixels byte-for-byte."
+
+[[series]]
+id = "sdo_aia_synoptic_stored_pixels_i32"
+description = "Complete signed-int32 stored-pixel plane for one SDO/AIA synoptic wavelength image."
+semantic_meaning = "Scaled integer detector-image codes representing solar EUV or UV intensity over a complete AIA synoptic image; physical values equal stored codes multiplied by 0.0625."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The FITS compressed-image extension declares logical ZBITPIX=32. Lossless tile decompression reconstructs signed-int32 stored codes; BSCALE=0.0625 is retained as interpretation metadata rather than applied to widen the samples."
+source_resources = ["selected_aia_synoptic_fits", "cfitsio_source", "sdo_copyright_evidence", "nasa_media_usage_evidence"]
+source_format = "tiled-compressed FITS image extension"
+source_field = "Complete logical ZBITPIX=32 image array"
+filtered_input_path = "filtered/nasa_sdo_aia_synoptic_i32/ingest_stats.json"
+filtering = "Within one fixed historical hour directory, keep the earliest complete 1024x1024 image for each of the ten AIA synoptic wavelengths. Channel cadences differ, so exact exposure timestamps need not match."
+missing_value_policy = "Missing wavelengths, changed FITS identities, wrong dimensions/type/scaling, decoder failure, undefined pixels, constant images, duplicate planes, or stale outputs fail the recipe. No image pixels are dropped or imputed."
+conversion = "Losslessly decompress the FITS tiled image, preserve the signed-int32 stored codes before BSCALE application, and convert FITS big-endian words to canonical little-endian int32 in row-major order."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous signed-int32 solar image plane"
+sample_geometry = "sdo_aia_synoptic_wavelength_image_2d"
+sample_rank = 2
+sample_shape = [1024, 1024]
+sample_axes = ["y", "x"]
+natural_record_kind = "complete_aia_synoptic_wavelength_image"
+sample_count = 10
+total_size_bytes = 41943040
+output_path = "samples/nasa_sdo_aia_synoptic_i32/sdo_aia_synoptic_stored_pixels_i32/"

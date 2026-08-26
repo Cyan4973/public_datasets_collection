@@ -133,6 +133,7 @@ smithsonian_openaccess_gltf_indices_u16	ok	899964	1799928	3	299988	599976	0	0	0	
 nasa_power_daily_surface_state	ok	964260	7714080	60	16071	128568	0	0	0	1	none	none
 nasa_power_daily_temperature_extremes	ok	964260	7714080	60	16071	128568	0	0	0	1	none	none
 usgs_nwis_specific_conductance_daily	ok	984131	7873048	120	8317.5	66540	0	0	0	1	none	none
+nasa_tess_lightcurves_f32	ok	1015204	4060816	64	15437	61748	0	0	0	1	none	none
 ncbi_assembly_refseq_summary	ok	1045878	6275268	2	522939	3137634	1568625	6274500	3	1	none	none
 nih_reporter_projects	ok	1064676	6388056	90	11664	66162	0	0	0	1	none	none
 europe_pmc_search	ok	1127748	2631412	6	187958	375916	187958	751832	1	1	none	none

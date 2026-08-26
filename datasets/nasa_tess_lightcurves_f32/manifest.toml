@@ -1,0 +1,98 @@
+manifest_version = 1
+dataset_id = "nasa_tess_lightcurves_f32"
+name = "NASA TESS Stellar Light Curves Float32"
+description = "Quality-filtered native-float32 stellar brightness time series from public TESS SPOC light-curve products."
+homepage = "https://archive.stsci.edu/missions-and-data/tess"
+
+[license]
+name = "NASA public mission data"
+spdx = "LicenseRef-NASA-Open-Data"
+url = "https://www.nasa.gov/nasa-brand-center/images-and-media/"
+citation = "NASA Transiting Exoplanet Survey Satellite; Mikulski Archive for Space Telescopes; relevant SPOC data-product citations."
+notes = "MAST marked every selected SPOC product PUBLIC during discovery. The FITS headers identify NASA/Ames as origin and TESS as the telescope, with no contrary copyright notice. The pinned official NASA guidance states that NASA content generally is not subject to copyright in the United States and describes attribution, logo, endorsement, and identifiable-person restrictions; the emitted arrays contain only stellar measurements. Preserve NASA, TESS, MAST, and pipeline attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public astronomical measurements of stars from a NASA spacecraft; no human subjects or personal identifiers are present."
+usage_notes = "Only calibrated stellar flux measurements are intended as sample bytes. Target identifiers, coordinates, timestamps, and quality flags remain metadata."
+
+[[origins]]
+id = "mast_tess_spoc"
+name = "MAST TESS SPOC Light Curves"
+url = "https://archive.stsci.edu/missions-and-data/tess"
+type = "official_mission_data_archive"
+version = "TESS sectors 61-68, fixed public SPOC product selection"
+notes = "Discovery used official MAST APIs and required dataRights=PUBLIC."
+
+[[resources]]
+id = "selected_tess_lightcurves"
+origin = "mast_tess_spoc"
+url = "https://mast.stsci.edu/api/v0/invoke"
+type = "fits_binary_table_selection"
+version = "TESS sectors 61-68, fixed south-CVZ cone selection"
+access = "Discovery selected 64 exact public SPOC LC product URIs; filenames, sizes, and full SHA-256 hashes are recorded during acquisition."
+size_bytes = 126650880
+local_path = "downloads/nasa_tess_lightcurves_f32/fits/"
+
+[[resources]]
+id = "mast_tess_provenance_evidence"
+origin = "mast_tess_spoc"
+url = "https://archive.stsci.edu/missions-and-data/tess"
+type = "html_provenance_evidence"
+version = "captured 2026-08-26"
+access = "Exact official MAST TESS mission page pinned by size and SHA-256."
+size_bytes = 117080
+sha256 = "a1ea1aafb7cf964dae869eac88ce3bfc33acf322cf511f62fd53dc34cca3cfa3"
+local_path = "downloads/nasa_tess_lightcurves_f32/mast_tess_page.html"
+
+[[resources]]
+id = "nasa_media_usage_evidence"
+origin = "mast_tess_spoc"
+url = "https://www.nasa.gov/nasa-brand-center/images-and-media/"
+type = "html_license_evidence"
+version = "captured 2026-08-26"
+access = "Exact official NASA media-usage page pinned by size and SHA-256."
+size_bytes = 314701
+sha256 = "178d06d54ef9d5309798e77a1cc412d398ef06ee2c798144787604f5ad6047b2"
+local_path = "downloads/nasa_tess_lightcurves_f32/nasa_media_usage_guidelines.html"
+
+[local_paths]
+downloads = "downloads/nasa_tess_lightcurves_f32/"
+filtered = "filtered/nasa_tess_lightcurves_f32/"
+index = "index/nasa_tess_lightcurves_f32/"
+samples = "samples/nasa_tess_lightcurves_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_tess_lightcurves_f32/samples.jsonl"
+summary = "Discover public TESS SPOC light-curve FITS products, validate native float32 PDCSAP_FLUX columns, then emit one quality-filtered little-endian flux series per target-sector product."
+deterministic_notes = "The fixed selection pins 64 exact product URIs, sizes, SHA-256 hashes, row counts, eight TIC targets, and sectors 61-68. Build validates the generic fixed-width FITS table layout, retains only QUALITY=0 finite PDCSAP_FLUX words, and byte-swaps each native big-endian word to little-endian. Verification reparses every pinned FITS file and compares all output bytes. The pinned result retains 1,015,204 of 1,247,392 rows: 224,940 nonzero-quality and 7,248 non-finite rows are excluded."
+
+[[series]]
+id = "tess_pdcsap_flux_f32"
+description = "One quality-filtered TESS Pre-search Data Conditioning Simple Aperture Photometry light curve per target and observing sector."
+semantic_meaning = "Systematics-corrected stellar brightness measured over successive TESS cadences for one target-sector observation."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Only products whose FITS binary-table schema declares PDCSAP_FLUX with TFORM=E are eligible. Retained finite source float32 values are copied without numeric conversion other than FITS big-endian to canonical little-endian byte order."
+source_resources = ["selected_tess_lightcurves", "mast_tess_provenance_evidence", "nasa_media_usage_evidence"]
+source_format = "TESS SPOC light-curve FITS binary table"
+source_field = "PDCSAP_FLUX rows whose QUALITY value is zero and whose flux is finite"
+filtered_input_path = "filtered/nasa_tess_lightcurves_f32/ingest_stats.json"
+filtering = "Keep public SPOC LC products from the fixed discovery selection. Within each product retain source-order PDCSAP_FLUX values only where QUALITY=0 and flux is finite."
+missing_value_policy = "Rows with nonzero QUALITY or non-finite PDCSAP_FLUX are excluded. Missing columns, wrong FITS types, too-short retained light curves, changed source identities, constant samples, duplicates, or stale outputs fail the recipe."
+conversion = "Extract each retained native FITS float32 PDCSAP_FLUX word and convert its byte order from FITS big-endian to little-endian without changing the binary32 value."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 stellar light curve"
+sample_geometry = "tess_target_sector_lightcurve_1d"
+sample_rank = 1
+sample_axes = ["valid_cadence_time"]
+natural_record_kind = "complete_tess_target_sector_pdcsap_lightcurve"
+sample_count = 64
+total_size_bytes = 4060816
+output_path = "samples/nasa_tess_lightcurves_f32/tess_pdcsap_flux_f32/"

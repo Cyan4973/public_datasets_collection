@@ -1,0 +1,75 @@
+manifest_version = 1
+dataset_id = "usgs_geomag_observatory_minute_f32"
+name = "USGS Geomagnetic Observatory Minute Float32"
+description = "Minute-resolution X, Y, and Z geomagnetic-field component series from four USGS observatories during calendar year 2024."
+homepage = "https://www.usgs.gov/programs/geomagnetism"
+
+[license]
+name = "U.S. Government Public Domain"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits"
+citation = "U.S. Geological Survey Geomagnetism Program, Geomagnetism Web Services."
+notes = "The official USGS copyright page states that USGS-authored or produced data and information are considered to be in the U.S. Public Domain. Preserve USGS and observatory attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public physical measurements from fixed USGS geomagnetic observatories; no participant or personal data are present."
+usage_notes = "Ground magnetic-field component measurements intended as numeric compression training material."
+
+[[origins]]
+id = "usgs_geomagnetism_web_services"
+name = "USGS Geomagnetism Web Services"
+url = "https://geomag.usgs.gov/ws/"
+type = "us_government_scientific_api"
+version = "calendar-year-2024 variation minute data"
+
+[[resources]]
+id = "geomag_2024_monthly_json"
+origin = "usgs_geomagnetism_web_services"
+url = "https://geomag.usgs.gov/ws/data/"
+type = "bounded_json_api_queries"
+version = "2024 variation product at 60-second sampling"
+access = "Download script issues 48 explicit month-bounded queries for BOU, CMO, FRD, and HON and validates every response semantically."
+local_path = "downloads/usgs_geomag_observatory_minute_f32/"
+notes = "Exact query URLs, response sizes, SHA-256 hashes, metadata, and component coverage are recorded in download_plan.tsv and download_inventory.json after acquisition."
+
+[local_paths]
+downloads = "downloads/usgs_geomag_observatory_minute_f32/"
+filtered = "filtered/usgs_geomag_observatory_minute_f32/"
+index = "index/usgs_geomag_observatory_minute_f32/"
+samples = "samples/usgs_geomag_observatory_minute_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/usgs_geomag_observatory_minute_f32/samples.jsonl"
+summary = "Fetch month-bounded USGS variation JSON, validate exact one-minute timestamp grids and X/Y/Z component arrays, then emit one little-endian float32 station/component/year sample."
+deterministic_notes = "Station set, year, product type, sampling period, components, monthly boundaries, missing-value rule, and float32 conversion are fixed. Download inventory hashes pin the realized API responses."
+
+[[series]]
+id = "usgs_geomag_xyz_minute_f32"
+description = "Calendar-year minute geomagnetic X, Y, or Z component at one USGS observatory."
+semantic_meaning = "Ground magnetic-field component in nanoteslas over time, sampled once per minute by a fixed USGS geomagnetic observatory."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "The official API publishes decimal JSON measurements with 0.01-nT digital sampling metadata. Retained values are deterministically rounded once to IEEE-754 float32, whose resolution remains finer than 0.01 nT over the observed range."
+source_resources = ["geomag_2024_monthly_json"]
+source_format = "USGS Geomagnetism Web Services Timeseries JSON"
+source_field = "values entries with id X, Y, or Z from the variation product"
+filtered_input_path = "filtered/usgs_geomag_observatory_minute_f32/ingest_stats.json"
+filtering = "For each station and component, concatenate the twelve source month arrays in timestamp order and retain finite measurements whose absolute value is below the USGS 99999-class missing sentinel."
+missing_value_policy = "JSON nulls, non-finite values, and absolute values at or above 90000 are omitted independently per component. Each retained station/component year must retain at least 95 percent of the expected 527040 minute slots."
+conversion = "Parse retained decimal JSON values, round once to IEEE-754 binary32, and write raw little-endian float32 words in source timestamp order."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 time-series array"
+sample_geometry = "geomagnetic_observatory_component_year"
+sample_rank = 1
+sample_axes = ["valid_minute_observation"]
+natural_record_kind = "observatory_component_calendar_year"
+sample_count = 12
+total_size_bytes = 25186968
+output_path = "samples/usgs_geomag_observatory_minute_f32/usgs_geomag_xyz_minute_f32/"

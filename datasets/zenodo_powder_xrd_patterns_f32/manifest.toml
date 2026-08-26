@@ -1,0 +1,76 @@
+manifest_version = 1
+dataset_id = "zenodo_powder_xrd_patterns_f32"
+name = "High-Pressure Zeolite Powder-XRD Float32 Intensities"
+description = "Experimental pressure-series powder X-ray diffraction intensity curves for empty and filled Na-X and RHO zeolites."
+homepage = "https://zenodo.org/records/4955141"
+
+[license]
+name = "Creative Commons Zero v1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "Nearchou, Antony; Cornelius, Mero-Lee U.; Jones, Zoe L.; Collings, Ines E.; Wells, Stephen A.; Raithby, Paul R.; Sartbaeva, Asel. Data from: Pressure-induced symmetry changes in body-centred cubic zeolites. Zenodo. https://doi.org/10.5281/zenodo.4955141"
+notes = "The exact Zenodo record declares cc-zero. Preserve the record DOI, title, and creator attribution as good scientific practice."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public experimental materials-characterization data deposited by the study authors; no participant or personal fields are present."
+usage_notes = "Measured powder-XRD intensity curves intended as numeric compression training material."
+
+[[origins]]
+id = "zenodo_4955141"
+name = "Data from: Pressure-induced symmetry changes in body-centred cubic zeolites"
+url = "https://zenodo.org/records/4955141"
+type = "zenodo_record"
+version = "10.5281/zenodo.4955141"
+
+[[resources]]
+id = "cubic_high_pressure_repository"
+origin = "zenodo_4955141"
+url = "https://zenodo.org/api/records/4955141/files/Cubic%20High-Pressure%20Repository.zip/content"
+type = "zip_of_ascii_xy_scans"
+version = "record-4955141"
+access = "Exact public object pinned by size and MD5."
+size_bytes = 36220726
+md5 = "7c674d184639b5d84a387af11930da6d"
+local_path = "downloads/zenodo_powder_xrd_patterns_f32/Cubic_High-Pressure_Repository.zip"
+
+[local_paths]
+downloads = "downloads/zenodo_powder_xrd_patterns_f32/"
+filtered = "filtered/zenodo_powder_xrd_patterns_f32/"
+index = "index/zenodo_powder_xrd_patterns_f32/"
+samples = "samples/zenodo_powder_xrd_patterns_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_powder_xrd_patterns_f32/samples.jsonl"
+summary = "Validate the pinned CC0 archive, parse every eligible Na-X/RHO empty/filled two-column XY scan, and emit one little-endian float32 intensity sample per unique complete scan."
+deterministic_notes = "Record identity, title, license, archive size and MD5, member path grammar, strict two-column parser, float32 conversion, lexicographic order, and duplicate policy are fixed."
+
+[[series]]
+id = "zeolite_powder_xrd_intensity_f32"
+description = "Experimental powder-XRD intensity versus scattering-coordinate scan for one zeolite, loading state, and pressure step."
+semantic_meaning = "Published powder X-ray diffraction intensity in source arbitrary units, ordered by the accompanying strictly increasing scattering coordinate."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "The source publishes decimal ASCII intensity values. Each is deterministically rounded once to IEEE-754 binary32 to form the 32-bit machine-facing training representation."
+source_resources = ["cubic_high_pressure_repository"]
+source_format = "ZIP-contained two-column ASCII .xy powder-diffraction scan"
+source_field = "second numeric column: measured diffraction intensity"
+filtered_input_path = "filtered/zenodo_powder_xrd_patterns_f32/ingest_stats.json"
+filtering = "Keep complete .xy members under the exact Na-X or RHO and Empty_data or Filled_data hierarchy; require at least 1000 rows, a strictly increasing first column, finite nonconstant intensities, and unique float32 intensity bytes."
+missing_value_policy = "Blank/comment lines before or within a scan are ignored. After numeric data begin, malformed rows, non-two-column rows, non-finite values, non-increasing coordinates, short scans, and degenerate intensities fail the build; no values are imputed."
+conversion = "Parse the second decimal column in source order, round each value once to IEEE-754 binary32, and write raw little-endian float32 words. The first coordinate column is validated for ordering but is not emitted."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 intensity array"
+sample_geometry = "powder_xrd_intensity_scan_1d"
+sample_rank = 1
+sample_axes = ["increasing_scattering_coordinate"]
+natural_record_kind = "deposited_powder_xrd_xy_scan"
+sample_count = 147
+total_size_bytes = 2588036
+output_path = "samples/zenodo_powder_xrd_patterns_f32/zeolite_powder_xrd_intensity_f32/"

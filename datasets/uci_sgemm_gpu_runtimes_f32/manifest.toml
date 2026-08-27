@@ -1,0 +1,99 @@
+manifest_version = 1
+dataset_id = "uci_sgemm_gpu_runtimes_f32"
+name = "UCI SGEMM GPU Kernel Runtime Float32"
+description = "Repeated execution-time series from an exhaustive OpenCL SGEMM GPU kernel-configuration sweep."
+homepage = "https://archive.ics.uci.edu/dataset/440/sgemm+gpu+kernel+performance"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Nugteren, C. & Codreanu, V. (2017). SGEMM GPU kernel performance [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5MK70."
+notes = "The identity-pinned official UCI dataset page states that the dataset is licensed under CC BY 4.0. Preserve dataset and author attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public GPU benchmark measurements; no people or personal identifiers."
+usage_notes = "Only execution times are intended as primary samples. Kernel parameters remain source metadata."
+
+[[origins]]
+id = "uci_440"
+name = "UCI SGEMM GPU Kernel Performance"
+url = "https://archive.ics.uci.edu/dataset/440/sgemm+gpu+kernel+performance"
+type = "uci_dataset"
+version = "UCI dataset 440"
+notes = "Official UCI dataset with DOI 10.24432/C5MK70."
+
+[[resources]]
+id = "sgemm_archive"
+origin = "uci_440"
+url = "https://archive.ics.uci.edu/static/public/440/sgemm+gpu+kernel+performance.zip"
+type = "zip_archive"
+version = "UCI dataset 440"
+access = "Direct official public download."
+size_bytes = 3186088
+sha256 = "8d3ee0d82708df11b54debc6a4fbade77c604a047f019fa7940413032eb7b096"
+local_path = "downloads/uci_sgemm_gpu_runtimes_f32/sgemm_gpu_kernel_performance.zip"
+
+[[resources]]
+id = "uci_440_metadata"
+origin = "uci_440"
+url = "https://archive.ics.uci.edu/api/dataset?id=440"
+type = "json_metadata"
+version = "UCI dataset 440"
+access = "Exact official UCI API metadata pinned by size and SHA-256."
+size_bytes = 5044
+sha256 = "f86c51dcd111ce1c2fa35d3b510465c25490e0ee09f7f442c3d058710329744a"
+local_path = "downloads/uci_sgemm_gpu_runtimes_f32/uci_dataset_440.json"
+
+[[resources]]
+id = "uci_440_rights_page"
+origin = "uci_440"
+url = "https://archive.ics.uci.edu/dataset/440/sgemm+gpu+kernel+performance"
+type = "html_license_evidence"
+version = "UCI dataset 440"
+access = "Exact official UCI dataset page pinned by size and SHA-256 as license evidence."
+size_bytes = 84528
+sha256 = "bafa820bd79e3bc2e96fcac284ae2f5d25308fe60ff85acc543e28d0df2546cd"
+local_path = "downloads/uci_sgemm_gpu_runtimes_f32/uci_dataset_440.html"
+
+[local_paths]
+downloads = "downloads/uci_sgemm_gpu_runtimes_f32/"
+filtered = "filtered/uci_sgemm_gpu_runtimes_f32/"
+index = "index/uci_sgemm_gpu_runtimes_f32/"
+samples = "samples/uci_sgemm_gpu_runtimes_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/uci_sgemm_gpu_runtimes_f32/samples.jsonl"
+summary = "Validate the official UCI source and license, then convert the four complete runtime columns to deterministic little-endian float32 series."
+deterministic_notes = "The archive, metadata, rights page, CSV member identity, exact 14-configuration-plus-four-runtime schema, 241,600 unique configuration rows, float32 output hashes, and aggregate counts are pinned. Build writes each complete repeated runtime column in source order; verification independently reparses the ZIP and compares every output byte."
+
+[[series]]
+id = "sgemm_gpu_runtime_f32"
+description = "Four repeated GPU SGEMM execution-time measurements over the same ordered kernel-configuration sweep."
+semantic_meaning = "Measured milliseconds required by an OpenCL GPU to execute each single-precision general matrix-multiplication kernel configuration."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "UCI publishes decimal CSV values without a native binary width. Each value is deterministically rounded once to IEEE-754 binary32."
+source_resources = ["sgemm_archive", "uci_440_metadata", "uci_440_rights_page"]
+source_format = "ZIP archive containing CSV"
+source_field = "Run1 (ms), Run2 (ms), Run3 (ms), and Run4 (ms)"
+filtered_input_path = "filtered/uci_sgemm_gpu_runtimes_f32/ingest_stats.json"
+filtering = "Retain all finite execution-time values from each of the four complete run columns in source row order. Exclude the 14 discrete configuration fields from primary output."
+missing_value_policy = "Missing rows or columns, malformed/non-finite/negative timings, float32 overflow, constant runs, duplicate run payloads, or changed source identities fail the recipe."
+conversion = "Parse each decimal runtime, round once to IEEE-754 binary32, and serialize each complete run column as raw little-endian words."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 GPU runtime series"
+sample_geometry = "ordered_gpu_kernel_configuration_sweep_1d"
+sample_rank = 1
+sample_axes = ["kernel_configuration"]
+natural_record_kind = "complete_repeated_sgemm_benchmark_run"
+sample_count = 4
+total_size_bytes = 3865600
+output_path = "samples/uci_sgemm_gpu_runtimes_f32/sgemm_gpu_runtime_f32/"

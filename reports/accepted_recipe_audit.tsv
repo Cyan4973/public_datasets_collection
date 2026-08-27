@@ -132,6 +132,7 @@ nasa_power_daily_solar_flux	ok	898551	7188408	60	14976	119808	0	0	0	1	none	none
 smithsonian_openaccess_gltf_indices_u16	ok	899964	1799928	3	299988	599976	0	0	0	1	none	none
 nasa_power_daily_surface_state	ok	964260	7714080	60	16071	128568	0	0	0	1	none	none
 nasa_power_daily_temperature_extremes	ok	964260	7714080	60	16071	128568	0	0	0	1	none	none
+uci_sgemm_gpu_runtimes_f32	ok	966400	3865600	4	241600	966400	0	0	0	1	none	none
 usgs_nwis_specific_conductance_daily	ok	984131	7873048	120	8317.5	66540	0	0	0	1	none	none
 nasa_tess_lightcurves_f32	ok	1015204	4060816	64	15437	61748	0	0	0	1	none	none
 ncbi_assembly_refseq_summary	ok	1045878	6275268	2	522939	3137634	1568625	6274500	3	1	none	none

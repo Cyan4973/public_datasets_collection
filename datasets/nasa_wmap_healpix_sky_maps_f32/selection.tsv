@@ -1,0 +1,6 @@
+band	filename	size_bytes	source_sha256	url
+K	wmap_band_iqumap_r9_9yr_K_v5.fits	100676160	fe64dc687ab4db73e85b264e3a6496b87041a4cfe6fb11015180cca621478108	https://lambda.gsfc.nasa.gov/data/map/dr5/skymaps/9yr/raw/wmap_band_iqumap_r9_9yr_K_v5.fits
+Ka	wmap_band_iqumap_r9_9yr_Ka_v5.fits	100676160	ba376e79738305cf277b624bba9394cf84043fe017957f4e483380f021266ef7	https://lambda.gsfc.nasa.gov/data/map/dr5/skymaps/9yr/raw/wmap_band_iqumap_r9_9yr_Ka_v5.fits
+Q	wmap_band_iqumap_r9_9yr_Q_v5.fits	100676160	a13120279345024f9639e20241281b5d85d99c263db07ea65d0390c18e4832b0	https://lambda.gsfc.nasa.gov/data/map/dr5/skymaps/9yr/raw/wmap_band_iqumap_r9_9yr_Q_v5.fits
+V	wmap_band_iqumap_r9_9yr_V_v5.fits	100676160	4d421a4cdc033df48cfe9f02aaa8404e55b51ced406081f05c8641f173c450fc	https://lambda.gsfc.nasa.gov/data/map/dr5/skymaps/9yr/raw/wmap_band_iqumap_r9_9yr_V_v5.fits
+W	wmap_band_iqumap_r9_9yr_W_v5.fits	100676160	6cdf9a52134c50fc9b859ccb840a8eef6cefaf54faa4c2f530a72c6244c4da06	https://lambda.gsfc.nasa.gov/data/map/dr5/skymaps/9yr/raw/wmap_band_iqumap_r9_9yr_W_v5.fits

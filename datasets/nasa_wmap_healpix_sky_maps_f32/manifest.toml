@@ -1,0 +1,299 @@
+manifest_version = 1
+dataset_id = "nasa_wmap_healpix_sky_maps_f32"
+name = "NASA WMAP Nine-Year Full-Sky HEALPix Maps Float32"
+description = "Full-sky WMAP temperature, polarization, observation-count, and polarization-weight fields in native NESTED HEALPix order."
+homepage = "https://lambda.gsfc.nasa.gov/product/wmap/dr5/m_products.html"
+
+[license]
+name = "NASA public mission data"
+spdx = "LicenseRef-NASA-Open-Data"
+url = "https://www.nasa.gov/nasa-brand-center/images-and-media/"
+citation = "Bennett et al. (2013), Nine-Year Wilkinson Microwave Anisotropy Probe (WMAP) Observations: Final Maps and Results, ApJS 208:20; NASA LAMBDA WMAP DR5."
+notes = "The pinned NASA guidance states that NASA supports open science and makes data available to everyone, explicitly discusses use of NASA content to train AI models, and states that such use does not constitute NASA endorsement. These numeric mission files contain no NASA insignia, logos, people, or third-party marked content. Disclose NASA/LAMBDA/WMAP as source material without implying NASA review, permission, output attribution, or endorsement."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public full-sky microwave measurements from a NASA spacecraft; no people or personal identifiers."
+usage_notes = "Only scientific HEALPix map fields are emitted. Mission branding, page imagery, FITS prose metadata, and logos are excluded from training samples."
+
+[[origins]]
+id = "nasa_lambda_wmap_dr5"
+name = "NASA LAMBDA WMAP Data Release 5"
+url = "https://lambda.gsfc.nasa.gov/product/wmap/dr5/m_products.html"
+type = "official_nasa_mission_data_archive"
+version = "WMAP nine-year release / DR5 / map version 5"
+notes = "Full-resolution coadded nine-year I,Q,U maps per frequency band at HEALPix Nside 512."
+
+[[resources]]
+id = "wmap_k_band_iqu"
+origin = "nasa_lambda_wmap_dr5"
+url = "https://lambda.gsfc.nasa.gov/data/map/dr5/skymaps/9yr/raw/wmap_band_iqumap_r9_9yr_K_v5.fits"
+type = "fits_healpix_binary_tables_float32"
+version = "wmap_band_iqumap_r9_9yr_K_v5.fits"
+access = "Exact official NASA/LAMBDA URL pinned by size and SHA-256."
+size_bytes = 100676160
+sha256 = "fe64dc687ab4db73e85b264e3a6496b87041a4cfe6fb11015180cca621478108"
+local_path = "downloads/nasa_wmap_healpix_sky_maps_f32/wmap_band_iqumap_r9_9yr_K_v5.fits"
+
+[[resources]]
+id = "wmap_ka_band_iqu"
+origin = "nasa_lambda_wmap_dr5"
+url = "https://lambda.gsfc.nasa.gov/data/map/dr5/skymaps/9yr/raw/wmap_band_iqumap_r9_9yr_Ka_v5.fits"
+type = "fits_healpix_binary_tables_float32"
+version = "wmap_band_iqumap_r9_9yr_Ka_v5.fits"
+access = "Exact official NASA/LAMBDA URL pinned by size and SHA-256."
+size_bytes = 100676160
+sha256 = "ba376e79738305cf277b624bba9394cf84043fe017957f4e483380f021266ef7"
+local_path = "downloads/nasa_wmap_healpix_sky_maps_f32/wmap_band_iqumap_r9_9yr_Ka_v5.fits"
+
+[[resources]]
+id = "wmap_q_band_iqu"
+origin = "nasa_lambda_wmap_dr5"
+url = "https://lambda.gsfc.nasa.gov/data/map/dr5/skymaps/9yr/raw/wmap_band_iqumap_r9_9yr_Q_v5.fits"
+type = "fits_healpix_binary_tables_float32"
+version = "wmap_band_iqumap_r9_9yr_Q_v5.fits"
+access = "Exact official NASA/LAMBDA URL pinned by size and SHA-256."
+size_bytes = 100676160
+sha256 = "a13120279345024f9639e20241281b5d85d99c263db07ea65d0390c18e4832b0"
+local_path = "downloads/nasa_wmap_healpix_sky_maps_f32/wmap_band_iqumap_r9_9yr_Q_v5.fits"
+
+[[resources]]
+id = "wmap_v_band_iqu"
+origin = "nasa_lambda_wmap_dr5"
+url = "https://lambda.gsfc.nasa.gov/data/map/dr5/skymaps/9yr/raw/wmap_band_iqumap_r9_9yr_V_v5.fits"
+type = "fits_healpix_binary_tables_float32"
+version = "wmap_band_iqumap_r9_9yr_V_v5.fits"
+access = "Exact official NASA/LAMBDA URL pinned by size and SHA-256."
+size_bytes = 100676160
+sha256 = "4d421a4cdc033df48cfe9f02aaa8404e55b51ced406081f05c8641f173c450fc"
+local_path = "downloads/nasa_wmap_healpix_sky_maps_f32/wmap_band_iqumap_r9_9yr_V_v5.fits"
+
+[[resources]]
+id = "wmap_w_band_iqu"
+origin = "nasa_lambda_wmap_dr5"
+url = "https://lambda.gsfc.nasa.gov/data/map/dr5/skymaps/9yr/raw/wmap_band_iqumap_r9_9yr_W_v5.fits"
+type = "fits_healpix_binary_tables_float32"
+version = "wmap_band_iqumap_r9_9yr_W_v5.fits"
+access = "Exact official NASA/LAMBDA URL pinned by size and SHA-256."
+size_bytes = 100676160
+sha256 = "6cdf9a52134c50fc9b859ccb840a8eef6cefaf54faa4c2f530a72c6244c4da06"
+local_path = "downloads/nasa_wmap_healpix_sky_maps_f32/wmap_band_iqumap_r9_9yr_W_v5.fits"
+
+[[resources]]
+id = "wmap_dr5_product_page"
+origin = "nasa_lambda_wmap_dr5"
+url = "https://lambda.gsfc.nasa.gov/product/wmap/dr5/m_products.html"
+type = "html_provenance_and_product_evidence"
+version = "captured 2026-08-27"
+access = "Exact official product page pinned by size and SHA-256."
+size_bytes = 75543
+sha256 = "ba6d9fbe395cc5b032cce70367042a3fa1bc830416472977cff238ea1a960d36"
+local_path = "downloads/nasa_wmap_healpix_sky_maps_f32/wmap_products.html"
+
+[[resources]]
+id = "nasa_ai_and_media_guidance"
+origin = "nasa_lambda_wmap_dr5"
+url = "https://www.nasa.gov/nasa-brand-center/images-and-media/"
+type = "html_rights_and_ai_use_evidence"
+version = "captured 2026-08-27"
+access = "Exact official NASA guidance page pinned by size and SHA-256."
+size_bytes = 308617
+sha256 = "3003114a6e2f73365f8824cc08c8b3cb2d6518a7b9f96cb12db6308dc36c10e5"
+local_path = "downloads/nasa_wmap_healpix_sky_maps_f32/nasa_media_usage.html"
+
+[local_paths]
+downloads = "downloads/nasa_wmap_healpix_sky_maps_f32/"
+filtered = "filtered/nasa_wmap_healpix_sky_maps_f32/"
+index = "index/nasa_wmap_healpix_sky_maps_f32/"
+samples = "samples/nasa_wmap_healpix_sky_maps_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_wmap_healpix_sky_maps_f32/samples.jsonl"
+summary = "Validate five official WMAP nine-year band maps and emit seven separate native float32 HEALPix field families in little-endian band order."
+deterministic_notes = "The official pages, five FITS identities, complete three-HDU layouts, mission/band metadata, both binary-table schemas, Nside-512 NESTED geometry, finite/non-sentinel distributions, per-sample and aggregate hashes, and totals are pinned. The duplicate Weight Arrays.N_OBS must be byte-identical to Stokes Maps.N_OBS and is emitted once. Verification reparses every source and compares all 440,401,920 output bytes."
+
+[[series]]
+id = "wmap_temperature_f32"
+description = "WMAP nine-year Stokes-I thermodynamic-temperature maps across five frequency bands."
+semantic_meaning = "Full-sky microwave brightness-temperature anisotropy and foreground emission in each WMAP band."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Native FITS TFORM=E IEEE-754 float32; endian normalization only."
+source_resources = ["wmap_k_band_iqu", "wmap_ka_band_iqu", "wmap_q_band_iqu", "wmap_v_band_iqu", "wmap_w_band_iqu", "wmap_dr5_product_page", "nasa_ai_and_media_guidance"]
+source_format = "FITS binary-table HEALPix maps"
+source_field = "Stokes Maps.TEMPERATURE"
+filtered_input_path = "filtered/nasa_wmap_healpix_sky_maps_f32/ingest_stats.json"
+filtering = "Retain the complete Nside-512 NESTED field for each K, Ka, Q, V, and W band, preserving pixel order and band boundaries."
+missing_value_policy = "Require every value finite and non-sentinel; constant, duplicate, changed, or stale outputs fail."
+conversion = "Reverse each native FITS big-endian float32 word to the identical little-endian bit pattern."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 HEALPix temperature field"
+sample_geometry = "full_sky_healpix_nested_sphere_1d"
+sample_rank = 1
+sample_axes = ["healpix_nested_pixel_index"]
+natural_record_kind = "complete_wmap_frequency_band_healpix_field"
+sample_count = 5
+total_size_bytes = 62914560
+output_path = "samples/nasa_wmap_healpix_sky_maps_f32/wmap_temperature_f32/"
+
+[[series]]
+id = "wmap_q_polarisation_f32"
+description = "WMAP nine-year Stokes-Q thermodynamic-polarization maps across five bands."
+semantic_meaning = "Signed linear-polarization Q component on the complete HEALPix sphere."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Native FITS TFORM=E float32; endian normalization only."
+source_resources = ["wmap_k_band_iqu", "wmap_ka_band_iqu", "wmap_q_band_iqu", "wmap_v_band_iqu", "wmap_w_band_iqu", "wmap_dr5_product_page", "nasa_ai_and_media_guidance"]
+source_format = "FITS binary-table HEALPix maps"
+source_field = "Stokes Maps.Q_POLARISATION"
+filtered_input_path = "filtered/nasa_wmap_healpix_sky_maps_f32/ingest_stats.json"
+filtering = "Retain each complete band Q field separately in source NESTED pixel order."
+missing_value_policy = "Require every value finite, non-sentinel, and nonconstant."
+conversion = "Reverse each source float32 word from big-endian FITS order to little endian."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 HEALPix Q-polarization field"
+sample_geometry = "full_sky_healpix_nested_sphere_1d"
+sample_rank = 1
+sample_axes = ["healpix_nested_pixel_index"]
+natural_record_kind = "complete_wmap_frequency_band_healpix_field"
+sample_count = 5
+total_size_bytes = 62914560
+output_path = "samples/nasa_wmap_healpix_sky_maps_f32/wmap_q_polarisation_f32/"
+
+[[series]]
+id = "wmap_u_polarisation_f32"
+description = "WMAP nine-year Stokes-U thermodynamic-polarization maps across five bands."
+semantic_meaning = "Signed linear-polarization U component on the complete HEALPix sphere."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Native FITS TFORM=E float32; endian normalization only."
+source_resources = ["wmap_k_band_iqu", "wmap_ka_band_iqu", "wmap_q_band_iqu", "wmap_v_band_iqu", "wmap_w_band_iqu", "wmap_dr5_product_page", "nasa_ai_and_media_guidance"]
+source_format = "FITS binary-table HEALPix maps"
+source_field = "Stokes Maps.U_POLARISATION"
+filtered_input_path = "filtered/nasa_wmap_healpix_sky_maps_f32/ingest_stats.json"
+filtering = "Retain each complete band U field separately in source NESTED pixel order."
+missing_value_policy = "Require every value finite, non-sentinel, and nonconstant."
+conversion = "Reverse each source float32 word from big-endian FITS order to little endian."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 HEALPix U-polarization field"
+sample_geometry = "full_sky_healpix_nested_sphere_1d"
+sample_rank = 1
+sample_axes = ["healpix_nested_pixel_index"]
+natural_record_kind = "complete_wmap_frequency_band_healpix_field"
+sample_count = 5
+total_size_bytes = 62914560
+output_path = "samples/nasa_wmap_healpix_sky_maps_f32/wmap_u_polarisation_f32/"
+
+[[series]]
+id = "wmap_n_obs_f32"
+description = "WMAP effective observation-count maps across five frequency bands."
+semantic_meaning = "Spatially varying effective observation support for each WMAP band map."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "N_OBS is native float32 and generally fractional. Its byte-identical copy in Weight Arrays is validated and excluded."
+source_resources = ["wmap_k_band_iqu", "wmap_ka_band_iqu", "wmap_q_band_iqu", "wmap_v_band_iqu", "wmap_w_band_iqu", "wmap_dr5_product_page", "nasa_ai_and_media_guidance"]
+source_format = "FITS binary-table HEALPix maps"
+source_field = "Stokes Maps.N_OBS"
+filtered_input_path = "filtered/nasa_wmap_healpix_sky_maps_f32/ingest_stats.json"
+filtering = "Retain one complete N_OBS map per band; require and exclude its duplicate."
+missing_value_policy = "Require finite positive non-sentinel values and byte identity of the repeated source column."
+conversion = "Reverse each source float32 word from big-endian FITS order to little endian."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 HEALPix effective-observation field"
+sample_geometry = "full_sky_healpix_nested_sphere_1d"
+sample_rank = 1
+sample_axes = ["healpix_nested_pixel_index"]
+natural_record_kind = "complete_wmap_frequency_band_healpix_field"
+sample_count = 5
+total_size_bytes = 62914560
+output_path = "samples/nasa_wmap_healpix_sky_maps_f32/wmap_n_obs_f32/"
+
+[[series]]
+id = "wmap_qq_weight_f32"
+description = "WMAP QQ polarization-weight maps across five frequency bands."
+semantic_meaning = "Published diagonal QQ element of the spatial polarization-weight array."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Native FITS TFORM=E float32; endian normalization only."
+source_resources = ["wmap_k_band_iqu", "wmap_ka_band_iqu", "wmap_q_band_iqu", "wmap_v_band_iqu", "wmap_w_band_iqu", "wmap_dr5_product_page", "nasa_ai_and_media_guidance"]
+source_format = "FITS binary-table HEALPix weight arrays"
+source_field = "Weight Arrays.QQ"
+filtered_input_path = "filtered/nasa_wmap_healpix_sky_maps_f32/ingest_stats.json"
+filtering = "Retain the complete QQ field for each band in NESTED pixel order."
+missing_value_policy = "Require every value finite, non-sentinel, and nonconstant."
+conversion = "Reverse each source float32 word from big-endian FITS order to little endian."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 HEALPix QQ-weight field"
+sample_geometry = "full_sky_healpix_nested_sphere_1d"
+sample_rank = 1
+sample_axes = ["healpix_nested_pixel_index"]
+natural_record_kind = "complete_wmap_frequency_band_healpix_field"
+sample_count = 5
+total_size_bytes = 62914560
+output_path = "samples/nasa_wmap_healpix_sky_maps_f32/wmap_qq_weight_f32/"
+
+[[series]]
+id = "wmap_qu_weight_f32"
+description = "WMAP signed QU polarization cross-weight maps across five frequency bands."
+semantic_meaning = "Published off-diagonal QU element of the spatial polarization-weight array."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Native signed FITS TFORM=E float32; endian normalization only."
+source_resources = ["wmap_k_band_iqu", "wmap_ka_band_iqu", "wmap_q_band_iqu", "wmap_v_band_iqu", "wmap_w_band_iqu", "wmap_dr5_product_page", "nasa_ai_and_media_guidance"]
+source_format = "FITS binary-table HEALPix weight arrays"
+source_field = "Weight Arrays.QU"
+filtered_input_path = "filtered/nasa_wmap_healpix_sky_maps_f32/ingest_stats.json"
+filtering = "Retain the complete signed QU field for each band in NESTED pixel order."
+missing_value_policy = "Require every value finite, non-sentinel, and nonconstant."
+conversion = "Reverse each source float32 word from big-endian FITS order to little endian."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 HEALPix QU-weight field"
+sample_geometry = "full_sky_healpix_nested_sphere_1d"
+sample_rank = 1
+sample_axes = ["healpix_nested_pixel_index"]
+natural_record_kind = "complete_wmap_frequency_band_healpix_field"
+sample_count = 5
+total_size_bytes = 62914560
+output_path = "samples/nasa_wmap_healpix_sky_maps_f32/wmap_qu_weight_f32/"
+
+[[series]]
+id = "wmap_uu_weight_f32"
+description = "WMAP UU polarization-weight maps across five frequency bands."
+semantic_meaning = "Published diagonal UU element of the spatial polarization-weight array."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Native FITS TFORM=E float32; endian normalization only."
+source_resources = ["wmap_k_band_iqu", "wmap_ka_band_iqu", "wmap_q_band_iqu", "wmap_v_band_iqu", "wmap_w_band_iqu", "wmap_dr5_product_page", "nasa_ai_and_media_guidance"]
+source_format = "FITS binary-table HEALPix weight arrays"
+source_field = "Weight Arrays.UU"
+filtered_input_path = "filtered/nasa_wmap_healpix_sky_maps_f32/ingest_stats.json"
+filtering = "Retain the complete UU field for each band in NESTED pixel order."
+missing_value_policy = "Require every value finite, non-sentinel, and nonconstant."
+conversion = "Reverse each source float32 word from big-endian FITS order to little endian."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 HEALPix UU-weight field"
+sample_geometry = "full_sky_healpix_nested_sphere_1d"
+sample_rank = 1
+sample_axes = ["healpix_nested_pixel_index"]
+natural_record_kind = "complete_wmap_frequency_band_healpix_field"
+sample_count = 5
+total_size_bytes = 62914560
+output_path = "samples/nasa_wmap_healpix_sky_maps_f32/wmap_uu_weight_f32/"

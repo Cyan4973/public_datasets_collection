@@ -104,6 +104,7 @@ nasa_power_daily_wind	ok	449280	3594240	30	14976	119808	0	0	0	1	none	none
 openalex_works_2024_sample	ok	460000	1160000	23	20000	40000	0	0	0	1	none	none
 sec_submissions_largecap_bundle	ok	483235	1739646	245	1001	4000	0	0	0	1	none	none
 appliances_energy_uci	ok	513110	4104880	26	19735	157880	39470	315760	2	1	none	none
+zenodo_battery_eis_complex_f32	ok	524234	2096936	26	21594	86376	0	0	0	1	none	none
 noaa_coops_air_temperature	ok	525155	4201240	3	175044	1400352	0	0	0	1	none	none
 noaa_coops_air_pressure	ok	525156	4201248	3	175047	1400376	0	0	0	1	none	none
 nasa_power_daily_longwave_flux	ok	540600	4324800	40	13515	108120	0	0	0	1	none	none

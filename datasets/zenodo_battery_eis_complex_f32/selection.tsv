@@ -1,0 +1,2 @@
+record_id	doi	filename	size_bytes	md5	sha256	row_count	cell_count	frequency_count	output_value_count	output_size_bytes	output_sha256	url
+17792537	10.5281/zenodo.17792537	frequency-space_spline-interp_v1-3.txt	8139517	d8f3abd2a38b4f0c88a6d297ce733264	9ccd34f7534ed0045c965e6c34dc6044b76394c6727283d1f5feb383bf078eb6	4297	26	61	524234	2096936	24dc7a1ccb70e1633ecbdf26b006daaec8de2e48ca0262a6f9bbe8b362c0e6da	https://zenodo.org/api/records/17792537/files/frequency-space_spline-interp_v1-3.txt/content

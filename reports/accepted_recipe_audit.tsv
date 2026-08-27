@@ -180,6 +180,7 @@ noaa_cors_rinex_observations_f64	ok	4574236	36593888	115	32648	261184	0	0	0	1	no
 ncbi_gene_human	ok	4794554	19178216	4	1198638.5	4794554	0	0	0	1	none	none
 landsat_scene_cloud_cover_f64	ok	5000000	40000000	1	5000000	40000000	0	0	0	1	none	none
 natural_earth_10m_geometry_xy_f64	ok	5312502	42500016	1166	1461	11688	0	0	0	1	none	none
+usgs_shakemap_ground_motion_f32	ok	5520480	22081920	14	394320	1577280	0	0	0	1	none	none
 covid19_hospitalizations_u64	ok	6025565	48204520	9	191923	1535384	0	0	0	1	none	none
 bam_read_mapq_u8	ok	6170563	6170563	14	435368	435368	0	0	0	1	none	none
 zenodo_marine_dom_positive_ms1_f32	ok	6232014	24928056	2802	2368	9472	0	0	0	1	none	none

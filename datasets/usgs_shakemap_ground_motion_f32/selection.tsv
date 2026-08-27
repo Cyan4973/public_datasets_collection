@@ -1,0 +1,2 @@
+event_id	magnitude	event_time_utc	place	product_source	product_code	product_update_time_ms	raster_size_bytes	raster_url	event_detail_url
+us6000qw60	8.8	2025-07-29T23:24:52.483000+00:00	2025 Kamchatka Peninsula, Russia Earthquake	us	us6000qw60	1759864843221	13201579	https://earthquake.usgs.gov/product/shakemap/us6000qw60/us/1759864843221/download/raster.zip	https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us6000qw60&format=geojson

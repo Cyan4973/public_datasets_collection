@@ -1,0 +1,126 @@
+manifest_version = 1
+dataset_id = "zenodo_zeroswarm_tcp_sequence_u32"
+name = "Zero-SWARM TCP Transport Sequence and Acknowledgment UInt32"
+description = "Native TCP sequence-space counter trajectories from two normal synthetic Factory I/O Modbus/TCP captures."
+homepage = "https://zenodo.org/records/15082260"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "George Lazaridis and Asterios Mpatziakas, Modbus Normal and Malicious Network Traffic, Zenodo, DOI 10.5281/zenodo.15082260."
+notes = "The exact Zenodo record declares CC BY 4.0. Preserve authors, title, DOI, record, and license attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Synthetic Factory I/O testbed traffic released publicly by its authors; no real user communications or personal identifiers."
+usage_notes = "Only native TCP sequence and acknowledgment numbers are emitted. IP/MAC addresses, ports, timestamps, checksums, flags, options, packet bodies, and Modbus payload values are excluded."
+
+[[origins]]
+id = "zenodo_15082260"
+name = "Modbus Normal and Malicious Network Traffic"
+url = "https://zenodo.org/records/15082260"
+type = "zenodo_dataset"
+version = "1.0 / DOI 10.5281/zenodo.15082260"
+
+[[resources]]
+id = "zeroswarm_normal_v2_pcap"
+origin = "zenodo_15082260"
+url = "https://zenodo.org/api/records/15082260/files/ZeroSWARM%20Normal%20data_v2.pcap/content"
+type = "classic_pcap_modbus_tcp"
+version = "ZeroSWARM Normal data_v2.pcap"
+access = "Exact Zenodo object pinned by size, MD5, and SHA-256."
+size_bytes = 232217247
+md5 = "eee8b87e62c482fd574b6e78d32cb12b"
+sha256 = "6f9b3e9228cc60e7b1130b790c11b187c5562bee5363f34f2e2da59c133540a3"
+local_path = "downloads/zenodo_zeroswarm_tcp_sequence_u32/ZeroSWARM Normal data_v2.pcap"
+
+[[resources]]
+id = "zeroswarm_normal_v2b_pcap"
+origin = "zenodo_15082260"
+url = "https://zenodo.org/api/records/15082260/files/ZeroSWARM%20Normal%20data_v2b.pcap/content"
+type = "classic_pcap_modbus_tcp"
+version = "ZeroSWARM Normal data_v2b.pcap"
+access = "Exact Zenodo object pinned by size, MD5, and SHA-256."
+size_bytes = 18119840
+md5 = "9f8235fcdbfcacb32e7a70db14fc6c74"
+sha256 = "7ccdb3216007134eecaabf622eb2f2d6c09a06f2e4bbaec8b477a9906d52a7df"
+local_path = "downloads/zenodo_zeroswarm_tcp_sequence_u32/ZeroSWARM Normal data_v2b.pcap"
+
+[[resources]]
+id = "zenodo_record_metadata"
+origin = "zenodo_15082260"
+url = "https://zenodo.org/api/records/15082260"
+type = "json_metadata_and_license_evidence"
+version = "record 15082260 captured 2026-08-27"
+access = "Exact Zenodo API response pinned by size and SHA-256."
+size_bytes = 5364
+sha256 = "6dded3622c3f2f7fcaa3c74e89c3a51c43af94eb63546a6da510b8a65e193ffb"
+local_path = "downloads/zenodo_zeroswarm_tcp_sequence_u32/zenodo_record_15082260.json"
+
+[local_paths]
+downloads = "downloads/zenodo_zeroswarm_tcp_sequence_u32/"
+filtered = "filtered/zenodo_zeroswarm_tcp_sequence_u32/"
+index = "index/zenodo_zeroswarm_tcp_sequence_u32/"
+samples = "samples/zenodo_zeroswarm_tcp_sequence_u32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_zeroswarm_tcp_sequence_u32/samples.jsonl"
+summary = "Validate two licensed normal Zero-SWARM PCAPs and emit separate little-endian uint32 TCP sequence and acknowledgment trajectories for each capture direction."
+deterministic_notes = "Record and PCAP identities, Ethernet/IPv4/TCP parsing, port-502 packet counts, capture/direction boundaries, counts, ranges, cardinalities, transition and decrease counts, per-sample hashes, aggregate hashes, and total output are pinned. The decoder emits no network identity, timing, option, checksum, flag, or payload field. Verification reparses every packet and compares every output byte."
+
+[[series]]
+id = "zeroswarm_tcp_sequence_u32"
+description = "TCP sequence-number trajectories for request and response directions in two normal Modbus/TCP captures."
+semantic_meaning = "Cumulative 32-bit TCP byte positions in packet capture order, showing payload-sized advances and repeated plateaus."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "TCP sequence numbers are protocol-native unsigned 32-bit network-order fields. Output preserves each value and changes only byte order to little endian."
+source_resources = ["zeroswarm_normal_v2_pcap", "zeroswarm_normal_v2b_pcap", "zenodo_record_metadata"]
+source_format = "Classic PCAP containing Ethernet/IPv4/Modbus-TCP"
+source_field = "TCP Sequence Number for unfragmented IPv4/TCP port-502 packets"
+filtered_input_path = "filtered/zenodo_zeroswarm_tcp_sequence_u32/ingest_stats.json"
+filtering = "Retain every validated port-502 packet sequence number, split by capture and request/response direction while preserving packet order."
+missing_value_policy = "Malformed, fragmented, non-IPv4, non-TCP, and non-port-502 frames are outside the series. Every qualifying packet contributes exactly one value; changed counts, constant or duplicate samples, identity mismatches, or stale outputs fail."
+conversion = "Decode each four-byte network-order field as uint32 and serialize the identical value as little-endian uint32. No delta or relative-sequence normalization is applied."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous uint32 TCP sequence-number trajectory"
+sample_geometry = "tcp_sequence_space_packet_timeline_1d"
+sample_rank = 1
+sample_axes = ["direction_packet_capture_order"]
+natural_record_kind = "pcap_tcp_counter_field_direction"
+sample_count = 4
+total_size_bytes = 12143764
+output_path = "samples/zenodo_zeroswarm_tcp_sequence_u32/zeroswarm_tcp_sequence_u32/"
+
+[[series]]
+id = "zeroswarm_tcp_acknowledgment_u32"
+description = "TCP acknowledgment-number trajectories for request and response directions in two normal Modbus/TCP captures."
+semantic_meaning = "Cumulative 32-bit next-byte acknowledgments in packet capture order, showing peer progress, delayed acknowledgments, and plateaus."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "TCP acknowledgment numbers are protocol-native unsigned 32-bit network-order fields. Output preserves each value and changes only byte order to little endian."
+source_resources = ["zeroswarm_normal_v2_pcap", "zeroswarm_normal_v2b_pcap", "zenodo_record_metadata"]
+source_format = "Classic PCAP containing Ethernet/IPv4/Modbus-TCP"
+source_field = "TCP Acknowledgment Number for unfragmented IPv4/TCP port-502 packets"
+filtered_input_path = "filtered/zenodo_zeroswarm_tcp_sequence_u32/ingest_stats.json"
+filtering = "Retain every validated port-502 packet acknowledgment number, split by capture and request/response direction while preserving packet order."
+missing_value_policy = "Malformed, fragmented, non-IPv4, non-TCP, and non-port-502 frames are outside the series. Every qualifying packet contributes exactly one value; changed counts, constant or duplicate samples, identity mismatches, or stale outputs fail."
+conversion = "Decode each four-byte network-order field as uint32 and serialize the identical value as little-endian uint32. No delta or relative-acknowledgment normalization is applied."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous uint32 TCP acknowledgment-number trajectory"
+sample_geometry = "tcp_sequence_space_packet_timeline_1d"
+sample_rank = 1
+sample_axes = ["direction_packet_capture_order"]
+natural_record_kind = "pcap_tcp_counter_field_direction"
+sample_count = 4
+total_size_bytes = 12143764
+output_path = "samples/zenodo_zeroswarm_tcp_sequence_u32/zeroswarm_tcp_acknowledgment_u32/"

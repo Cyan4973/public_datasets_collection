@@ -1,0 +1,255 @@
+manifest_version = 1
+dataset_id = "eht_public_uvfits_visibilities_f32"
+name = "Event Horizon Telescope Calibrated Stokes-I UV Visibilities Float32"
+description = "Separate real, imaginary, and statistical-weight sequences from five calibrated EHT UVFITS observations."
+homepage = "https://github.com/eventhorizontelescope"
+
+[license]
+name = "Open Data Commons Public Domain Dedication and License 1.0"
+spdx = "PDDL-1.0"
+url = "https://opendatacommons.org/licenses/pddl/1-0/"
+citation = "Event Horizon Telescope Collaboration public data releases 2019-D01-01, 2020-D01-01, 2021-D03-01, 2022-D02-01, and 2024-D01-01."
+notes = "Each selected official release LICENSE.txt states that its data files are licensed under ODC-PDDL 1.0. The GPLv3 clause in the same notice applies to release scripts, which this recipe does not redistribute as training material. Preserve release and EHT attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Published astronomical interferometry of M87, 3C 279, Centaurus A, and Sagittarius A*; no people or personal identifiers."
+usage_notes = "Only calibrated Stokes-I visibility real, imaginary, and positive statistical-weight fields are emitted. UV coordinates, baselines, timestamps, antenna tables, and source metadata remain validation/context metadata rather than primary samples."
+
+[[origins]]
+id = "eht_2019_d01_01"
+name = "EHT 2017 M87 First Results calibrated data"
+url = "https://github.com/eventhorizontelescope/2019-D01-01"
+type = "official_github_data_release"
+version = "commit 27ae76aacb9067a83388395c3826012b97aac371"
+
+[[origins]]
+id = "eht_2020_d01_01"
+name = "EHT 2017 3C 279 First Results calibrated data"
+url = "https://github.com/eventhorizontelescope/2020-D01-01"
+type = "official_github_data_release"
+version = "commit 6d7a1765be11b4438271f4e451e00e523f8c7050"
+
+[[origins]]
+id = "eht_2021_d03_01"
+name = "EHT 2017 Centaurus A calibrated data"
+url = "https://github.com/eventhorizontelescope/2021-D03-01"
+type = "official_github_data_release"
+version = "commit 6011dde00a03270f973c8f63a94986689d114cb0"
+
+[[origins]]
+id = "eht_2022_d02_01"
+name = "EHT 2017 Sagittarius A* calibrated data"
+url = "https://github.com/eventhorizontelescope/2022-D02-01"
+type = "official_github_data_release"
+version = "commit 52640fe116ac20fd67c7d1937c2e09a0ef49caa3"
+
+[[origins]]
+id = "eht_2024_d01_01"
+name = "EHT 2018 M87 calibrated data"
+url = "https://github.com/eventhorizontelescope/2024-D01-01"
+type = "official_github_data_release"
+version = "commit fda41da417419fd9b54505ea3fa70a8cf6fb60ec"
+
+[[resources]]
+id = "m87_2017_096_hi_uvfits"
+origin = "eht_2019_d01_01"
+url = "https://raw.githubusercontent.com/eventhorizontelescope/2019-D01-01/27ae76aacb9067a83388395c3826012b97aac371/uvfits/SR1_M87_2017_096_hi_hops_netcal_StokesI.uvfits"
+type = "uvfits_random_groups_float32"
+version = "Git blob e345b4e0adccfc0aae032e6db576b086a5fd2d11"
+access = "Exact commit-pinned GitHub raw URL, pinned by size, Git blob SHA-1, and SHA-256."
+size_bytes = 786240
+sha256 = "5bc42247ccd01b58460d95e8c17f91e337c79ffe99a0718aacf0a91c77ad24ec"
+local_path = "downloads/eht_public_uvfits_visibilities_f32/m87_2017_096_hi.uvfits"
+
+[[resources]]
+id = "threec279_2017_101_hi_uvfits"
+origin = "eht_2020_d01_01"
+url = "https://raw.githubusercontent.com/eventhorizontelescope/2020-D01-01/6d7a1765be11b4438271f4e451e00e523f8c7050/uvfits/SR1_3C279_2017_101_hi_hops_netcal_StokesI.uvfits"
+type = "uvfits_random_groups_float32"
+version = "Git blob 02289c3d4ac76a3b0d1dae51088d927ae64694f8"
+access = "Exact commit-pinned GitHub raw URL, pinned by size, Git blob SHA-1, and SHA-256."
+size_bytes = 1238400
+sha256 = "3b4f35df2326ca4dba59832a7067369eaa38f40516a55f6f202aaf8f4583da57"
+local_path = "downloads/eht_public_uvfits_visibilities_f32/threec279_2017_101_hi.uvfits"
+
+[[resources]]
+id = "cena_2017_100_hi_uvfits"
+origin = "eht_2021_d03_01"
+url = "https://raw.githubusercontent.com/eventhorizontelescope/2021-D03-01/6011dde00a03270f973c8f63a94986689d114cb0/uvfits/CenA_2017_100_hi_hops_netcal_StokesI.uvfits"
+type = "uvfits_random_groups_float32"
+version = "Git blob 1a214ada6a87dc325d346c9c0ef5d500a42e6f45"
+access = "Exact commit-pinned GitHub raw URL, pinned by size, Git blob SHA-1, and SHA-256."
+size_bytes = 843840
+sha256 = "46a0552301e08b3fc0452340e8aa4d31617db859d6425c0986ada9234200846c"
+local_path = "downloads/eht_public_uvfits_visibilities_f32/cena_2017_100_hi.uvfits"
+
+[[resources]]
+id = "sgra_2017_097_lo_uvfits"
+origin = "eht_2022_d02_01"
+url = "https://raw.githubusercontent.com/eventhorizontelescope/2022-D02-01/52640fe116ac20fd67c7d1937c2e09a0ef49caa3/uvfits/ER6_SGRA_2017_097_lo_hops_netcal-LMTcal_StokesI.uvfits"
+type = "uvfits_random_groups_float32"
+version = "Git blob dfa0f1365b70fea550583e57074b736c3692e51f"
+access = "Exact commit-pinned GitHub raw URL, pinned by size, Git blob SHA-1, and SHA-256."
+size_bytes = 1497600
+sha256 = "762c5b294c9e15cf064fb980bb693eb6a1917fa11d4c7347d17655c99e6c044a"
+local_path = "downloads/eht_public_uvfits_visibilities_f32/sgra_2017_097_lo.uvfits"
+
+[[resources]]
+id = "m87_2018_111_b4_uvfits"
+origin = "eht_2024_d01_01"
+url = "https://raw.githubusercontent.com/eventhorizontelescope/2024-D01-01/fda41da417419fd9b54505ea3fa70a8cf6fb60ec/uvfits/L2V1_M87_2018_111_b4_hops_netcal_10s_StokesI.uvfits"
+type = "uvfits_random_groups_float32"
+version = "Git blob 234f3619393180bd9d6018a0fd42de817de7fa30"
+access = "Exact commit-pinned GitHub raw URL, pinned by size, Git blob SHA-1, and SHA-256."
+size_bytes = 699840
+sha256 = "630a679d1c75cc85c4849da61d20a7422aa0530bb1b8e3ee3b599ed7ef2bffab"
+local_path = "downloads/eht_public_uvfits_visibilities_f32/m87_2018_111_b4.uvfits"
+
+[[resources]]
+id = "eht_2019_license"
+origin = "eht_2019_d01_01"
+url = "https://raw.githubusercontent.com/eventhorizontelescope/2019-D01-01/27ae76aacb9067a83388395c3826012b97aac371/LICENSE.txt"
+type = "plain_text_data_license_evidence"
+version = "commit 27ae76aacb9067a83388395c3826012b97aac371"
+access = "Exact commit-pinned official license notice."
+size_bytes = 35356
+sha256 = "9725e2ef4127844b4cf21137a87e61830de0a04ad583ea6ba2229488b5012f1d"
+local_path = "downloads/eht_public_uvfits_visibilities_f32/2019-D01-01__LICENSE.txt"
+
+[[resources]]
+id = "eht_2020_license"
+origin = "eht_2020_d01_01"
+url = "https://raw.githubusercontent.com/eventhorizontelescope/2020-D01-01/6d7a1765be11b4438271f4e451e00e523f8c7050/LICENSE.txt"
+type = "plain_text_data_license_evidence"
+version = "commit 6d7a1765be11b4438271f4e451e00e523f8c7050"
+access = "Exact commit-pinned official license notice."
+size_bytes = 35356
+sha256 = "9725e2ef4127844b4cf21137a87e61830de0a04ad583ea6ba2229488b5012f1d"
+local_path = "downloads/eht_public_uvfits_visibilities_f32/2020-D01-01__LICENSE.txt"
+
+[[resources]]
+id = "eht_2021_license"
+origin = "eht_2021_d03_01"
+url = "https://raw.githubusercontent.com/eventhorizontelescope/2021-D03-01/6011dde00a03270f973c8f63a94986689d114cb0/LICENSE.txt"
+type = "plain_text_data_license_evidence"
+version = "commit 6011dde00a03270f973c8f63a94986689d114cb0"
+access = "Exact commit-pinned official license notice."
+size_bytes = 35356
+sha256 = "9725e2ef4127844b4cf21137a87e61830de0a04ad583ea6ba2229488b5012f1d"
+local_path = "downloads/eht_public_uvfits_visibilities_f32/2021-D03-01__LICENSE.txt"
+
+[[resources]]
+id = "eht_2022_license"
+origin = "eht_2022_d02_01"
+url = "https://raw.githubusercontent.com/eventhorizontelescope/2022-D02-01/52640fe116ac20fd67c7d1937c2e09a0ef49caa3/LICENSE.txt"
+type = "plain_text_data_license_evidence"
+version = "commit 52640fe116ac20fd67c7d1937c2e09a0ef49caa3"
+access = "Exact commit-pinned official license notice."
+size_bytes = 35356
+sha256 = "9725e2ef4127844b4cf21137a87e61830de0a04ad583ea6ba2229488b5012f1d"
+local_path = "downloads/eht_public_uvfits_visibilities_f32/2022-D02-01__LICENSE.txt"
+
+[[resources]]
+id = "eht_2024_license"
+origin = "eht_2024_d01_01"
+url = "https://raw.githubusercontent.com/eventhorizontelescope/2024-D01-01/fda41da417419fd9b54505ea3fa70a8cf6fb60ec/LICENSE.txt"
+type = "plain_text_data_license_evidence"
+version = "commit fda41da417419fd9b54505ea3fa70a8cf6fb60ec"
+access = "Exact commit-pinned official license notice."
+size_bytes = 35356
+sha256 = "9725e2ef4127844b4cf21137a87e61830de0a04ad583ea6ba2229488b5012f1d"
+local_path = "downloads/eht_public_uvfits_visibilities_f32/2024-D01-01__LICENSE.txt"
+
+[local_paths]
+downloads = "downloads/eht_public_uvfits_visibilities_f32/"
+filtered = "filtered/eht_public_uvfits_visibilities_f32/"
+index = "index/eht_public_uvfits_visibilities_f32/"
+samples = "samples/eht_public_uvfits_visibilities_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/eht_public_uvfits_visibilities_f32/samples.jsonl"
+summary = "Validate five official EHT Stokes-I UVFITS releases and emit separate little-endian float32 real, imaginary, and statistical-weight series."
+deterministic_notes = "Repository commits, URLs, sizes, Git blob SHA-1s, source SHA-256s, data-specific license notices, complete FITS layouts, random-group axes and parameters, source identities, Stokes coding, output hashes, extrema, distinct counts, and aggregate totals are pinned. RR and LL must be byte-identical; one copy is emitted. RL/LR must be zero/infinity placeholders and are excluded. Verification reparses every source and compares every output byte."
+
+[[series]]
+id = "eht_visibility_real_f32"
+description = "Real components of calibrated EHT Stokes-I spatial-frequency visibilities."
+semantic_meaning = "Signed real Fourier-plane visibility measurements across telescope baselines and observation time."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source natively stores IEEE-754 float32 in FITS big-endian order. Output reverses each four-byte word to little endian without numeric re-encoding."
+source_resources = ["m87_2017_096_hi_uvfits", "threec279_2017_101_hi_uvfits", "cena_2017_100_hi_uvfits", "sgra_2017_097_lo_uvfits", "m87_2018_111_b4_uvfits", "eht_2019_license", "eht_2020_license", "eht_2021_license", "eht_2022_license", "eht_2024_license"]
+source_format = "FITS random-groups UVFITS with big-endian float32 DATA triplets"
+source_field = "real member of each (real, imaginary, weight) Stokes-I visibility triplet"
+filtered_input_path = "filtered/eht_public_uvfits_visibilities_f32/ingest_stats.json"
+filtering = "Retain one real word per random group after requiring the source RR and LL words to be byte-identical. Exclude structurally empty RL/LR cross-hand placeholders. Keep each observation separate and preserve random-group order."
+missing_value_policy = "Retained values must be finite. RR and LL must be byte-identical with finite positive weights. RL/LR real and imaginary values must be zero and their weights must be zero or positive infinity; any changed pattern fails."
+conversion = "Reverse the four source bytes of each retained big-endian float32 word to produce the exact equivalent little-endian bit pattern."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 visibility real field"
+sample_geometry = "uv_visibility_random_group_sequence_1d"
+sample_rank = 1
+sample_axes = ["random_group_source_order"]
+natural_record_kind = "complete_calibrated_uvfits_observation_field"
+sample_count = 5
+total_size_bytes = 235252
+output_path = "samples/eht_public_uvfits_visibilities_f32/eht_visibility_real_f32/"
+
+[[series]]
+id = "eht_visibility_imaginary_f32"
+description = "Imaginary components of calibrated EHT Stokes-I spatial-frequency visibilities."
+semantic_meaning = "Signed imaginary Fourier-plane visibility measurements aligned with the real-component samples."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source natively stores IEEE-754 float32 in FITS big-endian order. Output reverses each four-byte word to little endian without numeric re-encoding."
+source_resources = ["m87_2017_096_hi_uvfits", "threec279_2017_101_hi_uvfits", "cena_2017_100_hi_uvfits", "sgra_2017_097_lo_uvfits", "m87_2018_111_b4_uvfits", "eht_2019_license", "eht_2020_license", "eht_2021_license", "eht_2022_license", "eht_2024_license"]
+source_format = "FITS random-groups UVFITS with big-endian float32 DATA triplets"
+source_field = "imaginary member of each (real, imaginary, weight) Stokes-I visibility triplet"
+filtered_input_path = "filtered/eht_public_uvfits_visibilities_f32/ingest_stats.json"
+filtering = "Retain one imaginary word per random group after requiring the source RR and LL words to be byte-identical. Exclude structurally empty RL/LR cross-hand placeholders. Keep each observation separate and preserve random-group order."
+missing_value_policy = "Retained values must be finite. RR and LL must be byte-identical with finite positive weights. RL/LR real and imaginary values must be zero and their weights must be zero or positive infinity; any changed pattern fails."
+conversion = "Reverse the four source bytes of each retained big-endian float32 word to produce the exact equivalent little-endian bit pattern."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 visibility imaginary field"
+sample_geometry = "uv_visibility_random_group_sequence_1d"
+sample_rank = 1
+sample_axes = ["random_group_source_order"]
+natural_record_kind = "complete_calibrated_uvfits_observation_field"
+sample_count = 5
+total_size_bytes = 235252
+output_path = "samples/eht_public_uvfits_visibilities_f32/eht_visibility_imaginary_f32/"
+
+[[series]]
+id = "eht_visibility_weight_f32"
+description = "Positive statistical weights for calibrated EHT Stokes-I visibilities."
+semantic_meaning = "Per-visibility inverse-variance-like confidence weights aligned with the real and imaginary measurement samples."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source natively stores IEEE-754 float32 in FITS big-endian order. Output reverses each four-byte word to little endian without numeric re-encoding."
+source_resources = ["m87_2017_096_hi_uvfits", "threec279_2017_101_hi_uvfits", "cena_2017_100_hi_uvfits", "sgra_2017_097_lo_uvfits", "m87_2018_111_b4_uvfits", "eht_2019_license", "eht_2020_license", "eht_2021_license", "eht_2022_license", "eht_2024_license"]
+source_format = "FITS random-groups UVFITS with big-endian float32 DATA triplets"
+source_field = "weight member of each (real, imaginary, weight) Stokes-I visibility triplet"
+filtered_input_path = "filtered/eht_public_uvfits_visibilities_f32/ingest_stats.json"
+filtering = "Retain one positive weight word per random group after requiring the source RR and LL words to be byte-identical. Exclude zero/infinite RL/LR cross-hand placeholders. Keep each observation separate and preserve random-group order."
+missing_value_policy = "Every retained weight must be finite and strictly positive. RR and LL must be byte-identical. RL/LR weights must be zero or positive infinity and their real/imaginary components zero; any changed pattern fails."
+conversion = "Reverse the four source bytes of each retained big-endian float32 word to produce the exact equivalent little-endian bit pattern."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 visibility weight field"
+sample_geometry = "uv_visibility_random_group_sequence_1d"
+sample_rank = 1
+sample_axes = ["random_group_source_order"]
+natural_record_kind = "complete_calibrated_uvfits_observation_field"
+sample_count = 5
+total_size_bytes = 235252
+output_path = "samples/eht_public_uvfits_visibilities_f32/eht_visibility_weight_f32/"

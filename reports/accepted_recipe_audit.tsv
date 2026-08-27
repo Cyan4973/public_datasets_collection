@@ -120,6 +120,7 @@ gdelt_events_avgtone_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	none
 gdelt_events_goldstein_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	none
 gdelt_events_nummentions_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	none
 gdelt_events_numsources_daily	ok	731884	2927536	7	107010	428040	0	0	0	1	none	none
+zenodo_morphodunes_piv_f64	ok	738020	5904160	4	184704	1477632	0	0	0	1	none	none
 wwpdb_mmcif_atom_coords_f32	ok	742731	2970924	8	15910.5	63642	0	0	0	1	none	none
 jrc_global_surface_water_occurrence_u8	ok	786432	786432	12	65536	65536	0	0	0	1	none	none
 taginfo_keys_all	ok	800000	5100000	8	100000	800000	0	0	0	1	none	none

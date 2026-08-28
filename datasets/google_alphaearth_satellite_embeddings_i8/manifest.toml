@@ -1,0 +1,114 @@
+manifest_version = 1
+dataset_id = "google_alphaearth_satellite_embeddings_i8"
+name = "Google AlphaEarth Annual Satellite Embedding Tiles Int8"
+description = "Spatially aligned native signed-int8 latent-axis tiles from Google DeepMind AlphaEarth annual satellite embeddings across six regions and years."
+homepage = "https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_SATELLITE_EMBEDDING_V1_ANNUAL"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "The AlphaEarth Foundations Satellite Embedding dataset is produced by Google and Google DeepMind."
+notes = "The official catalog, STAC record, and GCS guide explicitly declare CC BY 4.0 and prescribe this attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Google-hosted model-derived satellite embeddings; bounded byte ranges are fetched directly from generation-pinned public GCS objects."
+usage_notes = "The outputs are learned geospatial representations rather than raw satellite images. Preserve Google and Google DeepMind attribution."
+
+[[origins]]
+id = "google_alphaearth"
+name = "Google AlphaEarth Foundations public GCS bucket"
+url = "https://storage.googleapis.com/alphaearth_foundations/"
+type = "bucket"
+version = "Satellite Embedding V1 Annual"
+notes = "Official provider-pays public distribution of the Earth Engine Satellite Embedding dataset."
+
+[[resources]]
+id = "official_catalog"
+origin = "google_alphaearth"
+url = "https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_SATELLITE_EMBEDDING_V1_ANNUAL"
+type = "documentation"
+version = "live official catalog"
+access = "Direct public documentation download with semantic identity and license validation."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/google_alphaearth_satellite_embeddings_i8/documentation/catalog.html"
+notes = "Google Developers HTML contains dynamic nonces and serialized UI configuration; exact response hashes are recorded locally but are intentionally not pinned."
+
+[[resources]]
+id = "official_stac"
+origin = "google_alphaearth"
+url = "https://earthengine-stac.storage.googleapis.com/catalog/GOOGLE/GOOGLE_SATELLITE_EMBEDDING_V1_ANNUAL.json"
+type = "json_metadata"
+version = "live official STAC collection record"
+access = "Direct public metadata download with semantic dataset and license validation."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/google_alphaearth_satellite_embeddings_i8/documentation/stac.json"
+
+[[resources]]
+id = "official_gcs_guide"
+origin = "google_alphaearth"
+url = "https://developers.google.com/earth-engine/guides/aef_on_gcs_readme"
+type = "documentation"
+version = "live official GCS guide"
+access = "Direct public documentation download with semantic representation and license validation."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/google_alphaearth_satellite_embeddings_i8/documentation/gcs_guide.html"
+notes = "Defines CC BY 4.0 terms, required attribution, signed-int8 representation, NoData=-128, COG geometry, axis naming, and dequantization. Google Developers HTML contains dynamic markup, so the recipe validates these statements rather than a whole-page hash."
+
+[[resources]]
+id = "selected_generation_pinned_cogs"
+origin = "google_alphaearth"
+url = "https://storage.googleapis.com/alphaearth_foundations/satellite_embedding/v1/annual/"
+type = "cloud_optimized_geotiff_collection"
+version = "six object generations from 2020-2025, pinned in download.sh"
+access = "Public HTTP range requests against exact GCS object generations; full multi-gigabyte COGs are not downloaded."
+size_bytes = 18190621867
+sha256 = ""
+local_path = "downloads/google_alphaearth_satellite_embeddings_i8/"
+notes = "Six selected COGs total about 18.19 GB upstream. Full object sizes, generations, and GCS MD5 values are pinned in download.sh; only 4 MiB headers and selected compressed internal tile ranges are acquired."
+
+[local_paths]
+downloads = "downloads/google_alphaearth_satellite_embeddings_i8/"
+extracted = "extracted/google_alphaearth_satellite_embeddings_i8/"
+filtered = "filtered/google_alphaearth_satellite_embeddings_i8/"
+index = "index/google_alphaearth_satellite_embeddings_i8/"
+samples = "samples/google_alphaearth_satellite_embeddings_i8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/google_alphaearth_satellite_embeddings_i8/samples.jsonl"
+summary = "Range-fetch generation-pinned BigTIFF metadata and one aligned internal spatial tile across all 64 separately stored embedding axes per source, decode Zstandard locally, and emit the native signed-int8 grids."
+deterministic_notes = "The recipe pins six exact GCS objects by name, generation, full size, and provider MD5. For each source it checks the TIFF layout, evaluates a fixed ordered list of interior tile positions using only compressed byte counts, chooses the first position meeting nontriviality thresholds, and fetches the same spatial tile for all 64 axes. Build preserves decoded source bytes exactly and enforces nonconstant, low-NoData outputs."
+
+[[series]]
+id = "alphaearth_embedding_axis_i8"
+description = "Individual learned AlphaEarth satellite-embedding axes as signed-int8 spatial grids."
+semantic_meaning = "One 1024-by-1024 geographic tile for one of the 64 learned AlphaEarth embedding dimensions, with all dimensions spatially aligned within each source COG."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The official COG stores each axis as signed-int8 with PlanarConfiguration=2. The recipe preserves the native two's-complement bytes after independently decoding one Zstandard-compressed internal TIFF tile; it does not dequantize to float or interleave axes."
+source_resources = ["official_catalog", "official_stac", "official_gcs_guide", "selected_generation_pinned_cogs"]
+source_format = "little-endian BigTIFF Cloud Optimized GeoTIFF, 64 separate signed-int8 planes, Zstandard-compressed 1024x1024 tiles"
+source_field = "A00 through A63 embedding-axis planes"
+filtered_input_path = "filtered/google_alphaearth_satellite_embeddings_i8/ingest_stats.json"
+filtering = "Select six fixed year/UTM-zone source COGs, choose one deterministic nontrivial interior spatial tile per COG, retain all 64 aligned embedding-axis chunks, and reject samples with fewer than 16 distinct values or more than 25% NoData."
+missing_value_policy = "Preserve the official signed-int8 -128 NoData sentinel in accepted tiles. Reject a selected tile if any axis is constant/degenerate or its NoData fraction exceeds 25%; do not fill, interpolate, or dequantize values."
+conversion = "Parse TIFF metadata, range-fetch exact compressed tile chunks, decode Compression=50000 with the local zstd executable, and write the resulting source-native bytes unchanged. Signed int8 has no multi-byte ordering, but outputs are declared little-endian consistently with the corpus contract."
+numeric_kind = "int"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous signed-int8 embedding-axis grid"
+sample_geometry = "fixed_1024x1024_spatial_tile"
+sample_rank = 2
+sample_axes = ["y", "x"]
+natural_record_kind = "alphaearth_embedding_axis_cog_internal_tile"
+sample_count = 384
+total_size_bytes = 402653184
+output_path = "samples/google_alphaearth_satellite_embeddings_i8/alphaearth_embedding_axis_i8/"

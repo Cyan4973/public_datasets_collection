@@ -1,0 +1,230 @@
+manifest_version = 1
+dataset_id = "weatherbench2_era5_pressure_level_fields_f32"
+name = "WeatherBench2 ERA5 Global Pressure-Level Fields Float32"
+description = "Native float32 global ERA5 pressure-level weather fields sampled across six physical variables and eight seasonal/decadal windows from the WeatherBench2 public archive."
+homepage = "https://weatherbench2.readthedocs.io/en/latest/data-guide.html"
+
+[license]
+name = "ECMWF Copernicus Licence to Use Copernicus Products v1.2"
+spdx = "LicenseRef-ECMWF-Copernicus-1.2"
+url = "https://storage.googleapis.com/weatherbench2/datasets/era5/LICENSE"
+citation = "Contains modified Copernicus Climate Change Service information 2026. ERA5 data are distributed through the WeatherBench2 public archive."
+notes = "The exact ERA5 bucket license grants a free, worldwide, non-exclusive, royalty-free, perpetual licence for any lawful purpose, explicitly including reproduction, distribution, adaptation, modification, and combination. Public distributions must credit the Copernicus Climate Change Service and state that neither the European Commission nor ECMWF is responsible for any use that may be made of the information or data they contain."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public global atmospheric reanalysis fields produced for the Copernicus Climate Change Service and redistributed by WeatherBench2."
+usage_notes = "These are model-assisted meteorological reanalysis fields, not direct observations at every grid point. Preserve Copernicus attribution and the required European Commission/ECMWF disclaimer."
+
+[[origins]]
+id = "weatherbench2_era5"
+name = "WeatherBench2 ERA5 reanalysis archive"
+url = "https://weatherbench2.readthedocs.io/en/latest/data-guide.html"
+type = "public_gcs_zarr_archive"
+version = "ERA5 1959 through 2023-01-10, six-hour, 240x121 equiangular conservative grid with poles"
+notes = "WeatherBench2 hosts analysis-ready ERA5 arrays used as reference and input data for weather-forecasting research, including evaluation of machine-learning systems."
+
+[[resources]]
+id = "era5_copernicus_license"
+origin = "weatherbench2_era5"
+url = "https://storage.googleapis.com/weatherbench2/datasets/era5/LICENSE"
+type = "license_text"
+version = "GCS generation 1692728948234337; Copernicus licence version 1.2, November 2019"
+access = "Exact public GCS object pinned by generation, size, and SHA-256."
+size_bytes = 8435
+sha256 = "ffe05f9653f14ffd23322bf1ebecfd6dd519ba59726280b34593fcf69ccab60e"
+local_path = "downloads/weatherbench2_era5_pressure_level_fields_f32/LICENSE"
+
+[[resources]]
+id = "era5_zarr_consolidated_metadata"
+origin = "weatherbench2_era5"
+url = "https://storage.googleapis.com/weatherbench2/datasets/era5/1959-2023_01_10-6h-240x121_equiangular_with_poles_conservative.zarr/.zmetadata"
+type = "zarr_v2_consolidated_metadata"
+version = "1959-2023_01_10-6h-240x121_equiangular_with_poles_conservative.zarr"
+access = "Current public object accepted only when its complete SHA-256 matches the probed metadata."
+size_bytes = 58083
+sha256 = "0edf7981e8d07885312c611e5f9d53f84545e2f586506c3e7fe31e64395ee67b"
+local_path = "downloads/weatherbench2_era5_pressure_level_fields_f32/zmetadata.json"
+
+[[resources]]
+id = "selected_era5_pressure_level_zarr_chunks"
+origin = "weatherbench2_era5"
+url = "https://storage.googleapis.com/weatherbench2/datasets/era5/1959-2023_01_10-6h-240x121_equiangular_with_poles_conservative.zarr/"
+type = "generation_pinned_blosc_lz4_zarr_v2_chunks"
+version = "48 chunks selected by download plan SHA-256 efa91f21a5db11f18712977d3dc550ff4aeca08a70b24ee175443aaa9ca75f8f"
+access = "The downloader regenerates and validates the exact 48-row plan, then fetches every object at its pinned GCS generation and verifies its size and MD5."
+size_bytes = 459101417
+sha256 = ""
+local_path = "downloads/weatherbench2_era5_pressure_level_fields_f32/chunks/"
+notes = "Eight time chunks are retained for each of six separate pressure-level variables. Per-object names, generations, sizes, and MD5 values are pinned by the validated download plan."
+
+[local_paths]
+downloads = "downloads/weatherbench2_era5_pressure_level_fields_f32/"
+filtered = "filtered/weatherbench2_era5_pressure_level_fields_f32/"
+index = "index/weatherbench2_era5_pressure_level_fields_f32/"
+samples = "samples/weatherbench2_era5_pressure_level_fields_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/weatherbench2_era5_pressure_level_fields_f32/samples.jsonl"
+summary = "Validate 48 generation-pinned WeatherBench2 ERA5 Zarr chunks, decode Blosc/LZ4 plus byte shuffle locally, and split each eight-time chunk into separate native little-endian float32 pressure-level volumes without interleaving variables."
+deterministic_notes = "The exact license and Zarr metadata hashes, complete generation-pinned chunk plan, object sizes and MD5 values, Zarr dtype/dimensions/chunking/compressor, Blosc framing, output geometry, pressure levels, timestamps, finiteness, non-degeneracy, per-sample hashes, exact source-to-output bytes, and aggregate totals are enforced."
+
+[[series]]
+id = "era5_geopotential_pressure_levels_f32"
+description = "Global ERA5 geopotential volumes over 13 pressure levels and 64 six-hour analysis times."
+semantic_meaning = "Atmospheric geopotential in square metres per square second at each pressure-level, longitude, and latitude cell."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The selected Zarr array is native little-endian IEEE-754 float32; the recipe removes Blosc/LZ4 and byte-shuffle coding and preserves the decoded C-order bytes exactly."
+source_resources = ["era5_copernicus_license", "era5_zarr_consolidated_metadata", "selected_era5_pressure_level_zarr_chunks"]
+source_format = "Zarr v2 array with Blosc/LZ4 compression and byte shuffle"
+source_field = "geopotential"
+filtered_input_path = "filtered/weatherbench2_era5_pressure_level_fields_f32/ingest_stats.json"
+filtering = "Retain every one of the eight six-hour slices in each of eight deterministic seasonal/decadal source chunks; preserve all 13 pressure levels and the complete 240x121 global grid."
+missing_value_policy = "The source declares NaN as fill value. Every emitted value must be finite and each sample nonconstant; any missing, changed, non-finite, degenerate, duplicate, or stale output fails."
+conversion = "Decode Blosc/LZ4 and reverse the byte-shuffle transform, then split only along the time axis. No numeric conversion, scaling, regridding, interpolation, transposition, or field interleaving is performed."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 ERA5 pressure-level volume"
+sample_geometry = "global_pressure_level_longitude_latitude_volume_3d"
+sample_rank = 3
+sample_axes = ["pressure_level", "longitude", "latitude"]
+natural_record_kind = "era5_global_pressure_level_field_at_analysis_time"
+sample_count = 64
+total_size_bytes = 96645120
+output_path = "samples/weatherbench2_era5_pressure_level_fields_f32/era5_geopotential_pressure_levels_f32/"
+
+[[series]]
+id = "era5_specific_humidity_pressure_levels_f32"
+description = "Global ERA5 specific-humidity volumes over 13 pressure levels and 64 six-hour analysis times."
+semantic_meaning = "Atmospheric specific humidity in kilograms per kilogram at each pressure-level, longitude, and latitude cell."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The selected Zarr array is native little-endian IEEE-754 float32; the recipe preserves its decoded C-order bytes exactly."
+source_resources = ["era5_copernicus_license", "era5_zarr_consolidated_metadata", "selected_era5_pressure_level_zarr_chunks"]
+source_format = "Zarr v2 array with Blosc/LZ4 compression and byte shuffle"
+source_field = "specific_humidity"
+filtered_input_path = "filtered/weatherbench2_era5_pressure_level_fields_f32/ingest_stats.json"
+filtering = "Retain every one of the eight six-hour slices in each of eight deterministic seasonal/decadal source chunks; preserve all 13 pressure levels and the complete 240x121 global grid."
+missing_value_policy = "The source declares NaN as fill value. Every emitted value must be finite and each sample nonconstant; any missing, changed, non-finite, degenerate, duplicate, or stale output fails."
+conversion = "Decode Blosc/LZ4 and reverse the byte-shuffle transform, then split only along the time axis. No numeric conversion, scaling, regridding, interpolation, transposition, or field interleaving is performed."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 ERA5 pressure-level volume"
+sample_geometry = "global_pressure_level_longitude_latitude_volume_3d"
+sample_rank = 3
+sample_axes = ["pressure_level", "longitude", "latitude"]
+natural_record_kind = "era5_global_pressure_level_field_at_analysis_time"
+sample_count = 64
+total_size_bytes = 96645120
+output_path = "samples/weatherbench2_era5_pressure_level_fields_f32/era5_specific_humidity_pressure_levels_f32/"
+
+[[series]]
+id = "era5_temperature_pressure_levels_f32"
+description = "Global ERA5 air-temperature volumes over 13 pressure levels and 64 six-hour analysis times."
+semantic_meaning = "Atmospheric temperature in kelvin at each pressure-level, longitude, and latitude cell."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The selected Zarr array is native little-endian IEEE-754 float32; the recipe preserves its decoded C-order bytes exactly."
+source_resources = ["era5_copernicus_license", "era5_zarr_consolidated_metadata", "selected_era5_pressure_level_zarr_chunks"]
+source_format = "Zarr v2 array with Blosc/LZ4 compression and byte shuffle"
+source_field = "temperature"
+filtered_input_path = "filtered/weatherbench2_era5_pressure_level_fields_f32/ingest_stats.json"
+filtering = "Retain every one of the eight six-hour slices in each of eight deterministic seasonal/decadal source chunks; preserve all 13 pressure levels and the complete 240x121 global grid."
+missing_value_policy = "The source declares NaN as fill value. Every emitted value must be finite and each sample nonconstant; any missing, changed, non-finite, degenerate, duplicate, or stale output fails."
+conversion = "Decode Blosc/LZ4 and reverse the byte-shuffle transform, then split only along the time axis. No numeric conversion, scaling, regridding, interpolation, transposition, or field interleaving is performed."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 ERA5 pressure-level volume"
+sample_geometry = "global_pressure_level_longitude_latitude_volume_3d"
+sample_rank = 3
+sample_axes = ["pressure_level", "longitude", "latitude"]
+natural_record_kind = "era5_global_pressure_level_field_at_analysis_time"
+sample_count = 64
+total_size_bytes = 96645120
+output_path = "samples/weatherbench2_era5_pressure_level_fields_f32/era5_temperature_pressure_levels_f32/"
+
+[[series]]
+id = "era5_u_wind_pressure_levels_f32"
+description = "Global ERA5 eastward-wind volumes over 13 pressure levels and 64 six-hour analysis times."
+semantic_meaning = "Eastward component of atmospheric wind in metres per second at each pressure-level, longitude, and latitude cell."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The selected Zarr array is native little-endian IEEE-754 float32; the recipe preserves its decoded C-order bytes exactly."
+source_resources = ["era5_copernicus_license", "era5_zarr_consolidated_metadata", "selected_era5_pressure_level_zarr_chunks"]
+source_format = "Zarr v2 array with Blosc/LZ4 compression and byte shuffle"
+source_field = "u_component_of_wind"
+filtered_input_path = "filtered/weatherbench2_era5_pressure_level_fields_f32/ingest_stats.json"
+filtering = "Retain every one of the eight six-hour slices in each of eight deterministic seasonal/decadal source chunks; preserve all 13 pressure levels and the complete 240x121 global grid."
+missing_value_policy = "The source declares NaN as fill value. Every emitted value must be finite and each sample nonconstant; any missing, changed, non-finite, degenerate, duplicate, or stale output fails."
+conversion = "Decode Blosc/LZ4 and reverse the byte-shuffle transform, then split only along the time axis. No numeric conversion, scaling, regridding, interpolation, transposition, or field interleaving is performed."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 ERA5 pressure-level volume"
+sample_geometry = "global_pressure_level_longitude_latitude_volume_3d"
+sample_rank = 3
+sample_axes = ["pressure_level", "longitude", "latitude"]
+natural_record_kind = "era5_global_pressure_level_field_at_analysis_time"
+sample_count = 64
+total_size_bytes = 96645120
+output_path = "samples/weatherbench2_era5_pressure_level_fields_f32/era5_u_wind_pressure_levels_f32/"
+
+[[series]]
+id = "era5_v_wind_pressure_levels_f32"
+description = "Global ERA5 northward-wind volumes over 13 pressure levels and 64 six-hour analysis times."
+semantic_meaning = "Northward component of atmospheric wind in metres per second at each pressure-level, longitude, and latitude cell."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The selected Zarr array is native little-endian IEEE-754 float32; the recipe preserves its decoded C-order bytes exactly."
+source_resources = ["era5_copernicus_license", "era5_zarr_consolidated_metadata", "selected_era5_pressure_level_zarr_chunks"]
+source_format = "Zarr v2 array with Blosc/LZ4 compression and byte shuffle"
+source_field = "v_component_of_wind"
+filtered_input_path = "filtered/weatherbench2_era5_pressure_level_fields_f32/ingest_stats.json"
+filtering = "Retain every one of the eight six-hour slices in each of eight deterministic seasonal/decadal source chunks; preserve all 13 pressure levels and the complete 240x121 global grid."
+missing_value_policy = "The source declares NaN as fill value. Every emitted value must be finite and each sample nonconstant; any missing, changed, non-finite, degenerate, duplicate, or stale output fails."
+conversion = "Decode Blosc/LZ4 and reverse the byte-shuffle transform, then split only along the time axis. No numeric conversion, scaling, regridding, interpolation, transposition, or field interleaving is performed."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 ERA5 pressure-level volume"
+sample_geometry = "global_pressure_level_longitude_latitude_volume_3d"
+sample_rank = 3
+sample_axes = ["pressure_level", "longitude", "latitude"]
+natural_record_kind = "era5_global_pressure_level_field_at_analysis_time"
+sample_count = 64
+total_size_bytes = 96645120
+output_path = "samples/weatherbench2_era5_pressure_level_fields_f32/era5_v_wind_pressure_levels_f32/"
+
+[[series]]
+id = "era5_vertical_velocity_pressure_levels_f32"
+description = "Global ERA5 pressure-vertical-velocity volumes over 13 pressure levels and 64 six-hour analysis times."
+semantic_meaning = "Atmospheric vertical velocity in pascals per second at each pressure-level, longitude, and latitude cell."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The selected Zarr array is native little-endian IEEE-754 float32; the recipe preserves its decoded C-order bytes exactly."
+source_resources = ["era5_copernicus_license", "era5_zarr_consolidated_metadata", "selected_era5_pressure_level_zarr_chunks"]
+source_format = "Zarr v2 array with Blosc/LZ4 compression and byte shuffle"
+source_field = "vertical_velocity"
+filtered_input_path = "filtered/weatherbench2_era5_pressure_level_fields_f32/ingest_stats.json"
+filtering = "Retain every one of the eight six-hour slices in each of eight deterministic seasonal/decadal source chunks; preserve all 13 pressure levels and the complete 240x121 global grid."
+missing_value_policy = "The source declares NaN as fill value. Every emitted value must be finite and each sample nonconstant; any missing, changed, non-finite, degenerate, duplicate, or stale output fails."
+conversion = "Decode Blosc/LZ4 and reverse the byte-shuffle transform, then split only along the time axis. No numeric conversion, scaling, regridding, interpolation, transposition, or field interleaving is performed."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 ERA5 pressure-level volume"
+sample_geometry = "global_pressure_level_longitude_latitude_volume_3d"
+sample_rank = 3
+sample_axes = ["pressure_level", "longitude", "latitude"]
+natural_record_kind = "era5_global_pressure_level_field_at_analysis_time"
+sample_count = 64
+total_size_bytes = 96645120
+output_path = "samples/weatherbench2_era5_pressure_level_fields_f32/era5_vertical_velocity_pressure_levels_f32/"

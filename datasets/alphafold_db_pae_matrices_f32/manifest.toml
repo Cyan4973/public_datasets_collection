@@ -1,0 +1,85 @@
+manifest_version = 1
+dataset_id = "alphafold_db_pae_matrices_f32"
+name = "AlphaFold DB Predicted Aligned Error Float32 Matrices"
+description = "Dense directional residue-by-residue predicted-aligned-error matrices for a bounded, biologically varied protein selection."
+homepage = "https://alphafold.ebi.ac.uk/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Varadi M et al. AlphaFold Protein Structure Database: massively expanding the structural coverage of protein-sequence space with high-accuracy models. Nucleic Acids Research."
+notes = "The official AlphaFold DB application states CC-BY-4.0 and requests attribution for its databases and services. Preserve AlphaFold DB, EMBL-EBI, Google DeepMind, UniProt accession, and entry/version attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public computational protein-structure predictions; no participant or personal fields are present."
+usage_notes = "Model-derived structural-confidence data intended as numeric compression training material."
+
+[[origins]]
+id = "alphafold_db"
+name = "AlphaFold Protein Structure Database"
+url = "https://alphafold.ebi.ac.uk/"
+type = "public_prediction_database"
+version = "AlphaFold DB entries v6 and v1 as pinned per source"
+
+[[resources]]
+id = "alphafold_license_evidence"
+origin = "alphafold_db"
+url = "https://alphafold.ebi.ac.uk/main-RMCDQW2G.js"
+type = "official_application_license_evidence"
+version = "main-RMCDQW2G.js"
+size_bytes = 312610
+sha256 = "f46325c8ef2d7e156a0f57db06f9be3e7b2eaee3579d63deb9b09033f0a9f1c9"
+local_path = "downloads/alphafold_db_pae_matrices_f32/alphafold_main-RMCDQW2G.js"
+
+[[resources]]
+id = "selected_pae_documents"
+origin = "alphafold_db"
+url = "https://alphafold.ebi.ac.uk/files/"
+type = "15_versioned_predicted_aligned_error_json_documents"
+version = "14 AlphaFold DB v6 entries and one current numeric-ID v1 entry"
+size_bytes = 30904585
+local_path = "downloads/alphafold_db_pae_matrices_f32/"
+notes = "Exact per-document URLs, sizes, SHA-256 hashes, versions, accessions, and matrix dimensions are pinned in sources.tsv."
+
+[local_paths]
+downloads = "downloads/alphafold_db_pae_matrices_f32/"
+filtered = "filtered/alphafold_db_pae_matrices_f32/"
+index = "index/alphafold_db_pae_matrices_f32/"
+samples = "samples/alphafold_db_pae_matrices_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/alphafold_db_pae_matrices_f32/samples.jsonl"
+summary = "Validate 15 versioned AlphaFold DB PAE JSON documents and emit each complete square matrix as one little-endian float32 sample."
+deterministic_notes = "License asset, entry IDs, accessions, versions, URLs, source sizes/hashes, square dimensions, declared maxima, value bounds, output hashes, and aggregate totals are pinned. Verification independently reparses every JSON matrix and byte-compares each output."
+
+[[series]]
+id = "protein_predicted_aligned_error_f32"
+description = "Complete directional predicted-aligned-error matrix for one AlphaFold DB protein model."
+semantic_meaning = "Expected positional error in angstroms at residue i when predicted and true structures are aligned on residue j."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "AlphaFold DB publishes JSON numeric matrices. Values are deterministically converted once to IEEE-754 binary32; v6 documents are integer-quantized while the selected numeric-ID v1 document retains finer decimal resolution."
+source_resources = ["selected_pae_documents", "alphafold_license_evidence"]
+source_format = "AlphaFold DB predicted-aligned-error JSON"
+source_field = "predicted_aligned_error"
+filtered_input_path = "filtered/alphafold_db_pae_matrices_f32/ingest_stats.json"
+filtering = "Retain the complete matrix from each of the 15 pinned entries spanning sequence lengths 103 through 1,863. Exclude the scalar maximum, sequence, model coordinates, API metadata, and JSON framing."
+missing_value_policy = "Missing files, changed hashes, malformed envelopes, non-square or dimension-mismatched matrices, booleans, non-finite or negative values, values beyond the documented saturation ceiling, degenerate matrices, duplicate outputs, or aggregate drift fail the recipe; no values are dropped or imputed."
+conversion = "Traverse each matrix in source row-major order, round every JSON number once to IEEE-754 binary32, and serialize raw little-endian words."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 PAE matrix"
+sample_geometry = "protein_residue_pairwise_error_matrix_2d"
+sample_rank = 2
+sample_axes = ["scored_residue_i", "alignment_residue_j"]
+natural_record_kind = "complete_alphafold_protein_pae_matrix"
+sample_count = 15
+total_size_bytes = 36952932
+output_path = "samples/alphafold_db_pae_matrices_f32/protein_predicted_aligned_error_f32/"

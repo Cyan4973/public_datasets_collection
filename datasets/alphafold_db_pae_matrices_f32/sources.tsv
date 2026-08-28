@@ -1,0 +1,16 @@
+ordinal	accession	entry_id	version	sequence_length	source_bytes	source_sha256	declared_maximum	pae_url
+01	P62805	AF-P62805-F1	6	103	25114	e378eae2637531ec8f8df57872fc6eb63398c67dea06c04b2922fd29af2cc837	31.75	https://alphafold.ebi.ac.uk/files/AF-P62805-F1-predicted_aligned_error_v6.json
+02	P01308	AF-P01308-F1	6	110	35359	12d840e97dca9c6e1ffba505982d1420f60f5dc5a6e4fb0495793cf3a3f9a6cd	31.75	https://alphafold.ebi.ac.uk/files/AF-P01308-F1-predicted_aligned_error_v6.json
+03	P69905	AF-P69905-F1	6	142	40977	9d6bfee2b49f0391f3be41fdc617bfb70e0b976660d48b422b69b96c2b92fa85	31.75	https://alphafold.ebi.ac.uk/files/AF-P69905-F1-predicted_aligned_error_v6.json
+04	P42212	AF-P42212-F1	6	238	116285	b2838a1e0d38a31e133bec1f176c54578410f4b8a7b009b648b0c621a682ee88	31.75	https://alphafold.ebi.ac.uk/files/AF-P42212-F1-predicted_aligned_error_v6.json
+05	P02945	AF-P02945-F1	6	262	151712	a7dfc43f9f567d0b55b452f4801666c96fb3efad28efbea1ecc6b5456b4d1612	31.75	https://alphafold.ebi.ac.uk/files/AF-P02945-F1-predicted_aligned_error_v6.json
+06	P00330	AF-P00330-F1	6	348	244673	3f8b036f54521b7d32399af37adc9cb97c018f5b2b47626decfbfa25d24dd930	31.75	https://alphafold.ebi.ac.uk/files/AF-P00330-F1-predicted_aligned_error_v6.json
+07	P04637	AF-P04637-F1	6	393	422267	9cfbaa7522ce1aecf0caa3b66bb414815911521b05749493a40a557e58678c5d	31.75	https://alphafold.ebi.ac.uk/files/AF-P04637-F1-predicted_aligned_error_v6.json
+08	P04040	AF-P04040-F1	6	527	582802	bf9cfd34f22c67967d92c310b4f977353df9a590c8d697e19d28fab0081e397c	31.75	https://alphafold.ebi.ac.uk/files/AF-P04040-F1-predicted_aligned_error_v6.json
+09	P00734	AF-P00734-F1	6	622	1000309	c8f6984af2f7aeb28f4bcd26cfed210d8db3f69d527dd469c60c32483e4ebf12	31.75	https://alphafold.ebi.ac.uk/files/AF-P00734-F1-predicted_aligned_error_v6.json
+10	P0A6Y8	AF-P0A6Y8-F1	6	638	945729	ba5785cd19928db2ce6c9f6fdcc60481e474ef2f58633bef0b69acad3943a6cf	31.75	https://alphafold.ebi.ac.uk/files/AF-P0A6Y8-F1-predicted_aligned_error_v6.json
+11	P10636	AF-P10636-F1	6	758	1715027	aa467d5615f91d2b58421b451e4325a91102efa37e06e56d5e24c84f547664be	31.75	https://alphafold.ebi.ac.uk/files/AF-P10636-F1-predicted_aligned_error_v6.json
+12	P05067	AF-P05067-F1	6	770	1720508	85322403bf4f6e1bd21c986c12abcd6bcf8f0e63867cc5b506a663ae3fd85e3e	31.75	https://alphafold.ebi.ac.uk/files/AF-P05067-F1-predicted_aligned_error_v6.json
+13	P00533	AF-P00533-F1	6	1210	4160690	c6b5b71a44516fba2c1b53053a92d8d6a991a944872069bdade16795f2954dfb	31.75	https://alphafold.ebi.ac.uk/files/AF-P00533-F1-predicted_aligned_error_v6.json
+14	P0DTC2	AF-0000000365840314	1	1273	9399636	def6f9527dca15a4e96c1c871f2569bc358727c1d364008a45aad0da44cf9eb1	31.55	https://alphafold.ebi.ac.uk/files/AF-0000000365840314-predicted_aligned_error_v1.json
+15	P38398	AF-P38398-F1	6	1863	10343497	f6cefed6e56b7e32d5bd4fd0a7795e095ae80432ff7eac4ebbfb255338d66bb7	31.75	https://alphafold.ebi.ac.uk/files/AF-P38398-F1-predicted_aligned_error_v6.json

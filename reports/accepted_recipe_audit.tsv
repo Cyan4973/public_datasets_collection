@@ -197,6 +197,7 @@ covid19_vaccinations_u64	ok	8697443	69579544	6	935708	7485664	0	0	0	1	none	none
 unicode_bmp_gutenberg	ok	8700484	17400968	12	490769	981538	0	0	0	1	none	none
 tcia_cmmd_mammography_u16	ok	8781432	17562864	2	4390716	8781432	0	0	0	1	none	none
 nasa_heasarc_nicer_pi_i16	ok	8938390	17876780	31	18786	37572	0	0	0	1	none	none
+alphafold_db_pae_matrices_f32	ok	9238233	36952932	15	277729	1110916	0	0	0	1	none	none
 nasa_sdo_aia_synoptic_i32	ok	10485760	41943040	10	1048576	4194304	0	0	0	1	none	none
 fsdd_pcm_u8	ok	10498424	10498424	3000	3358.5	3358.5	0	0	0	1	none	none
 fsdd_spoken_digits	ok	10498424	20996848	3000	3358.5	6717	0	0	0	1	none	none

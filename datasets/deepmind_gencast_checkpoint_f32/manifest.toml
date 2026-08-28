@@ -1,0 +1,173 @@
+manifest_version = 1
+dataset_id = "deepmind_gencast_checkpoint_f32"
+name = "Google DeepMind GenCast Parameter Matrices Float32"
+description = "Native float32 transformer and graph-network parameter matrices from the official GenCast 1-degree Mini weather-model checkpoint."
+homepage = "https://github.com/google-deepmind/graphcast/tree/9c034db1ff412d5db6cbe6bb0c5c9afc5a267719/docs/weathernext1_gen"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Price I et al. Probabilistic weather forecasting with machine learning. Nature 637, 84-90 (2025). Google DeepMind WeatherNext/GenCast model release."
+notes = "The dm_graphcast bucket contains the CC BY 4.0 legal text. The pinned official README states that, effective 2026-08-06, the model-weight license permits commercial use and replaces the previous license, including for weights previously sourced from the repository. Preserve Google DeepMind, GenCast, model, paper, revision, and license attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public trained weather-model parameters; no weather input records, forecasts, personal data, or training examples are emitted."
+usage_notes = "The checkpoint embeds its superseded CC BY-NC-SA 4.0 notice. The pinned official README explicitly replaces that previous model-weight license with the current commercial-use CC BY 4.0 terms."
+
+[[origins]]
+id = "google_deepmind_gencast"
+name = "Google DeepMind WeatherNext 1 Gen (GenCast)"
+url = "https://github.com/google-deepmind/graphcast/tree/9c034db1ff412d5db6cbe6bb0c5c9afc5a267719/docs/weathernext1_gen"
+type = "model_repository_and_public_gcs_bucket"
+version = "9c034db1ff412d5db6cbe6bb0c5c9afc5a267719; GCS generation 1733326322411726"
+
+[[resources]]
+id = "gencast_1p0deg_mini_checkpoint"
+origin = "google_deepmind_gencast"
+url = "https://storage.googleapis.com/dm_graphcast/gencast/params/GenCast%201p0deg%20Mini%20%3C2019.npz"
+type = "stored_npz_checkpoint"
+version = "GCS generation 1733326322411726"
+size_bytes = 230105815
+sha256 = "a8dc94b616af89cfc01a5c6afbcc8411b594d919f23f3cd962f6f7755735195e"
+local_path = "downloads/deepmind_gencast_checkpoint_f32/gencast_1p0deg_mini_2019.npz"
+
+[[resources]]
+id = "dm_graphcast_bucket_license"
+origin = "google_deepmind_gencast"
+url = "https://storage.googleapis.com/dm_graphcast/LICENSE"
+type = "license_text"
+version = "GCS generation 1786019050394660"
+size_bytes = 18649
+sha256 = "95df2e9564862e51d69683a899b6dcc8218d577057bdf67322880769ff85f29e"
+local_path = "downloads/deepmind_gencast_checkpoint_f32/LICENSE"
+
+[[resources]]
+id = "pinned_gencast_readme"
+origin = "google_deepmind_gencast"
+url = "https://raw.githubusercontent.com/google-deepmind/graphcast/9c034db1ff412d5db6cbe6bb0c5c9afc5a267719/docs/weathernext1_gen/README.md"
+type = "model_documentation_and_license_supersession_evidence"
+version = "9c034db1ff412d5db6cbe6bb0c5c9afc5a267719"
+size_bytes = 9170
+sha256 = "d7c7e7d75ae7c1c53e28ea495be9b79e681a855e35876d8124635c801cf3c5e6"
+local_path = "downloads/deepmind_gencast_checkpoint_f32/gencast_README.md"
+
+[local_paths]
+downloads = "downloads/deepmind_gencast_checkpoint_f32/"
+filtered = "filtered/deepmind_gencast_checkpoint_f32/"
+index = "index/deepmind_gencast_checkpoint_f32/"
+samples = "samples/deepmind_gencast_checkpoint_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/deepmind_gencast_checkpoint_f32/samples.jsonl"
+summary = "Validate the pinned stored-NPY checkpoint and emit each selected complete C-order native-F32 rank-2 parameter matrix as an independent little-endian sample."
+deterministic_notes = "The repository revision, explicit legacy-license supersession wording, bucket license, source size/hash, complete ZIP member inventory and CRCs, every NPY header/payload length, selection roles, tensor order, finiteness, distributions, output hashes, and aggregate totals are enforced."
+
+[[series]]
+id = "gencast_transformer_ffn_weight_f32"
+description = "Complete feed-forward up/down projection matrices from each GenCast mesh-transformer block."
+semantic_meaning = "Learned transformer feed-forward coefficients mapping between 512 hidden features and 2,048 intermediate features."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Each selected NPZ member is a native C-order `<f4` NPY array; the recipe removes only its NPY header and emits its exact little-endian payload."
+source_resources = ["gencast_1p0deg_mini_checkpoint", "dm_graphcast_bucket_license", "pinned_gencast_readme"]
+source_format = "stored-member NPZ containing NPY arrays"
+source_field = "All `mesh_transformer` `ffw_up:w` and `ffw_down:w` matrices"
+filtered_input_path = "filtered/deepmind_gencast_checkpoint_f32/ingest_stats.json"
+filtering = "Retain all 32 native little-endian float32, rank-2, C-order transformer feed-forward weight tensors."
+missing_value_policy = "Missing or changed resources, invalid ZIP/NPY framing, non-float32 or non-C-order selected tensors, non-finite or degenerate values, duplicate outputs, or aggregate drift fail the recipe; no values are dropped or imputed within a retained tensor."
+conversion = "Remove ZIP and NPY framing and copy the complete source payload bytes verbatim."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 learned parameter matrix"
+sample_geometry = "neural_network_parameter_matrix_2d"
+sample_rank = 2
+sample_axes = ["input_feature", "output_feature"]
+natural_record_kind = "complete_gencast_transformer_feed_forward_parameter_tensor"
+sample_count = 32
+total_size_bytes = 134217728
+output_path = "samples/deepmind_gencast_checkpoint_f32/gencast_transformer_ffn_weight_f32/"
+
+[[series]]
+id = "gencast_transformer_attention_weight_f32"
+description = "Complete query, key, value, and final projection matrices from each GenCast mesh-transformer block."
+semantic_meaning = "Learned self-attention projection coefficients over the 512-feature mesh representation."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Each selected NPZ member is a native C-order `<f4` NPY array; the recipe removes only its NPY header and emits its exact little-endian payload."
+source_resources = ["gencast_1p0deg_mini_checkpoint", "dm_graphcast_bucket_license", "pinned_gencast_readme"]
+source_format = "stored-member NPZ containing NPY arrays"
+source_field = "All `mesh_transformer` `mha_proj_q:w`, `mha_proj_k:w`, `mha_proj_v:w`, and `mha_final:w` matrices"
+filtered_input_path = "filtered/deepmind_gencast_checkpoint_f32/ingest_stats.json"
+filtering = "Retain all 64 native little-endian float32, rank-2, C-order transformer attention weight tensors."
+missing_value_policy = "Missing or changed resources, invalid ZIP/NPY framing, non-float32 or non-C-order selected tensors, non-finite or degenerate values, duplicate outputs, or aggregate drift fail the recipe; no values are dropped or imputed within a retained tensor."
+conversion = "Remove ZIP and NPY framing and copy the complete source payload bytes verbatim."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 learned parameter matrix"
+sample_geometry = "neural_network_parameter_matrix_2d"
+sample_rank = 2
+sample_axes = ["input_feature", "output_feature"]
+natural_record_kind = "complete_gencast_transformer_attention_parameter_tensor"
+sample_count = 64
+total_size_bytes = 67108864
+output_path = "samples/deepmind_gencast_checkpoint_f32/gencast_transformer_attention_weight_f32/"
+
+[[series]]
+id = "gencast_graph_gnn_weight_f32"
+description = "Complete grid-to-mesh and mesh-to-grid graph-network MLP weight matrices from GenCast."
+semantic_meaning = "Learned message-passing coefficients for encoding, processing, and decoding weather-grid and mesh node/edge features."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Each selected NPZ member is a native C-order `<f4` NPY array; the recipe removes only its NPY header and emits its exact little-endian payload. One Fortran-order decoder matrix is excluded rather than reordered."
+source_resources = ["gencast_1p0deg_mini_checkpoint", "dm_graphcast_bucket_license", "pinned_gencast_readme"]
+source_format = "stored-member NPZ containing NPY arrays"
+source_field = "C-order `:w` matrices under `grid2mesh_gnn` and `mesh2grid_gnn`, excluding normalization conditioning"
+filtered_input_path = "filtered/deepmind_gencast_checkpoint_f32/ingest_stats.json"
+filtering = "Retain 21 native little-endian float32, rank-2, C-order graph-network matrices with at least 1,000 values; exclude the sole Fortran-order 512x84 output matrix."
+missing_value_policy = "Missing or changed resources, invalid ZIP/NPY framing, non-float32 selected tensors, unexpected tensor order, non-finite or degenerate values, duplicate outputs, or aggregate drift fail the recipe; no values are dropped or imputed within a retained tensor."
+conversion = "Remove ZIP and NPY framing and copy the complete source payload bytes verbatim."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 learned parameter matrix"
+sample_geometry = "neural_network_parameter_matrix_2d"
+sample_rank = 2
+sample_axes = ["input_feature", "output_feature"]
+natural_record_kind = "complete_gencast_graph_network_parameter_tensor"
+sample_count = 21
+total_size_bytes = 25227264
+output_path = "samples/deepmind_gencast_checkpoint_f32/gencast_graph_gnn_weight_f32/"
+
+[[series]]
+id = "gencast_conditioning_weight_f32"
+description = "Complete conditioning-projection matrices used by GenCast normalization layers."
+semantic_meaning = "Learned coefficients mapping the 16-dimensional noise/conditioning representation into normalization controls."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Each selected NPZ member is a native C-order `<f4` NPY array; the recipe removes only its NPY header and emits its exact little-endian payload."
+source_resources = ["gencast_1p0deg_mini_checkpoint", "dm_graphcast_bucket_license", "pinned_gencast_readme"]
+source_format = "stored-member NPZ containing NPY arrays"
+source_field = "All rank-2 `norm_conditioning/...:w` matrices"
+filtered_input_path = "filtered/deepmind_gencast_checkpoint_f32/ingest_stats.json"
+filtering = "Retain all 43 native little-endian float32, rank-2, C-order conditioning matrices."
+missing_value_policy = "Missing or changed resources, invalid ZIP/NPY framing, non-float32 or non-C-order selected tensors, non-finite or degenerate values, duplicate outputs, or aggregate drift fail the recipe; no values are dropped or imputed within a retained tensor."
+conversion = "Remove ZIP and NPY framing and copy the complete source payload bytes verbatim."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 learned parameter matrix"
+sample_geometry = "neural_network_parameter_matrix_2d"
+sample_rank = 2
+sample_axes = ["conditioning_feature", "normalization_control"]
+natural_record_kind = "complete_gencast_conditioning_parameter_tensor"
+sample_count = 43
+total_size_bytes = 2818048
+output_path = "samples/deepmind_gencast_checkpoint_f32/gencast_conditioning_weight_f32/"

@@ -1,0 +1,85 @@
+manifest_version = 1
+dataset_id = "hf_timm_resnet18_conv_f32"
+name = "Hugging Face timm ResNet-18 Convolution Kernels Float32"
+description = "Native float32 rank-4 convolution kernel banks from a pinned Apache-2.0 timm ResNet-18 image-classification checkpoint."
+homepage = "https://huggingface.co/timm/resnet18.a1_in1k"
+
+[license]
+name = "Apache License 2.0"
+spdx = "Apache-2.0"
+url = "https://www.apache.org/licenses/LICENSE-2.0"
+citation = "timm/resnet18.a1_in1k model card; Ross Wightman, PyTorch Image Models; He et al., Deep Residual Learning for Image Recognition."
+notes = "The exact pinned Hugging Face model card and API card metadata declare apache-2.0 for the model repository. Preserve model, timm, ResNet, and Hugging Face attribution. The checkpoint was trained on ImageNet-1k, but no training images or labels are included in this recipe."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public trained image-classification model parameters; the recipe contains no source images, labels, or user records."
+usage_notes = "Only convolution parameter tensors from the Apache-2.0 model artifact are emitted."
+
+[[origins]]
+id = "hf_timm_resnet18_a1_in1k"
+name = "timm/resnet18.a1_in1k"
+url = "https://huggingface.co/timm/resnet18.a1_in1k"
+type = "huggingface_model_repository"
+version = "491b427b45c94c7fb0e78b5474cc919aff584bbf"
+
+[[resources]]
+id = "pinned_model_card"
+origin = "hf_timm_resnet18_a1_in1k"
+url = "https://huggingface.co/timm/resnet18.a1_in1k/raw/491b427b45c94c7fb0e78b5474cc919aff584bbf/README.md"
+type = "markdown_model_card_and_license_evidence"
+version = "491b427b45c94c7fb0e78b5474cc919aff584bbf"
+size_bytes = 38416
+sha256 = "e96d7547dfaff6f0a0d74209819c461ec2d66556a9d6b059f1c2a50d413da5bb"
+local_path = "downloads/hf_timm_resnet18_conv_f32/model_card.md"
+
+[[resources]]
+id = "resnet18_safetensors"
+origin = "hf_timm_resnet18_a1_in1k"
+url = "https://huggingface.co/timm/resnet18.a1_in1k/resolve/491b427b45c94c7fb0e78b5474cc919aff584bbf/model.safetensors"
+type = "safetensors_checkpoint"
+version = "491b427b45c94c7fb0e78b5474cc919aff584bbf"
+size_bytes = 46807446
+sha256 = "80c49dee3da4822c009c5a7fe591e9223c5a2cfcf95a4067ca4dfb5a7b89c612"
+local_path = "downloads/hf_timm_resnet18_conv_f32/model.safetensors"
+
+[local_paths]
+downloads = "downloads/hf_timm_resnet18_conv_f32/"
+filtered = "filtered/hf_timm_resnet18_conv_f32/"
+index = "index/hf_timm_resnet18_conv_f32/"
+samples = "samples/hf_timm_resnet18_conv_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/hf_timm_resnet18_conv_f32/samples.jsonl"
+summary = "Validate the pinned SafeTensors checkpoint and copy each complete native-F32 rank-4 convolution tensor into a separate little-endian sample."
+deterministic_notes = "The repository revision, model card license, source sizes/hashes, SafeTensors header and complete payload coverage, selected tensor names/shapes/offsets, finiteness, distributions, output hashes, and aggregate totals are enforced."
+
+[[series]]
+id = "resnet18_convolution_kernel_f32"
+description = "Complete learned convolution kernel bank for one ResNet-18 convolution or residual projection layer."
+semantic_meaning = "Trained image-feature filter coefficients arranged by output channel, input channel, and two-dimensional spatial kernel position."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The SafeTensors payload stores each selected parameter tensor as native F32 values. Tensor boundaries and four-dimensional shapes are preserved, and each exact typed payload range is emitted verbatim."
+source_resources = ["resnet18_safetensors", "pinned_model_card"]
+source_format = "SafeTensors checkpoint"
+source_field = "All F32 tensors with rank four and at least 1,000 values"
+filtered_input_path = "filtered/hf_timm_resnet18_conv_f32/ingest_stats.json"
+filtering = "Retain all 20 native-F32 rank-4 convolution tensors, including 7x7 input, 3x3 residual, and 1x1 downsampling kernels. Exclude batch-normalization tensors, running statistics, biases, classifier weights, metadata, and file framing."
+missing_value_policy = "Missing or changed resources, invalid SafeTensors framing, gaps or overlaps, non-F32 or non-rank-4 selected tensors, fewer than 1,000 values, non-finite or degenerate payloads, duplicate outputs, or aggregate drift fail the recipe; no values are dropped or imputed within a retained tensor."
+conversion = "Emit each selected tensor's exact typed payload range verbatim. SafeTensors numeric data are little-endian."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float32 convolution tensor"
+sample_geometry = "convolution_kernel_bank_4d"
+sample_rank = 4
+sample_axes = ["output_channel", "input_channel", "kernel_y", "kernel_x"]
+natural_record_kind = "complete_neural_network_convolution_parameter_tensor"
+sample_count = 20
+total_size_bytes = 44667648
+output_path = "samples/hf_timm_resnet18_conv_f32/resnet18_convolution_kernel_f32/"

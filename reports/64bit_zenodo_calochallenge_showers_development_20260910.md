@@ -77,4 +77,3 @@ All event payloads are finite, nonnegative, nonconstant, and pairwise distinct.
 Verification independently retraverses the HDF5 chunk tree, re-inflates every
 selected chunk, reconstructs all events, and byte-compares every emitted
 sample.
-

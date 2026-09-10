@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "zenodo_calochallenge_showers_f64"
+name = "CaloChallenge Dataset 2 Electron Showers Float64"
+description = "Complete native-float64 simulated electron calorimeter showers from a bounded chunk-aligned prefix of Fast Calorimeter Simulation Challenge 2022 Dataset 2."
+homepage = "https://zenodo.org/records/6366271"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Fast Calorimeter Simulation Challenge 2022 - Dataset 2, Zenodo, DOI 10.5281/zenodo.6366271."
+notes = "The exact Zenodo data record declares CC BY 4.0. Preserve the DOI, title, creators, and challenge attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Synthetic single-electron showers generated with GEANT4 for a regular cylindrical calorimeter geometry."
+usage_notes = "The recipe emits only simulated per-cell deposited energies; no human or personal data are present."
+
+[[origins]]
+id = "zenodo_6366271"
+name = "Fast Calorimeter Simulation Challenge 2022 - Dataset 2"
+url = "https://zenodo.org/records/6366271"
+type = "zenodo_record"
+version = "10.5281/zenodo.6366271"
+
+[[resources]]
+id = "dataset_2_1_hdf5_ranges"
+origin = "zenodo_6366271"
+url = "https://zenodo.org/api/records/6366271/files/dataset_2_1.hdf5/content"
+type = "http_ranges_from_hdf5"
+version = "record-6366271"
+size_bytes = 1356475617
+md5 = "e590333e9a2da51b258288d74bd8357a"
+local_path = "downloads/zenodo_calochallenge_showers_f64/"
+notes = "The downloader acquires only the HDF5 prefix, required chunk-index nodes, and compressed chunks covering the first ten complete 391-event row bands."
+
+[local_paths]
+downloads = "downloads/zenodo_calochallenge_showers_f64/"
+filtered = "filtered/zenodo_calochallenge_showers_f64/"
+index = "index/zenodo_calochallenge_showers_f64/"
+samples = "samples/zenodo_calochallenge_showers_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_calochallenge_showers_f64/samples.jsonl"
+summary = "Range-fetch a deterministic chunk-aligned prefix of the exact HDF5 showers dataset, decompress its DEFLATE chunks locally, and emit one complete float64 detector-cell array per simulated event."
+deterministic_notes = "Record identity/license/file metadata, HTTP Content-Range totals, HDF5 superblock/object metadata, B-tree topology, chunk grid, downloaded-range hashes, DEFLATE payload sizes, source float64 words, event boundaries, output hashes, and aggregate statistics are validated."
+
+[[series]]
+id = "calochallenge_electron_shower_energy_f64"
+description = "Complete GEANT4-simulated electron calorimeter shower energy-deposit arrays."
+semantic_meaning = "Deposited energy in each of 6,480 calorimeter readout cells for one incident electron event."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The HDF5 `showers` dataset stores little-endian IEEE-754 float64 values. Each output preserves one complete source row and its native detector-cell order."
+source_resources = ["dataset_2_1_hdf5_ranges"]
+source_format = "HDF5 v0 superblock, chunked root `showers` dataset with DEFLATE filter"
+source_field = "Root HDF5 dataset `showers`, one complete row per simulated event"
+filtered_input_path = "filtered/zenodo_calochallenge_showers_f64/ingest_stats.json"
+filtering = "Keep the first ten complete HDF5 row-chunk bands, covering source events 0 through 3909. Exclude `incident_energies`, HDF5 framing, padded edge cells, and all later events."
+missing_value_policy = "No shower cells are dropped or imputed. Missing ranges, changed source metadata/layout, corrupt chunks, non-finite or negative energies, constant events, incomplete events, or duplicate event payloads fail the recipe."
+conversion = "Inflate each selected HDF5 chunk, reconstruct source row-major rows, and copy each complete event's 6,480 native little-endian float64 words without arithmetic conversion or reordering."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 calorimeter-cell energy array"
+sample_geometry = "segmented_calorimeter_shower_event_1d"
+sample_rank = 1
+sample_shape = [6480]
+sample_axes = ["detector_cell_source_order"]
+natural_record_kind = "complete_geant4_single_electron_calorimeter_shower"
+sample_count = 3910
+total_size_bytes = 202694400
+output_path = "samples/zenodo_calochallenge_showers_f64/calochallenge_electron_shower_energy_f64/"

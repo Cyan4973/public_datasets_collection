@@ -1,0 +1,102 @@
+manifest_version = 1
+dataset_id = "wwpdb_structure_factors_f32"
+name = "wwPDB X-ray Structure-Factor Reflection Fields Float32"
+description = "Measured crystallographic structure-factor amplitudes and uncertainties from five large public wwPDB sparse reciprocal-lattice reflection tables."
+homepage = "https://www.wwpdb.org/ftp/pdb-ftp-sites"
+
+[license]
+name = "Creative Commons CC0 1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "wwPDB archive structure-factor data; cite entries 1AON, 1FFK, 1J5E, 2PTC, and 4V9D and wwPDB/RCSB as appropriate."
+notes = "wwPDB archive data are distributed under CC0; preserve entry identifiers and attribution/citation metadata."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public experimental X-ray crystallographic reflection data from the wwPDB archive."
+usage_notes = "Only diffraction measurement fields are emitted; atom coordinates, annotations, and textual metadata are excluded."
+
+[[origins]]
+id = "wwpdb_archive"
+name = "Worldwide Protein Data Bank archive"
+url = "https://files.wwpdb.org/download/"
+type = "public_archive"
+notes = "Public wwPDB structure-factor CIF download endpoint."
+
+[[resources]]
+id = "bounded_structure_factor_cif_selection"
+origin = "wwpdb_archive"
+url = "https://files.rcsb.org/download/<PDB_ID>-sf.cif.gz"
+type = "exact_gzip_mmcif_selection"
+version = "five_pinned_entry_files"
+access = "Download five exact structure-factor CIF gzip files listed in selection.tsv and validate size, MD5, and SHA-256."
+size_bytes = 25873004
+sha256 = ""
+local_path = "downloads/wwpdb_structure_factors_f32/sf/"
+
+[local_paths]
+downloads = "downloads/wwpdb_structure_factors_f32/"
+filtered = "filtered/wwpdb_structure_factors_f32/"
+index = "index/wwpdb_structure_factors_f32/"
+samples = "samples/wwpdb_structure_factors_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/wwpdb_structure_factors_f32/samples.jsonl"
+summary = "Validate five exact gzip/mmCIF reflection tables, parse their sparse reciprocal-lattice loops, and emit separate little-endian float32 amplitude and uncertainty samples per crystal."
+deterministic_notes = "Source sizes and hashes, gzip integrity, mmCIF loop schema, reflection counts, Miller-index validity, missing tokens, decimal-to-binary32 conversion, output hashes, and aggregate statistics are enforced."
+
+[[series]]
+id = "wwpdb_measured_structure_factor_amplitude_f32"
+description = "Measured structure-factor amplitude arrays from complete crystal reflection tables."
+semantic_meaning = "Experimental diffraction amplitude F for each retained reciprocal-lattice reflection in source order."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "The source publishes decimal numeric `_refln.F_meas_au` values. Each is parsed and rounded once to IEEE-754 binary32."
+source_resources = ["bounded_structure_factor_cif_selection"]
+source_format = "gzip-compressed PDBx/mmCIF structure-factor reflection table"
+source_field = "`_refln.F_meas_au` column"
+filtered_input_path = "filtered/wwpdb_structure_factors_f32/ingest_stats.json"
+filtering = "Emit one sample per complete crystal entry, preserving reflection-row order and omitting only rows whose amplitude token is explicitly missing (`?` or `.`)."
+missing_value_policy = "Explicit missing tokens are omitted from this field only. Malformed rows, invalid Miller indices, non-finite or negative amplitudes, changed schemas/counts, constant outputs, or source identity changes fail the recipe."
+conversion = "Parse each decimal amplitude and round once to a canonical little-endian IEEE-754 float32 word; do not reorder reflections or combine other columns."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 structure-factor amplitude array"
+sample_geometry = "sparse_reciprocal_lattice_reflection_attribute_1d"
+sample_rank = 1
+sample_axes = ["reflection_source_order"]
+natural_record_kind = "complete_wwpdb_crystal_reflection_amplitude_field"
+sample_count = 5
+total_size_bytes = 8635744
+output_path = "samples/wwpdb_structure_factors_f32/wwpdb_measured_structure_factor_amplitude_f32/"
+
+[[series]]
+id = "wwpdb_measured_structure_factor_uncertainty_f32"
+description = "Measured structure-factor amplitude uncertainty arrays from complete crystal reflection tables."
+semantic_meaning = "Published standard uncertainty associated with each retained measured structure-factor amplitude."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "The source publishes decimal numeric `_refln.F_meas_sigma_au` values. Each is parsed and rounded once to IEEE-754 binary32."
+source_resources = ["bounded_structure_factor_cif_selection"]
+source_format = "gzip-compressed PDBx/mmCIF structure-factor reflection table"
+source_field = "`_refln.F_meas_sigma_au` column"
+filtered_input_path = "filtered/wwpdb_structure_factors_f32/ingest_stats.json"
+filtering = "Emit one sample for each entry carrying the uncertainty column, preserving reflection-row order and omitting only rows whose uncertainty token is explicitly missing (`?` or `.`)."
+missing_value_policy = "Explicit missing tokens are omitted from this field only. Malformed rows, invalid Miller indices, non-finite or negative uncertainties, changed schemas/counts, constant outputs, or source identity changes fail the recipe."
+conversion = "Parse each decimal uncertainty and round once to a canonical little-endian IEEE-754 float32 word; do not interleave it with amplitudes or coordinates."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 structure-factor uncertainty array"
+sample_geometry = "sparse_reciprocal_lattice_reflection_attribute_1d"
+sample_rank = 1
+sample_axes = ["reflection_source_order"]
+natural_record_kind = "complete_wwpdb_crystal_reflection_uncertainty_field"
+sample_count = 4
+total_size_bytes = 8546124
+output_path = "samples/wwpdb_structure_factors_f32/wwpdb_measured_structure_factor_uncertainty_f32/"

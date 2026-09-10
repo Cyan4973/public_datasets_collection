@@ -1,0 +1,6 @@
+pdb_id	url	filename	size_bytes	md5	sha256	reflection_rows	amplitude_values	sigma_values
+1AON	https://files.rcsb.org/download/1AON-sf.cif.gz	1AON-sf.cif.gz	2019137	a62b38205c4c67a5d272b824c4572015	7972a892fdd458b6964133bb8d6e25df14b56ee74b7f078c7bb9126ebb1111bf	242645	242645	242645
+1FFK	https://files.rcsb.org/download/1FFK-sf.cif.gz	1FFK-sf.cif.gz	9199825	08fbc84605061816e2ea75eccce18413	09d32de15dcd9d17887e696d10477d3598f96e0912c87c70eb1c8e85976cd902	701272	701272	701272
+1J5E	https://files.rcsb.org/download/1J5E-sf.cif.gz	1J5E-sf.cif.gz	3948912	eaf654df32b9aaaa24aa551c4cf60c29	4b53c9445406d376305f3e779c9cec48bf070fd9ae7d3fcdb01238ed1ea54a18	254234	254234	254234
+2PTC	https://files.rcsb.org/download/2PTC-sf.cif.gz	2PTC-sf.cif.gz	256614	dc69e69d50cf5a0ba92ccc1143953558	82fc99c9aabfe42c1211000a778aebd892ebef562b705f1cc8cfcc528f93d627	22405	22405	0
+4V9D	https://files.rcsb.org/download/4V9D-sf.cif.gz	4V9D-sf.cif.gz	10448516	e4489d2205c86d6d801c9e0bf01f5fe2	57c97e8373f7857764199ec46eb632514d510577151858c15730c248532aba57	1954668	938380	938380

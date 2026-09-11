@@ -1,4 +1,5 @@
 dataset_id	status	active_path	evidence_path	replacement_id	reason	retry_condition
+pfam_profile_hmm_match_emissions_f32	accepted	datasets/pfam_profile_hmm_match_emissions_f32/manifest.toml	reports/32bit_pfam_profile_hmm_development_20260910.md		Accepted 27,496 complete Pfam 38.2 profile-HMM match-emission matrices as 372,522,160 bytes of little-endian float32 under CC0 1.0.	Already accepted.
 bbbc004_microscopy_tiff_u16	rejected		attempts/20260722_rejected_bbbc004_microscopy_tiff_u16.md		TIFFs are 8-bit PackBits (bits=8, comp=32773), not 16-bit	Not retryable as 16-bit; could be u8 candidate
 bls_cpi_monthly	transient_failure		attempts/20260529_transient_failure_bls_cpi_monthly.md		BLS API DNS/access failure produced no payload.	Retry only with reachable BLS API and downloader validation that fails if no JSON payload is written.
 bls_payroll_employment_monthly	transient_failure		attempts/20260529_transient_failure_bls_payroll_employment_monthly.md		BLS API DNS/access failure produced no payload.	Retry only with reachable BLS API and downloader validation that fails if no JSON payload is written.

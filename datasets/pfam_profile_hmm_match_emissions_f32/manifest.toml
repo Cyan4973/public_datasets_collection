@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "pfam_profile_hmm_match_emissions_f32"
+name = "Pfam Profile-HMM Match-Emission Matrices Float32"
+description = "Position-specific 20-amino-acid match-emission score matrices from 27,496 complete Pfam 38.2 family profile HMMs."
+homepage = "https://www.ebi.ac.uk/interpro/entry/pfam/"
+
+[license]
+name = "Creative Commons Zero 1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "The Pfam Consortium. Pfam: The protein families database."
+notes = "Pfam 38.2 relnotes explicitly state that the database of protein-domain family alignments and HMMs is dedicated under CC0 1.0 and may be copied, modified, distributed, and performed commercially without permission."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public fitted protein-family profile models from the official immutable EMBL-EBI Pfam 38.2 release."
+usage_notes = "Preserve the Pfam release, family accessions, and citation. Only numerical match-emission parameters are emitted."
+
+[[origins]]
+id = "pfam_38_2"
+name = "Pfam release 38.2"
+url = "https://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam38.2/"
+type = "public_archive"
+notes = "Immutable official Pfam release directory hosted by EMBL-EBI."
+
+[[resources]]
+id = "pfam_a_hmm_38_2"
+origin = "pfam_38_2"
+url = "https://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam38.2/Pfam-A.hmm.gz"
+type = "gzip_hmmer3_profile_library"
+version = "Pfam 38.2"
+access = "Direct public download; validate exact byte size, published MD5, SHA-256, gzip integrity, release identity, and CC0 grant."
+size_bytes = 418160514
+sha256 = "2d82087b6c5c60d762cc767f98e8260b273134c215ab7efccf7440614a4e5dab"
+local_path = "downloads/pfam_profile_hmm_match_emissions_f32/Pfam-A.hmm.gz"
+notes = "Published MD5: 7ab3c4e215d0daaea3004e37c4e24f8a."
+
+[local_paths]
+downloads = "downloads/pfam_profile_hmm_match_emissions_f32/"
+filtered = "filtered/pfam_profile_hmm_match_emissions_f32/"
+index = "index/pfam_profile_hmm_match_emissions_f32/"
+samples = "samples/pfam_profile_hmm_match_emissions_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/pfam_profile_hmm_match_emissions_f32/samples.jsonl"
+summary = "Stream the exact Pfam 38.2 HMMER3 library and emit one row-major little-endian float32 match-emission matrix for every complete family profile having at least 50 model positions."
+deterministic_notes = "The recipe pins release documents and archive identity; validates every HMMER record, alphabet order, profile length, matrix position, finite match-emission token, transition structure, family accession, output byte order, per-sample hash, aggregate hash, sample count, and total volume."
+
+[[series]]
+id = "pfam_profile_hmm_match_emissions_f32"
+description = "Position-specific match-emission score matrices for complete Pfam family profile HMMs."
+semantic_meaning = "For each retained Pfam family, each matrix row contains the 20 HMMER match-state amino-acid emission costs at one consecutive model position, in the source HMM alphabet order."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "HMMER publishes the fitted parameters as decimal negative-log probability values. Each finite decimal token is rounded once to IEEE-754 binary32."
+source_resources = ["pfam_a_hmm_38_2"]
+source_format = "gzip-compressed HMMER3/f ASCII profile-HMM library"
+source_field = "20 match-emission score columns on each numbered model-position row under the HMM amino-acid header"
+filtered_input_path = "filtered/pfam_profile_hmm_match_emissions_f32/ingest_stats.json"
+filtering = "Keep one complete match-emission matrix per Pfam family whose declared profile length is at least 50 positions, giving at least 1,000 natural-record values. Exclude COMPO, insert-emission, transition, annotation, and short-profile fields."
+missing_value_policy = "Any `*` sentinel, malformed or non-finite token in a retained match-emission row is fatal; none occur in Pfam 38.2. Transition `*` sentinels are validated structurally but transitions are not emitted. No values are dropped or imputed within a retained matrix."
+conversion = "Parse each source decimal match-emission token, round once to binary32, and serialize each complete profile-length-by-20 matrix row-major in explicit little-endian order."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 Pfam profile-HMM match-emission matrix"
+sample_geometry = "variable_length_protein_profile_position_by_amino_acid_matrix"
+sample_rank = 2
+sample_axes = ["profile_position", "amino_acid_hmmer_order"]
+natural_record_kind = "complete_pfam_family_profile_hmm_match_emission_matrix"
+sample_count = 27496
+total_size_bytes = 372522160
+output_path = "samples/pfam_profile_hmm_match_emissions_f32/pfam_profile_hmm_match_emissions_f32/"

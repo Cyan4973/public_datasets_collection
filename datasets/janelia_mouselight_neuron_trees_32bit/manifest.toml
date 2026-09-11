@@ -1,0 +1,258 @@
+manifest_version = 1
+dataset_id = "janelia_mouselight_neuron_trees_32bit"
+name = "Janelia MouseLight Neuron Tree Fields 32-bit"
+description = "Separate float32 coordinate and int32 parent-reference fields from 320 complete CC BY 4.0 MouseLight consensus axon and dendrite SWC trees."
+homepage = "https://registry.opendata.aws/janelia-mouselight/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Janelia Research Campus MouseLight Project. Mouse Brain Anatomy: MouseLight Imagery, AWS Open Data Registry."
+notes = "The AWS Open Data Registry explicitly applies CC BY 4.0 to the janelia-mouselight-imagery bucket containing imagery and neuron annotations. Preserve MouseLight/Janelia attribution and cite the associated reconstruction publication."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public mouse-neuron morphology annotations from the Janelia MouseLight project; no human or personal data are included."
+usage_notes = "Only completed consensus axon and dendrite SWC numerical fields are emitted. Images, annotator-specific drafts, names, thumbnails, and other metadata are excluded."
+
+[[origins]]
+id = "janelia_mouselight_aws"
+name = "Janelia MouseLight AWS Open Data"
+url = "https://registry.opendata.aws/janelia-mouselight/"
+type = "public_object_store"
+notes = "AWS Open Data Registry entry at commit e4a69a3dfa44fc2237ade6f35393c960383964d0 identifies bucket arn:aws:s3:::janelia-mouselight-imagery and declares CC BY 4.0."
+
+[[resources]]
+id = "mouselight_completed_swc_selection"
+origin = "janelia_mouselight_aws"
+url = "https://janelia-mouselight-imagery.s3.amazonaws.com/"
+type = "exact_swc_selection"
+version = "320 size-stratified objects listed 2026-09-10"
+access = "Download the 320 exact completed-tracing SWC objects in sources.tsv and validate byte size, S3 ETag/MD5, and SHA-256."
+size_bytes = 108215773
+sha256 = ""
+local_path = "downloads/janelia_mouselight_neuron_trees_32bit/swc/"
+
+[local_paths]
+downloads = "downloads/janelia_mouselight_neuron_trees_32bit/"
+filtered = "filtered/janelia_mouselight_neuron_trees_32bit/"
+index = "index/janelia_mouselight_neuron_trees_32bit/"
+samples = "samples/janelia_mouselight_neuron_trees_32bit/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/janelia_mouselight_neuron_trees_32bit/samples.jsonl"
+summary = "Validate 320 pinned SWCs, parse each rooted tree, and emit separate little-endian X/Y/Z float32 coordinate and parent-reference int32 samples for complete consensus axons and dendrites."
+deterministic_notes = "The selection takes 256 axons and 64 dendrites at even size-rank intervals among canonical SWCs of at least 50,000 source bytes. Source hashes, sequential node IDs, one root, backward parent references, coordinate conversion, nondegeneracy, duplicate outputs, sample hashes, aggregate counts, and aggregate output hash are enforced."
+
+[[series]]
+id = "mouselight_axon_x_f32"
+description = "MouseLight consensus-axon X-coordinate streams."
+semantic_meaning = "Source X coordinate for each node in one complete consensus axon tree, preserving SWC node order."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "Published decimal SWC coordinates are rounded once to IEEE-754 binary32."
+source_resources = ["mouselight_completed_swc_selection"]
+source_format = "SWC seven-column neuron morphology text"
+source_field = "X coordinate column"
+filtered_input_path = "filtered/janelia_mouselight_neuron_trees_32bit/ingest_stats.json"
+filtering = "Keep the complete X field from each of 256 selected consensus axon SWCs."
+missing_value_policy = "Malformed rows, non-finite coordinates, invalid tree links, changed source identities, constant coordinates, or duplicate outputs fail the recipe; no values are dropped or imputed."
+conversion = "Parse source decimal coordinates, round once to float32, and serialize explicitly in little-endian SWC node order."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 neuron-tree X-coordinate array"
+sample_geometry = "rooted_neuron_tree_node_attribute_1d"
+sample_rank = 1
+sample_axes = ["swc_node_order"]
+natural_record_kind = "complete_mouselight_consensus_axon_coordinate_field"
+sample_count = 256
+total_size_bytes = 6559744
+output_path = "samples/janelia_mouselight_neuron_trees_32bit/mouselight_axon_x_f32/"
+
+[[series]]
+id = "mouselight_axon_y_f32"
+description = "MouseLight consensus-axon Y-coordinate streams."
+semantic_meaning = "Source Y coordinate for each node in one complete consensus axon tree, preserving SWC node order."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "Published decimal SWC coordinates are rounded once to IEEE-754 binary32."
+source_resources = ["mouselight_completed_swc_selection"]
+source_format = "SWC seven-column neuron morphology text"
+source_field = "Y coordinate column"
+filtered_input_path = "filtered/janelia_mouselight_neuron_trees_32bit/ingest_stats.json"
+filtering = "Keep the complete Y field from each of 256 selected consensus axon SWCs."
+missing_value_policy = "Malformed rows, non-finite coordinates, invalid tree links, changed source identities, constant coordinates, or duplicate outputs fail the recipe; no values are dropped or imputed."
+conversion = "Parse source decimal coordinates, round once to float32, and serialize explicitly in little-endian SWC node order."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 neuron-tree Y-coordinate array"
+sample_geometry = "rooted_neuron_tree_node_attribute_1d"
+sample_rank = 1
+sample_axes = ["swc_node_order"]
+natural_record_kind = "complete_mouselight_consensus_axon_coordinate_field"
+sample_count = 256
+total_size_bytes = 6559744
+output_path = "samples/janelia_mouselight_neuron_trees_32bit/mouselight_axon_y_f32/"
+
+[[series]]
+id = "mouselight_axon_z_f32"
+description = "MouseLight consensus-axon Z-coordinate streams."
+semantic_meaning = "Source Z coordinate for each node in one complete consensus axon tree, preserving SWC node order."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "Published decimal SWC coordinates are rounded once to IEEE-754 binary32."
+source_resources = ["mouselight_completed_swc_selection"]
+source_format = "SWC seven-column neuron morphology text"
+source_field = "Z coordinate column"
+filtered_input_path = "filtered/janelia_mouselight_neuron_trees_32bit/ingest_stats.json"
+filtering = "Keep the complete Z field from each of 256 selected consensus axon SWCs."
+missing_value_policy = "Malformed rows, non-finite coordinates, invalid tree links, changed source identities, constant coordinates, or duplicate outputs fail the recipe; no values are dropped or imputed."
+conversion = "Parse source decimal coordinates, round once to float32, and serialize explicitly in little-endian SWC node order."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 neuron-tree Z-coordinate array"
+sample_geometry = "rooted_neuron_tree_node_attribute_1d"
+sample_rank = 1
+sample_axes = ["swc_node_order"]
+natural_record_kind = "complete_mouselight_consensus_axon_coordinate_field"
+sample_count = 256
+total_size_bytes = 6559744
+output_path = "samples/janelia_mouselight_neuron_trees_32bit/mouselight_axon_z_f32/"
+
+[[series]]
+id = "mouselight_axon_parent_i32"
+description = "MouseLight consensus-axon parent-node reference streams."
+semantic_meaning = "One-based SWC parent-node identifier for each node in a complete consensus axon tree, with -1 marking the root."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "Published decimal SWC parent identifiers are represented exactly as signed 32-bit integers."
+source_resources = ["mouselight_completed_swc_selection"]
+source_format = "SWC seven-column neuron morphology text"
+source_field = "parent node ID column"
+filtered_input_path = "filtered/janelia_mouselight_neuron_trees_32bit/ingest_stats.json"
+filtering = "Keep the complete parent-reference field from each of 256 selected consensus axon SWCs; exclude the trivial sequential node-ID column."
+missing_value_policy = "Each tree must have exactly one -1 root and every other parent must reference an earlier node; invalid links, changed source identities, degenerate fields, or duplicate outputs fail the recipe."
+conversion = "Parse source decimal parent identifiers exactly and serialize as canonical little-endian signed int32 in SWC node order."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian int32 neuron-tree parent-reference array"
+sample_geometry = "rooted_neuron_tree_parent_pointer_1d"
+sample_rank = 1
+sample_axes = ["swc_node_order"]
+natural_record_kind = "complete_mouselight_consensus_axon_parent_field"
+sample_count = 256
+total_size_bytes = 6559744
+output_path = "samples/janelia_mouselight_neuron_trees_32bit/mouselight_axon_parent_i32/"
+
+[[series]]
+id = "mouselight_dendrite_x_f32"
+description = "MouseLight dendrite X-coordinate streams."
+semantic_meaning = "Source X coordinate for each node in one complete dendrite tree, preserving SWC node order."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "Published decimal SWC coordinates are rounded once to IEEE-754 binary32."
+source_resources = ["mouselight_completed_swc_selection"]
+source_format = "SWC seven-column neuron morphology text"
+source_field = "X coordinate column"
+filtered_input_path = "filtered/janelia_mouselight_neuron_trees_32bit/ingest_stats.json"
+filtering = "Keep the complete X field from each of 64 selected dendrite SWCs."
+missing_value_policy = "Malformed rows, non-finite coordinates, invalid tree links, changed source identities, constant coordinates, or duplicate outputs fail the recipe; no values are dropped or imputed."
+conversion = "Parse source decimal coordinates, round once to float32, and serialize explicitly in little-endian SWC node order."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 neuron-tree X-coordinate array"
+sample_geometry = "rooted_neuron_tree_node_attribute_1d"
+sample_rank = 1
+sample_axes = ["swc_node_order"]
+natural_record_kind = "complete_mouselight_dendrite_coordinate_field"
+sample_count = 64
+total_size_bytes = 1228456
+output_path = "samples/janelia_mouselight_neuron_trees_32bit/mouselight_dendrite_x_f32/"
+
+[[series]]
+id = "mouselight_dendrite_y_f32"
+description = "MouseLight dendrite Y-coordinate streams."
+semantic_meaning = "Source Y coordinate for each node in one complete dendrite tree, preserving SWC node order."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "Published decimal SWC coordinates are rounded once to IEEE-754 binary32."
+source_resources = ["mouselight_completed_swc_selection"]
+source_format = "SWC seven-column neuron morphology text"
+source_field = "Y coordinate column"
+filtered_input_path = "filtered/janelia_mouselight_neuron_trees_32bit/ingest_stats.json"
+filtering = "Keep the complete Y field from each of 64 selected dendrite SWCs."
+missing_value_policy = "Malformed rows, non-finite coordinates, invalid tree links, changed source identities, constant coordinates, or duplicate outputs fail the recipe; no values are dropped or imputed."
+conversion = "Parse source decimal coordinates, round once to float32, and serialize explicitly in little-endian SWC node order."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 neuron-tree Y-coordinate array"
+sample_geometry = "rooted_neuron_tree_node_attribute_1d"
+sample_rank = 1
+sample_axes = ["swc_node_order"]
+natural_record_kind = "complete_mouselight_dendrite_coordinate_field"
+sample_count = 64
+total_size_bytes = 1228456
+output_path = "samples/janelia_mouselight_neuron_trees_32bit/mouselight_dendrite_y_f32/"
+
+[[series]]
+id = "mouselight_dendrite_z_f32"
+description = "MouseLight dendrite Z-coordinate streams."
+semantic_meaning = "Source Z coordinate for each node in one complete dendrite tree, preserving SWC node order."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "Published decimal SWC coordinates are rounded once to IEEE-754 binary32."
+source_resources = ["mouselight_completed_swc_selection"]
+source_format = "SWC seven-column neuron morphology text"
+source_field = "Z coordinate column"
+filtered_input_path = "filtered/janelia_mouselight_neuron_trees_32bit/ingest_stats.json"
+filtering = "Keep the complete Z field from each of 64 selected dendrite SWCs."
+missing_value_policy = "Malformed rows, non-finite coordinates, invalid tree links, changed source identities, constant coordinates, or duplicate outputs fail the recipe; no values are dropped or imputed."
+conversion = "Parse source decimal coordinates, round once to float32, and serialize explicitly in little-endian SWC node order."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 neuron-tree Z-coordinate array"
+sample_geometry = "rooted_neuron_tree_node_attribute_1d"
+sample_rank = 1
+sample_axes = ["swc_node_order"]
+natural_record_kind = "complete_mouselight_dendrite_coordinate_field"
+sample_count = 64
+total_size_bytes = 1228456
+output_path = "samples/janelia_mouselight_neuron_trees_32bit/mouselight_dendrite_z_f32/"
+
+[[series]]
+id = "mouselight_dendrite_parent_i32"
+description = "MouseLight dendrite parent-node reference streams."
+semantic_meaning = "One-based SWC parent-node identifier for each node in a complete dendrite tree, with -1 marking the root."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "Published decimal SWC parent identifiers are represented exactly as signed 32-bit integers."
+source_resources = ["mouselight_completed_swc_selection"]
+source_format = "SWC seven-column neuron morphology text"
+source_field = "parent node ID column"
+filtered_input_path = "filtered/janelia_mouselight_neuron_trees_32bit/ingest_stats.json"
+filtering = "Keep the complete parent-reference field from each of 64 selected dendrite SWCs; exclude the trivial sequential node-ID column."
+missing_value_policy = "Each tree must have exactly one -1 root and every other parent must reference an earlier node; invalid links, changed source identities, degenerate fields, or duplicate outputs fail the recipe."
+conversion = "Parse source decimal parent identifiers exactly and serialize as canonical little-endian signed int32 in SWC node order."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian int32 neuron-tree parent-reference array"
+sample_geometry = "rooted_neuron_tree_parent_pointer_1d"
+sample_rank = 1
+sample_axes = ["swc_node_order"]
+natural_record_kind = "complete_mouselight_dendrite_parent_field"
+sample_count = 64
+total_size_bytes = 1228456
+output_path = "samples/janelia_mouselight_neuron_trees_32bit/mouselight_dendrite_parent_i32/"

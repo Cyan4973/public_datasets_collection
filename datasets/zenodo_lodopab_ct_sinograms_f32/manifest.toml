@@ -1,0 +1,78 @@
+manifest_version = 1
+dataset_id = "zenodo_lodopab_ct_sinograms_f32"
+name = "LoDoPaB-CT Validation Sinograms Float32"
+description = "Complete native-float32 low-dose CT projection sinograms from one bounded official LoDoPaB-CT validation shard."
+homepage = "https://doi.org/10.5281/zenodo.3384092"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Leuschner, J., Schmidt, M., and Otero Baguer, D. LoDoPaB-CT Dataset, Zenodo, DOI 10.5281/zenodo.3384092."
+notes = "The exact Zenodo record metadata declares CC BY 4.0. Preserve dataset authorship, DOI, and attribution."
+
+[safety]
+contains_sensitive_data = true
+contains_personal_data = false
+provenance_notes = "LoDoPaB-CT is derived from de-identified human thoracic CT data from LIDC-IDRI and publishes simulated low-dose projection observations without participant identifiers."
+usage_notes = "Only numerical projection-domain observations are emitted. Patient identifiers, reconstructed images, annotations, diagnoses, and clinical metadata are excluded; do not attempt re-identification or linkage."
+
+[[origins]]
+id = "zenodo_lodopab_ct_1_0_0"
+name = "LoDoPaB-CT Dataset version 1.0.0"
+url = "https://doi.org/10.5281/zenodo.3384092"
+type = "zenodo_record"
+version = "1.0.0"
+notes = "Official dataset deposit by Johannes Leuschner, Maximilian Schmidt, and Daniel Otero Baguer."
+
+[[resources]]
+id = "lodopab_observation_validation_000"
+origin = "zenodo_lodopab_ct_1_0_0"
+url = "https://zenodo.org/api/records/3384092/files/observation_validation.zip/content"
+type = "range_extracted_zip_member_hdf5"
+version = "observation_validation_000.hdf5"
+access = "Validate the live CC BY 4.0 Zenodo record, then fetch outer-ZIP bytes 0-106629167 only; validate the local header, DEFLATE stream, member CRC32, and HDF5 SHA-256."
+size_bytes = 272735288
+sha256 = "04f0399b1d1d4ff8d012d54312b1b67f84a412d94bf935865963172e996fb977"
+local_path = "downloads/zenodo_lodopab_ct_sinograms_f32/observation_validation_000.hdf5"
+notes = "Outer observation_validation.zip is 2,944,573,582 bytes with MD5 3cff406e09c59774912655eb7a72cfcf. The selected member is DEFLATE-compressed to 106,629,107 bytes with CRC32 206b14c4; exact local-header-plus-member range SHA-256 is fe5d44a630728d768552e1be3624fbaf1cfc27c6a73ccbfd860e89398f2a3ae4."
+
+[local_paths]
+downloads = "downloads/zenodo_lodopab_ct_sinograms_f32/"
+filtered = "filtered/zenodo_lodopab_ct_sinograms_f32/"
+index = "index/zenodo_lodopab_ct_sinograms_f32/"
+samples = "samples/zenodo_lodopab_ct_sinograms_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_lodopab_ct_sinograms_f32/samples.jsonl"
+summary = "Validate one exact LoDoPaB HDF5 shard and dechunk its `/data` tensor into one complete row-major little-endian float32 angle-by-detector sinogram per validation slice."
+deterministic_notes = "The recipe pins Zenodo identity, license, outer archive metadata, byte range, ZIP member metadata and hashes. It validates the HDF5 v0 superblock, root links, float32 datatype, shape, chunk layout and B-tree; every output is reconstructed from the complete unfiltered chunk grid and independently byte-compared during verification."
+
+[[series]]
+id = "lodopab_ct_observation_sinogram_f32"
+description = "Low-dose fan-beam CT observation sinograms for complete validation slices."
+semantic_meaning = "Log-transformed simulated low-dose X-ray line-integral measurements arranged by projection angle and detector bin for one de-identified thoracic CT slice."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The HDF5 `/data` dataset is explicitly little-endian IEEE float32. Dechunking reconstructs its logical row-major matrix while preserving every typed value's IEEE-754 bit pattern."
+source_resources = ["lodopab_observation_validation_000"]
+source_format = "HDF5 v0 file containing an unfiltered chunked little-endian float32 tensor"
+source_field = "root dataset `/data`, one `1000 × 513` observation matrix per leading-axis record"
+filtered_input_path = "filtered/zenodo_lodopab_ct_sinograms_f32/ingest_stats.json"
+filtering = "Retain all 128 complete observation records from the exact validation shard; discard only HDF5 chunk padding outside the declared `128 × 1000 × 513` dataspace."
+missing_value_policy = "Every logical `/data` value must be finite and each complete sinogram must be nonconstant. Missing chunks, duplicate chunks, malformed metadata, non-finite values, changed dimensions, or source-identity changes fail the recipe; no values are dropped or imputed."
+conversion = "Traverse the HDF5 chunk B-tree, decode native little-endian float32 cells into logical coordinates, remove only edge-chunk padding, and emit each full angle-major `1000 × 513` sinogram separately."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 LoDoPaB-CT observation sinogram"
+sample_geometry = "ct_radon_sinogram_angle_by_detector_matrix_2d"
+sample_rank = 2
+sample_axes = ["projection_angle", "detector_bin"]
+natural_record_kind = "complete_lodopab_ct_validation_slice_observation_sinogram"
+sample_count = 128
+total_size_bytes = 262656000
+output_path = "samples/zenodo_lodopab_ct_sinograms_f32/lodopab_ct_observation_sinogram_f32/"

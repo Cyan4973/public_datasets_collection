@@ -49,7 +49,12 @@ python3 tools/autocollect/driver.py init              # once: snapshot baseline
 python3 tools/autocollect/driver.py run --stop-after 2 --max-cost-usd 150   # pilot
 tmux new -s autocollect 'python3 tools/autocollect/driver.py run'           # full run
 python3 tools/autocollect/driver.py status            # anytime, from another shell
+python3 tools/autocollect/driver.py activity          # latest steps of each recent agent session
 ```
+
+Agents are separate headless `claude -p` processes, so they do not show up in
+an interactive Claude Code session; `activity` reads their streamed
+transcripts under `.data/pipeline/logs/`.
 
 `run` refuses to start while `attempts/dataset_status.tsv` or the audit
 files have uncommitted changes, while `tools/check_repo_hygiene.py` fails, or

@@ -16,6 +16,7 @@ download/build logs, costs, archived drafts.
 Commands:
   driver.py init [--target 50]
   driver.py status
+  driver.py activity [--minutes 120] [--lines 8]
   driver.py run [--agents 3] [--downloads 2] [--widths 8,16] [--stop-after N] [--max-cost-usd X]
   driver.py requeue <candidate_id> [--status queued]
   driver.py unpause
@@ -566,7 +567,8 @@ def run_agent(cfg: Config, role: str, subject: str, prompt: str, schema: dict, s
     cmd = [
         "claude", "-p",
         "--agent", ROLE_AGENT[role],
-        "--output-format", "json",
+        "--output-format", "stream-json",
+        "--verbose",
         "--json-schema", json.dumps(schema),
         "--permission-mode", "dontAsk",
         "--max-budget-usd", str(cfg.budgets_usd[role]),
@@ -1065,6 +1067,10 @@ class Driver:
             add_event(state, "builder_error", phase=phase, error=agent["error"], log=agent["log"])
             save_state(cid, state)
             log(f"builder {cid} ({phase}) failed: {agent['error']}")
+            if "budget" in agent["error"].lower():
+                self.terminal(cid, "deferred", f"builder exceeded the ${self.cfg.budgets_usd['builder']:.0f} per-phase agent budget in the {phase} phase",
+                              "Retry with a larger builder budget or a narrower recipe scope.", None)
+                return
             if state["agent_failures"] > self.cfg.max_agent_failures:
                 self.set_status(cid, PAUSED, f"builder failed repeatedly: {agent['error']}")
             return
@@ -1124,7 +1130,7 @@ class Driver:
             add_event(state, "judge_error", error=agent["error"], log=agent["log"])
             save_state(cid, state)
             log(f"judge {cid} failed: {agent['error']}")
-            if state["agent_failures"] > self.cfg.max_agent_failures:
+            if "budget" in agent["error"].lower() or state["agent_failures"] > self.cfg.max_agent_failures:
                 self.set_status(cid, PAUSED, f"judge failed repeatedly: {agent['error']}")
             return
         state["agent_failures"] = 0
@@ -1370,6 +1376,42 @@ def cmd_status(args) -> int:  # noqa: ARG001
     return 0
 
 
+def describe_tool_use(item: dict) -> str:
+    args = item.get("input") or {}
+    detail = args.get("command") or args.get("natural_language_query") or args.get("query") or args.get("url") or args.get("file_path") or args.get("pattern")
+    return f"{item.get('name', '?')}: {one_line(detail if detail else json.dumps(args), 160)}"
+
+
+def cmd_activity(args) -> int:
+    """Latest steps of recent agent sessions, from their streamed transcripts."""
+    cutoff = time.time() - args.minutes * 60
+    logs = sorted(
+        (path for path in LOGS_DIR.glob("*/*.jsonl") if path.stat().st_mtime >= cutoff),
+        key=lambda path: path.stat().st_mtime,
+    )
+    if not logs:
+        print(f"no agent transcripts updated in the last {args.minutes} minutes")
+    for path in logs:
+        steps: list[str] = []
+        finished = ""
+        for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+            try:
+                event = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if event.get("type") == "assistant":
+                for item in (event.get("message") or {}).get("content") or []:
+                    if isinstance(item, dict) and item.get("type") == "tool_use":
+                        steps.append(describe_tool_use(item))
+            elif event.get("type") == "result":
+                finished = f"finished: {event.get('subtype')}, ${float(event.get('total_cost_usd') or 0):.2f}, {event.get('num_turns')} turns"
+        age = int(time.time() - path.stat().st_mtime)
+        print(f"== {path.parent.name}/{path.name}  ({len(steps)} steps, updated {age}s ago) {finished or 'running'}")
+        for step in steps[-args.lines:]:
+            print(f"   {step}")
+    return 0
+
+
 def cmd_requeue(args) -> int:
     rows = load_ledger()
     for row in rows:
@@ -1438,6 +1480,9 @@ def main() -> int:
     init.add_argument("--target", type=int, default=50)
     init.add_argument("--force", action="store_true")
     sub.add_parser("status", help="progress per width and pipeline state")
+    activity = sub.add_parser("activity", help="latest steps of recent agent sessions")
+    activity.add_argument("--minutes", type=int, default=120, help="transcripts updated within this window")
+    activity.add_argument("--lines", type=int, default=8, help="steps shown per session")
     run = sub.add_parser("run", help="run the pipeline until the goal, a stop condition, or an interrupt")
     run.add_argument("--agents", type=int, default=3, help="concurrent agent sessions")
     run.add_argument("--downloads", type=int, default=2, help="concurrent download/rebuild subprocesses")
@@ -1454,7 +1499,7 @@ def main() -> int:
     requeue.add_argument("--status", default="queued", choices=ACTIVE_STATUSES)
     sub.add_parser("unpause", help="clear a global pause after inspecting its cause")
     args = parser.parse_args()
-    return {"init": cmd_init, "status": cmd_status, "run": cmd_run, "requeue": cmd_requeue, "unpause": cmd_unpause}[args.command](args)
+    return {"init": cmd_init, "status": cmd_status, "activity": cmd_activity, "run": cmd_run, "requeue": cmd_requeue, "unpause": cmd_unpause}[args.command](args)
 
 
 if __name__ == "__main__":

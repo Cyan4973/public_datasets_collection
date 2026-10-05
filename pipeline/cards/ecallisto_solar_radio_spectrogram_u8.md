@@ -1,0 +1,23 @@
+# e-CALLISTO Solar Radio Dynamic Spectrograms (raw 8-bit digits)
+
+- Candidate id: `ecallisto_solar_radio_spectrogram_u8`
+- Width: uint8
+- Quantity: Raw solar radio flux-density detector output in 8-bit 'digits' (log-detector ADC counts, BUNIT='digits', DATAMIN 0, DATAMAX about 254). Each image is a frequency × time dynamic spectrum: 200 frequency channels × 3600 sweeps at 0.25 s from one CALLISTO heterodyne spectrometer.
+- Source: https://www.e-callisto.org/Data/data.html
+- Resources: https://soleil.i4ds.ch/solarradio/data/2002-20yy_Callisto/, https://soleil.i4ds.ch/solarradio/data/2002-20yy_Callisto/2024/06/01/GLASGOW_20240601_100000_01.fit.gz, https://soleil.i4ds.ch/solarradio/data/readme.txt, https://spase-metadata.org/ISWI/NumericalData/Callisto/FAS/PT0.25S.html, https://api.datacite.org/dois/10.48322/pmwd-mk15
+- License: CC0-1.0
+- License evidence: https://api.datacite.org/dois/10.48322/pmwd-mk15
+- License quote: DataCite record for DOI 10.48322/pmwd-mk15, titled 'CALLISTO Solar Spectrogram FITS files' (creators Monstein, Csillaghy, Benz; publisher International Space Weather Initiative, 2023): rightsList = [{'rights': 'Creative Commons Zero v1.0 Universal', 'rightsUri': 'https://creativecommons.org/publicdomain/zero/1.0/legalcode', 'rightsIdentifier': 'cc0-1.0'}]. The SPASE landing page describes the record as 'solar dynamic spectrogram FITS files of the CALLISTO spectrometer data from the e-Callisto network of stations', AccessRights 'Open'.
+- Natural record: One 15-minute e-CALLISTO FITS file (STATION_YYYYMMDD_HHMMSS_FC.fit.gz). The primary HDU is BITPIX=8, NAXIS1=3600 (time) × NAXIS2=200 (frequency), giving 720,000 uint8 values. The two binary tables holding the time and frequency axes are auxiliary.
+- Estimated samples: 300
+- Estimated primary values: 216,000,000
+- Estimated download bytes: 75,000,000
+- Estimated primary bytes: 216,000,000
+- Decode path: curl the .fit.gz, then use Python gzip to decompress. Parse 2880-byte FITS header blocks of 80-character cards up to END. Require BITPIX=8, NAXIS1=3600, NAXIS2=200, BZERO=0, BSCALE=1, BUNIT='digits'. Read the next 720,000 bytes as unsigned 8-bit values (FITS BITPIX=8 is unsigned, so no byte swap is needed) and write them out in the native axis order. Ignore the trailing BINTABLE extensions or record them as auxiliary.
+- Novelty kind: new_modality
+- Novelty evidence: novelty.py --url soleil.i4ds.ch/... --terms callisto 'solar radio' spectrogram returned no matches in recipes, staging, registry, ledger, downstream families or downstream registry. The local 8-bit families include no solar, heliospheric or radio-spectrograph material. The only astronomy at 8 bits is NICER detector addresses and the THEMIS IR mosaic.
+- Homogeneity: Pin one station, one focus code (the two-digit suffix, i.e. one front-end/polarization) and one FRQFILE, so that every sample shares the frequency program, gain path and 8-bit log-detector scale. Do not mix stations or focus codes. Observed daily counts: GLASGOW focus 01 has about 45-68 files/day from 2024 onward (absent in 2021-2023 listings); Australia-ASSA focus 62/63 (LWA RHCP/LHCP, 15-85 MHz) has about 40-53 files/day per code, present in 2022, 2023, 2024, 2025 and 2026. A bounded selection, e.g. about 300 files spread over several days or months from one station and focus code, gives burst and quiet-Sun diversity.
+- Risks: (1) Rights: the CC0 grant comes from the network PIs and ISWI DataCite metadata covering the whole e-Callisto FITS collection, but individual stations are operated by many host institutions. Ideally an ETH/FHNW-operated station would be used, but no Bleien (BLEN*) files appeared in the 2024 listing. The SPASE HTML JSON-LD also names a 'cdla.io/permissive-1-0' license, which conflicts with but is as permissive as the DataCite CC0; cite DataCite as the record of rights. (2) Some files may be calibrated (BUNIT='SFU') or use a different NAXIS2/FRQFILE; download.sh must reject them. (3) Daily directory listings are about 1.3 MB each; keep the number of days bounded. (4) Some files are RFI-dominated or night-time noise; restrict to daytime UT for the chosen station if wanted.
+- Probe evidence: HEAD on GLASGOW_20240601_100000_01.fit.gz returned 200 (Content-Length 199,937). A one-byte https range GET returned 206. A partial-gunzip range read printed BITPIX=8, NAXIS1=3600, NAXIS2=200, BUNIT='digits', DATAMIN 0, DATAMAX 254, CDELT1=0.25, FRQFILE='FRQ4580.CFG'. The 2024-06-01 directory listing holds 4,980 .fit.gz files from more than 100 stations. Five other dates were checked for station and focus-code persistence.
+
+Proposed by the autocollect scout on 2026-10-05 (transcript `.data/pipeline/logs/scout_8bit/scout.20261005_160501.jsonl`).

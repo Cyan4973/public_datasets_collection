@@ -1,0 +1,84 @@
+manifest_version = 1
+dataset_id = "mpc_goes18_abi_cmi_c13_fulldisk_u16"
+name = "GOES-18 ABI CMI Band 13 Full-Disk Brightness-Temperature Codes UInt16"
+description = "Twelve complete GOES-18 (GOES-West) ABI L2 Cloud and Moisture Imagery band-13 (10.3 um clean longwave IR window) full-disk 2 km scans, one per month from October 2025 to September 2026, emitted as the native packed 12-bit uint16 brightness-temperature codes with the source off-disk fill preserved."
+homepage = "https://planetarycomputer.microsoft.com/dataset/goes-cmi"
+
+[license]
+name = "NOAA Open Data Dissemination (NODD) open data; U.S. Government work, no use restrictions"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://registry.opendata.aws/noaa-goes/"
+citation = "NOAA GOES-R Series Advanced Baseline Imager (ABI) Level 2 Cloud and Moisture Imagery (ABI-L2-MCMIPF), GOES-18, NOAA/NESDIS. Accessed through the NOAA Open Data Dissemination program partner Microsoft Planetary Computer (collection goes-cmi)."
+notes = "Grant: the NODD GOES license statement (https://registry.opendata.aws/noaa-goes/) reads 'NOAA data disseminated through NODD are open to the public and can be used as desired ... NOAA requests attribution for the use or dissemination of unaltered NOAA data. However, it is not permissible to state or imply endorsement by or affiliation with NOAA. If you modify NOAA data, you may not state or imply that it is original, unaltered NOAA data.' The NODD FAQ (https://www.noaa.gov/big-data-project-frequently-asked-questions) states 'The NOAA datasets made available through NODD are free for all users to access with no use restrictions and do not require any registration to access' and names Microsoft Azure as one of the three NODD cloud providers. The Planetary Computer collection lists NOAA as licensor; its STAC license field ('proprietary', linking a nesdisia.noaa.gov policy page titled 'Public Domain') is not relied on as the grant. Caveat: every GOES-R NetCDF carries the boilerplate global attribute license='Unclassified data. Access is restricted to approved users only.', which the COG copies into its GDAL metadata; it is a legacy ground-segment attribute contradicted by NOAA's own public NODD distribution of these exact products. Attribute NOAA; the emitted samples are decoded packed codes from Microsoft's COG export, not unaltered NOAA files."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Operational NOAA geostationary weather-satellite imagery (thermal infrared brightness temperature of Earth's disk at 2 km); no people, personal data, or sensitive content."
+usage_notes = "Public NOAA environmental data; preserve NOAA attribution and do not imply NOAA endorsement."
+
+[[origins]]
+id = "planetary_computer_goes_cmi"
+name = "Microsoft Planetary Computer goes-cmi STAC collection"
+url = "https://planetarycomputer.microsoft.com/api/stac/v1/collections/goes-cmi"
+type = "api"
+notes = "Planetary Computer hosts NOAA's GOES-R ABI L2 CMIP/MCMIP NetCDF products and Cloud-Optimized GeoTIFF exports of each MCMIP 2 km band (stactools-goes 0.1.8). Blob access requires an anonymous short-lived SAS from https://planetarycomputer.microsoft.com/api/sas/v1/token/goeseuwest/noaa-goes-cogs; no account, key, or login."
+
+[[origins]]
+id = "noaa_nodd_goes"
+name = "NOAA Open Data Dissemination: GOES-R series"
+url = "https://registry.opendata.aws/noaa-goes/"
+type = "data_portal"
+notes = "NODD statement of open terms for GOES-16/17/18/19 ABI products; Planetary Computer (Azure) is a NODD cloud partner."
+
+[[resources]]
+id = "goes18_mcmipf_c13_cogs"
+origin = "planetary_computer_goes_cmi"
+url = "https://goeseuwest.blob.core.windows.net/noaa-goes-cogs/goes-18/ABI-L2-MCMIPF/"
+type = "file"
+version = "Twelve exact STAC items (OR_ABI-L2-F-M6_G18_s20252882000208 ... OR_ABI-L2-F-M6_G18_s20262582000206), asset C13_2km; hrefs, Content-Length and Azure Content-MD5 pinned in download.sh"
+access = "Public anonymous HTTPS with a Planetary Computer SAS appended per run; resumable curl."
+size_bytes = 431073260
+sha256 = ""
+local_path = "downloads/mpc_goes18_abi_cmi_c13_fulldisk_u16/cogs/"
+notes = "Each COG is a classic little-endian TIFF: primary IFD 5424x5424, BitsPerSample 16, SampleFormat 1, Deflate, Predictor 1, 512x512 tiles (11x11 = 121), GDAL_NODATA 65535, plus four overview IFDs that are ignored. GDAL metadata carries the source NetCDF name (NC_GLOBAL#dataset_name), NETCDF_VARNAME CMI_C13, scale_factor 0.06145332, add_offset 89.620003, units K, valid_range {0,4095}, sensor_band_bit_depth 12. Per-file integrity is the Azure Content-MD5 (base64 MD5) plus exact size; sha256 of the decoded rasters is recorded in the sample index."
+
+[local_paths]
+downloads = "downloads/mpc_goes18_abi_cmi_c13_fulldisk_u16/"
+filtered = "filtered/mpc_goes18_abi_cmi_c13_fulldisk_u16/"
+index = "index/mpc_goes18_abi_cmi_c13_fulldisk_u16/"
+samples = "samples/mpc_goes18_abi_cmi_c13_fulldisk_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/mpc_goes18_abi_cmi_c13_fulldisk_u16/samples.jsonl"
+summary = "Fetch twelve pinned GOES-18 CMI_C13 full-disk COGs (one 20:00 UTC Mode-6 scan on the 15th of each month, 2025-10 .. 2026-09), validate size, Content-MD5 and TIFF/GDAL structure, inflate the 121 primary Deflate tiles, crop the right/bottom edge padding, and write each complete 5424x5424 grid as raw little-endian uint16."
+deterministic_notes = "discover.sh documents the STAC search (collections=goes-cmi, platform=GOES-18, goes:image-type=FULL DISK, datetime window 19:30-20:30 UTC on the 15th) used to resolve the pins on 2026-10-05. Scope is fixed: GOES-18 only, band 13 only, full disk only, 2 km MCMIP COG only. The window starts in October 2025 because the January-March 2025 COGs were written by stactools-goes 0.1.6 as SampleFormat 2 (int16, GDAL nodata -1) and April 2025 has no 20:00 scan; October 2025 - September 2026 gives twelve consecutive months with one identical encoding and the exact 20:00 slot. Every tile must inflate to exactly 524,288 bytes. verify.sh re-derives each raster with a separate decoder and byte-compares it with the sample."
+
+[[series]]
+id = "goes18_abi_cmi_c13_fulldisk_bt_code_u16"
+description = "GOES-18 ABI band-13 (10.3 um) full-disk top-of-atmosphere brightness temperature, native packed uint16 codes."
+semantic_meaning = "Per-pixel ABI L2 Cloud and Moisture Imagery band-13 top-of-atmosphere brightness temperature on the GOES-R fixed full-disk grid (2 km at nadir, GOES-West, projection longitude 137 W), stored as the NetCDF packed code: brightness_temperature_K = 89.620003 + 0.06145332 * code, code in 0..4095 (12-bit sensor depth); 65535 marks space/off-disk and other unavailable pixels."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "CMI_C13 is stored in NOAA's MCMIPF NetCDF as a packed 16-bit integer with _Unsigned=true, scale_factor/add_offset and _FillValue -1 (bit pattern 0xFFFF, i.e. 65535 unsigned); the Planetary Computer COG keeps those exact codes (GDAL_NODATA 65535, scale/offset in GDAL metadata). The recipe only removes TIFF tiling and Deflate; it does not apply scale/offset, reproject, resample, mask or reorder values. Scale, offset and units are recorded per sample in the index as metadata."
+source_resources = ["goes18_mcmipf_c13_cogs"]
+source_format = "cloud_optimized_geotiff_export_of_noaa_abi_l2_mcmipf_netcdf4"
+source_field = "CMI_C13"
+filtered_input_path = "filtered/mpc_goes18_abi_cmi_c13_fulldisk_u16/ingest_stats.json"
+filtering = "Keep every one of the 29,419,776 primary-grid pixels of each of the twelve pinned scans. Overview IFDs, the DQF_C13 quality layer, other bands, and the original NetCDF are not used."
+missing_value_policy = "Source-native fill 65535 is preserved in place, not stripped or remapped. Realized: 6,373,440 of 29,419,776 pixels (21.66%) are off the Earth disk (space corners) and are fill in every scan, with an identical pixel mask across months; on-disk pixels NOAA marked unavailable are also 65535 (only one such pixel in the whole output, in the 2026-07 scan). About 23.05 million valid codes per scan. build.sh and verify.sh both require every value to be <= 4095 or == 65535, a fill fraction within 0.15..0.35, fill at all four grid corners, a valid sub-satellite centre pixel, at least 1,000 distinct valid codes, and a median on-disk brightness temperature within 200..305 K. Any other code, size/MD5/structure mismatch, short tile, or degenerate grid is fatal."
+conversion = "Parse the primary IFD of each classic little-endian TIFF, zlib-inflate each of the 121 tiles (each must be exactly 512*512*2 bytes), copy tile rows into a 5424x5424 row-major grid (north row first, west column first), cropping the 304-pixel right/bottom edge tiles, and write the unchanged little-endian uint16 codes. One sample per full-disk scan."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 raster"
+sample_geometry = "5424x5424_goes_r_abi_fixed_grid_full_disk_2km"
+sample_rank = 2
+sample_axes = ["fixed_grid_y", "fixed_grid_x"]
+natural_record_kind = "complete_goes18_abi_mode6_full_disk_band13_scan"
+sample_count = 12
+total_size_bytes = 706074624
+output_path = "samples/mpc_goes18_abi_cmi_c13_fulldisk_u16/goes18_abi_cmi_c13_fulldisk_bt_code_u16/"

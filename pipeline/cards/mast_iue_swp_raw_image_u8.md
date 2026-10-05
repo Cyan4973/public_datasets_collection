@@ -1,0 +1,23 @@
+# IUE SWP Camera Raw Science Images (8-bit DN)
+
+- Candidate id: `mast_iue_swp_raw_image_u8`
+- Width: uint8
+- Quantity: Raw 8-bit detector data numbers from the International Ultraviolet Explorer Short-Wavelength Prime (SWP, about 1150-1980 Å) SEC-vidicon camera. Each 768×768 raw frame holds the dispersed UV spectrum, background and reseau marks as read out.
+- Source: https://archive.stsci.edu/missions-and-data/iue
+- Resources: https://archive.stsci.edu/missions/iue/data/swp/, https://archive.stsci.edu/missions/iue/data/swp/30000/, https://archive.stsci.edu/missions/iue/data/swp/20000/swp20001.raw.gz, https://archive.stsci.edu/publishing/data-use
+- License: Public domain (MAST/NASA open data)
+- License evidence: https://archive.stsci.edu/publishing/data-use
+- License quote: MAST Data Use Policy: "Most data hosted at MAST are in the public domain (see: open data), and therefore do not have restrictions on use." The only copyrighted collections named are the Digitized Sky Survey and the Guide Star Catalogs; IUE is not among them. The accepted nasa_tess_lightcurves_f32 recipe used the same MAST public-domain basis.
+- Natural record: One IUE raw image file (camera + image number, e.g. swp30001.raw.gz). It decompresses to exactly 597,384 bytes: a 7,560-byte EBCDIC IUESIPS/VICAR label (21 × 360-byte records = 105 × 72-character lines), then 768 lines × 768 samples of uint8 = 589,824 values.
+- Estimated samples: 300
+- Estimated primary values: 176,947,200
+- Estimated download bytes: 110,000,000
+- Estimated primary bytes: 176,947,200
+- Decode path: curl the .raw.gz, then use Python gzip to decompress. Require the total length to be 597,384 (also readable from the gzip ISIZE trailer via a suffix range GET). Decode the first 7,560 bytes as cp037 (EBCDIC) and check that label line 1 contains '768 768'; the label can also be parsed for camera, image number, dispersion and exposure as auxiliary metadata. Emit bytes 7560 to 597383 as 768×768 uint8 in row order.
+- Novelty kind: new_source
+- Novelty evidence: novelty.py --url archive.stsci.edu/missions/iue/... --terms iue 'international ultraviolet' ultraviolet vidicon matched only by host (nasa_tess_lightcurves_f32, a different mission at f32). It also matched nasa_fits_sample_image_planes, which carries one IUE extracted-spectrum FITS sample (IUElwp25637mxlo.fits) at 32/64 bits from fits.gsfc.nasa.gov: a different product (an extracted spectrum, not raw camera frames) and a different width. There are no IUE raw images and no UV-astronomy detector frames locally or downstream at 8 bits.
+- Homogeneity: Restrict to one camera (SWP) and one dispersion mode. Select low-dispersion-only images from directory listings where swpNNNNN.mxlo.gz exists and swpNNNNN.mxhi.gz does not (the swp/30000 directory has 585 of 999 such images, 997 with raw files). This keeps the image geometry (a single low-dispersion spectral trace) and the camera's DN response uniform. Spread the selection across several thousand-image directories, i.e. across mission epochs and targets, for diversity. Do not mix in LWP/LWR or high-dispersion echelle frames.
+- Risks: (1) The raw files are legacy EBCDIC IUESIPS/VICAR, not FITS. The label length was inferred from a constant decompressed size of 597,384 across SWP, LWP and LWR files plus a 105-line label scan; the builder should validate against the IUE documentation (archive.stsci.edu/missions/iue/manuals/) and reject any file whose size differs. (2) IUE was a joint NASA/ESA/UK mission, and some frames were acquired at ESA VILSPA. If a judge questions ESA-acquired frames, the label station field (e.g. 'IUESOC' for GSFC) allows filtering to GSFC-acquired images. (3) Top and bottom rows are near zero, outside the circular camera target; this is genuine content, not padding. (4) Each thousand-image directory listing is about 830 KB; keep the number of listings bounded.
+- Probe evidence: The swp/ directory lists 58 thousand-image subdirectories (00000-58000). A HEAD on swp20001.raw.gz returned 200 with Accept-Ranges bytes and Content-Length 342,274. Suffix range GETs of the gzip ISIZE gave exactly 597,384 for swp20001, swp20000, lwp10001 and lwr05001. A partial gunzip of the first 24 KB, decoded as cp037, showed the label: '1 1 768 768 ...', 'SWP 20001, NGC 3783, 30 MINUTE EXPOSURE, LRG APER, LOW DISP', 'OBSERVER: TED GULL ... 1983/136'. Pixel bytes after offset 7560 show near-zero edge rows and about 25-35 DN background in interior rows, with a 768-byte row stride.
+
+Proposed by the autocollect scout on 2026-10-05 (transcript `.data/pipeline/logs/scout_8bit/scout.20261005_160501.jsonl`).

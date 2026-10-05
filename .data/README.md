@@ -15,7 +15,7 @@ Because `.data/` is gitignored, `git status` / `git log` give **no signal** that
 
 1. **Accepted corpus:** `datasets/<dataset_id>/manifest.toml`
    - Only directories under `datasets/` are accepted recipes.
-   - Each must have passed user-run `download.sh` + local `build.sh` + `verify.sh`.
+   - Each must have passed a run of the current `download.sh` (by the user or the autocollect driver) + local `build.sh` + `verify.sh`.
 
 2. **Draft area:** `staging/<dataset_id>/`
    - By design git-ignored except `staging/README.md`.
@@ -55,6 +55,7 @@ Because `.data/` is gitignored, `git status` / `git log` give **no signal** that
 - `index/` — `samples.jsonl` per dataset: `dataset_id, series_id, sample_path, numeric_kind, bit_width, value_count, sample_size_bytes`
 - `logs/` — `download.latest.log`, `build.latest.log`, `verify.latest.log`
 - `batches/` — temporary batch launch summaries (outside repo by convention)
+- `pipeline/` — autocollect driver runtime state: per-candidate state, agent transcripts, download/build logs, costs, archived drafts (the committed ledger is `pipeline/` at the repo root)
 
 All can be safely deleted and rebuilt via `download.sh` + `build.sh`. Nothing under `.data/` except this README is committed.
 

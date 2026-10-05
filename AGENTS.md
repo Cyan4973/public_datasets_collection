@@ -6,7 +6,8 @@ Do not ask for per-edit approval for normal file creation, modification,
 deletion, renaming, or formatting within this repository.
 
 Require explicit user approval only when:
-- downloading or fetching external dataset resources
+- downloading or fetching external dataset resources (except the autocollect
+  pipeline, below)
 - editing files outside this repository
 - running destructive git or history operations
 - deleting non-generated user data under `.data/`
@@ -16,6 +17,19 @@ When working autonomously:
 - briefly state what you are changing and keep moving
 - never download datasets yourself; write download scripts for the user to run
 - process dataset contents only after the user confirms local files are present
+
+Automated collection (autocollect):
+- The user authorized `tools/autocollect/driver.py` (2026-10-05) to run staging
+  `download.sh` scripts itself, within its guardrails: public anonymous
+  resources only, a per-candidate byte cap, a disk reserve and budget, and a
+  time limit. See `tools/autocollect/README.md`.
+- Agents launched by the driver follow `.claude/agents/autocollect-*.md`. They
+  may make small metadata probes (listings, HEAD or range requests, license
+  pages, small API pages). Only the builder edits files, and only its own
+  `staging/<id>/`. Only the driver runs full downloads, records outcomes, and
+  commits; it commits locally and never pushes.
+- Interactive sessions keep the rules above: ask before downloading and leave
+  `download.sh` runs to the user unless told otherwise.
 
 Authoritative vs ephemeral layers (to avoid the `.data/samples/` trap):
 - `.data/` is ephemeral scratch (downloads, extracted, filtered, samples, index, logs, batches). A directory existing under `.data/samples/` does **NOT** mean accepted or usable. It mixes accepted output, staging experiments, removed-recipe remnants, and orphan pulls with no status metadata, and is gitignored so `git status` gives no provenance.

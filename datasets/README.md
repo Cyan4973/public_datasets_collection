@@ -2,7 +2,7 @@
 
 Each subdirectory under `datasets/` is an accepted recipe only.
 
-Use `staging/` for drafts. Move a recipe into `datasets/` only after the user has run the current `download.sh` and the recipe has then passed local `build.sh` and `verify.sh`.
+Use `staging/` for drafts. Move a recipe into `datasets/` only after the current `download.sh` has been run (by the user or the autocollect driver) and the recipe has then passed local `build.sh` and `verify.sh`.
 
 Core acceptance rules:
 - one recipe, one coherent material

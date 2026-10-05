@@ -33,7 +33,7 @@ This repository stores reproducible recipes, not dataset payloads. Accepted reci
    If a recipe claims `50` sites, `20` years, or some other coverage, the accepted output must actually realize that scope or be explicitly narrowed before acceptance.
 
 10. Accepted recipes must be public, permissively licensed, safe, and locally reproducible.
-   The user must have run the current `download.sh`, and the current `build.sh` and `verify.sh` must succeed against local files.
+   The current `download.sh` must have been run, by the user or by the autocollect driver (`tools/autocollect/`), and the current `build.sh` and `verify.sh` must succeed against local files.
 
 ## Minimal Mechanics
 
@@ -64,6 +64,7 @@ This repository stores reproducible recipes, not dataset payloads. Accepted reci
 - Keep them outside the repository, typically under `/tmp/`.
 - They must call the per-dataset `download.sh` scripts and must not replace per-dataset acceptance decisions.
 - Batch runs should emit a local summary under `.data/batches/<batch_id>/`.
+- The autocollect driver (`tools/autocollect/driver.py`) is durable in-repo tooling rather than a temporary launcher: it runs per-dataset `download.sh` scripts under its own guardrails and still applies one independent acceptance decision per dataset.
 
 ## Evaluation-only material
 

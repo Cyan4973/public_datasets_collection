@@ -8,11 +8,11 @@ Use it for:
 - first-pass recipe authoring
 - source-path experiments
 - schema or parser fixes
-- recipes waiting on the user-run download step
+- recipes waiting on the download step
 - recipes that have downloaded but not yet passed `build.sh` and `verify.sh`
 
 Do not move a recipe from `staging/` into `datasets/` until all of the following are true:
-- the user has run the current `download.sh`
+- the current `download.sh` has been run (by the user or the autocollect driver)
 - `build.sh` succeeds from local files only
 - `verify.sh` succeeds
 

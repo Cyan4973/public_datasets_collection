@@ -1,0 +1,84 @@
+manifest_version = 1
+dataset_id = "mpc_landsat_c2_l1_mss_dn_u8"
+name = "Landsat-5 MSS Collection 2 Level-1 (L1TP Tier 1) Multispectral Band DN UInt8"
+description = "Complete Landsat-5 Multispectral Scanner (MSS) Collection 2 Level-1 scenes, precision- and terrain-corrected (L1TP, Tier 1), 1984-1991: the four reflective bands B1 green, B2 red, B3 nir08 and B4 nir09 of each scene as the USGS calibrated, quantized top-of-atmosphere radiance digital numbers (uint8, 0 = fill outside the rotated footprint) on a 60 m north-up UTM grid, one sample per scene band: 13 scenes from 13 WRS-2 path/rows on five continents and 13 biomes (hyper-arid Sahara to arctic tundra), 52 samples, 746,545,896 bytes, zero fill 33.6% of bytes. This is orthorectified Earth-observation multispectral imagery, not raw camera frames."
+homepage = "https://planetarycomputer.microsoft.com/dataset/landsat-c2-l1"
+
+[license]
+name = "Public domain (USGS-distributed Landsat imagery; USGS data policy names Landsat imagery as public domain)"
+spdx = "LicenseRef-Public-Domain"
+url = "https://www.usgs.gov/emergency-operations-portal/data-policy"
+citation = "Landsat-1-5 MSS Collection 2 Level-1 courtesy of the U.S. Geological Survey, https://doi.org/10.5066/P9AF14YV. Accessed through Microsoft Planetary Computer (collection landsat-c2-l1)."
+notes = "Grants relied on, both issued by the USGS for Landsat data. (1) The USGS data policy that the Planetary Computer collection links as its license under the title 'Public Domain' (MPC link https://www.usgs.gov/core-science-systems/hdds/data-policy, which redirects to https://www.usgs.gov/emergency-operations-portal/data-policy). Its 'Public Imagery' section states: 'Most of the satellite images supplied by U.S. Federal civil agencies are public domain (such as Landsat or ASTER). ... All public domain imagery may be used, shared, transferred, or redistributed without restriction. However, there should be acknowledgement of the image source within any derived maps, products, or publications.' (2) The USGS-managed AWS Open Data Registry entry 'USGS Landsat' (https://registry.opendata.aws/usgs-landsat/, YAML source in github.com/awslabs/open-data-registry), field License: 'There are no restrictions on Landsat data downloaded from the USGS; it can be used or redistributed as desired. We do request that you include a statement of the data source when citing, copying, or reprinting USGS Landsat data or images.' The MPC files are USGS Collection 2 Level-1 products (each MTL.json carries ORIGIN = 'Image courtesy of the U.S. Geological Survey'). download.sh captures the MPC collection JSON (required: rel=license 'Public Domain' usgs.gov data-policy link, NASA and USGS as licensors, cite-as DOI 10.5066/P9AF14YV, green/red/nir08/nir09 uint8 nodata 0, qa bands uint16) and at least one of the two grant documents (usgs.gov intermittently times out or refuses curl, so the registry entry is the reachable alternative), phrase-checks them with scripts/rights_check.py before any raster transfer, and pins requested/effective URL, HTTP code, size and sha256 in downloads/<id>/rights_receipts.tsv; build.sh refuses to run without ok receipts and verify.sh re-runs the checks offline. Authoring-time capture of 2026-10-06: MPC collection JSON 10,928 bytes, sha256 ff11d3a187eb...cc777; USGS policy page (HTTP 200 after redirect) 89,600 bytes, sha256 86f3f2d17997...0c6, both phrases matched; registry page 16,826 bytes, sha256 51e78769e7bf...abd49, phrase matched with 'Managed By United States Geological Survey'. The STAC 'license' field reads 'proprietary' and only points to the USGS page; it is not claimed as a grant by itself. Attribution: 'Landsat imagery courtesy of the U.S. Geological Survey'."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official USGS Landsat Collection 2 Level-1 products hosted by Microsoft Planetary Computer (Azure open data); 60 m multispectral imagery of deserts, savanna, forest, cropland, wetland and tundra from 1984-1991; no people or personal data are resolvable at this resolution."
+usage_notes = "Public-domain Earth-observation imagery; keep the USGS source acknowledgement."
+
+[[origins]]
+id = "planetary_computer_landsat_c2_l1"
+name = "Microsoft Planetary Computer landsat-c2-l1 STAC collection"
+url = "https://planetarycomputer.microsoft.com/api/stac/v1/collections/landsat-c2-l1"
+type = "api"
+notes = "STAC API (POST /api/stac/v1/search) over every Landsat 1-5 MSS Collection 2 Level-1 scene (1972-07-25..2013-01-07) with per-band uint8 Cloud-Optimized GeoTIFF assets (green/red/nir08/nir09), uint16 QA assets, and MTL metadata. Blob access requires an anonymous short-lived read-only SAS from https://planetarycomputer.microsoft.com/api/sas/v1/token/landsateuwest/landsat-c2; no account, key, or login."
+
+[[origins]]
+id = "usgs_landsat_c2_l1_mss"
+name = "USGS EROS Landsat 1-5 MSS Collection 2 Level-1"
+url = "https://doi.org/10.5066/P9AF14YV"
+type = "data_portal"
+notes = "Producer and archive of record (USGS EROS, LPGS processing). Defines the L1TP processing level, Tier 1 geometric criteria, and the DN-to-radiance rescaling recorded in each MTL."
+
+[[resources]]
+id = "landsat5_mss_l1tp_band_cogs"
+origin = "planetary_computer_landsat_c2_l1"
+url = "https://landsateuwest.blob.core.windows.net/landsat-c2/level-1/standard/mss/"
+type = "file"
+version = "13 exact Landsat-5 MSS C2 L1TP T1 products (LM05_L1TP_015042_19860427_20200831_02_T1 ... LM05_L1TP_230077_19840930_20200902_02_T1; USGS processing dates 2020-08-27..2021-09-19 are embedded in the product ids), assets green/red/nir08/nir09 = B1..B4 (52 COGs) plus mtl.json (13 files); product id, href, Content-Length, Azure Content-MD5 and IFD-0 shape pinned per file in sources.tsv (resolved by discover.sh on 2026-10-06)."
+access = "Public anonymous HTTPS with a Planetary Computer SAS appended per run; resumable curl."
+size_bytes = 411160598
+sha256 = ""
+local_path = "downloads/mpc_landsat_c2_l1_mss_dn_u8/scenes/"
+notes = "Each band COG is a classic little-endian TIFF whose IFD 0 is a single-sample uint8 raster (BitsPerSample 8, SampleFormat 1, Photometric 1), Deflate-compressed in 256 x 256 tiles, Predictor 1, GDAL_NODATA '0', followed by 6 overview IFDs (ignored). IFD-0 size varies by scene (3381-4262 rows x 3761-4304 columns) and equals STAC proj:shape and MTL REFLECTIVE_LINES/SAMPLES. Per-file integrity: exact size and Azure Content-MD5 (published for all 65 files, pinned), full tile-inflate check for COGs, semantic MTL check (Landsat-5, MSS, L1TP, T1, collection 02, path/row, date, shape, UINT8, QCAL 1..255) at download time; sha256 receipts in downloads/<id>/download_receipts.tsv and the sample index. The uint16 QA_PIXEL / QA_RADSAT assets are not downloaded."
+
+[local_paths]
+downloads = "downloads/mpc_landsat_c2_l1_mss_dn_u8/"
+filtered = "filtered/mpc_landsat_c2_l1_mss_dn_u8/"
+index = "index/mpc_landsat_c2_l1_mss_dn_u8/"
+samples = "samples/mpc_landsat_c2_l1_mss_dn_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/mpc_landsat_c2_l1_mss_dn_u8/samples.jsonl"
+summary = "Download the 13 pinned Landsat-5 MSS L1TP T1 scenes (four band COGs + MTL.json each; one scene per fixed WRS-2 path/row, chosen by a deterministic cloud/sun rule via the Planetary Computer STAC API), validate size/MD5/TIFF structure/MTL semantics, inflate the Deflate tiles, crop edge tiles to the per-scene IFD-0 size, and write each band raster as raw uint8 in source row-major order with the zero fill in place."
+deterministic_notes = "Scope was resolved by discover.sh on 2026-10-06 and pinned in sources.tsv: 13 fixed WRS-2 path/rows (186/041, 176/052, 170/042, 162/029, 104/073, 230/077, 225/080, 030/037, 021/030, 015/042, 065/011, 171/012, 039/017); per path/row the STAC items of collection landsat-c2-l1 with platform landsat-5, instruments ['mss'], landsat:correction L1TP, landsat:collection_category T1, collection 02, WRS-2, datetime 1984-03-01..1993-12-31, 0 <= eo:cloud_cover < 5, view:sun_elevation > 30, and all of green/red/nir08/nir09/mtl.json present; the lowest cloud cover, then highest sun elevation, then earliest datetime, then id is taken. Landsat 1-4 MSS, L1GS/L1GT products, Tier 2 and the 2012-2013 MSS re-activation are excluded by construction. download.sh requires exactly 13 scenes, 65 files and 411,160,598 bytes. build.sh and verify.sh share the degeneracy bounds; verify.sh re-derives every sample with a separate decoder, byte-compares it, and recomputes all statistics with different code paths."
+
+[[series]]
+id = "landsat5_mss_l1tp_dn_u8"
+description = "Landsat-5 MSS Collection 2 Level-1 L1TP band digital numbers (B1 green, B2 red, B3 nir08, B4 nir09), one complete scene band per sample, uint8."
+semantic_meaning = "Per-pixel top-of-atmosphere spectral radiance of one MSS reflective band as the USGS Collection 2 Level-1 calibrated, quantized 8-bit digital number (QCAL 1..255), after systematic radiometric calibration, precision geometric correction with ground control and terrain correction with a DEM (L1TP), cubic-convolution resampled to a 60 m north-up UTM grid. Bands: B1 green 0.5-0.6 um, B2 red 0.6-0.7 um, B3 near-infrared 0.7-0.8 um, B4 near-infrared 0.8-1.1 um. Radiance = RADIANCE_MULT_BAND_n x DN + RADIANCE_ADD_BAND_n from the scene MTL (recorded per sample in the index, not applied). 0 is fill outside the rotated scene footprint inside the north-up bounding box. Orthorectified Earth-observation multispectral imagery, not raw instrument frames."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The COG stores the Collection 2 Level-1 MSS DN as uint8; the recipe only removes TIFF tiling and Deflate. No scaling, radiance or reflectance conversion, reprojection, resampling, masking, or band combination is applied."
+source_resources = ["landsat5_mss_l1tp_band_cogs"]
+source_format = "planetary_computer_cloud_optimized_geotiff_landsat_c2_l1_mss"
+source_field = "MSS band DN, assets green/red/nir08/nir09 (Landsat-5 bands B1..B4)"
+filtered_input_path = "filtered/mpc_landsat_c2_l1_mss_dn_u8/ingest_stats.json"
+filtering = "Keep every pixel of IFD 0 of each pinned scene's four band COGs. Overview IFDs, the uint16 QA_PIXEL / QA_RADSAT bands, and MTL text/XML variants are not used (MTL.json only supplies validation and documentation fields)."
+missing_value_policy = "Source-native fill 0 (outside the rotated scene footprint, GDAL_NODATA '0', QUANTIZE_CAL_MIN = 1) is preserved in place, never stripped or remapped; saturated pixels (DN 255) are kept and counted. build.sh and verify.sh both require per band: at least 1,000,000 valid pixels, fill fraction within 0.05..0.70, at least 16 distinct valid DN with max > min, valid DN within the MTL QCAL range, saturated (DN 255) pixels <= 60% of valid pixels, and mean absolute horizontal neighbour difference / std <= 0.6; per scene: the four band fill masks agree on >= 99% of pixels and Pearson correlations corr(B1,B2) and corr(B3,B4) over jointly valid pixels >= 0.5 (decode-correctness guards). Any size/MD5/structure/MTL mismatch, short tile, or degenerate band is fatal. Realized (build of 2026-10-06): fill fraction 0.261..0.449 per band (0.336 overall); 83..255 distinct valid DN per band; coherence 0.046..0.288; mask agreement >= 0.9986; corr(B1,B2) >= 0.796, corr(B3,B4) >= 0.833; saturation is below 5% of valid pixels everywhere except Fezzan B2/B3 (42.8% / 40.0%, bright sand sea, MTL saturation flag Y)."
+conversion = "Parse IFD 0 of each classic little-endian TIFF, zlib-inflate every 256 x 256 tile (each must yield exactly 65,536 bytes; GDAL sparse tiles read as 0; Predictor 2 would be undone mod 256 but all pinned files use Predictor 1), copy tile rows into a height x width row-major grid (north row first, west column first), crop right/bottom edge-tile padding to the per-scene IFD-0 width and height, and write the bytes unchanged as uint8. One sample per scene band; per-sample height/width are recorded in the index (sample_shape)."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 raster, row-major"
+sample_geometry = "landsat_mss_l1tp_scene_band_60m_utm_north_up_height_x_width"
+sample_rank = 2
+sample_axes = ["row_north_to_south", "column_west_to_east"]
+natural_record_kind = "landsat_c2_l1_mss_scene_band_raster"
+sample_count = 52
+total_size_bytes = 746545896
+output_path = "samples/mpc_landsat_c2_l1_mss_dn_u8/landsat5_mss_l1tp_dn_u8/"

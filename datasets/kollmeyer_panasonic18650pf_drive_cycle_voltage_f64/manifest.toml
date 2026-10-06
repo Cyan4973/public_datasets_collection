@@ -1,0 +1,120 @@
+manifest_version = 1
+dataset_id = "kollmeyer_panasonic18650pf_drive_cycle_voltage_f64"
+name = "Panasonic NCR18650PF EV Drive-Cycle Cell Terminal Voltage Float64 (Kollmeyer, UW-Madison)"
+description = "Measured terminal voltage of one Panasonic NCR18650PF Li-ion cell driven with scaled electric-vehicle drive-cycle power profiles at five ambient temperatures plus two temperature-rise campaigns, logged every 0.1 s and stored natively as MATLAB double; one float64 sample per split single-profile drive-cycle test file."
+homepage = "https://data.mendeley.com/datasets/wykht8y7tg/1"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Kollmeyer, Phillip (2018), \"Panasonic 18650PF Li-ion Battery Data\", Mendeley Data, V1, doi:10.17632/wykht8y7tg.1. Tests performed at the University of Wisconsin-Madison."
+notes = "Evidence chain (captured 2026-10-05): (1) the pinned BSEBench Tier-1 mirror card (README.md at revision 0f3c96601aa8dcc25f697ef32f3ac918d24433b9, sha256-pinned in download.sh) states 'Kollmeyer, P. (2018). \"Panasonic 18650PF Li-ion Battery Data and Experimental Procedures.\" Mendeley Data, v1. DOI: 10.17632/wykht8y7tg.1 ... Upstream URL: https://data.mendeley.com/datasets/wykht8y7tg/1 ... License: CC-BY-4.0'; (2) the BSEBench Tier-2 sidecars for the same dataset repeat license CC-BY-4.0 with provenance 'Kollmeyer (Mendeley)'; (3) the upstream readme shipped inside the mirror says 'If this data is utilized for any purpose, it should be appropriately referenced.' The upstream Mendeley landing page and the DataCite DOI record were NOT reachable from the collection network (proxy 403), so the CC BY 4.0 grant is taken from the mirror's statement of the upstream license rather than read directly from Mendeley. Attribution: cite the DOI above and credit Dr. Phillip Kollmeyer, University of Wisconsin-Madison."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Laboratory battery-tester logs of a single commercial Li-ion cell in a thermal chamber. Fetched from the BSEBench Hugging Face Tier-1 raw mirror, which re-hosts the upstream Mendeley files unmodified under the upstream folder layout; every file is pinned by git revision, size and LFS SHA-256. The only personal datum in the upstream readme is the experimenter's contact address, which is not emitted."
+usage_notes = "Primary payload is the Voltage column only. Current, Power, Ah, Wh, temperatures, Time and TimeStamp are not emitted; Time is used only to validate the 0.1 s logging cadence."
+
+[[origins]]
+id = "bsebench_hf_mirror"
+name = "BSEBench Tier-1 raw mirror: bsebench-org/panasonic-kollmeyer-2018-raw"
+url = "https://huggingface.co/datasets/bsebench-org/panasonic-kollmeyer-2018-raw"
+type = "repository"
+version = "git revision 0f3c96601aa8dcc25f697ef32f3ac918d24433b9 (lastModified 2026-05-12)"
+notes = "Anonymous public Hugging Face dataset repository; 293 tree entries preserving the upstream 'Panasonic 18650PF Data/' hierarchy. Download host for all resources."
+
+[[origins]]
+id = "mendeley_upstream"
+name = "Mendeley Data: Panasonic 18650PF Li-ion Battery Data (Kollmeyer 2018), V1"
+url = "https://data.mendeley.com/datasets/wykht8y7tg/1"
+type = "data_portal"
+version = "V1, doi:10.17632/wykht8y7tg.1"
+notes = "Canonical publisher of record. Not reachable from the collection network; nothing is fetched from it."
+
+[[resources]]
+id = "drive_cycle_mat_files"
+origin = "bsebench_hf_mirror"
+url = "https://huggingface.co/datasets/bsebench-org/panasonic-kollmeyer-2018-raw/resolve/0f3c96601aa8dcc25f697ef32f3ac918d24433b9/Panasonic%2018650PF%20Data/"
+type = "matlab_v5_file_selection"
+version = "git revision 0f3c96601aa8dcc25f697ef32f3ac918d24433b9"
+access = "55 exact per-file resolve URLs (spaces percent-encoded) listed in selection.tsv, each pinned by size and LFS SHA-256; fetched with resumable curl."
+size_bytes = 113217590
+local_path = "downloads/kollmeyer_panasonic18650pf_drive_cycle_voltage_f64/files/"
+notes = "All split single-profile drive-cycle files from the five '<T>degC/Drive cycles' folders (46) plus the split cycles of '-20degC Trise' (Cycle_1..4, US06) and '10degC Trise' (Cycle_1..4). excluded.tsv lists the 28 other .mat files in those folders and why they are excluded."
+
+[[resources]]
+id = "mirror_card"
+origin = "bsebench_hf_mirror"
+url = "https://huggingface.co/datasets/bsebench-org/panasonic-kollmeyer-2018-raw/resolve/0f3c96601aa8dcc25f697ef32f3ac918d24433b9/README.md"
+type = "file"
+version = "git revision 0f3c96601aa8dcc25f697ef32f3ac918d24433b9"
+access = "Direct public download."
+size_bytes = 2190
+sha256 = "f33e6b30bfb127851de3165c797d7c5f8625e9f4f60bcf45bf0b55f91d4050c0"
+local_path = "downloads/kollmeyer_panasonic18650pf_drive_cycle_voltage_f64/mirror_README.md"
+notes = "License and provenance evidence: names the upstream DOI, URL and CC-BY-4.0."
+
+[[resources]]
+id = "upstream_readme"
+origin = "bsebench_hf_mirror"
+url = "https://huggingface.co/datasets/bsebench-org/panasonic-kollmeyer-2018-raw/resolve/0f3c96601aa8dcc25f697ef32f3ac918d24433b9/Panasonic%2018650PF%20Data/Readme%20file%20-%20desc%20of%20tests%20performed.txt"
+type = "file"
+version = "git revision 0f3c96601aa8dcc25f697ef32f3ac918d24433b9"
+access = "Direct public download."
+size_bytes = 6426
+sha256 = "ed236fbbc93b3ac6fba2d0a98c55d5572fbe31b1053dc1ce46c8e268a1c23aab"
+local_path = "downloads/kollmeyer_panasonic18650pf_drive_cycle_voltage_f64/upstream_readme_desc_of_tests.txt"
+notes = "Upstream test description: column semantics, 0.1 s drive-cycle time step, duplicate contiguous-log caveat, cell aging, attribution request."
+
+[[resources]]
+id = "mirror_tree_listing"
+origin = "bsebench_hf_mirror"
+url = "https://huggingface.co/api/datasets/bsebench-org/panasonic-kollmeyer-2018-raw/tree/0f3c96601aa8dcc25f697ef32f3ac918d24433b9?recursive=true"
+type = "api_query_result"
+version = "git revision 0f3c96601aa8dcc25f697ef32f3ac918d24433b9"
+access = "Public Hugging Face Hub API, no token."
+size_bytes = 60372
+local_path = "downloads/kollmeyer_panasonic18650pf_drive_cycle_voltage_f64/hf_tree_0f3c96601aa8dcc25f697ef32f3ac918d24433b9.json"
+notes = "Not hash-pinned (API serialization may change); semantically checked: every selected path appears with the pinned size and LFS oid, and every .mat in the covered folders is either selected or listed in excluded.tsv."
+
+[local_paths]
+downloads = "downloads/kollmeyer_panasonic18650pf_drive_cycle_voltage_f64/"
+filtered = "filtered/kollmeyer_panasonic18650pf_drive_cycle_voltage_f64/"
+index = "index/kollmeyer_panasonic18650pf_drive_cycle_voltage_f64/"
+samples = "samples/kollmeyer_panasonic18650pf_drive_cycle_voltage_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/kollmeyer_panasonic18650pf_drive_cycle_voltage_f64/samples.jsonl"
+summary = "Fetch 55 pinned split drive-cycle MAT v5 files from a revision-pinned mirror, decode the zlib-compressed struct 'meas' with a pure-stdlib parser, validate the 0.1 s Time cadence and voltage window, and emit each file's Voltage column verbatim as one little-endian float64 sample."
+deterministic_notes = "Mirror revision, per-file sizes and LFS SHA-256 (selection.tsv), evidence-file hashes and the explicit exclusion list (excluded.tsv) are pinned. The MAT parser is self-tested on synthetic files (packed small elements, struct field names, cell TimeStamp, uint8-stored double, multiple top-level variables, malformed inputs) before every download and build. Samples are ordered by test start (selection.tsv seq). verify.sh re-decodes every source, compares sample bytes, re-derives each index row and the summary, recomputes min/max from the stored float64 words, rejects constant or duplicate samples, and checks manifest sample_count/total_size_bytes against the realized output."
+
+[[series]]
+id = "cell_terminal_voltage_f64"
+description = "Cell terminal voltage (V) of one Panasonic NCR18650PF cell under one scaled EV drive-cycle power profile per sample, 0.1 s logging step."
+semantic_meaning = "Measured cell terminal voltage in volts (sense leads welded to the cell terminals), logged by a Digatron Firing Circuits Universal Battery Tester while the cell follows a drive-cycle power profile computed for an electric Ford F150 (35 kWh pack) scaled to one 18650 cell. Profiles: US06, HWFET (25 degC split in two halves HWFTa/HWFTb), UDDS, LA92, Neural Network (NN), and Cycles 1-4 (random mixes of those). Ambient: 25, 10, 0, -10, -20 degC chamber setpoints, plus temperature-rise runs starting at -20 degC and 10 degC."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The MAT files declare Voltage as an mxDOUBLE N x 1 array stored as little-endian miDOUBLE; the payload is copied verbatim, so there is no widening or numeric conversion. The tester exported values rounded to 5 decimal places (10 uV), and the measured levels sit on a sparse ADC lattice (consecutive distinct levels mostly 0.14-0.64 mV apart, a few thousand distinct values per file), so the float64 words carry far fewer significant digits than float64 can hold. They are still the source's own stored doubles, not float32-representable values."
+source_resources = ["drive_cycle_mat_files", "mirror_card", "upstream_readme", "mirror_tree_listing"]
+source_format = "zlib-compressed MATLAB v5 MAT-file (miCOMPRESSED) holding a 1x1 struct 'meas' of N x 1 columns"
+source_field = "meas.Voltage"
+filtered_input_path = "filtered/kollmeyer_panasonic18650pf_drive_cycle_voltage_f64/ingest_stats.json"
+filtering = "Keep the 55 split single-profile drive-cycle files listed in selection.tsv: all split files in the five '<T>degC/Drive cycles' folders (46), Cycle_1..4 and US06 from '-20degC Trise', and Cycle_1..4 from '10degC Trise'. Excluded by explicit list (excluded.tsv, 28 files): the contiguous multi-profile logs (*_US06_HWFET_UDDS_LA92*, *_HWFET_UDDS_LA92_NN*, 0degC_LA92_NN, *trise_HWFET_UDDS_LA92_NN*), which mix lower-rate charge/pause logging into one long file and, outside the Trise folders, duplicate the split files, plus the 39xx PreChg/Pause/Charge segments. Never fetched: the 'Trise with pause(s)' folders (*Cycle_1to4_w_pauses*), HPPC pulse tests, EIS CSVs, 'Charges and Pauses' folders and the C/20 and 1C capacity tests. Every row of each kept file's Voltage column is emitted; Current, Power, Ah, Wh, temperatures, Time and TimeStamp are not."
+missing_value_policy = "No missing values are expected or tolerated: any NaN or infinite Voltage, any Voltage outside 2.0-4.4 V (observed range 2.28588-4.32296 V; the 4 values above 4.25 V are brief regen pulses near full charge in 10degC_LA92, 10degC_Cycle_1 and 10degC_Cycle_2, a physically real overshoot above the 4.2 V charge limit), a Time column that is non-finite, decreasing, of a different length, whose median step is outside 0.095-0.105 s or whose share of ~0.1 s steps is below 90%, or fewer than 1,000 rows or 500 distinct values in a file is fatal in download preflight, build and verify alike. No rows are dropped, filled or resampled. Some split files begin with a short pre-cycle rest logged at a 60 s step and every file has occasional ~2 s logger gaps; those rows are kept as recorded and counted per sample in the index (off_nominal_step_count, long_steps_over_10s)."
+conversion = "Parse the 128-byte MAT v5 header (little-endian 'IM', version 0x0100), inflate each top-level miCOMPRESSED element, walk the miMATRIX struct 'meas' (field-name length, field names, one miMATRIX per field; the cell-array TimeStamp field is skipped), take Voltage as mxDOUBLE/miDOUBLE N x 1, and write its payload bytes unchanged as one little-endian IEEE-754 float64 array per source file in logging order. Sample file name <seq>_<sample_id>.bin, seq = chronological test-start order from selection.tsv."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian IEEE-754 float64 array"
+sample_geometry = "time_series"
+sample_rank = 1
+sample_axes = ["time_step"]
+natural_record_kind = "split_single_profile_drive_cycle_test_file"
+sample_count = 55
+total_size_bytes = 35623936
+output_path = "samples/kollmeyer_panasonic18650pf_drive_cycle_voltage_f64/cell_terminal_voltage_f64/"

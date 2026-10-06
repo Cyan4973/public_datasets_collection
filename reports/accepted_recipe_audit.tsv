@@ -178,6 +178,7 @@ citibike_2024_01_station_ids_u16	ok	3776170	7552340	16	180600	361200	0	0	0	1	non
 nasa_naif_de440s_spk_coefficients_f64	ok	3863400	30907200	12	159262.5	1274100	0	0	0	1	none	none
 beijing_air_quality_uci	ok	4219435	33755480	132	32141.5	257132	1534340	12274720	48	1	none	none
 wwpdb_structure_factors_f32	ok	4295467	17181868	9	254234	1016936	0	0	0	1	none	none
+kollmeyer_panasonic18650pf_drive_cycle_voltage_f64	ok	4452992	35623936	55	75811	606488	0	0	0	1	none	none
 noaa_cors_rinex_observations_f64	ok	4574236	36593888	115	32648	261184	0	0	0	1	none	none
 ncbi_gene_human	ok	4794554	19178216	4	1198638.5	4794554	0	0	0	1	none	none
 landsat_scene_cloud_cover_f64	ok	5000000	40000000	1	5000000	40000000	0	0	0	1	none	none

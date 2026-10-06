@@ -1,0 +1,91 @@
+manifest_version = 1
+dataset_id = "wiod2016_world_input_output_tables_f64"
+name = "WIOD 2016 Release World Input-Output Tables 2000-2014, Current Prices, Float64"
+description = "The 15 annual current-price World Input-Output Tables of the WIOD 2016 release, each emitted as one native-float64 row-major matrix of inter-country inter-industry flows plus final-demand flows in millions of US dollars."
+homepage = "https://www.rug.nl/ggdc/valuechain/wiod/wiod-2016-release"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Timmer, M. P., Dietzenbacher, E., Los, B., Stehrer, R. and de Vries, G. J. (2015). An Illustrated User Guide to the World Input-Output Database: the Case of Global Automotive Production. Review of International Economics 23: 575-605. doi:10.1111/roie.12178. Data: WIOD, World Input-Output Database 2016 Release, 2000-2014, DataverseNL, doi:10.34894/PJ2M1C, version 2.1."
+notes = "DataverseNL termsOfUse for doi:10.34894/PJ2M1C (version 2.1): 'The World Input-Output Database (WIOD) is licensed under a Creative Commons Attribution 4.0 International-license.' The GGDC release page states 'The WIOD 2016 release is licensed under a Creative Commons Attribution 4.0 International License' and asks users to cite Timmer et al. (2015). download.sh re-checks the termsOfUse text on every run."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official WIOD deposit by the Groningen Growth and Development Centre on DataverseNL; files are not restricted, no guestbook or access request. National-accounts aggregates by country and industry only."
+usage_notes = "Macro-economic statistics; no individuals or firms are identifiable."
+
+[[origins]]
+id = "dataversenl_wiod2016"
+name = "World Input-Output Database 2016 Release, 2000-2014 (DataverseNL)"
+url = "https://doi.org/10.34894/PJ2M1C"
+type = "data_portal"
+version = "2.1"
+notes = "Dataset version 2.1, released 2025-10-09; distribution date 2016-11-30. The GGDC WIOD 2016 release page links datafile 199103 as the Stata WIOTs."
+
+[[resources]]
+id = "dataset_metadata_v2_1"
+origin = "dataversenl_wiod2016"
+url = "https://dataverse.nl/api/datasets/:persistentId/versions/2.1?persistentId=doi:10.34894/PJ2M1C"
+type = "api_query_result"
+version = "2.1"
+access = "Public anonymous Dataverse native API (JSON)."
+size_bytes = 16432
+sha256 = "76e9bffb536cd7f669b6bbb2aa8491aad045583c474592898e4e63671a6fa830"
+local_path = "downloads/wiod2016_world_input_output_tables_f64/dataset_v2.1.json"
+notes = "Validated semantically on every run: persistent id, version 2.1 RELEASED, CC BY 4.0 termsOfUse, no access terms, and the exact datafile 199103 name, size, SHA-1 and restricted=false. Size and SHA-256 are as observed on 2026-10-06 and are informational, not enforced, because the JSON is re-fetched."
+
+[[resources]]
+id = "wiots_in_stata_zip"
+origin = "dataversenl_wiod2016"
+url = "https://dataverse.nl/api/access/datafile/199103"
+type = "archive"
+version = "WIOTS_in_STATA.zip, datafile 199103, dataset version 2.1"
+access = "Public anonymous download; the access URL 303-redirects to a signed objectstore.surf.nl URL (1 h validity) that honours byte ranges. download.sh re-requests the access URL on every resume attempt."
+size_bytes = 638963496
+sha256 = "00563a9e996887454643513b8d68f2a50c1ddf4fa9c219c47dcf5ef54e006fc1"
+sha1 = "cde6085d4233fec2356877aedf21d950de912b78"
+local_path = "downloads/wiod2016_world_input_output_tables_f64/WIOTS_in_STATA.zip"
+notes = "Dataverse publishes SHA-1 (pinned and checked). 15 DEFLATE members WIOT2000_October16_ROW.dta .. WIOT2014_October16_ROW.dta, 55,216,235 bytes each, with pinned CRC-32 values; members are streamed, never extracted to disk."
+
+[local_paths]
+downloads = "downloads/wiod2016_world_input_output_tables_f64/"
+filtered = "filtered/wiod2016_world_input_output_tables_f64/"
+index = "index/wiod2016_world_input_output_tables_f64/"
+samples = "samples/wiod2016_world_input_output_tables_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/wiod2016_world_input_output_tables_f64/samples.jsonl"
+summary = "Validate the pinned DataverseNL archive, stream each yearly Stata-118 WIOT member, and emit its 2464 x 2684 block of double cells (supplying country-industry rows by intermediate-use plus final-demand columns) as one row-major little-endian float64 matrix per year."
+deterministic_notes = "Pinned DOI, dataset version, datafile id, size, SHA-1, ZIP member names, sizes and CRC-32. The Stata parser checks release 118, LSF byte order, K=2690, N=2472, the exact variable names and type codes, a 21,640-byte row width computed from the type codes, and every section boundary against the <map> offsets. Rows are kept in source order (44 countries x 56 industries) and must carry the expected country, industry number and year; the 8 trailing summary rows must be II_fob, TXSP, EXP_adj, PURR, PURNR, VA, IntTTM, GO. Exactly 15 samples of identical shape are required. verify.sh re-walks the Stata tags, unpacks and repacks every row, compares bit-for-bit, and checks three accounting identities: row sums equal the source TOT column (observed max relative deviation 4e-11); column sums equal the source II_fob row within 1e-6 of the column's absolute sum (observed max 2.2e-7, because II_fob was stored at a slightly different rounding stage); and the GO row equals TOT for every country-industry (observed exact). Archive SHA-256 is recorded for reference; download.sh enforces the Dataverse-published SHA-1."
+
+[[series]]
+id = "wiot_current_price_flows_f64"
+description = "Annual world input-output flow matrix: intermediate deliveries between 2464 country-industries and deliveries to 220 country final-demand categories, millions of US$ at current prices."
+semantic_meaning = "Cell (i, j) is the value, in millions of current US dollars, of output of supplying industry i (country c_i, ISIC Rev.4 industry k_i) used by column j: intermediate use by country-industry j (first 2464 columns) or final use by category j (last 220 columns: household consumption, NPISH consumption, government consumption, gross fixed capital formation, changes in inventories and valuables, for each of the 44 destination countries). Values are RAS-balanced and full-precision. Negative cells occur only in final-demand columns (changes in inventories and valuables, and a few gross fixed capital formation cells); intermediate cells are non-negative."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The Stata members store each cell as an IEEE-754 double with LSF (little-endian) byte order. The emitted bytes are exactly the source bytes of the retained double cells, so sign, -0.0 and every bit pattern are preserved; no rounding, rescaling or reordering of cells within a row."
+source_resources = ["wiots_in_stata_zip"]
+source_format = "Stata .dta release 118 (LSF) member of WIOTS_in_STATA.zip, one WIOT per year"
+source_field = "double variables vAUS1 .. vROW56 (intermediate use) and vAUS57 .. vROW61 (final demand) for the 2464 country-industry rows"
+filtered_input_path = "filtered/wiod2016_world_input_output_tables_f64/ingest_stats.json"
+filtering = "All 15 yearly tables (2000-2014) of the current-price release are kept. Within each table the 2464 supplying country-industry rows and the 2684 use columns are kept. Dropped: the string/label variables IndustryCode, IndustryDescription, Country and the integer RNr and Year variables (row labels, recorded in filtered/.../table_axes.json); the TOT column (row total, equal to the row sum); and the 8 summary rows II_fob (column sum of intermediate rows), TXSP, EXP_adj, PURR, PURNR, VA, IntTTM and GO (taxes, adjustments, value added, margins and output totals, which are a different quantity from inter-industry deliveries). Previous-year-price tables, national IO tables, SUTs and the 2013 release are not used."
+missing_value_policy = "Stata missing doubles (>= 2^1023, i.e. '.', '.a' .. '.z'), IEEE NaN or infinity anywhere in a row, values with magnitude above 1e9 million US$, unexpected row labels, a changed layout, or a changed member are fatal in build and verify. None are expected; no values are dropped, imputed or replaced. Zero cells are genuine zeros and are kept."
+conversion = "Stream the member with zipfile; parse the release-118 header and <map>; skip to the <data> offset; read 2472 fixed rows of 21,640 bytes; for each of the first 2464 rows copy bytes 160 .. 21,632 (2684 little-endian doubles following the 160-byte label fields) to the sample. One sample per year, row-major, shape [2464, 2684]: rows ordered country-major (AUS .. USA, ROW) then industry 1..56; columns ordered as in the source (vAUS1 .. vROW56, then vAUS57 .. vROW61)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 matrix"
+sample_geometry = "multi_regional_input_output_matrix_2d"
+sample_rank = 2
+sample_axes = ["supplying_country_industry", "using_country_industry_then_final_demand"]
+natural_record_kind = "wiod2016_annual_world_input_output_table"
+sample_count = 15
+total_size_bytes = 793605120
+output_path = "samples/wiod2016_world_input_output_tables_f64/wiot_current_price_flows_f64/"

@@ -313,6 +313,7 @@ susy_uci	ok	95000000	365000000	19	5000000	20000000	0	0	0	1	none	none
 rwth_isea_home_storage_battery_voltage_f32	ok	95040000	380160000	36	2678400	10713600	0	0	0	1	none	none
 gwa_v4_country_wind_speed_100m_f32	ok	95611417	382445668	31	2908444	11633776	0	0	0	1	none	none
 openimages_v6_train_bbox_annotations_f32	ok	98970872	308556248	17	5821816	23287264	0	0	0	1	none	none
+wiod2016_world_input_output_tables_f64	ok	99200640	793605120	15	6613376	52907008	0	0	0	1	none	none
 zenodo_gpr_rd3_i16	ok	100995072	201990144	12	4409856	8819712	0	0	0	1	none	none
 nasa_pds_mastcamz_raw_i16	ok	102835200	205670400	52	1977600	3955200	0	0	0	1	none	none
 zenodo_rat_fus_image_sequence_f32	ok	107712000	430848000	1	107712000	430848000	0	0	0	1	none	none

@@ -1,0 +1,126 @@
+manifest_version = 1
+dataset_id = "physionet_circor_pcg_i16"
+name = "PhysioNet CirCor DigiScope Pediatric Phonocardiogram Recordings PCM16"
+description = "Every public 4 kHz mono 16-bit heart-sound (phonocardiogram) recording of the CirCor DigiScope 1.0.3 release: 3,163 auscultation recordings from 942 pediatric patients, one native int16 sample per recording."
+homepage = "https://physionet.org/content/circor-heart-sound/1.0.3/"
+
+[license]
+name = "Open Data Commons Attribution License v1.0"
+spdx = "ODC-By-1.0"
+url = "https://opendatacommons.org/licenses/by/1-0/"
+citation = "Oliveira, J., Renna, F., Costa, P. D., Nogueira, M., Oliveira, C., Ferreira, C., Jorge, A., Mattos, S., Hatem, T., Tavares, T., Elola, A., Rad, A. B., Sameni, R., Clifford, G. D., & Coimbra, M. T. (2022). The CirCor DigiScope Dataset: From Murmur Detection to Murmur Classification. IEEE Journal of Biomedical and Health Informatics, 26(6), 2524-2535. DOI: 10.1109/JBHI.2021.3137048. The CirCor DigiScope Phonocardiogram Dataset, version 1.0.3, PhysioNet (https://physionet.org/content/circor-heart-sound/1.0.3/). Goldberger, A., et al. (2000). PhysioBank, PhysioToolkit, and PhysioNet. Circulation 101(23), e215-e220."
+notes = "The release ships LICENSE.txt (20,402 B, sha256 86c0ad300f6d380591298bc03652e30b81f65954bbf22435812bcfd46812ab06, itself listed in the release SHA256SUMS.txt) containing the ODC Attribution License text; download.sh pins and re-checks it. The project is served from the anonymous PhysioNet open-data bucket (open access, no credentialing), like the accepted physionet_bidmc_ppg_resp_i16 recipe. Preserve the article, dataset, and PhysioNet attribution."
+
+[safety]
+contains_sensitive_data = true
+contains_personal_data = false
+provenance_notes = "De-identified pediatric heart-sound recordings collected in two cardiac screening campaigns in Pernambuco, Brazil, published by PhysioNet as an open-access (non-credentialed) project. Recordings are named only by a numeric study patient ID and auscultation site."
+usage_notes = "Treat as human health-related material. Emitted samples contain only the stethoscope PCM waveform; no age, sex, height, weight, pregnancy status, murmur or outcome labels, campaign, or segmentation annotations are downloaded or emitted. As with any stethoscope audio, recordings can contain incidental body or ambient sound (crying, movement, faint voices) picked up through the chest piece at a 4 kHz sampling rate."
+
+[[origins]]
+id = "physionet_open_circor_1_0_3"
+name = "PhysioNet open-data bucket: circor-heart-sound 1.0.3"
+url = "https://physionet-open.s3.amazonaws.com/circor-heart-sound/1.0.3/"
+type = "bucket"
+version = "1.0.3"
+notes = "Official anonymous PhysioNet open-data S3 mirror of the versioned project files (physionet.org/files/circor-heart-sound/1.0.3/). The versioned path is immutable; every file is checked against the release SHA256SUMS.txt."
+
+[[resources]]
+id = "circor_sha256sums"
+origin = "physionet_open_circor_1_0_3"
+url = "https://physionet-open.s3.amazonaws.com/circor-heart-sound/1.0.3/SHA256SUMS.txt"
+type = "file"
+version = "1.0.3"
+access = "Direct public download."
+size_bytes = 957290
+sha256 = "9724d3f0fc2fb65edfa29fe22ea7a9f3aceda96d5fd94b649ff8e52b53b2e50c"
+local_path = "downloads/physionet_circor_pcg_i16/SHA256SUMS.txt"
+notes = "Official per-file SHA-256 list (10,434 entries); pinned by its own hash and used to validate every other file."
+
+[[resources]]
+id = "circor_license"
+origin = "physionet_open_circor_1_0_3"
+url = "https://physionet-open.s3.amazonaws.com/circor-heart-sound/1.0.3/LICENSE.txt"
+type = "file"
+version = "1.0.3"
+access = "Direct public download."
+size_bytes = 20402
+sha256 = "86c0ad300f6d380591298bc03652e30b81f65954bbf22435812bcfd46812ab06"
+local_path = "downloads/physionet_circor_pcg_i16/LICENSE.txt"
+notes = "ODC Attribution License (ODC-By) text shipped with the release."
+
+[[resources]]
+id = "circor_records"
+origin = "physionet_open_circor_1_0_3"
+url = "https://physionet-open.s3.amazonaws.com/circor-heart-sound/1.0.3/RECORDS"
+type = "file"
+version = "1.0.3"
+access = "Direct public download."
+size_bytes = 72827
+sha256 = "953b0da03a23abb43aba4151088f6dbe97b8805a61f1622c01dc929f14fd167d"
+local_path = "downloads/physionet_circor_pcg_i16/RECORDS"
+notes = "Official WFDB record list: 3,163 entries training_data/<patient>_<site>[_<n>]."
+
+[[resources]]
+id = "circor_wav_recordings"
+origin = "physionet_open_circor_1_0_3"
+url = "https://physionet-open.s3.amazonaws.com/circor-heart-sound/1.0.3/training_data/"
+type = "file"
+version = "1.0.3"
+access = "Direct public download, one GET per file, parallel curl with retries."
+size_bytes = 578849274
+sha256 = ""
+local_path = "downloads/physionet_circor_pcg_i16/training_data/"
+notes = "All 3,163 <record>.wav files named in RECORDS (41,260 to 516,140 B each, median 171,692 B). Each file is checked against its SHA256SUMS.txt entry; the aggregate byte count is pinned."
+
+[[resources]]
+id = "circor_wfdb_headers"
+origin = "physionet_open_circor_1_0_3"
+url = "https://physionet-open.s3.amazonaws.com/circor-heart-sound/1.0.3/training_data/"
+type = "file"
+version = "1.0.3"
+access = "Direct public download, one GET per file, parallel curl with retries."
+size_bytes = 187976
+sha256 = ""
+local_path = "downloads/physionet_circor_pcg_i16/training_data/"
+notes = "All 3,163 <record>.hea WFDB headers (CRLF text) used to cross-check sample count, data byte offset, signal format, and site label. Checked against SHA256SUMS.txt."
+
+[local_paths]
+downloads = "downloads/physionet_circor_pcg_i16/"
+filtered = "filtered/physionet_circor_pcg_i16/"
+index = "index/physionet_circor_pcg_i16/"
+samples = "samples/physionet_circor_pcg_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/physionet_circor_pcg_i16/samples.jsonl"
+summary = "Fetch and checksum all 3,163 WAV/.hea pairs of CirCor DigiScope 1.0.3, decode each WAV's PCM data chunk after validating RIFF structure and the WFDB header, and emit one little-endian int16 sample per auscultation recording (full population, no subsetting)."
+deterministic_notes = "Pinned release 1.0.3 with SHA-256 for SHA256SUMS.txt, LICENSE.txt and RECORDS; every recording and header must match SHA256SUMS.txt; aggregate WAV (578,849,274 B) and header (187,976 B) sizes are pinned. Canonical order is (numeric patient ID, site AV/PV/TV/MV/Phc, repeat suffix). build.sh and verify.sh run a synthetic-input selftest of both decoders; verify.sh re-decodes every recording with the stdlib wave module and compares bytes, index fields, exclusions, the aggregate output SHA-256, and manifest totals. Floors: at least 10,000 primary values or 100 KB, median at least 1,000 values per sample. Realized 2026-10-05: 3,163 samples, 0 exclusions, 289,355,051 values, 578,710,102 bytes, median 85,824 values, aggregate output SHA-256 42342b450a0e91f6442f2105ac0379ed4d47e2de97ab9886588f14a6be82a017; full-scale codes 83,638 (0.029%), present in 1,970 recordings, only 17 recordings above 1%, maximum 4.35%."
+
+[[series]]
+id = "circor_pcg_pcm_i16"
+description = "Complete 4 kHz phonocardiogram (heart-sound) recordings, one per auscultation recording of the CirCor DigiScope 1.0.3 release."
+semantic_meaning = "Successive signed 16-bit PCM amplitude codes of the chest-wall acoustic signal captured by a Littmann 3200 electronic stethoscope (DigiScope Collector) held at one auscultation site of one pediatric patient: aortic (AV), pulmonary (PV), tricuspid (TV), mitral (MV), or another position (Phc). 4000 samples per second."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The WAV fmt chunk declares PCM format tag 1, one channel, 4000 Hz, 16 bits per sample, and the WFDB header declares format 16 with ADC resolution 16, gain 1, zero 0. Emitted values are the stored PCM codes, without gain scaling, filtering, or resampling."
+source_resources = ["circor_wav_recordings", "circor_wfdb_headers", "circor_records", "circor_sha256sums"]
+source_format = "RIFF/WAVE PCM (format tag 1, mono, 4000 Hz, 16-bit) with companion WFDB .hea header"
+source_field = "WAV data chunk: mono 16-bit PCM samples (WFDB signal 0, format 16 at the data-chunk byte offset)"
+filtered_input_path = "filtered/physionet_circor_pcg_i16/ingest_stats.json"
+filtering = "Keep every recording listed in the official RECORDS file of release 1.0.3: 942 patients; AV 800, PV 766, TV 732, MV 861, Phc 4; the 43 repeat recordings at a site (_1/_2/_3 suffixes) are kept as separate samples. Recordings with fewer than 16 distinct PCM codes, or whose PCM payload is byte-identical to an earlier recording in canonical order, are excluded and listed in ingest_stats.json; more than 1% exclusions fails the build. Demographics and murmur labels (training_data.csv, per-patient .txt) and the .tsv heart-cycle segmentations are neither downloaded nor emitted."
+missing_value_policy = "PCM has no missing-value sentinel. Every sample of every retained recording is emitted, including full-scale (-32768 or 32767) clipped codes, whose count and fraction are reported by build and verify. Checksum, RIFF-structure, fmt-parameter, header sample-count, header byte-offset, or site-label mismatches are fatal; verify recomputes the same exclusion rule from the downloads."
+conversion = "Walk the RIFF chunk list to locate the fmt and data chunks (no fixed 44-byte header assumption), require PCM tag 1, 1 channel, 4000 Hz, 16 bits, byte rate 8000 and block align 2, require data length = 2 x WFDB sample count and data offset = WFDB byte offset, then write the data-chunk int16 values as raw little-endian int16, one .bin per recording in canonical order."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian signed-int16 PCM sequence"
+sample_geometry = "variable_length_phonocardiogram_waveform_1d"
+sample_rank = 1
+sample_axes = ["time_sample_4000hz"]
+natural_record_kind = "complete_circor_auscultation_recording"
+sample_count = 3163
+total_size_bytes = 578710102
+output_path = "samples/physionet_circor_pcg_i16/circor_pcg_pcm_i16/"

@@ -203,6 +203,7 @@ tcia_cmmd_mammography_u16	ok	8781432	17562864	2	4390716	8781432	0	0	0	1	none	non
 nasa_heasarc_nicer_pi_i16	ok	8938390	17876780	31	18786	37572	0	0	0	1	none	none
 alphafold_db_pae_matrices_f32	ok	9238233	36952932	15	277729	1110916	0	0	0	1	none	none
 noaa_dcdb_csb_vessel_track_lonlat_f64	ok	10182222	81457776	895	3442	27536	0	0	0	1	none	none
+cesnet_ts24_institution_traffic_bytes_u64	ok	10446225	83569800	278	40270	322160	10446225	41784900	278	1	none	none
 nasa_sdo_aia_synoptic_i32	ok	10485760	41943040	10	1048576	4194304	0	0	0	1	none	none
 fsdd_pcm_u8	ok	10498424	10498424	3000	3358.5	3358.5	0	0	0	1	none	none
 fsdd_spoken_digits	ok	10498424	20996848	3000	3358.5	6717	0	0	0	1	none	none

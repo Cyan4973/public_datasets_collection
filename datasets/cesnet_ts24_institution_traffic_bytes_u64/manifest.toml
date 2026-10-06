@@ -1,0 +1,129 @@
+manifest_version = 1
+dataset_id = "cesnet_ts24_institution_traffic_bytes_u64"
+name = "CESNET-TimeSeries24 Institution 10-Minute Transmitted Bytes UInt64"
+description = "Per-institution 10-minute transmitted-byte counters (n_bytes) aggregated from IP flow records on the Czech CESNET3 research and education ISP backbone over 40 weeks, one uint64 time series for each of the 278 institutions whose 10-minute file has data."
+homepage = "https://zenodo.org/records/13382427"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Koumar, J., Hynek, K., Cejka, T. & Siska, P. CESNET-TimeSeries24: Time Series Dataset for Network Traffic Anomaly Detection and Forecasting. Scientific Data 12, 338 (2025). https://doi.org/10.1038/s41597-025-04603-x. Dataset: Zenodo, DOI 10.5281/zenodo.13382427."
+notes = "The Zenodo record 13382427 metadata declares license id cc-by-4.0 with open access; download.sh re-checks the license field. The authors ask users to cite the Scientific Data paper. Preserve attribution to the authors, CESNET, the DOI and the license."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official author upload to Zenodo by CESNET staff. Institution-level aggregates over many hosts, identified only by an opaque numeric institution id; no IP addresses, payloads or per-user records are emitted."
+usage_notes = "Only the n_bytes counter and its id_time window index are emitted. The IP-address and subnet levels, the hourly and daily re-aggregations, and all other CSV columns are excluded."
+
+[[origins]]
+id = "zenodo_13382427"
+name = "CESNET-TimeSeries24: Time Series Dataset for Network Traffic Anomaly Detection and Forecasting"
+url = "https://zenodo.org/records/13382427"
+type = "repository"
+notes = "Zenodo record 13382427 (concept record 13382426, single version, published 2024-09-27)."
+
+[[resources]]
+id = "institutions_archive"
+origin = "zenodo_13382427"
+url = "https://zenodo.org/api/records/13382427/files/institutions.tar.gz/content"
+type = "archive"
+version = "Zenodo record 13382427 file institutions.tar.gz"
+access = "Direct public anonymous download; resumable curl; size, published MD5, gzip integrity and archive structure validated."
+size_bytes = 479428489
+md5 = "ab3e15fb8dc9b7120ddb2318795b6812"
+sha256 = "f112548546ae8124dd62aa55c0628a5646dc72427f280c7cf27cfde658da6ff2"
+local_path = "downloads/cesnet_ts24_institution_traffic_bytes_u64/institutions.tar.gz"
+notes = "gzip-compressed ustar archive: institutions/identifiers.csv plus agg_10_minutes, agg_1_hour and agg_1_day CSV directories, one CSV per institution. Only agg_10_minutes/<id>.csv members are used. MD5 is the value published in the Zenodo record."
+
+[[resources]]
+id = "times_archive"
+origin = "zenodo_13382427"
+url = "https://zenodo.org/api/records/13382427/files/times.tar.gz/content"
+type = "archive"
+version = "Zenodo record 13382427 file times.tar.gz"
+access = "Direct public anonymous download; size, MD5 and SHA-256 pinned."
+size_bytes = 211467
+md5 = "a03813763e07646ca38f17ffd53e549e"
+sha256 = "f1b0c8e20127df0646379d583dd798f84b252c9e1c82595eed207c4a3d5e1280"
+local_path = "downloads/cesnet_ts24_institution_traffic_bytes_u64/times.tar.gz"
+notes = "times/times_10_minutes.csv maps id_time 0..40297 to window start timestamps (2023-10-09 02:03:49+02:00 to 2024-07-14 23:50:52+02:00). Used to bound and validate id_time."
+
+[[resources]]
+id = "zenodo_record_metadata"
+origin = "zenodo_13382427"
+url = "https://zenodo.org/api/records/13382427"
+type = "api_query_result"
+version = "live record JSON"
+access = "Public Zenodo REST API."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/cesnet_ts24_institution_traffic_bytes_u64/zenodo_record_13382427.json"
+notes = "Not hash-pinned because the response embeds changing download/view statistics. Validated by field: license id cc-by-4.0, access_right open, DOI, and the size and md5 of institutions.tar.gz and times.tar.gz."
+
+[local_paths]
+downloads = "downloads/cesnet_ts24_institution_traffic_bytes_u64/"
+filtered = "filtered/cesnet_ts24_institution_traffic_bytes_u64/"
+index = "index/cesnet_ts24_institution_traffic_bytes_u64/"
+samples = "samples/cesnet_ts24_institution_traffic_bytes_u64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/cesnet_ts24_institution_traffic_bytes_u64/samples.jsonl"
+summary = "Stream the pinned institutions.tar.gz once with tarfile 'r|gz', keep only institutions/agg_10_minutes/<id>.csv members, locate the n_bytes and id_time columns by header name, and emit one little-endian uint64 n_bytes sample and one little-endian uint32 id_time auxiliary sample per institution."
+deterministic_notes = "Member order in the tar stream is never assumed. identifiers.csv lists 283 ids (0..284 with gaps); every id has an agg_10_minutes member, 278 of which have data rows and become samples, while the 5 header-only members (institutions 148, 260, 267, 279, 283) are pinned in build and verify and emit nothing. Rows keep source order and id_time must be strictly increasing and inside the 40,298-window grid of times_10_minutes.csv. Index rows are sorted by series then institution id. verify.sh re-reads the archive with an independent csv-module parser, compares every sample byte, the index, manifest counts and the pinned per-institution counts, ranges and SHA-256 digests in expected_samples.tsv, and rejects constant series and sub-floor output."
+
+[[series]]
+id = "institution_n_bytes_u64"
+description = "Bytes transmitted per 10-minute window by one CESNET3 institution, over 40 weeks."
+semantic_meaning = "For each 10-minute window present in the source, the total number of bytes carried by all IP flows of one institution on the CESNET3 backbone (the n_bytes metric of CESNET-TimeSeries24), in window order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "n_bytes is a native non-negative integer byte counter summed from IPFIX flow octet counters (unsigned 64-bit in IPFIX). Values are copied exactly from the decimal CSV field; only the encoding changes to little-endian uint64."
+source_resources = ["institutions_archive", "times_archive", "zenodo_record_metadata"]
+source_format = "CSV inside gzip-compressed tar (institutions/agg_10_minutes/<id_institution>.csv)"
+source_field = "n_bytes column of the institution-level 10-minute aggregation CSV"
+filtered_input_path = "filtered/cesnet_ts24_institution_traffic_bytes_u64/ingest_stats.json"
+filtering = "Every institution in identifiers.csv whose agg_10_minutes CSV has data rows (278 of 283; the 10-minute files of institutions 148, 260, 267, 279 and 283 are header-only upstream even though their hourly and daily files have rows); every data row of each such CSV. Excluded: agg_1_hour and agg_1_day (re-aggregations of the same windows), institution_subnets and ip_addresses levels, and every other column (n_flows, n_packets, unique-destination counts, 2-decimal ratios and averages)."
+missing_value_policy = "Windows with no row in the source CSV are not imputed: each sample holds only the present windows in id_time order, and the auxiliary id_time series records which windows they are (756,619 of 278 x 40,298 windows are absent, concentrated in small institutions). A header-only 10-minute CSV yields no sample; the set of such institutions is pinned (148, 260, 267, 279, 283) and any other header-only member is fatal. A present row with a blank, non-decimal-integer, signed, fractional, exponent-form or larger-than-uint64 n_bytes or id_time is fatal, as are wrong field counts, non-increasing id_time, id_time outside the 40,298-window grid, carriage returns and non-ASCII bytes. Zero byte counts are kept as real values. build.sh and verify.sh apply the same policy."
+conversion = "Parse each n_bytes field as an exact decimal integer (no float round trip) and pack it as little-endian uint64. One sample per institution CSV, values in source row order."
+numeric_kind = "uint"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian uint64 array"
+sample_geometry = "institution_10_minute_traffic_time_series"
+sample_rank = 1
+sample_axes = ["present_10_minute_window"]
+natural_record_kind = "institution_10_minute_aggregation_csv_time_series"
+sample_count = 278
+total_size_bytes = 83569800
+output_path = "samples/cesnet_ts24_institution_traffic_bytes_u64/institution_n_bytes_u64/"
+
+[[series]]
+id = "institution_id_time_u32"
+description = "10-minute window index (id_time) of each emitted n_bytes value, one array per institution."
+semantic_meaning = "Alignment helper: the source id_time for each value of the matching institution_n_bytes_u64 sample, mapping to timestamps via times/times_10_minutes.csv."
+role = "auxiliary"
+representation_class = "native_numeric"
+representation_notes = "Window index copied from the source id_time column; preserves alignment across missing windows. Not part of the compression target and does not count toward acceptance."
+source_resources = ["institutions_archive", "times_archive"]
+source_format = "CSV inside gzip-compressed tar (institutions/agg_10_minutes/<id_institution>.csv)"
+source_field = "id_time column of the institution-level 10-minute aggregation CSV"
+filtered_input_path = "filtered/cesnet_ts24_institution_traffic_bytes_u64/ingest_stats.json"
+filtering = "Same rows as institution_n_bytes_u64."
+missing_value_policy = "Same as institution_n_bytes_u64 (same rows, same 278 institutions); values are strictly increasing within each sample and lie in 0..40297."
+conversion = "Parse id_time as an exact decimal integer and pack as little-endian uint32, one array per institution, aligned element-for-element with the primary sample of the same name."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian uint32 array"
+sample_geometry = "institution_10_minute_window_index"
+sample_rank = 1
+sample_axes = ["present_10_minute_window"]
+natural_record_kind = "institution_10_minute_aggregation_csv_time_series"
+sample_count = 278
+total_size_bytes = 41784900
+output_path = "samples/cesnet_ts24_institution_traffic_bytes_u64/institution_id_time_u32/"

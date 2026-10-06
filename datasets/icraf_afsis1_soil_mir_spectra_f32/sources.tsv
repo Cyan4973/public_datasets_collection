@@ -1,0 +1,20 @@
+datafile_id	local_filename	upstream_ingested_name	country_column_value	original_size_bytes	original_md5
+10916	10916_angola.csv	Angola.tab	Angola	22847957	e47deabafad30be106e6bd87e62a87af
+10917	10917_botswana.csv	Botswana.tab	Botswana	16787063	e29e652c815031eecd15505e78047aad
+10918	10918_burkina_faso.csv	Burkina Faso.tab	Burkina Faso	5458709	5fc08461f4fabe5d35940554d27f5bcb
+10919	10919_cameroon.csv	Cameroon.tab	Cameroon	5709229	8a58b05f46be8486250f4232f716f8a9
+10920	10920_ethiopia.csv	Ethiopia.tab	Ethiopia	20808731	b8151d7759972a7f70e8715a7a3440bb
+10921	10921_ghana.csv	Ghana.tab	Ghana	17008454	b2a019152e8cebb2bcd3cdbe77ed9fc5
+10922	10922_guinea.csv	Guinea.tab	Guinea	10525238	bc2a837fd51f8210be8ea8614386fa79
+10923	10923_kenya.csv	Kenya.tab	Kenya	15450291	433c1fd5f369271d98584a85f7ff4b10
+10924	10924_madagascar.csv	Madagascar.tab	Madagascar	11315725	b65d7ae7dbe72e8c6ce083b643a8d82c
+10925	10925_malawi.csv	Malawi.tab	Malawi	11474703	46152699784dfb7d839ad93066d8b85b
+10926	10926_mali.csv	Mali.tab	Mali	22550596	495d890d2a0bac6b6074daa823294a12
+10927	10927_mozambique.csv	Mozambique.tab	Mozambique	34227187	09894b6f892a0b92bda3cb846f79853c
+10928	10928_niger.csv	Niger.tab	Niger	5672278	31b07ca6cdc7e7515f2e13b5015523e1
+10929	10929_nigeria.csv	Nigeria.tab	Nigeria	28169291	536b65d9098a2fef9b653ead08b39c90
+10930	10930_south_africa.csv	SAfrica.tab	SAfrica	13031296	a125192409d1ee8ddabfa561b76b1dec
+10931	10931_tanzania.csv	Tanzania.tab	Tanzania	37272260	148a317d70482fd78d4a2b08c744dd7e
+10932	10932_uganda.csv	Uganda.tab	Uganda	9863855	06272bd7246135734e3f50d56f77e7be
+10933	10933_zambia.csv	Zambia.tab	Zambia	22851780	9d01a7680ab1f337e7237a396cf17eae
+10934	10934_zimbabwe.csv	Zimbambwe.tab	Zimbambwe	16122234	00e1107995db10ed908e1962905716ba

@@ -1,0 +1,89 @@
+manifest_version = 1
+dataset_id = "icraf_afsis1_soil_mir_spectra_f32"
+name = "AfSIS Phase I Soil Mid-Infrared Absorbance Spectra Float32"
+description = "One float32 mid-infrared diffuse-reflectance absorbance spectrum (1,749 fixed wavenumbers, 4001.6 to 601.7 cm-1) per AfSIS Phase I soil sample, all measured on ICRAF's Bruker Tensor 27/HTS-XT in Nairobi."
+homepage = "https://data.worldagroforestry.org/dataset.xhtml?persistentId=doi:10.34725/DVN/QXCWP1"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Vågen, Tor-Gunnar; Winowiecki, Leigh Ann; Desta, Luseged; Tondoh, Ebagnerin Jérôme; Weullow, Elvis; Shepherd, Keith; Sila, Andrew. Mid-Infrared Spectra (MIRS) from ICRAF Soil and Plant Spectroscopy Laboratory: Africa Soil Information Service (AfSIS) Phase I 2009-2013. World Agroforestry (ICRAF) Dataverse, V1.1. https://doi.org/10.34725/DVN/QXCWP1"
+notes = "The dataset's Dataverse termsOfUse (version 1.1, checked by download.sh, build.sh and verify.sh) states: 'This dataset is made available under the Creative Commons Attribution 4.0 International license (CC-BY-4.0). The license allows you, the user, to copy and redistribute the material in any medium or format and/or transform, and build upon the material for any purpose, even commercially.' Dataverse's structured license field is NONE because the grant is carried by these custom terms. The conditions require credit, a link to the license, and an indication of changes. The separate '0. Disclaimer.pdf' (not downloaded) is only an as-is, no-warranty statement."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official ICRAF Dataverse deposit of laboratory soil spectra. Rows carry only an ICRAF lab sample number (SSN), sampling depth class and country; no coordinates, people or personal data are emitted."
+usage_notes = "Only the 1,749 absorbance values of each spectrum are emitted. Num, SSN, Depth and Country are kept in the sample index as provenance only."
+
+[[origins]]
+id = "icraf_dataverse"
+name = "World Agroforestry (ICRAF) Research Data Repository (Dataverse)"
+url = "https://data.worldagroforestry.org/dataset.xhtml?persistentId=doi:10.34725/DVN/QXCWP1"
+type = "data_portal"
+notes = "Dataset doi:10.34725/DVN/QXCWP1, version 1.1 released 2025-06-19. Files are accessed anonymously through the Dataverse access API by numeric datafile id."
+
+[[resources]]
+id = "dataverse_version_1_1_listing"
+origin = "icraf_dataverse"
+url = "https://data.worldagroforestry.org/api/datasets/:persistentId/versions/1.1?persistentId=doi:10.34725/DVN/QXCWP1"
+type = "api_query_result"
+version = "1.1"
+access = "Anonymous Dataverse native API. Validated semantically, not by hash: persistent id, released version 1.1, the CC-BY-4.0 terms text, and exact ids, names, original sizes and MD5s of all 19 country CSVs."
+size_bytes = 32541
+sha256 = ""
+local_path = "downloads/icraf_afsis1_soil_mir_spectra_f32/dataset_version_1.1.json"
+notes = "Byte size observed 2026-10-05; the JSON rendering is not pinned because server formatting may change without a data change."
+
+[[resources]]
+id = "afsis1_mir_country_csvs"
+origin = "icraf_dataverse"
+url = "https://data.worldagroforestry.org/api/access/datafile/{10916..10934}?format=original"
+type = "file"
+version = "1.1"
+access = "19 original-format CSVs (datafile ids 10916-10934, listed with sizes and MD5s in sources.tsv). The access API ignores Range, so each file is fetched whole with retries and checked against the Dataverse original size and MD5 and the pinned header-line SHA-256 before use."
+size_bytes = 327146877
+sha256 = ""
+local_path = "downloads/icraf_afsis1_soil_mir_spectra_f32/csv/"
+notes = "Ingested .tab renditions differ in size and are not used. Local file names use datafile id plus a corrected country slug; the upstream names include 'SAfrica' and the typo 'Zimbambwe', which are also the literal Country column values. Datafile 10842, '0. Disclaimer.pdf', is skipped."
+
+[local_paths]
+downloads = "downloads/icraf_afsis1_soil_mir_spectra_f32/"
+filtered = "filtered/icraf_afsis1_soil_mir_spectra_f32/"
+index = "index/icraf_afsis1_soil_mir_spectra_f32/"
+samples = "samples/icraf_afsis1_soil_mir_spectra_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/icraf_afsis1_soil_mir_spectra_f32/samples.jsonl"
+summary = "Validate the pinned Dataverse v1.1 listing and 19 original country CSVs, check that every file has the same 1,753-column header (Num, SSN, Depth, Country, then 1,749 wavenumbers), and emit each soil sample's 1,749 absorbance values as one little-endian float32 sample. Realized: 18,247 spectra from 18,257 source rows (7 all-NA placeholder rows and 3 three-replicate-lattice rows excluded by pinned SSN)."
+deterministic_notes = "Files are processed in ascending datafile id and rows in source order. Fixed rules: header-line SHA-256 570c81aa54a569adea4c11b444c4861758296f283e06f77c95c3e0023b830d11, exactly 1,753 columns, SSNs unique across all files, Depth in {Topsoil, Subsoil}, Country equal to the file's pinned value, every cell a plain decimal on the 2.5e-7 lattice with |value| < 4, and at least 100 distinct values per spectrum. Two row classes are excluded by rule and the excluded SSNs must equal pinned sets: rows whose 1,749 cells are all the literal NA (7 SSNs) and rows lying entirely on the k/3e6 lattice printed to 9 decimals (3 SSNs). Byte-identical duplicate spectra would keep only their first occurrence; none occur in v1.1. Aggregate payload SHA-256 3481c4a2e37c05c59a4f6593574c3662b6a40782dd60b138d6a7d7e1d6aad2ab. verify.sh re-derives everything through a separate parser (csv module, decimal.Decimal, array packing) and checks sample bytes, lattice recovery of every stored value, index fields and min/max from stored float32 values, ingest statistics, absence of stray files, and the manifest counts."
+
+[[series]]
+id = "afsis1_soil_mir_absorbance_f32"
+description = "Mid-infrared diffuse-reflectance absorbance spectra of AfSIS Phase I soil samples (LDSF sites in 19 sub-Saharan African countries, 0-20 cm and 20-50 cm depths, 2009-2013)."
+semantic_meaning = "Absorbance (log10 of 1/reflectance) of one air-dried, ground soil sample at 1,749 fixed wavenumbers. The order is the source column order, from 4001.6 down to 601.7 cm-1 at about 1.93 cm-1 spacing. The provider removed the atmospheric CO2 band between m2381.7 and m2350.8. All spectra share one grid, one instrument (Bruker Tensor 27 with HTS-XT, ICRAF Nairobi) and one sampling protocol (LDSF)."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "The source publishes decimal text with up to 8 fractional digits. Every cell of every emitted spectrum sits on a 2.5e-7 lattice: the values look like 4-replicate means of 6-decimal readings, and values printed with 8 fractional digits end in 25 or 75. Each cell is rounded once to IEEE-754 binary32. float32 does not reproduce the printed text digit for digit, but it preserves the information exactly. The lattice integer q = value / 2.5e-7 satisfies |q| < 16,000,000 < 2^24, and below |value| = 4 the binary32 half-ulp (at most 2^-23) is smaller than half a lattice step (1.25e-7). So round(f32 * 4e6) == q for every cell, which build and verify assert cell by cell; any |value| >= 4 is fatal. Realized: maximum |value| 3.047, worst float32 error 0.47681 lattice steps, below the theoretical ceiling 2^-23 / 2.5e-7 = 0.47684 for [2,4), all 31,914,003 cells recovered. Bruker OPUS also stores spectra natively as float32. float64 would only widen the data."
+source_resources = ["dataverse_version_1_1_listing", "afsis1_mir_country_csvs"]
+source_format = "Dataverse original-format comma-separated text table, one CRLF CSV per country"
+source_field = "the 1,749 spectral absorbance columns m4001.6 ... m601.7 of each soil-sample row"
+filtered_input_path = "filtered/icraf_afsis1_soil_mir_spectra_f32/ingest_stats.json"
+filtering = "All 18,257 rows of the 19 country CSVs are read and 18,247 spectra are kept (9,466 topsoil, 8,781 subsoil). Excluded and listed in ingest_stats.json: (a) 7 placeholder rows whose 1,749 cells are all NA, meaning no spectrum was recorded (Botswana icr075150 and icr075279, Mali icr015372 and icr069796, Tanzania icr024965, Zambia icr075956, Zimbabwe icr075550); (b) 3 rows whose every cell is k/3e6 printed to 9 decimals, i.e. 3-replicate means on a different tick lattice from the 2.5e-7 lattice of all other spectra (Kenya icr033584, Mali icr037556, Zambia icr075955). Both sets are pinned: any other row of either kind fails the build. A spectrum whose float32 bytes exactly duplicate an earlier one would be dropped; none occur. Num, SSN, Depth and Country are not emitted as samples."
+missing_value_policy = "The source marks a missing spectrum with the literal NA in all 1,749 cells. Those 7 rows are excluded whole and must match the pinned SSN set. A row with only some NA cells is fatal. So are empty, NaN, infinite, exponent-form or otherwise non-decimal cells, wrong column counts, off-lattice values outside the pinned 3-replicate rows, |absorbance| >= 4, duplicate SSNs, unknown Depth or Country values, header or grid differences, and spectra with fewer than 100 distinct values. Nothing is imputed, and every excluded row is listed."
+conversion = "Parse each spectral cell as decimal text, convert it to binary64 and then round once to binary32. Write the 1,749 values in source column order (descending wavenumber) as raw little-endian float32, one file per soil sample named <SSN>.bin. Index min/max come from the stored float32 values."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 absorbance spectrum"
+sample_geometry = "fixed_wavenumber_grid_spectrum_1d"
+sample_rank = 1
+sample_axes = ["wavenumber_cm-1_descending"]
+natural_record_kind = "afsis1_soil_sample_mir_absorbance_spectrum"
+sample_count = 18247
+total_size_bytes = 127656012
+output_path = "samples/icraf_afsis1_soil_mir_spectra_f32/afsis1_soil_mir_absorbance_f32/"

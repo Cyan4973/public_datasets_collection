@@ -1,0 +1,139 @@
+manifest_version = 1
+dataset_id = "physionet_grabmyo_semg_i16"
+name = "PhysioNet GRABMyo Forearm/Wrist Surface EMG Hand-Gesture Trials Int16"
+description = "Every Session 1, trial 1 hand-gesture recording of GRABMyo 1.1.0 (43 participants x 17 gestures = 731 trials): 5 s of 28-channel forearm/wrist surface EMG at 2048 Hz, one frame-interleaved little-endian int16 sample (10,240 frames x 28 channels) per trial, emitted as the published WFDB format-16 stored values."
+homepage = "https://physionet.org/content/grabmyo/1.1.0/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Jiang, N., Pradhan, A., & He, J. (2024). Gesture Recognition and Biometrics ElectroMyogram (GRABMyo) (version 1.1.0). PhysioNet. https://doi.org/10.13026/89dm-f662. Pradhan, A., He, J., & Jiang, N. (2022). Multi-day dataset of forearm and wrist electromyogram for hand gesture recognition and biometrics. Scientific Data, 9, 733. https://doi.org/10.1038/s41597-022-01836-y. Goldberger, A., et al. (2000). PhysioBank, PhysioToolkit, and PhysioNet. Circulation 101(23), e215-e220."
+notes = "The PhysioNet project page (Files section) states 'License (for files): Creative Commons Attribution 4.0 International Public License' and 'Anyone can access the files, as long as they conform to the terms of the specified license' (open access, no credentialing). The release LICENSE.txt (14,842 B, sha256 9a78e7f2..., listed in SHA256SUMS.txt) is the CC BY 4.0 legal code; download.sh pins it and checks its first line. The bundled readme.txt names the Open Data Commons Attribution License v1.0 instead; both are attribution-only permissive licenses, and the recipe follows the project-level CC BY 4.0 grant. Preserve the dataset, article, and PhysioNet attribution."
+
+[safety]
+contains_sensitive_data = true
+contains_personal_data = false
+provenance_notes = "Surface EMG recorded from 43 healthy volunteers at the University of Waterloo, published by PhysioNet as an open-access (non-credentialed) project. Records are named only by session, numeric participant ID, gesture, and trial; the WFDB headers carry no demographic comments."
+usage_notes = "Treat as human physiological material. Emitted samples contain only the 28 electrode waveforms; subject-info.csv (anthropometrics) is neither downloaded nor emitted. The upstream project studies these signals as a within-dataset biometric, so the recordings are pseudonymous rather than identity-free; do not attempt re-identification."
+
+[[origins]]
+id = "physionet_open_grabmyo_1_1_0"
+name = "PhysioNet open-data bucket: grabmyo 1.1.0"
+url = "https://physionet-open.s3.amazonaws.com/grabmyo/1.1.0/"
+type = "bucket"
+version = "1.1.0"
+notes = "Official anonymous PhysioNet open-data S3 mirror of physionet.org/files/grabmyo/1.1.0/ (the latest version; 1.0.0-1.0.2 also exist). The versioned path is immutable; every file is checked against the release SHA256SUMS.txt."
+
+[[resources]]
+id = "grabmyo_sha256sums"
+origin = "physionet_open_grabmyo_1_1_0"
+url = "https://physionet-open.s3.amazonaws.com/grabmyo/1.1.0/SHA256SUMS.txt"
+type = "file"
+version = "1.1.0"
+access = "Direct public download."
+size_bytes = 4300947
+sha256 = "757ea64fa5134b7b3b84d9f79e30cfa1ac4d2c65a40ce9b427db11dd8258974e"
+local_path = "downloads/physionet_grabmyo_semg_i16/SHA256SUMS.txt"
+notes = "Official per-file SHA-256 list (30,715 entries). Pinned by its own hash; it defines the trial selection and validates every other file."
+
+[[resources]]
+id = "grabmyo_license"
+origin = "physionet_open_grabmyo_1_1_0"
+url = "https://physionet-open.s3.amazonaws.com/grabmyo/1.1.0/LICENSE.txt"
+type = "file"
+version = "1.1.0"
+access = "Direct public download."
+size_bytes = 14842
+sha256 = "9a78e7f22742dde9f66ae235ec793ba2212019dc4d0ced75c4da09ced0b35fb2"
+local_path = "downloads/physionet_grabmyo_semg_i16/LICENSE.txt"
+notes = "CC BY 4.0 legal code shipped with the release (CRLF text)."
+
+[[resources]]
+id = "grabmyo_readme"
+origin = "physionet_open_grabmyo_1_1_0"
+url = "https://physionet-open.s3.amazonaws.com/grabmyo/1.1.0/readme.txt"
+type = "file"
+version = "1.1.0"
+access = "Direct public download."
+size_bytes = 2448
+sha256 = "1db9b7889c0868a35f6067ecb109f716cb88cd1a9549c39f4edecb1c33dfca05"
+local_path = "downloads/physionet_grabmyo_semg_i16/readme.txt"
+notes = "Release readme: 43 participants, 3 sessions, 17 gestures, 7 trials, EMGUSB2+ amplifier, 2048 Hz, file naming."
+
+[[resources]]
+id = "grabmyo_motion_sequence"
+origin = "physionet_open_grabmyo_1_1_0"
+url = "https://physionet-open.s3.amazonaws.com/grabmyo/1.1.0/MotionSequence.txt"
+type = "file"
+version = "1.1.0"
+access = "Direct public download."
+size_bytes = 630
+sha256 = "10e2919838e85e4837fd63ec096deae1a7353ecf53ac033093d64b551018067e"
+local_path = "downloads/physionet_grabmyo_semg_i16/MotionSequence.txt"
+notes = "Gesture names for indices 1-17 (17 = Rest); build.sh checks them against the names written to the index."
+
+[[resources]]
+id = "grabmyo_session1_trial1_dat"
+origin = "physionet_open_grabmyo_1_1_0"
+url = "https://physionet-open.s3.amazonaws.com/grabmyo/1.1.0/Session1/"
+type = "file"
+version = "1.1.0"
+access = "Direct public download, one GET per file, parallel curl with retries."
+size_bytes = 479068160
+sha256 = ""
+local_path = "downloads/physionet_grabmyo_semg_i16/Session1/"
+notes = "All 731 Session1/session1_participant<P>/session1_participant<P>_gesture<G>_trial1.dat files listed in SHA256SUMS.txt (P = 1..43, G = 1..17), each exactly 655,360 B. Each is checked against its SHA256SUMS.txt entry; the selected list of 1,462 (.dat + .hea) checksum lines is pinned by sha256 ad6d952e14967043c9927534e834cf62f9b63676f3c0930a80ebbed99a0423dc."
+
+[[resources]]
+id = "grabmyo_session1_trial1_hea"
+origin = "physionet_open_grabmyo_1_1_0"
+url = "https://physionet-open.s3.amazonaws.com/grabmyo/1.1.0/Session1/"
+type = "file"
+version = "1.1.0"
+access = "Direct public download, one GET per file, parallel curl with retries."
+size_bytes = 2273949
+sha256 = ""
+local_path = "downloads/physionet_grabmyo_semg_i16/Session1/"
+notes = "The 731 matching WFDB .hea headers (3,035-3,174 B each), checked against SHA256SUMS.txt. They carry per-signal format, gain(baseline)/units, ADC resolution, initial value, checksum, and channel name."
+
+[local_paths]
+downloads = "downloads/physionet_grabmyo_semg_i16/"
+filtered = "filtered/physionet_grabmyo_semg_i16/"
+index = "index/physionet_grabmyo_semg_i16/"
+samples = "samples/physionet_grabmyo_semg_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/physionet_grabmyo_semg_i16/samples.jsonl"
+summary = "Fetch and checksum the 731 Session 1 / trial 1 WFDB .dat/.hea pairs of GRABMyo 1.1.0, validate each header and every per-signal WFDB checksum and initial value, drop the four unused amplifier inputs U1-U4, and emit one frame-interleaved little-endian int16 sample (10,240 x 28) per gesture trial."
+deterministic_notes = "Pinned release 1.1.0: SHA-256 of SHA256SUMS.txt, LICENSE.txt, readme.txt and MotionSequence.txt; the trial selection (every Session1 *_trial1.dat/.hea entry of SHA256SUMS.txt, which must form the complete 43 x 17 participant x gesture grid) is pinned by the sha256 of its canonical checksum lines; every record must match SHA256SUMS.txt, every .dat must be 655,360 B, and the aggregate .dat (479,068,160 B) and .hea (2,273,949 B) sizes are pinned. Canonical order is (participant, gesture). Exclusion rule (build and verify): a trial is dropped if any kept channel contains the WFDB invalid marker -32768 or has fewer than 256 distinct codes, or if its output is byte-identical to an earlier trial; more than 1% exclusions fails. build.sh and verify.sh each self-test their own decoder on synthetic records; verify.sh re-derives every sample by byte-slicing the kept columns out of the source frames and compares bytes, index fields, exclusions, the aggregate output SHA-256, and manifest totals. Floors: at least 10,000 primary values or 100 KB, median at least 1,000 values per sample. Realized 2026-10-05: download 1,462 record files in one pass (485,909,830 B under downloads/), 731 samples from 43 participants x 17 gestures, 0 exclusions, 209,592,320 values, 419,184,640 bytes, every sample 286,720 values (10,240 x 28), aggregate output SHA-256 d70a0eff7a6a6332f5799e3b2163197401ed9ff42c4a577af41cc9e786ff919b; header comment lines 0; channel peak-to-peak 31-9,230 uV (median 551) in gesture trials and 19-1,487 uV (median 102) in Rest trials."
+
+[[series]]
+id = "grabmyo_semg_trial_i16"
+description = "Complete 5-second, 28-channel forearm and wrist surface-EMG hand-gesture trials (Session 1, trial 1 of every participant x gesture), one frame-interleaved int16 sample per trial."
+semantic_meaning = "Signed 16-bit stored WFDB values of surface EMG from an OT Bioelettronica EMGUSB2+ amplifier (gain 500, 2048 Hz) recorded while a healthy participant performs one of 17 hand/wrist gestures (16 movements plus Rest). Channels are F1-F16 (forearm: two rings of eight electrodes, 2 cm apart) and W1-W12 (wrist: two rings of six), which the project page describes as recorded in a bipolar configuration (8+8 forearm, 6+6 wrist) from 28 monopolar Ambu AM-N00S/E electrodes. Physical value in mV = (code - baseline) / gain, using the per-channel WFDB gain and baseline kept in the index."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Emitted values are exactly the int16 values stored in the published WFDB format-16 .dat files, with no local rescaling, filtering, or resampling. They are not raw amplifier ADC codes: the publisher band-pass filtered (10-500 Hz, 4th-order Butterworth) and 60 Hz notch-filtered the float signal (the paper's processing; the probe spectra show the notch and band edges), then converted it to WFDB with per-file, per-channel min/max auto-scaling. Realized over all 20,468 kept channels: every channel's minimum is -32767 (19,831) or -32766 (637) and its maximum is 32763-32766, each extreme reached exactly once (no clipping runs); the non-integer gain ranges 7.1e3-3.4e6 units/mV (median 1.25e5) with a per-channel integer baseline. The code scale therefore differs between channels and trials in physical units, but every channel is the same kind of full-range 16-bit quantization of one filtered sEMG waveform, with dense step-1 codes (3,562-9,176 distinct values per 10,240-sample channel, median 8,102; per-channel code standard deviation 1,432-12,395, median 6,327; no lattice). The per-channel gain and baseline are kept as auxiliary metadata in each index row (adc_gain_per_mv, baseline), not emitted as samples."
+source_resources = ["grabmyo_session1_trial1_dat", "grabmyo_session1_trial1_hea", "grabmyo_sha256sums"]
+source_format = "WFDB format 16 (interleaved little-endian two's-complement int16, 32 signals per frame) with companion .hea header"
+source_field = "Stored sample values of WFDB signals F1-F16 and W1-W12 (source columns 1-16, 18-23, 26-31)"
+filtered_input_path = "filtered/physionet_grabmyo_semg_i16/ingest_stats.json"
+filtering = "Keep Session 1, trial 1 of every participant (1-43) and gesture (1-17): 731 trials, one per participant x gesture. Sessions 2-3 and trials 2-7 (same participants, gestures, and setup) are not downloaded, which bounds the output at about 419 MB. Within each trial keep the 28 electrode channels and drop U1-U4 (source columns 17, 24, 25, 32), which the project page lists as unused inputs that only delimit the electrode rings and which carry low-level noise. Trials matching the exclusion rule are listed in ingest_stats.json (realized: none)."
+missing_value_policy = "WFDB format 16 reserves -32768 as the invalid-sample marker; a trial with any -32768 in a kept channel is excluded (build and verify apply the same rule, with at most 1% exclusions). All other stored values are emitted as recorded, including each channel's single normalization minimum (-32767 or -32766) and maximum (32763-32766), whose counts are reported. Realized: no -32768 values in any kept channel. Checksum, size, header-format, channel-name, initial-value, or per-signal checksum mismatches are fatal."
+conversion = "Parse the .hea (record line '<name> 32 2048 10240'; 32 signal lines with format 16, gain(baseline)/mV, ADC resolution 16, ADC zero 0, block size 0, names F1-F16, U1, W1-W6, U2, U3, W7-W12, U4), read the 655,360-byte .dat as little-endian int16 frames of 32, check each signal's first value and 16-bit sum against the header, then write the 28 kept columns in source order as frames: value[t * 28 + k] = signal KEPT[k] at time t, as raw little-endian int16, one .bin per trial in (participant, gesture) order."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian signed-int16 multichannel sEMG trial, frame-interleaved (time-major)"
+sample_geometry = "semg_trial_frames_by_electrode_channels_2d"
+sample_rank = 2
+sample_axes = ["time_sample_2048hz", "electrode_channel_F1-F16_W1-W12"]
+sample_shape = [10240, 28]
+natural_record_kind = "complete_grabmyo_gesture_trial_recording"
+sample_count = 731
+total_size_bytes = 419184640
+output_path = "samples/physionet_grabmyo_semg_i16/grabmyo_semg_trial_i16/"

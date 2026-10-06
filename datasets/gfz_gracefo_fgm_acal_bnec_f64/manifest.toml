@@ -1,0 +1,102 @@
+manifest_version = 1
+dataset_id = "gfz_gracefo_fgm_acal_bnec_f64"
+name = "GRACE-FO Calibrated Platform-Magnetometer B_NEC Daily Field Vectors Float64"
+description = "Complete daily 1 Hz geomagnetic field vectors (North, East, Centre; nT) from the AOCS fluxgate magnetometers of GRACE-FO 1 and 2 as published in GFZ ACAL_CORR v0201 (aligned and vector-calibrated B_NEC): one native float64 [records, 3] B_NEC array per selected satellite-day, 64 days spread over 2018-06..2026-08. In 47 samples the published satellite-disturbance corrections (dB_* terms) are nonzero; in the 17 samples dated 2022-11-21..2024-11-10 all seven dB_* variables are published as exactly 0.0, so those B_NEC values carry no disturbance correction (recorded per sample as index field disturbance_terms_zero)."
+homepage = "https://doi.org/10.5880/GFZ.2.3.2021.002"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Michaelis, I., Stolle, C., Rother, M. (2021): GRACE-FO calibrated and characterized magnetometer data. V. 0201. GFZ Data Services. https://doi.org/10.5880/GFZ.2.3.2021.002. Background: Stolle, C., Michaelis, I., Xiong, C. et al. (2021), Observing Earth's magnetic environment with the GRACE-FO mission, Earth Planets Space 73, 51, https://doi.org/10.1186/s40623-021-01364-w."
+notes = "Three independent statements of CC BY 4.0 for the exact objects: the ISDC README.txt in each satellite folder ('License: CC BY 4.0', validated by download.sh), the GFZ Data Services DOI landing page (schema.org license https://spdx.org/licenses/CC-BY-4.0, DC.rights CC-BY-4.0), and the global CDF attribute License = 'Creative Commons Attribution 4.0 International (CC BY 4.0)' inside every file (checked per file by download, build and verify). The in-file Rules_of_use attribute is only an as-is warranty disclaimer. Preserve the DOI citation."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official GFZ Information System and Data Center (ISDC) anonymous HTTPS archive of the GRACE-FO magnetometer product; no mirrors."
+usage_notes = "Geophysical satellite measurements only; no personal, human-subject or sensitive content."
+
+[[origins]]
+id = "gfz_isdc_gracefo_magnetic_field_0201"
+name = "GFZ ISDC GRACE-FO MAGNETIC_FIELD v0201"
+url = "https://isdc-data.gfz.de/grace-fo/MAGNETIC_FIELD/0201/"
+type = "data_portal"
+version = "0201"
+notes = "Daily per-satellite NASA CDF files under GF1/ACAL_CORR/ and GF2/ACAL_CORR/ (Apache listings: 2,921 GF1 and 2,821 GF2 v0201 files, 2018-06-01..2026-08-31, at discovery on 2026-10-05). README.txt notes that 2024-12 and 2025-02 were reprocessed to v0202 and that v0201 was withdrawn for 2026-05; those months are excluded."
+
+[[resources]]
+id = "isdc_readme_gf1"
+origin = "gfz_isdc_gracefo_magnetic_field_0201"
+url = "https://isdc-data.gfz.de/grace-fo/MAGNETIC_FIELD/0201/GF1/README.txt"
+type = "file"
+version = "Last-Modified 2026-08-17T12:28:38Z"
+access = "Direct public download; content-validated (license line, DOI, ACAL_CORR description, no reprocessed/withdrawn months beyond 2024-12/2025-02/2026-05)."
+size_bytes = 2864
+sha256 = "1f273abea6385ee133182fafb758b224597e651525d7e8e4ac0b92ea3324045a"
+local_path = "downloads/gfz_gracefo_fgm_acal_bnec_f64/README_GF1.txt"
+notes = "Hash recorded at authoring; download.sh validates content rather than the hash because GFZ appends processing notes to this file."
+
+[[resources]]
+id = "isdc_readme_gf2"
+origin = "gfz_isdc_gracefo_magnetic_field_0201"
+url = "https://isdc-data.gfz.de/grace-fo/MAGNETIC_FIELD/0201/GF2/README.txt"
+type = "file"
+version = "as of 2026-10-05"
+access = "Direct public download; content-validated as for GF1."
+size_bytes = 2864
+sha256 = "fe0f03b0fe0dd5720e04866ba4632d091c4f6a8026306c43811b0ed6fd6f980b"
+local_path = "downloads/gfz_gracefo_fgm_acal_bnec_f64/README_GF2.txt"
+notes = "Identical to the GF1 README apart from the satellite identifier."
+
+[[resources]]
+id = "acal_corr_daily_selection"
+origin = "gfz_isdc_gracefo_magnetic_field_0201"
+url = "https://isdc-data.gfz.de/grace-fo/MAGNETIC_FIELD/0201/"
+type = "exact_file_selection"
+version = "64 complete-day v0201 files pinned in sources.tsv (discovered 2026-10-05)"
+access = "Direct public HTTPS downloads of the exact files in sources.tsv (curl, resumable); each validated for pinned size, CDF magic, file identity attributes, B_NEC structure and the 86,400-epoch 1 s lattice."
+size_bytes = 975321560
+sha256 = ""
+local_path = "downloads/gfz_gracefo_fgm_acal_bnec_f64/cdf/"
+notes = "Per-file name, size, SHA-256, Last-Modified and Apache ETag are pinned in sources.tsv. ISDC publishes no checksum files; the SHA-256 values were taken from the first complete download of 2026-10-05 (size-matched, CDF-validated) and are enforced by download, build and verify."
+
+[local_paths]
+downloads = "downloads/gfz_gracefo_fgm_acal_bnec_f64/"
+filtered = "filtered/gfz_gracefo_fgm_acal_bnec_f64/"
+index = "index/gfz_gracefo_fgm_acal_bnec_f64/"
+samples = "samples/gfz_gracefo_fgm_acal_bnec_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/gfz_gracefo_fgm_acal_bnec_f64/samples.jsonl"
+summary = "Fetch 64 pinned daily GRACE-FO ACAL_CORR v0201 CDFs, decode each with a pure-stdlib CDF v3 reader (whole-file GZIP, VXR chain, per-block GZIP CVVRs), and emit the complete B_NEC variable of each file as one row-major little-endian float64 [records, 3] sample (86,400 records, or 86,399 for the 4 files whose upstream record set omits one epoch)."
+deterministic_notes = "Selection (scripts/select_days.py, documented by discover.sh): slot dates 2018-06-15 + 45k days up to 2026-08-31; GF1 on even slots, GF2 on odd slots, falling back to the other satellite on the same date; complete-day v0201 files only; months 2024-12, 2025-02, 2026-05 excluded; at most one satellite per date. Result: 64 of 67 slots (34 GF1, 30 GF2; 3 slots in excluded months skipped). Build runs a synthetic CDF self-test, then enforces file identity attributes, CDF_DOUBLE[3] layout, equal record counts across Timestamp/B_NEC/B_FGM/q_NEC_FGM/B_FLAG, every Timestamp on the exact 1 s CDF_EPOCH lattice of the file's UTC day (strictly increasing, first 00:00:00, last 23:59:59, at most 10 absent epochs; realized: 60 files complete, 4 files missing exactly one epoch), LABELS_BNEC = Bnorth/Beast/Bcentre, finite values, per-component nonconstancy, |B| within 5,000..80,000 nT, and distinct sample hashes. Verify re-decodes every source and byte-compares through a separate byte-swap path, checks index min/max against stored float64, manifest counts, and that B_NEC equals the conjugate-q_NEC_FGM rotation of B_FGM within 1e-6 nT on every 7th epoch. Build also requires all seven dB_* disturbance terms to be finite CDF_DOUBLE[3] arrays with the B_NEC record count, classifies each file as all-seven-identically-zero or all-seven-nonzero (a mixed state is fatal), records disturbance_terms_zero and disturbance_total_rms_nT per sample, and fails unless the zero class is exactly the pinned 17 dates 2022-11-21..2024-11-10 (47 nonzero); it also requires every component to have all-distinct values and zero float32-exact values. Verify re-classifies the terms from raw bytes, recomputes the RMS with exact summation (math.fsum) within 1e-3 nT, re-counts distinct and float32-exact values (via the low 29 mantissa bits), and re-checks the 17/47 split."
+
+[[series]]
+id = "gracefo_fgm_acal_corr_b_nec_f64"
+description = "Daily GRACE-FO calibrated platform-magnetometer field vectors in the local North-East-Centre frame."
+semantic_meaning = "Geomagnetic field vector in nT sampled at 1 Hz along the near-polar low Earth orbit (~490 km at launch, slowly decaying) by the active AOCS fluxgate magnetometer (FGM A) of one GRACE-FO satellite, as published by GFZ in ACAL_CORR v0201: aligned and vector-calibrated against a geomagnetic reference model and expressed in the local North, East, Centre (downward) frame. GFZ also publishes seven satellite-disturbance correction terms (dB_MTQ_FGM, dB_XI_FGM, dB_NY_FGM, dB_BT_FGM, dB_ST_FGM, dB_SA_FGM, dB_BAT_FGM: magnetorquers, non-linearities, temperature, solar array, battery). In 47 samples these are nonzero (RMS of their per-record sum 12.3..74.0 nT, median 29.8 nT, against a +/-50,000 nT signal). In the 17 samples dated 2022-11-21..2024-11-10 all seven are published as exactly 0.0 on every record, so no disturbance correction is present in those files; upstream (README, DOI page) does not document this. One sample is one complete UTC day of one satellite."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Upstream B_NEC is CDF_DOUBLE (IEEE-754 binary64) in network byte order. Samples hold the identical binary64 values, byte-swapped to little-endian; no rounding or rescaling. Realized-sample evidence, enforced by build and re-checked by verify: in every sample each of the three components has all-distinct values (distinct count = record count), and none of the 16,588,788 stored values is exactly representable in float32 (index fields component_distinct_counts and float32_exact_values)."
+source_resources = ["acal_corr_daily_selection"]
+source_format = "NASA CDF v3 daily file, whole-file GZIP compressed, per-variable GZIP CVVR blocks, network encoding"
+source_field = "zVariable B_NEC (CDF_DOUBLE, zDims [3], one record per 1 s epoch of the UTC day, UNITS nT, labels Bnorth/Beast/Bcentre)"
+filtered_input_path = "filtered/gfz_gracefo_fgm_acal_bnec_f64/ingest_stats.json"
+filtering = "Keep only the complete B_NEC variable of each of the 64 pinned files. Excluded: B_FGM (same measurement in the instrument frame), q_NEC_FGM, the dB_* disturbance-correction terms, Latitude/Longitude/Radius, B_FLAG (per-sample nonzero count recorded in the index), the label variables, and Timestamp (verified to lie on the lattice midnight + k seconds; the few absent epochs are listed per sample in the index field missing_epoch_seconds, so the time axis is fully recoverable without a timestamp series). The dB_* terms are read only to classify each file: index fields disturbance_terms_zero (all seven terms identically 0.0; 17 samples) and disturbance_total_rms_nT (RMS over records and components of the per-record sum of the seven terms, rounded to 1e-3; 0.0 for the 17, 12.269..74.042 nT for the other 47). No sample is dropped or re-selected on this basis."
+missing_value_policy = "The upstream B_NEC FILLVAL is NaN. Shared by build and verify: every Timestamp must equal the file date's midnight + k*1000 ms with integer k, strictly increasing, first k = 0 and last k = 86399; at most 10 lattice epochs may be absent (upstream omits the record rather than filling it); every record listed in the VXR chain must be physically present (no sparse or padded records); every B_NEC value must be finite. The sample keeps exactly the records present, in order: no fill is inserted for absent epochs, which are listed per sample in index field missing_epoch_seconds (realized: 4 of 64 samples lack one epoch each, at seconds 2296, 15049, 51046 and 65891). Any NaN, infinity, off-lattice or duplicated epoch, or more than 10 absent epochs is fatal; nothing is dropped, imputed or reordered. B_FLAG is not used to remove values."
+conversion = "Decompress the whole file (GZIP body at byte 40 after the CCR header, prepend the uncompressed magic), parse CDR/GDR/zVDR/ADR chains, follow B_NEC's VXR chain (VXRnext links and nested VXRs) to its CVVR blocks (each a separate GZIP stream; currently 4 blocks of 21,600 records), concatenate records in order, unpack as big-endian float64 and repack as little-endian float64. Output layout is row-major [records, 3]: for each present 1 s epoch the interleaved triple (B_N, B_E, B_C)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 array, row-major [records, 3] (records = 86,400 minus absent epochs), interleaved (B_N, B_E, B_C) per epoch"
+sample_geometry = "satellite_daily_vector_time_series_2d"
+sample_rank = 2
+sample_axes = ["utc_second_of_day", "nec_component"]
+natural_record_kind = "gracefo_fgm_acal_corr_daily_satellite_file_b_nec_array"
+sample_count = 64
+total_size_bytes = 132710304
+output_path = "samples/gfz_gracefo_fgm_acal_bnec_f64/gracefo_fgm_acal_corr_b_nec_f64/"

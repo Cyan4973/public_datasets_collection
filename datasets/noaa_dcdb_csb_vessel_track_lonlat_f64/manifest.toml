@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "noaa_dcdb_csb_vessel_track_lonlat_f64"
+name = "NOAA/IHO DCDB Crowdsourced Bathymetry Vessel Track Coordinates Float64"
+description = "Sequential vessel GNSS tracks: interleaved WGS84 longitude/latitude float64 pairs in file order, one sample per IHO DCDB crowdsourced-bathymetry submission file. 895 samples from 46 vessels (Rosepoint, GLOS, COMIT USF trusted nodes) on the 1e-6-degree decimal lattice, contributed 2024-06-01..07."
+homepage = "https://noaa-dcdb-bathymetry-pds.s3.amazonaws.com/docs/readme.html"
+
+[license]
+name = "Creative Commons Zero v1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "IHO Data Centre for Digital Bathymetry (DCDB), hosted by NOAA NCEI: Crowdsourced Bathymetry (CSB) point data, NOAA Open Data Dissemination bucket noaa-dcdb-bathymetry-pds."
+notes = "The DCDB CSB FAQ (https://noaa-dcdb-bathymetry-pds.s3.amazonaws.com/docs/FAQ.html, last updated Aug 8, 2023; fetched 2026-10-05, sha256 86017f3863f94913646e6ca50f59f30cfb0c929207193b3d5ea5398a04ad2b1a) states: 'Regardless of whether the data are provided to the IHO DCDB by a Trusted Node or an individual, the data is dedicated to the public domain in accordance with the \"Creative Commons Zero\" universal public domain dedication ( CC0 1.0 ).' It also states that the DCDB 'archives and shares, freely and without restrictions, depth data contributed by mariners.'"
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NOAA NODD public S3 bucket, anonymous HTTPS. Per the FAQ, only data from international waters or from coastal states that agreed to public sharing are published. Vessel names (PLATFORM_NAME), UNIQUE_ID, FILE_UUID, DEPTH and TIME are read only for validation, deduplication and overlap checks and are never emitted."
+usage_notes = "Samples are coordinate sequences of opted-in vessels (commercial, research and recreational) that the IHO publishes under CC0. The index keeps the public S3 object key for provenance. That key embeds the trusted node's opaque vessel UUID, but no vessel name."
+
+[[origins]]
+id = "noaa_nodd_dcdb_bucket"
+name = "NOAA Open Data Dissemination: IHO DCDB Crowdsourced Bathymetry bucket"
+url = "https://noaa-dcdb-bathymetry-pds.s3.amazonaws.com/"
+type = "bucket"
+notes = "Public us-east-1 bucket noaa-dcdb-bathymetry-pds; CSV objects under csb/csv/<YYYY>/<MM>/<DD>/ grouped by contribution date. Documentation at docs/readme.html and docs/FAQ.html."
+
+[[resources]]
+id = "csb_csv_2024_06_01_07_kept_objects"
+origin = "noaa_nodd_dcdb_bucket"
+url = "https://noaa-dcdb-bathymetry-pds.s3.amazonaws.com/csb/csv/2024/06/"
+type = "file"
+version = "ListObjectsV2 of csb/csv/2024/06/01/ .. 07/ taken 2026-10-05: 2,125 objects, 1,583,536,283 bytes; 900 kept objects pinned in selection.tsv (sha256 725be897a641e4b85213188fe90101c4f0b692dd4633cf15961f933a77f30536)"
+access = "Anonymous HTTPS GET of each kept object key; resumable curl."
+size_bytes = 1172429139
+sha256 = ""
+local_path = "downloads/noaa_dcdb_csb_vessel_track_lonlat_f64/csv/"
+notes = "Each object is checked against its pinned size and S3 composite ETag (MD5 over 5 MiB parts, verified against S3 for single-part and multipart objects), plus the exact header and first-row identity. Per-object SHA-256 values are recorded in downloads/<id>/download_manifest.tsv after download."
+
+[local_paths]
+downloads = "downloads/noaa_dcdb_csb_vessel_track_lonlat_f64/"
+filtered = "filtered/noaa_dcdb_csb_vessel_track_lonlat_f64/"
+index = "index/noaa_dcdb_csb_vessel_track_lonlat_f64/"
+samples = "samples/noaa_dcdb_csb_vessel_track_lonlat_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_dcdb_csb_vessel_track_lonlat_f64/samples.jsonl"
+summary = "Download the 900 pinned CSB CSV objects, parse LON/LAT text per row, apply the missing-value and lattice policy, and emit one little-endian float64 sample of interleaved LON,LAT pairs per object in file row order."
+deterministic_notes = "Window: S3 contribution-date prefixes 2024-06-01..07, a size cap; the full month of June 2024 is 9,904 objects and 6.06 GB. discover.sh documents the listing and the head/tail range probes behind selection.tsv; download.sh trusts the hash-pinned selection. Provider/lattice rules: AquaMap excluded (binary-float repr, 14-15 fractional digits), PGS excluded (files split between 1e-4 and 1e-6 lattices), FarSounder excluded (hourly rolling re-uploads with overlapping time ranges). Exact re-uploads (same UNIQUE_ID, size and first/last row) keep only the first key. Build and verify also exclude files whose micro-degree values sit on the coarse 1/60,000-degree sub-lattice (3-decimal NMEA minutes; 3 objects), and record each sample's effective quantum (1/600,000 or 1e-6 degree). They enforce the exact header, constant FILE_UUID/PROVIDER/UNIQUE_ID per file, 1e-6 lattice text, unique payloads, no time overlap between kept files of one vessel, and an exact n/1e6 match of every stored double. Samples are in selection key order."
+
+[[series]]
+id = "csb_vessel_track_lonlat_f64"
+description = "Vessel GNSS track coordinates from one CSB submission file, as interleaved LON,LAT float64 pairs."
+semantic_meaning = "WGS84 longitude and latitude (decimal degrees) of the vessel position logged with each echo-sounder depth sounding during routine maritime operations, in the trusted node's file row order. Each sample is one sequential vessel track segment (logging cadence about 1 s or about 60 s depending on the vessel's logger). Effective coordinate quantum is 1/600,000 degree (4-decimal NMEA minutes rounded to 6 decimal degrees; 605 samples, 85% of bytes) or 1e-6 degree (259 samples, 15%); 31 small samples are unclassified."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source prints coordinates as plain decimal text with at most six fractional digits (1e-6 degree lattice, trailing zeros stripped). Each token is parsed to the nearest IEEE-754 binary64. That double equals n/1e6 exactly for the integer micro-degree count n and round-trips to the source text. There is no rescaling, rounding or reprojection. float32 cannot hold these values; for example, -124.100532 needs 9 significant digits."
+source_resources = ["csb_csv_2024_06_01_07_kept_objects"]
+source_format = "IHO DCDB CSB point-data CSV with header UNIQUE_ID,FILE_UUID,LON,LAT,DEPTH,TIME,PLATFORM_NAME,PROVIDER"
+source_field = "LON and LAT columns (decimal degrees), interleaved per row"
+filtered_input_path = "filtered/noaa_dcdb_csb_vessel_track_lonlat_f64/ingest_stats.json"
+filtering = "Start from the 900 selection.tsv objects (Rosepoint 784, GLOS 106, COMIT USF 10). Exclude a whole object, recorded in ingest_stats.json, if any kept row has a LON/LAT token that is finite but not plain decimal with at most 6 fractional digits, if it has no valid fix, if all its valid fixes are one identical position (2 one-row files), or if it has at least 50 distinct micro-degree magnitudes and at least 90% of them are 0, 17 or 33 mod 50, i.e. degrees converted from 3-decimal NMEA minutes, a 1/60,000-degree tick 10x coarser than the rest (3 Rosepoint files, including both Nat Geo Quest files). Realized: 895 samples."
+missing_value_policy = "Rows are dropped and counted when LON or LAT is empty, unparseable or non-finite, outside [-180,180] / [-90,90], or exactly (0,0). Build and verify fail if more than 1% of rows are dropped in total. Malformed rows (not 8 fields), a changed header, or FILE_UUID/PROVIDER/UNIQUE_ID changing within a file are fatal. No values are imputed."
+conversion = "Parse each LON and LAT token with Python float(), which is correctly rounded to binary64. Append (LON, LAT) per kept row in file order and serialize as little-endian float64. value_count = 2 x kept rows. verify.sh recomputes integer micro-degrees from the text without floats and requires stored == n/1e6 exactly."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64 array of interleaved LON,LAT pairs"
+sample_geometry = "vessel_track_fix_sequence_lonlat_pairs"
+sample_rank = 2
+sample_axes = ["sounding_fix_in_file_order", "lon_lat"]
+natural_record_kind = "dcdb_csb_trusted_node_submission_file"
+sample_count = 895
+total_size_bytes = 81457776
+output_path = "samples/noaa_dcdb_csb_vessel_track_lonlat_f64/csb_vessel_track_lonlat_f64/"

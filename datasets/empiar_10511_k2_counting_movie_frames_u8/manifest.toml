@@ -1,0 +1,102 @@
+manifest_version = 1
+dataset_id = "empiar_10511_k2_counting_movie_frames_u8"
+name = "EMPIAR-10511 Cryo-EM Gatan K2 Electron-Counting Movie Frames UInt8"
+description = "40 native 8-bit 3838x3710 dose-fractionated cryo-EM movie frames (per-pixel electron counts, frame means 0.825-0.990 e/pixel) from a Gatan K2 Summit in counting mode on a 300 kV Titan Krios. The frame is always section z = 20 (the 21st of 40), taken by HTTP byte range from each of 40 movies spaced evenly over the 2979 unaligned, unnormalized MRC movies of EMPIAR-10511 (mouse cGAS bound to nucleosomes from HEK 293T cells)."
+homepage = "https://www.ebi.ac.uk/empiar/EMPIAR-10511/"
+
+[license]
+name = "Creative Commons CC0 1.0 Universal Public Domain Dedication"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "Zhao B, Xu P, Rowlett CM, Jing T, Shinde O, Lei Y, West AP, Liu WR, Li P (2020). EMPIAR-10511: mouse cGAS with nucleosomes from 293T. Electron Microscopy Public Image Archive, DOI 10.6019/EMPIAR-10511. Associated paper: The molecular basis of tight nuclear tethering and inactivation of cGAS, Nature (2020), DOI 10.1038/s41586-020-2749-z. Related map EMD-22047, model PDB 6X5A."
+notes = "EMPIAR FAQ (https://www.ebi.ac.uk/empiar/faq): 'All data in EMPIAR is freely and publicly available to the global community under the CC0 license'. download.sh fetches the FAQ and fails if that sentence disappears. Citing the entry DOI is requested as good practice, not required. The licence covers the EMPIAR movies only; the EMDB map and PDB model are cited, not used."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official EMPIAR archive files served anonymously over HTTPS by ftp.ebi.ac.uk; no mirrors. The specimen is purified recombinant mouse cGAS bound to nucleosomes isolated from the established HEK 293T cell line; the frames are 2D electron-count projections of vitrified macromolecules and carry no donor information."
+usage_notes = "Samples hold only detector counts. The EMPIAR entry JSON, which lists the depositors' institutional contact details, is downloaded only to validate the imageset geometry and is never emitted."
+
+[[origins]]
+id = "empiar"
+name = "Electron Microscopy Public Image Archive (EMBL-EBI)"
+url = "https://www.ebi.ac.uk/empiar/EMPIAR-10511/"
+type = "data_portal"
+notes = "Entry EMPIAR-10511, released 2020-10-09, 1.5 TB, one imageset 'Unaligned multiframe micrographs of mouse cGAS / nucleosomes purified from HEK 293T cells': 2979 MRC movies, 40 frames each, UNSIGNED BYTE, 3838x3710, 1.07 A pixels."
+
+[[resources]]
+id = "empiar_10511_entry"
+origin = "empiar"
+url = "https://www.ebi.ac.uk/empiar/api/entry/EMPIAR-10511/"
+type = "api_query_result"
+version = "release 2020-10-09 (updated 2020-10-09)"
+access = "Anonymous JSON API; validated for title, DOI, REL status and the single imageset (directory data, MRC, 2979 movies, 40 frames, UNSIGNED BYTE, 3838x3710, 1.07 A pixels)."
+size_bytes = 3297
+sha256 = ""
+local_path = "downloads/empiar_10511_k2_counting_movie_frames_u8/empiar_10511_entry.json"
+notes = "Metadata only; not used to build samples. Size is indicative, not enforced."
+
+[[resources]]
+id = "empiar_faq_license"
+origin = "empiar"
+url = "https://www.ebi.ac.uk/empiar/faq"
+type = "file"
+version = "fetched at download time"
+access = "Anonymous HTML; must contain the CC0 licence sentence."
+size_bytes = 44045
+sha256 = ""
+local_path = "downloads/empiar_10511_k2_counting_movie_frames_u8/empiar_faq.html"
+notes = "Licence evidence only. Size is indicative, not enforced."
+
+[[resources]]
+id = "selected_movie_frame_ranges"
+origin = "empiar"
+url = "https://ftp.ebi.ac.uk/empiar/world_availability/10511/data/"
+type = "file"
+version = "40 movies pinned in scripts/k2_movies.tsv (server mtimes 2020-10-09); listing positions 37, 111, 186, ..., 2941 of the 2979 name-sorted movies"
+access = "Two HTTP range requests per movie: bytes 0-1023 (MRC header) and bytes 284,780,624-299,019,603 (section z = 20). Each response must be 206 with Content-Range '.../569560224'. Pins per movie: exact file size 569,560,224, SHA-256 of the 1024-byte header, SHA-256 of the first 65,536 bytes of the frame (from discover.sh), and SHA-256 of the whole frame (recorded from the verified 2026-10-06 autocollect download and enforced on every later run)."
+size_bytes = 569600160
+sha256 = ""
+local_path = "downloads/empiar_10511_k2_counting_movie_frames_u8/"
+notes = "The data/ directory holds 2979 movies of 569,560,224 bytes (543M in the listing; 1,696,719,907,296 bytes in total, which EMPIAR reports as 1.5 TB, i.e. TiB) plus gain-reference.mrc (56,956,944 bytes, float32 mode 2, one section), which is excluded: it is a correction map, not detector counts. Whole movies are never fetched. size_bytes counts the 40 header and frame ranges (40 x 14,240,004)."
+
+[local_paths]
+downloads = "downloads/empiar_10511_k2_counting_movie_frames_u8/"
+filtered = "filtered/empiar_10511_k2_counting_movie_frames_u8/"
+index = "index/empiar_10511_k2_counting_movie_frames_u8/"
+samples = "samples/empiar_10511_k2_counting_movie_frames_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/empiar_10511_k2_counting_movie_frames_u8/samples.jsonl"
+summary = "Range-fetch the MRC header and frame z = 20 of 40 pinned EMPIAR-10511 K2 counting-mode movies (569,600,160 bytes), validate header geometry and frame statistics, and emit each frame's 3838x3710 uint8 count raster unchanged as one raw sample (40 samples, 569,559,200 bytes)."
+deterministic_notes = "discover.sh documents pin resolution: it parses the data/ autoindex (exactly 2979 FoilHole_*.mrc movies listed as 543M plus gain-reference.mrc listed as 54M), sorts movie names, takes listing indices floor((2s+1)*2979/80) for s = 0..39 (bin centres of 40 equal bins), and for each records HEAD Content-Length, the SHA-256 of bytes 0-1023 and the SHA-256 of bytes 284,780,624-284,846,159. Per movie, download, build and verify require: header SHA-256 equal to the pin; NX/NY/NZ/MODE = 3838/3710/40/0; NXSTART/NYSTART/NZSTART = 0; MX/MY/MZ = 3838/3710/40; MAPC/MAPR/MAPS = 1/2/3; ISPG = 0 and NSYMBT = 0 (so section k starts at 1024 + k*14,238,980); bytes 96-195 zero; 'MAP ' and little-endian stamp 0x44 0x41; one label 'Digital Micrograph(TM), GMS v 3.23' and no other label text; DMIN = 0, integer DMAX in 8..127 (observed 19..79) and DMEAN in 0.5..1.5. GMS fills DMIN/DMAX/DMEAN from the first frame only (for slot 0, DMAX 44 equals the maximum of frame 0 while frame 20 reaches 64; DMEAN 0.8641 vs frame-0 mean 0.8627), so frames are compared with DMEAN but never with DMIN/DMAX. Frame checks: exactly 14,238,980 bytes; prefix and (once pinned) whole-frame SHA-256 equal to the pins; maximum at most 127 (so MRC2014 signed-int8 and EMPIAR UNSIGNED BYTE readings coincide; enforced by build and verify, reported as a warning by download so a valid uint8 transfer is not discarded); at least 8 distinct values; mean in 0.5..1.5 e/pixel and within 25 % of the header DMEAN; modal value covering at most 75 % of pixels; at most 37 constant rows and 37 constant columns; no duplicate frame payload. verify.sh re-derives every frame from the downloaded ranges, byte-compares each sample, recomputes all statistics and index rows, checks that the sample directory matches the index exactly, and checks manifest sample_count and total_size_bytes. The SHA-256 over '<sample name>\\t<sample sha256>' lines in slot order is pinned (1f736f4887d93b62c74579e725e7b50a3c9c3f30ab03a433d73d83787e353926) and enforced by build and verify."
+
+[[series]]
+id = "k2_counting_frame_u8"
+description = "Unnormalized electron-counting frames from a Gatan K2 Summit: one 3838x3710 dose fraction (frame 21 of 40) per sampled cryo-EM exposure of vitrified mouse cGAS-nucleosome complexes."
+semantic_meaning = "Each value is the number of electron events the Gatan K2 Summit direct electron detector registered in counting mode in one 1.07 A pixel (specimen scale) during one dose fraction (section z = 20 of a 40-frame movie; 300 kV FEI Titan Krios, 48 e/A^2 total exposure per EMDB EMD-22047, defocus 0.8-2.0 um). The frames are as written by Gatan DigitalMicrograph (GMS 3.23) without gain normalization, alignment or summation: sparse, roughly Poisson counts. Over the 40 realized frames: means 0.825-0.990 e/pixel (median 0.875); zero fractions 0.372-0.440; pooled value shares 0: 41.8 %, 1: 36.3 %, 2: 15.9 %, 3: 4.7 %, 4: 1.0 %, >=5: 0.2 %; per-frame entropy 1.73-1.88 bits/value; 16-24 distinct values. Each frame also holds 3-14 isolated values >= 16 (frame maxima 31-80) from hot or bright pixels, some recurring at fixed coordinates across frames."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "GMS writes the movie as an MRC mode-0 stack and EMPIAR declares the imageset voxel type UNSIGNED BYTE. MRC2014 defines mode 0 as signed int8 (IMOD reads it as unsigned unless a flag is set); all stored values are non-negative counts at most 127 (enforced per emitted frame by build and verify; the header DMAX, which describes the first frame, is 19-79 for the 40 movies), so both readings give the same numbers and the bytes are emitted unchanged as uint8. The low dynamic range is native to counting-mode acquisition, where each pixel reports a small integer number of detected electrons per frame; 8 bits is the narrowest standard width and the format the instrument wrote. The deposited float32 gain reference is not applied: the samples are the raw counts, not a derived product."
+source_resources = ["selected_movie_frame_ranges"]
+source_format = "MRC2014 movie stack written by Gatan DigitalMicrograph GMS 3.23: 1024-byte little-endian header, NSYMBT = 0, 40 contiguous mode-0 sections of 3838x3710, x fastest"
+source_field = "MRC section z = 20 data block (bytes 284,780,624-299,019,603): 3838x3710 per-pixel electron-count raster of one dose-fractionated frame"
+filtered_input_path = "filtered/empiar_10511_k2_counting_movie_frames_u8/ingest_stats.json"
+filtering = "Only the 2979 FoilHole movies are eligible; gain-reference.mrc is excluded. 40 movies are taken at the bin centres of 40 equal bins over the name-sorted listing (indices 37, 111, 186, ..., 2941), which spans both acquisition days (2020-03-04 and 2020-03-05) and all four EPU acquisition templates. From each movie only section z = 20 (mid-exposure, the same dose position in every movie) is taken; all 3838x3710 pixels of that frame are emitted, nothing is cropped."
+missing_value_policy = "There are no missing-value sentinels: every value is a detector count, and zeros are genuine zero-count pixels (37-44 % of pixels at this dose). Fatal, identically in download, build and verify: any size, Content-Range, hash or MRC-header deviation; fewer than 8 distinct values; a mean outside 0.5-1.5 e/pixel or more than 25 % from the header DMEAN; a modal value above 75 % of pixels; more than 37 constant rows or columns; a duplicate frame payload. Fatal in build and verify (a warning in download): a frame maximum above 127. Isolated hot or bright pixels are kept as acquired and counted (hot_values, values >= 16) in the index statistics."
+conversion = "Copy the 14,238,980 bytes of section z = 20 verbatim as one raw uint8 sample per movie: 3710 rows of 3838 pixels, row-major as stored by MRC (x fastest, first stored row first). 8-bit values need no byte-order change."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 electron-counting detector frame"
+sample_geometry = "detector_frame_raster_2d"
+sample_rank = 2
+sample_shape = [3710, 3838]
+sample_axes = ["detector_row_y", "detector_column_x"]
+natural_record_kind = "dose_fractionated_movie_frame"
+sample_count = 40
+total_size_bytes = 569559200
+output_path = "samples/empiar_10511_k2_counting_movie_frames_u8/k2_counting_frame_u8/"

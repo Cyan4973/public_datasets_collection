@@ -1,0 +1,6 @@
+{
+ "sample_count": 336,
+ "dropped_framelets": [],
+ "aggregate_sha256": "811298b0c29c03f7a791b53f427398f0a891af8c06ce8ac8fe461ae9d789180f",
+ "notes": "sample_count and dropped_framelets follow from the published HIST.TAB of each pinned MIDR: the largest per-MIDR DN-0 count is 111,758 (F-MIDR.05S098), below the 524,288-pixel drop threshold of a single framelet, so the drop rule cannot fire; the first build confirmed this (largest per-framelet DN-0 count 78,549). aggregate_sha256 = SHA-256 over sorted 'sample_path<TAB>sha256' lines, pinned from the 2026-10-05 build."
+}

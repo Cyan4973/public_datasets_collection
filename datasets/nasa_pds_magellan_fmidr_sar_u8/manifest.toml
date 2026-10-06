@@ -1,0 +1,150 @@
+manifest_version = 1
+dataset_id = "nasa_pds_magellan_fmidr_sar_u8"
+name = "Magellan Venus Full-Resolution SAR Mosaic (F-MIDR) Framelets UInt8"
+description = "336 native uint8 1024x1024 framelets of Magellan S-band synthetic-aperture-radar backscatter from six full-resolution (75 m/pixel) Venus mosaic image data records on six PDS MIDR volumes."
+homepage = "https://asc-pds-magellan.s3.us-west-2.amazonaws.com/mg_0046/aareadme.txt"
+
+[license]
+name = "NASA SMD Open Scientific Data Policy"
+spdx = "LicenseRef-NASA-SMD-Open-Data"
+url = "https://science.nasa.gov/researchers/science-data/science-information-policy/"
+citation = "NASA/JPL Magellan Project, MGN-V-RDRS-5-MIDR-FULL-RES-V1.0 (Magellan Venus Radar System Derived Mosaic Image Data Record, Full Resolution), NASA Planetary Data System; served by the PDS Cartography and Imaging Sciences Node / USGS Astrogeology. Preserve mission, data-set ID, and product (F-MIDR) attribution."
+notes = "NASA SMD states that information produced from SMD-funded scientific research is held as a public trust, made publicly available, and openly shared; the same evidence is accepted for nasa_pds_cassini_vims_qube_i16 and nasa_pds_mastcamz_raw_i16. Magellan was a NASA mission and these 1990-1993 archive products are distributed anonymously by the official PDS node. The policy page is proxy-blocked from this environment and was not re-fetched; download.sh does not fetch it."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official PDS3 MIDR CD-ROM volumes mirrored in the anonymous USGS Astrogeology bucket asc-pds-magellan; no third-party mirrors."
+usage_notes = "Planetary radar imagery of the surface of Venus; samples hold only IMAGE-object DNs (no VICAR headers, PDS labels, or ancillary tables)."
+
+[[origins]]
+id = "asc_pds_magellan"
+name = "PDS Imaging Node / USGS Astrogeology Magellan archive bucket"
+url = "https://asc-pds-magellan.s3.us-west-2.amazonaws.com/?list-type=2&delimiter=/"
+type = "bucket"
+notes = "Anonymous S3 bucket holding the Magellan PDS3 volumes: MIDR CD-ROMs mg_0001-mg_0127, later FMAP volumes mg_11xx-14xx, GxDR mg_3001/3002, and edr/. Only F-MIDR directories (f*) on MIDR volumes are in scope; C1/C2/C3 compressed MIDRs, P-MIDRs, FMAP, GxDR and EDR are excluded."
+
+[[resources]]
+id = "fmidr_25s003"
+origin = "asc_pds_magellan"
+url = "https://asc-pds-magellan.s3.us-west-2.amazonaws.com/mg_0006/f25s003/"
+type = "file"
+version = "F-MIDR.25S003;1 on volume MG_0006"
+access = "56 ffNN.img + 56 ffNN.lbl + hist.tab + hist.lbl, each pinned by size and S3 single-part ETag (MD5) in sources.tsv."
+size_bytes = 59128768
+sha256 = ""
+local_path = "downloads/nasa_pds_magellan_fmidr_sar_u8/mg_0006/f25s003/"
+notes = "About 25S 3E (Alpha Regio tessera). Whole-MIDR DN-0 fraction 0.154 % (HIST.TAB)."
+
+[[resources]]
+id = "fmidr_65n018"
+origin = "asc_pds_magellan"
+url = "https://asc-pds-magellan.s3.us-west-2.amazonaws.com/mg_0007/f65n018/"
+type = "file"
+version = "F-MIDR.65N018;1 on volume MG_0007"
+access = "56 ffNN.img + 56 ffNN.lbl + hist.tab + hist.lbl, each pinned by size and S3 single-part ETag (MD5) in sources.tsv."
+size_bytes = 59128768
+sha256 = ""
+local_path = "downloads/nasa_pds_magellan_fmidr_sar_u8/mg_0007/f65n018/"
+notes = "About 65N 18E (Ishtar Terra highlands). Whole-MIDR DN-0 count 11 pixels."
+
+[[resources]]
+id = "fmidr_35s130"
+origin = "asc_pds_magellan"
+url = "https://asc-pds-magellan.s3.us-west-2.amazonaws.com/mg_0013/f35s130/"
+type = "file"
+version = "F-MIDR.35S130;1 on volume MG_0013"
+access = "56 ffNN.img + 56 ffNN.lbl + hist.tab + hist.lbl, each pinned by size and S3 single-part ETag (MD5) in sources.tsv."
+size_bytes = 59128768
+sha256 = ""
+local_path = "downloads/nasa_pds_magellan_fmidr_sar_u8/mg_0013/f35s130/"
+notes = "About 35S 130E (Artemis region). Whole-MIDR DN-0 fraction 0.031 %."
+
+[[resources]]
+id = "fmidr_05s098"
+origin = "asc_pds_magellan"
+url = "https://asc-pds-magellan.s3.us-west-2.amazonaws.com/mg_0015/f05s098/"
+type = "file"
+version = "F-MIDR.05S098;1 on volume MG_0015"
+access = "56 ffNN.img + 56 ffNN.lbl + hist.tab + hist.lbl, each pinned by size and S3 single-part ETag (MD5) in sources.tsv."
+size_bytes = 59128768
+sha256 = ""
+local_path = "downloads/nasa_pds_magellan_fmidr_sar_u8/mg_0015/f05s098/"
+notes = "About 5S 98E (Aphrodite Terra). Whole-MIDR DN-0 fraction 0.190 %."
+
+[[resources]]
+id = "fmidr_10n188"
+origin = "asc_pds_magellan"
+url = "https://asc-pds-magellan.s3.us-west-2.amazonaws.com/mg_0025/f10n188/"
+type = "file"
+version = "F-MIDR.10N188;1 on volume MG_0025"
+access = "56 ffNN.img + 56 ffNN.lbl + hist.tab + hist.lbl, each pinned by size and S3 single-part ETag (MD5) in sources.tsv."
+size_bytes = 59128768
+sha256 = ""
+local_path = "downloads/nasa_pds_magellan_fmidr_sar_u8/mg_0025/f10n188/"
+notes = "About 10N 188E (Sapas Mons volcano area). No DN-0 pixels."
+
+[[resources]]
+id = "fmidr_20n286"
+origin = "asc_pds_magellan"
+url = "https://asc-pds-magellan.s3.us-west-2.amazonaws.com/mg_0046/f20n286/"
+type = "file"
+version = "F-MIDR.20N286;1 on volume MG_0046"
+access = "56 ffNN.img + 56 ffNN.lbl + hist.tab + hist.lbl, each pinned by size and S3 single-part ETag (MD5) in sources.tsv."
+size_bytes = 59128768
+sha256 = ""
+local_path = "downloads/nasa_pds_magellan_fmidr_sar_u8/mg_0046/f20n286/"
+notes = "About 20N 286E (Beta Regio / Devana Chasma rift). Whole-MIDR DN-0 fraction 0.003 %."
+
+[[resources]]
+id = "fmidr_dataset_description"
+origin = "asc_pds_magellan"
+url = "https://asc-pds-magellan.s3.us-west-2.amazonaws.com/mg_0046/label/fmidrds.lbl"
+type = "file"
+version = "MGN-V-RDRS-5-MIDR-FULL-RES-V1.0 data-set catalog label on MG_0046"
+access = "Direct public download; size and MD5 pinned in sources.tsv; must name the F-MIDR data set."
+size_bytes = 8000
+sha256 = ""
+local_path = "downloads/nasa_pds_magellan_fmidr_sar_u8/mg_0046/label/fmidrds.lbl"
+notes = "Documentation only (data-set description); not used to build samples."
+
+[local_paths]
+downloads = "downloads/nasa_pds_magellan_fmidr_sar_u8/"
+filtered = "filtered/nasa_pds_magellan_fmidr_sar_u8/"
+index = "index/nasa_pds_magellan_fmidr_sar_u8/"
+samples = "samples/nasa_pds_magellan_fmidr_sar_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_pds_magellan_fmidr_sar_u8/samples.jsonl"
+summary = "Fetch 685 pinned files (354,780,608 bytes) for six F-MIDRs, validate every detached PDS3 label and VICAR2 header, and emit each framelet's 1024x1024 uint8 IMAGE object as one raw sample (336 samples, 352,321,536 bytes)."
+deterministic_notes = "sources.tsv (SHA-256 pinned in download.sh and the parser) fixes every volume, directory, file, byte size and MD5. discover.sh documents the selection from the 765 F-MIDR directories: name unique across volumes, not on mg_0001 (older 1-record VICAR layout), whole-MIDR DN-0 fraction below 0.2 % and max DN <= 251 by the MIDR's HIST.TAB, one MIDR per volume, spread over latitude -35..+65 and longitude 3..286 E. Build and verify require DATA_SET_ID MGN-V-RDRS-5-MIDR-FULL-RES-V1.0, MAGELLAN/VENUS/RADAR SYSTEM/PRIMARY_MISSION, FILE_RECORDS 1026, ^IMAGE record 3, 2-record VICAR2 header, 1024x1024 UNSIGNED_INTEGER 8-bit, the pinned DN-law note, sinusoidal 75 m/pixel projection, VICAR LBLSIZE 2048 / BYTE / BSQ / NL=NS=1024 / NBB=NLB=0 / SPDN_1=0 'MISSING DATA' / LOW_REP -20 / HI_REP 30 / PRODUCT = IMAGE_ID / SUBFRAME, SUBF_ROW, SUBF_COL = framelet position. The 56 framelet histograms of each MIDR must sum exactly to its published HIST.TAB. Samples are sorted by volume, MIDR and framelet; the aggregate SHA-256 of (sample_path, sha256) lines is pinned in expected_output.json."
+
+[[series]]
+id = "magellan_fmidr_sar_backscatter_u8"
+description = "Magellan full-resolution Venus SAR mosaic framelets as stored 8-bit backscatter DNs."
+semantic_meaning = "Each value is a stored F-MIDR DN of Magellan S-band (12.6 cm) SAR backscatter on a 75 m/pixel sinusoidal map grid: DN = INT((MIN(MAX(RV,-20),30) + 20) * 5) + 1, where RV is the radar cross section per unit area divided by the Muhleman law, in dB, giving 0.2 dB per DN over DN 1..251 (-20..+30 dB). DN 0 is the single VICAR-declared special value, MISSING DATA."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "This is the archive's own quantized product: each detached PDS3 label declares the IMAGE object as UNSIGNED_INTEGER with SAMPLE_BITS 8 and states the DN law. The build emits the declared IMAGE DNs as stored, with no rescaling, no dB conversion, and no remapping of DN 0."
+source_resources = ["fmidr_25s003", "fmidr_65n018", "fmidr_35s130", "fmidr_05s098", "fmidr_10n188", "fmidr_20n286"]
+source_format = "PDS3 detached-label Magellan F-MIDR framelet: 2048-byte VICAR2 header followed by a 1024x1024 UNSIGNED_INTEGER 8-bit IMAGE object"
+source_field = "IMAGE object DN (F-MIDR normalized radar backscatter, 0.2 dB per DN, DN 0 = MISSING DATA)"
+filtered_input_path = "filtered/nasa_pds_magellan_fmidr_sar_u8/ingest_stats.json"
+filtering = "All 56 framelets of each of the six pinned F-MIDRs are inspected. Drop rule, applied identically in build and verify: a framelet is dropped iff more than 524,288 of its 1,048,576 pixels are DN 0, so all-zero framelets are always dropped. For this selection the rule drops nothing, because the largest whole-MIDR DN-0 count is 111,758 (F-MIDR.05S098). VICAR headers, PDS labels, browse images and the geom/frame tables are not emitted; HIST.TAB is used only as an exact cross-check."
+missing_value_policy = "DN 0 (MISSING DATA) stays in place inside retained framelets (221,906 pixels, 0.063 % of retained pixels, by HIST.TAB); it is never remapped, masked or imputed. Framelets over the 50 % DN-0 threshold are dropped as above. Fatal: any DN above 251, a constant framelet, fewer than 16 distinct DNs, any label or VICAR header deviation, a size or MD5 mismatch, or a MIDR whose framelet histograms do not sum to its HIST.TAB."
+conversion = "Parse the detached label. Its ^IMAGE pointer names the upper-case file FFNN.IMG at record 3, which is mapped explicitly to the bucket's lower-case key ffNN.img. Skip (3 - 1) * 1024 = 2048 header bytes and write the next 1,048,576 bytes (1024 lines x 1024 samples, line-major as stored) as one raw uint8 sample per framelet. 8-bit values need no byte-order change."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 1024x1024 framelet raster"
+sample_geometry = "fixed_1024x1024_sinusoidal_map_framelet"
+sample_rank = 2
+sample_shape = [1024, 1024]
+sample_axes = ["line", "sample"]
+natural_record_kind = "magellan_fmidr_framelet_file"
+sample_count = 336
+total_size_bytes = 352321536
+output_path = "samples/nasa_pds_magellan_fmidr_sar_u8/magellan_fmidr_sar_backscatter_u8/"

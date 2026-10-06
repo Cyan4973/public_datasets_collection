@@ -1,0 +1,23 @@
+# NREL ResStock 2021 (AMY2018) State-Level Single-Family-Detached 15-Minute End-Use Energy Load Profiles Float64
+
+- Candidate id: `nrel_resstock2021_state_enduse_load_profiles_f64`
+- Width: float64
+- Quantity: Weighted aggregate simulated energy consumption in kWh per 15-minute interval, by end use and fuel (out.<fuel>.<end_use>.energy_consumption), for the single-family-detached housing stock of each US state. data_dictionary.tsv gives kWh for every fuel. These are EnergyPlus building-stock simulation sums written as full-precision doubles (e.g. 49.945120048400376, 3462031.244523301).
+- Source: https://data.openei.org/submissions/4520
+- Resources: https://oedi-data-lake.s3.amazonaws.com/nrel-pds-building-stock/end-use-load-profiles-for-us-building-stock/2021/resstock_amy2018_release_1/timeseries_aggregates/by_state/state%3DCO/co-single-family_detached.csv, https://oedi-data-lake.s3.amazonaws.com/?list-type=2&prefix=nrel-pds-building-stock/end-use-load-profiles-for-us-building-stock/2021/resstock_amy2018_release_1/timeseries_aggregates/by_state/, https://oedi-data-lake.s3.amazonaws.com/nrel-pds-building-stock/end-use-load-profiles-for-us-building-stock/2021/resstock_amy2018_release_1/data_dictionary.tsv
+- License: CC-BY-4.0
+- License evidence: https://data.openei.org/submissions/4520
+- License quote: OEDI submission 4520 'End-Use Load Profiles for the U.S. Building Stock' (DOI 10.25984/1876417): 'License: Creative Commons Attribution 4.0' (links https://creativecommons.org/licenses/by/4.0/).
+- Natural record: One end-use column of one state's published aggregate profile file, by_state/state=XX/xx-single-family_detached.csv. It is an annual 15-minute series of 35,040 values (2018-01-01 00:15 to 2019-01-01 00:00; both endpoints verified). There are 49 files (48 states plus DC). Keep the non-degenerate out.*.energy_consumption end-use columns. Exclude the *.total columns, which are sums of end uses, and all-zero columns. The timestamp, models_used and units_represented columns are auxiliary.
+- Estimated samples: 1,800
+- Estimated primary values: 63,000,000
+- Estimated download bytes: 1,546,682,912
+- Estimated primary bytes: 505,000,000
+- Decode path: curl the 49 CSVs (S3 object keys need 'state%3DXX'), each about 25-32 MB, plain text. Parse with the csv module, convert with float() and pack with struct '<d'. Preserve signed values (the PV column is negative; '-0.0' appears). Check 35,040 rows per file and drop columns that are all zero. Pure stdlib.
+- Novelty kind: new_modality
+- Novelty evidence: novelty.py --url https://oedi-data-lake.s3.amazonaws.com/nrel-pds-building-stock/end-use-load-profiles-for-us-building-stock/ --terms resstock 'load profiles' end-use found no matches in recipes, registry, ledger, downstream or downstream_registry. The corpus has no building-energy simulation load profiles; the nearest material, UCI household power and appliances energy, is single-site metering.
+- Homogeneity: One release (ResStock 2021 AMY2018 release 1), one building type (single-family detached), one aggregation level (state), one cadence (15 min), one unit (kWh) and one generation process (EnergyPlus plus sample weighting). Different end uses differ in scale but share unit and process. Do not mix building types, county/PUMA aggregation levels, ComStock, or the *_intensity (kWh/sqft) columns.
+- Risks: (1) This is simulation output, not measurement (ClimSim is the accepted precedent for simulation outputs), and the values are weighted sums. (2) Many end-use columns are all-zero or sparse (holiday lights, pool and hot-tub loads); drop degenerate ones and justify the rest. (3) Totals duplicate the end-use sums and must be excluded, or a judge may call them inflation. (4) The sample count depends on the column filter (roughly 1,500-2,000). The builder can restrict to electricity end uses (~430 MB) if the judge prefers a narrower family. (5) Download is 1.55 GB for ~0.5 GB kept.
+- Probe evidence: The S3 ListObjectsV2 on by_state/ returned 244 keys, including 49 single-family_detached files totalling 1,546,682,912 B (CO file 31,852,785 B). A range GET 0-3000 shows the header with 53 out.* columns and a first row 'G0800010,Single-Family Detached,2018-01-01 00:15:00,439,106295.509,49.945120048400376,170.55069784560217,...' (county file). A tail range GET on the CO state file ends at '2019-01-01 00:00:00'. data_dictionary.tsv lists out.electricity.total.energy_consumption and out.natural_gas.total.energy_consumption as float, kWh. The OEDI 4520 page links CC BY 4.0.
+
+Proposed by the autocollect scout on 2026-10-06 (transcript `.data/pipeline/logs/scout_64bit/scout.20261006_012600.jsonl`).

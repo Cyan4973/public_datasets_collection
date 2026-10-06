@@ -1,0 +1,23 @@
+# Azure Public Dataset V2 (2019) VM CPU Utilization Readings, 5-Minute Min/Max/Avg, Float64
+
+- Candidate id: `azure_vm2019_cpu_utilization_readings_f64`
+- Width: float64
+- Quantity: Per-VM CPU utilization (percent, 0-100) over each 5-minute interval: min, max and avg. schema.csv types these as DOUBLE. The CSV prints them with 17 significant digits (e.g. 19.898441030801841), so they are true binary doubles, not rounded decimals.
+- Source: https://github.com/Azure/AzurePublicDataset/blob/master/AzurePublicDatasetV2.md
+- Resources: https://github.com/Azure/AzurePublicDataset/releases/download/dataset-v2/trace_data_vm_cpu_readings_vm_cpu_readings-file-1-of-195.csv.gz, https://github.com/Azure/AzurePublicDataset/releases/download/dataset-v2/trace_data_vm_cpu_readings_vm_cpu_readings-file-2-of-195.csv.gz, https://github.com/Azure/AzurePublicDataset/releases/download/dataset-v2/schema.csv, https://github.com/Azure/AzurePublicDataset/blob/master/LICENSE
+- License: CC-BY-4.0
+- License evidence: https://github.com/Azure/AzurePublicDataset/blob/master/LICENSE
+- License quote: The repo root LICENSE is 'Attribution 4.0 International' (the GitHub license API reports spdx CC-BY-4.0). Code has its own LICENSE-CODE (MIT). The same repo's AzureVMNoiseDataset2024.md says: 'The data is made available and licensed under a CC-BY Attribution License (https://github.com/Azure/AzurePublicDataset/blob/master/LICENSE).' The trace files are release assets of this repo (release 'dataset-v2', 'Dataset files migrated from Azure Blob Storage').
+- Natural record: One 5-minute fleet snapshot: every VM reading that shares one timestamp. The file is sorted by timestamp. File 1 holds exactly 44 snapshots (t=0..12900 s): file 2 starts at t=13200 and file 3 at t=26400, both verified. Each snapshot averages about 225k VMs (1,942,780,023 readings / 8,640 timestamps). Primary series: min_cpu, max_cpu and avg_cpu, one sample per snapshot per series. The hashed vmid and the timestamp are auxiliary or dropped.
+- Estimated samples: 88
+- Estimated primary values: 59,800,000
+- Estimated download bytes: 1,713,065,565
+- Estimated primary bytes: 478,000,000
+- Decode path: Download with curl (-L -C -, resumable; GitHub serves a signed redirect). Pin the sha256 digests from the release API: file-1 010c375e5e69624c300a2dad1460762364b89b8ca030e1de05dcd808e9d7032a (856,259,637 B), file-2 26d03dee50b36ae4d572d17206431905b3ebb18faa9851efb985d2239eb43389 (856,805,928 B). Stream with gzip.open, read rows with the csv module (int timestamp, vmid string, three floats), convert with float() and pack with struct '<d'. Start a new sample whenever the timestamp changes. Check that values fall in [0,100] and that the 44 timestamps per file sit on the 300-second grid. Pure stdlib.
+- Novelty kind: new_source
+- Novelty evidence: novelty.py --url https://github.com/Azure/AzurePublicDataset --terms azure 'vm cpu' 'cpu readings' found a same-host (github.com) match only. Its 'azure' term hits are unrelated WHO API recipes. Nothing in the registry, ledger, downstream families or downstream registry. No cloud or VM utilization telemetry exists at any width in local datasets/, staging/, attempts/dataset_status.tsv or pipeline/candidates.tsv. None of the 14 accepted 64-bit families from this effort is systems telemetry.
+- Homogeneity: One quantity (CPU utilization %, 0-100), one 5-minute aggregation, one region, one 30-day 2019 trace (V2). min, max and avg are separate series with the same unit. Do not mix in the 2017 V1 trace, which is a different sanitized subset with 125 files.
+- Risks: (1) Natural-record argument: a per-VM series would span all 195 files (~166 GB), so the timestamp snapshot is the bounded natural record. Row order inside a snapshot follows the source's arbitrary VM hash order. (2) Each file is ~856 MB, so use resumable curl with a speed-limit stall check. Two files plus output come to about 2.2 GB, within the 5 GB cap. One file (44 snapshots, ~239 MB primary) also works. (3) Builder should check for and handle any empty or NaN fields, though none appeared in the probed rows.
+- Probe evidence: Range GET 0-30000 on file-1 decompressed to rows like '0,yNf/R3X8...,19.898441030801841,24.996361191759995,22.630672687116984'. Range GETs on file-2 and file-3 start at timestamps 13200 and 26400. The GitHub releases API lists 195 cpu_readings assets (166.6 GB total) with sizes and sha256 digests. schema.csv shows 'vm_cpu_readings-file-*-of-195.csv.gz,3,min cpu,DOUBLE' and likewise for max and avg. AzurePublicDatasetV2.md reports 1,942,780,023 readings over 30 days.
+
+Proposed by the autocollect scout on 2026-10-06 (transcript `.data/pipeline/logs/scout_64bit/scout.20261006_012600.jsonl`).

@@ -1,0 +1,101 @@
+manifest_version = 1
+dataset_id = "fingrid_nordic_grid_frequency_10hz_f32"
+name = "Fingrid Nordic Grid Frequency 10 Hz (daily records) Float32"
+description = "Electrical frequency of the Nordic synchronous power system measured by Fingrid at 10 samples per second; one little-endian float32 vector per daily CSV file from three pinned monthly archives (2025-01, 2025-07, 2026-01), restricted to the primary 10 uHz-resolution measurement chain."
+homepage = "https://data.fingrid.fi/en/datasets/339"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Fingrid Oyj, 'Frequency - historical data' (dataset 339), Fingrid Open Data, https://data.fingrid.fi/en/datasets/339."
+notes = "The dataset page metadata declares license name 'Creative Commons Attribution' with termsLink https://creativecommons.org/licenses/by/4.0/; download.sh re-checks both on every run. Attribute Fingrid as the source."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Fingrid Open Data file downloads (Azure-hosted /files/339/ paths linked from the dataset page); anonymous HTTPS, no API key. The data are system-level physical measurements with no personal information."
+usage_notes = "Public, CC BY 4.0, appropriate for reproducible numeric dataset collection with attribution."
+
+[[origins]]
+id = "fingrid_open_data_339"
+name = "Fingrid Open Data: Frequency - historical data"
+url = "https://data.fingrid.fi/en/datasets/339"
+type = "data_portal"
+notes = "Dataset page embeds its metadata (license, monthly file listing with link and byte size) as Next.js JSON; the open-data API needs a key but the /files/ archives do not."
+
+[[resources]]
+id = "archive_2025_01"
+origin = "fingrid_open_data_339"
+url = "https://data.fingrid.fi/files/339/2025/2025-01.7z"
+type = "archive"
+version = "Last-Modified Thu, 10 Apr 2025 12:31:06 GMT"
+access = "Direct anonymous download, fetched whole (solid 7z)."
+size_bytes = 66380610
+sha256 = "762ed181c6aa8793c31edbe8555bb446d2875061d80767604cb49fb984eca549"
+local_path = "downloads/fingrid_nordic_grid_frequency_10hz_f32/2025-01.7z"
+notes = "Azure Content-MD5 4pyVAQnb0v4tHp0fMOEa8w==. 7z 0.3, encoded LZMA header, one LZMA (LZMA1, dict 8 MiB, lc3 lp0 pb2) folder holding a 2025-01/ directory entry and 31 daily CSVs, 907,390,195 bytes decoded; member names, sizes and CRC32s pinned in members.tsv."
+
+[[resources]]
+id = "archive_2025_07"
+origin = "fingrid_open_data_339"
+url = "https://data.fingrid.fi/files/339/2025/2025-07.7z"
+type = "archive"
+version = "Last-Modified Thu, 11 Sep 2025 08:01:43 GMT"
+access = "Direct anonymous download, fetched whole (solid 7z)."
+size_bytes = 67980333
+sha256 = "393756cd7ec25d99d81f9affcc8e96e12788443e1fcd3f9b35e94b8327bfa9bc"
+local_path = "downloads/fingrid_nordic_grid_frequency_10hz_f32/2025-07.7z"
+notes = "Azure Content-MD5 Wep5FnmTmtRMwBKvdmjGxA==. Encoded LZMA header, one LZMA (LZMA1, dict 8 MiB, lc3 lp0 pb2) folder of 31 daily CSVs with no directory entry, 905,667,530 bytes decoded (pack 67,979,704). Members are not stored in date order (the first is Taajuusdata2025-07-29.csv); the index and aggregate digest use date order."
+
+[[resources]]
+id = "archive_2026_01"
+origin = "fingrid_open_data_339"
+url = "https://data.fingrid.fi/files/339/2026/2026-01.7z"
+type = "archive"
+version = "Last-Modified Fri, 17 Apr 2026 12:54:12 GMT"
+access = "Direct anonymous download, fetched whole (solid 7z)."
+size_bytes = 65159455
+sha256 = "f63627e68bad463df49adff4fc697251266e956acd88b4e6faba4440844499a9"
+local_path = "downloads/fingrid_nordic_grid_frequency_10hz_f32/2026-01.7z"
+notes = "Azure Content-MD5 apcLtfE1sePX9ZX3WBqZNQ==. Encoded LZMA header, one LZMA (LZMA1, dict 8 MiB, lc3 lp0 pb2) folder holding a 2026-01/ directory entry and 31 daily CSVs, 906,867,671 bytes decoded (pack 65,158,816)."
+
+[local_paths]
+downloads = "downloads/fingrid_nordic_grid_frequency_10hz_f32/"
+filtered = "filtered/fingrid_nordic_grid_frequency_10hz_f32/"
+index = "index/fingrid_nordic_grid_frequency_10hz_f32/"
+samples = "samples/fingrid_nordic_grid_frequency_10hz_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/fingrid_nordic_grid_frequency_10hz_f32/samples.jsonl"
+summary = "Validate the dataset page license and listing, download three pinned monthly 7z archives, stream-decode them with a pure-stdlib 7z/LZMA reader (per-member CRC32 checked), and emit the Value column of every daily CSV as one raw little-endian float32 sample."
+deterministic_notes = "sources.tsv pins URL, byte size, Azure Content-MD5, Last-Modified and SHA-256 per archive; members.tsv pins all 93 member names, sizes and CRC32s (resolved by discover.sh from range-fetched 7z headers). Months avoid DST transitions so each daily file covers 00:00:00.0-23:59:59.9 Finnish local time. Two pinned day rules are applied identically by build and verify: coverage (at least 777,600 of 864,000 0.1 s ticks carry a value) and resolution (coarse_token_share = share of Value tokens printed with 3 or fewer decimals must be <= 0.02; clean 10 uHz days measure 0.0099-0.0103, any day containing an hour from the 1 mHz backup chain measures >= 0.051). Excluded days are listed in filtered/<id>/build_summary.json. The 2024 archives were dropped because 53 of their 62 days contain such hours. The aggregate sample SHA-256 is computed over samples in index (date) order. verify.sh re-derives each sample through an independent parser (csv, datetime.fromisoformat, Decimal, array('f')) and byte-compares it, re-derives every per-day statistic in the index (including coarse_token_share), rejects any indexed day failing a day rule, requires every day passing both rules to be indexed, rejects degenerate days (fewer than 100 distinct values or range under 0.01 Hz), and checks the manifest scope."
+
+[[series]]
+id = "nordic_grid_frequency_10hz_f32"
+description = "Nordic synchronous-area power-system frequency at 10 Hz, one sample per calendar day."
+semantic_meaning = "Electrical frequency (Hz) of the Nordic synchronous power system as measured by Fingrid at 400 kV substations in Finland with a 0.1 s sample period; values sit around the 50 Hz nominal (typically 49.8-50.2 Hz) and trace load-generation imbalance and frequency-containment control."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Upstream values are decimal text with at most 5 fractional digits. Each token is converted to the nearest IEEE-754 binary32; build and verify both check that every distinct token round-trips exactly (|float32 - token| <= ulp/2 = 1.9e-6 Hz near 50 Hz, below the 5e-6 half-step), so the float32 stream is lossless with respect to the published decimals."
+source_resources = ["archive_2025_01", "archive_2025_07", "archive_2026_01"]
+source_format = "7z archive (one solid LZMA1 folder) of daily 'Time,Value' CSV files, Finnish local time, 0.1 s timestamps"
+source_field = "Value column (grid frequency in Hz) of each Taajuusdata<YYYY-MM-DD>.csv"
+filtered_input_path = "filtered/fingrid_nordic_grid_frequency_10hz_f32/day_stats.jsonl"
+filtering = "All 93 daily CSVs of the three pinned months are parsed. A day is kept when at least 777,600 of its 864,000 0.1 s ticks carry a value and at most 2 % of its Value tokens are printed with 3 or fewer decimals (resolution rule: excludes days containing hours from Fingrid's smoothed 1 mHz backup measurement chain, which appear in 2024 archives; the pinned 2025-2026 months are expected to have none). Within a kept day every row with a value is emitted in file order, including the occasional repeated HH:00:00.000 row where the upstream file joins hourly pieces."
+missing_value_policy = "Rows missing upstream (telemetry gaps) are not filled or interpolated; the sample simply contains the rows present, and per-day covered/missing ticks, gap runs and duplicate-timestamp rows are recorded in the index and day_stats.jsonl. Blank Value tokens would be dropped and counted. Malformed rows, timestamps off the file's date or off the 100 ms lattice, non-decimal tokens, more than 5 decimals, values outside 45-55 Hz, or values that do not round-trip through float32 are fatal. Days failing the 90 % coverage rule or the coarse_token_share <= 0.02 resolution rule are excluded by build and rejected by verify if present; verify also requires every day passing both rules to be present. Individual rows are never dropped for resolution reasons."
+conversion = "Stream-decode the solid 7z folder, split it by the header's substream sizes and check each member's CRC32; parse the CSV (header 'Time,Value', CRLF), convert each Value token to float32 (round-to-nearest) and write the day's values in row order as raw little-endian float32, one file per daily CSV."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 vector"
+sample_geometry = "regularly_sampled_time_series_with_rare_gaps"
+sample_rank = 1
+sample_axes = ["time_0p1s_local"]
+natural_record_kind = "fingrid_daily_frequency_csv_file"
+sample_count = 93
+total_size_bytes = 321045344
+output_path = "samples/fingrid_nordic_grid_frequency_10hz_f32/nordic_grid_frequency_10hz_f32/"

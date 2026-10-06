@@ -287,6 +287,7 @@ deepmind_gencast_checkpoint_f32	ok	57342976	229371904	160	262144	1048576	0	0	0	1
 dandi_ibl_bwm_spike_amplitudes_f64	ok	57416236	459329888	1321	34405	275240	0	0	0	1	none	none
 zenodo_gridgnosis_pmu_voltage_magnitude_f32	ok	58442013	233768052	20	3240018	12960072	0	0	0	1	none	none
 mitbih_arrhythmia_u8	ok	59150000	59150000	91	650000	650000	0	0	0	1	none	none
+azure_vm2019_cpu_utilization_readings_f64	ok	59672817	477382536	264	226171.5	1809372	0	0	0	1	none	none
 sentinel2_l2a_scene_classification_u8	ok	60280200	60280200	2	30140100	30140100	0	0	0	1	none	none
 mitbih_arrhythmia_physionet	ok	62400000	124800000	96	650000	1300000	0	0	0	1	none	none
 dandi_001076_zebrafish_calcium_fluorescence_f32	ok	62819025	251276100	48	1227534	4910136	0	0	0	1	none	none

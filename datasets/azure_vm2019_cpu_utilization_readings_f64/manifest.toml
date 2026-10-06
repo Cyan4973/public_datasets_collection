@@ -1,0 +1,194 @@
+# Staging draft. Realized by build.sh on 2026-10-06: 88 complete snapshots x 3
+# series = 264 samples, 477,382,536 primary bytes.
+manifest_version = 1
+dataset_id = "azure_vm2019_cpu_utilization_readings_f64"
+name = "Azure Public Dataset V2 (2019) VM CPU Utilization 5-Minute Fleet Snapshots Float64"
+description = "Per-VM CPU utilization (percent) over 5-minute intervals from the Microsoft Azure 2019 VM trace (AzurePublicDataset V2): the first 88 complete fleet snapshots (t = 0..26,100 s, from files 1-2 of 195). Each snapshot holds every VM reading that shares one timestamp (223,522-227,744 VMs, median 226,171.5); min, max and avg CPU are emitted as three native float64 series, one sample per snapshot, values in source row order (19,890,939 readings per series)."
+homepage = "https://github.com/Azure/AzurePublicDataset/blob/master/AzurePublicDatasetV2.md"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://github.com/Azure/AzurePublicDataset/blob/master/LICENSE"
+evidence_url = "https://api.github.com/repos/Azure/AzurePublicDataset/license"
+evidence_quote = "Repository root LICENSE is the CC BY 4.0 legal code ('Attribution 4.0 International ... Creative Commons Attribution 4.0 International Public License'); the GitHub license API reports spdx_id CC-BY-4.0. Code is separately under LICENSE-CODE (MIT). The same repository's AzureVMNoiseDataset2024.md states: 'The data is made available and licensed under a CC-BY Attribution License (https://github.com/Azure/AzurePublicDataset/blob/master/LICENSE).' The trace files are release assets of this repository (release dataset-v2, 'Dataset files migrated from Azure Blob Storage')."
+citation = "Eli Cortez, Anand Bonde, Alexandre Muzio, Mark Russinovich, Marcus Fontoura, Ricardo Bianchini. Resource Central: Understanding and Predicting Workloads for Improved Resource Management in Large Cloud Platforms. SOSP 2017. https://www.microsoft.com/en-us/research/wp-content/uploads/2017/10/Resource-Central-SOSP17.pdf. Data: Microsoft Azure, AzurePublicDataset V2 (2019 VM trace), https://github.com/Azure/AzurePublicDataset."
+notes = "The repository README asks users of either VM trace to cite the SOSP'17 Resource Central paper. download.sh re-fetches LICENSE on every run and fails if it is no longer the CC BY 4.0 text. The V2 page itself carries no separate license statement; the grant relied on is the repository-level LICENSE covering the repository's data."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Microsoft Azure / Microsoft Research release assets on github.com/Azure/AzurePublicDataset (release dataset-v2; the legacy Azure Blob URLs redirect there). Sizes and sha256 digests pinned from the GitHub release API. No mirrors."
+usage_notes = "Only the three CPU utilization columns are emitted. The encrypted VM id (an anonymized hash, already sanitized by the publisher) is dropped and not stored anywhere in the output. No subscription, deployment or customer information is used."
+
+[[origins]]
+id = "azure_public_dataset_v2"
+name = "Microsoft Azure Public Dataset V2 (2019 VM trace), GitHub release dataset-v2"
+url = "https://github.com/Azure/AzurePublicDataset/releases/tag/dataset-v2"
+type = "repository"
+version = "release dataset-v2 (id 333244254, published 2026-06-02; trace content is the 2019 V2 trace)"
+notes = "30 consecutive days of 5-minute VM CPU readings from one Azure region: 2,695,548 VMs, 1,942,780,023 readings, as one timestamp-sorted row stream cut into 195 vm_cpu_readings gzip CSV files of exactly 10,000,000 rows each (except the last; 166,566,456,024 bytes). The cuts are by row count, so a file boundary can fall inside a snapshot. Only V2 (2019) is used; the 2017 V1 trace (125 files, a different sanitized subset) is never mixed in."
+
+[[resources]]
+id = "release_metadata"
+origin = "azure_public_dataset_v2"
+url = "https://api.github.com/repos/Azure/AzurePublicDataset/releases/tags/dataset-v2"
+type = "api_query_result"
+version = "dataset-v2"
+access = "Anonymous GitHub REST API, best effort (rate limited); when available, download.sh checks the tag, 195 vm_cpu_readings assets, and the pinned size/sha256 digest of every fetched asset."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/azure_vm2019_cpu_utilization_readings_f64/release_dataset-v2.json"
+notes = "Not hash-pinned (live download counters). The sha256 pins on the payloads are authoritative."
+
+[[resources]]
+id = "repo_license"
+origin = "azure_public_dataset_v2"
+url = "https://raw.githubusercontent.com/Azure/AzurePublicDataset/master/LICENSE"
+type = "file"
+version = "master (blob a2c95fc1559c88a47f83793422c3fc20424e1f21 at probe time)"
+access = "Direct public download; must contain the CC BY 4.0 legal-code title lines."
+size_bytes = 18653
+sha256 = "9bbc1ea9fe5c96df01b311a2ac864d5b18fc87b9948bfd14770e4b44db755ee9"
+local_path = "downloads/azure_vm2019_cpu_utilization_readings_f64/LICENSE"
+notes = "Content-checked rather than hash-pinned so a whitespace edit does not break the recipe."
+
+[[resources]]
+id = "schema_csv"
+origin = "azure_public_dataset_v2"
+url = "https://github.com/Azure/AzurePublicDataset/releases/download/dataset-v2/schema.csv"
+type = "file"
+version = "dataset-v2"
+access = "Direct public download (GitHub release asset, signed redirect)."
+size_bytes = 1485
+sha256 = "638f5ed7792e9a3bb7e04120d92e4164c20e17adff34a84ff5b996adcbd6c518"
+local_path = "downloads/azure_vm2019_cpu_utilization_readings_f64/schema.csv"
+notes = "Declares vm_cpu_readings fields: 1 timestamp INTEGER, 2 vm id STRING_HASH, 3 min cpu DOUBLE, 4 max cpu DOUBLE, 5 avg cpu DOUBLE."
+
+[[resources]]
+id = "cpu_readings_file_1"
+origin = "azure_public_dataset_v2"
+url = "https://github.com/Azure/AzurePublicDataset/releases/download/dataset-v2/trace_data_vm_cpu_readings_vm_cpu_readings-file-1-of-195.csv.gz"
+type = "file"
+version = "dataset-v2 asset 436410975"
+access = "Direct public download; curl -L -C - into .part with stall detection, always re-invoked on the stable github.com URL (the release-assets redirect is signed and expires); sha256 checked, first row must be t = 0."
+size_bytes = 856259637
+sha256 = "010c375e5e69624c300a2dad1460762364b89b8ca030e1de05dcd808e9d7032a"
+local_path = "downloads/azure_vm2019_cpu_utilization_readings_f64/trace_data_vm_cpu_readings_vm_cpu_readings-file-1-of-195.csv.gz"
+notes = "10,000,000 rows, timestamps 0..13,200 s. t = 0 is the trace start, so the first snapshot is complete. Its last 18,322 rows are the beginning of snapshot t = 13,200, which continues in file 2."
+
+[[resources]]
+id = "cpu_readings_file_2"
+origin = "azure_public_dataset_v2"
+url = "https://github.com/Azure/AzurePublicDataset/releases/download/dataset-v2/trace_data_vm_cpu_readings_vm_cpu_readings-file-2-of-195.csv.gz"
+type = "file"
+version = "dataset-v2 asset 436411603"
+access = "Same as file 1; first row must be t = 13,200."
+size_bytes = 856805928
+sha256 = "26d03dee50b36ae4d572d17206431905b3ebb18faa9851efb985d2239eb43389"
+local_path = "downloads/azure_vm2019_cpu_utilization_readings_f64/trace_data_vm_cpu_readings_vm_cpu_readings-file-2-of-195.csv.gz"
+notes = "10,000,000 rows, timestamps 13,200..26,400 s. Its first 207,895 rows complete snapshot t = 13,200 (joined with the 18,322 rows at the end of file 1 in stream order: 226,217 rows). Its last 109,061 rows are the beginning of snapshot t = 26,400, which continues in file 3 and is therefore dropped as incomplete."
+
+[[resources]]
+id = "cpu_readings_file_3_head"
+origin = "azure_public_dataset_v2"
+url = "https://github.com/Azure/AzurePublicDataset/releases/download/dataset-v2/trace_data_vm_cpu_readings_vm_cpu_readings-file-3-of-195.csv.gz"
+type = "other"
+version = "dataset-v2 asset 436412059, bytes 0-65535 of 856,709,133 (full-file sha256 497c73bf85d026286b113d62e4a775637c7c9792ccfd406cc9b74c077f185637)"
+access = "One HTTP range request (Content-Range checked); only its first row is read."
+size_bytes = 65536
+sha256 = "93b3b6f50f0fc9bcdda1ec1e6ed00101fdab3bb2f6883d790c334de799282291"
+local_path = "downloads/azure_vm2019_cpu_utilization_readings_f64/trace_data_vm_cpu_readings_vm_cpu_readings-file-3-of-195.head-0-65535.gz"
+notes = "Boundary proof only, never emitted: file 3 starts at t = 26,400, so snapshot t = 26,100 is complete within file 2 and the trailing t = 26,400 rows of file 2 are a partial snapshot."
+
+[local_paths]
+downloads = "downloads/azure_vm2019_cpu_utilization_readings_f64/"
+filtered = "filtered/azure_vm2019_cpu_utilization_readings_f64/"
+index = "index/azure_vm2019_cpu_utilization_readings_f64/"
+samples = "samples/azure_vm2019_cpu_utilization_readings_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/azure_vm2019_cpu_utilization_readings_f64/samples.jsonl"
+summary = "Fetch the pinned V2 vm_cpu_readings files 1 and 2 of 195 (plus a 64 KiB head range of file 3), read them as one timestamp-sorted row stream, split it into 5-minute fleet snapshots (joining the one snapshot that straddles the file 1/2 cut and dropping the trailing partial snapshot that continues into file 3), and emit min, max and avg CPU of every complete snapshot as three raw little-endian float64 samples in source row order."
+deterministic_notes = "Inputs are sha256-pinned. scripts/build_snapshots.py (gzip + csv module) reads file 1 then file 2 as one row stream and requires every row to have 5 fields, a decimal timestamp, a non-empty vm id and three finite values in [0, 100]; each timestamp must be one contiguous run, consecutive runs exactly 300 s apart, starting at t = 0. A run that crosses the file cut (t = 13,200: 18,322 + 207,895 rows) is one snapshot. The final run is dropped only because file 3's pinned head range starts with the same timestamp (t = 26,400: 109,061 rows dropped); had it abutted, it would be kept. Exactly 88 complete snapshots t = 0..26,100 are required. Rows keep source order inside a snapshot (no sorting by vm id). Duplicate vm ids inside a snapshot, constant samples, a median snapshot below 1,000 values, or more than 1e9 primary bytes are fatal. min <= avg <= max violations are counted, not altered. Index rows carry timestamp_s, snapshot_index, source_files, min/max (from the stored doubles), distinct and zero counts and sha256; filtered/<id>/ingest_stats.json records per-snapshot row counts (per source file) and distinct-vm counts, the straddling snapshot, the dropped partial snapshot and row accounting (20,000,000 read = 19,890,939 emitted + 109,061 dropped). scripts/verify_snapshots.py re-derives every sample with a separate parser (raw zlib streaming, byte splitting, struct '<d' packing), requires byte equality with every sample file, re-checks the missing-value policy, index statistics, stats counters, no stray files, and manifest sample_count/total_size_bytes."
+
+[[series]]
+id = "vm_cpu_min_pct_f64"
+description = "Minimum CPU utilization of each VM within one 5-minute interval, for every VM reporting at that timestamp."
+semantic_meaning = "Minimum CPU utilization (percent of the VM's allocated virtual cores, 0-100) observed during the 5-minute interval ending at the snapshot timestamp, one value per VM reading in the Azure V2 2019 trace."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "schema.csv types the column as DOUBLE and the CSV prints full binary64 precision (16-17 significant digits, e.g. 19.898441030801841), so float(token) recovers the publisher's double exactly; no rescaling, rounding or narrowing."
+source_resources = ["cpu_readings_file_1", "cpu_readings_file_2", "cpu_readings_file_3_head", "schema_csv"]
+source_format = "gzip-compressed headerless CSV (CRLF), rows 'timestamp,vm id,min cpu,max cpu,avg cpu', sorted by timestamp"
+source_field = "vm_cpu_readings field 3 'min cpu' (DOUBLE)"
+filtered_input_path = "filtered/azure_vm2019_cpu_utilization_readings_f64/ingest_stats.json"
+filtering = "Every row of the 88 complete snapshots is kept; no VM or value is filtered. The only rows not emitted are the 109,061 trailing rows of file 2 at t = 26,400, an incomplete snapshot whose remainder is in file 3. The timestamp defines the sample boundary and is kept in the index; the vm id column is dropped."
+missing_value_policy = "No missing values are allowed: an empty, non-numeric, NaN/infinite or out-of-range (outside [0, 100]) value, a malformed row, a timestamp gap or repeat, or a duplicate vm id inside a snapshot makes the build fail; nothing is imputed or filtered. Exact zeros are real readings and are kept (counted per sample in the index)."
+conversion = "Python float() of the CSV token (exact binary64), written as raw little-endian float64 in source row order; one file per snapshot: samples/<id>/vm_cpu_min_pct_f64/t<timestamp>.f64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 array"
+sample_geometry = "one_value_per_vm_reading_at_one_timestamp"
+sample_rank = 1
+sample_axes = ["vm_reading_in_source_order"]
+natural_record_kind = "azure_v2_vm_cpu_readings_5min_fleet_timestamp_snapshot"
+sample_count = 88
+total_size_bytes = 159127512
+output_path = "samples/azure_vm2019_cpu_utilization_readings_f64/vm_cpu_min_pct_f64/"
+
+[[series]]
+id = "vm_cpu_max_pct_f64"
+description = "Maximum CPU utilization of each VM within one 5-minute interval, for every VM reporting at that timestamp."
+semantic_meaning = "Maximum CPU utilization (percent, 0-100) observed during the 5-minute interval ending at the snapshot timestamp, one value per VM reading in the Azure V2 2019 trace."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "schema.csv types the column as DOUBLE and the CSV prints full binary64 precision, so float(token) recovers the publisher's double exactly; no rescaling, rounding or narrowing."
+source_resources = ["cpu_readings_file_1", "cpu_readings_file_2", "cpu_readings_file_3_head", "schema_csv"]
+source_format = "gzip-compressed headerless CSV (CRLF), rows 'timestamp,vm id,min cpu,max cpu,avg cpu', sorted by timestamp"
+source_field = "vm_cpu_readings field 4 'max cpu' (DOUBLE)"
+filtered_input_path = "filtered/azure_vm2019_cpu_utilization_readings_f64/ingest_stats.json"
+filtering = "Same rows, sample boundaries and row order as vm_cpu_min_pct_f64 (88 complete snapshots; trailing partial t = 26,400 snapshot excluded)."
+missing_value_policy = "Same as vm_cpu_min_pct_f64: any empty, non-numeric, non-finite or out-of-range value, malformed row, timestamp gap/repeat or duplicate vm id is fatal; nothing is imputed or filtered."
+conversion = "Python float() of the CSV token (exact binary64), written as raw little-endian float64 in source row order; one file per snapshot: samples/<id>/vm_cpu_max_pct_f64/t<timestamp>.f64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 array"
+sample_geometry = "one_value_per_vm_reading_at_one_timestamp"
+sample_rank = 1
+sample_axes = ["vm_reading_in_source_order"]
+natural_record_kind = "azure_v2_vm_cpu_readings_5min_fleet_timestamp_snapshot"
+sample_count = 88
+total_size_bytes = 159127512
+output_path = "samples/azure_vm2019_cpu_utilization_readings_f64/vm_cpu_max_pct_f64/"
+
+[[series]]
+id = "vm_cpu_avg_pct_f64"
+description = "Average CPU utilization of each VM over one 5-minute interval, for every VM reporting at that timestamp."
+semantic_meaning = "Average CPU utilization (percent, 0-100) over the 5-minute interval ending at the snapshot timestamp, one value per VM reading in the Azure V2 2019 trace."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "schema.csv types the column as DOUBLE and the CSV prints full binary64 precision, so float(token) recovers the publisher's double exactly; no rescaling, rounding or narrowing."
+source_resources = ["cpu_readings_file_1", "cpu_readings_file_2", "cpu_readings_file_3_head", "schema_csv"]
+source_format = "gzip-compressed headerless CSV (CRLF), rows 'timestamp,vm id,min cpu,max cpu,avg cpu', sorted by timestamp"
+source_field = "vm_cpu_readings field 5 'avg cpu' (DOUBLE)"
+filtered_input_path = "filtered/azure_vm2019_cpu_utilization_readings_f64/ingest_stats.json"
+filtering = "Same rows, sample boundaries and row order as vm_cpu_min_pct_f64 (88 complete snapshots; trailing partial t = 26,400 snapshot excluded)."
+missing_value_policy = "Same as vm_cpu_min_pct_f64: any empty, non-numeric, non-finite or out-of-range value, malformed row, timestamp gap/repeat or duplicate vm id is fatal; nothing is imputed or filtered. The trailing CR of each line is removed by the CSV reader before parsing."
+conversion = "Python float() of the CSV token (exact binary64), written as raw little-endian float64 in source row order; one file per snapshot: samples/<id>/vm_cpu_avg_pct_f64/t<timestamp>.f64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 array"
+sample_geometry = "one_value_per_vm_reading_at_one_timestamp"
+sample_rank = 1
+sample_axes = ["vm_reading_in_source_order"]
+natural_record_kind = "azure_v2_vm_cpu_readings_5min_fleet_timestamp_snapshot"
+sample_count = 88
+total_size_bytes = 159127512
+output_path = "samples/azure_vm2019_cpu_utilization_readings_f64/vm_cpu_avg_pct_f64/"

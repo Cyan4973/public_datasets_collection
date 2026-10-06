@@ -1,0 +1,96 @@
+manifest_version = 1
+dataset_id = "cartographer_backpack2d_hokuyo_ranges_f32"
+name = "Cartographer 2D Backpack (Deutsches Museum) Hokuyo Horizontal Laser Ranges Float32"
+description = "Native float32 first-echo range profiles from the horizontal Hokuyo UTM-30LX-EW planar laser scanner on Google's Cartographer 2D mapping backpack: 16 complete recording sessions at the Deutsches Museum, each one scans x 1079-beam matrix decoded from the ROS sensor_msgs/MultiEchoLaserScan topic 'horizontal_laser_2d'."
+homepage = "https://google-cartographer-ros.readthedocs.io/en/latest/data.html"
+
+[license]
+name = "Apache License 2.0"
+spdx = "Apache-2.0"
+url = "http://www.apache.org/licenses/LICENSE-2.0"
+citation = "The Cartographer Authors, '2D Cartographer Backpack - Deutsches Museum' public data, cartographer_ros docs/source/data.rst (https://google-cartographer-ros.readthedocs.io/en/latest/data.html)."
+notes = "The '2D Cartographer Backpack - Deutsches Museum' data section of data.rst has its own 'License' subsection: 'Copyright 2016 The Cartographer Authors / Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License.' This grant sits directly above the bag table and covers the bags themselves, not only the documentation code. download.sh re-checks the pinned data.rst (commit ef0e971b, SHA-256 97187a77...) for this text and for every pinned bag URL."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Cartographer public-data bags on the project's anonymous Google Cloud Storage bucket (cartographer-public-data), linked from the cartographer_ros documentation; no mirrors."
+usage_notes = "Only planar laser range distances of a museum interior are emitted. The IMU stream, vertical push-broom laser, intensities and timestamps are excluded. Visitors can appear as anonymous range blips; nothing identifies a person."
+
+[[origins]]
+id = "cartographer_ros_docs"
+name = "cartographer_ros documentation: Public Data (data.rst)"
+url = "https://github.com/cartographer-project/cartographer_ros/blob/ef0e971b50ed94b06fa29cdd12a311240c56c571/docs/source/data.rst"
+type = "repository"
+notes = "Lists the 56 backpack_2d bags with duration, size, floor and known issues, and carries the Apache-2.0 data license. The GCS bucket listing itself is denied, so this table is the inventory."
+
+[[origins]]
+id = "cartographer_public_data_gcs"
+name = "cartographer-public-data Google Cloud Storage bucket"
+url = "https://storage.googleapis.com/cartographer-public-data/bags/backpack_2d/"
+type = "bucket"
+notes = "Anonymous HTTPS object access; object generations date from 2016-11-16 and expose size, MD5 and CRC32C via x-goog-hash."
+
+[[resources]]
+id = "data_rst"
+origin = "cartographer_ros_docs"
+url = "https://raw.githubusercontent.com/cartographer-project/cartographer_ros/ef0e971b50ed94b06fa29cdd12a311240c56c571/docs/source/data.rst"
+type = "file"
+version = "commit ef0e971b50ed94b06fa29cdd12a311240c56c571 (2018-10-25, last change to the file; identical to master on 2026-10-06)"
+access = "Direct public download."
+size_bytes = 30746
+sha256 = "97187a77c1b906f9bcaf919455df5c61a6b71a0d7ada4a387a71d424a665a431"
+local_path = "downloads/cartographer_backpack2d_hokuyo_ranges_f32/data.rst"
+notes = "License and inventory evidence; not a numeric source."
+
+[[resources]]
+id = "backpack_2d_bag_selection"
+origin = "cartographer_public_data_gcs"
+url = "https://storage.googleapis.com/cartographer-public-data/bags/backpack_2d/"
+type = "file"
+version = "16 bags pinned in sources.tsv (GCS generations 1479288862596000-1479295325207000)"
+access = "Whole-object resumable curl of each <bag>.bag; HEAD size/MD5 checked before transfer, size + base64 MD5 + ROS bag header/index section checked after."
+size_bytes = 1470431881
+sha256 = ""
+local_path = "downloads/cartographer_backpack2d_hokuyo_ranges_f32/bags/"
+notes = "Per-bag size_bytes, md5_base64, crc32c_base64, gcs_generation, index_pos, chunk_count and exact horizontal_laser_2d scan_count are pinned in sources.tsv. Selection rule (scripts/select_sources.py, reproduced by discover.sh): exclude the 3 bags flagged with gaps in the laser data, take the shortest eligible session for every backpack unit (b0, b1, b2) and floor (OG, EG, UG), then add the remaining eligible sessions shortest-first while the primary output stays <= 950,000,000 bytes. About 60% of each bag is IMU and vertical-laser data that is not kept."
+
+[local_paths]
+downloads = "downloads/cartographer_backpack2d_hokuyo_ranges_f32/"
+filtered = "filtered/cartographer_backpack2d_hokuyo_ranges_f32/"
+index = "index/cartographer_backpack2d_hokuyo_ranges_f32/"
+samples = "samples/cartographer_backpack2d_hokuyo_ranges_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/cartographer_backpack2d_hokuyo_ranges_f32/samples.jsonl"
+summary = "Validate 16 pinned ROS bag v2.0 files, walk every bz2 chunk, keep the horizontal_laser_2d MultiEchoLaserScan messages in record-time order, and emit the first echo of each of the 1079 beams as one row-major scans x 1079 little-endian float32 matrix per recording session."
+deterministic_notes = "Pure-stdlib ROS bag parser (records, bz2 chunks, connection records, ROS1 message deserialization). Build walks chunks sequentially; verify independently re-derives every scan through the index section (chunk-info -> chunk -> index-data offsets) with a separate float decoder and compares byte-for-byte. Enforced: pinned sizes/MD5s/index positions/chunk and scan counts; one horizontal_laser_2d connection of type sensor_msgs/MultiEchoLaserScan (md5 6fefb0c6...); identical float32 bit patterns for angle_min/max/increment, scan_time, range_min and range_max in every one of the 209,373 scans of all 16 bags (b0, b1 and b2); 1079 beams; non-decreasing record times and no horizontal-scan gap above 1 s; values in [0.023, 60.0] on the float32(mm/1000) lattice; range_max sentinel fraction <= 0.5 per session; >= 1000 distinct values per session; a session whose scans are all identical is rejected; sample hashes, counts, floors, 1 GB cap and manifest scope. Floor: 225,913,467 primary values, median session 12,426 scans (13,407,654 values)."
+
+[[series]]
+id = "hokuyo_horizontal_first_echo_range_f32"
+description = "Horizontal Hokuyo UTM-30LX-EW first-echo range profiles, one complete recording session per sample."
+semantic_meaning = "Distance in metres from the horizontal planar laser scanner to the first reflecting surface along each of 1079 beams spanning -134.75 to +134.75 degrees in 0.25-degree steps, for every scan (about 36.7 per second) of one backpack walk through the Deutsches Museum."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The bag stores each LaserEcho range as an IEEE-754 float32 in metres; the recipe copies those 4-byte patterns unchanged. The Hokuyo reports integer millimetres, and the recording driver converted them to float32 metres, so every value is float32(n/1000). This is the published upstream representation, not a local widening. Realized: 4.0-24.1% of values per session (9.55% overall) are the range_max sentinel 60.0, and 157 of 225,913,467 values (zero-echo beams) are NaN."
+source_resources = ["backpack_2d_bag_selection"]
+source_format = "ROS bag v2.0 (bz2 chunks) carrying ROS1 sensor_msgs/MultiEchoLaserScan messages"
+source_field = "topic horizontal_laser_2d, field ranges[beam].echoes[0] (float32 metres, first echo of each of the 1079 LaserEcho entries)"
+filtered_input_path = "filtered/cartographer_backpack2d_hokuyo_ranges_f32/ingest_stats.json"
+filtering = "Keep every horizontal_laser_2d message of each of the 16 pinned sessions, in record-time order. Drop the vertical_laser_2d topic (different mounting/geometry), the IMU topic (float64), the intensities array, any second and third echoes (2.9-5.9% of beams per session carry more than one), and message headers."
+missing_value_policy = "Preserved as in the source: 60.0 (exactly range_max) is the scanner driver's out-of-range/no-return value: 21,582,485 values, 4.0-24.1% per session. It stays as-is (not converted to NaN), is counted per sample in the index (range_max_sentinel_count), and verify re-counts it and rejects any session where it exceeds 50%. A beam whose LaserEcho has zero echoes has no source range; it is filled with canonical quiet NaN (0x7FC00000) and counted per sample (zero_echo_nan_count). Realized: 157 such beams in 10 of 16 sessions (max 55 in one session, 7e-7 of all values). Verify re-derives the zero-echo count and requires it to equal the NaN count exactly, so a source NaN echo would also fail. Non-finite echoes, values outside [range_min 0.023, range_max 60.0], geometry changes, beam-count changes, malformed records, record-time regressions or >1 s scan gaps fail the recipe."
+conversion = "Parse ROS bag records, bz2-decompress each chunk, map connection ids to topics via op-7 records, deserialize each op-2 horizontal_laser_2d message (Header, 7 float32 parameters, uint32 beam count, per-beam uint32 echo count + float32 echoes, intensities), take echoes[0] per beam, and write scans x 1079 little-endian float32 row-major (scan-major, beam index increasing from angle_min to angle_max) to one .f32 file per bag."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 planar laser range matrix"
+sample_geometry = "planar_lidar_scan_time_series_scans_by_beams_2d"
+sample_rank = 2
+sample_axes = ["scan", "beam"]
+natural_record_kind = "complete_cartographer_backpack_recording_session_horizontal_laser_scan_sequence"
+sample_count = 16
+total_size_bytes = 903653868
+output_path = "samples/cartographer_backpack2d_hokuyo_ranges_f32/hokuyo_horizontal_first_echo_range_f32/"

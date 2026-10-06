@@ -1,0 +1,198 @@
+manifest_version = 1
+dataset_id = "the_well_post_neutron_star_merger_density_f32"
+name = "The Well Post-Neutron-Star-Merger GRMHD Density Snapshots Float32"
+description = "Native float32 fluid rest-mass density volumes (192 log-r x 128 theta x 66 phi) from saved dumps of six (of eight published) LANL nubhlight general-relativistic neutrino-radiation MHD simulations of black-hole accretion disks after neutron-star mergers and a collapsar, as published in The Well."
+homepage = "https://huggingface.co/datasets/polymathic-ai/post_neutron_star_merger"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Ohana, McCabe, Meyer et al., The Well: a Large-Scale Collection of Diverse Physics Simulations for Machine Learning, arXiv:2412.00568 (2024); Miller, Ryan and Dolence, nubhlight: radiation GRMHD for neutrino-driven accretion flows, ApJS 241, 30 (2019); plus the per-scenario papers listed in the dataset card (Miller et al. 2019 PRD 100 023008; Miller et al. 2020 ApJ 902 66; Curtis et al. 2023 ApJL 945 L13; Lund et al. 2024 ApJ 964 111)."
+notes = "The dataset card of the exact pinned repository revision declares `license: cc-by-4.0` in its YAML front matter, and the Hugging Face API reports cardData.license = cc-by-4.0 and the tag license:cc-by-4.0; download.sh re-checks all three live. Attribute The Well and the nubhlight papers."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Numerical astrophysics simulation output (LANL nubhlight) republished by Polymathic AI as The Well; fetched from the official Hugging Face dataset repository at a pinned commit."
+usage_notes = "Only the fluid density field is emitted, in the publisher's per-simulation code units. No personal or sensitive content."
+
+[[origins]]
+id = "hf_post_neutron_star_merger"
+name = "polymathic-ai/post_neutron_star_merger (The Well)"
+url = "https://huggingface.co/datasets/polymathic-ai/post_neutron_star_merger"
+type = "repository"
+version = "721253cd3220d158d3088c0cce4558dd444d1353"
+notes = "Ungated public Hugging Face dataset repository; 8 HDF5 files (train 0,3,4,5,6,7; valid 1; test 2) of 14,109,638,656 bytes each, served through the xet CDN with HTTP range support."
+
+[[resources]]
+id = "hf_revision_metadata"
+origin = "hf_post_neutron_star_merger"
+url = "https://huggingface.co/api/datasets/polymathic-ai/post_neutron_star_merger/revision/721253cd3220d158d3088c0cce4558dd444d1353"
+type = "api_query_result"
+version = "721253cd3220d158d3088c0cce4558dd444d1353"
+access = "Anonymous JSON API; must report the pinned sha, ungated/public, cardData.license cc-by-4.0, and exactly the 8 HDF5 files of sources.tsv."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/the_well_post_neutron_star_merger_density_f32/meta/revision.json"
+notes = "Refetched every run; small and not content-pinned."
+
+[[resources]]
+id = "hf_tree_metadata"
+origin = "hf_post_neutron_star_merger"
+url = "https://huggingface.co/api/datasets/polymathic-ai/post_neutron_star_merger/tree/721253cd3220d158d3088c0cce4558dd444d1353/data?recursive=true"
+type = "api_query_result"
+version = "721253cd3220d158d3088c0cce4558dd444d1353"
+access = "Anonymous JSON API; every file's size, LFS sha256 and xet hash must equal sources.tsv."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/the_well_post_neutron_star_merger_density_f32/meta/tree_data.json"
+notes = "Refetched every run."
+
+[[resources]]
+id = "hf_dataset_card"
+origin = "hf_post_neutron_star_merger"
+url = "https://huggingface.co/datasets/polymathic-ai/post_neutron_star_merger/resolve/721253cd3220d158d3088c0cce4558dd444d1353/README.md"
+type = "file"
+version = "721253cd3220d158d3088c0cce4558dd444d1353"
+access = "Direct public download; the YAML front matter must contain `license: cc-by-4.0`."
+size_bytes = 14530
+sha256 = "77ae51977a87a5442d9ea0f37b50f68a8e1da273a69854d4a8769a22128bb635"
+local_path = "downloads/the_well_post_neutron_star_merger_density_f32/meta/README.md"
+notes = "License and dataset description evidence."
+
+[[resources]]
+id = "scenario_0_density_snapshots"
+origin = "hf_post_neutron_star_merger"
+url = "https://huggingface.co/datasets/polymathic-ai/post_neutron_star_merger/resolve/721253cd3220d158d3088c0cce4558dd444d1353/data/train/post_neutron_star_merger_scenario_0.hdf5"
+type = "http_range_slices_of_hdf5_file"
+version = "721253cd3220d158d3088c0cce4558dd444d1353"
+access = "Anonymous HTTP range GETs (HTTP 206) on the pinned resolve URL: bytes 0-65535 and 11538432-11541093 (HDF5 metadata), then nine 6,488,064-byte /t0_fields/density snapshots at 16777216 + dump * 6488064 for dump = 20, 40, ..., 180."
+size_bytes = 14109638656
+sha256 = "bf59d08b358bc21638b876a192259c37e6002b9f08187d592abe6503ebf7579e"
+local_path = "downloads/the_well_post_neutron_star_merger_density_f32/scenario_0/"
+notes = "train split. size_bytes and sha256 describe the complete upstream HDF5 file (LFS object id, xet hash e5068c957fd2f3fe83fd82ee9a05b7c5f6d76ea8f6391bd8b42c92ef37142c3c); only 58,460,774 bytes of it are fetched. Every range response must carry this content identity."
+
+[[resources]]
+id = "scenario_1_density_snapshots"
+origin = "hf_post_neutron_star_merger"
+url = "https://huggingface.co/datasets/polymathic-ai/post_neutron_star_merger/resolve/721253cd3220d158d3088c0cce4558dd444d1353/data/valid/post_neutron_star_merger_scenario_1.hdf5"
+type = "http_range_slices_of_hdf5_file"
+version = "721253cd3220d158d3088c0cce4558dd444d1353"
+access = "Anonymous HTTP range GETs (HTTP 206) on the pinned resolve URL: bytes 0-65535 and 11538432-11541093 (HDF5 metadata), then nine 6,488,064-byte /t0_fields/density snapshots at 16777216 + dump * 6488064 for dump = 20, 40, ..., 180."
+size_bytes = 14109638656
+sha256 = "80266fddfd4c44e29f040bffa9ccf88c3d7198c4818e0b28e2b41bbdff3a9304"
+local_path = "downloads/the_well_post_neutron_star_merger_density_f32/scenario_1/"
+notes = "valid split. size_bytes and sha256 describe the complete upstream HDF5 file (LFS object id, xet hash 225239ead751d28b433494b4c751279705acc2b85e4a26146760dd694537543b); only 58,460,774 bytes of it are fetched. Every range response must carry this content identity."
+
+[[resources]]
+id = "scenario_2_density_snapshots"
+origin = "hf_post_neutron_star_merger"
+url = "https://huggingface.co/datasets/polymathic-ai/post_neutron_star_merger/resolve/721253cd3220d158d3088c0cce4558dd444d1353/data/test/post_neutron_star_merger_scenario_2.hdf5"
+type = "http_range_slices_of_hdf5_file"
+version = "721253cd3220d158d3088c0cce4558dd444d1353"
+access = "Anonymous HTTP range GETs (HTTP 206) on the pinned resolve URL: bytes 0-65535 and 11538432-11541093 (HDF5 metadata), then nine 6,488,064-byte /t0_fields/density snapshots at 16777216 + dump * 6488064 for dump = 20, 40, ..., 180."
+size_bytes = 14109638656
+sha256 = "eb72077ff53c6613d990a097bfbb7cf92cd4bd69065a274916b7abfcbf5dee75"
+local_path = "downloads/the_well_post_neutron_star_merger_density_f32/scenario_2/"
+notes = "test split. size_bytes and sha256 describe the complete upstream HDF5 file (LFS object id, xet hash 2655f83dcf47f3d2478e68225360b409315f95e5a8c2c0a4851dda177f2f344c); only 58,460,774 bytes of it are fetched. Every range response must carry this content identity."
+
+[[resources]]
+id = "scenario_3_density_snapshots"
+origin = "hf_post_neutron_star_merger"
+url = "https://huggingface.co/datasets/polymathic-ai/post_neutron_star_merger/resolve/721253cd3220d158d3088c0cce4558dd444d1353/data/train/post_neutron_star_merger_scenario_3.hdf5"
+type = "http_range_slices_of_hdf5_file"
+version = "721253cd3220d158d3088c0cce4558dd444d1353"
+access = "Anonymous HTTP range GETs (HTTP 206) on the pinned resolve URL: bytes 0-65535 and 11538432-11541093 (HDF5 metadata), then nine 6,488,064-byte /t0_fields/density snapshots at 16777216 + dump * 6488064 for dump = 20, 40, ..., 180."
+size_bytes = 14109638656
+sha256 = "b1faebb36115143c8c241a247d99be62568202035c3f3523aba51e41f5462342"
+local_path = "downloads/the_well_post_neutron_star_merger_density_f32/scenario_3/"
+notes = "train split. size_bytes and sha256 describe the complete upstream HDF5 file (LFS object id, xet hash bdf310e2bcc91326ae729204304540b586ade95a427c525e76e3c08db99ca5c0); only 58,460,774 bytes of it are fetched. Every range response must carry this content identity."
+
+[[resources]]
+id = "scenario_4_density_snapshots"
+origin = "hf_post_neutron_star_merger"
+url = "https://huggingface.co/datasets/polymathic-ai/post_neutron_star_merger/resolve/721253cd3220d158d3088c0cce4558dd444d1353/data/train/post_neutron_star_merger_scenario_4.hdf5"
+type = "http_range_slices_of_hdf5_file"
+version = "721253cd3220d158d3088c0cce4558dd444d1353"
+access = "Anonymous HTTP range GETs (HTTP 206) on the pinned resolve URL: bytes 0-65535 and 11538432-11541093 (HDF5 metadata), then nine 6,488,064-byte /t0_fields/density snapshots at 16777216 + dump * 6488064 for dump = 20, 40, ..., 180."
+size_bytes = 14109638656
+sha256 = "21e587c90c006c4b7d37e2b04899bd7e928967ae506e9ceb5afd05dfca6909fd"
+local_path = "downloads/the_well_post_neutron_star_merger_density_f32/scenario_4/"
+notes = "train split. size_bytes and sha256 describe the complete upstream HDF5 file (LFS object id, xet hash ada6e0b0e11630f3755271b7c12b99880759878a37e2c54dbe349af26e098b57); only 58,460,774 bytes of it are fetched. Every range response must carry this content identity."
+
+[[resources]]
+id = "scenario_5_density_snapshots"
+origin = "hf_post_neutron_star_merger"
+url = "https://huggingface.co/datasets/polymathic-ai/post_neutron_star_merger/resolve/721253cd3220d158d3088c0cce4558dd444d1353/data/train/post_neutron_star_merger_scenario_5.hdf5"
+type = "http_range_slices_of_hdf5_file"
+version = "721253cd3220d158d3088c0cce4558dd444d1353"
+access = "Anonymous HTTP range GETs (HTTP 206) on the pinned resolve URL: bytes 0-65535 and 11538432-11541093 (HDF5 metadata), then nine 6,488,064-byte /t0_fields/density snapshots at 16777216 + dump * 6488064 for dump = 20, 40, ..., 180."
+size_bytes = 14109638656
+sha256 = "e7e966a7bd0c45cfb8b702a8ae8594abf2cdb909d31fb2b6c852858ea199e101"
+local_path = "downloads/the_well_post_neutron_star_merger_density_f32/scenario_5/"
+notes = "Fetched only so the scope rule can be evaluated and audited locally; excluded from output (every selected dump max <= 2.2e-5 code units). train split. size_bytes and sha256 describe the complete upstream HDF5 file (LFS object id, xet hash ee51a437489ad28735fb8667fb070460c8481fc4e05d2498ecd9fdbdfdc1d0fc); only 58,460,774 bytes of it are fetched. Every range response must carry this content identity."
+
+[[resources]]
+id = "scenario_6_density_snapshots"
+origin = "hf_post_neutron_star_merger"
+url = "https://huggingface.co/datasets/polymathic-ai/post_neutron_star_merger/resolve/721253cd3220d158d3088c0cce4558dd444d1353/data/train/post_neutron_star_merger_scenario_6.hdf5"
+type = "http_range_slices_of_hdf5_file"
+version = "721253cd3220d158d3088c0cce4558dd444d1353"
+access = "Anonymous HTTP range GETs (HTTP 206) on the pinned resolve URL: bytes 0-65535 and 11538432-11541093 (HDF5 metadata), then nine 6,488,064-byte /t0_fields/density snapshots at 16777216 + dump * 6488064 for dump = 20, 40, ..., 180."
+size_bytes = 14109638656
+sha256 = "6276a47847348b08abe11b23b00fe90f705a1a9c8534e7cf943b09f96fa68ba7"
+local_path = "downloads/the_well_post_neutron_star_merger_density_f32/scenario_6/"
+notes = "Fetched only so the scope rule can be evaluated and audited locally; excluded from output (every selected dump max <= 2.2e-5 code units). train split. size_bytes and sha256 describe the complete upstream HDF5 file (LFS object id, xet hash 4002201d0d9a7b73b30a21b122e5b015a0dfc048c0301977d28cf06a944ec76a); only 58,460,774 bytes of it are fetched. Every range response must carry this content identity."
+
+[[resources]]
+id = "scenario_7_density_snapshots"
+origin = "hf_post_neutron_star_merger"
+url = "https://huggingface.co/datasets/polymathic-ai/post_neutron_star_merger/resolve/721253cd3220d158d3088c0cce4558dd444d1353/data/train/post_neutron_star_merger_scenario_7.hdf5"
+type = "http_range_slices_of_hdf5_file"
+version = "721253cd3220d158d3088c0cce4558dd444d1353"
+access = "Anonymous HTTP range GETs (HTTP 206) on the pinned resolve URL: bytes 0-65535 and 11538432-11541093 (HDF5 metadata), then nine 6,488,064-byte /t0_fields/density snapshots at 16777216 + dump * 6488064 for dump = 20, 40, ..., 180."
+size_bytes = 14109638656
+sha256 = "27518715c520547b86efb80c98c4d95fbbad0593e430b6062847d23b53e77b93"
+local_path = "downloads/the_well_post_neutron_star_merger_density_f32/scenario_7/"
+notes = "train split. size_bytes and sha256 describe the complete upstream HDF5 file (LFS object id, xet hash f3f1fafa9f3356067a0ed797a5e878cf6295378e2c3de324c58e4a2ecb337bcf); only 58,460,774 bytes of it are fetched. Every range response must carry this content identity."
+
+[local_paths]
+downloads = "downloads/the_well_post_neutron_star_merger_density_f32/"
+filtered = "filtered/the_well_post_neutron_star_merger_density_f32/"
+index = "index/the_well_post_neutron_star_merger_density_f32/"
+samples = "samples/the_well_post_neutron_star_merger_density_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/the_well_post_neutron_star_merger_density_f32/samples.jsonl"
+summary = "Validate the pinned CC BY 4.0 revision, parse each file's HDF5 metadata from two small byte ranges, range-fetch nine complete density dumps (indices 20, 40, ..., 180) from each of the 8 simulations, apply the disk-presence scope rule (6 files qualify), and emit each 192 x 128 x 66 float32 volume unchanged as one sample."
+deterministic_notes = "Revision, file sizes, LFS sha256 and xet hashes are pinned in sources.tsv and re-checked against the live API; every range response must be HTTP 206 with the exact Content-Range and the pinned content identity. A stdlib HDF5 reader (superblock v2 with lookup3 checksum, v1 object headers, symbol-table groups) validates that /t0_fields/density is (1, 181, 192, 128, 66) IEEE F32LE, contiguous at byte 16,777,216 with 1,174,339,584 bytes and no filter pipeline, and that /dimensions/time has 181 strictly increasing entries. The parser is self-tested on a synthetic HDF5 file in build.sh. Samples are byte-identical to the fetched ranges; verify.sh re-parses the metadata, byte-compares samples with downloads, recomputes all statistics through two decode paths, rejects duplicates, and checks manifest totals. Emitted samples must also have >= 50% distinct values, a modal value <= 10% of cells, <= 25% of (r, theta) rows constant along phi, and >= 6 decades between max and min-positive. Realized: 54 samples x 1,622,016 values."
+
+[[series]]
+id = "post_neutron_star_merger_density_f32"
+description = "Fluid rest-mass density volumes from saved dumps of nubhlight GR neutrino-radiation MHD post-merger accretion-disk simulations."
+semantic_meaning = "Rest-mass density rho_0 of the plasma on the simulation's 192 (log r) x 128 (theta code coordinate, equator-focused) x 66 (phi) log-spherical grid at one saved dump time, in per-simulation code units (multiply by the scenario's RHO_unit in simulation_parameters.json for g/cm^3)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The publisher stores the field as IEEE binary32 little-endian (the simulations ran in double precision; the float32 HDF5 dataset is the published artifact). Bytes are copied unchanged; no rescaling, unit conversion, transposition or resampling."
+source_resources = ["scenario_0_density_snapshots", "scenario_1_density_snapshots", "scenario_2_density_snapshots", "scenario_3_density_snapshots", "scenario_4_density_snapshots", "scenario_7_density_snapshots"]
+source_format = "HDF5 (superblock v2) file in The Well layout, contiguous unfiltered F32LE dataset"
+source_field = "/t0_fields/density[0, dump, :, :, :] (dimensions log_r, theta, phi)"
+filtered_input_path = "filtered/the_well_post_neutron_star_merger_density_f32/ingest_stats.json"
+filtering = "From each of the 8 published simulation files, the 9 saved dumps with index 20, 40, ..., 180 (code times ~1500 to ~9500 in steps of ~1000; dump 180 is the last) are fetched. Dump 0 (code time ~500, the earliest saved state) is excluded by the stride rule, so the near-untouched initial atmosphere never enters the family. Scope rule, evaluated on the fetched data in build.sh and verify.sh: a file is emitted only if every selected dump has maximum density >= 1e-2 code units (an order-unity-normalized disk is present). Scenarios 0, 1, 2, 3, 4 and 7 qualify (every dump max >= 0.057). Scenarios 5 and 6 are excluded (every dump max <= 2.2e-5; floor-dominated fields with 150k-860k distinct values), and a mixed outcome is fatal. Result: 6 files x 9 dumps = 54 samples. Other fields (electron_fraction, temperature, entropy, internal_energy, pressure, velocity, magnetic_field, g_contravariant) are not emitted."
+missing_value_policy = "The source has no missing-value sentinel. Every value must be finite and non-negative (no NaN, Inf, negative or -0.0); any violation is fatal in download.sh, build.sh and verify.sh. Atmosphere-floor cells are genuine stored values and are kept. Every fetched snapshot must have at least 100,000 distinct values, a modal value covering at most 25% of cells, at most 50% of rows constant along phi and max/min-positive >= 1e3. Emitted samples must meet the stricter family floors listed in deterministic_notes. Duplicate samples are fatal."
+conversion = "Fetch bytes [16777216 + dump * 6488064, +6488064) of the pinned file, which is exactly one C-order (192, 128, 66) F32LE slab of /t0_fields/density, and write it unchanged as one raw little-endian float32 sample with phi varying fastest. Index min/max are taken from the stored float32 values."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 3-D density volume, C order"
+sample_geometry = "log_spherical_grid_volume_log_r_by_theta_by_phi"
+sample_rank = 3
+sample_axes = ["log_r", "theta", "phi"]
+natural_record_kind = "nubhlight_saved_simulation_dump_density_volume"
+sample_count = 54
+total_size_bytes = 350355456
+output_path = "samples/the_well_post_neutron_star_merger_density_f32/post_neutron_star_merger_density_f32/"

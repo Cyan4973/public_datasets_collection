@@ -1,0 +1,103 @@
+manifest_version = 1
+dataset_id = "tcia_ldct_siemens_ct_projections_u16"
+name = "TCIA LDCT-and-Projection-data Siemens Full-Dose Helical CT Projection Views UInt16"
+description = "Stored unsigned 16-bit DICOM-CT-PD projection views (736 detector columns x 64 detector rows) from Siemens SOMATOM Definition Flash full-dose helical chest and abdomen CT scans: 20 deterministically selected views from each of the 100 public CC BY 4.0 Siemens full-dose projection series."
+homepage = "https://www.cancerimagingarchive.net/collection/ldct-and-projection-data/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "McCollough, C., Chen, B., Holmes III, D., Duan, X., Yu, Z., Yu, L., Leng, S., Fletcher, J. (2020). Low Dose CT Image and Projection Data (LDCT-and-Projection-data) (Version 7) [dataset]. The Cancer Imaging Archive. https://doi.org/10.7937/9npb-2637. Format: Chen B. et al., Med. Phys. 42(12):6964 (2015), doi:10.1118/1.4935406. Dataset paper: Moen T. R. et al., Med. Phys. (2020), doi:10.1002/mp.14594."
+notes = "The TCIA collection page lists the 'Images of the Chest' and 'Images of the Liver' downloads as CC BY 4.0 and states: 'Changed license for Chest and Liver patients from NIH Controlled Data Access (TCIA Restricted) to CC 4.0.' Every pinned NBIA getSeries row carries LicenseName 'Creative Commons Attribution 4.0 International License' and LicenseURI https://creativecommons.org/licenses/by/4.0/; download.sh re-asserts this on every run. Head (N*) subjects remain NIH-controlled and are not listed by the public API or used here. Attribution must include the data citation and DOI; publications should acknowledge grants EB017095 and EB017185."
+
+[safety]
+contains_sensitive_data = true
+contains_personal_data = false
+provenance_notes = "Official TCIA NBIA public API, de-identified (DICOMANON / CTP) clinical CT projection data from Mayo Clinic released in the LDCT-and-Projection-data collection."
+usage_notes = "Samples contain only detector projection codes. The index carries technical acquisition metadata and TCIA pseudonymous subject IDs (C###/L###) for provenance; DICOM demographics, dates and free text are not emitted. Do not attempt participant re-identification or linkage."
+
+[[origins]]
+id = "tcia_nbia_v1"
+name = "The Cancer Imaging Archive NBIA public REST API v1"
+url = "https://services.cancerimagingarchive.net/nbia-api/services/v1"
+type = "api"
+version = "LDCT-and-Projection-data Version 7 (series DateReleased 2025-08-14)"
+notes = "Anonymous public endpoints getSeries, getSOPInstanceUIDs and getSingleImage."
+
+[[resources]]
+id = "series_listing"
+origin = "tcia_nbia_v1"
+url = "https://services.cancerimagingarchive.net/nbia-api/services/v1/getSeries?Collection=LDCT-and-Projection-data"
+type = "api_query_result"
+version = "698 series rows as of 2026-10-05"
+access = "Refreshed on every download run and validated against series_pins.tsv."
+size_bytes = 552058
+sha256 = ""
+local_path = "downloads/tcia_ldct_siemens_ct_projections_u16/series_listing.json"
+notes = "Each of the 100 pinned series must match its pinned PatientID, BodyPartExamined, StudyInstanceUID, ImageCount, FileSize, Manufacturer SIEMENS, SeriesDescription 'Full dose projections', and CC BY 4.0 LicenseName/LicenseURI."
+
+[[resources]]
+id = "sop_instance_listings"
+origin = "tcia_nbia_v1"
+url = "https://services.cancerimagingarchive.net/nbia-api/services/v1/getSOPInstanceUIDs?SeriesInstanceUID=<pinned series UID>"
+type = "api_query_result"
+version = "100 listings, 2,958,812 SOP Instance UIDs in total"
+access = "One uncompressed JSON listing per pinned series (about 80 bytes per UID); cached and validated for exact count and uniqueness."
+size_bytes = 235900000
+sha256 = ""
+local_path = "downloads/tcia_ldct_siemens_ct_projections_u16/sop_lists/"
+notes = "Needed only to resolve which views to fetch; the API exposes no lighter per-instance index. Size is an estimate (2,958,812 x ~79.7 bytes)."
+
+[[resources]]
+id = "selected_projection_instances"
+origin = "tcia_nbia_v1"
+url = "https://services.cancerimagingarchive.net/nbia-api/services/v1/getSingleImage?SeriesInstanceUID=<series>&SOPInstanceUID=<sop>"
+type = "api_query_result"
+version = "2,000 DICOM Raw Data Storage instances (20 per pinned series)"
+access = "Uncompressed application/dicom objects, fetched one at a time with retries and a short delay; each is schema-validated before acceptance."
+size_bytes = 198290000
+sha256 = ""
+local_path = "downloads/tcia_ldct_siemens_ct_projections_u16/dicom/"
+notes = "About 99,144 bytes (chest) or 99,147 bytes (liver) per object. download_inventory.json records the exact size and SHA-256 of every fetched object; build.sh and verify.sh enforce it."
+
+[local_paths]
+downloads = "downloads/tcia_ldct_siemens_ct_projections_u16/"
+filtered = "filtered/tcia_ldct_siemens_ct_projections_u16/"
+index = "index/tcia_ldct_siemens_ct_projections_u16/"
+samples = "samples/tcia_ldct_siemens_ct_projections_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/tcia_ldct_siemens_ct_projections_u16/samples.jsonl"
+summary = "Validate the 100 pinned CC BY 4.0 Siemens full-dose projection series, list their SOP Instance UIDs, fetch 20 deterministically selected DICOM-CT-PD views per series, and emit each view's complete 736x64 stored uint16 Pixel Data as one little-endian sample."
+deterministic_notes = "Series are pinned in series_pins.tsv (UIDs, counts, sizes). Per series, the SOP UID listing is sorted lexicographically and ranks floor((2i+1)n/40), i=0..19, are selected; SOP UIDs are opaque hashes unrelated to acquisition order, so this is a deterministic pseudo-random draw of views across each helical scan. Instance objects are validated for Raw Data Storage SOP class, Implicit VR Little Endian, Mayo DICOM-CT-PD private creators, HELICAL/FANBEAM/CYLINDRICAL geometry, all seven preprocessing flags YES (including LogFlag), Rows=736, Columns=64, BitsAllocated=BitsStored=16, HighBit=15, PixelRepresentation=0, one MONOCHROME2 sample, and a final 94,208-byte Pixel Data element whose decoded min/max equal the Smallest/Largest Image Pixel Value tags. Samples are named <PatientID>_i<InstanceNumber>.bin and indexed in (PatientID, InstanceNumber) order. Floors: 2,000 samples x 47,104 values; verify.sh rejects constant views and views with fewer than 256 distinct values."
+
+[[series]]
+id = "siemens_full_dose_projection_view_u16"
+description = "One complete Siemens full-dose helical CT projection view (one gantry angle and table position) as stored uint16 codes."
+semantic_meaning = "Vendor-preprocessed (gain, dark-field, flat-field, bad-pixel, scatter and beam-hardening corrected) and log-converted X-ray attenuation line integrals for every detector element of one projection view, quantized to 16-bit codes. Physical line integral = code x RescaleSlope + RescaleIntercept with a per-series slope of 1.12e-4 to 2.01e-4 and intercept of -0.268 to -0.134 (realized), apparently chosen per series to fill the 16-bit code range. Realized acquisition groups: 50 chest series at 120 kVp, 14 abdomen series at 120 kVp, and 36 abdomen series at 100 kVp, all FFSZ. These are DICOM-CT-PD machine-facing projection codes, not raw photon counts."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Pixel Data is declared BitsAllocated=16, BitsStored=16, HighBit=15, PixelRepresentation=0 in an uncompressed Implicit VR Little Endian object, so the stored codes are emitted unchanged. RescaleSlope/RescaleIntercept, kVp, tube current, flying-focal-spot mode, angular steps per rotation and the per-view focal-centre angle and z position are recorded per sample in the index as auxiliary metadata only."
+source_resources = ["series_listing", "sop_instance_listings", "selected_projection_instances"]
+source_format = "DICOM Raw Data Storage (SOP class 1.2.840.10008.5.1.4.1.1.66) in the Mayo DICOM-CT-PD layout, Implicit VR Little Endian"
+source_field = "Pixel Data (7FE0,0010): Rows=736 detector columns (channels) x Columns=64 detector rows, unsigned 16-bit"
+filtered_input_path = "filtered/tcia_ldct_siemens_ct_projections_u16/ingest_stats.json"
+filtering = "Keep only Manufacturer SIEMENS series with SeriesDescription exactly 'Full dose projections' and PatientID C### (chest) or L### (liver/abdomen): all 100 such public series, 20 selected views each. Exclude 'Low dose projections' (low dose simulated by noise insertion), all GE series (different detector geometry), reconstructed image series, and the NIH-controlled head subjects."
+missing_value_policy = "No values are dropped, masked, clipped, rescaled or imputed. Any instance that is missing, truncated, compressed, schema-incompatible, constant, or whose decoded min/max disagree with its Smallest/Largest Image Pixel Value tags fails the download or build; there is no sentinel value."
+conversion = "Walk the Implicit VR LE dataset (descending undefined-length sequences and items to their delimiters), locate the final Pixel Data element, check its length is 736 x 64 x 2 = 94,208 bytes, and write those bytes unchanged as one little-endian uint16 sample in source order (detector column major, 64 detector-row values per column). Index min/max are computed from the stored uint16 codes."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian uint16 DICOM-CT-PD projection view"
+sample_geometry = "ct_helical_projection_view_detector_column_by_row_matrix_2d"
+sample_rank = 2
+sample_shape = [736, 64]
+sample_axes = ["detector_column_channel", "detector_row"]
+natural_record_kind = "dicom_ct_pd_raw_data_instance_single_projection_view"
+sample_count = 2000
+total_size_bytes = 188416000
+output_path = "samples/tcia_ldct_siemens_ct_projections_u16/siemens_full_dose_projection_view_u16/"

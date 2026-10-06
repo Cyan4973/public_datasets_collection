@@ -1,0 +1,102 @@
+manifest_version = 1
+dataset_id = "dandi_001076_zebrafish_calcium_fluorescence_f32"
+name = "DANDI:001076 Larval-Zebrafish Two-Photon Suite2p ROI Fluorescence Float32"
+description = "Complete Suite2p raw ROI fluorescence (F) matrices, frames x ROIs in stored float32, from all 48 NWB imaging objects (12 sessions x 4) of the CC BY 4.0 DANDI:001076 larval-zebrafish H2B-GCaMP6s calcium-imaging dandiset."
+homepage = "https://dandiarchive.org/dandiset/001076/draft"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Loring, Matthew (2024) OMR Robot CaImaging (Version draft) [Data set]. DANDI archive. https://dandiarchive.org/dandiset/001076/draft"
+notes = "The dandiset metadata (draft dandiset.yaml, schema 0.6.7) declares `license: - spdx:CC-BY-4.0` and access `dandi:OpenAccess`; download.sh re-checks both on every run. Data accompany the manuscript 'Embodied Neural Visuomotor Circuits in Neuromechanical Simulations and a Zebrafish Robot'. Preserve the DANDI citation and attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official DANDI Archive S3 blobs referenced by the dandiset's own draft assets.yaml; animal (Danio rerio, 5 dpf larvae) neurophysiology only. The contributor's contact e-mail in dandiset.yaml is not copied into samples."
+usage_notes = "Only RoiResponseSeries fluorescence values are emitted; session timestamps, NWB identifiers and DANDI asset ids are kept only as index bookkeeping."
+
+[[origins]]
+id = "dandi_001076_draft"
+name = "DANDI Archive dandiset 001076 (draft; no published version)"
+url = "https://dandiarchive.org/dandiset/001076/draft"
+type = "data_portal"
+version = "draft, last modified 2024-06-27T21:01:35Z (API status Valid, 48 assets, 660,278,264 bytes)"
+notes = "API https://api.dandiarchive.org/api/dandisets/001076/ reports embargo_status OPEN and most_recent_published_version null, so the draft asset set is pinned by content-addressed blob URL plus dandi:sha2-256 in assets.tsv."
+
+[[resources]]
+id = "dandiset_yaml"
+origin = "dandi_001076_draft"
+url = "https://dandiarchive.s3.amazonaws.com/dandisets/001076/draft/dandiset.yaml"
+type = "file"
+version = "draft"
+access = "Anonymous HTTPS; fetched on every download run and checked for identifier DANDI:001076, name 'OMR Robot CaImaging', license spdx:CC-BY-4.0 and dandi:OpenAccess."
+size_bytes = 1766
+sha256 = ""
+local_path = "downloads/dandi_001076_zebrafish_calcium_fluorescence_f32/metadata/dandiset.yaml"
+notes = "License evidence. Its assetsSummary (42 files) is stale relative to the 48-asset draft listed by assets.yaml and the API; the recipe trusts assets.yaml plus the API asset_count."
+
+[[resources]]
+id = "assets_yaml"
+origin = "dandi_001076_draft"
+url = "https://dandiarchive.s3.amazonaws.com/dandisets/001076/draft/assets.yaml"
+type = "file"
+version = "draft"
+access = "Anonymous HTTPS; fetched on every download run; the (path, asset id, S3 blob URL, contentSize, dandi:sha2-256) set must equal assets.tsv exactly."
+size_bytes = 117230
+sha256 = ""
+local_path = "downloads/dandi_001076_zebrafish_calcium_fluorescence_f32/metadata/assets.yaml"
+notes = "Draft asset index; any added, removed or changed asset fails the download."
+
+[[resources]]
+id = "nwb_ophys_assets"
+origin = "dandi_001076_draft"
+url = "https://dandiarchive.s3.amazonaws.com/blobs/"
+type = "exact_file_selection"
+version = "all 48 draft assets pinned in assets.tsv"
+access = "Whole-file resumable curl of each content-addressed S3 blob; each file must match its contentSize, HDF5 signature and dandi:sha2-256 before promotion."
+size_bytes = 660278264
+sha256 = ""
+local_path = "downloads/dandi_001076_zebrafish_calcium_fluorescence_f32/nwb/"
+notes = "48 NWB 2.6.0 files, 8,642,925 to 22,085,626 bytes each; per-file SHA-256 values are in assets.tsv."
+
+[local_paths]
+downloads = "downloads/dandi_001076_zebrafish_calcium_fluorescence_f32/"
+filtered = "filtered/dandi_001076_zebrafish_calcium_fluorescence_f32/"
+index = "index/dandi_001076_zebrafish_calcium_fluorescence_f32/"
+samples = "samples/dandi_001076_zebrafish_calcium_fluorescence_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/dandi_001076_zebrafish_calcium_fluorescence_f32/samples.jsonl"
+summary = "Validate the live draft license and asset set, fetch the 48 pinned NWB blobs, decode each file's /processing/ophys/Fluorescence/RoiResponseSeries/data with a standard-library HDF5 reader, and emit one complete frames x ROIs little-endian float32 matrix per file."
+deterministic_notes = "Pinned: blob URLs, sizes, dandi:sha2-256, NWB identifiers, session start times, frames, ROIs and chunk counts per asset (assets.tsv). The reader requires superblock v0, v1 object headers, symbol-table groups, H5T_IEEE_F32LE, the deflate filter only, filter mask 0 and an exact chunk grid (46 files store one chunk equal to the full shape; 2 files store two ROI-axis chunks whose edge padding is discarded). Each inflated chunk must equal the full chunk size, and the decoded length must equal frames x ROIs x 4. build.sh and verify.sh first run a synthetic HDF5 self-test. Samples follow asset-path order and are re-decoded and byte-compared by verify.sh, which also rejects duplicates, non-finite values and constant matrices."
+
+[[series]]
+id = "suite2p_roi_fluorescence_f32"
+description = "Suite2p raw ROI fluorescence (F) matrices from larval-zebrafish two-photon calcium imaging."
+semantic_meaning = "Raw fluorescence of every Suite2p-segmented ROI in one NWB imaging object (one Suite2p plane extraction), in arbitrary fluorescence units (NWB unit 'n.a.', conversion 1.0, offset 0.0). Rows are imaging frames at about 0.85 to 0.94 Hz over roughly 26 minutes; columns are ROIs in PlaneSegmentation order. Animals are 5 dpf larval zebrafish expressing nuclear H2B-GCaMP6s during optomotor-response experiments."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The NWB dataset is declared H5T_IEEE_F32LE. Decoding inflates the deflate-compressed chunk(s) and removes only HDF5 edge-chunk padding; every stored float32 bit pattern is kept unchanged in stored row-major order. The quantity itself is upstream Suite2p extraction output (mean ROI pixel intensity per frame) published by the data authors, not a local transform."
+source_resources = ["nwb_ophys_assets"]
+source_format = "NWB 2.6.0 HDF5 file (superblock v0), chunked deflate H5T_IEEE_F32LE 2-D dataset"
+source_field = "/processing/ophys/Fluorescence/RoiResponseSeries/data (frames x ROIs)"
+filtered_input_path = "filtered/dandi_001076_zebrafish_calcium_fluorescence_f32/ingest_stats.json"
+filtering = "All 48 assets and every frame and ROI of RoiResponseSeries are kept, including ROIs that Suite2p's classifier marked rejected; the full stored matrix is the natural record. Excluded as different quantities: Fluorescence/Neuropil (Fneu), Fluorescence/Deconvolved (spike inference), PlaneSegmentation image_mask, ROICentroids, Accepted/Rejected flags, mean and correlation images (float64), and trial tables."
+missing_value_policy = "The source has no missing-value sentinel. Every value must be finite: any NaN or Inf is fatal (the realized build found 0 non-finite values across all 62,819,025). A constant matrix, duplicate decoded sample, changed shape, chunk grid, unit, conversion, offset, resolution, NWB identifier or source hash also fails the recipe. Nothing is dropped, clipped or imputed. Negative values (266 in total, minimum -125.35) and exact zeros (2) are genuine Suite2p output and are kept; the realized range is -125.35 to 1202.02."
+conversion = "For each pinned NWB file: navigate the symbol-table groups to RoiResponseSeries/data, assert H5T_IEEE_F32LE, deflate-only and the pinned shape and chunk count, and walk the v1 raw-data chunk B-tree. zlib-inflate each chunk to exactly chunk_rows x chunk_cols x 4 bytes, place its valid region at its logical offset, and write the frames x ROIs matrix row-major as little-endian float32 to <session>_<obj>.bin."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 Suite2p ROI fluorescence matrix"
+sample_geometry = "calcium_imaging_frame_by_roi_fluorescence_matrix_2d"
+sample_rank = 2
+sample_axes = ["imaging_frame", "roi"]
+natural_record_kind = "complete_suite2p_roi_response_series_of_one_nwb_imaging_object"
+sample_count = 48
+total_size_bytes = 251276100
+output_path = "samples/dandi_001076_zebrafish_calcium_fluorescence_f32/suite2p_roi_fluorescence_f32/"

@@ -276,6 +276,7 @@ deepmind_gencast_checkpoint_f32	ok	57342976	229371904	160	262144	1048576	0	0	0	1
 mitbih_arrhythmia_u8	ok	59150000	59150000	91	650000	650000	0	0	0	1	none	none
 sentinel2_l2a_scene_classification_u8	ok	60280200	60280200	2	30140100	30140100	0	0	0	1	none	none
 mitbih_arrhythmia_physionet	ok	62400000	124800000	96	650000	1300000	0	0	0	1	none	none
+dandi_001076_zebrafish_calcium_fluorescence_f32	ok	62819025	251276100	48	1227534	4910136	0	0	0	1	none	none
 zenodo_gia_stress_fields_f64	ok	64915200	519321600	7	9273600	74188800	0	0	0	1	none	none
 zenodo_lodopab_ct_sinograms_f32	ok	65664000	262656000	128	513000	2052000	0	0	0	1	none	none
 physionet_eit_thorax_images_f32	ok	66201600	264806400	17	3328000	13312000	0	0	0	1	none	none

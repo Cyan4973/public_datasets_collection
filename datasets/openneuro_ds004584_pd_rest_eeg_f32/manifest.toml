@@ -1,0 +1,99 @@
+manifest_version = 1
+dataset_id = "openneuro_ds004584_pd_rest_eeg_f32"
+name = "OpenNeuro ds004584 Resting-State 63-Channel Scalp EEG Float32"
+description = "Thirty whole eyes-open resting-state scalp EEG recordings (63 channels, 500 Hz, Pz reference) from OpenNeuro ds004584, emitted as the distributed EEGLAB little-endian float32 voltage matrices."
+homepage = "https://openneuro.org/datasets/ds004584/versions/1.0.0"
+
+[license]
+name = "Creative Commons CC0 1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "Singh A, Cole R, Espinoza A, Cavanagh J, Narayanan N. Rest eyes open. OpenNeuro ds004584 v1.0.0, DOI 10.18112/openneuro.ds004584.v1.0.0. Related preprint: doi:10.1101/2022.07.26.22278079."
+notes = "The release's own dataset_description.json declares \"License\": \"CC0\" with DatasetDOI doi:10.18112/openneuro.ds004584.v1.0.0; download.sh re-checks both fields before fetching any signal data. Citation is courteous, not required."
+
+[safety]
+contains_sensitive_data = true
+contains_personal_data = false
+provenance_notes = "Public de-identified human scalp EEG released by the study authors (University of Iowa, Narayanan lab) through OpenNeuro's official S3 bucket."
+usage_notes = "The source study includes 100 people with Parkinson's disease and 49 controls. This recipe keeps only de-identified EEG voltage matrices plus channel-name and acquisition sidecars needed to decode them. It never downloads or emits participants.tsv, participants.json, EEGLAB .set metadata, group labels, demographics, or clinical scores, and samples carry no diagnosis. Do not attempt re-identification or linkage to clinical data."
+
+[[origins]]
+id = "openneuro_ds004584"
+name = "OpenNeuro ds004584 \"Rest eyes open\" (BIDS 1.2.1)"
+url = "https://openneuro.org/datasets/ds004584/versions/1.0.0"
+type = "bucket"
+version = "1.0.0"
+notes = "Public anonymous S3 objects under https://s3.amazonaws.com/openneuro.org/ds004584/. CHANGES lists only 1.0.0 (2023-05-31). The listing holds 1,051 keys including 149 *_task-Rest_eeg.fdt objects totalling 3,020,968,040 bytes, all with single-part MD5 ETags."
+
+[[resources]]
+id = "dataset_description"
+origin = "openneuro_ds004584"
+url = "https://s3.amazonaws.com/openneuro.org/ds004584/dataset_description.json"
+type = "file"
+version = "1.0.0"
+access = "Direct public download; download.sh requires License=CC0, the pinned DatasetDOI and Name."
+size_bytes = 504
+local_path = "downloads/openneuro_ds004584_pd_rest_eeg_f32/dataset_description.json"
+notes = "MD5/ETag e638be12229b176a735782d36c850dfb at pinning (Last-Modified 2023-06-07)."
+
+[[resources]]
+id = "selected_rest_eeg_fdt"
+origin = "openneuro_ds004584"
+url = "https://s3.amazonaws.com/openneuro.org/ds004584/"
+type = "file"
+version = "1.0.0"
+access = "Thirty exact public objects sub-XXX/eeg/sub-XXX_task-Rest_eeg.fdt pinned in selection.tsv by byte size and MD5; resumable curl transfers."
+size_bytes = 605908800
+local_path = "downloads/openneuro_ds004584_pd_rest_eeg_f32/"
+notes = "Selected from the 109 subjects whose channels.tsv equals canonical_channels.txt exactly, at evenly spaced positions round(i*108/29), i=0..29, over the sorted subject ids (sub-009 .. sub-139). discover.sh reproduces the selection from metadata only."
+
+[[resources]]
+id = "selected_rest_eeg_sidecars"
+origin = "openneuro_ds004584"
+url = "https://s3.amazonaws.com/openneuro.org/ds004584/"
+type = "file"
+version = "1.0.0"
+access = "The matching sub-XXX_task-Rest_channels.tsv and sub-XXX_task-Rest_eeg.json objects, pinned in selection.tsv by size and MD5."
+size_bytes = 38420
+local_path = "downloads/openneuro_ds004584_pd_rest_eeg_f32/"
+notes = "Used only to derive and cross-check nbchan, the channel order, sampling rate, reference and duration. All 30 channels.tsv files are byte-identical (MD5 cc9f6fb4a0aa3d9ae52d31c46839c8b4)."
+
+[local_paths]
+downloads = "downloads/openneuro_ds004584_pd_rest_eeg_f32/"
+filtered = "filtered/openneuro_ds004584_pd_rest_eeg_f32/"
+index = "index/openneuro_ds004584_pd_rest_eeg_f32/"
+samples = "samples/openneuro_ds004584_pd_rest_eeg_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/openneuro_ds004584_pd_rest_eeg_f32/samples.jsonl"
+summary = "Validate the CC0 release, fetch 30 pinned EEGLAB .fdt float32 matrices with their channels.tsv/eeg.json sidecars, and emit each recording's whole 63-channel float32 voltage matrix as one little-endian sample."
+deterministic_notes = "selection.tsv pins subject, .fdt size/MD5, sidecar sizes/MD5s and time points; canonical_channels.txt pins the 63-channel montage and order. Recordings with a 64th Resp (respiration) channel, X/Y/Z channels, or the alternate FT9/PO3/PO4 montage are excluded so one channel set and order holds. nbchan comes from channels.tsv rows and must equal eeg.json EEGChannelCount; the .fdt size must divide by 4*nbchan and give RecordingDuration*500 points. Values are copied in source order without clipping, filtering or rescaling; NaN/Inf, constant matrices, size/MD5 mismatches and montage changes fail. verify.sh re-hashes sources, re-derives geometry, checks byte identity, re-checks finiteness by a different method, recomputes stored float32 min/max, and reconciles index and manifest totals."
+
+[[series]]
+id = "ds004584_rest_eeg_63ch_f32"
+description = "Eyes-open resting-state scalp EEG voltage matrices, 63 channels at 500 Hz, one whole recording per subject."
+semantic_meaning = "Scalp electrode potential in microvolts (EEGLAB convention; channels.tsv lists units as n/a) for 63 channels of one BrainVision 64-electrode cap, referenced to Pz with ground AFz, sampled at 500 Hz while the subject rests with eyes open for roughly two to four minutes."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The EEGLAB .fdt matrix is IEEE float32 as distributed by the authors. Preprocessing before export is undocumented (eeg.json SoftwareFilters is n/a); the values sit on no ADC lattice (0.1, 0.0488, 0.01, 0.5 and 1/2048 uV lattice hit rates match the random baseline of about 4% at tolerance 0.02 over 50k random values per recording) and use the full float32 mantissa. Whole-recording channel means are near zero (median 0.7-2.4 uV in most checked recordings) while slow baseline drift remains (2 s window means vary by about 15-220 uV), consistent with undocumented upstream mean removal or low-cutoff high-pass filtering; the data are not average-referenced. They are collected as distributed, with no requantization or rescaling."
+source_resources = ["selected_rest_eeg_fdt", "selected_rest_eeg_sidecars"]
+source_format = "EEGLAB .fdt headerless little-endian float32 data matrix with BIDS channels.tsv and eeg.json sidecars"
+source_field = "EEG.data, the [nbchan=63 x pnts] scalp voltage matrix"
+filtered_input_path = "filtered/openneuro_ds004584_pd_rest_eeg_f32/ingest_stats.json"
+filtering = "Keep the 30 pinned subjects (all with the identical canonical 63-channel montage); keep every channel and every time point of each recording. No artifact rejection, clipping, epoching or re-referencing."
+missing_value_policy = "ds004584 has no missing-value sentinel in .fdt matrices. Any NaN or Inf, constant recording, size not divisible by 4*nbchan, nbchan disagreement between channels.tsv and eeg.json, montage change, duration/point-count disagreement, or size/MD5 mismatch fails the recipe. No values are dropped, imputed or clipped; large artifact excursions are kept as distributed. Flat individual channels are counted in the index (flat_channels) but do not fail a recording unless all channels are flat."
+conversion = "Read the .fdt as little-endian float32 and write the same values in the same order: element t*63 + c is channel c (channels.tsv order) at time point t, i.e. a C-order [pnts, 63] matrix. No byte swapping is needed because the source is already little-endian."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 multichannel EEG matrix"
+sample_geometry = "time_major_channel_interleaved_matrix_2d"
+sample_rank = 2
+sample_axes = ["time_point", "channel"]
+natural_record_kind = "one_subject_eyes_open_resting_state_eeg_recording"
+sample_count = 30
+total_size_bytes = 605908800
+output_path = "samples/openneuro_ds004584_pd_rest_eeg_f32/ds004584_rest_eeg_63ch_f32/"

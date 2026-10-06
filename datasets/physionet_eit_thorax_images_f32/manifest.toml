@@ -1,0 +1,126 @@
+manifest_version = 1
+dataset_id = "physionet_eit_thorax_images_f32"
+name = "PhysioNet Aeration Study Draeger PulmoVista Thoracic EIT Image Sequences (FEM) Float32"
+description = "Complete reconstructed thoracic electrical-impedance-tomography image sequences (32 x 32 pixels, 50 Hz, native float32) from the Draeger PulmoVista 500 exports of the PhysioNet 'Respiratory and heart rate monitoring dataset from aeration study' 1.0.0: the 17 of 20 forced-expiratory-manoeuvre recordings (one per healthy volunteer) that are continuous 50 Hz acquisitions, one sample per recording."
+homepage = "https://physionet.org/content/respiratory-heartrate-dataset/1.0.0/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Guy, E. F. S., Flett, I., Clifton, J. A., Calje-van der Klei, T., Chen, R., Knopp, J., Moeller, K., & Chase, J. G. (2024). Respiratory and heart rate monitoring dataset from aeration study (version 1.0.0). PhysioNet. RRID:SCR_007345. https://doi.org/10.13026/e4dt-f689. Goldberger, A., et al. (2000). PhysioBank, PhysioToolkit, and PhysioNet. Circulation 101(23), e215-e220."
+notes = "The physionet.org project page (open access, 'Anyone can access the files, as long as they conform to the terms of the specified license') declares 'Creative Commons Attribution 4.0 International Public License' for v1.0.0 (DOI 10.13026/e4dt-f689, published 2024-03-20). The release ships LICENSE.txt (14,842 B, sha256 9a78e7f22742dde9f66ae235ec793ba2212019dc4d0ced75c4da09ced0b35fb2, itself listed in the release SHA256SUMS.txt) whose first line is 'Creative Commons Attribution 4.0 International Public License'; download.sh pins and re-checks it. Preserve the dataset, author and PhysioNet attribution."
+
+[safety]
+contains_sensitive_data = true
+contains_personal_data = false
+provenance_notes = "Official PhysioNet open-access (non-credentialed) project, served from the anonymous PhysioNet open-data S3 bucket. Data from 20 healthy adult volunteers recruited under University of Canterbury HREC consent (HREC 2023/30/LR-PS). Files are named only by a study subject number (S01-S20) and trial type."
+usage_notes = "Treat as human physiological material. Emitted samples contain only reconstructed EIT pixel values (relative conductivity change, arbitrary units). subject-info.csv (self-reported demographics, asthma, smoking and vaping history), the pressure/flow, ECG, PPG and heart-rate-belt files are neither downloaded nor emitted, and the per-frame wall-clock time stamps, event text, MinMax/event-marker/timing-error integers and Medibus fields of the EIT frames are dropped. Do not attempt linkage or re-identification."
+
+[[origins]]
+id = "physionet_open_respiratory_heartrate_1_0_0"
+name = "PhysioNet open-data bucket: respiratory-heartrate-dataset 1.0.0"
+url = "https://physionet-open.s3.amazonaws.com/respiratory-heartrate-dataset/1.0.0/"
+type = "bucket"
+version = "1.0.0"
+notes = "Official anonymous PhysioNet open-data S3 mirror of physionet.org/files/respiratory-heartrate-dataset/1.0.0/ (the only published version). The bucket listing shows 60 EIT .bin exports (20 FEM, 20 PEEP, 20 PEEP_BH; 3,294,430,100 B in total), all multiples of the 4358-byte frame."
+
+[[resources]]
+id = "eit_sha256sums"
+origin = "physionet_open_respiratory_heartrate_1_0_0"
+url = "https://physionet-open.s3.amazonaws.com/respiratory-heartrate-dataset/1.0.0/SHA256SUMS.txt"
+type = "file"
+version = "1.0.0"
+access = "Direct public download."
+size_bytes = 30220
+sha256 = "e463d8351c734df9d286d26cfb64d82ac56684678449ad42ba570fea84296011"
+local_path = "downloads/physionet_eit_thorax_images_f32/SHA256SUMS.txt"
+notes = "Official per-file SHA-256 list (308 entries); pinned by its own hash and required to vouch for every other fetched file."
+
+[[resources]]
+id = "eit_license"
+origin = "physionet_open_respiratory_heartrate_1_0_0"
+url = "https://physionet-open.s3.amazonaws.com/respiratory-heartrate-dataset/1.0.0/LICENSE.txt"
+type = "file"
+version = "1.0.0"
+access = "Direct public download."
+size_bytes = 14842
+sha256 = "9a78e7f22742dde9f66ae235ec793ba2212019dc4d0ced75c4da09ced0b35fb2"
+local_path = "downloads/physionet_eit_thorax_images_f32/LICENSE.txt"
+notes = "CC BY 4.0 legal code shipped with the release (CRLF text)."
+
+[[resources]]
+id = "eit_readme"
+origin = "physionet_open_respiratory_heartrate_1_0_0"
+url = "https://physionet-open.s3.amazonaws.com/respiratory-heartrate-dataset/1.0.0/README.txt"
+type = "file"
+version = "1.0.0"
+access = "Direct public download."
+size_bytes = 6708
+sha256 = "4ea31ef7082e86918a793796327c890730437a94747b8db90dad0ba3f185dc70"
+local_path = "downloads/physionet_eit_thorax_images_f32/README.txt"
+notes = "Release README: EIT_rawData files 'contain data as a matrix of pixel values representing regional aeration for a cross-sectional image (32x32 frame) over time (with 50Hz sampling)'."
+
+[[resources]]
+id = "eit_reader_code"
+origin = "physionet_open_respiratory_heartrate_1_0_0"
+url = "https://physionet-open.s3.amazonaws.com/respiratory-heartrate-dataset/1.0.0/Code/read_binData.m"
+type = "file"
+version = "1.0.0"
+access = "Direct public download."
+size_bytes = 1821
+sha256 = "cc09fef3ce2a7a0e2bb62f9ece90418db2992b790b178d7c731f16e191fa60fc"
+local_path = "downloads/physionet_eit_thorax_images_f32/Code/read_binData.m"
+notes = "Authors' MATLAB reader documenting the 4358-byte frame layout (time stamp, dummy, 1024 float32 pixels, 2 int32, 30 int8 event text, int32 timing error, 52 float32 Medibus) and the reshape/rot90/flipud display orientation."
+
+[[resources]]
+id = "eit_fem_recordings"
+origin = "physionet_open_respiratory_heartrate_1_0_0"
+url = "https://physionet-open.s3.amazonaws.com/respiratory-heartrate-dataset/1.0.0/EIT_rawData/"
+type = "file"
+version = "1.0.0"
+access = "Direct public download, one resumable curl GET per file (curl -C -, stall detection, retries)."
+size_bytes = 332079600
+sha256 = ""
+local_path = "downloads/physionet_eit_thorax_images_f32/EIT_rawData/"
+notes = "All 20 EIT_rawData/S01_FEM.bin ... S20_FEM.bin files (13,074,000 to 36,607,200 B; 3,000 to 8,400 frames). Per-file sizes and SHA-256 are pinned in scripts/eit_bin.py (RECORDINGS) and must also appear in SHA256SUMS.txt. All 20 are fetched so the dropped-frame exclusion (3 files, 50,334,900 B) is derived from source content by build.sh and re-derived by verify.sh rather than pinned by name only."
+
+[local_paths]
+downloads = "downloads/physionet_eit_thorax_images_f32/"
+filtered = "filtered/physionet_eit_thorax_images_f32/"
+index = "index/physionet_eit_thorax_images_f32/"
+samples = "samples/physionet_eit_thorax_images_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/physionet_eit_thorax_images_f32/samples.jsonl"
+summary = "Fetch and checksum the 20 forced-expiratory-manoeuvre Draeger PulmoVista EIT exports of PhysioNet respiratory-heartrate-dataset 1.0.0, split each file into 4358-byte frames, exclude recordings with dropped frames, and emit the 1024 float32 pixel values of every frame, in stored order, as one frames x 32 x 32 little-endian float32 sample per retained recording."
+deterministic_notes = "Pinned release 1.0.0 with SHA-256 for SHA256SUMS.txt, LICENSE.txt, README.txt and Code/read_binData.m; the 20 FEM files are pinned by size and SHA-256 (cross-checked against SHA256SUMS.txt) and must be multiples of 4358 bytes. Canonical order S01..S20. Every frame's float64 time stamp must be a day fraction in [0,1) and the median frame step must be 19-21 ms (50 Hz), which rejects any frame-grid misalignment. Exclusion rule (build and verify, from source content): a recording with any frame step > 30 ms is excluded; at most 5 exclusions are allowed and the derived set must equal the documented set (S02, S08, S09). build.sh and verify.sh run a synthetic-input selftest (3 positive cases: clean, gap exclusion, reference-frame detection; 8 negative cases) of two independent decoders: build copies pixel bytes verbatim and computes statistics with array('f'); verify re-decodes with struct, re-derives the exclusion decision, re-packs as '<1024f' and byte-compares every frame, then re-checks index fields (including per-sample SHA-256 and min/max of the stored float32), the aggregate output SHA-256 and manifest totals. Floors: at least 10,000 primary values or 100 KB, median at least 1,000 values per sample. Realized 2026-10-05: 17 samples, 3 exclusions, 64,650 frames, 66,201,600 values, 264,806,400 bytes, median 3,250 frames (3,328,000 values) per sample, value range -24.786 to 216.429 AU, exact zeros 2.858% (29 out-of-mask pixels per frame plus one all-zero reference frame per recording), no non-finite values, aggregate output SHA-256 a4429e0dd5d71ca467458d25b5d536176f9c0a8dae46201123fa7be6e35583a1."
+
+[[series]]
+id = "pulmovista_eit_fem_image_f32"
+description = "Complete reconstructed thoracic EIT image sequences of the forced-expiratory-manoeuvre trial, one per retained volunteer recording."
+semantic_meaning = "Per-pixel relative regional conductivity (aeration) change, in device arbitrary units, of a 32 x 32 cross-sectional thoracic image reconstructed by a Draeger PulmoVista 500 from an electrode belt around the chest at axilla level, 50 frames per second, while a seated healthy volunteer breathes through a full-face mask and pressure/flow sensor and performs three forced expiratory manoeuvres. Pixels outside the device's thorax mask (29 corner pixels per frame) are exactly 0.0 as exported."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The values are the Draeger device-software export of reconstructed images (read_binData.m: 'reconstructed EIT images from the .bin file generated by the Dräger Tool'), i.e. the stable machine-facing artifact the authors publish as 'EIT_rawData'; electrode voltages are not part of the release. The recipe neither reconstructs, filters, scales, rotates nor resamples: each frame's 1024 IEEE-754 float32 words are copied bit-for-bit."
+source_resources = ["eit_fem_recordings", "eit_sha256sums", "eit_reader_code"]
+source_format = "Draeger PulmoVista 500 EIT .bin export: headerless sequence of 4358-byte little-endian frames (layout per Code/read_binData.m)"
+source_field = "per-frame pixel block: 1024 float32 reconstructed-image values at frame byte offset 12"
+filtered_input_path = "filtered/physionet_eit_thorax_images_f32/ingest_stats.json"
+filtering = "Population: every FEM recording of the release (S01-S20, one per subject, 3,000-8,400 frames). Retained: the 17 recordings whose frame time stamps advance in 20 ms steps throughout. Excluded by rule (any frame step > 30 ms, i.e. dropped frames): S02_FEM (gaps of 108 and 103 ms), S08_FEM (103, 97 ms) and S09_FEM (120, 105, 100, 91 ms). These three are also off the common scale: in each, the all-zero reference frame lies 1-4 frames before a gap and nearly all frames sit on a large static baseline (median per-frame max 7,329-8,690 AU vs 23-67 AU in the retained recordings, whose global range is -24.8 to 216.4 AU), whereas the same subjects' PEEP trials are on the normal scale; the cause is undocumented upstream, and mixing them would bundle a ~150x different regime. The PEEP and PEEP_BH trials (40 recordings, 16,500-19,150 frames each; each set alone would be about 1.39 GB of primary output, above the 1 GB cap) are out of scope so the recipe takes one trial protocol across every subject. Per frame, the time stamp, dummy float, MinMax/event-marker int32, event text, timing-error int32 and 52 Medibus floats (observed as -1000 / -3.4e38 fill) are dropped."
+missing_value_policy = "The export has no missing-value sentinel for pixels. Out-of-mask pixels (29 per frame) and the single all-zero frame per recording (apparently the device's relative-impedance reference frame) are native exact 0.0 and are kept. Every pixel must be finite: any NaN or +/-Inf, a size that is not a multiple of 4358, a checksum mismatch, an out-of-range time stamp or a non-50 Hz median cadence is fatal. Whole recordings with dropped frames (any frame step > 30 ms) are excluded and listed in ingest_stats.json with their gaps; more than 5 exclusions, or a derived set different from S02/S08/S09, is fatal. For retained recordings, a constant recording, more than 1% of frames identical to their predecessor, a sampled frame with fewer than 256 distinct values, or a median per-frame maximum above 1,000 AU is fatal. Nothing is imputed or partially dropped. verify.sh applies the same rules from the downloads."
+conversion = "For frame k of a recording, take bytes [4358k + 12, 4358k + 4108) (1024 little-endian float32) and append them unchanged; the sample is the concatenation over all frames in stored order, shape frames x 32 x 32. Read row-major, each 32 x 32 block is the caudal-cranial display image produced by read_binData.m (its reshape + rot90 + flipud is a transpose of MATLAB's column-major fill), so axis 1 is image row and axis 2 is image column. Index min/max are computed from the stored float32 values."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 EIT image sequence"
+sample_geometry = "eit_image_time_series_frames_by_32x32_pixels_3d"
+sample_rank = 3
+sample_axes = ["frame_50hz", "image_row", "image_column"]
+natural_record_kind = "complete_pulmovista_eit_forced_expiratory_manoeuvre_recording"
+sample_count = 17
+total_size_bytes = 264806400
+output_path = "samples/physionet_eit_thorax_images_f32/pulmovista_eit_fem_image_f32/"

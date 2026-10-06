@@ -1,0 +1,101 @@
+manifest_version = 1
+dataset_id = "orex_ola_l2_lidar_point_xyz_f64"
+name = "OSIRIS-REx OLA Level-2 Bennu Lidar Return XYZ Float64"
+description = "Bennu-centred body-fixed x, y, z coordinates (metres, native IEEE-754 float64) of every valid laser return in the 44 OSIRIS-REx Laser Altimeter (OLA) Level-2 calibrated (data_calibrated_v2) High-Energy-Laser linear-scan products of the Reconnaissance B and C phases, one N x 3 sample per published scil2id product."
+homepage = "https://sbn.psi.edu/pds/resource/doi/orex_ola_5.0.html"
+
+[license]
+name = "NASA SMD Open Scientific Data Policy"
+spdx = "LicenseRef-NASA-SMD-Open-Data"
+url = "https://science.nasa.gov/researchers/science-data/science-information-policy/"
+citation = "Daly, M.; Barnouin, O.; Espiritu, R.; Lauretta, D.S. OSIRIS-REx Laser Altimeter (OLA) Bundle 5.0 (collection urn:nasa:pds:orex.ola:data_calibrated_v2::1.0), NASA Planetary Data System Small Bodies Node, doi:10.26033/g7ym-d692."
+notes = "NASA SMD policy: 'NASA holds this information, including publications, data, and software, as a public trust to increase knowledge and serve the public good. It is Science Mission Directorate (SMD) policy, consistent with NASA and Federal policies, that information produced from SMD-funded scientific research [is made publicly available].' The products are part of the NASA OSIRIS-REx mission bundle archived by the PDS Small Bodies Node and served anonymously over HTTPS; neither the product labels nor the bundle/collection labels state any use restriction. OLA was contributed to the NASA mission by the Canadian Space Agency; the archived data are distributed through NASA PDS on the same basis as the accepted nasa_pds_* recipes. Cite the bundle DOI above."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NASA PDS Small Bodies Node archive at PSI (sbnarchive.psi.edu, behind Cloudflare). Exact product LIDVIDs, label SHA-256 values and table sizes are pinned in sources.tsv; no mirrors."
+usage_notes = "Planetary laser-altimetry geometry of asteroid (101955) Bennu; no people, imagery or personal information."
+
+[[origins]]
+id = "pds_sbn_psi"
+name = "NASA PDS Small Bodies Node (PSI) - OSIRIS-REx OLA bundle"
+url = "https://sbnarchive.psi.edu/pds4/orex/orex.ola/"
+type = "mirrorless_archive"
+notes = "Current OLA bundle (urn:nasa:pds:orex.ola::5.0). Only the data_calibrated_v2 collection (urn:nasa:pds:orex.ola:data_calibrated_v2::1.0, 1,010 products) is used. The superseded data_calibrated (v1) collection, the data_calibrated_l2a_v20/v21 strip-adjusted collections, L1/L0 collections and other phases are not touched."
+
+[[resources]]
+id = "collection_inventory"
+origin = "pds_sbn_psi"
+url = "https://sbnarchive.psi.edu/pds4/orex/orex.ola/data_calibrated_v2/collection_inventory_ola_data_calibrated_v2.csv"
+type = "file"
+version = "urn:nasa:pds:orex.ola:data_calibrated_v2::1.0 (Last-Modified 2023-07-23)"
+access = "Direct anonymous HTTPS download."
+size_bytes = 79790
+sha256 = "19641a0bc30d1499885077023ede6c82b33ed48e5970a490ac990a32d8c7df45"
+local_path = "downloads/orex_ola_l2_lidar_point_xyz_f64/collection_inventory_ola_data_calibrated_v2.csv"
+notes = "1,010 primary member LIDVIDs; download.sh, build and verify require every pinned product LIDVID to be listed."
+
+[[resources]]
+id = "ola_l2_labels"
+origin = "pds_sbn_psi"
+url = "https://sbnarchive.psi.edu/pds4/orex/orex.ola/data_calibrated_v2/{recon_b,recon_c}/<product>.xml"
+type = "file"
+version = "44 PDS4 labels, LIDVID ...:<product>.dat::1.0, pinned in sources.tsv"
+access = "Direct anonymous HTTPS download, one request per label."
+size_bytes = 750291
+sha256 = ""
+local_path = "downloads/orex_ola_l2_lidar_point_xyz_f64/<phase>/<product>.xml"
+notes = "Each label's size and SHA-256 are pinned in sources.tsv (the manifest sha256 field is empty because this resource is 44 files). Labels define the 186-byte, 23-field Table_Binary and the flag_status semantics."
+
+[[resources]]
+id = "ola_l2_tables"
+origin = "pds_sbn_psi"
+url = "https://sbnarchive.psi.edu/pds4/orex/orex.ola/data_calibrated_v2/{recon_b,recon_c}/<product>.dat"
+type = "file"
+version = "44 scil2id binary tables (42 recon_b, 2 recon_c), files dated 2023-07-23, created 2021-10-25"
+access = "Direct anonymous HTTPS download, resumable (curl -C -) because the host runs at roughly 0.4 MB/s."
+size_bytes = 946432542
+sha256 = ""
+local_path = "downloads/orex_ola_l2_lidar_point_xyz_f64/<phase>/<product>.dat"
+notes = "Sizes pinned in sources.tsv and equal to label records * 186 (5,088,347 records in total). The archive publishes no payload checksums; per-file SHA-256 values from the first download are pinned in payload_sha256.tsv and re-checked by download.sh, build and verify."
+
+[local_paths]
+downloads = "downloads/orex_ola_l2_lidar_point_xyz_f64/"
+filtered = "filtered/orex_ola_l2_lidar_point_xyz_f64/"
+index = "index/orex_ola_l2_lidar_point_xyz_f64/"
+samples = "samples/orex_ola_l2_lidar_point_xyz_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/orex_ola_l2_lidar_point_xyz_f64/samples.jsonl"
+summary = "Fetch 44 pinned OLA L2 scil2id products (PDS4 label + 186-byte-record binary table) from the PDS SBN, keep the x, y, z IEEE754LSBDouble fields of every record whose label-documented flag_status means a valid return, and emit them bit-exactly as one N x 3 little-endian float64 sample per product."
+deterministic_notes = "Scope rule (discover.sh, scripts/ola_l2.py select): every data_calibrated_v2 product in the recon_b and recon_c phase directories whose label file_size is below 200,000,000 bytes; sources.tsv pins the 44 results in phase/product order (42 recon_b products of 18.2 MB and 97,858..97,967 records each, recon_c 20200303_ola_scil2id06500 with 356,965 records and 20200526_ola_scil2id06510 with 618,490). The 21 larger recon_b products (323 MB..9.1 GB; the two probed, 06031 and 06052, are Low-Energy-Laser scans at ~10 kHz) are excluded by the bound. All 44 selected products are High Energy Laser (laser_selection 0) linear scans (scan_mode 1); the build makes any kept record in another mode fatal. preliminary_survey and sample_collection were probed and excluded (README): their small products are 99.3..100% no-return records. Index rows carry point_count, sample_shape [N, 3], phase, product, LIDVID, start/stop UTC, source record count, per-flag counts, dropped counts, |xyz| range, out-of-band count, source .dat SHA-256, sample SHA-256 and min/max computed from the stored float64 values. verify.sh re-derives every sample by byte slicing (no float conversion) with its own label parser and re-applies the same policy. Realized: 44 samples, 5,088,347 source records, 5,087,058 kept points (3,873,296 flag 0 + 1,213,762 flag 100; no flag 1/101 occur), 1,289 records dropped (1,012 flag 2 + 277 flag 102; no flag 3/103 occur), 15,261,174 values, 122,089,392 bytes; 97,054 to 618,490 points per sample, median 293,746.5 values; SHA-256 of all samples concatenated in index order df1d2fd1bd7b3927bd1314a4f02d9247a9b22ffe8041d268d794d27ee4afd158. Per-product .dat SHA-256 values from the first download are pinned in payload_sha256.tsv."
+
+[[series]]
+id = "ola_l2_return_xyz_f64"
+description = "Bennu-centred body-fixed Cartesian coordinates of individual OLA laser returns, one N x 3 array per published L2 scan product."
+semantic_meaning = "x, y, z position in metres of the surface point hit by each valid OLA High-Energy-Laser return on asteroid (101955) Bennu, as computed by the OLA science pipeline (SPICE geometry, refined calibration v2) and stored in the L2 table. The frame is Bennu-centred and body-fixed: in the probed records the label's elongitude/latitude/radius fields equal the spherical form of (x, y, z) to 1e-13 degrees, and |point - spacecraft position| matches the measured range to about 1 m. All but 6 of the 5,087,058 points lie 213..281 m from Bennu's centre (see missing_value_policy for the 6 early returns); consecutive returns trace linear scan lines across the surface during the Reconnaissance B (Jan-Feb 2020, ~0.8 km range) and C (Mar/May 2020, ~0.3 km range) flyovers."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source stores x, y and z as native little-endian IEEE754LSBDouble fields of each 186-byte record; the sample keeps those 24 bytes per kept record unchanged. The values are full-precision doubles (0 of 18,000 probed recon_b/recon_c values are exactly representable as float32), so 64 bits is the native width, not a widening. Range, azimuth/elevation, intensities, latitude/longitude/radius (a redundant spherical form of the same point), spacecraft position, time fields and flags are not emitted."
+source_resources = ["ola_l2_tables", "ola_l2_labels", "collection_inventory"]
+source_format = "PDS4 Table_Binary (OSIRIS-REx OLA L2 scil2id .dat): 186-byte fixed-length records of 23 fields described by the detached PDS4 XML label"
+source_field = "x, y, z fields (field_number 15..17, field_location 115/123/131, IEEE754LSBDouble, unit m: 'X/Y/Z position of lidar point')"
+filtered_input_path = "filtered/orex_ola_l2_lidar_point_xyz_f64/build_stats.json"
+filtering = "The 44 pinned recon_b/recon_c products (scope rule above). Within each product, only records whose flag_status is a 'valid return' code are kept; nothing else is filtered (no spatial, range, intensity or time cuts)."
+missing_value_policy = "flag_status semantics are read from each label: 0 valid return, 1 valid return with overflow, 100 valid return (demodulator on), 101 valid return with overflow (demodulator on) are kept; 2/102 no return and 3/103 missing sample are dropped, because their xyz is computed from a negative sentinel range (-1128.922153 mm) and lies near the spacecraft (kilometres to thousands of kilometres away) rather than on Bennu. Any other flag value, a changed code list, a kept record with non-finite xyz or a laser/scan mode other than High Energy Linear, a product with fewer than 90% kept records, or more than 1% of kept points outside 150..350 m from Bennu's centre is fatal in build.sh, verify.sh and download validation. Kept points are never clipped, reordered or imputed. The realized build keeps 5 valid-flag points outside 150..350 m (401.8, 755.3, 782.1, 934.4 and 1,102.7 m from Bennu's centre, one each in recon_b products 06053, 06056, 06060, 06075 and 06111) plus one at 345.2 m in recon_c 06500; their measured ranges (151..532 m, versus ~800 m to the surface) show they are early returns between the spacecraft and Bennu, but the source flags them as valid returns (flag 0), so they are kept as published and counted per product in the index (out_of_band_points). Per-product kept and dropped counts are recorded in the index and build_stats.json."
+conversion = "For each record (offset k * 186) with a kept flag, copy bytes 114..137 (x, y, z IEEE754LSBDouble) unchanged into an N x 3 row-major (return-major, xyz-interleaved) little-endian float64 array in source record order; one sample file <product>_xyz.f64 per scil2id product."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64 N x 3 point-coordinate array"
+sample_geometry = "lidar_returns_by_xyz"
+sample_rank = 2
+sample_axes = ["lidar_return", "xyz_component"]
+natural_record_kind = "published_ola_l2_scil2id_scan_product"
+sample_count = 44
+total_size_bytes = 122089392
+output_path = "samples/orex_ola_l2_lidar_point_xyz_f64/ola_l2_return_xyz_f64/"

@@ -1405,26 +1405,31 @@ def cmd_status(args) -> int:  # noqa: ARG001
     target = int(baseline["target_new_per_width"])
     new = progress()
     ledger = load_ledger()
-    groups = [
-        ("proposed", {"proposed"}),
-        ("queued", {"queued"}),
-        ("building", {"ready_for_download", "downloaded", "built", "needs_repair"}),
-        ("judging", {"ready_for_judge"}),
-        ("accepted", {"accepted"}),
-        ("screened_out", {"screened_out"}),
-        ("not_accepted", set(REGISTRY_TERMINALS)),
-        ("paused", {PAUSED}),
-    ]
+    beat = json.loads(HEARTBEAT_PATH.read_text()) if HEARTBEAT_PATH.exists() else {"inflight": []}
+    # The ledger holds resting statuses only; the heartbeat says what is running now.
+    live: dict[str, str] = {}
+    for item in beat["inflight"]:
+        cid = item.get("cid")
+        if cid:
+            live[cid] = {"builder": "authoring" if item.get("phase") == "author" else "building", "judge": "judging"}.get(item["kind"], "building")
+    resting = {
+        "proposed": "proposed", "queued": "waiting", "ready_for_download": "building", "downloaded": "building",
+        "built": "building", "needs_repair": "building", "ready_for_judge": "judging", "accepted": "accepted",
+        "screened_out": "screened_out", PAUSED: "paused", **{status: "not_accepted" for status in REGISTRY_TERMINALS},
+    }
+    groups = ["proposed", "waiting", "authoring", "building", "judging", "accepted", "screened_out", "not_accepted", "paused"]
     print(f"baseline {baseline['created']}, target +{target} accepted families per width\n")
-    print(f"{'width':>5} {'base':>5} {'new':>7}  " + " ".join(f"{name:>12}" for name, _ in groups))
+    print(f"{'width':>5} {'base':>5} {'new':>7}  " + " ".join(f"{name:>12}" for name in groups))
     for width in WIDTHS:
-        counts = [sum(1 for row in ledger if row["width"] == str(width) and row["status"] in statuses) for _, statuses in groups]
-        print(f"{width:>5} {baseline['accepted_per_width'][str(width)]:>5} {len(new[width]):>3}/{target:<3}  " + " ".join(f"{count:>12}" for count in counts))
+        rows = [row for row in ledger if row["width"] == str(width)]
+        stage = [live.get(row["candidate_id"]) or resting.get(row["status"], row["status"]) for row in rows]
+        print(f"{width:>5} {baseline['accepted_per_width'][str(width)]:>5} {len(new[width]):>3}/{target:<3}  " + " ".join(f"{stage.count(name):>12}" for name in groups))
+    print("\nwaiting = screened and queued for a free builder slot; authoring = builder writing the recipe now;")
+    print("building = download, build/verify, driver rebuild check, or repair; judging = with the judge or next in line")
     print(f"\ntotal agent cost: ${total_cost():.2f}")
     if PAUSE_PATH.exists():
         print(f"GLOBAL PAUSE: {json.loads(PAUSE_PATH.read_text())['reason']}  (inspect, then `driver.py unpause`)")
-    if HEARTBEAT_PATH.exists():
-        beat = json.loads(HEARTBEAT_PATH.read_text())
+    if beat.get("at"):
         inflight = ", ".join(
             f"{item['kind']}:{item.get('cid') or item.get('width') or ','.join(item.get('cids', []))}" for item in beat["inflight"]
         )

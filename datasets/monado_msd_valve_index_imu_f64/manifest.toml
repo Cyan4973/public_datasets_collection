@@ -1,0 +1,166 @@
+manifest_version = 1
+dataset_id = "monado_msd_valve_index_imu_f64"
+name = "Monado SLAM Datasets Valve Index Calibrated IMU Float64"
+description = "Complete calibrated ~1 kHz gyroscope and accelerometer streams (float64) from the 30 Valve Index sequences of the Monado SLAM Datasets whose published imu0/data.csv carries the Basalt IMU correction exactly once; one gyro sample and one accel sample per recorded headset sequence."
+homepage = "https://huggingface.co/datasets/collabora/monado-slam-datasets"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "M. de Mayo, D. Cremers, T. Pire. The Monado SLAM Dataset for Egocentric Visual-Inertial Tracking. IEEE/RSJ IROS 2025, pp. 13111-13118, doi:10.1109/IROS60139.2025.11247240. Data: https://huggingface.co/datasets/collabora/monado-slam-datasets (Collabora)."
+notes = "The dataset card at the pinned revision declares `license: cc-by-4.0` in its metadata, its License section states the work is licensed under CC BY 4.0, and the introduction says the data may be used for any purpose with a mention of the original project. download.sh re-checks the card metadata and README text at the pinned revision."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Collabora/TUM upload on Hugging Face (repository collabora/monado-slam-datasets, revision 74c07d42d980c55775dd0edc06e58c486b848be1). Only headset IMU CSV members are fetched; no camera images or other members are downloaded."
+usage_notes = "Headset inertial measurements only (angular velocity and specific force of the device). No images, audio, names or identifiers of the wearer are emitted."
+
+[[origins]]
+id = "hf_collabora_msd"
+name = "Monado SLAM Datasets (Hugging Face, collabora/monado-slam-datasets)"
+url = "https://huggingface.co/datasets/collabora/monado-slam-datasets"
+type = "repository"
+version = "74c07d42d980c55775dd0edc06e58c486b848be1"
+notes = "Public, ungated Hugging Face dataset repository. Every resolve URL pins the revision SHA; resolve redirects to the HF CDN and byte ranges survive the redirect (curl -L)."
+
+[[resources]]
+id = "hf_revision_metadata"
+origin = "hf_collabora_msd"
+url = "https://huggingface.co/api/datasets/collabora/monado-slam-datasets/revision/74c07d42d980c55775dd0edc06e58c486b848be1"
+type = "api_query_result"
+version = "74c07d42d980c55775dd0edc06e58c486b848be1"
+access = "Anonymous JSON; download.sh requires sha match, gated=false, private=false and cardData.license=cc-by-4.0."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/monado_msd_valve_index_imu_f64/meta/revision.json"
+notes = "Identity, access and license evidence; small and not pinned by hash because the API serialization may change."
+
+[[resources]]
+id = "hf_valve_index_tree"
+origin = "hf_collabora_msd"
+url = "https://huggingface.co/api/datasets/collabora/monado-slam-datasets/tree/74c07d42d980c55775dd0edc06e58c486b848be1/M_monado_datasets/MI_valve_index?recursive=true"
+type = "api_query_result"
+version = "74c07d42d980c55775dd0edc06e58c486b848be1"
+access = "Anonymous JSON listing; download.sh checks that the 49 Valve Index sequence archives equal the 30 sources.tsv rows plus the 19 pinned EXCLUDED sequences, and that every referenced part file keeps its pinned size and LFS SHA-256."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/monado_msd_valve_index_imu_f64/meta/tree_MI_valve_index.json"
+notes = "52 archive files: 48 single-file ZIPs plus the 4-part split archive MIPB08 (.z01, .z02, .z03, .zip)."
+
+[[resources]]
+id = "hf_dataset_card"
+origin = "hf_collabora_msd"
+url = "https://huggingface.co/datasets/collabora/monado-slam-datasets/resolve/74c07d42d980c55775dd0edc06e58c486b848be1/README.md"
+type = "file"
+version = "74c07d42d980c55775dd0edc06e58c486b848be1"
+access = "Direct public download; download.sh requires the `license: cc-by-4.0` front matter and the CC BY 4.0 License statement."
+size_bytes = 127399
+sha256 = ""
+local_path = "downloads/monado_msd_valve_index_imu_f64/meta/README.md"
+notes = "License and citation evidence."
+
+[[resources]]
+id = "valve_index_imu0_data_csv_members"
+origin = "hf_collabora_msd"
+url = "https://huggingface.co/datasets/collabora/monado-slam-datasets/resolve/74c07d42d980c55775dd0edc06e58c486b848be1/M_monado_datasets/MI_valve_index/"
+type = "range_extracted_zip_members"
+version = "74c07d42d980c55775dd0edc06e58c486b848be1"
+access = "For each of the 30 rows of sources.tsv, one exact HTTP byte range covering the local file header plus the stored <seq>/mav0/imu0/data.csv member of the pinned part file; validated by HTTP 206 Content-Range, PK\\x03\\x04 signature, member name, method 0, sizes and the central-directory CRC-32, then written as the bare CSV."
+size_bytes = 1204756112
+sha256 = ""
+local_path = "downloads/monado_msd_valve_index_imu_f64/"
+notes = "size_bytes is the sum of the 30 fetched ranges (1,204,752,957 member bytes + 3,155 local-header bytes). Members range from 474,997 B (MIO09_short_1_updown) to 291,172,258 B (MIPB08_beatsaber_long_session_1, which lives on disk 1 = part file .z02 of the split archive). Per-member CRC-32 values are pinned instead of SHA-256 because only the ZIP central directory publishes a per-member checksum."
+
+[local_paths]
+downloads = "downloads/monado_msd_valve_index_imu_f64/"
+filtered = "filtered/monado_msd_valve_index_imu_f64/"
+index = "index/monado_msd_valve_index_imu_f64/"
+samples = "samples/monado_msd_valve_index_imu_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/monado_msd_valve_index_imu_f64/samples.jsonl"
+summary = "Range-fetch the stored imu0/data.csv member of each of the 30 single-correction Valve Index sequence archives in the pinned HF revision, validate it against the pinned ZIP central-directory metadata, parse the 7-column EuRoC IMU table, and emit per-sequence row-major float64 gyroscope and accelerometer matrices plus an auxiliary int64 timestamp vector."
+deterministic_notes = "sources.tsv (produced by discover.sh from 128 KiB archive tails, a 1 MiB central-directory window per archive and 1 KiB at each local header, then filtered to the in-scope 30) pins part file, size, LFS SHA-256, disk number, local-header offset and length, member size and CRC-32 for the 30 sequences; download.sh pins the 19 excluded sequence names and requires tree = sources + EXCLUDED. Build requires the exact header, 7 fields per row, digit-only timestamps and finite values, keeps every row in source order, reports duplicate/backward timestamp steps instead of dropping rows, fails above 0.1% non-increasing steps (realized: 0), requires each sequence's accel-x lattice step (median of distinct-value gaps below 1.5x the smallest gap) to equal the single-correction step 0.0023266877217 within 1e-9, records it as accel_x_lattice_step, and pins the realized total of 9,026,215 rows. Verify re-derives every sample with a separate parser, byte-compares it, recomputes index metadata, manifest totals and the lattice step independently (plus every distinct accel-x value on the single-correction lattice), asserts that no excluded sequence appears in sources, index or sample directories, and checks that the median accelerometer norm is near 1 g and the median timestamp step near 1 ms."
+
+[[series]]
+id = "msd_valve_index_gyro_w_rs_s_f64"
+description = "Calibrated Valve Index headset gyroscope stream, one complete recorded sequence per sample."
+semantic_meaning = "Angular velocity of the IMU sensor frame S relative to the world frame R, expressed in S (w_RS_S x, y, z) in rad/s, sampled at ~1 kHz on the device clock, after exactly one application of the published Basalt scale-misalignment and bias correction."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source CSV prints IEEE-754 binary64 values in shortest round-trip form (16-17 significant digits); float() recovers the exact published doubles, so no rounding or widening occurs. Calibrated data.csv is chosen over data.raw.csv (raw measurements printed with 10 decimals before the documented correction) because it is the dataset's canonical EuRoC-format IMU stream that SLAM systems consume directly, and over data.extra.csv, which holds host arrival times rather than measurements. Scope evidence: upstream data.csv carries the Basalt correction in three states. In the kept 30 sequences (MIO04-MIO16, MIPB01-MIPB08, MIPP01-MIPP06, MIPT01-MIPT03) the accel-x count lattice step is 0.0023266877 m/s^2 (device count scale x (1 + calib_accel_bias[3] = -0.028198018)) and the gyro rest offset is ~0. In MIC02-MIC16 and MIO01-MIO03 (18) the step is 0.0022610797 (one extra factor 0.971802) and the gyro rest offset is ~(+0.018, -0.007, +0.007) rad/s, i.e. about -1x the published calib_gyro_bias (-0.0171, 0.0075, -0.0056); in MIC01 the step is 0.0021973218 (0.971802^2 more) with a rest offset of about -2x the bias. Those 19 over-corrected sequences are excluded rather than locally re-corrected (undoing the extra passes would be a synthetic remap)."
+source_resources = ["valve_index_imu0_data_csv_members"]
+source_format = "EuRoC/ASL-format IMU CSV (mav0/imu0/data.csv) stored in per-sequence ZIP archives"
+source_field = "w_RS_S_x [rad s^-1], w_RS_S_y [rad s^-1], w_RS_S_z [rad s^-1] columns"
+filtered_input_path = "filtered/monado_msd_valve_index_imu_f64/ingest_stats.json"
+filtering = "All rows of the 30 Valve Index sequences whose published data.csv carries the Basalt correction exactly once: MIO04-MIO16 (13), MIPB01-MIPB08 (8, including the split MIPB08 long session), MIPP01-MIPP06 (6) and MIPT01-MIPT03 (3); 9,026,215 rows. Excluded: MIC01-MIC16 and MIO01-MIO03 (correction applied two or three times, see representation_notes) and the HP Reverb G2 (MG) and Samsung Odyssey+ (MO) devices (different IMUs)."
+missing_value_policy = "No values are missing in the source. Header changes, rows without exactly 7 fields, non-digit timestamps, empty or non-finite values, CRC/size mismatches, constant components or more than 0.1% non-increasing timestamp steps fail the recipe; no rows are dropped, reordered or imputed."
+conversion = "float() on each decimal field; rows written in source order as little-endian row-major (x, y, z) float64 triples; one file per sequence."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 row-major imu_sample x component matrix"
+sample_geometry = "imu_time_series_xyz_matrix"
+sample_rank = 2
+sample_axes = ["imu_sample", "xyz_component"]
+natural_record_kind = "complete_msd_valve_index_sequence_gyroscope_stream"
+sample_count = 30
+total_size_bytes = 216629160
+output_path = "samples/monado_msd_valve_index_imu_f64/msd_valve_index_gyro_w_rs_s_f64/"
+
+[[series]]
+id = "msd_valve_index_accel_a_rs_s_f64"
+description = "Calibrated Valve Index headset accelerometer stream, one complete recorded sequence per sample."
+semantic_meaning = "Specific force (acceleration including the gravity reaction) of the IMU expressed in the sensor frame S (a_RS_S x, y, z) in m/s^2, sampled at ~1 kHz on the device clock, after exactly one application of the published Basalt scale-misalignment and bias correction."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Same source rows as the gyroscope series; shortest round-trip float64 text parsed exactly. Kept as a separate series from the gyroscope so units (m/s^2 vs rad/s) and magnitudes (~9.8 vs ~0.01) never mix inside one sample. Every kept sequence has accel-x lattice step 0.0023266877217 (one Basalt correction pass); the excluded MIC02-MIC16/MIO01-MIO03 (0.0022610797) and MIC01 (0.0021973218) carry extra passes, as detailed on the gyroscope series."
+source_resources = ["valve_index_imu0_data_csv_members"]
+source_format = "EuRoC/ASL-format IMU CSV (mav0/imu0/data.csv) stored in per-sequence ZIP archives"
+source_field = "a_RS_S_x [m s^-2], a_RS_S_y [m s^-2], a_RS_S_z [m s^-2] columns"
+filtered_input_path = "filtered/monado_msd_valve_index_imu_f64/ingest_stats.json"
+filtering = "All rows of the same 30 single-correction Valve Index sequences as the gyroscope series."
+missing_value_policy = "Same as the gyroscope series: malformed, empty or non-finite fields fail the recipe; no rows are dropped, reordered or imputed."
+conversion = "float() on each decimal field; rows written in source order as little-endian row-major (x, y, z) float64 triples; one file per sequence."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 row-major imu_sample x component matrix"
+sample_geometry = "imu_time_series_xyz_matrix"
+sample_rank = 2
+sample_axes = ["imu_sample", "xyz_component"]
+natural_record_kind = "complete_msd_valve_index_sequence_accelerometer_stream"
+sample_count = 30
+total_size_bytes = 216629160
+output_path = "samples/monado_msd_valve_index_imu_f64/msd_valve_index_accel_a_rs_s_f64/"
+
+[[series]]
+id = "msd_valve_index_imu_timestamp_ns_i64"
+description = "Device-clock IMU timestamps aligned row-for-row with the gyroscope and accelerometer samples."
+semantic_meaning = "IMU device timestamp in nanoseconds for each row (~1 ms steps)."
+role = "auxiliary"
+representation_class = "native_numeric"
+representation_notes = "Integer nanosecond timestamps parsed exactly as int64; kept only to preserve row alignment and sampling-time information."
+source_resources = ["valve_index_imu0_data_csv_members"]
+source_format = "EuRoC/ASL-format IMU CSV (mav0/imu0/data.csv)"
+source_field = "#timestamp [ns] column"
+filtered_input_path = "filtered/monado_msd_valve_index_imu_f64/ingest_stats.json"
+filtering = "All rows of the 30 in-scope sequences, in source order."
+missing_value_policy = "Non-digit timestamps fail the recipe; duplicate or backward steps are kept and counted in the index (fatal above 0.1% of rows)."
+conversion = "int() on each timestamp field; little-endian int64 vector per sequence."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian int64 vector"
+sample_geometry = "imu_time_series_timestamps"
+sample_rank = 1
+sample_axes = ["imu_sample"]
+natural_record_kind = "complete_msd_valve_index_sequence_imu_timestamps"
+sample_count = 30
+total_size_bytes = 72209720
+output_path = "samples/monado_msd_valve_index_imu_f64/msd_valve_index_imu_timestamp_ns_i64/"

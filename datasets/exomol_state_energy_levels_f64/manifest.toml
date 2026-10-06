@@ -1,0 +1,162 @@
+# Draft recipe (staging). 77 datasets selected, 43 kept and 34 excluded by
+# the pinned exclusion rules; per-dataset statuses are pinned in sources.tsv.
+manifest_version = 1
+dataset_id = "exomol_state_energy_levels_f64"
+name = "ExoMol Molecular State Energy Term Values Float64"
+description = "Rovibronic state energy term values (cm^-1, six-decimal F12.6 text) from the .states files of ExoMol molecular line lists, one complete energy column per molecule, decoded to little-endian float64 in native file order."
+homepage = "https://www.exomol.com/data/molecules/"
+
+[license]
+name = "Creative Commons Attribution-ShareAlike 4.0 International"
+spdx = "CC-BY-SA-4.0"
+url = "https://creativecommons.org/licenses/by-sa/4.0/"
+evidence_url = "https://www.exomol.com/data/licence/"
+evidence_quote = "All data in ExoMol is released under the Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0) licence."
+citation = "J. Tennyson et al., The 2024 release of the ExoMol database: molecular line lists for exoplanet and other hot atmospheres, JQSRT (2024), arXiv:2406.06347; plus the per-dataset references of the 43 kept datasets below (DOIs from each dataset's .def.json; where it has none, the reference on the ExoMol dataset page). All 77 selected datasets' references are in sources.tsv."
+notes = "Share-alike: derived samples must stay under CC BY-SA 4.0 with attribution to ExoMol and the per-dataset line-list papers. ExoMol asks users to cite the relevant journal articles. The per-dataset DOI is also carried in every sample-index row and in sources.tsv."
+dataset_citations = [
+  "AlCl 27Al-35Cl__YNAT v20221231: doi:10.1093/mnras/stac3757",
+  "AlH 27Al-1H__AloHa v20240307: doi:10.1093/mnras/stad3802",
+  "C2 12C-13C__8states v20200824: doi:10.5281/zenodo.5716928",
+  "C3 12C-12C-13C__AtLast v20241023: doi:10.1093/mnras/stae2425",
+  "CaCl 40Ca-35Cl__MoLLIST-CaCl v20240720: doi:10.3847/1538-4357/ad499e",
+  "CaH 40Ca-1H__XAB v20220211: doi:10.1093/mnras/stac371",
+  "CaO 40Ca-16O__VBATHY v20230220: doi:10.5281/zenodo.5716731",
+  "CaOH 40Ca-16O-1H__OYT6 v20230523: doi:10.1093/mnras/stac2462",
+  "CH3F 12C-1H3-19F__OYKYT v20250807: doi:10.5281/zenodo.5716860",
+  "CH+ 12C-1H_p__PYT v20231219: doi:10.1093/mnras/stad3909",
+  "CO 12C-16O__4thplus v20260530: No DOI in .def.json; ExoMol dataset page cites Tao, El Kher, El-Kork, Yurchenko and Tennyson, ExoMol line lists LXX: the CO fourth positive band system, MNRAS 549, stag985 (2026).",
+  "CO2 12C-16O2__Dozen v20260115: doi:10.1093/mnras/staf2135",
+  "CS 12C-32S__JnK v20160726: doi:10.5281/zenodo.5716944",
+  "H2O 1H-2H-16O__VTT v20160726: doi:10.5281/zenodo.5716812",
+  "H2S 1H2-32S__AYT2 v20241204: doi:10.5281/zenodo.5716826",
+  "H3O+ 1H3-16O_p__eXeL v20200707: doi:10.1093/mnras/staa2034",
+  "HBO 1H-10B-16O__LQL v20240522: doi:10.1039/D3CP05997A",
+  "KCl 39K-35Cl__Barton v20160726: doi:10.5281/zenodo.5716977",
+  "KH 39K-1H__Khan v20260604: doi:10.1093/mnras/stag979",
+  "LiOH 6Li-16O-1H__OYT7 v20250807: doi:10.1093/mnras/stad3226",
+  "MgH 24Mg-1H__XAB v20220211: doi:10.1093/mnras/stac371",
+  "NaCl 23Na-35Cl__Barton v20160726: doi:10.5281/zenodo.5717023",
+  "NaH 23Na-1H__Rivlin v20160804: doi:10.5281/zenodo.5363263",
+  "NH3 14N-1H2-2H__CoYuTe v20260410: doi:10.1093/mnras/stag462",
+  "NO 14N-16O__XABC v20210422: doi:10.5281/zenodo.5716782",
+  "NS 14N-32S__SNaSH v20180101: doi:10.5281/zenodo.5717011",
+  "O2 16O-17O__SWYT v20260604: No DOI in .def.json; ExoMol dataset page cites Somogyi, Yurchenko and Tennyson, ExoMol line lists LXVII: empirical magnetic dipole and electric quadrupole spectra of the infrared bands of oxygen O2, MNRAS stag1279 (2026, in press).",
+  "OCS 16O-12C-32S__OYT8 v20240425: doi:10.1093/mnras/stae1110",
+  "PF3 31P-19F3__MCYTY v20250807: doi:10.5281/zenodo.5716880",
+  "PH 31P-1H__LaTY v20190427: doi:10.5281/zenodo.5716703",
+  "PN 31P-14N__PaiN v20240505: doi:10.1093/mnras/stae2610",
+  "PO 31P-16O__POPS v20170910: doi:10.5281/zenodo.5716784",
+  "ScH 45Sc-1H__LYT v20160726: doi:10.5281/zenodo.5363276",
+  "ScO 45Sc-16O__LPB v20241104: doi:10.3847/1538-4357/ad7af1",
+  "SH 32S-1H__GYT v20190801: doi:10.5281/zenodo.5716705",
+  "SiH 28Si-1H__SiGHTLY v20171101: doi:10.5281/zenodo.5716715",
+  "SiH2 28Si-1H2__CATS v20200201: doi:10.5281/zenodo.5716836",
+  "SiO 28Si-16O__SiOUVenIR v20211105: doi:10.5281/zenodo.5910818",
+  "SiS 28Si-32S__UCTY v20180601: doi:10.5281/zenodo.5717037",
+  "SO 32S-16O__SOLIS v20230914: doi:10.1093/mnras/stad3508",
+  "TiO 46Ti-16O__Toto v20240509: doi:10.5281/zenodo.5716754",
+  "VO 51V-16O__HyVO v20231218: doi:10.1093/mnras/stae542",
+  "ZrO 90Zr-16O__ZorrO v20230713: doi:10.1093/mnras/stad2103",
+]
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official ExoMol database files (www.exomol.com/db/), resolved from the version-pinned master file exomol.all and each dataset's .def; no mirrors."
+usage_notes = "Computed and empirically refined molecular energy levels for astrophysical spectroscopy; no personal data."
+
+[[origins]]
+id = "exomol_db"
+name = "ExoMol database (UCL)"
+url = "https://www.exomol.com/db/"
+type = "data_portal"
+notes = "Official ExoMol file tree <molecule>/<iso-slug>/<dataset>/<iso-slug>__<dataset>.<ext>; '+' in a formula maps to '_p' in paths."
+
+[[resources]]
+id = "exomol_master"
+origin = "exomol_db"
+url = "https://www.exomol.com/db/exomol.all"
+type = "file"
+version = "20260605"
+access = "Direct public download; SHA-256 pinned; header must read EXOMOL.master version 20260605 with 102 molecules, 242 isotopologues, 250 datasets."
+size_bytes = 189391
+sha256 = "3bc26ed45c5483839ee7a17ce4b135bdd5b2230147b6c261e07102884ffe646c"
+local_path = "downloads/exomol_state_energy_levels_f64/meta/exomol.all"
+notes = "Master file listing every molecule, isotopologue and dataset in ExoMol order. Used to re-derive the selection; EXOMOL_ALLOW_METADATA_DRIFT=1 tolerates a newer master only if the pinned selection still re-derives exactly."
+
+[[resources]]
+id = "exomol_def_files"
+origin = "exomol_db"
+url = "https://www.exomol.com/db/"
+type = "file"
+version = "master 20260605"
+access = "250 direct public downloads; each SHA-256, size, state count and dataset version pinned in master_datasets.tsv."
+size_bytes = 1838166
+sha256 = ""
+local_path = "downloads/exomol_state_energy_levels_f64/meta/def/"
+notes = "Every .def listed by the master file; their 'No. of states in .states file' values drive the selection rule. Per-file pins in master_datasets.tsv."
+
+[[resources]]
+id = "exomol_selected_def_json"
+origin = "exomol_db"
+url = "https://www.exomol.com/db/"
+type = "file"
+version = "master 20260605"
+access = "77 direct public downloads; size and SHA-256 pinned per file in sources.tsv."
+size_bytes = 363320
+sha256 = ""
+local_path = "downloads/exomol_state_energy_levels_f64/defjson/"
+notes = "JSON definitions of the selected datasets: DOI, state count, and the states_file_fields layout (column 1 ID I12, column 2 E F12.6 '%12.6f', 'State energy in cm-1'), checked for every file."
+
+[[resources]]
+id = "exomol_selected_states_bz2"
+origin = "exomol_db"
+url = "https://www.exomol.com/db/"
+type = "file"
+version = "master 20260605"
+access = "77 direct public downloads (curl, resumable); exact size, Last-Modified, SHA-256 and decoded line count pinned per file in sources.tsv; download.sh decodes every file in full and checks the pinned line count and a first record with ID 1."
+size_bytes = 673432460
+sha256 = ""
+local_path = "downloads/exomol_state_energy_levels_f64/states/"
+notes = "One .states.bz2 per molecule: the first dataset in exomol.all order whose .def declares 1,000 to 5,000,000 states. 42,250,026 decoded state lines across the 77 files (42,218,362 per the .def files); 43 datasets with 31,168,077 states are kept."
+
+[local_paths]
+downloads = "downloads/exomol_state_energy_levels_f64/"
+filtered = "filtered/exomol_state_energy_levels_f64/"
+index = "index/exomol_state_energy_levels_f64/"
+samples = "samples/exomol_state_energy_levels_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/exomol_state_energy_levels_f64/samples.jsonl"
+summary = "Fetch the version-pinned ExoMol master file and .def files, re-derive one dataset per molecule, fetch those .states.bz2 files, decode the six-decimal energy column, exclude whole datasets whose line count disagrees with the .def, whose energy tokens are malformed or not six-decimal, whose IDs are not strictly increasing, that are not on a uniform 1e-6 cm^-1 decimal lattice, or whose energies are float32 values printed with six decimals (float32_lattice), and emit one little-endian float64 sample per kept dataset in native file order."
+deterministic_notes = "Selection: for each of the 102 molecules in exomol.all order, the first dataset (master order) whose .def 'No. of states' is within [1,000, 5,000,000]; 77 molecules qualify. Neither exomol.all nor the .def/.def.json files carry a 'recommended' flag (only the HTML pages do), so master order is the tie-break. Whole-dataset exclusion rules, pinned in scripts/exomol_states.py and per dataset in sources.tsv expected_status: def_count (decoded line count differs from the .def/.def.json state count; 9 datasets), token_format (an energy token not matching -?d{1,6}.dddddd, e.g. nan, 5-decimal or free-format values; 4), id_sequence (IDs not strictly increasing from 1, i.e. duplicates or out of order; 2), lattice (for k = 1, 2, 3 the share of tokens whose six-digit fraction ends in >= k zeros implies a coarse-token share q_k = (c_k/n - 10^-k)/(1 - 10^-k) above 0.02 + 5 sigma_k; 24), float32_lattice (over valid tokens with |E| >= 1024 cm^-1, at least 100 eligible and more than 5% equal to the six-decimal print of the nearest float32, i.e. a float32-ULP effective lattice; 2: BH AX and NaO NaOUCMe at share 1.000, every kept dataset <= 0.004), negative_reference (more than 1% negative energies; none). Exclusion reasons combine, so these counts overlap: 34 datasets are excluded and 43 kept. Gaps in otherwise increasing IDs (7 kept datasets keep their original calculation numbering) are reported, not excluded; completeness is enforced by the .def count. Build fails if a realized status or line count differs from the pinned one; verify re-derives every status with an independent integer micro-unit parser. Integrity: pinned SHA-256 and line count per file; every stored double equals the exact decimal micro-unit value divided by 10^6 and formats back to the source token."
+
+[[series]]
+id = "exomol_state_energy_cm1_f64"
+description = "Rovibronic state energy term values of one molecule's ExoMol line list."
+semantic_meaning = "Energy term value E of every rovibronic state of one isotopologue line list, in cm^-1 relative to the dataset's zero of energy (its lowest state), exactly as published in column 2 of the ExoMol .states file."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source prints each energy as a fixed-point decimal with exactly six decimals (declared F12.6 / C %12.6f), up to 11 significant digits (e.g. 29170.834712); float32 cannot hold these. Each token is parsed to the nearest IEEE-754 binary64, which equals the decimal micro-unit count divided by 10^6 and round-trips to the source text. No rescaling, sorting or deduplication."
+source_resources = ["exomol_master", "exomol_def_files", "exomol_selected_def_json", "exomol_selected_states_bz2"]
+source_format = "bzip2-compressed ExoMol .states text file (fixed-format, space-separated records)"
+source_field = "column 2, E: state energy in cm^-1 (F12.6, C format %12.6f) as declared by states_file_fields in the dataset .def.json"
+filtered_input_path = "filtered/exomol_state_energy_levels_f64/dataset_classification.tsv"
+filtering = "One dataset per molecule by the pinned selection rule; whole datasets are excluded only by the pinned def_count, token_format, id_sequence, lattice, float32_lattice or negative_reference rules (34 of 77; listed with statistics in filtered/<id>/dataset_classification.tsv and the README). Within a kept dataset every state record is emitted; no rows are dropped. Degeneracy, J, uncertainty, lifetime, Lande g, quantum labels and the calculated-energy column of MARVELized files are not emitted."
+missing_value_policy = "No missing values are emitted or imputed. A record with fewer than two fields or a non-integer ID is fatal. Any non-finite or malformed energy token (e.g. the 76 'nan' energies of AlO ATP) excludes the whole dataset (token_format), as does a line count that differs from the .def state count (def_count). Negative energies are kept verbatim (one value, -0.146155 in ScO LPB); a dataset with more than 1% negative values would be excluded (negative_reference)."
+conversion = "Stream-decode the .bz2, split each record on whitespace, parse field 2 with float() to binary64, and write the values in native file (state ID) order as little-endian float64, one file per dataset. The order is the ExoMol J/symmetry-block order, so the stream is a sawtooth of ascending runs."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 array"
+sample_geometry = "one_value_per_rovibronic_state_in_file_order"
+sample_rank = 1
+sample_axes = ["state"]
+natural_record_kind = "exomol_isotopologue_dataset_states_file_energy_column"
+sample_count = 43
+total_size_bytes = 249344616
+output_path = "samples/exomol_state_energy_levels_f64/exomol_state_energy_cm1_f64/"

@@ -1,0 +1,126 @@
+manifest_version = 1
+dataset_id = "zenodo_hc18_fetal_head_ultrasound_u8"
+name = "HC18 Fetal-Head 2D B-Mode Ultrasound Images UInt8"
+description = "The HC18 grand-challenge images (1,334 published: 999 training + 335 test; 1,325 emitted after dropping 1 exact and 8 near-duplicate re-exports): standard-plane 2D B-mode ultrasound sonograms of the fetal head from routine screening exams at Radboud UMC, each decoded from its 8-bit grayscale PNG (800x540 for 1,293 of the emitted images, native sizes 738-800 x 539-563 for 32) into one raw uint8 image sample."
+homepage = "https://hc18.grand-challenge.org/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "van den Heuvel TLA, de Bruijn D, de Korte CL, van Ginneken B. Automated measurement of fetal head circumference using 2D ultrasound images. PLoS ONE 13(8): e0200412 (2018), doi:10.1371/journal.pone.0200412. Dataset: van den Heuvel TLA, de Bruijn D, de Korte CL, van Ginneken B. Automated measurement of fetal head circumference using 2D ultrasound images [Data set]. Zenodo (2018), doi:10.5281/zenodo.1327317 (concept doi:10.5281/zenodo.1322000)."
+notes = "The Zenodo record metadata of record 1327317 declares license id 'cc-by-4.0' with access_right 'open'; download.sh fetches the record JSON and fails unless both still hold. The challenge page adds no other terms and asks users to cite the paper and the Zenodo dataset. Preserve the authors, the paper and the DOI in any redistribution."
+
+[safety]
+contains_sensitive_data = true
+contains_personal_data = false
+provenance_notes = "Official Zenodo deposit by the Radboud UMC authors of the challenge; no mirrors. Clinical ultrasound images acquired May 2014 - May 2015 in routine screening of 551 pregnant women. Per the paper the local ethics committee (CMO Arnhem-Nijmegen) approved collection and use, informed consent was waived for the retrospective collection, and all data were anonymized according to the Declaration of Helsinki."
+usage_notes = "Samples hold only the published image pixels. Burned-in elements seen in the inspected frames (a 64-frame contact sheet plus full-resolution views) are scanner graphics only: a grey-scale bar, a tiny setting label next to it (e.g. 'Volume / 5.4'), a black masking rectangle (most frames, presumably over the on-screen measurement readout), and in a few frames a bottom scanner status strip (e.g. 'Cine 742', '15 sec'). No patient text was seen. Ellipse annotation masks, head-circumference labels and file names are not emitted. Do not attempt re-identification or linkage."
+
+[[origins]]
+id = "zenodo_hc18"
+name = "Zenodo record 1327317: Automated measurement of fetal head circumference using 2D ultrasound images"
+url = "https://zenodo.org/records/1327317"
+type = "repository"
+notes = "Latest (and second) version of concept record 1322000, published 2018-07-27. The earlier version 1322001, cited on the challenge page, has slightly different archive sizes and is not used."
+
+[[resources]]
+id = "zenodo_record_metadata"
+origin = "zenodo_hc18"
+url = "https://zenodo.org/api/records/1327317"
+type = "api_query_result"
+version = "record 1327317"
+access = "Anonymous JSON; validated for record id, concept record 1322000, exact title, first creator, licence cc-by-4.0, access_right open, and the exact four-file list with sizes and MD5s."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/zenodo_hc18_fetal_head_ultrasound_u8/record_1327317.json"
+notes = "Metadata and licence evidence only; refetched on every download run, so not hash-pinned."
+
+[[resources]]
+id = "training_set_zip"
+origin = "zenodo_hc18"
+url = "https://zenodo.org/api/records/1327317/files/training_set.zip/content"
+type = "archive"
+version = "md5:00eb8198b9a505b2b3a6dfc740382497"
+access = "Whole-file resumable curl download; exact size, MD5 (Zenodo) and SHA-256 (recorded from the verified 2026-10-06 download) enforced; end-of-central-directory geometry checked (1999 entries, central directory 221,260 bytes at offset 132,705,556)."
+size_bytes = 132926838
+sha256 = "fd20d7909df892cfbdc0850de18072dbdad4dc3bc0a57202d4cc818d4715de36"
+local_path = "downloads/zenodo_hc18_fetal_head_ultrasound_u8/training_set.zip"
+notes = "1999 members: the training_set/ directory, 999 image PNGs (944 stored, 55 deflated) and 999 *_Annotation.png ellipse masks (all deflated). Image names run 000_HC.png..805_HC.png plus 164 _2HC, 23 _3HC and 6 _4HC further images from the same exams."
+
+[[resources]]
+id = "test_set_zip"
+origin = "zenodo_hc18"
+url = "https://zenodo.org/api/records/1327317/files/test_set.zip/content"
+type = "archive"
+version = "md5:8402af5d137ef40a2888c1011ef3fe7e"
+access = "Whole-file resumable curl download; exact size, MD5 (Zenodo) and SHA-256 (recorded from the verified 2026-10-06 download) enforced; end-of-central-directory geometry checked (336 entries, central directory 33,926 bytes at offset 43,484,515)."
+size_bytes = 43518463
+sha256 = "6356d1171e5805dabb83af72c13eb2b32fc3d6c0c2015c58eb9ee083521e9bdd"
+local_path = "downloads/zenodo_hc18_fetal_head_ultrasound_u8/test_set.zip"
+notes = "336 members: the test_set/ directory and 335 image PNGs 000_HC.png..334_HC.png (312 stored, 23 deflated). No annotations are published for the test set."
+
+[[resources]]
+id = "training_pixel_size_csv"
+origin = "zenodo_hc18"
+url = "https://zenodo.org/api/records/1327317/files/training_set_pixel_size_and_HC.csv/content"
+type = "file"
+version = "md5:c0761518fece2bd2d2ad4218f2cd9777"
+access = "Small curl download; exact size, MD5 and SHA-256 enforced; header and 999 rows checked."
+size_bytes = 33688
+sha256 = "1c08fa81c374c5f9509f3aa6a6568e4dc6cc5434ff82d0df731db7e4f25816b3"
+local_path = "downloads/zenodo_hc18_fetal_head_ultrasound_u8/training_set_pixel_size_and_HC.csv"
+notes = "filename, pixel size (mm), head circumference (mm). Used only to cross-check the image inventory and to record pixel_size_mm in index rows; the head-circumference label is not emitted. Pixel sizes span 0.0494-0.3933 mm (wider than the 0.052-0.326 mm quoted by the paper)."
+
+[[resources]]
+id = "test_pixel_size_csv"
+origin = "zenodo_hc18"
+url = "https://zenodo.org/api/records/1327317/files/test_set_pixel_size.csv/content"
+type = "file"
+version = "md5:8476dc198cc6542f26c57e87faeee033"
+access = "Small curl download; exact size, MD5 and SHA-256 enforced; header and 335 rows checked."
+size_bytes = 9096
+sha256 = "215970c7334fcb3794c88d39cbe33fe334f4323cbce8cddeeda04aa5c0faf227"
+local_path = "downloads/zenodo_hc18_fetal_head_ultrasound_u8/test_set_pixel_size.csv"
+notes = "filename, pixel size (mm). Used only to cross-check the image inventory and to record pixel_size_mm in index rows."
+
+[local_paths]
+downloads = "downloads/zenodo_hc18_fetal_head_ultrasound_u8/"
+filtered = "filtered/zenodo_hc18_fetal_head_ultrasound_u8/"
+index = "index/zenodo_hc18_fetal_head_ultrasound_u8/"
+samples = "samples/zenodo_hc18_fetal_head_ultrasound_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_hc18_fetal_head_ultrasound_u8/samples.jsonl"
+summary = "Fetch the two pinned HC18 image archives (176,445,301 bytes) and pixel-size CSVs, decode every *HC.png image member with a strict pure-stdlib 8-bit grayscale PNG decoder, skip 9 pinned duplicate re-exports, and emit each remaining image at its native size as one raw uint8 sample (1,325 samples, 572,299,207 bytes)."
+deterministic_notes = "Selection is the complete published image population minus pinned duplicates: every member matching ^\\d{3}_([2-9])?HC\\.png$ in both archives (999 + 335); the 999 *_Annotation.png masks are classified and skipped, and any other member name is fatal. Order: training then test, each by (exam number, repeat index) with NNN_HC = 1 and NNN_kHC = k. Build reads the ZIP central directory itself (classic ZIP, no ZIP64, no encryption), checks every local header, inflates method-8 members with zlib.decompressobj(-15) requiring an exact stream end, and checks size and CRC-32. The PNG decoder requires IHDR first with bit depth 8, colour type 0, compression 0, filter 0, interlace 0 and the exact pinned dimensions (800x540, or the per-member size listed in scripts/hc18_pins.py SIZE_EXCEPTIONS for 32 members); checks every chunk CRC; rejects PLTE, tRNS and any other critical chunk, non-consecutive IDAT and bytes after IEND; skips ancillary chunks (only pHYs and tIME occur); inflates the concatenated IDAT stream requiring an exact end and length height*(width+1); and undoes filters 0-4 (rows: Paeth 93.5 %, sub 4.4 %, average 1.1 %, none 1.0 %, up 0.03 %). Duplicates: training_set/392_2HC.png is byte-identical to 392_HC.png (PNG, annotation and CSV row) and is skipped after confirming identical pixels; 8 near-duplicates (training 243_3HC, 788_2HC, 720_2HC, 507_2HC, 198_2HC, 392_3HC, 220_2HC and test 280_HC, each the same frame as an earlier member with 0.35-3.9 % of pixels differing in a small region) are skipped after confirming the same shape and 0 < differing fraction < 10 %. scripts/near_duplicate_screen.py documents how they were found (all-pairs 24x16 thumbnail screen, then full-resolution comparison); the next-closest pairs differ in 59-64 % of pixels. Fatal in build and verify alike: counts other than 999 + 335 published images, image names disagreeing with the CSV filenames, a stored/deflated mix other than 944/55 and 312/23, any size other than the pinned one, a constant image, fewer than 64 distinct values, a modal value above 90 % of the frame, an unpinned duplicate payload, a pinned duplicate failing its check, or totals other than 1,325 samples and 572,299,207 values. scripts/selftest.py round-trips 141 synthetic PNGs (all five filter types, fixed and mixed per row, split IDAT, ancillary chunks, one full 800x540 frame) through both decoders and checks 15 malformed-PNG rejections plus the ZIP reader; build.sh and verify.sh run it first. verify.sh re-checks the MD5s, re-reads the archives through the standard-library zipfile module, decodes each PNG with an independently written chunk walker and flat-buffer unfilter, byte-compares every sample, re-confirms the skipped duplicates, recomputes every index field and statistic, checks the sample directory against the index and the manifest counts, and enforces the pinned aggregate SHA-256 over '<sample name>\\t<sample sha256>' lines (ffd5dceb156129b58f990d5e8a8dd19d7ed034c7021e57d0b9bd8c3dc5171602)."
+
+[[series]]
+id = "hc18_fetal_head_bmode_u8"
+description = "2D B-mode ultrasound images of the fetal head in the standard trans-thalamic plane used for head-circumference measurement, one frame per distinct published HC18 image (1,293 at 800x540, 32 at native sizes 738-800 x 539-563)."
+semantic_meaning = "Each value is the 8-bit grayscale brightness of one pixel of a scan-converted B-mode sonogram as exported from GE Voluson E8 or Voluson 730 scanners: echo amplitude after the scanner's gain, log compression and grey mapping, 0 = black (no echo, outside the imaging sector, or masked). Values span 0-254 (per-image maximum 243 for 1,181 of 1,325 images, 237-254 overall); 21 % of pixels are 0 on average. Physical pixel size varies per image (0.049-0.393 mm in the CSVs) with depth and zoom settings and is recorded as pixel_size_mm in the index."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The published PNGs store one 8-bit grayscale sample per pixel (colour type 0, bit depth 8, no palette, no transparency). Decoding inflates and unfilters the scanlines and writes those stored 8-bit values unchanged: no rescaling, windowing, cropping, padding or resampling. The display-domain grey mapping is the scanner's own export, the machine-facing form in which the material was published."
+source_resources = ["training_set_zip", "test_set_zip"]
+source_format = "PNG (8-bit grayscale, non-interlaced; 800x540 except 32 pinned native sizes) members of the Zenodo training_set.zip and test_set.zip archives"
+source_field = "PNG IDAT image data of each *HC.png member, decoded to its height x width uint8 grayscale pixel raster"
+filtered_input_path = "filtered/zenodo_hc18_fetal_head_ultrasound_u8/ingest_stats.json"
+filtering = "All 1,334 published image members are decoded; 1,325 are emitted (991 training, 334 test). Skipped: 1 exact duplicate and 8 near-duplicate re-exports of the same frame (pinned, see deterministic_notes). Training and test images come from the same acquisition and are one material, recorded in the index split field. The *_Annotation.png ellipse masks (labels) are not decoded. Every pixel of every emitted frame is kept, including the out-of-sector black area, the grey-scale bar and small scanner label at the upper left, the black masking rectangle present in most frames, and the occasional bottom scanner status strip; nothing is cropped or padded."
+missing_value_policy = "There are no missing-value sentinels: every pixel is a stored image value, and zeros (outside the sector, masked areas, anechoic regions) are kept as data. Malformed archives or PNGs, any image that is not 8-bit grayscale at its pinned size, CRC or length mismatches, constant or near-constant frames (fewer than 64 distinct values or a modal value above 90 %), and unpinned duplicate frames are fatal in both build and verify; no values are dropped or imputed."
+conversion = "Read the member (stored, or raw DEFLATE), validate the PNG chunk stream, zlib-inflate the concatenated IDAT data, undo the per-scanline filter (0 none, 1 sub, 2 up, 3 average, 4 Paeth; 1 byte per pixel), and write the rows top row first as one raw uint8 sample per image (sample_shape [height, width] in each index row). 8-bit values need no byte-order change."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 B-mode ultrasound image"
+sample_geometry = "bmode_ultrasound_display_raster_2d"
+sample_rank = 2
+sample_shape_notes = "Per-sample [height, width] in samples.jsonl: [540, 800] for 1,293 samples; 32 samples have pinned native sizes from 541x738 to 563x799."
+sample_axes = ["image_row_y", "image_column_x"]
+natural_record_kind = "hc18_fetal_head_bmode_ultrasound_png_image"
+sample_count = 1325
+total_size_bytes = 572299207
+output_path = "samples/zenodo_hc18_fetal_head_ultrasound_u8/hc18_fetal_head_bmode_u8/"

@@ -1,0 +1,139 @@
+manifest_version = 1
+dataset_id = "ncbi_geo_mm285_methylation_idat_mean_u16"
+name = "GEO GSE290585 Infinium Mouse Methylation (MM285) IDAT Bead-Type Mean Intensities UInt16"
+description = "Native uint16 per-bead-type mean fluorescence intensities (IDAT field 104) from 150 Illumina Infinium Mouse Methylation BeadChip (GPL30650) IDAT files of GEO series GSE290585: the Grn and Red IDATs of the first 75 GSM accessions, one sample per IDAT (one array position x one color channel)."
+homepage = "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE290585"
+
+[license]
+name = "NCBI public data (GEO); no NCBI-imposed use restrictions"
+spdx = "LicenseRef-NCBI-Public-Data"
+url = "https://ftp.ncbi.nlm.nih.gov/README.ftp"
+citation = "GEO series GSE290585, 'A Ternary-code DNA Methylome Atlas of Mouse Tissues' (contributors SolMoe Lee and Wanding Zhou, Zhou Lab, Children's Hospital of Philadelphia), PubMed 41057935; platform GPL30650 Infinium Mouse Methylation BeadChip."
+notes = "Evidence: the NCBI FTP README served from the same host states 'NOTE: ALL DATA HERE IS PUBLIC, NON-SENSITIVE, UNRESTRICTED SCIENTIFIC DATA SHARING AMONG SCIENTIFIC COMMUNITIES. THESE SERVERS ARE INTENTIONALLY PUBLIC.' download.sh re-fetches README.ftp on every run and fails if that sentence disappears. Caveat: GEO's own disclaimer page (www.ncbi.nlm.nih.gov/geo/info/disclaimer.html, proxy-blocked from this environment, wording not re-verified here) says NCBI places no restrictions on use or distribution of GEO data but that submitters may claim patent, copyright or other IP rights in data they submit, which NCBI cannot assess. No such claim is attached to GSE290585, and the emitted values are machine-generated scanner intensities. Precedents for the NCBI-public-data basis: accepted ncbi_refseq_viral_genomes_u8 (LicenseRef-NCBI-Public-Data) and ena_fastq_quality_phred (INSDC open data, instrument-derived quality values). Attribute GEO GSE290585 and PubMed 41057935."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NCBI GEO FTP (HTTPS) per-sample supplementary files only. Organism is Mus musculus (C57BL/6J) for every selected GSM, checked against the series matrix at download time; no human subjects or personal data."
+usage_notes = "Only the numeric bead-type Mean arrays are emitted. Sample annotations (tissue, BS/bACE conversion) are carried in the sample index as metadata, not as primary payload."
+
+[[origins]]
+id = "ncbi_geo_ftp"
+name = "NCBI Gene Expression Omnibus FTP site (HTTPS)"
+url = "https://ftp.ncbi.nlm.nih.gov/geo/"
+type = "data_portal"
+notes = "Public anonymous HTTPS access to GEO series and per-sample supplementary directories."
+
+[[resources]]
+id = "ncbi_ftp_readme"
+origin = "ncbi_geo_ftp"
+url = "https://ftp.ncbi.nlm.nih.gov/README.ftp"
+type = "file"
+version = "live; re-fetched each run (2,136 bytes, sha256 327c89c77cf4050f487517c4e12158f4d146807468979574b734c26cb39bb8ec on 2026-10-05)"
+access = "Direct public download."
+size_bytes = 2136
+sha256 = ""
+local_path = "downloads/ncbi_geo_mm285_methylation_idat_mean_u16/README.ftp"
+notes = "Rights evidence. Not hash-pinned because unrelated text may change; the public-data sentence is content-checked instead."
+
+[[resources]]
+id = "gse290585_filelist"
+origin = "ncbi_geo_ftp"
+url = "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE290nnn/GSE290585/suppl/filelist.txt"
+type = "file"
+version = "live; 86,677 bytes, sha256 c23a2454ccf3a852d7bbcbb3438ddf72710281b098fa58c7dfccf8f402640b8e on 2026-10-05 (1,068 IDAT.gz, 534 GSMs)"
+access = "Direct public download."
+size_bytes = 86677
+sha256 = ""
+local_path = "downloads/ncbi_geo_mm285_methylation_idat_mean_u16/filelist.txt"
+notes = "Series supplementary listing; every pinned (name, size) pair must appear unchanged or download.sh fails."
+
+[[resources]]
+id = "gse290585_series_matrix"
+origin = "ncbi_geo_ftp"
+url = "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE290nnn/GSE290585/matrix/GSE290585_series_matrix.txt.gz"
+type = "file"
+version = "live; 26,354 bytes, sha256 9a3a1464b3701b1bc8dde838b61eb6628e4fc25199668e7668795825a0038a2e on 2026-10-05"
+access = "Direct public download."
+size_bytes = 26354
+sha256 = ""
+local_path = "downloads/ncbi_geo_mm285_methylation_idat_mean_u16/GSE290585_series_matrix.txt.gz"
+notes = "Metadata only (the data table is empty). Used to check series/platform/organism, that each pinned GSM lists exactly the pinned Grn/Red IDAT names, and to annotate index rows with tissue and cytosine_conversion_type."
+
+[[resources]]
+id = "gse290585_mm285_idats"
+origin = "ncbi_geo_ftp"
+url = "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM8817nnn/<GSM>/suppl/<GSM>_<barcode>_<RxxCyy>_<Grn|Red>.idat.gz"
+type = "file_set"
+version = "150 IDAT.gz uploaded 2025-02-24 for GSM8817338..GSM8817412; names and sizes pinned in scripts/pinned_files.tsv from filelist.txt"
+access = "Direct public download, one resumable curl transfer per file."
+size_bytes = 400141383
+sha256 = ""
+local_path = "downloads/ncbi_geo_mm285_methylation_idat_mean_u16/idat/"
+notes = "GEO publishes no checksums for supplementary files. Per-file SHA-256 values were taken from the 2026-10-05 autocollect download (the GSM8817338 Grn hash also matches an independent earlier probe fetch) and are pinned in the sha256 column of scripts/pinned_files.tsv; download.sh, build.sh and verify.sh enforce them together with the pinned size, gzip CRC and IDAT structure."
+
+[local_paths]
+downloads = "downloads/ncbi_geo_mm285_methylation_idat_mean_u16/"
+filtered = "filtered/ncbi_geo_mm285_methylation_idat_mean_u16/"
+index = "index/ncbi_geo_mm285_methylation_idat_mean_u16/"
+samples = "samples/ncbi_geo_mm285_methylation_idat_mean_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/ncbi_geo_mm285_methylation_idat_mean_u16/samples.jsonl"
+summary = "Fetch the 150 pinned GSE290585 MM285 IDAT.gz files, decode the Illumina IDAT v3 field table, and emit field 104 (bead-type Mean, uint16) unchanged as one little-endian sample per IDAT, Grn and Red as two primary series of one family."
+deterministic_notes = "Selection is fixed: the first 75 GSM accessions of GSE290585 in ascending numeric order (GSM8817338..GSM8817412), both channels each, pinned by name and size. download.sh checks the README.ftp public-data sentence, the filelist sizes, the series matrix (GSE290585, GPL30650, Mus musculus, exact IDAT names), and per file: gzip integrity, magic IDAT, version 3, N=361,821, off(103)-off(102)=4N, off(104)-off(103)=2N, off(107)-off(104)=2N, MidBlock count N, barcode (field 402) and position (field 404) equal to the file name, chip type (field 403) 'BeadChip 12x8', one IlluminaID order across all files, and Grn != Red per array. Every file's SHA-256 is pinned in pinned_files.tsv and enforced. Build writes samples in pin order; verify.sh re-decodes every IDAT independently and requires byte identity. Floors: 150 samples of 361,821 values (median 361,821) and 108,546,300 primary bytes."
+
+[[series]]
+id = "mm285_grn_bead_type_mean_u16"
+description = "Green-channel (Cy3 scan) per-bead-type mean intensities of MM285 BeadChip array positions."
+semantic_meaning = "For one MM285 BeadChip array position, the iScan-reported mean green-channel fluorescence intensity (scanner digital number) over the replicate beads of each of the 361,821 bead types, in the IDAT's native ascending IlluminaID order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "IDAT field 104 stores the bead-type Mean as little-endian uint16 and the values are copied unchanged. No background subtraction, normalization, dye-bias correction or probe-to-CpG mapping is applied. SD (field 103), NBeads (107) and IlluminaID (102) are not emitted."
+source_resources = ["gse290585_mm285_idats"]
+source_format = "Illumina IDAT v3 (gzip)"
+source_field = "Mean (field code 104)"
+filtered_input_path = "filtered/ncbi_geo_mm285_methylation_idat_mean_u16/ingest_stats.json"
+filtering = "The Grn IDAT of each of the 75 pinned GSMs; all 361,821 bead types kept; both bisulfite (BS, 38 arrays) and bACE (37 arrays) conversions kept without filtering."
+missing_value_policy = "IDAT Mean has no missing-value sentinel; every bead type carries a value and values are preserved unchanged, including any zero (per-sample zero-Mean and NBeads==0 counts are recorded in the index; in the realized output 21 of 150 IDATs contain 1-6 zero Means, essentially all at bead types with NBeads==0, i.e. no bead decoded on that array). Any structural failure (size, pinned sha256, gzip, magic, version 3, N, field geometry, barcode/position vs file name, chip type, IlluminaID order) or degenerate-array condition (distinct values < 2,000; zero Means > 0.1% of N; p01 > 1,500; median < 200; p99 < 3,000; max < 10,000; NBeads==0 for > 1% of bead types) is fatal; arrays are never padded, imputed or silently skipped. verify.sh applies the same thresholds."
+conversion = "gunzip in memory, parse the IDAT v3 field table, take the N=361,821 uint16 values at field 104's offset and write them unchanged as one little-endian uint16 .bin per IDAT in source bead-type order. Channels are never interleaved or merged: the Red IDAT of the same array is a separate sample in mm285_red_bead_type_mean_u16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian uint16 array"
+sample_geometry = "fixed_length_bead_type_vector"
+sample_rank = 1
+sample_axes = ["bead_type_in_ascending_illumina_id_order"]
+natural_record_kind = "one_mm285_beadchip_array_position_x_one_channel_idat_mean_array"
+sample_count = 75
+total_size_bytes = 54273150
+output_path = "samples/ncbi_geo_mm285_methylation_idat_mean_u16/mm285_grn_bead_type_mean_u16/"
+
+[[series]]
+id = "mm285_red_bead_type_mean_u16"
+description = "Red-channel (Cy5 scan) per-bead-type mean intensities of MM285 BeadChip array positions."
+semantic_meaning = "For one MM285 BeadChip array position, the iScan-reported mean red-channel fluorescence intensity (scanner digital number) over the replicate beads of each of the 361,821 bead types, in the IDAT's native ascending IlluminaID order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "IDAT field 104 stores the bead-type Mean as little-endian uint16 and the values are copied unchanged. No background subtraction, normalization, dye-bias correction or probe-to-CpG mapping is applied. SD (field 103), NBeads (107) and IlluminaID (102) are not emitted."
+source_resources = ["gse290585_mm285_idats"]
+source_format = "Illumina IDAT v3 (gzip)"
+source_field = "Mean (field code 104)"
+filtered_input_path = "filtered/ncbi_geo_mm285_methylation_idat_mean_u16/ingest_stats.json"
+filtering = "The Red IDAT of each of the 75 pinned GSMs; all 361,821 bead types kept; both bisulfite (BS, 38 arrays) and bACE (37 arrays) conversions kept without filtering."
+missing_value_policy = "IDAT Mean has no missing-value sentinel; every bead type carries a value and values are preserved unchanged, including any zero (per-sample zero-Mean and NBeads==0 counts are recorded in the index; in the realized output 21 of 150 IDATs contain 1-6 zero Means, essentially all at bead types with NBeads==0, i.e. no bead decoded on that array). Any structural failure (size, pinned sha256, gzip, magic, version 3, N, field geometry, barcode/position vs file name, chip type, IlluminaID order) or degenerate-array condition (distinct values < 2,000; zero Means > 0.1% of N; p01 > 1,500; median < 200; p99 < 3,000; max < 10,000; NBeads==0 for > 1% of bead types) is fatal; arrays are never padded, imputed or silently skipped. verify.sh applies the same thresholds."
+conversion = "gunzip in memory, parse the IDAT v3 field table, take the N=361,821 uint16 values at field 104's offset and write them unchanged as one little-endian uint16 .bin per IDAT in source bead-type order. Channels are never interleaved or merged: the Grn IDAT of the same array is a separate sample in mm285_grn_bead_type_mean_u16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian uint16 array"
+sample_geometry = "fixed_length_bead_type_vector"
+sample_rank = 1
+sample_axes = ["bead_type_in_ascending_illumina_id_order"]
+natural_record_kind = "one_mm285_beadchip_array_position_x_one_channel_idat_mean_array"
+sample_count = 75
+total_size_bytes = 54273150
+output_path = "samples/ncbi_geo_mm285_methylation_idat_mean_u16/mm285_red_bead_type_mean_u16/"

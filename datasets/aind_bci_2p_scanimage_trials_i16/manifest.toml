@@ -1,0 +1,89 @@
+manifest_version = 1
+dataset_id = "aind_bci_2p_scanimage_trials_i16"
+name = "AIND BCI Two-Photon ScanImage Trial Movies Int16"
+description = "Complete raw in-vivo two-photon calcium-imaging trial movies from the Allen Institute for Neural Dynamics brain-computer-interface project: offset-subtracted int16 ScanImage PMT digitizer codes, 512x256 pixels at 58.29 Hz, one complete single-channel behavioral-trial acquisition per mouse for 11 mice imaged on one rig with one ScanImage configuration."
+homepage = "https://registry.opendata.aws/allen-nd-open-data/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Allen Institute for Neural Dynamics, Brain Computer Interface project (investigators Kayvon Daie and Marton Rozsa). Raw single-plane-ophys data assets in s3://aind-open-data, AWS Open Data Registry entry 'Allen Institute for Neural Dynamics - Mouse Neuroanatomy and Physiology Data'."
+notes = "The AWS Open Data Registry entry for bucket arn:aws:s3:::aind-open-data (open-data-registry datasets/allen-nd-open-data.yaml, commit 23f7633f01561373a9426cb02a10b2fc9a528304) declares License: CC-BY-4.0. Each selected data asset's data_description.json (pinned by S3 versionId and SHA-256 and re-checked by download.sh and build.sh) declares \"license\": \"CC-BY-4.0\", \"restrictions\": null, project_name \"Brain Computer Interface\", institution AIND. Preserve AIND attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official AIND public S3 bucket served anonymously over HTTPS; raw laboratory mouse neurophysiology. No human-subject data."
+usage_notes = "Only the decoded int16 image planes are emitted. ScanImage headers, ROI definitions, per-frame descriptors, behavior streams, videos, and AIND metadata (which include experimenter user names) are used only for validation and are not emitted."
+
+[[origins]]
+id = "aind_open_data_s3"
+name = "Allen Institute for Neural Dynamics open data bucket (aind-open-data)"
+url = "https://aind-open-data.s3.amazonaws.com/"
+type = "bucket"
+notes = "Anonymous public S3 bucket, us-west-2, versioning enabled; objects are fetched by exact versionId. The bucket grows weekly, so nothing is discovered by 'latest' at download time."
+
+[[resources]]
+id = "bci_trial_tiffs"
+origin = "aind_open_data_s3"
+url = "https://aind-open-data.s3.amazonaws.com/"
+type = "file"
+version = "11 exact S3 object versions listed in sources.tsv (kind=trial_tiff), resolved 2026-10-05"
+access = "curl each <key>?versionId=<id> resumably; validate Content-Length, the S3 multipart ETag (recomputed locally with the published 52,428,800-byte part size), and the full ScanImage/BigTIFF structure. SHA-256 is computed locally and written to downloads/aind_bci_2p_scanimage_trials_i16/download_record.tsv."
+size_bytes = 984250298
+sha256 = ""
+local_path = "downloads/aind_bci_2p_scanimage_trials_i16/"
+notes = "One bci_NNNNN.tif per subject; ETags are multipart (not MD5) and sources.tsv also records each object's S3 full-object CRC64NVME. Storage class is INTELLIGENT_TIERING; every pinned version answered a one-byte range GET (HTTP 206) on 2026-10-05 and download.sh repeats that liveness check."
+
+[[resources]]
+id = "session_metadata_json"
+origin = "aind_open_data_s3"
+url = "https://aind-open-data.s3.amazonaws.com/"
+type = "file"
+version = "22 exact S3 object versions listed in sources.tsv (kind=data_description and kind=session)"
+access = "curl each <key>?versionId=<id>; validate size, MD5 ETag, and pinned SHA-256."
+size_bytes = 184708
+sha256 = ""
+local_path = "downloads/aind_bci_2p_scanimage_trials_i16/"
+notes = "data_description.json carries the per-asset license; session.json carries rig_id 442_Bergamo_2p_photostim and the bci stream's 512x256 / 58.29007 Hz / single Red PMT field of view. Used for validation only."
+
+[local_paths]
+downloads = "downloads/aind_bci_2p_scanimage_trials_i16/"
+filtered = "filtered/aind_bci_2p_scanimage_trials_i16/"
+index = "index/aind_bci_2p_scanimage_trials_i16/"
+samples = "samples/aind_bci_2p_scanimage_trials_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/aind_bci_2p_scanimage_trials_i16/samples.jsonl"
+summary = "Fetch 11 pinned ScanImage BigTIFF trial acquisitions (one per mouse), validate the single-channel acquisition regime, follow each IFD chain, and copy every page's single 262,144-byte int16 strip in page order into one raw little-endian frames x 256 x 512 sample per trial."
+deterministic_notes = "Selection (resolved once from bucket listings and pinned in sources.tsv): 2026 single-plane-ophys BCI sessions on rig 442_Bergamo_2p_photostim whose bci stream is 512x256 at 58.29007 Hz with a single Red PMT and ScanImage channelSave = 2 (this excludes the 38.10 Hz sessions, the January 2026 Green-PMT session, a 58.27 Hz session, and subjects 843574/865606/865607 whose files interleave channels [1 2]); sessions with at least 20 bci_NNNNN.tif trials; subjects with at least 3 such sessions (11 of 13); per subject the chronologically first trial, excluding each session's first acquisition and its final (often truncated) acquisition, whose length is 300-360 frames (5.1-6.2 s). Every page is asserted to be 512x256, 16-bit, uncompressed, SampleFormat 2, one strip of 262,144 bytes; per-frame descriptors must show contiguous frameNumberAcquisition 1..N, one constant ScanImage acquisitionNumbers value (which may differ from the _NNNNN file index), contiguous frameNumbers, increasing timestamps, and endOfAcquisition = 1 only on the final page, whose strip ends at end of file. verify.sh re-walks every TIFF with an independent reader and byte-compares all frames."
+
+[[series]]
+id = "bci_2p_trial_movie_i16"
+description = "Raw two-photon calcium-imaging movie of one complete BCI behavioral trial."
+semantic_meaning = "Per-pixel two-photon fluorescence intensity (920 nm excitation, 12% power) from primary motor cortex at 122-150 um imaging depth in an awake head-fixed mouse performing the BCI task; the calcium indicator is transgenic GCaMP8s (Ai237) or XCaMP-G (Ai230) for 4 subjects and is not recorded in the AIND metadata of the 7 Cas9-line subjects. Values are ScanImage resonant-scanner PMT digitizer codes (channelsDataType int16, 16-bit ADC) for saved channel 2, with ScanImage's automatically measured dark offset subtracted at acquisition, so the dark/background mode sits near zero, small negative values are noise, and bright cell bodies form a long positive tail. Frames are 512 pixels x 256 lines (1.953 um/pixel at zoom 2), bidirectionally scanned and line-corrected by ScanImage, at 58.29 frames/s."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The int16 values are exactly the uncompressed TIFF strip contents ScanImage wrote to disk; little-endian TIFF bytes are copied without any rescaling, offset change, or reordering."
+source_resources = ["bci_trial_tiffs", "session_metadata_json"]
+source_format = "ScanImage 2023.1 multi-page little-endian BigTIFF (one uncompressed 512x256 int16 page per frame)"
+source_field = "image plane of every page (single strip per IFD) for saved channel 2"
+filtered_input_path = "filtered/aind_bci_2p_scanimage_trials_i16/build_stats.json"
+filtering = "All pages of each of the 11 pinned trial files are kept. Not emitted: ScanImage static header and ROI JSON, per-page ImageDescription descriptors (frame numbers, timestamps), session files other than bci_NNNNN.tif (spont*, stack, photostim), and all behavior or video streams."
+missing_value_policy = "Raw PMT codes have no missing-value sentinel; no values are dropped, clipped, imputed, or flagged. A missing or truncated page, non-contiguous frame numbering, a missing endOfAcquisition marker, any tag or ScanImage-setting deviation, a size/ETag/SHA-256 mismatch, a constant frame, or fewer than 256 distinct values fails the recipe."
+conversion = "Follow the BigTIFF IFD chain from the header's first-IFD offset; for each page read StripOffsets and copy the 262,144-byte strip (already little-endian int16) to the output in page order. One sample per trial file, row-major [frame][scan_line][pixel]."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian int16 frames x 256 x 512 movie"
+sample_geometry = "two_photon_movie_frame_by_line_by_pixel_3d"
+sample_rank = 3
+sample_axes = ["frame", "scan_line", "pixel"]
+natural_record_kind = "complete_scanimage_bci_trial_acquisition_file"
+sample_count = 11
+total_size_bytes = 974651392
+output_path = "samples/aind_bci_2p_scanimage_trials_i16/bci_2p_trial_movie_i16/"

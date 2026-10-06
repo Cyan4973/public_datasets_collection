@@ -1,0 +1,102 @@
+manifest_version = 1
+dataset_id = "empiar_13192_sbfsem_vessel_slices_u8"
+name = "EMPIAR-13192 Carotid2 Serial Block-Face SEM Backscatter Slices UInt8"
+description = "32 evenly spaced native-uint8 6144x4096 backscattered-electron block-face images (65 nm pixels, every 40th of 1250 slices at 200 nm z-step) from one serial block-face SEM volume of a mouse carotid-artery hemostatic plug, EMPIAR-13192 imageset Carotid2."
+homepage = "https://www.ebi.ac.uk/empiar/EMPIAR-13192/"
+
+[license]
+name = "Creative Commons CC0 1.0 Universal Public Domain Dedication"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "Tomaiuolo T, Christensen TA, Stalker TJ (2026). EMPIAR-13192: Volume electron microscopy reveals heterogeneity of the hemostatic response in veins and arteries. Electron Microscopy Public Image Archive, DOI 10.6019/EMPIAR-13192. Associated manuscript: Tomaiuolo T, Roberts ME, Severa JR, Mansi CD, Mathers B, Mannix A, Christensen TA, Brass LF, Sinno T, Stalker TJ."
+notes = "EMPIAR FAQ (https://www.ebi.ac.uk/empiar/faq): 'All data in EMPIAR is freely and publicly available to the global community under the CC0 license'. download.sh fetches the FAQ and fails if that sentence disappears. Attribution to the entry DOI is requested as good practice, not required."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official EMPIAR archive files served anonymously over HTTPS by ftp.ebi.ac.uk; no mirrors. Mouse tissue (laboratory puncture-injury model); no human material."
+usage_notes = "Samples hold only detector intensities. The FEI metadata tags (generic 'Supervisor' account, instrument PC name, stage and beam settings) are validated but never emitted as samples."
+
+[[origins]]
+id = "empiar"
+name = "Electron Microscopy Public Image Archive (EMBL-EBI)"
+url = "https://www.ebi.ac.uk/empiar/EMPIAR-13192/"
+type = "data_portal"
+notes = "Entry EMPIAR-13192, released 2026-02-24, SBF-SEM, 169.2 GB, six imagesets (Carotid1-3, Jugular1-3). Only Carotid2 is in scope; see README for why the other volumes are excluded."
+
+[[resources]]
+id = "empiar_13192_entry"
+origin = "empiar"
+url = "https://www.ebi.ac.uk/empiar/api/entry/EMPIAR-13192/"
+type = "api_query_result"
+version = "release 2026-02-24"
+access = "Anonymous JSON API; validated for title, DOI, REL status, SBF-SEM type and the Carotid2 imageset (1250 images, UNSIGNED BYTE, 6144x4096, 650 A pixels)."
+size_bytes = 6502
+sha256 = ""
+local_path = "downloads/empiar_13192_sbfsem_vessel_slices_u8/empiar_13192_entry.json"
+notes = "Metadata only; not used to build samples. Size is indicative, not enforced."
+
+[[resources]]
+id = "empiar_faq_license"
+origin = "empiar"
+url = "https://www.ebi.ac.uk/empiar/faq"
+type = "file"
+version = "fetched at download time"
+access = "Anonymous HTML; must contain the CC0 licence sentence."
+size_bytes = 44045
+sha256 = ""
+local_path = "downloads/empiar_13192_sbfsem_vessel_slices_u8/empiar_faq.html"
+notes = "Licence evidence only. Size is indicative, not enforced."
+
+[[resources]]
+id = "carotid2_selected_slices"
+origin = "empiar"
+url = "https://ftp.ebi.ac.uk/empiar/world_availability/13192/data/Stalker_SBF-SEM/Carotid2/"
+type = "file"
+version = "Carotid2_Z0010.tif, Carotid2_Z0050.tif, ..., Carotid2_Z1250.tif (z = 10 + 40k, k = 0..31); server mtimes 2026-02-23"
+access = "32 whole uncompressed TIFFs, each pinned in scripts/carotid2_slices.tsv by exact byte size, SHA-256 of the metadata tail (bytes 25165832-EOF), FEI acquisition timestamp, and whole-file SHA-256 (recorded from the verified 2026-10-06 autocollect download and enforced on every later run)."
+size_bytes = 806100140
+sha256 = ""
+local_path = "downloads/empiar_13192_sbfsem_vessel_slices_u8/"
+notes = "The directory holds 1250 slices (Carotid2_Z0001..Z1250, about 25.19 MB each, 31.5 GB in total), which exceeds the corpus cap, so an evenly spaced every-40th subset is taken. One backend of the load-balanced autoindex intermittently omits Carotid2_Z1236.tif (not selected; the file still answers 206); the EMPIAR API count of 1250 is authoritative."
+
+[local_paths]
+downloads = "downloads/empiar_13192_sbfsem_vessel_slices_u8/"
+filtered = "filtered/empiar_13192_sbfsem_vessel_slices_u8/"
+index = "index/empiar_13192_sbfsem_vessel_slices_u8/"
+samples = "samples/empiar_13192_sbfsem_vessel_slices_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/empiar_13192_sbfsem_vessel_slices_u8/samples.jsonl"
+summary = "Fetch 32 pinned Carotid2 slice TIFFs (806,100,140 bytes), validate the FEI xT single-IFD layout and acquisition metadata of each, and emit each slice's 6144x4096 uint8 image as one raw sample (32 samples, 805,306,368 bytes)."
+deterministic_notes = "discover.sh documents pin resolution (HEAD for exact size, 8-byte header range, metadata-tail range). Selection is fixed: z = 10, 50, ..., 1250, every 40th slice (8 um apart in z), spanning the whole volume, sorted by z. Per file, build and verify require: size equal to the pin; header 'II*\\0' with the first IFD at 25165832; exactly one IFD with the 15 tags 254,256,257,258,259,262,273,277,278,279,282,283,296,34682,34683; width 6144, height 4096, BitsPerSample 8, Compression 1, Photometric 1, SamplesPerPixel 1, RowsPerStrip 2; 2048 StripOffsets equal to 8 + 12288*i and 2048 StripByteCounts of 12288 (sum 25,165,824); out-of-line tag data tiling the tail to EOF with at most one zero alignment byte; and FEI [System] SystemType=Volumescope, [Image] ResolutionX/Y=6144/4096, PostProcessing=None, Transformation=None, DriftCorrected=Off, ZoomFactor=1.0, [PrivateFei] DatabarHeight=0 and BitShift=0, [Scan] PixelWidth/Height=6.5e-008, [Beam] HV=3000, a single detector 'VS DBS' with Signal=BSE, and full-frame XML ScanSize/ScanArea. Metadata-tail SHA-256, acquisition timestamp (strictly increasing with z) and whole-file SHA-256 must match the pins. Each frame must have at least 64 distinct values, a modal value covering at most half the pixels, no constant row and no constant column (padding guard), and a unique payload. verify.sh re-derives every frame from the TIFFs, byte-compares each sample, recomputes all statistics and index rows, checks that the sample directory matches the index exactly, and checks manifest sample_count and total_size_bytes. The SHA-256 over '<sample name>\\t<sample sha256>' lines in z order is pinned (6aabf0cefce281fc39d0fe24e9d7a229b3a474d34956a1c3672f72933afce1af) and enforced by build and verify."
+
+[[series]]
+id = "carotid2_sbfsem_bse_u8"
+description = "Serial block-face SEM backscattered-electron images of one resin-embedded mouse carotid-artery hemostatic plug, one 6144x4096 frame per sampled block-face slice."
+semantic_meaning = "Each value is the 8-bit digitized backscattered-electron detector signal (Thermo Fisher VolumeScope 'VS DBS' detector, BSE, 3 kV, 1 us dwell, 2x line integration, low-vacuum chamber) for one 65 nm x 65 nm pixel of the freshly cut block face, as mapped by the acquisition software's detector contrast/brightness and DigitalContrast=-1 setting (the xT sign flip conventionally used for TEM-like inverted contrast). 0 and 255 are the clipped extremes of that mapping."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The FEI xT acquisition software writes the uncompressed TIFF image as BitsPerSample 8, SamplesPerPixel 1, min-is-black, with BitShift=0, no data bar, PostProcessing=None and Transformation=None. The EMPIAR API declares the imageset voxel type UNSIGNED BYTE. The samples are the stored 8-bit image values with no rescaling, remapping or cropping."
+source_resources = ["carotid2_selected_slices"]
+source_format = "FEI xT little-endian classic TIFF: 8-byte header, 2048 contiguous uncompressed 2-row strips at byte 8, trailing single IFD with FEI tags 34682 (INI) and 34683 (XML)"
+source_field = "TIFF image strips (IFD 0 StripOffsets/StripByteCounts): 6144x4096 uint8 BSE detector intensity raster"
+filtered_input_path = "filtered/empiar_13192_sbfsem_vessel_slices_u8/ingest_stats.json"
+filtering = "Only imageset Carotid2 (1250 slices, 65 nm pixels) is used; slices z = 10 + 40k (k = 0..31) are kept, which spans the whole volume with neighbours 8 um apart so samples are not near-duplicates. The other five imagesets of the entry are excluded because their pixel size, frame size or file provenance differ (see README). All pixels of every kept frame are emitted; nothing is cropped. Off-block regions are kept as acquired: from about z = 130 to 1090 the top 1-6 % of rows lie beyond the trimmed top edge of the resin block, a dark, noisy, streaked band with a ragged boundary."
+missing_value_policy = "There are no missing-value sentinels: every pixel is a detector reading. Clipped 0 and 255 values stay in place (979,947 zeros, 0.12 %, mostly in the off-block band; 312 pixels at 255). Fatal, identically in build and verify: any size, hash, timestamp, TIFF-layout or FEI-metadata deviation; a constant frame; fewer than 64 distinct values; a modal value above half the pixels; any constant row or column; a duplicate frame payload."
+conversion = "Read the IFD, confirm the 2048 strips are contiguous from byte 8 with 12288 bytes each, and write bytes 8..25165831 (4096 scan lines x 6144 pixels, top line first, row-major as stored) as one raw uint8 sample per slice. 8-bit values need no byte-order change."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 SBF-SEM backscatter block-face image"
+sample_geometry = "sbfsem_block_face_scan_raster_2d"
+sample_rank = 2
+sample_shape = [4096, 6144]
+sample_axes = ["scan_line_y", "scan_pixel_x"]
+natural_record_kind = "sbfsem_block_face_slice_tiff"
+sample_count = 32
+total_size_bytes = 805306368
+output_path = "samples/empiar_13192_sbfsem_vessel_slices_u8/carotid2_sbfsem_bse_u8/"

@@ -1,0 +1,89 @@
+manifest_version = 1
+dataset_id = "goose_vls128_lidar_scan_xyz_f32"
+name = "GOOSE 3D Validation Velodyne VLS-128 LiDAR Sweep XYZ Float32"
+description = "Per-point x, y, z float32 coordinates of 64 complete published LiDAR revolution files from the roof-mounted 128-beam Velodyne VLS-128 (Alpha Prime) of the MuCAR-3 research vehicle in the GOOSE 3D off-road validation split, 8 evenly spaced sweeps from each of the 8 validation sequences."
+homepage = "https://goose-dataset.de/docs/"
+
+[license]
+name = "Creative Commons Attribution-ShareAlike 4.0 International"
+spdx = "CC-BY-SA-4.0"
+url = "https://creativecommons.org/licenses/by-sa/4.0/"
+citation = "Mortimer, P., Hagmanns, R., Granero, M., Luettel, T., Petereit, J., and Wuensche, H.-J. The GOOSE Dataset for Perception in Unstructured Environments. IEEE ICRA 2024. arXiv:2310.16788. Data: https://goose-dataset.de/ (Fraunhofer IOSB and Universitaet der Bundeswehr Muenchen)."
+notes = "The download page https://goose-dataset.de/docs/setup/ states 'The GOOSE Datset is published under the CC BY-SA 4.0 License.' The archive's own LICENSE member (20,138 bytes, CRC32 ae93dc2c, SHA-256 28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5) is the full 'Attribution-ShareAlike 4.0 International' legal code; download.sh fetches it and refuses to proceed if it changes. Attribution to the GOOSE authors is required, and the derived xyz sample files are adaptations that remain under CC BY-SA 4.0 (share-alike)."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official GOOSE dataset archive served by goose-dataset.de (GOOSE 3D upload of 2024-07-26 per the archive CHANGELOG; file Last-Modified 2025-03-19, ETag \"67da9ea9-d0856283\"). Only exact byte ranges of the official archive are fetched; no mirrors."
+usage_notes = "Off-road and rural terrain LiDAR geometry in the sensor frame. Points carry no identity, imagery, GNSS position or labels; incidental people or vehicles would appear only as anonymous point geometry."
+
+[[origins]]
+id = "goose_dataset"
+name = "GOOSE: German Outdoor and Offroad Dataset"
+url = "https://goose-dataset.de/docs/setup/"
+type = "website"
+notes = "Official download page for GOOSE 3D point-cloud splits (train 27 GB, val 3.3 GB, test 3.3 GB); primary host goose-dataset.de with a Fraunhofer ownCloud alternative. Only the val split is used."
+
+[[resources]]
+id = "goose_3d_val_tail"
+origin = "goose_dataset"
+url = "https://goose-dataset.de/storage/goose_3d_val.zip"
+type = "other"
+version = "goose_3d_val.zip, 3,498,402,435 bytes, Last-Modified 2025-03-19T10:38:33Z, ETag \"67da9ea9-d0856283\""
+access = "Anonymous HTTPS byte range 3498085530-3498402434 (316,905 bytes)."
+size_bytes = 316905
+sha256 = "9c4e49e30f5a9b98ec92d5799850dc2c938908b19eb5e202a18f00e7f6e29a4e"
+local_path = "downloads/goose_vls128_lidar_scan_xyz_f32/archive_tail.bin"
+notes = "Holds the stored LICENSE, CHANGELOG and goose_label_mapping.csv members, the 1,925-entry central directory at offset 3,498,107,450 (294,887 bytes), the ZIP64 end record/locator and the EOCD. download.sh validates the 206 Content-Range and ETag, entry count, central-directory location, LICENSE/CHANGELOG CRC32 and text, and re-derives the selection to prove sources.tsv is unchanged. 1,214 central-directory records keep their local-header offset (>= 2^31) in a ZIP64 extended-information extra field; the parser resolves them."
+
+[[resources]]
+id = "goose_3d_val_selected_sweeps"
+origin = "goose_dataset"
+url = "https://goose-dataset.de/storage/goose_3d_val.zip"
+type = "other"
+version = "64 stored members lidar/val/<sequence>/<sequence>__<frame>_<timestamp_ns>_vls128.bin pinned in sources.tsv"
+access = "One anonymous HTTPS byte range per member covering its local header and payload (184,014,848 bytes in total)."
+size_bytes = 184006576
+sha256 = ""
+local_path = "downloads/goose_vls128_lidar_scan_xyz_f32/lidar/val/"
+notes = "sources.tsv pins each member's local-header offset, exact byte range, payload size and central-directory CRC32. All 961 val .bin members are stored (method 0) with sizes that are multiples of 16; every local header has a zero-length extra field, but the extractor still skips 30 + local name length + local extra length. Each payload is checked against CRC32 and size before it is kept; the range bytes are then discarded. Per-payload SHA-256 values from the first download are pinned in payload_sha256.tsv and re-checked by verify.sh; the SHA-256 of all 64 payloads concatenated in sources.tsv order is 303d8a9e19ecb1221469bec0b971c41c67805f93c467869ca46182e37caa45b0 (the manifest sha256 field is left empty because this resource is 64 separate files)."
+
+[local_paths]
+downloads = "downloads/goose_vls128_lidar_scan_xyz_f32/"
+filtered = "filtered/goose_vls128_lidar_scan_xyz_f32/"
+index = "index/goose_vls128_lidar_scan_xyz_f32/"
+samples = "samples/goose_vls128_lidar_scan_xyz_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/goose_vls128_lidar_scan_xyz_f32/samples.jsonl"
+summary = "Range-fetch 64 pinned stored VLS-128 sweep members from the official GOOSE 3D val archive, keep the first three float32 fields (x, y, z) of every 16-byte point record bit-exactly, and emit one N x 3 little-endian float32 sample per sweep."
+deterministic_notes = "Selection rule (scripts/goose_zip.py select, documented by discover.sh): for each of the 8 val sequences, sort its *_vls128.bin members by frame number (n = 73..191) and take indices floor((2k+1) n / 16) for k = 0..7. The pinned list in sources.tsv is re-derived from the live central directory on every download. Point order is preserved; samples are named after the source member. Index rows carry point_count, sample_shape [N, 3], sequence, frame, timestamp, source member, CRC32, SHA-256 and min/max computed from the stored float32 values. verify.sh re-derives every sample by byte slicing (no float conversion), re-checks the finite/no-zero-point policy on IEEE-754 bit patterns, rejects constant samples or axes, and checks inventory and manifest totals. Realized: 64 samples, 11,500,411 points, 34,501,233 values, 138,004,932 bytes; median 583,156.5 values per sample (75,290 to 217,338 points per sweep); SHA-256 of all samples concatenated in index order a7cace02b1c8d5f2433d66d043ef1340eeaf5728d1aad63f396342597ddea5d6."
+
+[[series]]
+id = "goose_vls128_sweep_xyz_f32"
+description = "Cartesian point coordinates of one published Velodyne VLS-128 LiDAR revolution from the GOOSE MuCAR-3 off-road vehicle."
+semantic_meaning = "x, y, z position in metres of every returned laser point of one 10 Hz roof-LiDAR revolution, in the roof-LiDAR sensor frame (z up; the ground lies about 2 m below the origin), recorded on unstructured off-road and rural terrain in Bavaria between July 2022 and May 2023 (sequence names indicate field tracks, a training ground, hills and the Mangfall valley, on sunny, rainy and winter days)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source stores x, y, z as native little-endian IEEE-754 float32; the sample keeps those three typed values per point bit-exactly. The fourth source field (remission) is integer-valued 0..255 stored as float32 and is dropped rather than emitted as a widened integer."
+source_resources = ["goose_3d_val_selected_sweeps"]
+source_format = "SemanticKITTI-layout LiDAR scan file (.bin): N x 4 little-endian float32 records (x, y, z, remission), stored uncompressed in goose_3d_val.zip"
+source_field = "per-point x, y, z float32 coordinates (first three float32 fields of each 16-byte point record)"
+filtered_input_path = "filtered/goose_vls128_lidar_scan_xyz_f32/build_stats.json"
+filtering = "8 evenly spaced sweeps from each of the 8 GOOSE 3D val sequences (2022-07-22_flight, 2022-08-30_siegertsbrunn_feldwege, 2022-09-21_garching_uebungsplatz_2, 2022-12-07_aying_hills, 2023-01-20_aying_mangfall_2, 2023-03-03_garching_2, 2023-05-15_neubiberg_rain, 2023-05-17_neubiberg_sunny), out of 961 val sweeps. All points of each selected sweep are kept. Labels, remission, train/test splits and the GOOSE-Ex platforms (ALICE, Spot) are excluded. Sweeps are not filtered by point count: 7 of the 64 published files cover less than 340 degrees of azimuth (6 in 2023-05-17_neubiberg_sunny at 156 to 324 degrees, 1 in 2023-03-03_garching_2 at 323 degrees; see README) and are kept as published."
+missing_value_policy = "The upstream files already omit beams without a return (no point lies within about 1 m of the sensor), so point counts vary per sweep. Every x, y, z and remission field must be finite and no point may be an all-zero (x = y = z = 0) padding point; any NaN, infinity or all-zero point is fatal in both build.sh and verify.sh. The realized build found 0 non-finite fields and 0 all-zero points in all 64 sweeps. No values are dropped, reordered, clipped or imputed."
+conversion = "Read each payload as N = size / 16 points of four little-endian float32 fields; write fields 0..2 (x, y, z) of every point bit-exactly into an N x 3 row-major (point-major, xyz-interleaved) little-endian float32 array; one sample file per source sweep."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw little-endian float32 N x 3 point-coordinate array"
+sample_geometry = "lidar_point_cloud_points_by_xyz"
+sample_rank = 2
+sample_axes = ["point", "xyz_component"]
+natural_record_kind = "complete_published_vls128_lidar_revolution_scan_file"
+sample_count = 64
+total_size_bytes = 138004932
+output_path = "samples/goose_vls128_lidar_scan_xyz_f32/goose_vls128_sweep_xyz_f32/"

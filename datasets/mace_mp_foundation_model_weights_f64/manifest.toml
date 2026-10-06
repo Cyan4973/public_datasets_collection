@@ -1,0 +1,261 @@
+manifest_version = 1
+dataset_id = "mace_mp_foundation_model_weights_f64"
+name = "MACE-MP Foundation Interatomic-Potential Checkpoints: Native Float64 Parameter Tensors"
+description = "Complete trained float64 parameter tensors (torch.nn.Parameter over DoubleStorage) from all ten MIT-licensed MACE-MP-0a/0b/0b2/0b3/MPA-0 equivariant interatomic-potential foundation checkpoints."
+homepage = "https://github.com/ACEsuit/mace-foundations"
+
+[license]
+name = "MIT License"
+spdx = "MIT"
+url = "https://github.com/ACEsuit/mace-foundations/blob/16a9f178706ce053f3ca8531efbab00a305d0854/LICENSE"
+citation = "Batatia I. et al., A foundation model for atomistic materials chemistry, arXiv:2401.00096 (2023). MACE-MP foundation models, ACEsuit/mace-foundations."
+notes = "The pinned README model table (revision 16a9f178706ce053f3ca8531efbab00a305d0854) ends the MACE-MP-0a, MACE-MP-0b, MACE-MP-0b2, MACE-MP-0b3 and MACE-MPA-0 rows with '| MIT |'; the repository LICENSE is the MIT License (Copyright (c) 2024 MACE-MP). The Hugging Face mirrors mace-foundations/mace-mp-0 and mace-foundations/mace-mpa-0 are also tagged license:mit. OMAT/MATPES/OMOL/MH/POLAR/MDP releases are ASL-licensed and are not downloaded. Preserve the MIT notice and cite the MACE-MP paper."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official GitHub release assets of ACEsuit/mace-foundations; trained model parameters only. No training structures (MPtrj/sAlex), descriptors or user data are downloaded or emitted."
+usage_notes = "Checkpoints are decoded with an inert whitelisting unpickler; torch/mace/e3nn are never imported and no pickled code is executed."
+
+[[origins]]
+id = "mace_foundations_github"
+name = "ACEsuit/mace-foundations GitHub releases"
+url = "https://github.com/ACEsuit/mace-foundations/releases"
+type = "repository"
+version = "README/LICENSE at 16a9f178706ce053f3ca8531efbab00a305d0854; release tags mace_mp_0, mace_mp_0b, mace_mp_0b2, mace_mp_0b3, mace_mpa_0"
+notes = "README links use the former repository name ACEsuit/mace-mp, which redirects to ACEsuit/mace-foundations; the recipe uses the mace-foundations release URLs directly."
+
+[[resources]]
+id = "repo_readme"
+origin = "mace_foundations_github"
+url = "https://raw.githubusercontent.com/ACEsuit/mace-foundations/16a9f178706ce053f3ca8531efbab00a305d0854/README.md"
+type = "file"
+version = "16a9f178706ce053f3ca8531efbab00a305d0854"
+access = "Direct public download."
+size_bytes = 9392
+sha256 = "3981e18e5b2d83bd6223ffc0724a261c638a9a0c812eddad91645821c91a3a12"
+local_path = "downloads/mace_mp_foundation_model_weights_f64/README.md"
+notes = "Model table with per-row license cells; validate-docs requires 'MIT' for the five MACE-MP generations and that each row links the downloaded asset or its release tag."
+
+[[resources]]
+id = "repo_license"
+origin = "mace_foundations_github"
+url = "https://raw.githubusercontent.com/ACEsuit/mace-foundations/16a9f178706ce053f3ca8531efbab00a305d0854/LICENSE"
+type = "file"
+version = "16a9f178706ce053f3ca8531efbab00a305d0854"
+access = "Direct public download."
+size_bytes = 1064
+sha256 = "31ea0ccf7bc19797081bff51c7eff3a3927c8cb6c1d7a726dec3d157b436da1c"
+local_path = "downloads/mace_mp_foundation_model_weights_f64/LICENSE"
+
+[[resources]]
+id = "mace_mp_0a_small"
+origin = "mace_foundations_github"
+url = "https://github.com/ACEsuit/mace-foundations/releases/download/mace_mp_0/2023-12-10-mace-128-L0_energy_epoch-249.model"
+type = "file"
+version = "release mace_mp_0 (2024-01-11)"
+access = "Direct public download (GitHub release asset)."
+size_bytes = 32581838
+sha256 = "2ddb079cee0e131eaaf6912ba581b394551ead283e95c99cfe78c605d10b5736"
+local_path = "downloads/mace_mp_foundation_model_weights_f64/mace_mp_0/2023-12-10-mace-128-L0_energy_epoch-249.model"
+notes = "MACE-MP-0a small (max_L=0). No upstream digest; pinned by size, sha256 of the central directory (2729d2018e47935b3463aa68620ba22084ca59749f8abf937ef127fb3a31842e, pins every member CRC32/size/offset), data.pkl sha256 and member CRC verification. Full sha256 recorded from the first verified download (no upstream digest)."
+
+[[resources]]
+id = "mace_mp_0a_medium"
+origin = "mace_foundations_github"
+url = "https://github.com/ACEsuit/mace-foundations/releases/download/mace_mp_0/2023-12-03-mace-128-L1_epoch-199.model"
+type = "file"
+version = "release mace_mp_0 (2024-01-11)"
+access = "Direct public download (GitHub release asset)."
+size_bytes = 44422970
+sha256 = "01bfe22100139f424713cf921144e5509cbe353d67aa9fa1be9c6e1e0ed35845"
+local_path = "downloads/mace_mp_foundation_model_weights_f64/mace_mp_0/2023-12-03-mace-128-L1_epoch-199.model"
+notes = "MACE-MP-0a medium (max_L=1). Pinned by size, central-directory sha256 7c227bf365625a317f6618b5eb03ebf9c06b4d4a0730409127203786c0560cb6, data.pkl sha256 and member CRCs."
+
+[[resources]]
+id = "mace_mp_0a_large"
+origin = "mace_foundations_github"
+url = "https://github.com/ACEsuit/mace-foundations/releases/download/mace_mp_0/2024-01-07-mace-128-L2_epoch-199.model"
+type = "file"
+version = "release mace_mp_0 (2024-01-11)"
+access = "Direct public download (GitHub release asset)."
+size_bytes = 63509066
+sha256 = "514bd2f1938653c37929f7c275a489378f03a7e3ffb27aa2ae0ddce8d0c859c8"
+local_path = "downloads/mace_mp_foundation_model_weights_f64/mace_mp_0/2024-01-07-mace-128-L2_epoch-199.model"
+notes = "MACE-MP-0a large (max_L=2). Pinned by size, central-directory sha256 15ae7e7fc86eec3cbd08b38e3fb4af3938ce9bd17ba50ed54aaef18d36a2d27f, data.pkl sha256 and member CRCs."
+
+[[resources]]
+id = "mace_mp_0b_small"
+origin = "mace_foundations_github"
+url = "https://github.com/ACEsuit/mace-foundations/releases/download/mace_mp_0b/mace_agnesi_small.model"
+type = "file"
+version = "release mace_mp_0b (2024-04-28)"
+access = "Direct public download (GitHub release asset)."
+size_bytes = 67603120
+sha256 = "7e3a0abcaf41e03a80e69f778e1b11b29de1cca704783dc25917a736392f8cf0"
+local_path = "downloads/mace_mp_foundation_model_weights_f64/mace_mp_0b/mace_agnesi_small.model"
+notes = "MACE-MP-0b small. Pinned by size, central-directory sha256 f1df341e4ab6c6d44089e850e5f14e36e189ed80f2bb70f30db67237845c4cc0, data.pkl sha256 and member CRCs."
+
+[[resources]]
+id = "mace_mp_0b_medium"
+origin = "mace_foundations_github"
+url = "https://github.com/ACEsuit/mace-foundations/releases/download/mace_mp_0b/mace_agnesi_medium.model"
+type = "file"
+version = "release mace_mp_0b (2024-04-28)"
+access = "Direct public download (GitHub release asset)."
+size_bytes = 79447096
+sha256 = "ab8baff639a8f295f3eccad3d3ccf574efb6fb63220bd52cd88664211569e521"
+local_path = "downloads/mace_mp_foundation_model_weights_f64/mace_mp_0b/mace_agnesi_medium.model"
+notes = "MACE-MP-0b medium. Pinned by size, central-directory sha256 355bff30b92ab2ec8c93dc8c17159090817b55b452f19d9c76f1e07e5fad58b5, data.pkl sha256 and member CRCs."
+
+[[resources]]
+id = "mace_mp_0b2_small"
+origin = "mace_foundations_github"
+url = "https://github.com/ACEsuit/mace-foundations/releases/download/mace_mp_0b2/mace-small-density-agnesi-stress.model"
+type = "file"
+version = "release mace_mp_0b2 (2024-11-12)"
+access = "Direct public download (GitHub release asset)."
+size_bytes = 67622684
+sha256 = "d5773bf9440e96d6eb8c598f84bd0e6369fcfa432f626a87f890e07da3c651c9"
+local_path = "downloads/mace_mp_foundation_model_weights_f64/mace_mp_0b2/mace-small-density-agnesi-stress.model"
+notes = "MACE-MP-0b2 small. sha256 is the Hugging Face LFS oid of the byte-identical mirror mace-foundations/mace-mp-0/mace-mp-0b2-small.model (same size; last 64 KiB incl. central directory compared byte-for-byte)."
+
+[[resources]]
+id = "mace_mp_0b2_medium"
+origin = "mace_foundations_github"
+url = "https://github.com/ACEsuit/mace-foundations/releases/download/mace_mp_0b2/mace-medium-density-agnesi-stress.model"
+type = "file"
+version = "release mace_mp_0b2 (2024-11-12)"
+access = "Direct public download (GitHub release asset)."
+size_bytes = 79462798
+sha256 = "a90be07c8aa6623c390fcc4653d3e319c4a356f8b4a53d323f96b2012d375caf"
+local_path = "downloads/mace_mp_foundation_model_weights_f64/mace_mp_0b2/mace-medium-density-agnesi-stress.model"
+notes = "MACE-MP-0b2 medium. sha256 from the byte-identical Hugging Face mirror mace-mp-0b2-medium.model."
+
+[[resources]]
+id = "mace_mp_0b2_large"
+origin = "mace_foundations_github"
+url = "https://github.com/ACEsuit/mace-foundations/releases/download/mace_mp_0b2/mace-large-density-agnesi-stress.model"
+type = "file"
+version = "release mace_mp_0b2 (2024-11-12)"
+access = "Direct public download (GitHub release asset)."
+size_bytes = 98544548
+sha256 = "348390e758e1c90011c7675e864850f8e9c5b3e7c217f79a2b4bad1baaa657ad"
+local_path = "downloads/mace_mp_foundation_model_weights_f64/mace_mp_0b2/mace-large-density-agnesi-stress.model"
+notes = "MACE-MP-0b2 large. sha256 from the byte-identical Hugging Face mirror mace-mp-0b2-large.model."
+
+[[resources]]
+id = "mace_mp_0b3_medium"
+origin = "mace_foundations_github"
+url = "https://github.com/ACEsuit/mace-foundations/releases/download/mace_mp_0b3/mace-mp-0b3-medium.model"
+type = "file"
+version = "release mace_mp_0b3 (2024-12-17)"
+access = "Direct public download (GitHub release asset)."
+size_bytes = 79472952
+sha256 = "2f2be696351ac9e94fbe01cdfb6f017679acdbd2db7645209ef55fec9826b012"
+local_path = "downloads/mace_mp_foundation_model_weights_f64/mace_mp_0b3/mace-mp-0b3-medium.model"
+notes = "MACE-MP-0b3 medium. sha256 from the byte-identical Hugging Face mirror mace-mp-0b3-medium.model."
+
+[[resources]]
+id = "mace_mpa_0_medium"
+origin = "mace_foundations_github"
+url = "https://github.com/ACEsuit/mace-foundations/releases/download/mace_mpa_0/mace-mpa-0-medium.model"
+type = "file"
+version = "release mace_mpa_0 (2024-12-17)"
+access = "Direct public download (GitHub release asset)."
+size_bytes = 79462305
+sha256 = "75428afe3a1d7d8062e19bcaabd5c433623cabf308242ec9fb493e38604fb638"
+local_path = "downloads/mace_mp_foundation_model_weights_f64/mace_mpa_0/mace-mpa-0-medium.model"
+notes = "MACE-MPA-0 medium (MPtrj + sAlex). sha256 from the byte-identical Hugging Face mirror mace-foundations/mace-mpa-0."
+
+[local_paths]
+downloads = "downloads/mace_mp_foundation_model_weights_f64/"
+filtered = "filtered/mace_mp_foundation_model_weights_f64/"
+index = "index/mace_mp_foundation_model_weights_f64/"
+samples = "samples/mace_mp_foundation_model_weights_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/mace_mp_foundation_model_weights_f64/samples.jsonl"
+summary = "Validate the ten pinned MIT checkpoints, decode each torch zip's data.pkl with an inert whitelisting unpickler to name every tensor, and emit every float64 torch.nn.Parameter with at least 1,000 values as one raw little-endian sample (exact storage byte range; offset/shape/stride honoured, contiguity required)."
+deterministic_notes = "Pinned: README/LICENSE revision and hashes, MIT license cells, per-checkpoint size, central-directory sha256, member count and prefix, data.pkl size/sha256, member CRCs, full sha256 for all 10 files, parameter/buffer counts, selected tensor counts and values per checkpoint and per series, aggregate totals. Order: checkpoints in release order (0a S/M/L, 0b S/M, 0b2 S/M/L, 0b3 M, MPA-0 M), then module-tree order. A cross-checkpoint near-duplicate screen (same name and shape, 8,192 evenly spaced positions, equal or within 1e-6 relative) excludes copies at >=50% matches; the pinned exclusion list is empty (max realized match 1.56%). A full-tensor exact-equality scan against earlier same-named tensors is pinned at 208,965 values (0.27%): neon (Z=10) embedding rows and skip_tp blocks, and part of the argon (Z=18) skip_tp block in 0b, that receive no MPtrj gradient and keep the same-seed initialization; no tensor exceeds 1.54%. verify.sh re-slices every payload by raw local-header offset (not zipfile), recomputes all statistics from source and emitted bytes, and checks index, stats, file inventory and these manifest totals."
+
+[[series]]
+id = "mace_equivariant_linear_weight_f64"
+description = "Complete e3nn equivariant linear and tensor-product path-weight vectors of MACE-MP checkpoints: element embedding, interaction linear_up/linear, element-dependent skip tensor product, product linear and readout linear weights."
+semantic_meaning = "Learned, unit-free mixing coefficients of e3nn o3.Linear / FullyConnectedTensorProduct layers (flattened per-path multiplicity blocks in e3nn order), trained in float64 to predict DFT (PBE/PBE+U) energies, forces and stresses."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Each sample is a torch.nn.Parameter stored by torch.save as a little-endian torch.DoubleStorage; the sample is exactly the parameter's element range of that storage, copied verbatim. Sampled values are not float32-representable and include float64 subnormals from weight decay, so the width is native, not widened."
+source_resources = ["mace_mp_0a_small", "mace_mp_0a_medium", "mace_mp_0a_large", "mace_mp_0b_small", "mace_mp_0b_medium", "mace_mp_0b2_small", "mace_mp_0b2_medium", "mace_mp_0b2_large", "mace_mp_0b3_medium", "mace_mpa_0_medium", "repo_readme", "repo_license"]
+source_format = "PyTorch zip checkpoint (torch.save of a ScaleShiftMACE module; data.pkl + raw storages)"
+source_field = "torch.nn.Parameter tensors named node_embedding.linear.weight, interactions.N.{linear_up,linear,skip_tp}.weight, products.N.linear.weight, readouts.N.linear_1.weight (float64, >= 1,000 values)"
+filtered_input_path = "filtered/mace_mp_foundation_model_weights_f64/ingest_stats.json"
+filtering = "Keep all 100 matching float64 Parameters with >= 1,000 values (10 per checkpoint); exclude readouts.0.linear.weight (128 values) and readouts.1.linear_2.weight (16 values) as below the per-sample size threshold. Buffers (symmetric-contraction U matrices, atomic energies, scale/shift, radial constants, atomic numbers) are excluded entirely. Kept tensors include untrained neon/argon element blocks identical across same-seed checkpoints (208,965 values, 0.27% of the dataset), disclosed in ingest_stats exact_overlap."
+missing_value_policy = "Trained parameters have no missing values. Any non-finite value, constant or majority-zero tensor, changed resource, CRC or inventory drift, non-float64 parameter storage, non-contiguous view or storage overrun fails the recipe; no values are dropped, imputed or rounded within a tensor. Subnormal values are preserved verbatim."
+conversion = "Copy elements [offset, offset+numel) of the parameter's DoubleStorage member unchanged (little-endian IEEE-754 binary64). One complete parameter tensor per sample; no concatenation or sharding."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float64 learned parameter vector"
+sample_geometry = "e3nn_flattened_path_weight_vector"
+sample_rank = 1
+sample_axes = ["e3nn_path_weight"]
+natural_record_kind = "complete_mace_equivariant_linear_parameter_tensor"
+sample_count = 100
+total_size_bytes = 504784896
+output_path = "samples/mace_mp_foundation_model_weights_f64/mace_equivariant_linear_weight_f64/"
+
+[[series]]
+id = "mace_radial_mlp_weight_f64"
+description = "Complete hidden and output weight matrices of the radial MLP (conv_tp_weights FullyConnectedNet) that maps radial basis features to per-edge tensor-product weights in each MACE interaction block."
+semantic_meaning = "Learned, unit-free weight matrices (64x64 hidden, 64xN output) of the e3nn FullyConnectedNet radial network, trained in float64."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Each sample is a C-contiguous rank-2 torch.nn.Parameter over a little-endian torch.DoubleStorage, emitted as exactly its element range of that storage, copied verbatim."
+source_resources = ["mace_mp_0a_small", "mace_mp_0a_medium", "mace_mp_0a_large", "mace_mp_0b_small", "mace_mp_0b_medium", "mace_mp_0b2_small", "mace_mp_0b2_medium", "mace_mp_0b2_large", "mace_mp_0b3_medium", "mace_mpa_0_medium", "repo_readme", "repo_license"]
+source_format = "PyTorch zip checkpoint (torch.save of a ScaleShiftMACE module; data.pkl + raw storages)"
+source_field = "torch.nn.Parameter tensors named interactions.N.conv_tp_weights.layerK.weight (float64, >= 1,000 values)"
+filtered_input_path = "filtered/mace_mp_foundation_model_weights_f64/ingest_stats.json"
+filtering = "Keep all 60 radial-MLP layer1/layer2/layer3 matrices (6 per checkpoint); exclude the 10x64 or 8x64 input layer0 (512-640 values) and the 0b2/0b3/MPA-0 density_fn weights (8-10 values) as below the per-sample size threshold."
+missing_value_policy = "Trained parameters have no missing values. Any non-finite value, constant or majority-zero tensor, changed resource, CRC or inventory drift, non-float64 parameter storage, non-contiguous view or storage overrun fails the recipe; no values are dropped, imputed or rounded within a tensor."
+conversion = "Copy elements [offset, offset+numel) of the parameter's DoubleStorage member unchanged (little-endian IEEE-754 binary64, row-major). One complete parameter tensor per sample."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float64 learned parameter matrix"
+sample_geometry = "neural_network_parameter_matrix_2d"
+sample_rank = 2
+sample_axes = ["input_feature", "output_feature"]
+natural_record_kind = "complete_mace_radial_mlp_parameter_tensor"
+sample_count = 60
+total_size_bytes = 10223616
+output_path = "samples/mace_mp_foundation_model_weights_f64/mace_radial_mlp_weight_f64/"
+
+[[series]]
+id = "mace_symmetric_contraction_weight_f64"
+description = "Complete per-element symmetric-contraction (ACE many-body product) weight tensors of MACE-MP checkpoints, for correlation orders 3 (weights_max), 2 and 1 (weights.0, weights.1)."
+semantic_meaning = "Learned, unit-free coefficients indexed by chemical element (89), coupling-basis function and channel (128) that weight the many-body product basis, trained in float64."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Each sample is a C-contiguous rank-3 torch.nn.Parameter over a little-endian torch.DoubleStorage, emitted as exactly its element range of that storage, copied verbatim. These tensors contain many weight-decayed values down to the float64 subnormal range, which float32 cannot represent."
+source_resources = ["mace_mp_0a_small", "mace_mp_0a_medium", "mace_mp_0a_large", "mace_mp_0b_small", "mace_mp_0b_medium", "mace_mp_0b2_small", "mace_mp_0b2_medium", "mace_mp_0b2_large", "mace_mp_0b3_medium", "mace_mpa_0_medium", "repo_readme", "repo_license"]
+source_format = "PyTorch zip checkpoint (torch.save of a ScaleShiftMACE module; data.pkl + raw storages)"
+source_field = "torch.nn.Parameter tensors named products.N.symmetric_contractions.contractions.M.{weights_max,weights.K} (float64, >= 1,000 values)"
+filtered_input_path = "filtered/mace_mp_foundation_model_weights_f64/ingest_stats.json"
+filtering = "Keep all 87 symmetric-contraction weight tensors (6, 9 or 12 per checkpoint depending on max_L); all exceed 1,000 values. The U_matrix coupling coefficients are buffers (fixed, not trained) and are excluded."
+missing_value_policy = "Trained parameters have no missing values. Any non-finite value, constant or majority-zero tensor, changed resource, CRC or inventory drift, non-float64 parameter storage, non-contiguous view or storage overrun fails the recipe; no values are dropped, imputed or rounded within a tensor. Subnormal values are preserved verbatim."
+conversion = "Copy elements [offset, offset+numel) of the parameter's DoubleStorage member unchanged (little-endian IEEE-754 binary64, row-major). One complete parameter tensor per sample."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous IEEE-754 float64 learned parameter tensor"
+sample_geometry = "element_basis_channel_weight_tensor_3d"
+sample_rank = 3
+sample_axes = ["chemical_element", "coupling_basis_function", "channel"]
+natural_record_kind = "complete_mace_symmetric_contraction_parameter_tensor"
+sample_count = 87
+total_size_bytes = 101343232
+output_path = "samples/mace_mp_foundation_model_weights_f64/mace_symmetric_contraction_weight_f64/"

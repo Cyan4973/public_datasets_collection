@@ -1,0 +1,78 @@
+manifest_version = 1
+dataset_id = "earthbigdata_s1_global_coherence_vv_coh12_u8"
+name = "Global Seasonal Sentinel-1 Interferometric Coherence, Summer VV 12-day (uint8 tiles)"
+description = "Native uint8 seasonal-median 12-day repeat-pass Sentinel-1 C-band VV interferometric coherence (DN = coherence x 100, 0 = nodata) for 150 contiguous 1x1-degree, 3-arcsecond tiles over the interior western United States, decoded from the producer's LZW GeoTIFFs."
+homepage = "https://sentinel-1-global-coherence-earthbigdata.s3.us-west-2.amazonaws.com/index.html"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Kellndorfer, J., Cartus, O., Lavalle, M. et al. Global seasonal Sentinel-1 interferometric coherence and backscatter data set. Sci Data 9, 73 (2022). doi:10.1038/s41597-022-01189-6. Contains modified Copernicus Sentinel data."
+notes = "The bucket documentation (index.html, 'License and Citation') states: 'The use of these data fall under the terms and conditions of the Creative Commons Attribution 4.0 International Public License. Contains modified Copernicus Sentinel data.' The Google Earth Engine catalog entry for the same data set (Earth_Big_Data/GLOBAL_SEASONAL_S1/V2019) also lists CC-BY-4.0. Keep the Kellndorfer et al. citation and the Copernicus attribution with any redistribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official producer bucket (Earth Big Data LLC / Gamma Remote Sensing AG, under contract for NASA JPL) in the AWS Open Data program; anonymous public HTTPS, not requester-pays; no mirrors."
+usage_notes = "Seasonal-median radar coherence over land at ~90 m pixels; no personal data. Only the summer VV COH12 metric is used."
+
+[[origins]]
+id = "earthbigdata_s3"
+name = "Global Seasonal Sentinel-1 Interferometric Coherence and Backscatter Data Set (AWS S3 bucket sentinel-1-global-coherence-earthbigdata, us-west-2)"
+url = "https://sentinel-1-global-coherence-earthbigdata.s3.us-west-2.amazonaws.com/index.html"
+type = "bucket"
+notes = "Bucket documentation dated 2021-09-08 (Kellndorfer and Cartus) documents tile naming, DN scaling (coherence gamma = DN/100, nodata 0, uint8) and the CC BY 4.0 license. 24,858 tile prefixes exist under data/tiles/."
+
+[[resources]]
+id = "summer_vv_coh12_tile_selection"
+origin = "earthbigdata_s3"
+url = "https://sentinel-1-global-coherence-earthbigdata.s3.us-west-2.amazonaws.com/data/tiles/"
+type = "file"
+version = "S3 objects last modified 2021-09-08; seasons Dec 2019 - Nov 2020 (summer = Jun-Aug 2020)"
+access = "Anonymous HTTPS GET of 150 exact objects data/tiles/<TILE>/<TILE>_summer_vv_COH12.tif listed in sources.tsv (tile, size, S3 ETag MD5, Last-Modified, URL); resolved by discover.sh with HEAD requests only."
+size_bytes = 161185497
+sha256 = ""
+local_path = "downloads/earthbigdata_s1_global_coherence_vv_coh12_u8/tiles/"
+notes = "Tile block: upper-left labels N36..N45 x W100..W114 (10 x 15 tiles), i.e. 35-45 N, 114-99 W. Every object is single-part (32-hex ETag = MD5); download.sh enforces size, MD5 and the GeoTIFF layout, and records per-file SHA-256 in download_plan.tsv."
+
+[local_paths]
+downloads = "downloads/earthbigdata_s1_global_coherence_vv_coh12_u8/"
+filtered = "filtered/earthbigdata_s1_global_coherence_vv_coh12_u8/"
+index = "index/earthbigdata_s1_global_coherence_vv_coh12_u8/"
+samples = "samples/earthbigdata_s1_global_coherence_vv_coh12_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/earthbigdata_s1_global_coherence_vv_coh12_u8/samples.jsonl"
+summary = "Download 150 pinned summer_vv_COH12 GeoTIFF tiles, validate size/MD5/layout, decode the 200 LZW strips of each tile with a pure-Python TIFF-LZW decoder, and emit one raw 1200x1200 uint8 coherence raster per tile."
+deterministic_notes = "Fixed tile list and per-file size/MD5 in sources.tsv; no live listing at download time. Tiles are processed in sorted tile-label order; samples are written as samples/<id>/summer_vv_coh12_u8/<TILE>.bin. The decoder is self-tested on synthetic LZW streams (including KwKwK, clear-code and 12-bit cases) and a synthetic strip GeoTIFF before every build/verify run; during authoring it matched an independent bit-serial TIFF-LZW implementation byte-for-byte on two real tiles. Build and verify fail on any layout deviation, strip that does not decode to exactly 7,200 bytes with an EOI code, DN above 100, all-nodata tile, tile with more than 50% nodata, raster with fewer than 3 distinct values, or duplicate raster. Floor: 150 samples x 1,440,000 values (median 1,440,000)."
+
+[[series]]
+id = "summer_vv_coh12_u8"
+description = "Seasonal (Jun-Aug 2020) median 12-day repeat-pass Sentinel-1 VV interferometric coherence per 3-arcsecond pixel, one 1x1-degree tile per sample."
+semantic_meaning = "Digital number DN = round(coherence x 100) where coherence gamma in [0, 1] is the median of all 12-day repeat-pass VV coherence estimates acquired in summer 2020 over the pixel; DN 0 is the producer's nodata value. Rows run north to south, columns west to east, 1/1200 degree pixel spacing."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The producer stores coherence as unsigned 8-bit DNs (gamma = DN/100) in band 1 of each GeoTIFF. The recipe only undoes the lossless TIFF LZW compression and strip layout; DN values, including nodata 0, are emitted unchanged."
+source_resources = ["summer_vv_coh12_tile_selection"]
+source_format = "GeoTIFF (classic little-endian TIFF, 1200x1200, 8-bit unsigned, LZW, 200 strips of 6 rows, GDAL_NODATA 0)"
+source_field = "band 1 of <TILE>_summer_vv_COH12.tif: summer VV 12-day coherence DN (gamma = DN/100)"
+filtered_input_path = "filtered/earthbigdata_s1_global_coherence_vv_coh12_u8/ingest_stats.json"
+filtering = "Only the summer season, VV polarization, 12-day (COH12) metric is used, for the 150 tiles N36..N45 x W100..W114. Other seasons, HH, COH06/18/24/36/48, AMP, rho/tau/rmse, inc and lsmap files are never downloaded."
+missing_value_policy = "DN 0 is the documented nodata value and is preserved in place (not remapped or dropped). A tile that is entirely nodata, more than 50% nodata, has fewer than 3 distinct DNs, contains a DN above 100, or duplicates another raster fails the build and verify."
+conversion = "Parse the classic TIFF IFD with struct, check the pinned layout and tile-origin tiepoint, LZW-decode each of the 200 strips (MSB-first codes, 256 clear, 257 EOI, early change, 9-12 bit), require exactly 1200x6 bytes per strip, and concatenate strips in order into one 1,440,000-byte uint8 raster per tile (no predictor to undo)."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw uint8 raster, row-major 1200 x 1200"
+sample_geometry = "geographic_1x1_degree_tile_raster"
+sample_rank = 2
+sample_shape = [1200, 1200]
+sample_axes = ["lat_row_north_to_south", "lon_col_west_to_east"]
+natural_record_kind = "one_degree_tile_seasonal_vv_coh12_geotiff"
+sample_count = 150
+total_size_bytes = 216000000
+output_path = "samples/earthbigdata_s1_global_coherence_vv_coh12_u8/summer_vv_coh12_u8/"

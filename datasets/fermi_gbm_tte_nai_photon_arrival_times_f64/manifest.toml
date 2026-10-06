@@ -1,0 +1,97 @@
+manifest_version = 1
+dataset_id = "fermi_gbm_tte_nai_photon_arrival_times_f64"
+name = "Fermi GBM Burst TTE NaI Photon Arrival Times Float64"
+description = "Native float64 photon arrival times (EVENTS.TIME, seconds relative to the burst trigger, stored values) from the time-tagged-event (TTE) files of one Fermi Gamma-ray Burst Monitor NaI(Tl) detector for each of 60 gamma-ray bursts evenly spaced over 2008-07 to 2025-12."
+homepage = "https://fermi.gsfc.nasa.gov/ssc/data/access/gbm/"
+
+[license]
+name = "NASA SMD Open Scientific Data Policy"
+spdx = "LicenseRef-NASA-SMD-Open-Data"
+url = "https://science.nasa.gov/researchers/science-data/science-information-policy/"
+citation = "Fermi Gamma-ray Burst Monitor burst data (Meegan et al. 2009, ApJ 702, 791), NASA HEASARC / Fermi Science Support Center. Preserve burst names (bnYYMMDDFFF), detector names, mission/instrument attribution and HEASARC acknowledgement."
+notes = "Re-read 2026-10-06 from the collection environment. NASA SMD Scientific Information Policy page: 'NASA holds this information, including publications, data, and software, as a public trust to increase knowledge and serve the public good. It is Science Mission Directorate (SMD) policy, consistent with NASA and Federal policies, that information produced from SMD-funded scientific research activities be made publicly available.' Fermi Science Support Center data policy (https://fermi.gsfc.nasa.gov/ssc/data/policy/, 'Last Updated: 28-Aug-2025'): 'GBM data were not proprietary at any time during the mission and are released as early as possible during science operations.' NASA Images and Media Usage Guidelines (https://www.nasa.gov/nasa-brand-center/images-and-media/): NASA content 'generally are not subject to copyright in the United States' and, under Artificial Intelligence (AI) Applications, 'NASA is committed to transparency, open science, and making data available to everyone.' Same licensing basis as the accepted HEASARC recipes nasa_heasarc_batse_cont_counts_i16, nasa_heasarc_nicer_pi_i16 and nasa_heasarc_nicer_detector_u8. download.sh re-fetches the FSSC policy page as soft provenance and fails if a fetched copy no longer states the GBM open-data sentence."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Fermi GBM burst data products (FITS, written by the GBM Instrument Operations Center, ORIGIN 'GIOC') fetched anonymously from the nasa-heasarc S3 mirror of the HEASARC archive."
+usage_notes = "Samples contain only photon arrival times recorded by a space gamma-ray detector. No human-subject, personal or Earth-imaging content, and no NASA insignia or imagery. NASA's AI-applications conditions (Images and Media Usage Guidelines) apply to models trained on this material: do not attribute AI output to NASA, do not imply NASA review or endorsement, and NASA insignia (Meatball, Worm logotype, Seal) must not appear in the training of AI tools or with AI-generated imagery. Acknowledging NASA/Fermi/GBM source material as a statement of fact is permitted."
+
+[[origins]]
+id = "nasa_heasarc_s3"
+name = "NASA HEASARC archive, anonymous S3 mirror (Fermi GBM burst data)"
+url = "https://nasa-heasarc.s3.amazonaws.com/fermi/data/gbm/bursts/"
+type = "bucket"
+version = "Burst directories listed 2026-10-06 (4,388 total, 4,178 in 2008-2025); selected files use the highest vNN in each burst's current/ prefix."
+notes = "Public, anonymous, not requester-pays. Mirrors https://heasarc.gsfc.nasa.gov/FTP/fermi/data/gbm/bursts/. discover.sh lists year prefixes and burst directories with delimiter=/ (ListObjectsV2, keyset pagination), then scripts/select_bursts.py lists each candidate burst's current/ prefix and probes the chosen file's FITS headers with a 40 KiB range GET. Every selected object is pinned in sources.tsv by key, exact Size, S3 ETag, EVENTS NAXIS2 and TZERO1."
+
+[[origins]]
+id = "fermi_fssc"
+name = "Fermi Science Support Center"
+url = "https://fermi.gsfc.nasa.gov/ssc/"
+type = "website"
+notes = "Mission data policy and GBM data documentation."
+
+[[resources]]
+id = "gbm_tte_nai_selection"
+origin = "nasa_heasarc_s3"
+url = "https://nasa-heasarc.s3.amazonaws.com/fermi/data/gbm/bursts/"
+type = "file"
+version = "60 exact glg_tte_<det>_<burst>_vNN.fit objects pinned by sources.tsv"
+access = "Direct anonymous HTTPS GET per pinned key; resumable curl."
+size_bytes = 452992320
+sha256 = "21281129d01cda224d186720645462af6eae42d8c1374ff5b2dfea43855864bf"
+local_path = "downloads/fermi_gbm_tte_nai_photon_arrival_times_f64/"
+notes = "The SHA-256 identifies the sources.tsv inventory. Each object is verified by exact size and exact S3 ETag (content MD5 for the 46 single-part objects of at most 8 MiB; MD5 of the 8 MiB-part MD5s with suffix -N, N = ceil(size / 8 MiB), for the 14 multipart objects, the same bucket convention verified by nasa_heasarc_batse_cont_counts_i16), and by the FITS standard CHECKSUM/DATASUM cards that the GBM pipeline writes into every HDU. Per-file SHA-256 values are recorded in download_inventory.json on first download."
+
+[[resources]]
+id = "fssc_data_policy"
+origin = "fermi_fssc"
+url = "https://fermi.gsfc.nasa.gov/ssc/data/policy/"
+type = "file"
+version = "fetched 2026-10-06 (page 'Last Updated: 28-Aug-2025')"
+access = "Direct anonymous HTTPS GET; provenance only, soft failure."
+size_bytes = 18394
+sha256 = "e0bf425df0115e1ddf4e755c5c24fe5bf0a2dd9914b74bcdd8c52203bfdeba8e"
+local_path = "downloads/fermi_gbm_tte_nai_photon_arrival_times_f64/fssc_data_policy.html"
+notes = "States 'GBM data were not proprietary at any time during the mission and are released as early as possible during science operations.' The HTML may change; download.sh checks the sentence, not the hash."
+
+[local_paths]
+downloads = "downloads/fermi_gbm_tte_nai_photon_arrival_times_f64/"
+filtered = "filtered/fermi_gbm_tte_nai_photon_arrival_times_f64/"
+index = "index/fermi_gbm_tte_nai_photon_arrival_times_f64/"
+samples = "samples/fermi_gbm_tte_nai_photon_arrival_times_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/fermi_gbm_tte_nai_photon_arrival_times_f64/samples.jsonl"
+summary = "Fetch 60 pinned GBM burst TTE NaI FITS files, walk the FITS headers to the EVENTS binary table by EXTNAME, validate its schema and FITS checksums, and write the stored TIME double of every event row, in source order, as one little-endian float64 sample per burst file."
+deterministic_notes = "Selection (scripts/select_bursts.py, run once by discover.sh): population = the 4,178 burst directories of 2008-2025 sorted by burst name; 60 targets t_k = floor((k + 0.5) * 4178 / 60); each target tries indices t, t+1, t-1, t+2, ... and takes the first burst whose current/ listing has an uncompressed NaI TTE file. Per detector only the highest vNN counts. Detector rule: the NaI file with the largest S3 Size, ties to the lowest detector index (BGO b0/b1, CTIME and CSPEC are never considered). A 40 KiB header probe must validate identity and schema, with NAXIS2 >= 100,000 and a TSTART/TSTOP window inside -400..0 s / 0..2000 s of TRIGTIME. 58 targets landed on their first candidate. bn090626707 (largest NaI file only 46,121 events) was skipped for bn090629543, and bn110318552 (window starting -644.5 s) was skipped for bn110319628. download.sh enforces exact size, ETag, FITS identity (GLAST/GBM/TTE/'GBM PHOTON LIST', DETNAM, FILENAME), HDU sequence PRIMARY/EBOUNDS/EVENTS/GTI, the EVENTS schema, every present CHECKSUM/DATASUM (both are required on EVENTS), zero padding, no trailing bytes, and the pinned NAXIS2 and TZERO1. build.sh additionally requires finite TIME in stored row order with at most 4 decreasing steps per file of at most 1 s each (realized: 2 steps in total, see missing_value_policy), PHA within 0..127 (row-alignment check), min <= first time in [-400, 0) s, last time <= max in (0, 2000] s, at least 10,000 value changes between consecutive events, and unique outputs. verify.sh is a separate implementation (own FITS parser and DATASUM, struct.iter_unpack('>dh') then pack('<d')) that checks byte equality with the source, the same ordering tolerance, span, every index statistic, the sample inventory and manifest totals. Realized: 60 samples, 45,118,967 primary values, 360,951,736 bytes, median 773,682.5 values per sample (205,859-2,726,534), global range -138.75215 s .. +482.31450 s, 189 consecutive equal times, 2 decreasing steps."
+
+[[series]]
+id = "gbm_nai_tte_photon_time_f64"
+description = "Whole EVENTS.TIME column of one GBM NaI detector's burst TTE file: the arrival time of every detected photon (event) in the TTE window around one gamma-ray-burst trigger."
+semantic_meaning = "Arrival time, in seconds relative to the burst trigger time (TRIGTIME), of each individual photon/particle event registered by one Fermi GBM NaI(Tl) scintillation detector (8 keV-1 MeV). Time tagging is the measurement itself: the event list is the instrument's highest-resolution data mode (2 microsecond tick), from which every GBM light curve and burst duration is derived. Absolute Fermi mission elapsed time = stored value + TZERO1."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "EVENTS declares TIME as FITS TFORM 1D (big-endian IEEE-754 float64), TUNIT 's', with TZERO1 = TRIGTIME and no TSCAL or TNULL. The stored doubles are emitted bit-exact, byte-swapped to little-endian. TZERO1 is deliberately NOT added: adding it in float64 would round away information (ulp about 1.2e-7 s at MET ~6e8 s) and turn a native field into a local recomputation. TZERO1 (= TRIGTIME, absolute MET) is recorded per sample in the index as metadata only. Stored + TZERO1 lies on the 2 microsecond GBM clock lattice to within double rounding (checked on header-probe rows in both processing eras)."
+source_resources = ["gbm_tte_nai_selection"]
+source_format = "FITS (PRIMARY + EBOUNDS + EVENTS + GTI binary tables), Fermi GBM burst TTE photon list (FILETYPE 'GBM PHOTON LIST', DATATYPE 'TTE')"
+source_field = "EVENTS.TIME (TFORM 1D, TUNIT s, TZERO1 = TRIGTIME; bytes 0-7 of each 10-byte row)"
+filtered_input_path = "filtered/fermi_gbm_tte_nai_photon_arrival_times_f64/ingest_stats.json"
+filtering = "60 pinned burst files only (see deterministic_notes). Every row of each file's EVENTS table is kept. The PHA column (16-bit channel code), EBOUNDS, GTI and header times are not emitted as series. TZERO1/TRIGTIME, TSTART/TSTOP and the GTI intervals are kept as index and ingest metadata only."
+missing_value_policy = "No missing-value handling: TIME has no TNULL or sentinel. Every stored value is emitted, and nothing is masked, clipped, imputed, sorted, deduplicated or dropped. Non-finite values, PHA codes outside 0..127, or spans outside the plausibility window are fatal in build and verify, not filtered. Times are emitted in stored row order and never sorted. 58 of 60 files are non-decreasing throughout. Two early-mission files each contain one backward step of about 0.099 s, where an interleaved run of events overlaps the preceding 0.099 s with no exact duplicate (time, PHA) rows. In bn090629543 (n3) row 235,055 steps from 140.515814 s back to 140.416888 s, a run of 74 events, and the combined rate in that window matches the neighbouring rate. In bn111018785 (n7) row 30,196 steps from -1.110846 s back to -1.209264 s, a run of 138 events, and the combined rate in that window is about twice the neighbouring rate. Both are preserved as stored. Build and verify tolerate at most 4 such steps per file, each at most 1 s, and record backsteps and max_backstep_s per sample in the index. Consecutive equal times (two events in the same clock tick, 189 in total) are legitimate and kept, and their count is recorded per sample as equal_steps. Bursts without a qualifying NaI TTE file were skipped at selection time, never padded or merged. verify.sh applies the same policy (byte equality with the source column)."
+conversion = "For each row of EVENTS, in source order, take the 8 big-endian bytes at row offset 0 (NAXIS1 = 10: TIME 1D then PHA 1I) and write them as a little-endian float64. One sample per burst file: shape [NAXIS2], 205,859-2,726,534 events. No TZERO addition, scaling, sorting, splitting or concatenation across bursts."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 array"
+sample_geometry = "variable_length_photon_event_arrival_time_1d"
+sample_rank = 1
+sample_axes = ["photon_event"]
+natural_record_kind = "gbm_burst_tte_file_nai_detector_event_time_column"
+sample_count = 60
+total_size_bytes = 360951736
+output_path = "samples/fermi_gbm_tte_nai_photon_arrival_times_f64/gbm_nai_tte_photon_time_f64/"

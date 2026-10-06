@@ -271,6 +271,7 @@ figshare_rmd17_trajectories_f64	ok	39600000	316800000	10	3600000	28800000	0	0	0	
 zenodo_adcp_pd0_backscatter_quality_u8	ok	43130088	43130088	9	4311744	4311744	0	0	0	1	none	none
 hsl_gtfs_static_schedule_numeric	ok	44453630	226392932	8	5809272	25274372	0	0	0	1	none	none
 encode_methylation_pct_u8	ok	44773596	44773596	24	1804995	1804995	0	0	0	1	none	none
+fermi_gbm_tte_nai_photon_arrival_times_f64	ok	45118967	360951736	60	773682.5	6189460	0	0	0	1	none	none
 zenodo_venere_nir_hsi_u16	ok	45342720	90685440	1	45342720	90685440	0	0	0	1	none	none
 yearpredictionmsd_uci	ok	46896395	186554890	91	515345	2061380	0	0	0	1	none	none
 nasa_pds_sharad_radargram_f32	ok	47106000	188424000	10	4658400	18633600	0	0	0	1	none	none

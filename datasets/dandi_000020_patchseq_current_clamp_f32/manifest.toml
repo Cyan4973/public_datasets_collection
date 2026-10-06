@@ -1,0 +1,282 @@
+manifest_version = 1
+dataset_id = "dandi_000020_patchseq_current_clamp_f32"
+name = "DANDI:000020 Allen Patch-seq Whole-Cell Current-Clamp Membrane-Potential Sweeps Float32"
+description = "Complete whole-cell current-clamp membrane-potential sweeps (native NWB float32, mV) from 16 mouse visual-cortex Patch-seq neurons, one neuron per donor, recorded by the Allen Institute MIES/ITC-18 pipeline in the gain-0.05 (0.00625 mV step) acquisition regime."
+homepage = "https://dandiarchive.org/dandiset/000020/0.210913.1639"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Allen Institute for Brain Science (2021) Patch-seq recordings from mouse visual cortex (Version 0.210913.1639) [Data set]. DANDI archive. https://doi.org/10.48324/dandi.000020/0.210913.1639"
+notes = "The published version's dandiset.yaml declares `license: - spdx:CC-BY-4.0` and `access: - status: dandi:OpenAccess`; every asset in assets.yaml carries `status: dandi:OpenAccess`. download.sh re-checks these lines and the pinned dandiset.yaml SHA-256."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official DANDI archive S3 bucket for the published, DOI-versioned dandiset 000020/0.210913.1639 (Allen Institute for Brain Science). Mouse in-vitro slice electrophysiology; no human subjects."
+usage_notes = "Only membrane-potential sample arrays are emitted. Stimulus waveforms, voltage-clamp currents, MIES notes, genotype and other metadata are not copied into samples."
+
+[[origins]]
+id = "dandi_000020_0_210913_1639"
+name = "DANDI Archive dandiset 000020, published version 0.210913.1639"
+url = "https://dandiarchive.s3.amazonaws.com/dandisets/000020/0.210913.1639/"
+type = "data_portal"
+version = "0.210913.1639"
+notes = "Published 2021-09-13; DOI 10.48324/dandi.000020/0.210913.1639. 4,435 NWB assets, 1,040 donors, 141,856,436,428 bytes."
+
+[[resources]]
+id = "dandiset_yaml"
+origin = "dandi_000020_0_210913_1639"
+url = "https://dandiarchive.s3.amazonaws.com/dandisets/000020/0.210913.1639/dandiset.yaml"
+type = "file"
+version = "0.210913.1639"
+access = "Anonymous public S3 GET."
+size_bytes = 3119
+sha256 = "c0667d27943cd65f270d14249d84ec27d8375aa9f43f9b3e3e67e8347d167897"
+local_path = "downloads/dandi_000020_patchseq_current_clamp_f32/dandiset.yaml"
+notes = "License, identity and access evidence; validated by `patchseq_cc.py check-dandiset`."
+
+[[resources]]
+id = "assets_yaml"
+origin = "dandi_000020_0_210913_1639"
+url = "https://dandiarchive.s3.amazonaws.com/dandisets/000020/0.210913.1639/assets.yaml"
+type = "file"
+version = "0.210913.1639"
+access = "Anonymous public S3 GET."
+size_bytes = 11176113
+sha256 = "65ef568e334d0e765283e64b0f203a7eaa545a0d1003bcc064ad2f3557eba8fe"
+local_path = "downloads/dandi_000020_patchseq_current_clamp_f32/assets.yaml"
+notes = "Pinned asset manifest (path, contentSize, S3 blob contentUrl, dandi:sha2-256 per asset). `patchseq_cc.py check-sources` re-derives sources.tsv from it."
+
+[[resources]]
+id = "nwb_sub_732239848"
+origin = "dandi_000020_0_210913_1639"
+url = "https://dandiarchive.s3.amazonaws.com/blobs/b77/628/b77628b1-4329-412d-82db-625395ab7d0c"
+type = "file"
+version = "0.210913.1639 asset 7718cc99-5fee-40ed-acda-770978525ca6"
+access = "Anonymous public S3 GET, resumable; size and dandi:sha2-256 verified."
+size_bytes = 21869679
+sha256 = "ea827a54dee95e6bb8d38ddbb29efe6829dffeb728ae53f3e521ef6d82d1811b"
+local_path = "downloads/dandi_000020_patchseq_current_clamp_f32/nwb/sub-732239848_ses-737181285_icephys.nwb"
+notes = "sub-732239848/sub-732239848_ses-737181285_icephys.nwb (selection rank 0 of the 522-donor gain-0.05 window)."
+
+[[resources]]
+id = "nwb_sub_740369784"
+origin = "dandi_000020_0_210913_1639"
+url = "https://dandiarchive.s3.amazonaws.com/blobs/8a2/0dc/8a20dce2-9f9e-4ec0-b211-c61c4d3804d2"
+type = "file"
+version = "0.210913.1639 asset 4b2a134f-c7ac-40f0-a9c8-a698a124d3ac"
+access = "Anonymous public S3 GET, resumable; size and dandi:sha2-256 verified."
+size_bytes = 38152234
+sha256 = "d17d904c483722330e2300ee9f0d05ac5041d835fecd40ea8bf616cceb919727"
+local_path = "downloads/dandi_000020_patchseq_current_clamp_f32/nwb/sub-740369784_ses-743374829_icephys.nwb"
+notes = "sub-740369784/sub-740369784_ses-743374829_icephys.nwb (selection rank 35 of the 522-donor gain-0.05 window)."
+
+[[resources]]
+id = "nwb_sub_746220175"
+origin = "dandi_000020_0_210913_1639"
+url = "https://dandiarchive.s3.amazonaws.com/blobs/906/3fc/9063fcb5-2098-49c6-8af1-2896c73ed3f4"
+type = "file"
+version = "0.210913.1639 asset 27df5685-4ce0-40ff-91bc-39789e5bc722"
+access = "Anonymous public S3 GET, resumable; size and dandi:sha2-256 verified."
+size_bytes = 21826835
+sha256 = "ecb5a6989e25eb893f5057d3f8bdb8e428c32982745e822d4cf8f3a647c32f68"
+local_path = "downloads/dandi_000020_patchseq_current_clamp_f32/nwb/sub-746220175_ses-753907682_icephys.nwb"
+notes = "sub-746220175/sub-746220175_ses-753907682_icephys.nwb (selection rank 69 of the 522-donor gain-0.05 window)."
+
+[[resources]]
+id = "nwb_sub_757080785"
+origin = "dandi_000020_0_210913_1639"
+url = "https://dandiarchive.s3.amazonaws.com/blobs/f36/83b/f3683b35-50a0-4f59-a9ba-97bf74096699"
+type = "file"
+version = "0.210913.1639 asset 3fe770a1-730f-45eb-becf-b8f8a3f026f2"
+access = "Anonymous public S3 GET, resumable; size and dandi:sha2-256 verified."
+size_bytes = 32284461
+sha256 = "63096012a69d22e4869cbb26a71dac128cff898184633022fa7759bf25694bd5"
+local_path = "downloads/dandi_000020_patchseq_current_clamp_f32/nwb/sub-757080785_ses-757361097_icephys.nwb"
+notes = "sub-757080785/sub-757080785_ses-757361097_icephys.nwb (selection rank 104 of the 522-donor gain-0.05 window)."
+
+[[resources]]
+id = "nwb_sub_761831990"
+origin = "dandi_000020_0_210913_1639"
+url = "https://dandiarchive.s3.amazonaws.com/blobs/537/85d/53785dcb-5b11-4ff9-bda1-ea62658f5587"
+type = "file"
+version = "0.210913.1639 asset bce5dd8c-f79b-4560-9656-6a150b80df22"
+access = "Anonymous public S3 GET, resumable; size and dandi:sha2-256 verified."
+size_bytes = 22109576
+sha256 = "882b744b4ed38e2d8fd1df35b3188e0c1c472c8540df08d65cc92c60569e4128"
+local_path = "downloads/dandi_000020_patchseq_current_clamp_f32/nwb/sub-761831990_ses-766049004_icephys.nwb"
+notes = "sub-761831990/sub-761831990_ses-766049004_icephys.nwb (selection rank 139 of the 522-donor gain-0.05 window)."
+
+[[resources]]
+id = "nwb_sub_775275471"
+origin = "dandi_000020_0_210913_1639"
+url = "https://dandiarchive.s3.amazonaws.com/blobs/b2b/f8b/b2bf8b45-cc10-4e72-9e1b-7acf92115598"
+type = "file"
+version = "0.210913.1639 asset 618b4b1e-95e0-43a6-a38e-05b48c1f290d"
+access = "Anonymous public S3 GET, resumable; size and dandi:sha2-256 verified."
+size_bytes = 48716800
+sha256 = "3f85a3aac67cc6361357b91a80011606768a1ca63fb377228850c3f00f223bc1"
+local_path = "downloads/dandi_000020_patchseq_current_clamp_f32/nwb/sub-775275471_ses-779979763_icephys.nwb"
+notes = "sub-775275471/sub-775275471_ses-779979763_icephys.nwb (selection rank 174 of the 522-donor gain-0.05 window)."
+
+[[resources]]
+id = "nwb_sub_799065231"
+origin = "dandi_000020_0_210913_1639"
+url = "https://dandiarchive.s3.amazonaws.com/blobs/87c/eab/87ceab5d-37a6-46d5-9ba7-a44ea262cfee"
+type = "file"
+version = "0.210913.1639 asset d27192fb-6d42-4fc6-a223-42b80e9f6653"
+access = "Anonymous public S3 GET, resumable; size and dandi:sha2-256 verified."
+size_bytes = 21035348
+sha256 = "57458d4441d33ebb63d0540d67f1e4e5349949bd8cf9b684108d9862380b2373"
+local_path = "downloads/dandi_000020_patchseq_current_clamp_f32/nwb/sub-799065231_ses-803046986_icephys.nwb"
+notes = "sub-799065231/sub-799065231_ses-803046986_icephys.nwb (selection rank 208 of the 522-donor gain-0.05 window)."
+
+[[resources]]
+id = "nwb_sub_812386057"
+origin = "dandi_000020_0_210913_1639"
+url = "https://dandiarchive.s3.amazonaws.com/blobs/421/d4a/421d4a9e-c16b-488d-9188-6f5e5dc57277"
+type = "file"
+version = "0.210913.1639 asset 8a589a74-fa55-4a0b-9a38-7b189aa34388"
+access = "Anonymous public S3 GET, resumable; size and dandi:sha2-256 verified."
+size_bytes = 30556431
+sha256 = "b763af6ae07ce15aa5a2fd1fa2f9d0872d8bf0b493f7c7b9aeaabffc07bff70a"
+local_path = "downloads/dandi_000020_patchseq_current_clamp_f32/nwb/sub-812386057_ses-815367523_icephys.nwb"
+notes = "sub-812386057/sub-812386057_ses-815367523_icephys.nwb (selection rank 243 of the 522-donor gain-0.05 window)."
+
+[[resources]]
+id = "nwb_sub_825548689"
+origin = "dandi_000020_0_210913_1639"
+url = "https://dandiarchive.s3.amazonaws.com/blobs/c17/b0f/c17b0fea-5615-47cb-956b-a2082954b022"
+type = "file"
+version = "0.210913.1639 asset d726172c-46ae-4cae-8297-043a2562ec50"
+access = "Anonymous public S3 GET, resumable; size and dandi:sha2-256 verified."
+size_bytes = 21794051
+sha256 = "53e61cdaafb6bcf1fa676238017efb533e275ad596ae5d52739c118ac42fb4ae"
+local_path = "downloads/dandi_000020_patchseq_current_clamp_f32/nwb/sub-825548689_ses-829264782_icephys.nwb"
+notes = "sub-825548689/sub-825548689_ses-829264782_icephys.nwb (selection rank 278 of the 522-donor gain-0.05 window)."
+
+[[resources]]
+id = "nwb_sub_839065509"
+origin = "dandi_000020_0_210913_1639"
+url = "https://dandiarchive.s3.amazonaws.com/blobs/324/5f1/3245f1c4-fd99-446a-b5a1-d4a6c87f1e1f"
+type = "file"
+version = "0.210913.1639 asset 925b28c4-5a0e-469d-82da-406d08429c72"
+access = "Anonymous public S3 GET, resumable; size and dandi:sha2-256 verified."
+size_bytes = 38076512
+sha256 = "340f0408ea34ea36531190b387fc75fd72dfdc603df75e3eb1436084b4e11726"
+local_path = "downloads/dandi_000020_patchseq_current_clamp_f32/nwb/sub-839065509_ses-842834023_icephys.nwb"
+notes = "sub-839065509/sub-839065509_ses-842834023_icephys.nwb (selection rank 313 of the 522-donor gain-0.05 window)."
+
+[[resources]]
+id = "nwb_sub_853715067"
+origin = "dandi_000020_0_210913_1639"
+url = "https://dandiarchive.s3.amazonaws.com/blobs/dfa/0fb/dfa0fb4e-1040-4fda-91ca-2677d400e811"
+type = "file"
+version = "0.210913.1639 asset 549cde0b-b5e9-4be2-80f5-194011050c68"
+access = "Anonymous public S3 GET, resumable; size and dandi:sha2-256 verified."
+size_bytes = 21049243
+sha256 = "908c2227979d41e87e7d12a60755d778b4e2cf9c60dcff0f787e6ab3ccb26ce0"
+local_path = "downloads/dandi_000020_patchseq_current_clamp_f32/nwb/sub-853715067_ses-855782433_icephys.nwb"
+notes = "sub-853715067/sub-853715067_ses-855782433_icephys.nwb (selection rank 347 of the 522-donor gain-0.05 window)."
+
+[[resources]]
+id = "nwb_sub_868713302"
+origin = "dandi_000020_0_210913_1639"
+url = "https://dandiarchive.s3.amazonaws.com/blobs/cff/215/cff21508-f45a-46d1-a435-74d0943c339a"
+type = "file"
+version = "0.210913.1639 asset 37f95bb9-6a43-4df6-a7de-b7edef74b86a"
+access = "Anonymous public S3 GET, resumable; size and dandi:sha2-256 verified."
+size_bytes = 23037308
+sha256 = "4d3748148c684ac9f77c70c97022244ba3fa73d3445b1d40da2fc2f447d7fa64"
+local_path = "downloads/dandi_000020_patchseq_current_clamp_f32/nwb/sub-868713302_ses-872210887_icephys.nwb"
+notes = "sub-868713302/sub-868713302_ses-872210887_icephys.nwb (selection rank 382 of the 522-donor gain-0.05 window)."
+
+[[resources]]
+id = "nwb_sub_899526566"
+origin = "dandi_000020_0_210913_1639"
+url = "https://dandiarchive.s3.amazonaws.com/blobs/537/2cc/5372cca2-c86a-4ba9-a6a0-935fb9f4325a"
+type = "file"
+version = "0.210913.1639 asset ed281284-1908-4f2b-90fa-5a0ef7ce51d3"
+access = "Anonymous public S3 GET, resumable; size and dandi:sha2-256 verified."
+size_bytes = 72028113
+sha256 = "b7b9effe646a505987a77dd37d26a32e54d75605ae1a6e05444862d1afe13d4e"
+local_path = "downloads/dandi_000020_patchseq_current_clamp_f32/nwb/sub-899526566_ses-902006933_icephys.nwb"
+notes = "sub-899526566/sub-899526566_ses-902006933_icephys.nwb (selection rank 417 of the 522-donor gain-0.05 window)."
+
+[[resources]]
+id = "nwb_sub_918438586"
+origin = "dandi_000020_0_210913_1639"
+url = "https://dandiarchive.s3.amazonaws.com/blobs/bc1/31e/bc131ef4-36f5-4a38-85a6-87c2c3300154"
+type = "file"
+version = "0.210913.1639 asset 5c084ad6-fd6d-4686-9670-058947acf0aa"
+access = "Anonymous public S3 GET, resumable; size and dandi:sha2-256 verified."
+size_bytes = 25745045
+sha256 = "d808b32b4adad3bf9397cc195d48641a65fc2329bf49f6a143adf906bbc53678"
+local_path = "downloads/dandi_000020_patchseq_current_clamp_f32/nwb/sub-918438586_ses-924610185_icephys.nwb"
+notes = "sub-918438586/sub-918438586_ses-924610185_icephys.nwb (selection rank 452 of the 522-donor gain-0.05 window)."
+
+[[resources]]
+id = "nwb_sub_959090058"
+origin = "dandi_000020_0_210913_1639"
+url = "https://dandiarchive.s3.amazonaws.com/blobs/751/3b9/7513b958-0db9-480d-8ef6-c7f9ab63d0ba"
+type = "file"
+version = "0.210913.1639 asset 3a09f5d8-e58c-4ba8-bf11-489a097cec4b"
+access = "Anonymous public S3 GET, resumable; size and dandi:sha2-256 verified."
+size_bytes = 23728012
+sha256 = "74b149fd3c935a02dec24f132c52feeab59796b933734672ba3065e0a2d98885"
+local_path = "downloads/dandi_000020_patchseq_current_clamp_f32/nwb/sub-959090058_ses-962991221_icephys.nwb"
+notes = "sub-959090058/sub-959090058_ses-962991221_icephys.nwb (selection rank 486 of the 522-donor gain-0.05 window)."
+
+[[resources]]
+id = "nwb_sub_1001658958"
+origin = "dandi_000020_0_210913_1639"
+url = "https://dandiarchive.s3.amazonaws.com/blobs/236/9ff/2369ff22-7bdc-4ef3-b5fa-dab6502e5e77"
+type = "file"
+version = "0.210913.1639 asset ec217ff4-76ea-45c6-90fd-829ac45df0a6"
+access = "Anonymous public S3 GET, resumable; size and dandi:sha2-256 verified."
+size_bytes = 59548951
+sha256 = "99018c02d0f31aab61e2b40a5738024d79d8a0583aaca54a8889554dc3ffee6a"
+local_path = "downloads/dandi_000020_patchseq_current_clamp_f32/nwb/sub-1001658958_ses-1003305489_icephys.nwb"
+notes = "sub-1001658958/sub-1001658958_ses-1003305489_icephys.nwb (selection rank 521 of the 522-donor gain-0.05 window)."
+
+[local_paths]
+downloads = "downloads/dandi_000020_patchseq_current_clamp_f32/"
+filtered = "filtered/dandi_000020_patchseq_current_clamp_f32/"
+index = "index/dandi_000020_patchseq_current_clamp_f32/"
+samples = "samples/dandi_000020_patchseq_current_clamp_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/dandi_000020_patchseq_current_clamp_f32/samples.jsonl"
+summary = "Validate the pinned dandiset.yaml and assets.yaml, re-derive the 16-donor selection, fetch and SHA-256-verify the 16 NWB blobs, then decode every /acquisition CurrentClampSeries sweep of the gain-0.05 regime into one raw little-endian float32 sample after trimming MIES's unacquired zero/NaN tail."
+deterministic_notes = "Selection rule (patchseq_cc.py derive_selection): donors sorted by numeric id, restricted to ids >= 732239848 (the gain-0.05 window located by probe_gain_regime.py; 522 donors), 16 donors at ranks round(i*521/15), first NWB path per donor; sources.tsv must equal the re-derivation byte for byte. Sweeps are selected by the group attribute neurodata_type == 'CurrentClampSeries' (never by name), in sorted /acquisition name order, and must have data unit 'volts', conversion float32(0.001), starting_time rate 50000 Hz and gain float32(0.05); other series are counted by exclusion reason in ingest_stats.json. Pure-stdlib HDF5 decoding (scripts/nwb_hdf5.py) validated on a synthetic HDF5 self-test. Interior MIES zero-fill runs (>= 50 consecutive +/-0.0) are recorded per sample, allowed only once per X7Ramp sweep and at most 2% of it, and their count (44 samples, 62,033 values) is pinned. Files are added whole and in selection order under a 700 MB running primary cap (hard cap 1 GB). verify.sh re-decodes every sweep, byte-compares samples, re-checks index rows, finiteness, non-constancy, untrimmed padding, value span, the exact ADC lattice (bit-exact repack), interior fill runs recounted from the sample bytes, and duplicate payloads, and compares the fresh ingest statistics."
+
+[[series]]
+id = "patchseq_cc_membrane_potential_f32"
+description = "Whole-cell current-clamp membrane-potential sweeps of mouse visual-cortex Patch-seq neurons (Allen Institute, MIES on ITC-18 with MultiClamp 700B)."
+semantic_meaning = "Intracellular membrane potential in millivolts sampled at 50 kHz during one current-clamp stimulus sweep (test pulse, long/short square current steps, ramps, chirps/noise, rheobase search) of one neuron: resting potential near -60 to -80 mV with action potentials overshooting toward +20 to +50 mV. Exception: 44 of the 73 X7Ramp sweeps contain one interior run of 960-1,983 exact 0.0 words (62,033 values in total). This is MIES's unacquired zero fill after the spike-triggered stop of the ramp, not membrane potential. It is kept as stored and listed per sample in the index field interior_fill_runs."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The NWB `data` dataset is stored by the producer as little-endian IEEE float32 in mV (unit 'volts', conversion 0.001), and the stored bit patterns are emitted unchanged. Measured over all 112,275,629 words: each equals float32(k / (3200 * g)) for an integer ITC-18 ADC code k in [-16,768, 8,549], with g the stored float32 gain 0.05000000074505806 and the division in double. That is a 0.00625 mV (1/160 mV) tick lattice; 22,449,239 words lie one ulp toward zero from a correctly rounded float32(k/160). The low mantissa bits are deterministic, following the periodic binary expansion of 1/5: the low byte takes only 5 distinct values, and 14.4% of words have the low 13 mantissa bits zero. Each word therefore carries at most about 15 bits of ADC information (a span of 25,318 codes). float32 is kept because it is the archive's native stored type and the integer codes are not stored, so recovering them would be a local remap (protocol rule 2). This matches the accepted kollmeyer_panasonic18650pf_drive_cycle_voltage_f64 precedent of producer-native floats on an ADC lattice. The gain-0.05 restriction exists only so that the family has one tick lattice."
+source_resources = ["assets_yaml", "nwb_sub_732239848", "nwb_sub_740369784", "nwb_sub_746220175", "nwb_sub_757080785", "nwb_sub_761831990", "nwb_sub_775275471", "nwb_sub_799065231", "nwb_sub_812386057", "nwb_sub_825548689", "nwb_sub_839065509", "nwb_sub_853715067", "nwb_sub_868713302", "nwb_sub_899526566", "nwb_sub_918438586", "nwb_sub_959090058", "nwb_sub_1001658958"]
+source_format = "NWB 2.2.5 (HDF5 superblock v0) CurrentClampSeries; chunked (8192) float32 dataset with shuffle + deflate filters"
+source_field = "/acquisition/<sweep>/data of every group whose neurodata_type attribute is CurrentClampSeries (membrane potential, mV)"
+filtered_input_path = "filtered/dandi_000020_patchseq_current_clamp_f32/ingest_stats.json"
+filtering = "Keep only /acquisition groups with neurodata_type == 'CurrentClampSeries'. Exclude VoltageClampSeries (pA currents), any other acquisition type, all /stimulus command waveforms, and CurrentClampSeries whose unit/conversion, 50 kHz rate or gain 0.05 differ (counted by reason). After trimming, sweeps shorter than 1,000 values, constant sweeps and sweeps with interior non-finite values are excluded and counted."
+missing_value_policy = "MIES writes exact zeros for unacquired spans. (1) Trailing fill: when a sweep ends early, as in rheobase or blip searches that stop after spiking, the remainder is padded with zeros or NaN. The maximal trailing run of +0.0/-0.0/NaN words is trimmed, and stored_values and trimmed_tail_values are recorded per sample (271 sweeps, 59,029,871 of 171,305,500 stored values, all +0.0). (2) Interior fill: after the spike-triggered stop of an X7Ramp ramp, MIES leaves one interior run of exact 0.0 words before the trace resumes. These sweeps are kept whole as natural records and are not split. Each index row lists interior_fill_runs ([[start, length], ...] over runs of at least 50 consecutive +/-0.0 words) and interior_fill_values. ingest_stats.json carries the totals: 44 sweeps from 14 donors, runs of 960-1,983, 62,033 values, at most 0.91% of a sweep, all pinned. These zeros are not membrane potential. Build and verify fail if fill appears outside X7Ramp, more than once per sweep, or above 2% of a sweep. Verify recounts the runs from the sample bytes. The 36 isolated exact zeros outside such runs are genuine ADC code 0. Interior NaN/Inf excludes a sweep, as do fewer than 1,000 values after trimming or a constant sweep, each counted by reason. Nothing is imputed."
+conversion = "Pure-stdlib HDF5 walk: superblock v0, then v1 object headers with continuations, then symbol-table groups. Attributes are read with vlen strings resolved from the global heap. The data chunk B-tree (v1, type 1) is traversed; each chunk is zlib-inflated and byte-unshuffled (element size 4), and edge-chunk padding is removed. The decoded float32 little-endian words are kept bit-exact, the unacquired tail is trimmed, and one sample file is written per sweep: samples/<id>/patchseq_cc_membrane_potential_f32/sub-<donor>_ses-<session>__data_<sweep>_AD0.bin. Every emitted word must equal float32(k / (3200 * gain)) for an integer ADC code k, the division done in double. The build checks this on all values with array equality, and verify checks it bit for bit by repacking. Any mismatch fails the recipe."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 membrane-potential time series"
+sample_geometry = "intracellular_voltage_time_series_1d"
+sample_rank = 1
+sample_axes = ["time_50khz"]
+natural_record_kind = "nwb_current_clamp_series_sweep"
+sample_count = 736
+total_size_bytes = 449102516
+output_path = "samples/dandi_000020_patchseq_current_clamp_f32/patchseq_cc_membrane_potential_f32/"

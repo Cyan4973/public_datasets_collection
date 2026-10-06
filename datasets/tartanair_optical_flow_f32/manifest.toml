@@ -1,0 +1,121 @@
+manifest_version = 1
+dataset_id = "tartanair_optical_flow_f32"
+name = "TartanAir V1 Dense Optical-Flow Fields Float32"
+description = "Native float32 dense forward optical-flow frames (480 x 640 x 2 pixel displacements) from the CMU AirLab TartanAir V1 simulation dataset: three frames from three different trajectories in each of the 36 environment/difficulty flow archives."
+homepage = "https://theairlab.org/tartanair-dataset/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International (project site); BSD-3-Clause (Hugging Face dataset card)"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Wang, W., Zhu, D., Wang, X., Hu, Y., Qiu, Y., Wang, C., Hu, Y., Kapoor, A., and Scherer, S. TartanAir: A Dataset to Push the Limits of Visual SLAM. IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), 2020. arXiv:2003.14338."
+notes = "The official project page https://theairlab.org/tartanair-dataset/ states under 'Term of use': 'This work is licensed under a Creative Commons Attribution 4.0 International License.' (linking creativecommons.org/licenses/by/4.0). The official Hugging Face dataset card theairlabcmu/tartanair at revision 65e00180ea952475878a748543e11e9ec20beaac declares `license: bsd-3-clause`. Both are permissive; the stricter attribution terms of CC BY 4.0 are followed. download.sh fails if the HF card license changes and logs whether the CC BY 4.0 notice is still present on the project page."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official CMU AirLab release on the Hugging Face hub (repository theairlabcmu/tartanair, the repo used by the official castacks/tartanair_tools downloader), pinned to one immutable revision. Content is rendered from Unreal Engine/AirSim virtual environments; no people or personal data are recorded."
+usage_notes = "Synthetic simulator ground truth: the flow fields were computed upstream by the dataset authors from rendered depth and ground-truth camera motion, then published as float32 .npy arrays. Nothing is numericized locally."
+
+[[origins]]
+id = "hf_theairlabcmu_tartanair"
+name = "TartanAir V1 on the Hugging Face hub (theairlabcmu/tartanair)"
+url = "https://huggingface.co/datasets/theairlabcmu/tartanair"
+type = "repository"
+version = "65e00180ea952475878a748543e11e9ec20beaac"
+notes = "Public, not gated. Anonymous resolve requests redirect (302) to signed xet CDN URLs; the redirect carries x-repo-commit, x-linked-size and x-linked-etag (LFS sha256), which download.sh validates on every range request."
+
+[[origins]]
+id = "airlab_project_page"
+name = "TartanAir project page (CMU AirLab)"
+url = "https://theairlab.org/tartanair-dataset/"
+type = "website"
+notes = "Dataset description, citation and the CC BY 4.0 term-of-use notice. Data-type documentation (float32 flow computed from ground-truth depth and camera motion; uint8 masks; fx = fy = 320, cx = 320, cy = 240, 640 x 480) is at https://github.com/castacks/tartanair_tools/blob/master/data_type.md."
+
+[[resources]]
+id = "hf_revision_metadata"
+origin = "hf_theairlabcmu_tartanair"
+url = "https://huggingface.co/api/datasets/theairlabcmu/tartanair/revision/65e00180ea952475878a748543e11e9ec20beaac"
+type = "api_query_result"
+version = "65e00180ea952475878a748543e11e9ec20beaac"
+access = "Anonymous HF API GET; validated for repo id, revision sha, public/ungated status and card license bsd-3-clause."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/tartanair_optical_flow_f32/repo_revision.json"
+notes = "Small JSON page (~14 KB); not byte-pinned because the API adds volatile fields."
+
+[[resources]]
+id = "hf_revision_tree"
+origin = "hf_theairlabcmu_tartanair"
+url = "https://huggingface.co/api/datasets/theairlabcmu/tartanair/tree/65e00180ea952475878a748543e11e9ec20beaac?recursive=true"
+type = "api_query_result"
+version = "65e00180ea952475878a748543e11e9ec20beaac"
+access = "Anonymous HF API GET (single page, 344 entries); every sources.tsv row must match its path, size, LFS sha256 and xet hash, and sources.tsv must cover exactly the 36 flow_flow.zip archives."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/tartanair_optical_flow_f32/repo_tree.json"
+notes = "discover.sh regenerates sources.tsv from this listing."
+
+[[resources]]
+id = "flow_flow_zip_archives"
+origin = "hf_theairlabcmu_tartanair"
+url = "https://huggingface.co/datasets/theairlabcmu/tartanair/resolve/65e00180ea952475878a748543e11e9ec20beaac/{environment}/{Easy|Hard}/flow_flow.zip"
+type = "range_extracted_zip_members"
+version = "65e00180ea952475878a748543e11e9ec20beaac"
+access = "HTTP byte ranges only: per archive the last 65,536 bytes, the exact ZIP64 central directory, and the exact local-header-plus-DEFLATE span of 3 selected members. No archive is downloaded whole."
+size_bytes = 676775615642
+sha256 = ""
+local_path = "downloads/tartanair_optical_flow_f32/zips/"
+notes = "36 ZIP64 archives (18 environments x Easy/Hard, 4.4-63.4 GB each, 676,775,615,642 bytes total) pinned in sources.tsv with per-archive size, LFS sha256 and xet hash. Whole-archive sha256 cannot be checked from ranges; identity is enforced through the resolver's x-linked-etag/x-repo-commit headers and the exact Content-Range total, and each member through its central-directory CRC32. Range traffic: 39,552,939 bytes of central directories (307,816 entries; all 36 tails were probed and parsed during authoring), 36 x 65,536 = 2,359,296 bytes of tails, and about 240 MB of member spans (mean compressed member about 2.2 MB), about 282 MB in total."
+
+[[resources]]
+id = "airlab_license_page"
+origin = "airlab_project_page"
+url = "https://theairlab.org/tartanair-dataset/"
+type = "file"
+version = "fetched at download time"
+access = "Anonymous GET; checked for the CC BY 4.0 term-of-use sentence (logged, non-fatal)."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/tartanair_optical_flow_f32/tartanair_dataset_page.html"
+notes = "License evidence only."
+
+[local_paths]
+downloads = "downloads/tartanair_optical_flow_f32/"
+filtered = "filtered/tartanair_optical_flow_f32/"
+index = "index/tartanair_optical_flow_f32/"
+samples = "samples/tartanair_optical_flow_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/tartanair_optical_flow_f32/samples.jsonl"
+summary = "Range-fetch three deterministically selected *_flow.npy members from each of the 36 pinned TartanAir flow_flow.zip archives, raw-inflate and CRC-check them, validate the .npy header, and emit each frame's 480 x 640 x 2 little-endian float32 tensor unchanged as one sample."
+deterministic_notes = "Selection rule (scripts/tartanair_flow.py select_members): within each archive, group members <env>/<Easy|Hard>/Pxxx/flow/NNNNNN_MMMMMM_flow.npy (MMMMMM = NNNNNN + 1) by trajectory; sort trajectory names (n of them); slot k = 0..2 goes to trajectory index floor((2k+1) n / 6); a trajectory with c slots and m frames (sorted by frame index) contributes positions floor((2j+1) m / (2c)), j = 0..c-1. Realized: every archive has 4-37 trajectories (369 trajectories and 306,268 flow frames upstream in total; 299-4,203 frames per trajectory), so the result is the temporal middle frame of three evenly spread trajectories per archive: 108 frames from 108 distinct trajectories, none sharing a trajectory or temporally adjacent. (The rule would spread slots over evenly spaced frames if an archive had fewer than three trajectories; none does.) The realized member list (offsets, spans, sizes, CRC32) is pinned in selection.lock.tsv. Member spans run from the local header to the next entry's local header, so local extra fields (which differ from central-directory extras) need no guessing. Validations: resolver revision + LFS sha256 + 206 Content-Range per request; ZIP64 EOCD/locator/central-directory consistency; local header name/CRC/sizes vs the central directory; DEFLATE end exactly at the compressed size; CRC32; npy v1.0 header exactly {'descr': '<f4', 'fortran_order': False, 'shape': (480, 640, 2)} with a 128-byte prefix; all values finite; both flow components non-constant. The realized selection is written to downloads/.../selection.tsv and must match the committed selection.lock.tsv exactly (checked by download.sh and verify.sh). Floors: 66,355,200 primary values, 265,420,800 bytes, median 614,400 values per sample."
+
+[[series]]
+id = "tartanair_left_optical_flow_uv_f32"
+description = "Dense forward optical flow of the TartanAir left camera from frame N to frame N+1, one complete 480 x 640 x 2 float32 field per sample."
+semantic_meaning = "Per-pixel 2-D image-plane displacement in pixels (two components per pixel, stored order: channel 0 then channel 1, conventionally horizontal u then vertical v) between consecutive left-camera frames, computed upstream from ground-truth depth and camera motion with the authors' ImageFlow code. 640 x 480 pinhole camera, fx = fy = 320 px."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Upstream stores each flow frame as a little-endian IEEE-754 float32 .npy array of shape (480, 640, 2) in C order; the sample is that tensor's element data with the 128-byte .npy header removed, bit-for-bit. The values are simulator ground truth published by the dataset authors (not a local remap); occlusion/dynamic-object masks (separate uint8 *_mask.npy members) are not applied or emitted."
+source_resources = ["flow_flow_zip_archives"]
+source_format = "NumPy .npy v1.0 arrays (descr '<f4', shape (480, 640, 2), C order) stored as DEFLATE members of ZIP64 archives"
+source_field = "the float32 flow tensor of each <env>/<difficulty>/Pxxx/flow/NNNNNN_MMMMMM_flow.npy member"
+filtered_input_path = "filtered/tartanair_optical_flow_f32/ingest_stats.json"
+filtering = "All 36 flow_flow.zip archives at the pinned revision (18 environments x Easy/Hard); three *_flow.npy members per archive chosen by the deterministic trajectory-spread rule in [processing] (108 of 369 upstream trajectories, one frame each). Realized per-frame mean |flow| ranges 1.67-54.75 px (median 7.6 px Easy, 10.4 px Hard); global value range -326.02 to 255.82 px. Masks, depth, RGB, segmentation and poses are excluded."
+missing_value_policy = "TartanAir flow has no missing-value sentinel. Any NaN or infinity in a selected frame is fatal in download.sh, build.sh and verify.sh (verify re-checks via the float32 exponent bits); no values are dropped, replaced or imputed. Masked (occluded or dynamic) pixels keep their upstream geometric flow values."
+conversion = "Raw-inflate the DEFLATE member (zlib wbits -15), check CRC32 and size against the central directory, parse the .npy v1.0 header, and write the following 2,457,600 bytes unchanged: 614,400 little-endian float32 values in (image_row, image_column, flow_component) C order, one file per flow frame."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 tensor, shape (480, 640, 2), C order"
+sample_geometry = "dense_optical_flow_field_row_by_column_by_uv"
+sample_rank = 3
+sample_axes = ["image_row", "image_column", "flow_component"]
+natural_record_kind = "one_tartanair_optical_flow_frame_pair_npy"
+sample_count = 108
+total_size_bytes = 265420800
+output_path = "samples/tartanair_optical_flow_f32/tartanair_left_optical_flow_uv_f32/"

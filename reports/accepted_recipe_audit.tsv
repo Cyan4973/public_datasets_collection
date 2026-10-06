@@ -312,6 +312,7 @@ ceda_ukdale_iam_appliance_power_u16	ok	82837497	165674994	51	1842782	3685564	828
 figshare_fukuchi_forceplate_c3d_f32	ok	83857942	335431768	1966	30192	120768	0	0	0	1	none	none
 noaa_stofs2d_glo_adcirc_station_water_level_f64	ok	85075200	680601600	40	2126880	17015040	0	0	0	1	none	none
 uci_hydraulic_system_cycles_f32	ok	85182000	340728000	14197	6000	24000	0	0	0	1	none	none
+rgl_epfl_isotropic_spectral_brdf_f32	ok	88258560	353034240	51	1597440	6389760	0	0	0	1	none	none
 nasa_pds_cassini_vims_qube_i16	ok	89698752	179397504	120	563200	1126400	0	0	0	1	none	none
 pfam_profile_hmm_match_emissions_f32	ok	93130540	372522160	27496	2580	10320	0	0	0	1	none	none
 tcia_ldct_siemens_ct_projections_u16	ok	94208000	188416000	2000	47104	94208	0	0	0	1	none	none

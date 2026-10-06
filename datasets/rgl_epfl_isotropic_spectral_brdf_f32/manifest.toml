@@ -1,0 +1,101 @@
+manifest_version = 1
+dataset_id = "rgl_epfl_isotropic_spectral_brdf_f32"
+name = "EPFL RGL Material Database Isotropic Spectral BRDF Tensors Float32"
+description = "Native float32 measured spectral reflectance tensors (8 incident elevations x 195 wavelengths x adaptive outgoing grid) for all 51 isotropic materials of the EPFL Realistic Graphics Lab material database."
+homepage = "https://rgl.epfl.ch/materials"
+
+[license]
+name = "Creative Commons Zero v1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "Jonathan Dupuy and Wenzel Jakob. An Adaptive Parameterization for Efficient Material Acquisition and Rendering. ACM Transactions on Graphics 37(6), Article 274 (SIGGRAPH Asia 2018). DOI 10.1145/3272127.3275059. Data: EPFL Realistic Graphics Lab material database, https://rgl.epfl.ch/materials."
+notes = "The database page https://rgl.epfl.ch/pages/lab/material-database states: 'Licensing conditions Unless otherwise noted, all material data is licensed under the Creative Commons Zero ( CC0 ) license.' The per-material panel template on https://rgl.epfl.ch/materials shows 'License:' linking the CC0 1.0 deed for every material, and no material carries an exception. download.sh re-checks both statements on every run."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official goniophotometer measurements of flat material swatches (felts, papers, wall/ceiling/car paints, vinyl wrap films, a maple leaf, a Spectralon reflectance standard, studio-provided paint and fabric samples) published by EPFL RGL on its CloudFront media host."
+usage_notes = "Only the numeric spectra tensor is emitted. Material descriptions are kept as index metadata for attribution; renderings, RGB variants, raw pickles and auxiliary tensors are not used."
+
+[[origins]]
+id = "rgl_epfl_material_database"
+name = "EPFL Realistic Graphics Lab material database"
+url = "https://rgl.epfl.ch/materials"
+type = "website"
+notes = "Official database maintained by the Realistic Graphics Lab (Wenzel Jakob), EPFL. Spectral BSDF files are served from https://d38rqfq1h7iukm.cloudfront.net/media/materials/<name>/<name>_spec.bsdf (S3 origin, anonymous HTTPS, byte ranges supported)."
+
+[[resources]]
+id = "rgl_license_page"
+origin = "rgl_epfl_material_database"
+url = "https://rgl.epfl.ch/pages/lab/material-database"
+type = "file"
+version = "fetched on every download run"
+access = "Direct public HTML page."
+size_bytes = 15918
+sha256 = ""
+local_path = "downloads/rgl_epfl_isotropic_spectral_brdf_f32/pages/material-database.html"
+notes = "Dynamic HTML, so not hash-pinned; download.sh requires the exact CC0 grant sentence. Size is as observed on 2026-10-06."
+
+[[resources]]
+id = "rgl_materials_page"
+origin = "rgl_epfl_material_database"
+url = "https://rgl.epfl.ch/materials"
+type = "file"
+version = "fetched on every download run"
+access = "Direct public HTML page with inline JavaScript material records."
+size_bytes = 325137
+sha256 = ""
+local_path = "downloads/rgl_epfl_isotropic_spectral_brdf_f32/pages/materials.html"
+notes = "Lists 62 materials (51 isotropic, 11 anisotropic). download.sh requires every pinned dl_spec URL and the CC0 deed link to be present; the material list itself is pinned in materials.tsv, not scraped at build time. Size as observed on 2026-10-06."
+
+[[resources]]
+id = "rgl_isotropic_spec_bsdf_files"
+origin = "rgl_epfl_material_database"
+url = "https://d38rqfq1h7iukm.cloudfront.net/media/materials/"
+type = "exact_file_selection"
+version = "51 isotropic *_spec.bsdf objects, Last-Modified 2018-11-01 to 2019-02-04"
+access = "Anonymous HTTPS GET of each pinned object; resumable; validate byte size, S3 ETag (single-part MD5), pinned SHA-256, and tensor_file semantics."
+size_bytes = 397553744
+sha256 = ""
+local_path = "downloads/rgl_epfl_isotropic_spectral_brdf_f32/spec/"
+notes = "Per-file name, outgoing resolution, size, ETag/MD5, Last-Modified, spectra offset, pipeline version, tags and description are pinned in materials.tsv; per-file SHA-256 values were recorded at the first full download (2026-10-06) and are now mandatory. ETag == MD5 was confirmed on a same-bucket object during authoring and on all 51 downloaded files."
+
+[local_paths]
+downloads = "downloads/rgl_epfl_isotropic_spectral_brdf_f32/"
+filtered = "filtered/rgl_epfl_isotropic_spectral_brdf_f32/"
+index = "index/rgl_epfl_isotropic_spectral_brdf_f32/"
+samples = "samples/rgl_epfl_isotropic_spectral_brdf_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/rgl_epfl_isotropic_spectral_brdf_f32/samples.jsonl"
+summary = "Validate 51 pinned isotropic RGL spectral BSDF tensor files, parse each Mitsuba/RGL tensor_file header, and emit the float32 `spectra` tensor of every material as one little-endian C-order sample."
+deterministic_notes = "Materials, sizes, ETag/MD5, SHA-256 and spectra offsets are pinned in materials.tsv (sorted by name); the aggregate SHA-256 of all samples in that order is pinned in scripts/rgl_brdf.py. The header parser requires format version 1.0, the exact 12-field layout, non-overlapping in-bounds fields, spectra dtype float32 with shape (1, 8, 195, R, R) for the pinned R, the shared 358.6-1001.9 nm wavelength grid, an increasing theta_i grid, jacobian flag 1, and the pinned description. Build rejects NaN/Inf, all-zero, constant tensors; verify re-parses each source in memory, byte-compares every sample with its source field, and recomputes zero/negative counts, stored-float32 min/max, distinct-value floor, per-sample SHA-256 and the manifest totals."
+
+[[series]]
+id = "rgl_isotropic_spectral_brdf_spectra_f32"
+description = "Measured spectral reflectance tensors of isotropic real-world materials on the Dupuy-Jakob adaptive BRDF parameterization."
+semantic_meaning = "For one material, the spectral reflectance term of its measured BRDF, sampled at 8 incident elevations theta_i (a single incident azimuth phi_i, isotropic), 195 wavelengths from 358.6 to 1001.9 nm, and an R x R grid over the warped outgoing-direction domain (R = 32 for 49 materials, 48 for irid_flake_paint1_fine, 64 for cg_sunflower). The official reader evaluates BRDF(lambda) = spectra(sample; phi_i, theta_i, lambda) * NDF / (4 * sigma)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The upstream tensor field is stored as little-endian IEEE-754 float32 (tensor_file dtype 10); every value keeps its source bit pattern."
+source_resources = ["rgl_isotropic_spec_bsdf_files"]
+source_format = "Mitsuba/RGL tensor_file v1.0 spectral BSDF (*_spec.bsdf)"
+source_field = "tensor field `spectra`, float32, shape (phi_i=1, theta_i=8, wavelength=195, R, R)"
+filtered_input_path = "filtered/rgl_epfl_isotropic_spectral_brdf_f32/ingest_stats.json"
+filtering = "Keep all 51 isotropic materials listed by the database (phi_i length 1). Exclude the 11 anisotropic materials (17 incident azimuths, about 111 MB per file, about 1.2 GB together, a different measurement regime). Emit only `spectra`; `luminance` is derived from it, and version, description, phi_i, theta_i, wavelengths, sigma, ndf, vndf, jacobian and valid are metadata or auxiliary fitting tensors."
+missing_value_policy = "No sentinel exists in the spectra field. Exact zeros are genuine stored values and are kept, not treated as missing: they are either whole outgoing cells that are zero at all 195 wavelengths (out-of-domain or unmeasured parameterization cells) or isolated zero wavelength bins inside measured cells where the signal is low (UV end, absorption bands; no negative value occurs anywhere, which suggests upstream clamping at zero). Whole-tensor zero fraction ranges from 0.78 percent (chm_light_blue) to 25.0 percent (ilm_solo_m_68), median 9.6 percent, and can exceed a quarter of a single theta_i slice; per-material zero_count and zero_fraction are recorded in the index. Any NaN or Inf, an all-zero or constant tensor, a changed shape, offset, description, wavelength grid or jacobian flag, or a source size/ETag mismatch is fatal. Nothing is dropped or imputed."
+conversion = "Parse the tensor_file header, read 4 * prod(shape) bytes at the `spectra` offset, check them as little-endian float32, and write them unchanged as one sample per material in source C order (phi_i, theta_i, wavelength, outgoing row, outgoing column)."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 spectral BRDF reflectance tensor"
+sample_geometry = "brdf_incident_elevation_by_wavelength_by_outgoing_grid_tensor_5d"
+sample_rank = 5
+sample_axes = ["phi_i", "theta_i", "wavelength", "outgoing_sample_row", "outgoing_sample_col"]
+natural_record_kind = "rgl_material_spectral_bsdf_spectra_tensor"
+sample_count = 51
+total_size_bytes = 353034240
+output_path = "samples/rgl_epfl_isotropic_spectral_brdf_f32/rgl_isotropic_spectral_brdf_spectra_f32/"

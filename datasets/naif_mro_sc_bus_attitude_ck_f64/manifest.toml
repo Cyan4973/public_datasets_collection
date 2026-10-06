@@ -1,0 +1,160 @@
+manifest_version = 1
+dataset_id = "naif_mro_sc_bus_attitude_ck_f64"
+name = "MRO Spacecraft-Bus Reconstructed Attitude (NAIF CK Type 3) Quaternions and Angular Rates Float64"
+description = "Native float64 attitude quaternions and angular-velocity vectors of the Mars Reconnaissance Orbiter spacecraft bus, decoded from 44 whole NAIF CK type-3 segments (telemetry-based reconstructed attitude, gyro era 2007-2017) in the NASA PDS MRO SPICE archive."
+homepage = "https://naif.jpl.nasa.gov/pub/naif/pds/data/mro-m-spice-6-v1.0/mrosp_1000/"
+
+[license]
+name = "U.S. Government Public Domain (NASA PDS archive; NAIF SPICE kernel rules)"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://naif.jpl.nasa.gov/naif/rules.html"
+citation = "NASA Navigation and Ancillary Information Facility (NAIF/JPL); Mars Reconnaissance Orbiter SPICE data set MRO-M-SPICE-6-V1.0 (NASA Planetary Data System), C-kernels mro_sc_psp_*.bc."
+notes = "NASA/JPL mission data archived in the NASA Planetary Data System, the same rights basis as the accepted nasa_naif_de440s_spk_coefficients_f64 recipe. NAIF's published rules state: 'SPICE kernels placed on the NAIF server may be downloaded and used by anyone' and 'Redistribution of SPICE kernels distributed by NAIF is permitted as long as they have not been modified'; commercial use needs 'No fees or licensing'. The rules also say a modified kernel must carry the modifier's attribution: the emitted arrays are extracts made by this recipe, not NAIF products. JPL is operated by Caltech for NASA, so the public-domain label follows the corpus convention for NAIF data; the operative explicit permission is the NAIF rules page. The USGS Astrogeology bucket used only as a fallback is an anonymous mirror of NAIF's operational kernel server and carries no license object of its own."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NASA PDS archive copies served by NAIF/JPL (data set MRO-M-SPICE-6-V1.0, volume MROSP_1000, data/ck). Only the pinned DAF file/summary records, PDS labels, and 44 pinned segment byte ranges are fetched. Fallback: byte-identical segment arrays on the USGS Astrogeology anonymous S3 mirror (asc-isisdata), checked against the same pins."
+usage_notes = "Spacecraft engineering attitude telemetry; no personal or sensitive content. NAIF export note: SPICE data are designated publicly available; publication is not restricted under ITAR."
+
+[[origins]]
+id = "nasa_pds_naif_mro_spice"
+name = "NASA PDS MRO SPICE archive (NAIF node), MRO-M-SPICE-6-V1.0 / MROSP_1000"
+url = "https://naif.jpl.nasa.gov/pub/naif/pds/data/mro-m-spice-6-v1.0/mrosp_1000/data/ck/"
+type = "data_portal"
+notes = "Archival home of the MRO reconstructed CKs. The NAIF CK aareadme says the weekly reconstructed files 'are intended for OPS use and for archiving in PDS'. PDS copies carry an embedded PDS label (one or two extra 1024-byte comment records) relative to the operational copies."
+
+[[origins]]
+id = "usgs_astrogeology_mirror"
+name = "USGS Astrogeology ISIS data bucket (anonymous S3 mirror of NAIF MRO kernels)"
+url = "https://asc-isisdata.s3.us-west-2.amazonaws.com/usgs_data/mro/kernels/ck/"
+type = "bucket"
+notes = "Fallback only, used when the NAIF host is unreachable. Object sizes equal NAIF's operational server (pub/naif/MRO/kernels/ck); segment arrays are byte-identical to the PDS copies at addresses shifted by 128 or 256 words. No license object; rights follow the NAIF/PDS basis above."
+
+[[resources]]
+id = "pds_ck_segment_ranges"
+origin = "nasa_pds_naif_mro_spice"
+url = "https://naif.jpl.nasa.gov/pub/naif/pds/data/mro-m-spice-6-v1.0/mrosp_1000/data/ck/"
+type = "other"
+version = "MRO-M-SPICE-6-V1.0 MROSP_1000; first weekly mro_sc_psp CK of each year 2007-2017 (11 kernels), 4 segments each; listing and summaries probed 2026-10-05"
+access = "Anonymous HTTPS byte-range GETs of the 44 segment arrays pinned in sources.tsv (DAF word addresses, object sizes, N, NINTS, SCLK coverage). Each range is one whole CK type-3 segment of 801,002 words."
+size_bytes = 281952704
+sha256 = ""
+local_path = "downloads/naif_mro_sc_bus_attitude_ck_f64/segments/"
+notes = "Whole kernels are 208-256 MB each (about 2.7 GB for 11), so only the selected segments are fetched. All 44 per-segment SHA-256 values are pinned in the sources.tsv segment_sha256 column (2 measured at authoring time on both hosts, 42 from the first realized download; the 2 authoring-time pins matched it) and are enforced by download.sh, build.sh and verify.sh."
+
+[[resources]]
+id = "pds_daf_headers_and_labels"
+origin = "nasa_pds_naif_mro_spice"
+url = "https://naif.jpl.nasa.gov/pub/naif/pds/data/mro-m-spice-6-v1.0/mrosp_1000/data/ck/"
+type = "other"
+version = "MROSP_1000"
+access = "Per kernel: DAF file record (bytes 0-1023, with HTTP Content-Range giving the object size), every DAF summary record in the FWARD/NEXT chain, and the detached PDS label <name>.lbl (SHA-256 pinned)."
+size_bytes = 59209
+sha256 = ""
+local_path = "downloads/naif_mro_sc_bus_attitude_ck_f64/headers/"
+notes = "Used to check DAF/CK identity, BIG-IEEE format, ND=2/NI=6, internal file name, segment count, and the pinned segment descriptors (instrument -74000, frame -74900 MRO_MME_OF_DATE, type 3, angular-velocity flag 1). Label checks: DATA_SET_ID, NAIF_INSTRUMENT_ID, PRODUCT_ID, PRODUCT_VERSION_TYPE = ACTUAL."
+
+[[resources]]
+id = "usgs_mirror_segment_ranges"
+origin = "usgs_astrogeology_mirror"
+url = "https://asc-isisdata.s3.us-west-2.amazonaws.com/usgs_data/mro/kernels/ck/"
+type = "other"
+version = "Mirror objects last modified 2022-08-12"
+access = "Fallback byte ranges at the mirror_* addresses pinned in sources.tsv. Download.sh uses them only when the PDS host fails its liveness check."
+size_bytes = 281952704
+sha256 = ""
+local_path = "downloads/naif_mro_sc_bus_attitude_ck_f64/segments/"
+notes = "S3 ETags are multipart (for example '-30'), so object size and per-segment SHA-256 are pinned instead of ETags."
+
+[local_paths]
+downloads = "downloads/naif_mro_sc_bus_attitude_ck_f64/"
+filtered = "filtered/naif_mro_sc_bus_attitude_ck_f64/"
+index = "index/naif_mro_sc_bus_attitude_ck_f64/"
+samples = "samples/naif_mro_sc_bus_attitude_ck_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/naif_mro_sc_bus_attitude_ck_f64/samples.jsonl"
+summary = "Range-fetch 44 pinned CK type-3 segments, validate DAF descriptors and segment structure, and emit each segment's quaternion block (N x 4) and angular-velocity block (N x 3) as little-endian float64 primary samples, plus its encoded-SCLK time tags as an auxiliary sample."
+deterministic_notes = "The selection rule is implemented in scripts/discover.py and pinned in sources.tsv: names ^mro_sc_psp_YYMMDD_yymmdd(_vN)?.bc$ in the PDS listing, the highest version per week, the first week of each year 2007-2017, and segment ordinals floor(i*M/4) for i=0..3 over the file's M segments. 2015 resolves to mro_sc_psp_150106_150112_v2.bc: PDS errata item 6 says v2 re-generated the Sep 2014-Mar 2015 CKs with corrected SCLK time tags, and PDS archives only v2 for that week. The window ends at 2017 because MRO moved routine attitude determination to star-tracker-only 'all-stellar' mode in 2018; the stored rates become roughly 6-100x smoother after that: probes of 5 all-stellar kernels (2018-2025, first 1,000 records) show median |delta av1| 9e-8..1.3e-6 rad/s, while the 44 realized gyro-era segments have whole-segment medians of 7.9e-6..1.2e-5 on every axis. Validation per segment: length = 7N + N + floor((N-1)/100) + NINTS + floor((NINTS-1)/100) + 2 from the (NINTS, N) trailer; strictly increasing epochs; epoch and interval directories; interval starts are epochs; epochs within the descriptor's SCLK coverage; |q| within 1e-6 of 1; all values finite; noisiest-axis rate-step median >= 2e-6 rad/s (gyro-era safety net between the all-stellar probe maximum 1.3e-6 and the realized gyro minimum 7.9e-6; the selection itself is by date). Output words are byte-swapped copies of the stored IEEE doubles."
+
+[[series]]
+id = "mro_sc_bus_quaternion_f64"
+description = "MRO spacecraft-bus attitude quaternions from one NAIF CK type-3 segment."
+semantic_meaning = "SPICE-convention unit quaternion (q0 scalar first) giving the rotation from the MRO_MME_OF_DATE (Mars mean equator and equinox of date) frame to the MRO_SPACECRAFT bus frame (NAIF ID -74000), at each telemetry time tag. Values come from the onboard Kalman-filter attitude estimate in ACS engineering telemetry at 5 or 10 Hz."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The CK stores each component as an IEEE-754 double. These are telemetry decimal values with 8 fractional digits (for example -0.04581941), so they are not float32-representable; probes found 0 of 7,000 sampled pointing words float32-exact, and all 17.6 M realized components equal their 8-decimal rounding. MSOPCK did not renormalise them (|q| deviates from 1 by up to ~1e-8)."
+source_resources = ["pds_ck_segment_ranges", "usgs_mirror_segment_ranges"]
+source_format = "NAIF DAF/CK data type 3 segment (BIG-IEEE)"
+source_field = "pointing record words 1-4: quaternion (q0, q1, q2, q3)"
+filtered_input_path = "filtered/naif_mro_sc_bus_attitude_ck_f64/segment_stats.json"
+filtering = "All N pointing records of each of the 44 pinned segments (N = 100,000 in every pinned segment); no records dropped."
+missing_value_policy = "CK type 3 has no missing-value sentinel; telemetry gaps appear only as interpolation-interval boundaries (all pinned segments have NINTS = 1). Non-finite values, |q| deviating from 1 by more than 1e-6, structural or descriptor mismatches, checksum mismatches, and constant samples are fatal; nothing is imputed or filtered."
+conversion = "Decode the big-endian segment; copy words 1-4 of every 7-word pointing record in record order, byte-swapped to little-endian float64. No renormalisation, sign flipping or rounding. One sample per CK segment: N x 4 values, record-major."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64 array, N records x 4 quaternion components"
+sample_geometry = "ck_segment_record_by_quaternion_component"
+sample_rank = 2
+sample_axes = ["pointing_record", "quaternion_component"]
+natural_record_kind = "naif_ck_type3_segment"
+sample_count = 44
+total_size_bytes = 140800000
+output_path = "samples/naif_mro_sc_bus_attitude_ck_f64/mro_sc_bus_quaternion_f64/"
+
+[[series]]
+id = "mro_sc_bus_angular_rate_f64"
+description = "MRO spacecraft-bus angular-velocity vectors from one NAIF CK type-3 segment."
+semantic_meaning = "Angular velocity of the MRO_SPACECRAFT bus frame in rad/s. Per CK convention the components are given with respect to the segment's base frame, MRO_MME_OF_DATE. NAIF's MSOPCK took the onboard IMU (ring-laser gyro) body rates paired with each quaternion (setup ANGULAR_RATE_FRAME = 'INSTRUMENT') and stored them in that convention. Typical magnitude is ~9.4e-4 rad/s, the orbital rate of a nadir-pointed MRO."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Native IEEE-754 doubles stored in the CK pointing records at full double precision (for example -0.00024256273012907782): unlike the quaternions they are the output of MSOPCK's frame handling, not raw decimal telemetry. The CK comments note that the IMU rates are shifted forward in time by a small unknown offset relative to the quaternions."
+source_resources = ["pds_ck_segment_ranges", "usgs_mirror_segment_ranges"]
+source_format = "NAIF DAF/CK data type 3 segment (BIG-IEEE), angular-velocity flag = 1"
+source_field = "pointing record words 5-7: angular velocity (av1, av2, av3)"
+filtered_input_path = "filtered/naif_mro_sc_bus_attitude_ck_f64/segment_stats.json"
+filtering = "All N pointing records of each of the 44 pinned segments; only gyro-era (2007-2017) kernels are selected, and a per-segment rate-step guard rejects star-tracker-only data."
+missing_value_policy = "No missing-value sentinel; non-finite values, structural or descriptor mismatches, checksum mismatches, constant samples or components, and segments failing the gyro-era rate-step guard are fatal; nothing is imputed or filtered."
+conversion = "Decode the big-endian segment; copy words 5-7 of every 7-word pointing record in record order, byte-swapped to little-endian float64. One sample per CK segment: N x 3 values, record-major."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64 array, N records x 3 angular-velocity components"
+sample_geometry = "ck_segment_record_by_rate_component"
+sample_rank = 2
+sample_axes = ["pointing_record", "angular_velocity_component"]
+natural_record_kind = "naif_ck_type3_segment"
+sample_count = 44
+total_size_bytes = 105600000
+output_path = "samples/naif_mro_sc_bus_attitude_ck_f64/mro_sc_bus_angular_rate_f64/"
+
+[[series]]
+id = "mro_sc_bus_sclk_epoch_ticks_f64"
+description = "Encoded MRO spacecraft-clock time tags of each pointing record (alignment helper)."
+semantic_meaning = "SPICE encoded SCLK (ticks of 1/256 s, with fractional part) for each pointing record, strictly increasing; aligns the two primary series in time. Cadence is 0.1 s or 0.2 s depending on telemetry mode."
+role = "auxiliary"
+representation_class = "native_numeric"
+representation_notes = "Auxiliary timestamp words; they do not count toward acceptance floors."
+source_resources = ["pds_ck_segment_ranges", "usgs_mirror_segment_ranges"]
+source_format = "NAIF DAF/CK data type 3 segment (BIG-IEEE)"
+source_field = "segment SCLK time-tag block (N words)"
+filtered_input_path = "filtered/naif_mro_sc_bus_attitude_ck_f64/segment_stats.json"
+filtering = "All N time tags; the SCLK directory, interval starts, interval directory and (NINTS, N) trailer are bookkeeping and are not emitted."
+missing_value_policy = "Time tags must be finite, strictly increasing and inside the descriptor's SCLK coverage; otherwise the build fails."
+conversion = "Byte-swap the N big-endian time-tag words to little-endian float64, one sample per segment."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64 array of N encoded SCLK values"
+sample_geometry = "ck_segment_record_time_tag"
+sample_rank = 1
+sample_axes = ["pointing_record"]
+natural_record_kind = "naif_ck_type3_segment"
+sample_count = 44
+total_size_bytes = 35200000
+output_path = "samples/naif_mro_sc_bus_attitude_ck_f64/mro_sc_bus_sclk_epoch_ticks_f64/"

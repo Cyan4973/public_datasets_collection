@@ -1,0 +1,103 @@
+manifest_version = 1
+dataset_id = "openneuro_ds003097_aomic_dti_tensor_f32"
+name = "AOMIC-ID1000 DTI Weighted-Least-Squares Diffusion-Tensor Fields Float32"
+description = "Complete published float32 diffusion-tensor volumes (six tensor elements per 2 mm voxel, 112x112x60x6) from the MRtrix3 dwi2tensor WLS fits of 32 evenly spaced AOMIC-ID1000 participants on OpenNeuro ds003097."
+homepage = "https://openneuro.org/datasets/ds003097"
+
+[license]
+name = "Creative Commons CC0 1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "Snoek, L., van der Miesen, M.M., Beemsterboer, T., van der Leij, A., Eigenhuis, A., & Scholte, H.S. (2021). The Amsterdam Open MRI Collection, a set of multimodal MRI datasets for individual difference analyses. Scientific Data 8, 85. doi:10.1038/s41597-021-00870-6. OpenNeuro ds003097 (AOMIC-ID1000), DOI 10.18112/openneuro.ds003097.v1.2.1."
+notes = "The dataset-level dataset_description.json declares \"License\": \"CC0\" for ds003097, and the dataset README states the dataset contains both raw and preprocessed data (and other derivatives). derivatives/dwipreproc carries no separate license or dataset_description file. Preserve the HowToAcknowledge citation."
+
+[safety]
+contains_sensitive_data = true
+contains_personal_data = false
+provenance_notes = "Public deidentified human-subject MRI derivatives released by the AOMIC authors (University of Amsterdam) through OpenNeuro's official anonymous S3 bucket; anonymization was designed with GDPR advice per the dataset acknowledgements."
+usage_notes = "Human-subject neuroimaging derivative, flagged sensitive per the openneuro_ds000030 precedent. The recipe keeps only fitted diffusion-tensor voxel values at 2 mm resolution (no anatomical face detail); it downloads no participant tables, demographics, psychometrics, raw DWI, images, or free text. Participant IDs appear only as the OpenNeuro sub-NNNN labels."
+
+[[origins]]
+id = "openneuro_ds003097"
+name = "OpenNeuro ds003097 AOMIC-ID1000"
+url = "https://openneuro.org/datasets/ds003097"
+type = "bucket"
+version = "1.2.1"
+notes = "Public anonymous S3 bucket https://s3.amazonaws.com/openneuro.org, prefix ds003097/derivatives/dwipreproc/ (925 sub-NNNN participant directories, all of which publish model-DTI_desc-WLS_diffmodel and _FA volumes, plus group_dwi.tsv)."
+
+[[resources]]
+id = "dataset_description"
+origin = "openneuro_ds003097"
+url = "https://s3.amazonaws.com/openneuro.org/ds003097/dataset_description.json"
+type = "file"
+version = "1.2.1"
+access = "Direct public S3 object; download.sh requires License == CC0 and Name == AOMIC-ID1000."
+size_bytes = 1290
+sha256 = "077aaf2ad49e2c2681ed30bc21b743294885d135d7ced167526dec1abed43a95"
+local_path = "downloads/openneuro_ds003097_aomic_dti_tensor_f32/dataset_description.json"
+notes = "DatasetDOI 10.18112/openneuro.ds003097.v1.2.1. A changed sha256 is logged as a warning; a changed license is fatal."
+
+[[resources]]
+id = "selected_dti_tensor_volumes"
+origin = "openneuro_ds003097"
+url = "https://s3.amazonaws.com/openneuro.org/ds003097/derivatives/dwipreproc/"
+type = "other"
+version = "1.2.1 (S3 objects last modified 2025-12-01)"
+access = "32 exact public S3 objects sub-NNNN/dwi/sub-NNNN_model-DTI_desc-WLS_diffmodel.nii.gz, pinned in selection.tsv by key, byte size and single-part ETag (= MD5)."
+size_bytes = 125611861
+sha256 = ""
+local_path = "downloads/openneuro_ds003097_aomic_dti_tensor_f32/dwipreproc/"
+notes = "selection.tsv sha256 ee3ad04b06d0c6493be7d68a83addb13dfc210b1c0c7595f971cb646f1301a62 (also pinned in download.sh). Per-object MD5s are in selection.tsv; no aggregate checksum is published upstream."
+
+[[resources]]
+id = "selected_fa_maps"
+origin = "openneuro_ds003097"
+url = "https://s3.amazonaws.com/openneuro.org/ds003097/derivatives/dwipreproc/"
+type = "other"
+version = "1.2.1 (S3 objects last modified 2025-12-01)"
+access = "32 exact public S3 objects sub-NNNN/dwi/sub-NNNN_model-DTI_desc-WLS_FA.nii.gz for the same participants, pinned in selection.tsv by key, byte size and MD5."
+size_bytes = 20820270
+sha256 = ""
+local_path = "downloads/openneuro_ds003097_aomic_dti_tensor_f32/dwipreproc/"
+notes = "Validation only, never emitted: the published MRtrix3 tensor2metric FA map is compared voxel by voxel with FA recomputed from the tensor, which pins the diagonal component positions and catches corrupted or misinterpreted payloads."
+
+[local_paths]
+downloads = "downloads/openneuro_ds003097_aomic_dti_tensor_f32/"
+filtered = "filtered/openneuro_ds003097_aomic_dti_tensor_f32/"
+index = "index/openneuro_ds003097_aomic_dti_tensor_f32/"
+samples = "samples/openneuro_ds003097_aomic_dti_tensor_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/openneuro_ds003097_aomic_dti_tensor_f32/samples.jsonl"
+summary = "Validate the CC0 release, fetch 32 pinned WLS diffusion-tensor NIfTI volumes plus their FA maps, and emit each participant's complete 112x112x60x6 float32 tensor volume bit-exactly as one little-endian sample."
+deterministic_notes = "discover.sh lists the dwipreproc prefix (16,663 objects, 925 participants, all with diffmodel and FA) and picks sorted-participant ranks floor((2i+1)*925/64), i=0..31 (sub-0015 ... sub-0914), confirming each header by a 4 KiB gzip range read; the result is pinned in selection.tsv (sha256 checked by download.sh). Build accepts only little-endian NIfTI-1 n+1 files with dim (4,112,112,60,6), datatype 16, bitpix 32, 2 mm voxels, vox_offset 352, scl_slope 1 or 0 with scl_inter 0, and an exact-length payload; rejects non-finite values, constant components, fewer than 100,000 nonzero voxels, diagonal elements positive in under 99% of brain voxels, median mean diffusivity outside 2e-4..3e-3 mm^2/s, any voxel whose recomputed FA differs from the published FA by more than 1e-5, duplicate payloads, and floor or 1 GB cap violations. verify.sh re-decodes every source, requires bit-exact samples, recomputes statistics and the FA cross-check from the stored samples, and checks manifest sample_count and total_size_bytes."
+
+[[series]]
+id = "aomic_dti_wls_tensor_f32"
+description = "Per-participant 3D diffusion-tensor fields: six tensor elements per 2 mm voxel from weighted-least-squares DTI fits of preprocessed b=1000 s/mm^2 diffusion MRI."
+semantic_meaning = "Apparent water self-diffusion tensor D (symmetric 3x3, in mm^2/s, scanner frame) estimated in every voxel of one participant's brain; diagonal elements are directional diffusivities (brain median about 8e-4 mm^2/s), off-diagonal elements are signed covariances. Voxels outside the published dwi2mask brain mask are exactly 0 in all six elements."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Published derived model product: the AOMIC pipeline fit the tensor with MRtrix3 dwi2tensor (weighted linear least squares, 2 iterations) and released it as native float32 NIfTI. The recipe copies the stored binary32 values bit-exactly; no refitting, rescaling, masking, cropping or rounding is applied locally."
+source_resources = ["selected_dti_tensor_volumes", "selected_fa_maps"]
+source_format = "NIfTI-1 single-file gzip (MRtrix3 dwi2tensor output, datatype 16 float32)"
+source_field = "4D float32 voxel payload of model-DTI_desc-WLS_diffmodel: six diffusion-tensor elements (Dxx, Dyy, Dzz, Dxy, Dxz, Dyz) per voxel"
+filtered_input_path = "filtered/openneuro_ds003097_aomic_dti_tensor_f32/ingest_stats.json"
+filtering = "Keep the complete tensor volume of each of the 32 selected participants, including the exact-zero background outside the brain mask (76.76% of realized values, 70.6-80.8% per participant) and the rare published WLS fit-failure voxels (123 of 5,598,074 brain voxels have a diagonal element above 0.01 mm^2/s in magnitude; extremes -953.1/+424.8), which are not clipped. FA maps are read only for validation."
+missing_value_policy = "There is no missing-value sentinel; the exact zeros outside the brain mask are published values and are kept. Missing objects, size/MD5 mismatches, gzip errors, malformed or unexpected headers, non-identity scaling, truncated or oversized payloads, non-finite values, constant components, degenerate masks, implausible diffusivities, or any FA cross-check failure abort download validation, build and verify. No voxels are dropped or imputed."
+conversion = "Gunzip, parse the 348-byte NIfTI-1 header, and copy the 4,515,840 float32 values after vox_offset 352 unchanged in NIfTI order (i fastest, then j, k, tensor component in MRtrix3 order Dxx, Dyy, Dzz, Dxy, Dxz, Dyz) to one little-endian .bin per participant (18,063,360 bytes)."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 diffusion-tensor field"
+sample_geometry = "3d_voxel_grid_x_6_tensor_components"
+sample_rank = 4
+sample_shape = [112, 112, 60, 6]
+sample_axes = ["i", "j", "k", "tensor_component"]
+natural_record_kind = "participant_dti_wls_tensor_nifti_volume"
+sample_count = 32
+total_size_bytes = 578027520
+output_path = "samples/openneuro_ds003097_aomic_dti_tensor_f32/aomic_dti_wls_tensor_f32/"

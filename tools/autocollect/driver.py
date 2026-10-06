@@ -186,6 +186,7 @@ class Config:
     model: str | None = None
     effort: str | None = None
     keep_rejected_data: bool = False
+    notify_cmd: str | None = None
     poll_s: int = 15
 
 
@@ -321,6 +322,19 @@ def candidate_bytes(cid: str) -> int:
                 except OSError:
                     pass
     return total
+
+
+def notify(cfg: Config, message: str) -> None:
+    """Send a milestone message through the user's notification command
+    (message on stdin), e.g. a pingme script."""
+    if not cfg.notify_cmd:
+        return
+    try:
+        result = subprocess.run(["bash", "-c", cfg.notify_cmd], input=message, text=True, capture_output=True, timeout=60)
+        if result.returncode != 0:
+            log(f"notify failed (rc={result.returncode}): {one_line(result.stderr, 300)}")
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        log(f"notify failed: {exc!r}")
 
 
 # ---------------------------------------------------------------- state files
@@ -804,6 +818,7 @@ class Driver:
     def pause_globally(self, reason: str) -> None:
         log(f"GLOBAL PAUSE: {reason}")
         write_atomic(PAUSE_PATH, json.dumps({"at": now_iso(), "reason": reason}, indent=1))
+        notify(self.cfg, f"autocollect PAUSED, needs a look: {one_line(reason, 600)}")
 
     def paused(self) -> bool:
         return PAUSE_PATH.exists()
@@ -1205,6 +1220,10 @@ class Driver:
         paths = [f"datasets/{cid}", str(report_path.relative_to(REPO_ROOT)), *SHARED_FILES, "pipeline"]
         if commit(paths, f"Add {name}\n\nAccepted by the autocollect judge ({row['novelty_kind'] or 'novelty unlabeled'})."):
             self.terminal_this_run += 1
+            sha = git("rev-parse", "--short", "HEAD").stdout.strip()
+            have = len(progress()[int(width)])
+            notify(self.cfg, f"autocollect accepted {cid} ({width}-bit, {row['novelty_kind']}): {name}. "
+                             f"{width}-bit progress {have}/{load_baseline()['target_new_per_width']}. Commit {sha}.")
         else:
             self.pause_globally(f"could not commit accepted dataset {cid}; files are promoted but uncommitted")
 
@@ -1255,6 +1274,7 @@ class Driver:
         self.set_status(cid, status, reason)
         if commit([str(attempt_path.relative_to(REPO_ROOT)), "attempts/dataset_status.tsv", "pipeline"], f"Record {status.replace('_', ' ')} {cid}"):
             self.terminal_this_run += 1
+            notify(self.cfg, f"autocollect {status} {cid} ({row['width']}-bit): {one_line(reason, 400)}")
         else:
             self.pause_globally(f"could not commit terminal record for {cid}")
 
@@ -1315,7 +1335,10 @@ class Driver:
         pending = git("status", "--porcelain", "--", "pipeline").stdout.strip()
         if pending:
             commit(["pipeline"], "Update autocollect ledger")
-        log(f"driver stop: goal_reached={self.goal_reached()} paused={self.paused()} cost_this_run=${total_cost(self.started_at):.2f}")
+        summary = f"driver stop: goal_reached={self.goal_reached()} paused={self.paused()} cost_this_run=${total_cost(self.started_at):.2f}"
+        log(summary)
+        new = progress()
+        notify(self.cfg, f"autocollect {summary}; new per width: " + ", ".join(f"{w}-bit {len(new[w])}" for w in WIDTHS))
         return 0
 
 
@@ -1469,6 +1492,7 @@ def cmd_run(args) -> int:
         download_cap_bytes=int(args.download_cap_gb * 1e9),
         disk_budget_bytes=int(args.disk_budget_gb * 1e9),
         keep_rejected_data=args.keep_rejected_data,
+        notify_cmd=args.notify_cmd,
     )
     return Driver(cfg).run()
 
@@ -1494,6 +1518,7 @@ def main() -> int:
     run.add_argument("--download-cap-gb", type=float, default=5.0)
     run.add_argument("--disk-budget-gb", type=float, default=500.0)
     run.add_argument("--keep-rejected-data", action="store_true")
+    run.add_argument("--notify-cmd", default=None, help="shell command receiving each milestone message on stdin (e.g. a pingme script)")
     requeue = sub.add_parser("requeue", help="reset a candidate's status (e.g. after a pause)")
     requeue.add_argument("candidate_id")
     requeue.add_argument("--status", default="queued", choices=ACTIVE_STATUSES)

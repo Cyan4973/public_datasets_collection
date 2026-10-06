@@ -67,6 +67,15 @@ Useful flags: `--agents` (concurrent agent sessions, default 3),
 `--max-cost-usd`, `--stop-after`, `--model`, `--effort`, `--download-cap-gb`
 (default 5), `--disk-budget-gb` (default 500), `--keep-rejected-data`.
 
+`--notify-cmd` runs a shell command with each milestone message on stdin
+(every accepted dataset, every terminal outcome, any global pause, driver
+stop). At Meta, the pingme skill script sends a Google Chat message to you:
+
+```bash
+python3 tools/autocollect/driver.py run --agents 8 \
+  --notify-cmd ~/.claude/plugins/cache/agent-market/source-control-at-meta/3.2.0/skills/pingme/scripts/pingme.sh
+```
+
 ## Guardrails
 
 - Downloads run only through the driver, in their own process group. They are

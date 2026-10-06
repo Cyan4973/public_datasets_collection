@@ -1,0 +1,108 @@
+manifest_version = 1
+dataset_id = "sevir_vil_storm_events_u8"
+name = "SEVIR Storm-Event Vertically Integrated Liquid (VIL) Radar-Mosaic Cubes UInt8"
+description = "Native uint8 digital-VIL codes from SEVIR STORMEVENTS NEXRAD vertically-integrated-liquid mosaics: one 384 x 384 x 49 (1 km grid, 5-minute frames, 4 hours) event cube per sample for 60 storm events spread across all six 2017-2019 half-year STORMEVENTS containers."
+homepage = "https://registry.opendata.aws/sevir/"
+
+[license]
+name = "SEVIR AWS Open Data registry statement: no restrictions on use"
+spdx = "LicenseRef-SEVIR-No-Restrictions"
+url = "https://github.com/awslabs/open-data-registry/blob/main/datasets/sevir.yaml"
+citation = "Veillette, M., Samsi, S., and Mattioli, C. (2020). SEVIR: A Storm Event Imagery Dataset for Deep Learning Applications in Radar and Satellite Meteorology. Advances in Neural Information Processing Systems 33 (NeurIPS 2020). Data: s3://sevir (AWS Open Data registry, managed by Mark S. Veillette, MIT Lincoln Laboratory)."
+notes = "The AWS Open Data registry entry for SEVIR (ManagedBy: Mark S. Veillette; Contact: mark.veillette@mit.edu) states verbatim: 'License: There are no restrictions on the use of this data.' download.sh re-fetches the registry YAML and fails unless that exact line is still present. The bucket itself carries no separate license file. The underlying radar observations come from the NOAA NEXRAD WSR-88D network (public U.S. government data). Cite Veillette et al. 2020 and acknowledge NOAA NEXRAD."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official SEVIR S3 bucket (s3://sevir, us-west-2) maintained by MIT Lincoln Laboratory; exact HTTP byte ranges of the pinned (ETag-guarded) HDF5 objects; no mirrors."
+usage_notes = "Meteorological radar-derived gridded fields only; no personal data. Storm Events IDs and timestamps are kept only as index metadata."
+
+[[origins]]
+id = "sevir_s3"
+name = "SEVIR public S3 bucket"
+url = "https://sevir.s3.amazonaws.com/"
+type = "bucket"
+notes = "Anonymous HTTPS access; S3 honors Range and If-Match. Objects last modified 2020-04-15."
+
+[[origins]]
+id = "aws_open_data_registry"
+name = "AWS Open Data registry entry for SEVIR"
+url = "https://registry.opendata.aws/sevir/"
+type = "website"
+notes = "Source of the license statement; the machine-readable YAML lives in awslabs/open-data-registry."
+
+[[resources]]
+id = "aws_registry_sevir_yaml"
+origin = "aws_open_data_registry"
+url = "https://raw.githubusercontent.com/awslabs/open-data-registry/main/datasets/sevir.yaml"
+type = "file"
+version = "main branch at download time"
+access = "Direct public download; content checked for the exact license, maintainer and bucket-ARN lines rather than a hash (the registry file may be edited cosmetically)."
+size_bytes = 1701
+sha256 = "523266e485f75ffe0d111db831f6909bf57112837a35e88b2294e27c284b7199"
+local_path = "downloads/sevir_vil_storm_events_u8/aws_registry_sevir.yaml"
+notes = "License evidence only; not used by build.sh. size/sha256 recorded at authoring time (2026-10-05)."
+
+[[resources]]
+id = "sevir_catalog_csv"
+origin = "sevir_s3"
+url = "https://sevir.s3.amazonaws.com/CATALOG.csv"
+type = "file"
+version = "S3 ETag f3bca535d25b6733647d45e27b59ed41-5, Last-Modified 2020-04-15T02:17:13Z"
+access = "Direct public download (resumable, If-Match ETag guard)."
+size_bytes = 33838047
+sha256 = "3209386cde96ffa80ccec3c1919090ffc601333cc651116f9fc48f224a5c2f57"
+local_path = "downloads/sevir_vil_storm_events_u8/CATALOG.csv"
+notes = "Event catalog (76,004 rows, 20,393 VIL rows, 3,910 STORMEVENTS VIL rows). Used to re-derive the pinned selection (events.tsv), to cross-check the HDF5 id dataset, and for the per-event pct_missing / data_min / data_max checks."
+
+[[resources]]
+id = "sevir_vil_stormevents_containers"
+origin = "sevir_s3"
+url = "https://sevir.s3.amazonaws.com/data/vil/"
+type = "other"
+version = "Six objects pinned by size and S3 ETag in containers.tsv (Last-Modified 2020-04-15)"
+access = "HTTP Range requests only, each with If-Match on the pinned ETag: metadata head bytes [0, 2048), metadata tail [2048 + N*7225344, EOF), and one 7,225,344-byte range per selected event at offset 2048 + file_index*7225344. Whole objects are never fetched."
+size_bytes = 433584316
+sha256 = ""
+local_path = "downloads/sevir_vil_storm_events_u8/"
+notes = "Containers: SEVIR_VIL_STORMEVENTS_{2017,2018,2019}_{0101_0630,0701_1231}.h5 (1,394,497,418 / 4,949,371,586 / 5,729,709,818 / 6,119,878,934 / 6,148,780,350 / 3,908,920,610 bytes; N = 193 / 685 / 793 / 847 / 851 / 541 events). size_bytes here is the fetched total: 6 x 2,048 head + 51,388 tail + 60 x 7,225,344 event bytes. Per-event SHA-256 pins live in event_sha256.tsv (recorded from the first driver download on 2026-10-05) and are enforced by download, build and verify; there is no single checksum for this multi-range resource."
+
+[local_paths]
+downloads = "downloads/sevir_vil_storm_events_u8/"
+filtered = "filtered/sevir_vil_storm_events_u8/"
+index = "index/sevir_vil_storm_events_u8/"
+samples = "samples/sevir_vil_storm_events_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/sevir_vil_storm_events_u8/samples.jsonl"
+summary = "Validate the license statement and the pinned catalog, parse the HDF5 v0 metadata of each STORMEVENTS VIL container from exact head/tail byte ranges, fetch exactly one contiguous uint8 vil[i] cube per selected event, and emit each cube as one raw uint8 sample in stored (row, column, frame) order."
+deterministic_notes = "Selection rule (scripts/select_events.py, pinned output events.tsv, re-derived by download/build/verify from the SHA-256-pinned catalog): STORMEVENTS VIL rows with pct_missing == 0 and data_max > 0; per container sort by (time_utc, id), keep the first event of each NWS episode_id, then take 10 events at positions floor((k + 0.5) * M / 10). HDF5 checks: superblock v0, root symbol table with exactly the links 'id' and 'vil'; 'vil' dataspace (N, 384, 384, 49) with N pinned per container, unsigned 8-bit fixed-point datatype, layout v3 contiguous at address 2048 with size N*7,225,344, no filter-pipeline message; 'id' is (N,) fixed 10-byte null-padded strings whose entries equal the catalog id at every file_index. Every range response must be 206 with the exact Content-Range and pinned ETag. Per-event SHA-256 pins in event_sha256.tsv are enforced by download, build and verify. Realized: 60 samples x 7,225,344 values (median 7,225,344), 254 distinct codes (1 and 255 absent), 48.7% zeros; aggregate SHA-256 of the samples concatenated in index order 742700951e156ad4bb24215f0356d9fa4e5f7675cace3242dcd47014ddbec281."
+
+[[series]]
+id = "sevir_vil_storm_event_cube_u8"
+description = "SEVIR digital vertically integrated liquid (VIL) codes for one 4-hour storm event on a 384 x 384 km, 1 km grid with 49 frames at nominal 5-minute spacing."
+semantic_meaning = "Per-pixel, per-frame NEXRAD-mosaic vertically integrated liquid stored as SEVIR's native uint8 digital-VIL code X in 0..254: VIL = 0 kg/m^2 for X <= 5, (X - 2) / 90.66 kg/m^2 for 5 < X <= 18, exp((X - 83.9) / 38.9) kg/m^2 for 18 < X <= 254; 255 is SEVIR's missing-data code."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The values are the source's own stored uint8 codes from the HDF5 'vil' dataset (unsigned 8-bit, contiguous, unfiltered); no rescaling, remapping, transposition or frame selection is applied. The piecewise linear/log code-to-kg/m^2 law is documented by the SEVIR maintainers (SEVIR_Tutorial.ipynb) and is not applied."
+source_resources = ["sevir_vil_stormevents_containers", "sevir_catalog_csv"]
+source_format = "HDF5 (superblock v0) SEVIR STORMEVENTS VIL file; dataset 'vil' uint8 (N, 384, 384, 49), contiguous at offset 2048"
+source_field = "root dataset 'vil', slice vil[file_index, :, :, :] (digital VIL codes)"
+filtered_input_path = "filtered/sevir_vil_storm_events_u8/ingest_stats.json"
+filtering = "Only STORMEVENTS VIL containers (no RANDOMEVENTS, no ir069/ir107/vis/lght). 60 events, 10 per half-year container, chosen by the pinned catalog rule in deterministic_notes (pct_missing == 0, data_max > 0, one event per NWS episode, evenly spaced in time). All 49 frames and the full 384 x 384 grid of each selected event are kept."
+missing_value_policy = "Only events with catalog pct_missing == 0 are selected, so code 255 (SEVIR missing data) must not occur: download, build and verify all fail if any 255 is present. Each cube must also have max code == catalog data_max, min code == catalog data_min (0), at least 16 distinct codes, a zero fraction below 0.9999 and at least 2 distinct frames. Zero codes (no precipitation, VIL below threshold) are genuine observations and are preserved."
+conversion = "The HDF5 metadata proves that vil[i] is the contiguous run of 7,225,344 unsigned 8-bit elements at byte offset 2048 + i*7,225,344 in C order (row, column, frame), so the fetched range is the decoded typed array; it is written unchanged as one little-endian uint8 sample (byte order is irrelevant at 8 bits). Frames remain the innermost axis as stored; nothing is transposed."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 digital-VIL cube, C order (grid_row, grid_column, frame)"
+sample_geometry = "laea_1km_grid_384x384_by_49_frames"
+sample_rank = 3
+sample_axes = ["grid_row", "grid_column", "frame"]
+natural_record_kind = "sevir_storm_event_vil_cube"
+sample_count = 60
+total_size_bytes = 433520640
+output_path = "samples/sevir_vil_storm_events_u8/sevir_vil_storm_event_cube_u8/"

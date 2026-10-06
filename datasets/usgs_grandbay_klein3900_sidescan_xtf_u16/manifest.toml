@@ -1,0 +1,89 @@
+manifest_version = 1
+dataset_id = "usgs_grandbay_klein3900_sidescan_xtf_u16"
+name = "USGS 2015-315-FA Grand Bay Klein Side-Scan Sonar XTF Backscatter UInt16"
+description = "Raw uint16 side-scan sonar backscatter (port and starboard, 4096 slant-range samples per channel per ping) from 24 complete Klein SonarPro XTF recording files of the USGS 2015 Grand Bay, Mississippi/Alabama survey."
+homepage = "https://doi.org/10.5066/P9374DKQ"
+
+[license]
+name = "U.S. Government public domain"
+spdx = "LicenseRef-USGov-Public-Domain"
+url = "https://coastal.er.usgs.gov/data-release/doi-P9374DKQ/data/GrandBay_2015-315-FA_metadata.txt"
+citation = "Locker, S.D., Forde, A.S., and Smith, C.G., 2018, Subbottom and sidescan sonar data acquired in 2015 from Grand Bay, Mississippi and Alabama: U.S. Geological Survey data release, https://doi.org/10.5066/P9374DKQ."
+notes = "FGDC metadata: 'Access_Constraints: None. These data are held in the public domain. Use_Constraints: Public domain data from the U.S. Government are freely redistributable with proper metadata and source attribution. The U.S. Geological Survey requests to be acknowledged as originator of the data in future products or derivative research.' The usgs.gov catalog page for the release is marked CC0 1.0 Universal. download.sh re-checks these phrases against the pinned metadata SHA-256."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official USGS St. Petersburg Coastal and Marine Science Center data release (Field Activity 2015-315-FA, project 15CCT03), fetched directly from coastal.er.usgs.gov by exact ZIP byte ranges."
+usage_notes = "Seafloor acoustic backscatter of an estuary; no people, vessels' crews, or personal data are present. Navigation fields in ping headers are not emitted."
+
+[[origins]]
+id = "usgs_doi_p9374dkq"
+name = "USGS data release doi:10.5066/P9374DKQ (Subbottom and Sidescan Sonar Data Acquired in 2015 From Grand Bay, Mississippi and Alabama)"
+url = "https://coastal.er.usgs.gov/data-release/doi-P9374DKQ/"
+type = "data_portal"
+notes = "Publication date 2018-10-01. The landing page lists 2015-315-FA_xtf.zip as 'Unprocessed Klein SonarPro xtf data files (.xtf)'."
+
+[[resources]]
+id = "fgdc_metadata_txt"
+origin = "usgs_doi_p9374dkq"
+url = "https://coastal.er.usgs.gov/data-release/doi-P9374DKQ/data/GrandBay_2015-315-FA_metadata.txt"
+type = "file"
+version = "Publication_Date 20181001"
+access = "Direct public download."
+size_bytes = 32601
+sha256 = "36736ed67024c1130c5ec8affef67c9d9756e44a0eb67d530a32480d5897f770"
+local_path = "downloads/usgs_grandbay_klein3900_sidescan_xtf_u16/GrandBay_2015-315-FA_metadata.txt"
+notes = "License, instrument, and survey description; identical in size to the archive's own metadata member."
+
+[[resources]]
+id = "xtf_archive_selected_members"
+origin = "usgs_doi_p9374dkq"
+url = "https://coastal.er.usgs.gov/data-release/doi-P9374DKQ/data/2015-315-FA_xtf.zip"
+type = "archive"
+version = "Last-Modified 2018-10-01T17:10:02Z; 9,843,630,446 bytes; ZIP64 central directory at offset 9,843,618,372 (11,976 bytes, 145 entries, SHA-256 1c82077476a90a00184a574b4ef7199dffd522394073e352dae21b7091974247)"
+access = "HTTP byte ranges only: the last 65,536 bytes (central directory) plus the exact [local header, next local header) range of each of the 24 members listed in sources.tsv; 464,297,806 bytes transferred in total."
+size_bytes = 842747776
+sha256 = ""
+local_path = "downloads/usgs_grandbay_klein3900_sidescan_xtf_u16/xtf/"
+notes = "size_bytes is the sum of the 24 extracted XTF members. Each member is validated against its central-directory offset, compressed size, uncompressed size, and CRC32 (pinned in sources.tsv); the DEFLATE stream must end exactly at the next member's local header. Members are deflate-compressed with no data descriptors."
+
+[local_paths]
+downloads = "downloads/usgs_grandbay_klein3900_sidescan_xtf_u16/"
+filtered = "filtered/usgs_grandbay_klein3900_sidescan_xtf_u16/"
+index = "index/usgs_grandbay_klein3900_sidescan_xtf_u16/"
+samples = "samples/usgs_grandbay_klein3900_sidescan_xtf_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/usgs_grandbay_klein3900_sidescan_xtf_u16/samples.jsonl"
+summary = "Range-fetch 24 pinned Klein SonarPro XTF members from the USGS archive, walk their XTF packets, and emit each recording file's sonar pings as one ping-major [port 4096 | starboard 4096] little-endian uint16 array."
+deterministic_notes = "Selection rule (scripts/xtf_sidescan.py list-band + discover, reproducible with discover.sh): of the 143 .xtf members, every file is a 1,024-byte XTF header followed by N pairs of one 832-byte Klein HeaderType-108 record and one 16,768-byte HeaderType-0 sonar ping, so N = (uncompressed_size - 1024) / 17600 exactly. Keep members with 1000 <= N < 2700 pings (25 members, about 2.2-6.0 minutes at 0.1333 s per ping), then drop members whose sonar pings are not in the majority configuration (2 channels, 4096 samples, channel frequency field 100, slant range 100 m); this removes 15CCT03_SSS_150528180500.xtf (frequency field 500). The band exists because full 30-minute SonarPro rollover files hold about 13,400 pings (about 220 MB of primary data each) and the 1 GB cap would allow only four of them; the band yields 24 complete recording files across six of the seven survey days. The result is pinned in sources.tsv with ZIP offsets, sizes, and CRC32. build.sh re-checks the configuration on every ping and fails on any deviation. Output order follows sources.tsv, ping order follows the file, and sample bytes are verbatim copies of the XTF channel payloads."
+
+[[series]]
+id = "klein_sidescan_port_stbd_backscatter_u16"
+description = "Raw side-scan sonar backscatter amplitudes from complete Klein SonarPro XTF recording files, port and starboard channels interleaved per ping."
+semantic_meaning = "Unprocessed side-scan sonar echo amplitude (raw uint16 counts, 12-13 effective bits, realized range 0 to 4,685) received by the port and starboard transducers of a towed Klein 3900 towfish over an estuarine seafloor, sampled at 4096 slant-range bins per channel per ping out to 100 m slant range, about 7.5 pings per second. Stored orientation: port samples run from far range (port[0], about 100 m slant range) to nadir (port[4095]); starboard samples run from nadir (stbd[0]) to far range (stbd[4095]). Each ping row therefore runs port-far, through nadir, to starboard-far as one continuous across-track line."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "XTF CHANINFO declares BytesPerSample = 2 for both sonar channels and the samples are stored as little-endian 16-bit integers; they are copied verbatim, without scaling, gain correction, slant-range correction, or reordering. No widening: the native storage width is 16 bits. CHANINFO UniPolar = 0, but every stored value lies in 0..4,685, so the bytes read identically as uint16 or int16; uint is the honest kind for echo envelope amplitudes."
+source_resources = ["xtf_archive_selected_members"]
+source_format = "Triton eXtended Triton Format (XTF, FileFormat 0x7B) written by Klein SonarPro 12 (RecordingProgramName 'KleinXlt' 4.0)"
+source_field = "HeaderType-0 sonar ping packets: the NumSamples x uint16 sample array following each XTFPINGCHANHEADER for ChannelNumber 0 (CHANINFO TypeOfChannel 1, port) and ChannelNumber 1 (TypeOfChannel 2, starboard)"
+filtered_input_path = "filtered/usgs_grandbay_klein3900_sidescan_xtf_u16/build_stats.json"
+filtering = "The 24 members of sources.tsv (selection rule in processing.deterministic_notes). Within each file every HeaderType-0 ping is kept; HeaderType-108 Klein auxiliary records (832 bytes of navigation/status fields, e.g. float64 latitude and longitude in radians; no sonar sample arrays) and any other packet types are skipped. The 256-byte ping headers and 64-byte channel headers (navigation, timing, gain) are not emitted."
+missing_value_policy = "No values are dropped, imputed, or rescaled. Zero is preserved wherever it occurs. Structural zeros: the first 7 port samples and the last 7 starboard samples of every ping (the far-range end of each channel) are always 0 in the source. They are 14/8192 = 0.17% of values, are kept verbatim, and account for most of the 0.25% per-file zero floor; verify.sh fails if any ping deviates. Other zeros are legitimate low-amplitude readings (water column, weak or shadowed seafloor). A missing 0xFACE magic, an inconsistent NumBytesThisRecord, a ping with a channel count, channel order, NumSamples, frequency field, or slant range outside the canonical configuration, a ping count different from the pinned value, or a channel that is all zero, more than half zero, or has fewer than 64 distinct values fails build and verify."
+conversion = "Walk packets from byte 1024 by NumBytesThisRecord, asserting 0xFACE at each step. For each HeaderType-0 ping, check that the record length equals 256 + sum(64 + 2 x NumSamples) rounded up to 64 bytes, then append the port array (4096 uint16) followed by the starboard array (4096 uint16) in stored order, without reordering: port runs from far range (port[0], about 100 m slant range) to nadir (port[4095]) and starboard from nadir (stbd[0]) to far range (stbd[4095]), so each 8192-value ping row runs port-far, through nadir, to starboard-far. One output file per XTF recording file, shape [pings, 2, 4096], little-endian uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw little-endian uint16 array, ping-major [ping][port, starboard][stored sample index: port far-to-nadir, starboard nadir-to-far]"
+sample_geometry = "sidescan_waterfall_ping_by_channel_by_slant_range_sample"
+sample_rank = 3
+sample_axes = ["ping", "channel_port_then_starboard", "stored_sample_index_port_far_to_nadir_stbd_nadir_to_far"]
+natural_record_kind = "complete_klein_sonarpro_xtf_recording_file"
+sample_count = 24
+total_size_bytes = 784498688
+output_path = "samples/usgs_grandbay_klein3900_sidescan_xtf_u16/klein_sidescan_port_stbd_backscatter_u16/"

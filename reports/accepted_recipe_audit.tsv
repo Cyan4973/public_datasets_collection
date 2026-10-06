@@ -378,6 +378,7 @@ mpc_goes18_abi_cmi_c13_fulldisk_u16	ok	353037312	706074624	12	29419776	58839552	
 sentinel1_grd_measurement_u16	ok	365856036	731712072	4	91464009	182928018	0	0	0	1	none	none
 ncbi_geo_gpl5423_scanarray_cdna_scan_u16	ok	372134400	744268800	24	15492400	30984800	0	0	0	1	none	none
 tcia_covid19_ny_sbu_chest_cr_u16	ok	373174272	746348544	48	7774464	15548928	0	0	0	1	none	none
+usgs_grandbay_klein3900_sidescan_xtf_u16	ok	392249344	784498688	24	17600512	35201024	0	0	0	1	none	none
 bbbc021_microscopy_tiff_u16	ok	393216000	786432000	300	1310720	2621440	0	0	0	1	none	none
 google_alphaearth_satellite_embeddings_i8	ok	402653184	402653184	384	1048576	1048576	0	0	0	1	none	none
 empiar_10318_microed_diffraction_frames_u16	ok	402653184	805306368	24	16777216	33554432	0	0	0	1	none	none

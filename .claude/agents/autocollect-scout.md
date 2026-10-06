@@ -25,7 +25,11 @@ downstream work.
 
 1. Ground on coverage: `python3 tools/autocollect/novelty.py --list-width <W>`
    shows local accepted recipes and downstream families at the width. Aim for
-   modalities, sources, and quantities that are absent or thin there.
+   modalities, sources, and quantities that are absent or thin there. Also
+   read the `accepted` rows of `pipeline/candidates.tsv` at your width: these
+   are this collection effort's new families. Favor modalities not yet among
+   them; a third family of an already-represented modality needs a strong
+   reason.
 2. Search broadly in the focus domains given by the driver (others are fine
    if clearly more promising). Use the web search tool, WebFetch, and curl.
    Productive places include institutional and agency archives, research data

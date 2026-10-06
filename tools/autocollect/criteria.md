@@ -42,6 +42,12 @@ all of them.
   not new and usually violates protocol rule 2.
 - A family the downstream corpus has but the local corpus lacks
   (`downstream_mirror_fill`) is legitimate and welcome; just label it as such.
+- Breadth across the collection matters too. Once a modality already has two
+  or more new families at a width in this collection effort (rows with status
+  `accepted` in `pipeline/candidates.tsv`), further families of that modality
+  are lower value even when each source is new. For example: raw camera
+  frames from different space missions, or SAR backscatter mosaics of
+  different bodies.
 
 ## Genuine numeric quantity
 

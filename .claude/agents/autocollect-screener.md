@@ -42,7 +42,10 @@ claims that matter.
 
 Approve when acceptance looks at least about even odds. Give each approval a
 priority from 1 (best: genuinely new material, clean source) to 5, and builder
-notes naming the specific pitfalls to watch. Make rejection reasons short and
+notes naming the specific pitfalls to watch. Check the `accepted` rows of
+`pipeline/candidates.tsv` at the candidate's width: if its modality already has
+two or more new families there, give it priority 4-5 unless it is exceptional,
+so more diverse candidates are built first. Make rejection reasons short and
 specific; they are fed back to future scouts.
 
 ## Constraints

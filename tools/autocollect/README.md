@@ -118,6 +118,9 @@ overrides the check; not recommended.
 - Network: the driver exports the `~/.curlrc` proxy to every child process so
   both curl and Python reach the internet. Recipes still use curl for network
   so they also run standalone.
+- To change prompts, criteria or code while a driver runs, write and commit in one
+  step (e.g. write to a temp file, then `mv` and `git commit` in one command); the
+  mutation check pauses on any uncommitted change to a tracked file.
 - Commits pass `tools/check_repo_hygiene.py` and `git diff --cached --check`
   and include only the decision's paths plus `pipeline/`.
 

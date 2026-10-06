@@ -1,0 +1,101 @@
+manifest_version = 1
+dataset_id = "empiar_10994_sbfsem_bsed_slices_u16"
+name = "EMPIAR-10994 Raw SBF-SEM (Gatan 3View BSED) HeLa Metaphase-Cell Slices UInt16"
+description = "132 evenly spaced raw native-uint16 backscattered-electron block-face images (about 15 nm pixels, 30 nm cuts, every 8th valid slice) from the two serial block-face SEM volumes of EMPIAR-10994: a control and a REEP3/4-knockdown HeLa cell in metaphase, decoded from Gatan DigitalMicrograph 4 (DM4) files at native per-run frame size."
+homepage = "https://www.ebi.ac.uk/empiar/EMPIAR-10994/"
+
+[license]
+name = "Creative Commons CC0 1.0 Universal Public Domain Dedication"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "Belevich I, Jokitalo E (2024). EMPIAR-10994: REEP3 and REEP4 determine the tubular morphology of the endoplasmic reticulum during mitosis. Electron Microscopy Public Image Archive, DOI 10.6019/EMPIAR-10994. Associated publication: Kumar D, Golchoubian B, Belevich I, Jokitalo E, Schlaitz AL (2019), Mol Biol Cell 30(12):1377-1389, DOI 10.1091/mbc.e18-11-0698."
+notes = "EMPIAR FAQ (https://www.ebi.ac.uk/empiar/faq): 'All data in EMPIAR is freely and publicly available to the global community under the CC0 license'. download.sh fetches the FAQ and fails if that sentence disappears. Citing the entry DOI is requested as good practice, not required."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official EMPIAR archive files served anonymously over HTTPS by ftp.ebi.ac.uk; no mirrors. Cultured HeLa cell line imaged by the University of Helsinki Electron Microscopy Unit in 2016; no patient or donor information."
+usage_notes = "Samples hold only detector intensities. The DM4 metadata (instrument settings, an operator e-mail-alert address in the SBFSEM tags, 3View file paths) is validated where relevant but never emitted."
+
+[[origins]]
+id = "empiar"
+name = "Electron Microscopy Public Image Archive (EMBL-EBI)"
+url = "https://www.ebi.ac.uk/empiar/EMPIAR-10994/"
+type = "data_portal"
+notes = "Entry EMPIAR-10994, released 2024-01-16, SBF-SEM, 8.7 GB. Raw imagesets: 'HeLa Control metaphase cell, raw data' (data/160621_HeLa_Control/01_original_images, 578 DM4) and 'HeLa REEP3/4 KD metaphase cell, raw datasets' (data/161107_HeLa_REEP3-4_KD_LBR/01_original_images, 474 DM4), both declared UNSIGNED 16 BIT INTEGER. The 02_processed_dataset imagesets (aligned, contrast-normalized 8-bit TIFF) and 03_models segmentations are not used."
+
+[[resources]]
+id = "empiar_10994_entry"
+origin = "empiar"
+url = "https://www.ebi.ac.uk/empiar/api/entry/EMPIAR-10994/"
+type = "api_query_result"
+version = "release 2024-01-16"
+access = "Anonymous JSON API; validated for status REL, DOI, SBF-SEM type, title, and both raw imagesets (DM4, UNSIGNED 16 BIT INTEGER, 578 and 474 images)."
+size_bytes = 6786
+sha256 = ""
+local_path = "downloads/empiar_10994_sbfsem_bsed_slices_u16/empiar_10994_entry.json"
+notes = "Metadata only; not used to build samples. Size is indicative, not enforced."
+
+[[resources]]
+id = "empiar_faq_license"
+origin = "empiar"
+url = "https://www.ebi.ac.uk/empiar/faq"
+type = "file"
+version = "fetched at download time"
+access = "Anonymous HTML; must contain the CC0 licence sentence."
+size_bytes = 44045
+sha256 = ""
+local_path = "downloads/empiar_10994_sbfsem_bsed_slices_u16/empiar_faq.html"
+notes = "Licence evidence only. Size is indicative, not enforced."
+
+[[resources]]
+id = "hela_raw_dm4_selected_slices"
+origin = "empiar"
+url = "https://ftp.ebi.ac.uk/empiar/world_availability/10994/data/"
+type = "file"
+version = "132 DM4 files listed in scripts/slices.tsv (server mtimes 2024-01-16)"
+access = "Whole DM4 files under <cell>/01_original_images/, pinned in scripts/slices.tsv by exact byte size, image Data offset, dimensions, calibration, voltage, acquisition time and SHA-256 of the DM4 metadata skeleton (every byte except undecoded array values), all resolved by discover.sh from HEAD and HTTP range requests on 2026-10-06, plus whole-file SHA-256 recorded from the verified 2026-10-06 autocollect download; all are enforced by download, build and verify."
+size_bytes = 537980563
+sha256 = ""
+local_path = "downloads/empiar_10994_sbfsem_bsed_slices_u16/"
+notes = "73 control files (downloads/.../control/) and 59 KD files (downloads/.../kd/); several file names occur in both cells, hence the per-cell directories. The full raw population is 1052 files (about 4.1 GB), above the corpus cap, so an evenly spaced subset is taken."
+
+[local_paths]
+downloads = "downloads/empiar_10994_sbfsem_bsed_slices_u16/"
+filtered = "filtered/empiar_10994_sbfsem_bsed_slices_u16/"
+index = "index/empiar_10994_sbfsem_bsed_slices_u16/"
+samples = "samples/empiar_10994_sbfsem_bsed_slices_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/empiar_10994_sbfsem_bsed_slices_u16/samples.jsonl"
+summary = "Fetch 132 pinned raw DM4 slices (537,980,563 bytes), walk each DM4 tag tree, validate the uint16 BSED image and its acquisition metadata, and emit the main image's Data array unchanged as one raw little-endian uint16 sample per slice at native frame size (132 samples, 252,375,600 values, 504,751,200 bytes)."
+deterministic_notes = "Population: per cell, the slices of all acquisition runs in acquisition order (control r01a 26, r01b 83, r01c 132, r01d 131, r01e 85, r01f 121 = 578; KD r01 105, r01b 72, r01c 82, r01d 17, r01e 114, r01f 84 = 474), minus KD r01d slices 0014-0016, which report 200 V and a 100.8 nm calibration and which the depositors deleted from their processed stack (Amira header 'MIB: Delete slice: 274:276'), giving 578 + 471 valid slices. Selection: z_index = 0, 8, 16, ... within each cell (73 control + 59 KD), so every run is represented in proportion to its length. discover.sh records the live listings, entry record, licence page and Amira evidence, and resolves every pin from HEAD plus small byte ranges. Per file, build and verify require: size equal to the pin; DM4 version 4, root length = size - 24, little-endian value flag, 8-byte zero trailer; every tag length consistent with its type descriptor and nested exactly within its parent; ImageList of exactly two entries with entry 0 an RGBA thumbnail (DataType 23) and entry 1 the main image with DataType 10, PixelDepth 2, Data element type 4 (uint16) and element count = width x height; square calibration between 0.0145 and 0.0155 um in um units; detector 3VBSED, microscope FEI Quanta, voltage 2500 V (control) or 2400 V (KD), 3View slice thickness 30 nm, DigiScan dwell 20 us and DigiScan width/height equal to the image; acquisition date of the cell; image name and 3View base file name matching the run and slice; Data offset, dimensions, calibration, voltage, acquisition time and skeleton SHA-256 and whole-file SHA-256 equal to the pins. The Data array is located by walking the tag tree: no alignment is assumed and 131 of the 132 selected arrays start at an odd byte offset. Each frame must have min < max, at least 256 distinct values, a maximum of at least 256, a modal value covering at most half the pixels, no constant row or column, and a unique payload. verify.sh re-derives every frame from the DM4 files, byte-compares each sample, recomputes statistics and index rows, checks that the sample directory matches the index exactly, and checks the manifest sample_count and total_size_bytes. The SHA-256 over '<sample name>\t<sample sha256>' lines in selection order is pinned (9197d1b64aac0f49910a52dbf772625e538cedb17358473d87c2216654250453) and enforced by build and verify. build.sh, verify.sh and download.sh first run a synthetic-DM4 self-test covering odd and even Data offsets, thumbnail-first image lists, struct, string and struct-array tags, sparse range parsing, and rejection of uint8/RGB main images, count mismatches, the beam-fault metadata, wrong runs or slices, corrupted lengths and constant frames."
+
+[[series]]
+id = "hela_sbfsem_bsed_u16"
+description = "Raw serial block-face SEM backscattered-electron images of two resin-embedded, heavy-metal-stained HeLa cells in metaphase, one native-size frame per sampled block-face slice."
+semantic_meaning = "Each value is the 16-bit digitized backscattered-electron signal (Gatan 3View 3VBSED detector on an FEI Quanta SEM, 2.5 kV control / 2.4 kV KD, 20 us dwell, DigiScan acquisition) for one pixel of the freshly cut block face; pixels are 14.8-15.3 nm and successive cuts are 30 nm apart. Realized values span 8,454-38,610 with uniformly used low bits and 6,710-16,950 distinct values per frame. The two cells sit in different detector brightness windows: control frames average 24,900-27,000 counts (minimum 8,454, maximum 30,912), KD frames 32,700-34,700 (25,207-38,610)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The DM4 ImageData declares DataType 10 (unsigned 16-bit) and PixelDepth 2, and the Data array is typed uint16 (element type 4) in little-endian byte order; EMPIAR declares both raw imagesets UNSIGNED 16 BIT INTEGER. Samples are the stored uint16 values with no rescaling, alignment, cropping or contrast normalization (unlike the depositors' 8-bit processed stack)."
+source_resources = ["hela_raw_dm4_selected_slices"]
+source_format = "Gatan DigitalMicrograph 4 (DM4) tag file: big-endian tag-tree structure with little-endian values; ImageList entry 0 is an RGBA thumbnail, entry 1 the acquired image"
+source_field = "ImageList[1]/ImageData/Data: uint16 array of Dimensions[0] x Dimensions[1] BSED intensities (x fastest)"
+filtered_input_path = "filtered/empiar_10994_sbfsem_bsed_slices_u16/ingest_stats.json"
+filtering = "Only the two raw 01_original_images imagesets are used. KD r01d slices 0014-0016 (beam-fault frames removed by the depositors) are excluded from the population; every 8th remaining slice of each cell is kept (240 nm apart in z), which spreads the selection over all 12 acquisition runs. All pixels of every kept frame are emitted at the run's native size (1280x1280, 1400x1400, 1500x1500 or 1096 rows x 1200 columns); nothing is cropped or padded."
+missing_value_policy = "There are no missing-value sentinels: every pixel is a detector reading, and any 0 or 65535 (clipped) values would stay in place and are counted per frame in the index statistics. Fatal, identically in build and verify: any size, hash, structure, type, dimension or acquisition-metadata deviation; a constant frame; fewer than 256 distinct values; a maximum below 256; a modal value above half the pixels; any constant row or column; a duplicate frame payload."
+conversion = "Walk the DM4 tag tree, locate ImageList[1]/ImageData/Data, check its descriptor [20, 4, width*height], and write its 2*width*height value bytes unchanged (already little-endian uint16, row-major with x fastest, first scan line first) as one raw sample per slice; the sample shape is [height, width]."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian uint16 SBF-SEM backscattered-electron block-face image"
+sample_geometry = "sbfsem_block_face_scan_raster_2d"
+sample_rank = 2
+sample_axes = ["scan_line_y", "scan_pixel_x"]
+natural_record_kind = "sbfsem_block_face_slice_dm4"
+sample_count = 132
+total_size_bytes = 504751200
+output_path = "samples/empiar_10994_sbfsem_bsed_slices_u16/hela_sbfsem_bsed_u16/"

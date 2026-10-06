@@ -1,0 +1,151 @@
+manifest_version = 1
+dataset_id = "noaa_wcsd_em302_water_column_i8"
+name = "NOAA NCEI Okeanos Explorer EX1711 Kongsberg EM302 Multibeam Water-Column Amplitudes Int8"
+description = "Native signed-int8 multibeam water-column backscatter amplitudes (0.5 dB steps, TVG applied) from Kongsberg EM302 'k' datagrams: one sample per complete 288-beam ping, from 15 whole .wcd files spread across NOAA Ship Okeanos Explorer cruise EX1711 (2017-11-30 to 2017-12-20)."
+homepage = "https://registry.opendata.aws/ncei-wcsd-archive/"
+
+[license]
+name = "NOAA NCEI Water-Column Sonar Data Archive terms (free use and redistribution; U.S. Government data)"
+spdx = "LicenseRef-NOAA-NCEI-WCSD-free-use"
+url = "https://github.com/awslabs/open-data-registry/blob/main/datasets/ncei-wcsd-archive.yaml"
+citation = "NOAA Office of Ocean Exploration and Research (2017): Water Column Sonar Data Collection (EX1711, EM302). National Centers for Environmental Information, NOAA. doi:10.7289/V5W957HS"
+notes = "The AWS Open Data registry entry for bucket noaa-wcsd-pds states: 'The data may be used and redistributed for free but is not intended for legal use, since it may contain inaccuracies.' The data were collected by NOAA (a U.S. Government agency) aboard NOAA Ship Okeanos Explorer. Keep the DOI citation and the no-warranty disclaimer."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NOAA NCEI archive bucket on the NOAA Open Data Dissemination (NODD) / AWS Open Data program, read anonymously over HTTPS; no mirrors."
+usage_notes = "Only water-column amplitude arrays and per-beam layout (sample counts, pointing angles) are emitted. Position, attitude, heading, runtime, installation and sound-velocity datagrams are validated for framing only and not emitted."
+
+[[origins]]
+id = "noaa_wcsd_pds"
+name = "NOAA NCEI Water-Column Sonar Data Archive (s3://noaa-wcsd-pds)"
+url = "https://noaa-wcsd-pds.s3.amazonaws.com/index.html"
+type = "bucket"
+notes = "Anonymous public S3 bucket (us-east-1), not requester-pays. Cruise folder data/raw/Okeanos_Explorer/EX1711/EM302/ holds 407 .wcd files (92.6 GB) uploaded 2021-03-06; the bucket has no checksum manifest, so objects are pinned by size and S3 ETag."
+
+[[resources]]
+id = "ex1711_em302_listing"
+origin = "noaa_wcsd_pds"
+url = "https://noaa-wcsd-pds.s3.amazonaws.com/?list-type=2&prefix=data/raw/Okeanos_Explorer/EX1711/EM302/&max-keys=1000"
+type = "api_query_result"
+version = "live S3 ListObjectsV2 page"
+access = "Anonymous S3 ListObjectsV2."
+size_bytes = 113247
+local_path = "downloads/noaa_wcsd_em302_water_column_i8/listing_EX1711_EM302.xml"
+notes = "Not hash-pinned (S3 may add response fields); download.sh requires every pinned object below to be listed with the pinned size and ETag before any payload is fetched. Size is the 2026-10-05 observation."
+
+[[resources]]
+id = "ex1711_em302_readme"
+origin = "noaa_wcsd_pds"
+url = "https://noaa-wcsd-pds.s3.amazonaws.com/data/raw/Okeanos_Explorer/EX1711/README_EX1711_EM302.md"
+type = "file"
+version = "ETag a9559a2d5719a14c68b487aefe291e37"
+access = "Direct public download."
+size_bytes = 2093
+md5 = "a9559a2d5719a14c68b487aefe291e37"
+local_path = "downloads/noaa_wcsd_em302_water_column_i8/README_EX1711_EM302.md"
+notes = "Cruise README with the citation and DOI 10.7289/V5W957HS."
+
+[[resources]]
+id = "ex1711_em302_wcd_files"
+origin = "noaa_wcsd_pds"
+url = "https://noaa-wcsd-pds.s3.amazonaws.com/data/raw/Okeanos_Explorer/EX1711/EM302/"
+type = "file"
+version = "S3 objects last modified 2021-03-06"
+access = "Direct public download of 15 whole objects (resumable curl into .part, then rename)."
+size_bytes = 357457606
+local_path = "downloads/noaa_wcsd_em302_water_column_i8/"
+notes = "Pinned objects (name, bytes, S3 ETag; '-N' ETags are MD5-of-part-MD5s over 8 MiB parts, recomputed locally): 0016_20171130_045718_EX1711b_MB.wcd 14150152 8e6012043a131aa82c53dba5767585bd-2; 0032_20171201_050548_EX1711b_MB.wcd 31598272 6b89ba77bf89db3674a34938f661b4ab-4; 0043_20171202_004144_EX1711b_MB.wcd 13051662 9cda0c9b3dfdc8d4a66a7000ec4ba719-2; 0058_20171202_104145_EX1711b_MB.wcd 7895394 dc11be3d569f27cb5ae6e9638188d537; 0064_20171203_004816_EX1711b_MB.wcd 18810152 239221955fcaea55a8e31c2c2ac74636-3; 0102_20171204_091713_EX1711b_MB.wcd 29846374 cb517ffce55fe9ea02794a5237ef4bda-4; 0124_20171206_044514_EX1711b_MB.wcd 30591162 cb279c9f426a9f9583842132b0d58765-4; 0148_20171207_035932_EX1711b_MB.wcd 41740046 950ba31aab79842e6d220cc3c4d672af-5; 0208_20171210_091038_EX1711b_MB.wcd 41348090 7665e625527666fcd38d79611e9090cc-5; 0270_20171213_110507_EX1711b_MB.wcd 8893816 3202af66f4d1223398a09d8ea3eabaea-2; 0321_20171215_232631_EX1711b_MB.wcd 30687674 412d31557f9afb87d3852b6822c9f8a9-4; 0346_20171217_051227_EX1711b_MB.wcd 24398754 017256f62d6a12524b258e1fbfde3f87-3; 0369_20171218_100453_EX1711b_MB.wcd 22763266 79bd7d066ad379b5a62074bdbbb5a02b-3; 0390_20171219_114303_EX1711b_MB.wcd 22081168 2ef192e40ed8008fa43fcf4a949e1396-3; 0403_20171220_104446_EX1711b_MB.wcd 19601624 d3f80aed0f36fc6e4ad0ab50e5d4db20-3. The same table is the FILES constant in scripts/em302_wcd.py. 0062_20171203_000100 (10977280 bytes, ETag ba14794026293d65f931e4fe2ffeb144-2) was dropped after the first download: the archived object is an exact multiple of 4096 bytes and ends inside a truncated water-column datagram, so it fails framing validation; 0064 (same day and depth mode, clean EOF) replaces it."
+
+[local_paths]
+downloads = "downloads/noaa_wcsd_em302_water_column_i8/"
+filtered = "filtered/noaa_wcsd_em302_water_column_i8/"
+index = "index/noaa_wcsd_em302_water_column_i8/"
+samples = "samples/noaa_wcsd_em302_water_column_i8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_wcsd_em302_water_column_i8/samples.jsonl"
+summary = "Validate every Kongsberg datagram (length, STX, ETX, 16-bit byte-sum checksum, model 302), group EM302 water-column 'k' datagrams by (date, time, ping counter), keep complete 288-beam pings, and emit each ping's concatenated per-beam int8 amplitude arrays as one sample, with per-beam sample counts and pointing angles as auxiliary series."
+deterministic_notes = "Pinned object list with sizes and locally recomputed S3 ETags; full-file datagram framing/checksum scan in download, build and verify; fatal on any framing error, non-EM302 datagram, system serial != 101, TVG function != 30, TVG offset != 20 dB, Nrx-total != 288, non-zero start range sample, out-of-range transmit sector, non-zero/over-long padding, inconsistent per-ping headers, non-strictly-decreasing beam pointing angles, decreasing ping timestamps, interior incomplete pings, or duplicate ping payloads. Files are processed in the pinned order and pings in file order. verify.sh re-decodes with an independent reader and compares sample bytes, index fields, stored-int8 min/max, hashes, dropped-ping accounting, and manifest totals."
+
+[[series]]
+id = "em302_ping_water_column_amplitude_i8"
+description = "Kongsberg EM302 multibeam water-column backscatter amplitudes, one complete ping per sample."
+semantic_meaning = "Received echo amplitude per receive beam and range sample, as logged by the EM302 with its time-varied gain applied (Kongsberg TVG X*log10(R) + 2*alpha*R + offsets, with X = 30 and C = 20 dB recorded in every datagram), in signed 0.5 dB steps; -128 is the native floor/no-signal code. A sample is all 288 receive beams of one ping in beam order (starboard to port, strictly decreasing pointing angle), each beam contributing its Ns range samples starting at range sample 0."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The int8 amplitude bytes are copied unchanged from the 'k' datagram beam blocks; beam headers, transmit-sector entries and datagram framing are removed. Beams are ragged (Ns varies per beam with slant range); the per-beam Ns needed to reshape a sample into a beam x range fan is the auxiliary series em302_ping_beam_sample_count_u16. One-byte values are endianness invariant and labelled little-endian for corpus consistency."
+source_resources = ["ex1711_em302_wcd_files"]
+source_format = "Kongsberg EM-series datagram stream (.wcd), water column datagram 'k' (0x6B), EM302"
+source_field = "Water column datagram per-beam sample amplitude array (int8, 0.5 dB)"
+filtered_input_path = "filtered/noaa_wcsd_em302_water_column_i8/ingest_stats.json"
+filtering = "All complete water-column pings of the 15 pinned EM302 files. Only 'k' datagrams contribute; auxiliary datagrams (I, R, U, P, A, H and any others) are framing-checked and skipped. The EX1711 EK60 folder and other cruises/sonar models are excluded."
+missing_value_policy = "No amplitude is dropped, clipped or imputed; -128 is kept as the native floor code. A ping missing any of its Nd datagrams is dropped only when it is the first or last water-column ping of a file (logging started or stopped mid-ping); an incomplete ping anywhere else is fatal. Pings whose amplitudes are all one value (blank pings) are dropped and counted in ingest_stats.json. Framing, checksum, TVG or geometry violations are fatal."
+conversion = "For each complete ping: sort its 'k' datagrams by datagram number, then concatenate every beam's Ns int8 amplitude bytes in datagram/beam order and write them unchanged as one raw int8 file. Index min/max come from the stored int8 values."
+numeric_kind = "int"
+bit_width = 8
+endianness = "little"
+sample_format = "raw signed-int8 water-column amplitude vector (ragged beams concatenated)"
+sample_geometry = "em302_ping_ragged_beam_by_range"
+sample_rank = 1
+sample_axes = ["beam_ragged_range_sample"]
+natural_record_kind = "complete_em302_water_column_ping"
+sample_count = 1953
+total_size_bytes = 343505942
+output_path = "samples/noaa_wcsd_em302_water_column_i8/em302_ping_water_column_amplitude_i8/"
+
+[[series]]
+id = "em302_ping_beam_sample_count_u16"
+description = "Per-beam range-sample counts (Ns) of each emitted ping."
+semantic_meaning = "Number of amplitude samples logged for each of the 288 receive beams of the ping, in the same beam order as the primary sample; the beam boundaries of the ragged primary vector."
+role = "auxiliary"
+representation_class = "native_numeric"
+representation_notes = "Native u16 'number of samples' field of each beam header, written as little-endian uint16. Alignment metadata only; does not count toward acceptance."
+source_resources = ["ex1711_em302_wcd_files"]
+source_format = "Kongsberg EM-series datagram stream (.wcd), water column datagram 'k' (0x6B), EM302"
+source_field = "Water column datagram beam header: number of samples (Ns)"
+filtered_input_path = "filtered/noaa_wcsd_em302_water_column_i8/ingest_stats.json"
+filtering = "Same pings as the primary series, one file per ping."
+missing_value_policy = "Same ping selection as the primary series; no values dropped."
+conversion = "288 beam Ns values per ping, packed as uint16 little-endian."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw uint16 vector"
+sample_geometry = "em302_ping_beam_vector"
+sample_rank = 1
+sample_axes = ["beam"]
+natural_record_kind = "complete_em302_water_column_ping_beam_layout"
+sample_count = 1953
+total_size_bytes = 1124928
+output_path = "samples/noaa_wcsd_em302_water_column_i8/em302_ping_beam_sample_count_u16/"
+
+[[series]]
+id = "em302_ping_beam_pointing_angle_i16"
+description = "Per-beam pointing angles of each emitted ping."
+semantic_meaning = "Receive beam pointing angle relative to vertical in 0.01 degree units for each of the 288 beams of the ping, same beam order as the primary sample."
+role = "auxiliary"
+representation_class = "native_numeric"
+representation_notes = "Native int16 beam pointing angle field, written as little-endian int16. Geometry metadata only; does not count toward acceptance."
+source_resources = ["ex1711_em302_wcd_files"]
+source_format = "Kongsberg EM-series datagram stream (.wcd), water column datagram 'k' (0x6B), EM302"
+source_field = "Water column datagram beam header: beam pointing angle re vertical (0.01 deg)"
+filtered_input_path = "filtered/noaa_wcsd_em302_water_column_i8/ingest_stats.json"
+filtering = "Same pings as the primary series, one file per ping."
+missing_value_policy = "Same ping selection as the primary series; no values dropped."
+conversion = "288 beam pointing angles per ping, packed as int16 little-endian."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw int16 vector"
+sample_geometry = "em302_ping_beam_vector"
+sample_rank = 1
+sample_axes = ["beam"]
+natural_record_kind = "complete_em302_water_column_ping_beam_layout"
+sample_count = 1953
+total_size_bytes = 1124928
+output_path = "samples/noaa_wcsd_em302_water_column_i8/em302_ping_beam_pointing_angle_i16/"

@@ -1,0 +1,103 @@
+manifest_version = 1
+dataset_id = "openneuro_ds004212_things_meg_ctf_i32"
+name = "THINGS-MEG CTF-275 Axial-Gradiometer Raw Int32 Channel Streams"
+description = "192 complete native signed-int32 CTF SQUID axial-gradiometer channel streams (8 fixed sensors x 24 main-task runs from 4 participants and 6 sessions each) range-extracted from the CC0 OpenNeuro THINGS-MEG dataset ds004212."
+homepage = "https://openneuro.org/datasets/ds004212/versions/3.0.0"
+
+[license]
+name = "Creative Commons CC0 1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "Hebart MN, Contier O, Teichmann L, Rockter AH, Zheng CY, Kidder A, Corriveau A, Vaziri-Pashkam M, Baker CI (2023). THINGS-data, a multimodal collection of large-scale datasets for investigating object representations in human brain and behavior. eLife 12:e82580. Data: OpenNeuro ds004212 (THINGS-MEG), doi:10.18112/openneuro.ds004212.v3.0.0."
+notes = "The official BIDS dataset_description.json (pinned S3 object version wfsYJNoFXN6rHilyRd9qTP1Uox0FqQcC, MD5 e1cae4f6b155f8325beb0921809b35c3) declares \"License\": \"CC0\" and DatasetDOI doi:10.18112/openneuro.ds004212.v3.0.0; download.sh re-checks both. Citation is requested, not required."
+
+[safety]
+contains_sensitive_data = true
+contains_personal_data = false
+provenance_notes = "Public, de-identified human magnetoencephalography released by the NIH study authors through OpenNeuro under CC0 (NIH IRB protocol 93-M-0170, NCT00001360). Data are fetched from the official OpenNeuro S3 bucket at pinned object versions; no mirrors."
+usage_notes = "Human-participant neuroimaging. This recipe emits only anonymous raw MEG gradiometer ADC count streams keyed by BIDS pseudonymous labels (sub-BIGMEG1..4). It does not emit participant tables, demographics, structural MRI, head-shape/fiducial digitisation, head-localisation channels, eye-tracking, event/stimulus files, recording dates, or any free text. res4 headers (which carry recording date/time) stay in the local download cache only and are not copied into samples or the index."
+
+[[origins]]
+id = "openneuro_ds004212"
+name = "THINGS-MEG (OpenNeuro ds004212)"
+url = "https://openneuro.org/datasets/ds004212/versions/3.0.0"
+type = "bucket"
+version = "3.0.0"
+notes = "Anonymous public S3 bucket s3://openneuro.org (https://s3.amazonaws.com/openneuro.org/ds004212/). The bucket is versioned; every object is requested with ?versionId=. CHANGES lists 3.0.0 (2025-05-29); the raw .ds objects date from 2023-01-05 and are unchanged since."
+
+[[resources]]
+id = "dataset_description"
+origin = "openneuro_ds004212"
+url = "https://s3.amazonaws.com/openneuro.org/ds004212/dataset_description.json?versionId=wfsYJNoFXN6rHilyRd9qTP1Uox0FqQcC"
+type = "file"
+version = "3.0.0"
+access = "Direct public anonymous GET of a pinned object version."
+size_bytes = 529
+md5 = "e1cae4f6b155f8325beb0921809b35c3"
+sha256 = "7be949c4b831b042fea2f83acec3cc7ded9f2d9682a6751c523c23cf2a7378a2"
+local_path = "downloads/openneuro_ds004212_things_meg_ctf_i32/dataset_description.json"
+notes = "License evidence; download.sh requires Name=THINGS-MEG, License=CC0 and the v3.0.0 DOI."
+
+[[resources]]
+id = "res4_headers"
+origin = "openneuro_ds004212"
+url = "https://s3.amazonaws.com/openneuro.org/ds004212/"
+type = "file"
+version = "3.0.0"
+access = "24 complete CTF *_meg.res4 objects, pinned by key, S3 versionId, size (3,188,345 B each) and MD5 (= single-part ETag) in selection.tsv."
+size_bytes = 76520280
+local_path = "downloads/openneuro_ds004212_things_meg_ctf_i32/res4/"
+notes = "Parsed to re-derive channel indices, sensor types, compensation grade and gains for every run."
+
+[[resources]]
+id = "meg4_gradiometer_ranges"
+origin = "openneuro_ds004212"
+url = "https://s3.amazonaws.com/openneuro.org/ds004212/"
+type = "other"
+version = "3.0.0"
+access = "HTTP byte ranges of 24 CTF *_meg.meg4 objects (517,824,008 B each, pinned by versionId and ETag in selection.tsv); one exact 1,670,400-byte range per selected channel, laid out per streams.tsv. Whole runs are never fetched."
+size_bytes = 320716800
+local_path = "downloads/openneuro_ds004212_things_meg_ctf_i32/streams/"
+notes = "Each range is the complete single-trial channel block [8 + c*417600*4, 8 + (c+1)*417600*4) of channel index c located from that run's res4; sha256 of every block is pinned in streams.tsv after the first acquisition."
+
+[local_paths]
+downloads = "downloads/openneuro_ds004212_things_meg_ctf_i32/"
+filtered = "filtered/openneuro_ds004212_things_meg_ctf_i32/"
+index = "index/openneuro_ds004212_things_meg_ctf_i32/"
+samples = "samples/openneuro_ds004212_things_meg_ctf_i32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/openneuro_ds004212_things_meg_ctf_i32/samples.jsonl"
+summary = "Validate the CC0 dataset description, fetch 24 pinned res4 headers, re-derive the 8 selected gradiometer channel indices per run with an MNE-Python-layout res4 parser, range-extract each complete big-endian int32 channel block from the pinned meg4 object versions, and emit each block unchanged as one canonical little-endian int32 sample."
+deterministic_notes = "Runs: sub-BIGMEG1..4 x ses-01/03/05/07/09/11 x run-01 (24 runs, selection.tsv). Channels: MLF32 MRF32 MLC32 MRC32 MLT33 MRT33 MLO32 MRO32 (mirrored L/R pair per frontal/central/temporal/occipital region), matched on the label before the '-1609' serial and re-located in each res4. Every res4 must parse with comp table ending exactly at EOF, nsamp=417600, nchan=310, 1200 Hz, 1 trial, sensor-type counts {5:272,1:19,0:9,18:8,17:1,20:1}, all 272 type-5 channels at grad_order_no=3 and qgain=2^20, and an identical 310-label order across runs. Each meg4 must still report its pinned size/ETag and start with 'MEG41CP\\0'. Ranges must return HTTP 206 with the exact byte count. Streams are rejected if they have <1000 distinct values, peak-to-peak <1000 counts, a flat run >120 samples, any constant 1-s block, int32-extreme values, or duplicate payloads/1-s blocks. Floor: 192 samples x 417,600 values far exceeds the 10,000-value / 1,000-value-median floor."
+
+[[series]]
+id = "ctf275_axial_gradiometer_counts_i32"
+description = "Raw CTF-275 first-order axial-gradiometer SQUID ADC counts, one complete continuous channel per THINGS-MEG main-task run."
+semantic_meaning = "Signed 32-bit CTF MEG ADC counts of one axial-gradiometer sensor (sensor_type_index 5) sampled at 1200 Hz for one full 348-s main-task run while a participant viewed THINGS object images; calibrated value in tesla = counts / (proper_gain x qgain) from res4 (MNE-Python cal convention), with 3rd-order synthetic-gradiometer compensation (grad_order_no 3) already applied by the acquisition system."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "CTF meg4 natively stores every channel as big-endian signed int32 counts; the values are copied unchanged and only byte-swapped to little-endian. Per-channel, per-session DC offsets put realized values in -1,009,352..893,741 (about 21 bits; 91.5% of all values lie outside the int16 range), while within-stream peak-to-peak spans 4,553-50,564 counts (median 10,354) with 3,684-31,977 distinct values per stream (median 7,291). 14 of 192 streams happen to sit near zero and fit entirely in int16; the family as a whole does not. Gains (one constant proper_gain per channel, about +/-2.8e9, qgain 2^20) are kept only as index metadata."
+source_resources = ["res4_headers", "meg4_gradiometer_ranges"]
+source_format = "CTF MEG4 .ds dataset (res4 header + meg4 trial-major channel-major big-endian int32 data)"
+source_field = "meg4 int32 sample block of one sensor_type_index=5 axial-gradiometer channel (single trial, 417,600 samples)"
+filtered_input_path = "filtered/openneuro_ds004212_things_meg_ctf_i32/ingest_stats.json"
+filtering = "Keep 8 fixed axial gradiometers (MLF32, MRF32, MLC32, MRC32, MLT33, MRT33, MLO32, MRO32) from run-01 of sessions 01/03/05/07/09/11 of all 4 participants. Exclude reference magnetometers/gradiometers (types 0/1), UADC (18), SCLK01 sample clock (17), UPPT001 trigger (20), all other gradiometers, the hz/hz2 head-localisation datasets, runs 02-10 and even sessions. No EEG/EOG or HLC channels exist in these runs."
+missing_value_policy = "CTF counts have no missing-value sentinel; every one of the 417,600 samples per stream is kept in source order, nothing is dropped, clipped or imputed. Changed object versions/sizes/ETags/MD5s/sha256s, res4 layout or self-check failures, short or non-206 ranges, and degenerate streams (constant blocks, flat runs >120 samples, <1000 distinct values, int32-extreme values, duplicates) are fatal in download, build and verify alike."
+conversion = "Decode each 1,670,400-byte meg4 channel block as 417,600 big-endian signed int32 values and write them unchanged as little-endian signed int32, one file per (run, channel). No scaling, offset removal, filtering, compensation change, resampling or concatenation."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian signed-int32 CTF SQUID gradiometer ADC counts"
+sample_geometry = "1d_continuous_meg_gradiometer_channel"
+sample_rank = 1
+sample_shape = [417600]
+sample_axes = ["time_sample"]
+sample_rate_hz = 1200.0
+natural_record_kind = "complete_ctf_meg4_channel_run_stream"
+sample_count = 192
+total_size_bytes = 320716800
+output_path = "samples/openneuro_ds004212_things_meg_ctf_i32/ctf275_axial_gradiometer_counts_i32/"

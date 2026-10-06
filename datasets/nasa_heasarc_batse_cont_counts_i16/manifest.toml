@@ -1,0 +1,90 @@
+manifest_version = 1
+dataset_id = "nasa_heasarc_batse_cont_counts_i16"
+name = "CGRO BATSE CONT Daily 16-Channel LAD Gamma-Ray Count Spectra Int16"
+description = "Native signed-int16 COUNTS tables from 50 CGRO BATSE CONT daily files (1991-05 to 2000-04): raw counts per 2.048 s accumulation in 16 energy channels (~20 keV-2 MeV) for each of the 8 NaI(Tl) Large Area Detectors."
+homepage = "https://nasa-heasarc.s3.amazonaws.com/compton/data/batse/daily/README"
+
+[license]
+name = "NASA SMD Open Scientific Data Policy"
+spdx = "LicenseRef-NASA-SMD-Open-Data"
+url = "https://science.nasa.gov/researchers/science-data/science-information-policy/"
+citation = "NASA HEASARC Compton Gamma Ray Observatory archive; CGRO/BATSE instrument team (PI G. J. Fishman, NASA MSFC). Preserve TJD/file identity, mission attribution, and HEASARC acknowledgement."
+notes = "NASA SMD states that information produced from SMD-funded scientific research is held as a public trust, made publicly available, and openly shared. These are public NASA mission data from the official HEASARC archive (its anonymous nasa-heasarc S3 mirror), the same basis as the accepted nasa_heasarc_nicer_pi_i16 and nasa_heasarc_nicer_detector_u8 recipes. All 50 primary FITS headers carry ORIGIN = 'MSFC' and OBSERVER = 'G. J. Fishman': the products were produced by the BATSE team at NASA Marshall Space Flight Center. The official NASA Images and Media Usage Guidelines (https://www.nasa.gov/nasa-brand-center/images-and-media/) state that NASA content 'generally are not subject to copyright in the United States' and, under Artificial Intelligence (AI) Applications, that 'NASA is committed to transparency, open science, and making data available to everyone'; both quotes were re-read from the copies of that page pinned by the accepted nasa_wmap_healpix_sky_maps_f32 (captured 2026-08-27, sha256 3003114a6e2f7336...) and nasa_tess_lightcurves_f32 (captured 2026-08-26, sha256 178d06d54ef9d530...) recipes; this recipe does not fetch or depend on those files. The SMD policy page, heasarc.gsfc.nasa.gov and www.nasa.gov were proxy-blocked (HTTP 403 at CONNECT) from the collection environment on 2026-10-05, so the SMD wording is carried over from the NICER manifests rather than re-fetched; the BATSE archive READMEs carry no contrary terms."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Background-monitoring gamma-ray detector count spectra recorded in orbit by NASA's Compton Gamma Ray Observatory (1991-2000); official HEASARC archive products, fetched anonymously from the HEASARC S3 mirror."
+usage_notes = "Samples contain only per-channel, per-detector photon count words from a space instrument. No human-subject, personal, or Earth-imaging content, and no NASA insignia, logos or imagery. NASA's AI-applications conditions (Images and Media Usage Guidelines) apply to models trained on this material: do not attribute AI output to NASA (references like 'according to NASA' are prohibited; outputs are attributed to the AI product), do not imply NASA review, permission or endorsement, and NASA insignia (Meatball, Worm logotype, Seal) must not appear in the training of AI tools or with AI-generated imagery. Acknowledging NASA/CGRO/BATSE source material as a statement of fact is permitted."
+
+[[origins]]
+id = "nasa_heasarc_s3"
+name = "NASA HEASARC archive, anonymous S3 mirror (CGRO BATSE daily data)"
+url = "https://nasa-heasarc.s3.amazonaws.com/compton/data/batse/daily/"
+type = "bucket"
+version = "Converter inventory of the 50 primary headers (MNEMONIC, all FILE-VER V1.00): CONT_DISCLA_FITS 4.10 x7 (TJD 8395, 8462, 8528, 8662, 8730, 8795, 8862; no DATE card, CDATE card 'Date FITS file created' reads Jun-Aug 2002); 1.01 x3 (TJD 8595, 8928, 8995; DATE Mar-Apr 1994); 2.05 x14 (TJD 9061-9860 and 10126; DATE Nov 1995-Feb 1996); 3.00 x1 (TJD 9993; no DATE card, CDATE reads 6-MAR-2001); 2.06 x25 (TJD 9927, 10060, 10193-11658; DATE Mar 1996-Apr 2000). S3 LastModified per the discovery listing: 2023-07-10 for 40 selected keys, 2023-08-02 for 10."
+notes = "Public, anonymous, not requester-pays. Keys were discovered once from a paginated ListObjectsV2 listing (discover.sh: 59,808 keys, 3,317 cont_*.fits.gz, 3,315 unique TJDs 8362-11690, 24.9 GB) and every selected key is pinned in sources.tsv."
+
+[[resources]]
+id = "batse_cont_daily_selection"
+origin = "nasa_heasarc_s3"
+url = "https://nasa-heasarc.s3.amazonaws.com/compton/data/batse/daily/"
+type = "file"
+version = "50 exact cont_<TJD>.fits.gz objects pinned by sources.tsv"
+access = "Direct anonymous HTTPS GET per pinned key; resumable curl."
+size_bytes = 377862785
+sha256 = "5c12e219d08b7163e8a58df2abefa763b68ea5df4b167524e4ae41062332d05e"
+local_path = "downloads/nasa_heasarc_batse_cont_counts_i16/"
+notes = "The SHA-256 identifies the sources.tsv inventory. Each object is pinned by key, exact size, exact S3 ETag (content MD5 for 43 single-part objects; MD5 of the two 8 MiB-part MD5s with suffix -2 for 7 multipart objects, part size confirmed on a real object), BATSE_CNTS NAXIS2, and per-file SHA-256 (recorded from the first download on 2026-10-05 and enforced by download.sh, build and verify)."
+
+[[resources]]
+id = "batse_daily_readme"
+origin = "nasa_heasarc_s3"
+url = "https://nasa-heasarc.s3.amazonaws.com/compton/data/batse/daily/README"
+type = "file"
+version = "fetched 2026-10-05"
+access = "Direct anonymous HTTPS GET; provenance only, soft failure."
+size_bytes = 1122
+sha256 = "bffda7ff0b652cdcb5a3a0e6656005c8bb41182ebd46512c34e4c0c5e7ef665e"
+local_path = "downloads/nasa_heasarc_batse_cont_counts_i16/daily_README.txt"
+notes = "States: 'The Continuous (CONT) data consists of 2.048 second resolution 16-channel count spectra from the eight LADs.' download.sh fails if that description disappears."
+
+[local_paths]
+downloads = "downloads/nasa_heasarc_batse_cont_counts_i16/"
+filtered = "filtered/nasa_heasarc_batse_cont_counts_i16/"
+index = "index/nasa_heasarc_batse_cont_counts_i16/"
+samples = "samples/nasa_heasarc_batse_cont_counts_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_heasarc_batse_cont_counts_i16/samples.jsonl"
+summary = "Fetch 50 pinned BATSE CONT daily gzip-FITS files, walk FITS headers to the BATSE_CNTS binary table by EXTNAME, validate its 13-column schema, and write the whole COUNTS column (128 big-endian int16 per row, detector axis fastest) of every row as one little-endian int16 sample per day."
+deterministic_notes = "Day selection (scripts/select_days.py, run once by discover.sh): 50 targets t_k = 8362 + (k + 0.5) * 3329 / 50 over the full TJD span; each snaps to the nearest day (ties to the lower TJD) whose file is >= 5,000,000 bytes and whose BATSE_CNTS NAXIS2 >= 20,000 (header read from a 64 KiB range GET). 49 targets landed on their nearest day; TJD 8729 (19,833 rows) was skipped for 8730. Identical duplicate keys (cont_10500, cont_10600 stored under two range directories with equal size and ETag) are deduplicated to the in-range directory. download.sh enforces exact size, ETag, gzip integrity, FITS identity (COMPTON GRO/BATSE/BATSE_CONT/TJD), schema and pinned NAXIS2. build.sh asserts HDU order PRIMARY, BATSE_E_CALIB, BATSE_CNTS, zero-filled table padding, and that only header-only RUN_LOG extensions (NAXIS 0; present in 3 of 50 files, TJD 8595/8928/8995, written by the 1994 FITS converter) follow the table, with their logged CONTINUOUS row count equal to NAXIS2; it also asserts the row floor, >= 256 distinct values, min < max, and <= 5% rows repeating their predecessor. verify.sh is a separate implementation (own FITS parser, struct '>128h' -> '<128h' per row) checking byte equality with the source, every index statistic, the sample inventory, and manifest totals. Floors: 191,592,448 primary values, median 3,966,976 values per sample."
+
+[[series]]
+id = "batse_lad_cont_counts_i16"
+description = "Whole-day CONT count tables: for each 2.048 s accumulation, 16 energy channels x 8 Large Area Detectors of raw counts."
+semantic_meaning = "Number of photon/particle events registered by one BATSE Large Area Detector (NaI(Tl) scintillator) in one of 16 pulse-height (energy-loss) channels during one 2.048 s accumulation; unit COUNTS per 2.048 s per channel."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The BATSE_CNTS binary table declares COUNTS as TFORM 128I (signed 16-bit), TDIM (8,16), TUNIT COUNTS, with no TZERO, TSCAL or TNULL; the stored words are the values. Only byte order changes. Channel energy edges vary by detector and calibration epoch (per-file BATSE_E_CALIB, 8-112 rows), and 4 of the 50 days use non-standard CONT channel ladders per their own BATSE_E_CALIB rows (TJD 8395 early-mission ladder with a populated channel 0; TJD 10126 rotated ladder with channel 0 at ~1.8 MeV; TJD 10992 and 11058 fine low-energy ladder); the stored quantity, unit, 2.048 s lattice and magnitude range are unchanged on those days (see README Homogeneity notes)."
+source_resources = ["batse_cont_daily_selection"]
+source_format = "gzip-compressed FITS (PRIMARY + BATSE_E_CALIB + BATSE_CNTS binary tables), BATSE CONT daily file"
+source_field = "BATSE_CNTS.COUNTS (TFORM 128I, TDIM (8,16), byte offset 28 in each 336-byte row)"
+filtered_input_path = "filtered/nasa_heasarc_batse_cont_counts_i16/ingest_stats.json"
+filtering = "50 pinned days only (see deterministic_notes); every row of each day's BATSE_CNTS table is kept. Other CONT columns (MID_TIME, positions, DEADTIME, FLAGS, pointing) and other BATSE daily products (DISCLA, DISCSP, HER, SHER) are not emitted."
+missing_value_policy = "No missing-value handling: COUNTS has no TNULL or sentinel and nothing is masked, clipped, imputed, unwrapped or dropped; every stored word is emitted. Measured over the 50 days: 323 negative words (19 days; 1.7 per million values) of two kinds: sustained runs in one detector/channel during very bright episodes where the count rises smoothly past 32767 and continues near -32000 (e.g. TJD 11125 row 8185 ch 3 det 7: 31766, 32540, -31811, -31370; the count exceeded the declared signed range and is stored modulo 2^16), and isolated single-row glitch words (e.g. 136, -30530, 3732). The FITS column declares signed TFORM I without TZERO, so the declared signed reading is kept; reading the same bits as uint16 is lossless for consumers. 93,694 values (0.05%) are >= 4096, nearly all in contiguous multi-row episodes (99.4% sit in a row adjacent to another such row) (bright transients/high-background intervals), not isolated. One all-zero row (TJD 9527 row 19277) is kept as stored. Per-sample negative_count, spike_count (>= 4096) and zero_count are in the index. Days below the 20,000-row floor were excluded at selection time, never padded or merged. verify.sh applies the same policy (byte equality with the source column)."
+conversion = "For each row in source order, take the 256 bytes at row offset 28 (128 big-endian int16 in FITS column-major TDIM (8,16) order: index = channel*8 + detector), byte-swap to little-endian int16, and append. One sample per daily file: shape [rows, 16, 8], rows = NAXIS2 (20,001-37,461). No scaling, calibration, sorting, splitting or concatenation across days."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian signed-int16 array"
+sample_geometry = "daily_cont_counts_rows_by_channel_by_detector"
+sample_rank = 3
+sample_axes = ["cont_accumulation_2048ms", "energy_channel", "lad_detector"]
+natural_record_kind = "batse_cont_daily_file_counts_table"
+sample_count = 50
+total_size_bytes = 383184896
+output_path = "samples/nasa_heasarc_batse_cont_counts_i16/batse_lad_cont_counts_i16/"

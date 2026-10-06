@@ -362,6 +362,7 @@ tcia_covid19_ny_sbu_chest_cr_u16	ok	373174272	746348544	48	7774464	15548928	0	0	
 bbbc021_microscopy_tiff_u16	ok	393216000	786432000	300	1310720	2621440	0	0	0	1	none	none
 google_alphaearth_satellite_embeddings_i8	ok	402653184	402653184	384	1048576	1048576	0	0	0	1	none	none
 mast_jwst_nircam_sw_uncal_ramps_u16	ok	402653184	805306368	12	33554432	67108864	0	0	0	1	none	none
+mpc_modis_mod10a1_ndsi_snow_cover_u8	ok	403200000	403200000	70	5760000	5760000	0	0	0	1	none	none
 pfam_seed_alignments_u8	ok	411242401	411242401	22719	6150	6150	0	0	0	1	none	none
 sevir_vil_storm_events_u8	ok	433520640	433520640	60	7225344	7225344	0	0	0	1	none	none
 csiro_parkes_uwl_search_mode_u8	ok	436207616	436207616	32	13631488	13631488	0	0	0	1	none	none

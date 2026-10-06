@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "mpc_modis_mod10a1_ndsi_snow_cover_u8"
+name = "Terra MODIS MOD10A1 v061 Daily 500 m NDSI Snow Cover UInt8 Tiles"
+description = "Complete source-native uint8 NDSI_Snow_Cover grids (NDSI x 100 for 0..100, plus the product's in-band flag codes for cloud, night, ocean, inland water, and missing data) from the Terra MODIS MOD10A1 Collection 6.1 daily snow product: 70 tile-days (28 tiles, North America, Europe, and Asia) selected by a fixed clear-sky/snow rule from every row-v02..v05 (about 30-70 N) sinusoidal tile on the 1st and 15th of each month, December 2023 to April 2024."
+homepage = "https://planetarycomputer.microsoft.com/dataset/modis-10A1-061"
+
+[license]
+name = "Creative Commons Zero 1.0 Universal (NASA Earthdata data use guidance; NSIDC DAAC openly shared)"
+spdx = "CC0-1.0"
+url = "https://nsidc.org/data/data-programs/nsidc-daac/citing-nsidc-daac"
+citation = "Hall, D. K. and G. A. Riggs. 2021. MODIS/Terra Snow Cover Daily L3 Global 500m SIN Grid, Version 61. [Subset: 70 tile-days listed in sources.tsv]. Boulder, Colorado USA. NASA National Snow and Ice Data Center Distributed Active Archive Center. https://doi.org/10.5067/MODIS/MOD10A1.061"
+notes = "The Planetary Computer collection modis-10A1-061 has STAC 'license' = 'proprietary', and its rel=license link (titled 'Use and Copyright | National Snow and Ice Data Center') is https://nsidc.org/data/data-programs/nsidc-daac/citing-nsidc-daac. That page says: 'Data hosted by the NSIDC DAAC are openly shared, without restriction, in accordance with NASA's Earth Science program Data and Information Guidance. NASA data are freely accessible; however, when you publish these data or works based on the data, you should clearly cite the data in your research.' NASA Earthdata Data Use Guidance (https://www.earthdata.nasa.gov/engage/open-data-services-software-policies/data-use-guidance): 'Unless the content is marked with a use restriction or license, data provided from a NASA-led mission are licensed as Creative Commons Zero (CC0). While there are no restrictions on the use of these data, data users are very strongly urged to cite the data used in their work products.' MOD10A1 is NASA Terra mission data; the STAC collection names NSIDC as producer/licensor. The NSIDC product page and user guide add 'As a condition of using these data, you must cite the use of this data set' - a citation condition, kept here as the required citation. The same page's 'may not be resold' sentence covers NSIDC website photographs and images, not data products. Preserve the DOI (embedded in every file as identifier_product_doi), NSIDC/NASA attribution, version, item IDs, and dates."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public NASA Earth-observation snow-cover grids produced by MODAPS (PGE MOD_PR10A1, C6.1 snow algorithm of Hall and Riggs) and distributed by NSIDC DAAC, mirrored by Microsoft Planetary Computer as COGs; no personal or sensitive data."
+usage_notes = "CC0 NASA mission data suitable for model training; cite the MOD10A1.061 DOI."
+
+[[origins]]
+id = "planetary_computer_modis"
+name = "Microsoft Planetary Computer MODIS Collection 6.1 mirror"
+url = "https://planetarycomputer.microsoft.com/api/stac/v1/collections/modis-10A1-061"
+type = "api"
+notes = "STAC collection modis-10A1-061 (Terra MOD10A1 and Aqua MYD10A1). Item IDs were resolved with one STAC /search per date on modis:vertical-tile 2..5, keeping only IDs with the 'MOD10A1.A<YYYYDDD>.' prefix and platform 'terra'. See scripts/probe.py, scripts/probe_candidates_20261006.tsv (all 815 candidates), and scripts/select_plan.py (the selection rule)."
+
+[[resources]]
+id = "mod10a1_061_ndsi_snow_cover_cogs"
+origin = "planetary_computer_modis"
+url = "https://modiseuwest.blob.core.windows.net/modis-061-cogs/MOD10A1/"
+type = "file"
+version = "MOD10A1 Collection 6.1 (VERSIONID 61, PGEVERSION 6.1.x); 70 exact item IDs with production timestamps pinned in sources.tsv"
+access = "Public container read with the anonymous short-lived SAS signature from https://planetarycomputer.microsoft.com/api/sas/v1/token/modiseuwest/modis-061-cogs (no account or key)."
+size_bytes = 128814601
+sha256 = ""
+local_path = "downloads/mpc_modis_mod10a1_ndsi_snow_cover_u8/rasters/"
+notes = "70 single-band NDSI_Snow_Cover COGs, 0.53-3.86 MB each. sources.tsv pins each file's byte size and the Azure x-ms-blob-content-md5; download.sh rejects size/MD5 mismatches and validates TIFF structure plus embedded metadata (SHORTNAME MOD10A1, VERSIONID 61, platform Terra, granule ID, tile numbers, observation date, DOI, long_name, value Key, _FillValue 255, missing_value 200, valid_range 0..100). SHA-256 receipts are written at download time. The NDSI, Snow_Albedo_Daily_Tile, QA, and pointer layers of the same items are never fetched."
+
+[local_paths]
+downloads = "downloads/mpc_modis_mod10a1_ndsi_snow_cover_u8/"
+filtered = "filtered/mpc_modis_mod10a1_ndsi_snow_cover_u8/"
+index = "index/mpc_modis_mod10a1_ndsi_snow_cover_u8/"
+samples = "samples/mpc_modis_mod10a1_ndsi_snow_cover_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/mpc_modis_mod10a1_ndsi_snow_cover_u8/samples.jsonl"
+summary = "Download 70 pinned MOD10A1.061 NDSI_Snow_Cover COGs, decode each primary 2400x2400 uint8 grid (Deflate tiles, edge padding cropped), and emit it unchanged as one raw uint8 sample per tile-day."
+deterministic_notes = "Fixed scope: Terra only (MOD10A1, never Aqua MYD10A1), Collection 6.1, layer NDSI_Snow_Cover only. Candidate pool: every Terra item in sinusoidal rows v02-v05 on the 1st and 15th of each month from 2023-12-01 to 2024-04-15 (815 items). Rule (scripts/select_plan.py): keep an item when its 300x300 overview has an estimated valid (0..100) fraction >= 0.45 and its producer header attribute SNOWCOVERPERCENT (percent of land pixels mapped as snow, computed by the PGE on the full grid) is >= 5; no ranking, capping, or hand-picking. The overview is only trusted for the valid fraction: GDAL resampling of 0 next to 250 fabricates 1..100 values, so overview snow estimates are inflated. The 0.45 threshold was chosen after inspecting the probe table (0.50 gave 53 items on 22 tiles with no European tile). Result: 70 items, 28 tiles, all 10 dates. verify.sh re-derives sources.tsv from the committed probe table with scripts/select_plan.py. Overview IFDs are ignored when building. Samples follow sources.tsv order (date, tile). Index min/max/sum and class counts are computed from the stored uint8 values."
+
+[[series]]
+id = "modis_mod10a1_daily_ndsi_snow_cover_u8"
+description = "MOD10A1.061 daily NDSI snow cover grids, one complete 2400x2400 sinusoidal tile for one day per sample, flag codes kept in place."
+semantic_meaning = "NDSI snow cover from the best Terra MODIS observation of the day per 500 m (463.3 m) cell on the MODIS sinusoidal grid. Values 0..100 are 100 x NDSI (normalized difference snow index, (band4 - band6)/(band4 + band6)) for land pixels detected as snow after the C6.1 screens; 0 is snow-free land, including detections reversed by the screens. Flag codes in the same byte: 200 missing data, 201 no decision, 211 night, 237 inland water, 239 ocean, 250 cloud, 254 detector saturated, 255 fill (product Key attribute and user guide Table 1)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "NDSI_Snow_Cover is a native uint8 SDS in the source HDF4-EOS granule (valid_range 0..100, missing_value 200, _FillValue 255, flag codes 201-254 documented in the Key attribute). The Planetary Computer COG carries the same uint8 plane plus the HDF-EOS metadata; the recipe only removes TIFF tiling and Deflate compression. The flag codes are part of the native variable encoding and are not remapped."
+source_resources = ["mod10a1_061_ndsi_snow_cover_cogs"]
+source_format = "cloud_optimized_geotiff"
+source_field = "NDSI_Snow_Cover"
+filtered_input_path = "filtered/mpc_modis_mod10a1_ndsi_snow_cover_u8/ingest_stats.json"
+filtering = "Keep all 5,760,000 primary-resolution pixels of each of the 70 pinned complete tiles. Tile-days were pre-selected by the rule in deterministic_notes (overview valid estimate plus header SNOWCOVERPERCENT). Build and verify then require, on the full grid, a valid (0..100) fraction >= 0.40, a snow (1..100) fraction >= 0.02, at least 20 distinct valid values, and no duplicate grids. Verify also requires at least 5% of pixels to change between consecutive observations of the same tile. Realized (build 2026-10-06): valid fraction 0.470-0.917 (median 0.589), snow fraction 0.049-0.728 (median 0.163), cloud 0.03-0.49, 77-92 distinct valid values per sample, 35-93% of pixels changing between consecutive same-tile samples; per-sample fractions are in README.md and ingest_stats.json."
+missing_value_policy = "Flag codes (200 missing, 201 no decision, 211 night, 237 inland water, 239 ocean, 250 cloud, 254 detector saturated, 255 fill) are source-native and preserved in place as stored. Any value outside {0..100, 200, 201, 211, 237, 239, 250, 254, 255} is fatal. Also fatal: a full-grid valid fraction below 0.40 or snow fraction below 0.02; missing or truncated files; size/MD5 mismatches; unexpected TIFF structure or metadata; corrupt Deflate streams; duplicate or degenerate grids."
+conversion = "Parse the classic little-endian TIFF IFD0 (2400x2400, BitsPerSample 8, SampleFormat 1, Compression 8, Predictor 1, 512x512 tiles, GDAL nodata 255). Inflate its 25 tiles with exact-length checks, crop the TIFF edge padding of the last tile row and column (2400 = 4x512 + 352), and write the uint8 grid row-major (y, x). No rescaling, resampling, remapping, or concatenation."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 NDSI snow cover grid (0..100 NDSI x 100; flags 200-255 as stored)"
+sample_geometry = "2400x2400_modis_sinusoidal_tile"
+sample_rank = 2
+sample_axes = ["y", "x"]
+natural_record_kind = "complete_mod10a1_daily_ndsi_snow_cover_tile"
+sample_count = 70
+total_size_bytes = 403200000
+output_path = "samples/mpc_modis_mod10a1_ndsi_snow_cover_u8/modis_mod10a1_daily_ndsi_snow_cover_u8/"

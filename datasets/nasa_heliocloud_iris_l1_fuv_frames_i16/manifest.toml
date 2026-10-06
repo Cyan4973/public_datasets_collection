@@ -1,0 +1,102 @@
+manifest_version = 1
+dataset_id = "nasa_heliocloud_iris_l1_fuv_frames_i16"
+name = "NASA IRIS Level-1 FUV Spectrograph Full-Readout CCD Frames (int16 DN, HelioCloud)"
+description = "40 whole 1096 x 4144 int16 level-1 frames of the IRIS far-ultraviolet spectrograph CCDs (C II 1334/1335 A and Si IV 1394/1403 A bands; unsummed full spectral readout, CRS 1541, no onboard companding: LUTID 0 unit-DN lattice), 2014-2022, 7 science OBSIDs, decoded from the RICE_1 tile-compressed FITS files in NASA GSFC HelioCloud."
+homepage = "https://iris.lmsal.com/"
+
+[license]
+name = "NASA SMD Open Scientific Data Policy"
+spdx = "LicenseRef-NASA-SMD-Open-Data"
+url = "https://science.nasa.gov/researchers/science-data/science-information-policy/"
+citation = "IRIS is a NASA small explorer mission developed and operated by LMSAL with mission operations executed at NASA Ames Research Center and major contributions to downlink communications funded by ESA and the Norwegian Space Centre. De Pontieu et al. 2014, Solar Physics 289, 2733 (The Interface Region Imaging Spectrograph). Data served by the NASA GSFC HelioCloud (gov-nasa-hdrl-data1, SDAC holdings)."
+notes = "IRIS project statement, read from https://iris.lmsal.com/data.html (HTTP 200 on 2026-10-05, 9,810 bytes, sha256 b0b34efe6c92421936d5a39536ab3e5bcdac0401fcc1ecb4b803e811106776e8; download.sh re-fetches it best effort into downloads/<id>/evidence/iris_lmsal_data.html): 'IRIS has an open data policy. When you publish work based on IRIS data, please acknowledge IRIS as follows: IRIS is a NASA small explorer mission developed and operated by LMSAL with mission operations executed at NASA Ames Research Center and major contributions to downlink communications funded by ESA and the Norwegian Space Centre.' NASA basis, the same as the accepted nasa_heasarc_nicer_pi_i16 and nasa_heasarc_batse_cont_counts_i16 recipes: the NASA SMD Science Information Policy page, fetched by the 2026-10-05 download run (downloads/<id>/evidence/nasa_smd_science_information_policy.html, 268,037 bytes, sha256 d1fdc2da6f0da6c9723a7057d7439167c1f086704420c8df7aa952d96e10efdb), states: 'NASA holds this information, including publications, data, and software, as a public trust to increase knowledge and serve the public good. It is Science Mission Directorate (SMD) policy, consistent with NASA and Federal policies, that information produced from SMD-funded scientific research activities be made publicly available.' and lists among its principles 'Mission data are released as soon as possible'. These are open-data policies, not a named license. IRIS is a NASA Small Explorer (SMD Heliophysics); these are its level-1 mission products served anonymously by NASA GSFC's HelioCloud bucket, whose catalog.json describes it as 'GSFC HelioCloud' / 'NASA TOPS ODR datasets' with a NASA contact; that catalog has no license field and no IRIS entry, and the bucket holds no README or license object for IRIS. The NASA Images and Media Usage Guidelines, re-read from the copy pinned by the accepted nasa_wmap_healpix_sky_maps_f32 recipe (captured 2026-08-27, sha256 3003114a6e2f7336...), state that NASA content 'generally are not subject to copyright in the United States' and, under Artificial Intelligence (AI) Applications, that 'NASA is committed to transparency, open science, and making data available to everyone'; the same section forbids attributing AI outputs to NASA, using NASA insignia with AI imagery or AI training, and implying NASA review or endorsement. Use the IRIS acknowledgement above."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NASA GSFC HelioCloud public bucket (anonymous HTTPS, not requester-pays); dispersed far-ultraviolet spectra of the solar chromosphere and transition region recorded by the IRIS spectrograph CCDs."
+usage_notes = "Samples contain only CCD counts of solar spectra. No personal, human-subject or Earth-observation data. Do not attribute model outputs to NASA or use NASA insignia (NASA AI guidance)."
+
+[[origins]]
+id = "nasa_gsfc_heliocloud"
+name = "NASA GSFC HelioCloud public bucket (SDAC IRIS holdings)"
+url = "https://gov-nasa-hdrl-data1.s3.amazonaws.com/sdac/iris/"
+type = "bucket"
+notes = "Prefixes indices/ (1,439 minute-of-day CSVs iris_iris_data_iris_HHMM.csv: start,stop,s3key,filesize; start/stop timestamps are corrupt, e.g. 0001-03-04), iris_data/level1/YYYY/MM/DD/HHHMM/ (2013-2022), level2_compressed/, level3_compressed/. Objects are single-part (ETag = content MD5) and return a full-object x-amz-checksum-sha1 with x-amz-checksum-mode: ENABLED."
+
+[[resources]]
+id = "iris_l1_fuv_full_readout_selection"
+origin = "nasa_gsfc_heliocloud"
+url = "https://gov-nasa-hdrl-data1.s3.amazonaws.com/sdac/iris/iris_data/level1/"
+type = "file"
+version = "40 objects pinned in sources.tsv (S3 Last-Modified 2024-02-27; re-resolved 2026-10-05 by discover.sh with the LUTID 0 regime)"
+access = "Anonymous HTTPS GET of each pinned key; download.sh enforces exact size, MD5 (= ETag), SHA-1 (= x-amz-checksum-sha1), SHA-256 (frozen after the first download of each file), the FITS header regime, DATASUM/CHECKSUM and pinned header facts."
+size_bytes = 112109760
+sha256 = "28f5cdf89fe4429daffb6a0474fbbbd3b4594c910cbccfd2de37a12e9a7a0f66"
+local_path = "downloads/nasa_heliocloud_iris_l1_fuv_frames_i16/fits/"
+notes = "Per-file pins live in sources.tsv (key, size, MD5/ETag, SHA-1, Last-Modified, path date, T_OBS, OBSID, FSN, EXPTIME, readout rows, DATAVALS, DATAMIN, DATAMAX, DATAMEDN, DATAP99, DATASUM, SHA-256). The resource sha256 above identifies the tracked sources.tsv inventory. The SHA-256 column is frozen from download_plan.tsv after the first download of each file (16 rows carried over from the first selection, 24 rows added after the LUTID-0 re-selection download); download.sh, build.py and verify.py enforce it wherever it is set, and download.sh accepts an empty value only for a key that has never been downloaded. The objects are not S3-versioned; a re-upload changes MD5/SHA-1 and fails loudly."
+
+[[resources]]
+id = "nasa_smd_policy_page"
+origin = "nasa_gsfc_heliocloud"
+url = "https://science.nasa.gov/researchers/science-data/science-information-policy/"
+type = "file"
+version = "fetched at download time (best effort); 2026-10-05 copy 268,037 bytes"
+access = "Anonymous HTTPS; a transport failure only warns (authoring probes got HTTP 403, the driver's download run fetched it). download.sh logs whether the phrase 'public trust' is present."
+size_bytes = 268037
+sha256 = "d1fdc2da6f0da6c9723a7057d7439167c1f086704420c8df7aa952d96e10efdb"
+local_path = "downloads/nasa_heliocloud_iris_l1_fuv_frames_i16/evidence/nasa_smd_science_information_policy.html"
+notes = "Rights evidence only; not a sample source. The page is dynamic, so a later fetch may hash differently; the pinned hash records the copy read on 2026-10-05."
+
+[[resources]]
+id = "iris_lmsal_data_page"
+origin = "nasa_gsfc_heliocloud"
+url = "https://iris.lmsal.com/data.html"
+type = "file"
+version = "fetched at download time (best effort); 2026-10-05 copy 9,810 bytes"
+access = "Anonymous HTTPS; a transport failure only warns. download.sh logs whether the phrase 'open data policy' is present."
+size_bytes = 9810
+sha256 = "b0b34efe6c92421936d5a39536ab3e5bcdac0401fcc1ecb4b803e811106776e8"
+local_path = "downloads/nasa_heliocloud_iris_l1_fuv_frames_i16/evidence/iris_lmsal_data.html"
+notes = "Rights evidence only (IRIS open data policy and acknowledgement text); not a sample source. The hash records the copy read on 2026-10-05; a later fetch may differ."
+
+[local_paths]
+downloads = "downloads/nasa_heliocloud_iris_l1_fuv_frames_i16/"
+filtered = "filtered/nasa_heliocloud_iris_l1_fuv_frames_i16/"
+index = "index/nasa_heliocloud_iris_l1_fuv_frames_i16/"
+samples = "samples/nasa_heliocloud_iris_l1_fuv_frames_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_heliocloud_iris_l1_fuv_frames_i16/samples.jsonl"
+summary = "Fetch 40 pinned IRIS level-1 FUV FITS files, check pins, FITS structure, header regime and checksums, Rice-decode every 4144-pixel tile (one image row) exactly as CFITSIO fits_rdecomp_short, cross-check each frame against its header statistics and the unit-DN lattice, and write the whole 1096 x 4144 frame as little-endian int16 with native BLANK -32768 fill."
+deterministic_notes = "discover.sh (authoring only) listed the 1,439 minute-of-day index CSVs, scanned every 12th (120 CSVs: minutes 0001, 0013, ..., 2349), kept 951 level-1 *_fuv.fits keys of >= 2,000,000 bytes, range-read 28,800 header bytes of each and applied the header regime: 207 pass; another 371 unsummed full readouts fail only on LUTID = 4 (onboard square-root companding). Eligible: 10-digit science OBSID starting with 3 (excludes commissioning 4190004113/4117, calibration-style 42xxxxxxxx 'FUV full frame' CRS-1 runs and OBSID 0), QUALITY = SAA = HLZ = 0, EXPTIME >= 4 s, pointing within 1016 arcsec of disk centre, DATAP99 - DATAMEDN >= 10 DN (133 frames, 126 date/OBSID runs, 8 OBSIDs, 2014-2022; no 2013 frame in the pool is LUTID 0). Ranked by DATAP99 - DATAMEDN (bright-tail spread above the pedestal), one frame per (date, OBSID) run, at most 18 per OBSID and 6 per year, first 40 taken. Header regime: BINTABLE COMPRESSED_DATA 1PB descriptors, ZIMAGE, ZBITPIX 16, ZNAXIS1 4144, ZNAXIS2 1096, ZTILE 4144 x 1, RICE_1, BLOCKSIZE 32, BYTEPIX 2, no ZSCALE/ZZERO/ZBLANK/ZQUANTIZ/BSCALE/BZERO/THEAP, TELESCOP IRIS, LVL_NUM 1, INSTRUME/IMG_PATH/CRS_TYPE FUV, IMG_TYPE LIGHT, CAMERA 1, SUMSPTRL 1, SUMSPAT 1, CRS_NREG 2, TSC1/TEC1 1/2048, TSC2/TEC2 2097/4112, regions 3-8 zero, BLANK -32768, MISSVALS 0, LUTID 0, TOTVALS = DATAVALS = readout area. Readout rows are read from TSR/TER, not hard-coded (all 40 realized frames: 25-1072, CRS 1541). build.sh runs scripts/selftest.py first (CFITSIO encoder port -> both decoders, all block codes -1..14, truncated/over-long tile rejection, synthetic FITS with DATASUM/CHECKSUM, and a synthetic square-root-companded frame that both lattice checks must reject); the encoder port also re-compressed 314 sampled real IRIS rows byte-for-byte during authoring. build.py verifies DATASUM and the HDU CHECKSUM, heap descriptors, exact BLANK layout = complement of the readout regions, DATAVALS, DATAMIN, DATAMAX, DATAMEDN exactly and DATAMEAN within 1e-3, the unit-DN lattice (every integer DATAMEDN-5..DATAMEDN+15 occurs), and the pinned header facts and SHA-256. verify.py re-derives every sample with its own FITS walker (LUTID 0 required independently), struct-based checksums, a byte-wise CFITSIO-port decoder and its own lattice check, re-checks MD5/SHA-1, byte-compares, checks index rows, totals, uniqueness and scope (>= 7 OBSIDs, >= 9 years)."
+
+[[series]]
+id = "iris_fuv_l1_full_readout_dn_i16"
+description = "Whole IRIS FUV spectrograph level-1 CCD frames: 1096 spatial rows x 4144 wavelength columns of int16 DN per exposure, unsummed full spectral readout of both FUV CCDs."
+semantic_meaning = "Raw CCD counts (BUNIT 'Corrected DN', level 1: reformatted and oriented, not dark-subtracted, flat-fielded or wavelength-corrected) of the dispersed solar far-ultraviolet spectrum along the IRIS slit, one exposure (15-60 s) per frame. Columns 1-2048 are FUV CCD 1 (~1332-1358 A: C II 1334/1335, continuum), columns 2097-4112 are CCD 2 (~1381-1407 A: Si IV 1394/1403, O IV 1399/1401); rows 25-1072 are the slit (~0.166 arcsec/pixel). Most pixels sit on the ~100-170 DN pedestal (it rises with exposure time and CCD age); emission lines, active-region and limb brightenings, cosmic-ray hits and saturated pixels reach far above it, up to the 14-bit ADC ceiling (16383)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The FITS image is ZBITPIX = 16 signed integers with no scaling keywords, losslessly RICE_1 compressed by row; decoding reproduces the archived int16 values exactly (verified against each header's DATASUM/CHECKSUM and DATAMIN/DATAMAX/DATAMEDN/DATAVALS). All frames were taken with onboard look-up table LUTID 0 (no companding), so the values sit on the native unit-DN lattice; LUTID 4 frames, which IRIS square-root companded on board (decoded levels measured in iris20131012_02490122: 1 DN steps up to 110 DN, then 2 DN, 9 DN near 400 DN, and only sparse coarse levels above ~4,000 DN), form a different tick lattice and are excluded (they could be a separate family). BLANK = -32768 is the source-declared fill for pixels that were not read out."
+source_resources = ["iris_l1_fuv_full_readout_selection"]
+source_format = "FITS tile-compressed image (empty primary HDU + BINTABLE COMPRESSED_DATA, RICE_1, ZTILE 4144 x 1, BLOCKSIZE 32, BYTEPIX 2), IRIS level-1 *_fuv.fits"
+source_field = "Decompressed ZBITPIX 16 image (ZNAXIS1 4144 wavelength columns x ZNAXIS2 1096 slit rows) of the COMPRESSED_DATA table"
+filtered_input_path = "filtered/nasa_heliocloud_iris_l1_fuv_frames_i16/ingest_stats.json"
+filtering = "40 pinned frames, one per (date, OBSID) run, all LUTID 0, from 7 science OBSIDs (3893012099 x18, 3690015104 x15, 3690011140 x2, 3882010194 x2, 3690011143, 3690010304, 3893010094 x1) over 2014 (2), 2015 (3), 2016 (3), 2017 (6), 2018 (6), 2019 (6), 2020 (5), 2021 (5), 2022 (4); EXPTIME 30 s (21), 60 s (15), 15 s (4). Excluded: onboard-companded frames (LUTID != 0), NUV, slit-jaw (SJI), dark (fuvd), summed (SUMSPTRL/SUMSPAT > 1), windowed (CRS_NREG != 2 or other columns), non-LIGHT, calibration/commissioning and radiation-zone (SAA/HLZ) frames."
+missing_value_policy = "Frames are kept whole and uncropped. Pixels outside the two readout regions carry the source BLANK value -32768 (rows 1-24 and 1073-1096, columns 2049-2096 between the CCDs and 4113-4144): 282,752 of 4,541,824 pixels per frame (6.23%). build and verify both require the BLANK set to equal exactly the complement of TSR/TER x TSC/TEC and require no BLANK inside the readout; every read-out pixel (including saturated and 0-DN pixels) is preserved unchanged. Any pin, structure, checksum, regime, header-statistic or lattice mismatch is fatal."
+conversion = "Walk the FITS headers, read the 1096 (count, heap offset) descriptors, Rice-decode each row tile (2-byte big-endian seed, 4-bit fs codes per 32-pixel block: fs < 0 repeat, fs = 14 verbatim 16-bit, otherwise unary + fs bits; zigzag un-mapping, accumulation modulo 2^16), reinterpret as signed int16 and write the 1096 x 4144 frame row-major (column fastest, FITS order) as little-endian int16 to samples/nasa_heliocloud_iris_l1_fuv_frames_i16/iris_fuv_l1_full_readout_dn_i16/<source stem>.i16; one sample per FITS file, no scaling, cropping or tiling."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian int16 CCD DN frame"
+sample_geometry = "fixed_1096x4144_iris_fuv_spectrograph_frame"
+sample_rank = 2
+sample_shape = [1096, 4144]
+sample_axes = ["slit_row_y", "wavelength_column"]
+natural_record_kind = "iris_fuv_spectrograph_level1_exposure_frame"
+sample_count = 40
+total_size_bytes = 363345920
+output_path = "samples/nasa_heliocloud_iris_l1_fuv_frames_i16/iris_fuv_l1_full_readout_dn_i16/"

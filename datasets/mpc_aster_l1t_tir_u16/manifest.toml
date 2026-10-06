@@ -1,0 +1,84 @@
+manifest_version = 1
+dataset_id = "mpc_aster_l1t_tir_u16"
+name = "Terra ASTER L1T Thermal-Infrared (Bands 10-14) At-Sensor Radiance DN UInt16"
+description = "Complete daytime, low-cloud Terra ASTER L1T v003 scenes, thermal-infrared subsystem only: the five TIR bands (ImageData10..14, 8.1-11.65 um) of each scene as precision terrain-corrected at-sensor radiance digital numbers (12-bit DN stored as uint16, 0 = fill outside the rotated swath), 90 m north-up UTM grid, one sample per scene: 51 scenes from 26 climatically diverse regions, two seasonal windows (Feb 15 - Apr 30, Jul 1 - Sep 15), acquired 2000-2006."
+homepage = "https://planetarycomputer.microsoft.com/dataset/aster-l1t"
+
+[license]
+name = "Public domain (USGS data policy names ASTER imagery as public domain; ASTER Level 1 products free of charge to all users since April 2016)"
+spdx = "LicenseRef-Public-Domain"
+url = "https://www.usgs.gov/emergency-operations-portal/data-policy"
+citation = "NASA/METI/AIST/Japan Spacesystems and U.S./Japan ASTER Science Team. ASTER Level 1 Precision Terrain Corrected Registered At-Sensor Radiance (AST_L1T) Version 3. NASA EOSDIS Land Processes DAAC. https://doi.org/10.5067/ASTER/AST_L1T.003. Accessed through Microsoft Planetary Computer (collection aster-l1t)."
+notes = "Grant relied on: the USGS data policy, which the Planetary Computer collection links as its license under the title 'Public Domain' (MPC's original link: https://www.usgs.gov/core-science-systems/hdds/data-policy; current location https://www.usgs.gov/emergency-operations-portal/data-policy). Its 'Public Imagery' section states: 'Most of the satellite images supplied by U.S. Federal civil agencies are public domain (such as Landsat or ASTER). ... All public domain imagery may be used, shared, transferred, or redistributed without restriction. However, there should be acknowledgement of the image source within any derived maps, products, or publications.' (The page is the USGS Hazards Data Distribution System data policy; MPC uses it as the license reference for this collection.) download.sh captures this page at downloads/mpc_aster_l1t_tir_u16/rights/usgs_data_policy.html (MPC link first, current location as fallback), phrase-checks it (regex 'public domain\\s*\\(\\s*such as landsat or aster\\s*\\)' plus 'redistributed without restriction' on the tag-stripped text) before any raster transfer, logs the matched sentences, and pins requested/effective URL, HTTP code, size and sha256 in downloads/mpc_aster_l1t_tir_u16/rights_receipts.tsv; build.sh refuses to run without check=ok receipts and verify.sh re-runs the checks offline. The raw MPC collection JSON is saved next to it (rights/mpc_collection_aster-l1t.json) and checked for the rel=license 'Public Domain' usgs.gov data-policy link, NASA and USGS listed as licensors, and TIR raster:bands 5 x uint16 nodata 0; its STAC 'license' field reads 'proprietary' and only points to that page. Capture of 2026-10-05: MPC's link redirected (HTTP 200) to https://www.usgs.gov/emergency-operations-portal/data-policy, 89,600 bytes, sha256 b91a7cda9f802beaf49b3b7bf3426b3f4dad71435c374bf66424d786cce6712e; MPC collection JSON 9,925 bytes, sha256 65f1fe15ee8394f1b9f8d49f3158f2f99e765c69a713648ce7b548de7fcca8e2 (providers NASA [producer, licensor], USGS [processor, producer, licensor], Microsoft [host, processor]). Supporting, optional and non-fatal: the NASA Earthdata notice 'ASTER Data Available at No Charge' (https://www.earthdata.nasa.gov/news/aster-data-available-no-charge, captured 137,157 bytes, sha256 fd9903ef4c170d9a5c186373fddd936662b409320d56780775cb1c8e532afd30): 'On April 1, 2016, NASA's Land Processes Distributed Active Archive Center (LP DAAC) began distributing Terra ... ASTER Level 1 Precision Terrain Corrected Registered At-Sensor Radiance (AST_L1T) data products over the entire globe at no charge.'; the same page names ASTER as a partnership of NASA, METI, AIST and J-spacesystems. Not claimed: NASA Earthdata's CC0 default, because its Data Use Guidance applies CC0 only to NASA-led missions and says data from partner (non-NASA-led) missions follow the sponsor's terms; ASTER is a METI (Japan) instrument on NASA's Terra. Attribution (requested by the USGS policy): acknowledge NASA/METI/AIST/Japan Spacesystems and the U.S./Japan ASTER Science Team (AST_L1T v003, LP DAAC) as the image source; the samples are decoded DN from Microsoft's COG export, not unaltered LP DAAC files."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NASA/METI ASTER L1T product hosted by Microsoft Planetary Computer (Azure open data); 90 m thermal-infrared Earth imagery of deserts, mountains, ice, steppe and farmland; no people or personal data are resolvable."
+usage_notes = "Public-domain Earth-observation imagery; keep the NASA/METI/AIST/J-spacesystems attribution."
+
+[[origins]]
+id = "planetary_computer_aster_l1t"
+name = "Microsoft Planetary Computer aster-l1t STAC collection"
+url = "https://planetarycomputer.microsoft.com/api/stac/v1/collections/aster-l1t"
+type = "api"
+notes = "STAC API (POST /api/stac/v1/search) over every AST_L1T v003 scene from 2000-03-04 to 2006-12-31, with VNIR/SWIR (uint8) and TIR (uint16, 5 bands) Cloud-Optimized GeoTIFF assets. Blob access requires an anonymous short-lived read-only SAS from https://planetarycomputer.microsoft.com/api/sas/v1/token/astersa/aster; no account, key, or login."
+
+[[origins]]
+id = "lpdaac_ast_l1t"
+name = "NASA LP DAAC AST_L1T v003"
+url = "https://doi.org/10.5067/ASTER/AST_L1T.003"
+type = "data_portal"
+notes = "Producer and archive of record for the AST_L1T product; documentation of the TIR DN-to-radiance conversion."
+
+[[resources]]
+id = "aster_l1t_tir_cogs"
+origin = "planetary_computer_aster_l1t"
+url = "https://astersa.blob.core.windows.net/aster/images/L1T/"
+type = "file"
+version = "51 exact AST_L1T v003 STAC items (AST_L1T_00302152001103411_20150414204656 ... AST_L1T_00309122003020020_20150430201556), asset TIR; item id, href, Content-Length and Azure Content-MD5 pinned in sources.tsv (resolved by discover.sh on 2026-10-05)."
+access = "Public anonymous HTTPS with a Planetary Computer SAS appended per run; resumable curl."
+size_bytes = 157104582
+sha256 = ""
+local_path = "downloads/mpc_aster_l1t_tir_u16/tir/"
+notes = "Each COG is a classic little-endian TIFF whose primary IFD is a 5-sample-per-pixel uint16 raster (BitsPerSample 16 x5, SampleFormat 1, PlanarConfiguration 1 = chunky), Deflate-compressed in 512x512 tiles with Predictor 2; GDAL metadata names the bands ImageData10..ImageData14. Overview IFDs are ignored. No GDAL_NODATA tag is set (0 is the swath fill by convention and by inspection). Per-file integrity: exact size and Azure Content-MD5 (published for all 51 files, pinned), full tile-inflate check at download time; sha256 receipts in downloads/<id>/download_receipts.tsv and in the sample index."
+
+[local_paths]
+downloads = "downloads/mpc_aster_l1t_tir_u16/"
+filtered = "filtered/mpc_aster_l1t_tir_u16/"
+index = "index/mpc_aster_l1t_tir_u16/"
+samples = "samples/mpc_aster_l1t_tir_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/mpc_aster_l1t_tir_u16/samples.jsonl"
+summary = "Download the 51 pinned ASTER L1T TIR COGs (one daytime, sun elevation > 20 deg, low-cloud < 10% scene per region and seasonal window, resolved via the Planetary Computer STAC API), validate size/MD5/TIFF structure, inflate the Deflate tiles, undo TIFF Predictor 2 with a 5-sample stride (mod 2^16), crop edge tiles, and write each complete scene raster as raw little-endian uint16 in source pixel-interleaved order."
+deterministic_notes = "Scope was resolved by discover.sh on 2026-10-05 and pinned in sources.tsv: 26 named region bounding boxes x 2 seasonal windows (Feb 15 - Apr 30, Jul 1 - Sep 15); per region a base year in 2000..2006 with fallback to the nearest other year; per window the qualifying item (TIR asset, 0 <= eo:cloud_cover < 10, view:sun_elevation > 20, not already chosen) with the lowest cloud cover, then earliest datetime, then id. 51 of 52 slots resolved; Patagonia Jul-Sep had no qualifying scene in any year. The ASTER archive on Planetary Computer is closed (2000-2006); download.sh requires exactly the 51 pinned scenes and 157,104,582 bytes. build.sh and verify.sh share the degeneracy bounds; verify.sh re-derives every sample with a separate decoder and byte-compares it."
+
+[[series]]
+id = "aster_l1t_tir_radiance_dn_u16"
+description = "Terra ASTER L1T thermal-infrared bands 10-14 at-sensor radiance digital numbers, one complete scene per sample, pixel-interleaved uint16."
+semantic_meaning = "Per-pixel, per-band ASTER TIR at-sensor spectral radiance as the AST_L1T 12-bit digital number, after LP DAAC's precision terrain correction and resampling to a 90 m north-up UTM grid. Bands: 10 (8.125-8.475 um), 11 (8.475-8.825 um), 12 (8.925-9.275 um), 13 (10.25-10.95 um), 14 (10.95-11.65 um). Radiance = (DN - 1) x UCC with fixed per-band unit-conversion coefficients 0.006822, 0.006780, 0.006590, 0.005693, 0.005225 W m-2 sr-1 um-1 (ASTER User Handbook; recorded in the index, not applied). 0 is fill outside the rotated, north-up-resampled swath."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The COG stores the AST_L1T TIR DN as uint16; the recipe only removes TIFF tiling, Deflate and the lossless TIFF Predictor-2 differencing. No scaling, radiance or temperature conversion, reprojection, resampling, masking or band reordering is applied; the source pixel-interleaved band order is kept."
+source_resources = ["aster_l1t_tir_cogs"]
+source_format = "planetary_computer_cloud_optimized_geotiff_aster_l1t_v003_tir"
+source_field = "TIR_Swath ImageData10..ImageData14 (asset TIR)"
+filtered_input_path = "filtered/mpc_aster_l1t_tir_u16/ingest_stats.json"
+filtering = "Keep every pixel and all five bands of the primary IFD of each planned scene's TIR COG. VNIR and SWIR assets (uint8), overview IFDs, and night scenes (sun elevation <= 20 deg) are not used."
+missing_value_policy = "Source-native fill 0 (outside the rotated swath footprint inside the north-up bounding box) is preserved in place, never stripped or remapped. Valid DN are 1..4095. build.sh and verify.sh both require: every value <= 4095; overall fill fraction within 0.05..0.80; per band at least 50,000 valid pixels and 64 distinct valid DN with max > min; fill masks agreeing across the five bands for at least 98% of pixels; Pearson correlation of bands 13 and 14 over jointly valid pixels >= 0.5 and band-13 mean absolute horizontal neighbour difference / std <= 0.75 (decode-correctness guards). Any size/MD5/structure mismatch, short tile, or degenerate scene is fatal."
+conversion = "Parse the primary IFD of each classic little-endian TIFF, zlib-inflate every tile (each must yield exactly tile_width*tile_height*5 uint16 values; sparse tiles read as 0), undo Predictor 2 per tile row by cumulative summation of each band's samples with a stride of 5 uint16 elements modulo 65536, copy tile rows into a height x width x 5 row-major grid (north row first, west column first, band 10 first within a pixel), crop right/bottom edge-tile padding, and write the values as little-endian uint16. One sample per scene; per-sample height/width are recorded in the index (sample_shape)."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 raster, pixel-interleaved"
+sample_geometry = "aster_l1t_scene_90m_utm_north_up_height_x_width_x_5_bands"
+sample_rank = 3
+sample_axes = ["row_north_to_south", "column_west_to_east", "tir_band"]
+natural_record_kind = "complete_aster_l1t_scene_tir_swath_raster"
+sample_count = 51
+total_size_bytes = 405872250
+output_path = "samples/mpc_aster_l1t_tir_u16/aster_l1t_tir_radiance_dn_u16/"

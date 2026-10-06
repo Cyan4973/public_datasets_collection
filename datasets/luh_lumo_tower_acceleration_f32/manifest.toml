@@ -1,0 +1,149 @@
+manifest_version = 1
+dataset_id = "luh_lumo_tower_acceleration_f32"
+name = "LUMO Lattice-Tower SHM Accelerometer Streams Float32"
+description = "Native single-precision structural-health-monitoring acceleration streams (18 accelerometers, 1651.6 Hz, unit g) of the LUMO 9 m steel lattice tower near Hannover: one sample per accelerometer channel of 12 ten-minute SHMTS records, one record from each healthy and reversible-damage state folder of the six official exemplary ZIPs."
+homepage = "https://data.uni-hannover.de/dataset/lumo"
+
+[license]
+name = "Creative Commons Attribution 3.0"
+spdx = "CC-BY-3.0"
+url = "https://creativecommons.org/licenses/by/3.0/"
+citation = "Wernitz, S., Hofmeister, B., Jonscher, C., Griessmann, T., Rolfes, R. (2021). LUMO - Leibniz University Test Structure for Monitoring [Data set]. Institut fuer Statik und Dynamik, Leibniz Universitaet Hannover / LUIS. https://doi.org/10.25835/0027803"
+notes = "The CKAN package (data.uni-hannover.de, id 93b52576-6a5a-4ce9-8c27-a0372590f7b0) declares license_id CC-BY-3.0, license_url https://creativecommons.org/licenses/by/3.0/, isopen true; the landing page shows 'License: Creative Commons Attribution 3.0' and schema:license https://creativecommons.org/licenses/by/3.0/. The six exemplary ZIPs are open resources of that package. Only the separately requested meteorological data are gated and they are not used. download.sh re-checks license_id, isopen and the DOI on every run. Attribute the authors and DOI."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Leibniz University Hannover research data repository (CKAN, DOI 10.25835/0027803); exact byte ranges of the official exemplary ZIP resources, validated against each ZIP central directory."
+usage_notes = "Engineering vibration measurements of a steel test structure; no people, locations of individuals or personal data."
+
+[[origins]]
+id = "luh_research_data_lumo"
+name = "LUMO - Leibniz University Test Structure for Monitoring (Research Data Repository LUH)"
+url = "https://data.uni-hannover.de/dataset/lumo"
+type = "data_portal"
+notes = "CKAN package 'lumo' by Institut fuer Statik und Dynamik; metadata via https://data.uni-hannover.de/api/3/action/package_show?id=lumo. The complete monthly archive (vault, split multi-part ZIPs) is not used; only the six single-file exemplary ZIPs published 2025-05-07."
+
+[[resources]]
+id = "ckan_package_show"
+origin = "luh_research_data_lumo"
+url = "https://data.uni-hannover.de/api/3/action/package_show?id=lumo"
+type = "api_query_result"
+version = "metadata_modified 2025-05-07T06:47:28.913315"
+access = "Public anonymous CKAN API."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/luh_lumo_tower_acceleration_f32/package_show.json"
+notes = "Fetched fresh each run; validated for package id, name, DOI, license_id CC-BY-3.0, isopen, and the pinned URL and size of every used ZIP resource."
+
+[[resources]]
+id = "exemplary_dam6_111_zip"
+origin = "luh_research_data_lumo"
+url = "https://data.uni-hannover.de/dataset/93b52576-6a5a-4ce9-8c27-a0372590f7b0/resource/d9661b47-1f25-4194-99e8-6805fcd5810e/download/exemplary_datasets_dam6_111.zip"
+type = "archive"
+version = "2025-05-07 (CKAN last_modified 2025-05-07T06:29:16)"
+access = "Two exact HTTP byte ranges (ZIP members), plus the last 64 KiB for the central directory."
+size_bytes = 680154659
+sha256 = ""
+local_path = "downloads/luh_lumo_tower_acceleration_f32/dam6_111/"
+notes = "Members 01_Healthy/SHMTS_202010051932.mat (CRC32 d4446933, 67538967 -> 67955236 B) and 02_DAM6_111/SHMTS_202010150419.mat (CRC32 abf562ff, 73771416 -> 73918076 B). Exact ranges in sources.tsv."
+
+[[resources]]
+id = "exemplary_dam4_111_zip"
+origin = "luh_research_data_lumo"
+url = "https://data.uni-hannover.de/dataset/93b52576-6a5a-4ce9-8c27-a0372590f7b0/resource/83ee4ee4-d86b-49ce-92dd-743bd779d845/download/exemplary_datasets_dam4_111.zip"
+type = "archive"
+version = "2025-05-07 (CKAN last_modified 2025-05-07T06:31:03)"
+access = "Two exact HTTP byte ranges (ZIP members), plus the last 64 KiB for the central directory."
+size_bytes = 665801542
+sha256 = ""
+local_path = "downloads/luh_lumo_tower_acceleration_f32/dam4_111/"
+notes = "Members 03_Healthy/SHMTS_202011020023.mat (CRC32 8e00838e) and 04_DAM4_111/SHMTS_202011111157.mat (CRC32 56ca978c). Exact ranges in sources.tsv."
+
+[[resources]]
+id = "exemplary_dam3_111_zip"
+origin = "luh_research_data_lumo"
+url = "https://data.uni-hannover.de/dataset/93b52576-6a5a-4ce9-8c27-a0372590f7b0/resource/78da8221-a6bb-4ad9-9f53-e3d9164b3c52/download/exemplary_datasets_dam3_111.zip"
+type = "archive"
+version = "2025-05-07 (CKAN last_modified 2025-05-07T06:32:23)"
+access = "Two exact HTTP byte ranges (ZIP members), plus the last 64 KiB for the central directory."
+size_bytes = 638712761
+sha256 = ""
+local_path = "downloads/luh_lumo_tower_acceleration_f32/dam3_111/"
+notes = "Members 05_Healthy/SHMTS_202103110713.mat (CRC32 300e504b) and 06_DAM3_111/SHMTS_202103200708.mat (CRC32 25210b73). Exact ranges in sources.tsv."
+
+[[resources]]
+id = "exemplary_dam6_010_zip"
+origin = "luh_research_data_lumo"
+url = "https://data.uni-hannover.de/dataset/93b52576-6a5a-4ce9-8c27-a0372590f7b0/resource/6b497c7b-48c3-4c5d-9d08-c3f37ff92122/download/exemplary_datasets_dam6_010.zip"
+type = "archive"
+version = "2025-05-07 (CKAN last_modified 2025-05-07T06:33:53)"
+access = "Two exact HTTP byte ranges (ZIP members), plus the last 64 KiB for the central directory."
+size_bytes = 643610180
+sha256 = ""
+local_path = "downloads/luh_lumo_tower_acceleration_f32/dam6_010/"
+notes = "Members 07_Healthy/SHMTS_202105010855.mat (CRC32 ba2942d9) and 08_DAM6_010/SHMTS_202105060712.mat (CRC32 9cf48983). Exact ranges in sources.tsv."
+
+[[resources]]
+id = "exemplary_dam4_010_zip"
+origin = "luh_research_data_lumo"
+url = "https://data.uni-hannover.de/dataset/93b52576-6a5a-4ce9-8c27-a0372590f7b0/resource/1f56230e-3f8e-4347-90a1-08bdb3cd4872/download/exemplary_datasets_dam4_010.zip"
+type = "archive"
+version = "2025-05-07 (CKAN last_modified 2025-05-07T06:35:13)"
+access = "Two exact HTTP byte ranges (ZIP members), plus the last 64 KiB for the central directory."
+size_bytes = 629562821
+sha256 = ""
+local_path = "downloads/luh_lumo_tower_acceleration_f32/dam4_010/"
+notes = "Members 09_Healthy/SHMTS_202105210714.mat (CRC32 ef0b0e4c) and 10_DAM4_010/SHMTS_202106020718.mat (CRC32 a9eed11e). Exact ranges in sources.tsv."
+
+[[resources]]
+id = "exemplary_dam3_010_zip"
+origin = "luh_research_data_lumo"
+url = "https://data.uni-hannover.de/dataset/93b52576-6a5a-4ce9-8c27-a0372590f7b0/resource/37be937f-8e16-414e-9fd4-92d59196417c/download/exemplary_datasets_dam3_010.zip"
+type = "archive"
+version = "2025-05-07 (CKAN last_modified 2025-05-07T06:35:47)"
+access = "Two exact HTTP byte ranges (ZIP members), plus the last 64 KiB for the central directory."
+size_bytes = 559776282
+sha256 = ""
+local_path = "downloads/luh_lumo_tower_acceleration_f32/dam3_010/"
+notes = "Members 11_Healthy/SHMTS_202106160038.mat (CRC32 b6b3096b) and 12_DAM3_010/SHMTS_202106261755.mat (CRC32 b7691ec1). Exact ranges in sources.tsv."
+
+[local_paths]
+downloads = "downloads/luh_lumo_tower_acceleration_f32/"
+filtered = "filtered/luh_lumo_tower_acceleration_f32/"
+index = "index/luh_lumo_tower_acceleration_f32/"
+samples = "samples/luh_lumo_tower_acceleration_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/luh_lumo_tower_acceleration_f32/samples.jsonl"
+summary = "Range-fetch 12 pinned SHMTS .mat members (770,718,051 bytes) from the six official LUMO exemplary ZIPs, inflate and CRC-check them, decode the MAT v5 struct Dat with a dependency-free parser, and emit each of the 18 accelerometer columns of the mxSINGLE Data matrix as one little-endian float32 sample."
+deterministic_notes = "Selection rule: in each of the 12 state folders (01..12: Healthy, DAM6_111, Healthy, DAM4_111, Healthy, DAM3_111, Healthy, DAM6_010, Healthy, DAM4_010, Healthy, DAM3_010) take the 3rd of the 5 SHMTS files in chronological order. sources.tsv pins zip, member, CRC32, compressed/uncompressed size and exact byte range; download.sh re-validates them against the live central directories, checks 206/Content-Range on every chunk, inflates, checks CRC32, size and data descriptor, and validates the MAT schema (Fs 1651.6129032258063, 990600x22 single, channel names accel01x..accel09y + strain01-03 + temp01, accel units 'g'). build.sh and verify.sh re-check size, CRC32 and the extracted-file SHA-256 pinned in mat_sha256.tsv, fail on any non-finite or constant channel, and verify.sh re-derives every sample via a second Data locator and compares bytes, SHA-256, min/max and manifest totals. Floor: 216 samples of 990,600 values each."
+
+[[series]]
+id = "lumo_tower_acceleration_f32"
+description = "Ambient (wind/operational) horizontal acceleration of the LUMO lattice tower, one accelerometer channel of one 10-minute SHMTS acquisition per sample."
+semantic_meaning = "Horizontal structural acceleration in g measured by one of 18 accelerometers (9 measurement levels x 2 horizontal axes x/y, channels accel01x..accel09y) on a 9 m steel lattice tower, sampled at 1651.6129 Hz for 990,600 samples (~599.8 s). Records come from healthy and reversibly damaged (DAM3/DAM4/DAM6 at levels 010/111) states of the same structure."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Upstream Data is a MATLAB mxSINGLE matrix with a miSINGLE (IEEE-754 binary32, little-endian 'IM' file) payload; the emitted bytes are the exact stored float32 bit patterns of each column. The values lie on a per-channel calibrated ADC lattice (step 5.65e-7 to 6.36e-7 g depending on the channel, the same in every record, plus an offset). Realized samples have 650 to 96,352 distinct values (median 18,135) and peak-to-peak 0.0007 to 0.24 g (median 0.023 g); the two calmest records use only about 10-11 bits of real resolution. No integer counts are published upstream."
+source_resources = ["exemplary_dam6_111_zip", "exemplary_dam4_111_zip", "exemplary_dam3_111_zip", "exemplary_dam6_010_zip", "exemplary_dam4_010_zip", "exemplary_dam3_010_zip"]
+source_format = "MATLAB Level-5 MAT file (SHMTS_<yyyymmddHHMM>.mat) with a zlib-compressed 1x1 struct variable Dat"
+source_field = "Dat.Data columns 1-18 (ChannelNames accel01x..accel09y, ChannelUnits g) of the 990600x22 mxSINGLE matrix"
+filtered_input_path = "filtered/luh_lumo_tower_acceleration_f32/ingest_stats.json"
+filtering = "Keep the 18 accelerometer columns of each of the 12 selected records; exclude columns 19-22 (strain01-03 in m/m, temp01 in degC), the Timestamps/Time datetime objects and the MAT subsystem element."
+missing_value_policy = "No missing-value handling is expected: every emitted value must be finite. Any NaN or Inf in a selected accelerometer column, a constant column, a changed channel name/unit/Fs/row count, or a size/CRC mismatch is fatal in build.sh and verify.sh; nothing is dropped, imputed or clipped."
+conversion = "Inflate the ZIP member, decompress the top-level miCOMPRESSED element of the MAT file, walk the Dat struct (skipping the MCOS datetime objects Timestamps/Time by their element size), locate the Data miSINGLE payload (column-major) and copy column j (j = 0..17) verbatim as rows x 4 bytes of little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 acceleration time series"
+sample_geometry = "uniformly_sampled_time_series"
+sample_rank = 1
+sample_axes = ["time_sample"]
+natural_record_kind = "lumo_shmts_10min_record_single_accelerometer_channel"
+sample_count = 216
+total_size_bytes = 855878400
+output_path = "samples/luh_lumo_tower_acceleration_f32/lumo_tower_acceleration_f32/"

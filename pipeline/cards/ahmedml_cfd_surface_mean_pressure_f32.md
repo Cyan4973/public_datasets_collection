@@ -1,0 +1,23 @@
+# AhmedML (NVIDIA/caemldatasets) Hybrid RANS-LES OpenFOAM Ahmed-Body Surface Time-Averaged Pressure pMean, Native Float32 VTP CellData
+
+- Candidate id: `ahmedml_cfd_surface_mean_pressure_f32`
+- Width: float32
+- Quantity: Time-averaged kinematic static pressure p/rho (m^2/s^2) on each boundary-surface cell of a parametric Ahmed car body, from time-accurate hybrid RANS-LES OpenFOAM v2212 simulations (~80 convective time units, ~20M-cell meshes)
+- Source: https://huggingface.co/datasets/neashton/ahmedml
+- Resources: https://huggingface.co/datasets/neashton/ahmedml/resolve/main/run_1/boundary_1.vtp, https://huggingface.co/datasets/neashton/ahmedml/resolve/main/run_250/boundary_250.vtp, https://huggingface.co/datasets/neashton/ahmedml/resolve/main/run_500/boundary_500.vtp, https://huggingface.co/datasets/neashton/ahmedml/resolve/main/README.md, https://huggingface.co/datasets/neashton/ahmedml/resolve/main/LICENSE.txt, https://huggingface.co/api/datasets/neashton/ahmedml/tree/main
+- License: CC-BY-SA-4.0
+- License evidence: https://huggingface.co/datasets/neashton/ahmedml/resolve/main/LICENSE.txt
+- License quote: README front matter: 'license: cc-by-sa-4.0'; LICENSE.txt: 'Attribution-ShareAlike 4.0 International'. Dataset is ungated and public on Hugging Face.
+- Natural record: One simulation run's boundary_<i>.vtp CellData array Name='pMean' (Float32, 1 component, one value per surface polygon; run_1 has NumberOfPolys=1,101,574, so 4,406,296 bytes). 500 runs (run_1..run_500) available, VTP files 68-103 MB each.
+- Estimated samples: 50
+- Estimated primary values: 55,000,000
+- Estimated download bytes: 300,000,000
+- Estimated primary bytes: 220,000,000
+- Decode path: VTK XML PolyData, byte_order LittleEndian, header_type UInt64, format='binary' (inline base64, no compressor attribute). Per run: curl range GET the first 2 KB (parse NumberOfPolys) and the last 2 KB (closing tags). Walk backwards over the fixed CellData order [pMean, static(p)_coeffMean, yPlusMean, wallShearStressMean(3 comp)] using base64 block length ((8+4*N*ncomp+2)//3)*4 and small 400-byte range GETs to confirm each <DataArray ... Name=...> tag. Then curl range GET exactly the pMean base64 line, base64.b64decode, require the UInt64 prefix == 4*NumberOfPolys, and emit the following float32 LE payload unchanged (one sample per run). Emit only pMean; Cp is a linear rescale of it and must not be added.
+- Novelty kind: new_modality
+- Novelty evidence: novelty.py --url https://huggingface.co/datasets/neashton/ahmedml --terms ahmed cfd 'surface pressure' openfoam: same-host-only matches (13 unrelated HF recipes), no AhmedML/caemldatasets recipe. 'cfd' matches only staging/registry pdebench_sod6_shock_tube_f64 (rejected at 64-bit, degenerate shock tube). 'surface pressure' matches only meteorological NASA POWER / Open-Meteo station pressure, a different modality. No CFD simulation surface field exists in local accepted, staging, ledger or downstream at any width.
+- Homogeneity: All runs use the same solver (OpenFOAM v2212), turbulence model, inflow condition, meshing pipeline, output variable and units; only the parametric body geometry varies (documented in geo_parameters_all.csv). One field (pMean) only; wall shear stress, y+ and Cp are excluded. Cell counts vary per run (about 0.9-1.4M) because of geometry, a natural record-size variation.
+- Risks: CC BY-SA 4.0 ShareAlike (precedents: goose_vls128, exomol, asterisk accepted under BY-SA). The original s3://caemldatasets bucket returns AllAccessDisabled, so the HF mirror is the access path; the HF xet backend honors range requests (206 verified). Exact range location requires the backward tag walk (verified working on run_1) or a forward parse; a builder that downloads whole VTPs instead would pull about 85 MB per run. Values are solver output exported as Float32 in the published artifact (OpenFOAM computes in double); this is the published native type, not a local narrowing. The volume_<i>.vtu files (about 5.6 GB) must not be touched.
+- Probe evidence: HF API: dataset not gated, license cc-by-sa-4.0, run_1 lists boundary_1.vtp 82,725,933 B. Tree API shows boundary vtp present for runs 2,3,50,100,250,400,499,500 (68-103 MB). 1-byte range GET returned 206 for run_1, run_250 and run_500. Header range shows Float32 Points, Int32 connectivity/offsets, NumberOfPoints=1,131,049, NumberOfPolys=1,101,574. Backward walk found CellData arrays wallShearStressMean (3), yPlusMean, static(p)_coeffMean and pMean. Decoded the first 3,997 pMean values at byte 47,475,130: UInt64 prefix 4,406,296 == 4*N; values -0.0473..-0.0408 m^2/s^2, smooth and non-constant.
+
+Proposed by the autocollect scout on 2026-10-06 (transcript `.data/pipeline/logs/scout_32bit/scout.20261006_015155.jsonl`).

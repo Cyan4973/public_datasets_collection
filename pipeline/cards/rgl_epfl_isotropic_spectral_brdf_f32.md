@@ -1,0 +1,23 @@
+# EPFL RGL Material Database Measured Spectral BRDFs (Isotropic, Adaptive Parameterization), Native Float32 Mitsuba Tensor 'spectra'
+
+- Candidate id: `rgl_epfl_isotropic_spectral_brdf_f32`
+- Width: float32
+- Quantity: Measured spectral bidirectional reflectance of real material samples (felts, papers, satins, car/flake paints, spectralon, leaf, etc.) from a goniophotometer, sampled at 8 incident elevations x 195 wavelengths x 32x32 outgoing directions in the Dupuy-Jakob 2018 adaptive parameterization
+- Source: https://rgl.epfl.ch/materials
+- Resources: https://d38rqfq1h7iukm.cloudfront.net/media/materials/acrylic_felt_green/acrylic_felt_green_spec.bsdf, https://d38rqfq1h7iukm.cloudfront.net/media/materials/spectralon/spectralon_spec.bsdf, https://d38rqfq1h7iukm.cloudfront.net/media/materials/cardboard/cardboard_spec.bsdf, https://rgl.epfl.ch/pages/lab/material-database
+- License: CC0-1.0
+- License evidence: https://rgl.epfl.ch/pages/lab/material-database
+- License quote: 'Licensing conditions Unless otherwise noted, all material data is licensed under the Creative Commons Zero ( CC0 ) license.' The per-material panel on https://rgl.epfl.ch/materials also shows 'License:' linking to https://creativecommons.org/publicdomain/zero/1.0/.
+- Natural record: One material's *_spec.bsdf tensor field 'spectra': float32, shape (phi_i=1, theta_i=8, wavelengths=195, 32, 32) = 1,597,440 values (6,389,760 bytes). 49 of the 62 materials share exactly this shape (isotropic, 32x32). Excluded: 11 anisotropic materials (17,8,195,32,32 at about 106 MB each, which would break the cap) and 2 isotropic materials at 48x48 and 64x64.
+- Estimated samples: 49
+- Estimated primary values: 78,274,560
+- Estimated download bytes: 330,000,000
+- Estimated primary bytes: 313,098,240
+- Decode path: Material list parsed from the inline JS in https://rgl.epfl.ch/materials (dl_spec URLs). Per file: curl range GET of the first 1 KB, then parse the Mitsuba tensor_file header with struct: magic 'tensor_file\0', u8 major/minor (1.0), u32 nfields, and per field u16 name length + name, u16 ndim, u8 dtype (10 = float32), u64 byte offset, u64 shape[ndim]. Require the 'spectra' field to be dtype 10 with shape (1,8,195,32,32). Then curl range GET [offset, offset + 4*1,597,440) (or the whole 6.95 MB file) and emit the little-endian float32 C-order payload unchanged (one sample per material).
+- Novelty kind: new_modality
+- Novelty evidence: novelty.py --url https://rgl.epfl.ch/materials --terms brdf bsdf 'material appearance' reflectance: no URL matches, no brdf/bsdf matches anywhere. 'reflectance' hits only remote-sensing surface reflectance (Sentinel-2 u16, MODIS, Landsat, AVIRIS/NEON staging) and soil MIR spectra, which are different modalities (nadir satellite imagery and 1-D absorbance spectra, not goniometric spectral BRDF tensors). No registry or ledger history. This is a computer-graphics measured-appearance modality absent at every width.
+- Homogeneity: Same instrument (RGL pgII goniophotometer), same acquisition and parameterization pipeline, same tensor shape and wavelength grid for all 49 selected isotropic materials. One quantity (spectral reflectance); luminance, vndf, ndf and sigma fields are excluded. Material class varies (the intended diversity), the measurement regime does not.
+- Risks: About 15-30% of entries are exact zeros (out-of-domain or invalid parameterization cells, flagged by the 'valid' field); this is legitimate structure, but the builder should report zero fraction. No upstream checksums: pin Content-Length (6,951,224 B for spectralon; ETag/Last-Modified 2018-11-05) and record sha256 at first download. Material list comes from page JS; pin the 49 material names in the recipe. CloudFront host, stable since 2018. Optionally include the 2 higher-resolution isotropic files as separate natural records if the judge prefers the full isotropic population.
+- Probe evidence: rgl.epfl.ch/materials (200, 325 KB) lists 62 materials with dl_spec URLs. Header-parsed all 62 *_spec.bsdf files via 1 KB range GETs: 49 have spectra f32 (1,8,195,32,32), 11 have (17,8,195,32,32), 1 has 48x48 and 1 has 64x64. Fields per file: version, description, phi_i, theta_i, wavelengths(195), sigma, ndf, vndf, luminance, spectra, jacobian, valid. HEAD spectralon_spec.bsdf: 200, Content-Length 6,951,224. 1-byte range GETs returned 206 for cardboard, leaf_maple and paper_blue. 16 KB spectra slices: acrylic_felt_green 0..0.788, spectralon 0..1.602 (around 1.55 plateau as expected for a near-Lambertian white), satin_gold 0..1.10, genuine non-lattice floats.
+
+Proposed by the autocollect scout on 2026-10-06 (transcript `.data/pipeline/logs/scout_32bit/scout.20261006_015155.jsonl`).

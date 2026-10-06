@@ -68,6 +68,11 @@ Useful flags: `--agents` (concurrent agent sessions, default 3),
 `--max-cost-usd`, `--stop-after`, `--model`, `--effort`, `--download-cap-gb`
 (default 5), `--disk-budget-gb` (default 500), `--keep-rejected-data`.
 
+Agents run at per-role effort: scouts and screener `medium`, builders `high`
+with a 300k-token compaction window, the judge `xhigh`. Override with
+`--role-effort scout=low,builder=medium` or `--builder-autocompact auto`;
+`--effort` sets one level for every role.
+
 `--notify-cmd` runs a shell command with each milestone message on stdin
 (every accepted dataset, every terminal outcome, any global pause, driver
 stop). At Meta, the pingme skill script sends a Google Chat message to you:

@@ -296,6 +296,7 @@ hf_smolllm2_135m_safetensors_f16	ok	134515008	269030016	272	331776	663552	0	0	0	
 modelnet10_off_mesh_vertices_f32	ok	139741776	558967104	4899	8472	33888	0	0	0	1	none	none
 figshare_fukuchi_marker_trajectories_f32	ok	144088704	576354816	5898	9768	39072	0	0	0	1	none	none
 weatherbench2_era5_pressure_level_fields_f32	ok	144967680	579870720	384	377520	1510080	0	0	0	1	none	none
+mast_iue_swp_raw_image_u8	ok	150994944	150994944	256	589824	589824	0	0	0	1	none	none
 dwd_radolan_rw_precip_i16	ok	155520000	311040000	192	810000	1620000	0	0	0	1	none	none
 google_books_1gram_counts_2020_eng_u64	ok	158333331	949999986	3	52777777	422222216	0	0	0	1	none	none
 citibike_2024_trip_geocoords_f64	ok	176663392	1413307136	200	995688.5	7965508	0	0	0	1	none	none

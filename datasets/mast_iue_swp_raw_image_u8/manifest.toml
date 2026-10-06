@@ -1,0 +1,90 @@
+manifest_version = 1
+dataset_id = "mast_iue_swp_raw_image_u8"
+name = "IUE SWP Low-Dispersion Raw Camera Images (8-bit DN)"
+description = "256 complete 768x768 unsigned-byte raw detector frames from the International Ultraviolet Explorer Short-Wavelength Prime (SWP) SEC-vidicon camera, low dispersion, large aperture, GSFC-acquired, 1978-1995, decoded from the MAST NEWSIPS raw-image FITS files."
+homepage = "https://archive.stsci.edu/missions-and-data/iue"
+
+[license]
+name = "Public domain (NASA mission data hosted at MAST)"
+spdx = "LicenseRef-MAST-Public-Domain"
+url = "https://archive.stsci.edu/publishing/data-use"
+citation = "International Ultraviolet Explorer (NASA/ESA/UK SERC), SWP camera raw images, Mikulski Archive for Space Telescopes (MAST), Space Telescope Science Institute."
+notes = "The MAST Data Use Policy states: 'Most data hosted at MAST are in the public domain (see: open data), and therefore do not have restrictions on use.' Its only copyrighted collections are the Digitized Sky Survey and the Guide Star Catalogs; IUE is neither, and IUE is not a community HLSP. download.sh re-fetches the policy page and fails if the public-domain sentence disappears or the copyrighted list starts naming IUE. Selection is restricted to frames acquired by the NASA GSFC ground station (FITS STATION = 'GSFC'); ESA VILSPA-acquired frames are excluded to keep provenance uniform. Acknowledge IUE, MAST and STScI."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official MAST IUE archive files over anonymous HTTPS; ultraviolet spectrograph detector frames of astronomical targets."
+usage_notes = "Only the FITS primary data unit (detector data numbers) is emitted. FITS header text, which includes guest-observer program identifiers and observer names in HISTORY/label-copy cards, is never written to samples, index rows, or sources.tsv; only camera, image number, observing date, exposure time, IUE object class and astronomical target name are kept as metadata."
+
+[[origins]]
+id = "mast_iue"
+name = "MAST International Ultraviolet Explorer archive"
+url = "https://archive.stsci.edu/missions-and-data/iue"
+type = "data_portal"
+notes = "Selection catalogue: https://archive.stsci.edu/iue/search.php (CSV output). Files: https://archive.stsci.edu/missions/iue/data/swp/<thousand-block>/swpNNNNN.rilo.gz. MAST file-format page (https://archive.stsci.edu/iue/file_formats.html) describes RILO as 'raw image files (a 768x768 byte primary array image)'."
+
+[[resources]]
+id = "iue_swp_lowdisp_rilo_selection"
+origin = "mast_iue"
+url = "https://archive.stsci.edu/missions/iue/data/swp/"
+type = "file"
+version = "256 NEWSIPS RILO files, Last-Modified 2013-06-11/12, resolved 2026-10-05 by discover.py"
+access = "Anonymous HTTPS. download.sh fetches the exact files in sources.tsv (URL, compressed size, SHA-256, gzip CRC32 and ISIZE = 619,200 pinned per file) and rejects any payload whose FITS header fails the homogeneity requirements."
+size_bytes = 85299872
+sha256 = ""
+local_path = "downloads/mast_iue_swp_raw_image_u8/rilo/"
+notes = "Per-file pins live in sources.tsv: URL, compressed size, gzip CRC32/ISIZE, and the content SHA-256 of each .rilo.gz (frozen from the first full download on 2026-10-05). download.sh, build.sh and verify.sh all enforce them. size_bytes is the sum of the 256 compressed files."
+
+[[resources]]
+id = "mast_data_use_policy"
+origin = "mast_iue"
+url = "https://archive.stsci.edu/publishing/data-use"
+type = "file"
+version = "fetched at download time"
+access = "Anonymous HTTPS; semantically checked for the public-domain sentence and the copyrighted-collections list."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/mast_iue_swp_raw_image_u8/evidence/mast_data_use.html"
+notes = "Rights evidence only; not a sample source. Size varies with site template, so it is not pinned."
+
+[local_paths]
+downloads = "downloads/mast_iue_swp_raw_image_u8/"
+filtered = "filtered/mast_iue_swp_raw_image_u8/"
+index = "index/mast_iue_swp_raw_image_u8/"
+samples = "samples/mast_iue_swp_raw_image_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/mast_iue_swp_raw_image_u8/samples.jsonl"
+summary = "Fetch 256 pinned SWP low-dispersion RILO FITS files, gunzip with CRC/ISIZE checks, validate the FITS primary header against fixed homogeneity keywords, and emit the 768x768 BITPIX=8 primary data unit unchanged as one raw uint8 sample per camera image."
+deterministic_notes = "discover.py queried the MAST IUE catalogue for all 38,130 SWP low-dispersion images, kept 16,372 with aperture LARGE, station GSFC, image type S, full read, standard acquisition, no trail/multiple/segmented flags, positive exposure, object class not 98/99 and no calibration words in the target name, split them by image number into 256 equal strata and took the first image per stratum whose FITS header (16 KiB range probe) also passed all header requirements; 18 candidates were skipped for ABNMINFR/ABNHISTR = YES. The selection is pinned in sources.tsv, sorted by image number. Header requirements: SIMPLE=T, BITPIX=8, NAXIS=2, NAXIS1=NAXIS2=768, no BZERO/BSCALE/BLANK, BUNIT=DN, TELESCOP=IUE, CAMERA=SWP, IMAGE=pinned number, DISPERSN=DISPTYPE=LOW, APERTURE=LARGE, READMODE=FULL, READGAIN=LOW, EXPOGAIN=MAXIMUM, UVC-VOLT=-5.0, STATION=GSFC, ABNNOSTD/ABNREAD/ABNUVC/ABNHISTR/ABNOTHER/ABNMINFR=NO, LEXPTRMD=NO-TRAIL, LEXPMULT=LEXPSEGM=NO, LIUECLAS not 98/99, LEXPTIME>0. Each decompressed file must be exactly 619,200 bytes (28,800-byte header, 589,824 pixels, 576 zero padding bytes). Frames must have >=16 distinct DN values and dark camera-target corners (max 64x64 corner mean <= 0.5 x central 256x256 mean, central mean >= 5). Duplicate frames fail. verify.sh re-inflates every gzip member with an independent parser, re-reads the FITS header, byte-compares each sample with the re-derived data unit, and checks index rows, counts, totals and the aggregate DN histogram."
+
+[[series]]
+id = "iue_swp_lowdisp_raw_dn_u8"
+description = "Complete raw IUE SWP camera frames (768 scan lines x 768 samples, 8-bit data numbers), low dispersion, large aperture."
+semantic_meaning = "Raw 8-bit video data numbers read out from the IUE Short-Wavelength Prime SEC-vidicon camera (about 1150-1980 Angstrom) for one exposure: the dispersed low-resolution ultraviolet spectrum of the target in the large aperture, sky/camera background, reseau marks, cosmic-ray hits and the dark area outside the circular camera target, before any NEWSIPS photometric or geometric correction."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The FITS primary array is BITPIX = 8 (unsigned byte) with no BZERO/BSCALE; MAST describes RILO as the raw image with a 768x768 byte primary array. For the probed swp30001 the RILO data unit is byte-identical to the legacy IUESIPS VICAR raw image (swp30001.raw.gz) after its label, confirming these are the original telemetry DNs. Values are copied unchanged."
+source_resources = ["iue_swp_lowdisp_rilo_selection"]
+source_format = "gzip-compressed single-HDU FITS (NEWSIPS RILO raw image) with an unsigned 8-bit 768x768 primary array"
+source_field = "FITS primary data unit: SWP camera raw data numbers (BUNIT = DN), NAXIS1 = 768 samples by NAXIS2 = 768 lines"
+filtered_input_path = "filtered/mast_iue_swp_raw_image_u8/ingest_stats.json"
+filtering = "256 pinned images, one per stratum of the 16,372 catalogue-eligible SWP low-dispersion large-aperture GSFC single exposures (SWP 506 to 55694, 1978-1995, 59 IUE object classes, 218 distinct target names). Calibration frames (object classes 98 wavelength-calibration lamp and 99 nulls/flat fields, and calibration words in the target name), high dispersion, small aperture, double/multiple/trailed/segmented exposures, partial reads, non-standard gain/UVC settings, VILSPA-acquired frames and frames flagged for missing minor frames or history replay are excluded."
+missing_value_policy = "Every pixel of every frame is preserved, including the near-zero rows and columns outside the circular camera target and saturated 255 DN pixels; nothing is masked, filled or dropped. Any gzip/CRC/ISIZE mismatch, FITS header deviation, nonzero FITS padding, degenerate frame, misaligned raw-frame structure or duplicate frame fails the recipe rather than being skipped."
+conversion = "Gunzip each RILO file, parse the 2,880-byte FITS header blocks to the END card (28,800 bytes), and write the following 589,824 bytes (768 lines of 768 samples, FITS order with NAXIS1 fastest, i.e. row-major from the first stored scan line) unchanged as one raw uint8 sample per camera image; byte order is irrelevant for 8-bit values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 SWP camera raw-image data numbers"
+sample_geometry = "fixed_768x768_iue_vidicon_raw_frame"
+sample_rank = 2
+sample_shape = [768, 768]
+sample_axes = ["vidicon_scan_line", "vidicon_sample"]
+natural_record_kind = "iue_swp_low_dispersion_raw_camera_image"
+sample_count = 256
+total_size_bytes = 150994944
+output_path = "samples/mast_iue_swp_raw_image_u8/iue_swp_lowdisp_raw_dn_u8/"

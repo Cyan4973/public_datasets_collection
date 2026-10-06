@@ -1,0 +1,23 @@
+# ClimSim Low-Res E3SM-MMF Climate-Simulation 3D Atmospheric State Fields (state_t / state_u / state_v / state_q0001) Float64
+
+- Candidate id: `leap_climsim_lowres_e3sm_mmf_state_fields_f64`
+- Width: float64
+- Quantity: Native double-precision E3SM-MMF (multiscale-modeling-framework climate model) atmospheric state on the ne4pg2 grid at one model timestep: air temperature state_t [K], zonal and meridional wind state_u/state_v [m/s] and specific humidity state_q0001 [kg/kg], each shaped (lev=60, ncol=384). Each variable is its own primary series. The recommended headline is state_t alone if the judge prefers a single quantity.
+- Source: https://huggingface.co/datasets/LEAP/ClimSim_low-res
+- Resources: https://huggingface.co/datasets/LEAP/ClimSim_low-res/resolve/bab82a2ebdc750a0134ddcd0d5813867b92eed2a/train/0001-02/E3SM-MMF.mli.0001-02-01-00000.nc, https://huggingface.co/api/datasets/LEAP/ClimSim_low-res/tree/bab82a2ebdc750a0134ddcd0d5813867b92eed2a/train, https://huggingface.co/datasets/LEAP/ClimSim_low-res/raw/main/README.md
+- License: CC-BY-4.0
+- License evidence: https://huggingface.co/datasets/LEAP/ClimSim_low-res/raw/main/README.md
+- License quote: license: cc-by-4.0 (dataset-card YAML of LEAP/ClimSim_low-res; the HF API cardData.license is also 'cc-by-4.0'; gated=False)
+- Natural record: One model-timestep input file E3SM-MMF.mli.<yyyy-mm-dd>-<sssss>.nc (NetCDF CDF-5, every file exactly 1,897,632 bytes). One sample = one variable's full (60 x 384) field from that timestep = 23,040 doubles. Suggested bounded subset: one timestep per ~5 model days across years 0002-0008, about 500 files, sampling distinct seasons and not adjacent 20-minute steps.
+- Estimated samples: 500
+- Estimated primary values: 46,080,000
+- Estimated download bytes: 372,000,000
+- Estimated primary bytes: 368,640,000
+- Decode path: NetCDF classic CDF-5 (magic 'CDF\x05'), parsed with pure struct: 64-bit counts and offsets, non-record variables at fixed begin offsets. In the probed file state_q0001 begins at 238752, state_t at 791712, state_u at 976032 and state_v at 1160352, each 184,320 bytes of big-endian IEEE double. Decode with struct '>23040d' and re-emit little-endian. Because every mli file is the same size with the same header, download.sh can curl -r just the needed ranges plus the first 2,200 header bytes for per-file header validation (HF resolve -> xet CDN honors Range: probe got 206/64 KB). Fallback: the whole 1.9 MB file.
+- Novelty kind: new_source
+- Novelty evidence: novelty.py --url https://huggingface.co/datasets/LEAP/ClimSim_low-res --terms climsim e3sm 'climate simulation' matched the HF host only (unrelated recipes) and nothing in the registry, ledger or downstream. The local 64-bit corpus has no climate-model or simulated 3D atmosphere: NASA POWER daily point series are reanalysis-derived decimal tables, and WeatherBench2 ERA5 is a different reanalysis source at 32-bit. Full-mantissa physics-model state doubles are a regime the decimal-CSV-heavy 64-bit corpus barely has.
+- Homogeneity: Single model (E3SM-MMF), single low-res grid (384 columns x 60 levels), single dataset revision bab82a2e, and a fixed variable set per series. Each series is one physical quantity with one unit. Do not use state_q0002/state_q0003 (cloud condensate, mostly zeros), state_pmid (deterministic from ps), or the pbuf_* gas climatologies (CH4/N2O/ozone are prescribed inputs). Keep different variables as different series, never concatenated.
+- Risks: Multi-variable recipe: a judge could ask for one quantity, so builder may ship state_t only (500 files gives 11.5M values, 92 MB; double the file count if more is wanted). Adjacent timesteps are highly correlated, so spread the selection. Values are big-endian in source, so emit little-endian and compute min/max from the stored dtype. HF CDN rate limits mean range requests need retries. The dataset repo has more than 100k files, so list via the tree API per month directory (paginated, 1000 per page).
+- Probe evidence: HF API: license cc-by-4.0, sha bab82a2ebdc750a0134ddcd0d5813867b92eed2a, not gated. Tree API lists 96 month directories train/0001-02..train/0009-01, and train/0003-07 holds 1000+ 'mli' files all 1,897,632 bytes. HEAD gave 302 to the xet CDN with x-linked-size 1897632. A Range GET of 64 KB returned the header, magic CDF\x05, dims ncol=384 lev=60, and all 29 data variables typed NC_DOUBLE. 8 KB slices of state_t (208.9-263.3 K, e.g. 213.8061166794635) and state_q0001 (~1.48e-06) decoded as full-mantissa doubles: 0/1024 with the low 29 mantissa bits zero, so not upcast float32. Total probe transfer about 100 KB.
+
+Proposed by the autocollect scout on 2026-10-05 (transcript `.data/pipeline/logs/scout_64bit/scout.20261005_231243.jsonl`).

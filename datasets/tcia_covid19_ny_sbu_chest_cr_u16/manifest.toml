@@ -1,0 +1,91 @@
+manifest_version = 1
+dataset_id = "tcia_covid19_ny_sbu_chest_cr_u16"
+name = "TCIA COVID-19-NY-SBU Portable Chest Radiographs UInt16"
+description = "48 complete 2544x3056 12-bit-in-uint16 Pixel Data planes of portable AP chest radiographs from one Carestream DRX-Revolution regime, one image per distinct patient, from TCIA's Stony Brook University COVID-19 Positive Cases collection."
+homepage = "https://doi.org/10.7937/TCIA.BBAG-2923"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Saltz, J., Saltz, M., Prasanna, P., Moffitt, R., Hajagos, J., Bremer, E., Balsamo, J., & Kurc, T. (2021). Stony Brook University COVID-19 Positive Cases [Data set]. The Cancer Imaging Archive. https://doi.org/10.7937/TCIA.BBAG-2923"
+notes = "The TCIA collection page lists the images, clinical data and template under CC BY 4.0 (Version 1, updated 2021/08/11, status Complete, Public) and requires the data citation including the DOI. Every live NBIA series row for the pinned objects reports LicenseName 'Creative Commons Attribution 4.0 International License' and LicenseURI https://creativecommons.org/licenses/by/4.0/; download.sh re-checks this per series. TCIA's data usage policy (no re-identification) applies."
+
+[safety]
+contains_sensitive_data = true
+contains_personal_data = false
+provenance_notes = "Public de-identified human clinical chest radiographs released by TCIA (DICOM PS3.15 Basic Application Confidentiality Profile with Clean Pixel Data option; BurnedInAnnotation NO is asserted for every object). Source DICOM headers carry pseudonymous IDs, shifted dates, age and sex; none of that is emitted. Pixels include the usual burned-in technologist markers (L/R letter, 'PORTABLE'/'SITTING' text); no identifiers were seen in a 1/16-scale review of all 48 images."
+usage_notes = "Samples contain only Pixel Data values. The committed pin file lists TCIA's public pseudonymous PatientID and UIDs for provenance only. Do not attempt re-identification or linkage; follow the TCIA data usage policy."
+
+[[origins]]
+id = "tcia_covid19_ny_sbu"
+name = "The Cancer Imaging Archive: Stony Brook University COVID-19 Positive Cases (COVID-19-NY-SBU)"
+url = "https://www.cancerimagingarchive.net/collection/covid-19-ny-sbu/"
+type = "data_portal"
+version = "Version 1, DateReleased 2021-08-11"
+notes = "Accessed through the public anonymous NBIA REST API v1 at https://services.cancerimagingarchive.net/nbia-api/services/v1."
+
+[[resources]]
+id = "nbia_study_series_metadata"
+origin = "tcia_covid19_ny_sbu"
+url = "https://services.cancerimagingarchive.net/nbia-api/services/v1/getSeries?StudyInstanceUID=<pinned study_instance_uid>"
+type = "api_query_result"
+version = "48 pinned StudyInstanceUIDs (pinned_series.tsv)"
+access = "Public anonymous JSON API."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/tcia_covid19_ny_sbu_chest_cr_u16/metadata/"
+notes = "A few KB per study. Used only to re-validate license, collection, modality, device, body part, view, ImageCount and FileSize of each pinned series before fetching the image. Size is not pinned because the JSON carries a server TimeStamp field."
+
+[[resources]]
+id = "pinned_chest_cr_dicom_objects"
+origin = "tcia_covid19_ny_sbu"
+url = "https://services.cancerimagingarchive.net/nbia-api/services/v1/getSingleImage?SeriesInstanceUID=<pinned series_instance_uid>&SOPInstanceUID=<pinned sop_instance_uid>"
+type = "file"
+version = "48 pinned SeriesInstanceUID/SOPInstanceUID pairs (pinned_series.tsv, SHA-256 68c20df34c05b2e16e98aa4e554c511625d3240db2f31ad2316d49aba6b6ba9d)"
+access = "Public anonymous API; the server ignores Range and streams chunked without Content-Length, so each object is fetched whole and size-checked."
+size_bytes = 746512192
+sha256 = ""
+local_path = "downloads/tcia_covid19_ny_sbu_chest_cr_u16/images/"
+notes = "48 single-image CR series, 15,552,208-15,552,420 bytes each. Per object the pin file fixes FileSize, header length (Pixel Data value offset) and the SHA-256 of all header bytes before Pixel Data; download.sh records full-object SHA-256 values in download_inventory.json on first fetch, and build/verify enforce them."
+
+[local_paths]
+downloads = "downloads/tcia_covid19_ny_sbu_chest_cr_u16/"
+filtered = "filtered/tcia_covid19_ny_sbu_chest_cr_u16/"
+index = "index/tcia_covid19_ny_sbu_chest_cr_u16/"
+samples = "samples/tcia_covid19_ny_sbu_chest_cr_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/tcia_covid19_ny_sbu_chest_cr_u16/samples.jsonl"
+summary = "Fetch 48 pinned uncompressed Explicit VR Little Endian CR DICOM objects (one per patient), walk each header with a stdlib parser, assert the fixed acquisition and pixel schema, and emit each complete native Pixel Data plane byte-for-byte as one little-endian uint16 sample."
+deterministic_notes = "Selection (discover.py, reproducible from the NBIA CR listing via discover.sh): COVID-19-NY-SBU CR series with Manufacturer CARESTREAM HEALTH, ManufacturerModelName DRX-REVOLUTION, BodyPartExamined CHEST, SeriesDescription AP, ImageCount 1, CC BY 4.0, StudyDesc starting 'CHEST AP ' without INFANT, and FileSize in the full-field 2544x3056 bucket (FileSize minus 15,548,928 pixel bytes between 2,048 and 4,096); one series per patient (smallest SeriesInstanceUID); patients ordered by sha256('tcia_covid19_ny_sbu_chest_cr_u16:' + PatientID); the first 48 whose live header validates exact Rows=2544, Columns=3056 are pinned (6 earlier patients in that order were 3056x2544 portrait objects and were skipped). Every object is checked for exact size, header SHA-256, transfer syntax, SOP class, identity UIDs, device, view, imager pixel spacing, pixel schema, identity rescale, lossless status and Pixel Data being the final element. The floor (10,000 values / 100 KB, median 1,000 values) is exceeded by every single sample; verify.sh rejects constant, low-cardinality, >12-bit, duplicate or mostly-zero planes."
+
+[[series]]
+id = "sbu_chest_cr_pixel_u16"
+description = "Complete portable AP chest radiograph pixel planes, one per distinct patient."
+semantic_meaning = "Stored for-presentation computed-radiography pixel values (12 bits stored in 16, 0-4095, MONOCHROME2, higher value = brighter display, identity rescale) of one complete portable anteroposterior chest X-ray acquired on a Carestream DRX-Revolution mobile unit at 0.139 mm imager pixel spacing. These are vendor-processed archived clinical images (ImageType DERIVED\\PRIMARY), not raw detector frames."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Each DICOM object declares BitsAllocated=16, BitsStored=12, HighBit=11, PixelRepresentation=0, SamplesPerPixel=1, PhotometricInterpretation MONOCHROME2, RescaleIntercept 0, RescaleSlope 1, LossyImageCompression 00 and native (unencapsulated) OW Pixel Data in Explicit VR Little Endian, so each emitted uint16 equals the stored 12-bit pixel value."
+source_resources = ["pinned_chest_cr_dicom_objects", "nbia_study_series_metadata"]
+source_format = "DICOM Computed Radiography Image Storage (1.2.840.10008.5.1.4.1.1.1), Explicit VR Little Endian (1.2.840.10008.1.2.1)"
+source_field = "Pixel Data (7FE0,0010)"
+filtered_input_path = "filtered/tcia_covid19_ny_sbu_chest_cr_u16/ingest_stats.json"
+filtering = "Keep the 48 pinned objects and only their Pixel Data element. DICOM metadata, private GEIIS/Carestream tags, ABDOMEN, DRX-1, PA/LATERAL, cropped-matrix and portrait-orientation objects are excluded."
+missing_value_policy = "No pixels are dropped, masked, cropped, filled or imputed; zero-valued collimation border pixels are kept as stored values. Missing, truncated, resized, compressed, rescaled, MONOCHROME1, out-of-12-bit-range, duplicate, constant, low-cardinality or more-than-half-zero images fail the recipe."
+conversion = "Walk the explicit-VR header (skipping defined- and undefined-length sequences) to Pixel Data, assert it is the final 15,548,928-byte element, and copy it byte-for-byte in source row-major order (2544 rows x 3056 columns) as little-endian uint16. No windowing, inversion, rescaling, rotation or normalization."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian unsigned-int16 chest radiograph plane (12 bits stored)"
+sample_geometry = "fixed_2544x3056_chest_radiograph"
+sample_rank = 2
+sample_axes = ["image_row", "image_column"]
+sample_shape = [2544, 3056]
+natural_record_kind = "complete_dicom_chest_radiograph_pixel_plane"
+sample_count = 48
+total_size_bytes = 746348544
+output_path = "samples/tcia_covid19_ny_sbu_chest_cr_u16/sbu_chest_cr_pixel_u16/"

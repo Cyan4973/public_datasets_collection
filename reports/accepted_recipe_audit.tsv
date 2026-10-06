@@ -190,6 +190,7 @@ zenodo_marine_dom_positive_ms1_f32	ok	6232014	24928056	2802	2368	9472	0	0	0	1	no
 usgs_geomag_observatory_minute_f32	ok	6296742	25186968	12	524702	2098808	0	0	0	1	none	none
 physionet_bidmc_ppg_resp_i16	ok	6360106	12720212	106	60001	120002	0	0	0	1	none	none
 noaa_tides_water_level	ok	7287492	58299936	42	175440	1403520	0	0	0	1	none	none
+comma2k19_global_pose_ecef_positions_f64	ok	7291422	58331376	2035	3600	28800	0	0	0	1	none	none
 janelia_mouselight_neuron_trees_32bit	ok	7788200	31152800	1280	3465.5	13862	0	0	0	1	none	none
 zenodo_crab_giant_pulse_sigmf_ci16	ok	8000000	16000000	1	8000000	16000000	0	0	0	1	none	none
 bbbc007_fluorescence_u8	ok	8050720	8050720	45	160000	160000	0	0	0	1	none	none

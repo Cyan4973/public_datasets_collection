@@ -1,0 +1,197 @@
+manifest_version = 1
+dataset_id = "comma2k19_global_pose_ecef_positions_f64"
+name = "comma2k19 Global Pose ECEF Camera Positions Float64"
+description = "Per-frame Earth-centred Earth-fixed (ECEF) positions of the road-facing camera, at 20 Hz, from comma.ai's post-processed INS/GNSS/vision pose optimizer. Covers all 2,035 one-minute comma2k19 highway segments; each segment's published (N,3) float64 frame_positions array is one sample."
+homepage = "https://huggingface.co/datasets/commaai/comma2k19"
+
+[license]
+name = "MIT License"
+spdx = "MIT"
+url = "https://huggingface.co/datasets/commaai/comma2k19/blob/4bff77c7254c654c28d4c2726186b4e825adccee/README.md"
+citation = "Harald Schafer, Eder Santana, Andrew Haden, Riccardo Biasini. A Commute in Data: The comma2k19 Dataset. arXiv:1812.05752, 2018."
+notes = "The official commaai Hugging Face dataset card at the pinned revision declares `license: mit` in its YAML front matter. download.sh re-checks the card's SHA-256 and that line. The upstream GitHub repository was not reachable from the collection environment, so the HF card is the only license evidence checked first-hand. Keep the MIT notice and the paper citation."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official comma.ai organisation repository on Hugging Face, pinned to commit 4bff77c7254c654c28d4c2726186b4e825adccee. Only the documented raw_data chunk archives are read, by exact byte ranges."
+usage_notes = "comma.ai deliberately published the positions under MIT and trimmed them to a ~20 km section of California I-280 between San Jose and San Francisco. They contain no names, plates, addresses or trip endpoints. They are vehicle trajectories from two recording devices (anonymous 16-hex-digit dongle ids) on a public highway, so a reviewer may still weigh location-privacy. The recipe emits no video, no images, and no off-highway data."
+
+[[origins]]
+id = "hf_commaai_comma2k19"
+name = "commaai/comma2k19 on Hugging Face"
+url = "https://huggingface.co/datasets/commaai/comma2k19"
+type = "repository"
+notes = "Official comma.ai dataset repository. raw_data/Chunk_1.zip..Chunk_10.zip are the full comma2k19 release, 8.7-9.9 GB ZIP64 archives each."
+
+[[resources]]
+id = "dataset_card"
+origin = "hf_commaai_comma2k19"
+url = "https://huggingface.co/datasets/commaai/comma2k19/raw/4bff77c7254c654c28d4c2726186b4e825adccee/README.md"
+type = "file"
+version = "4bff77c7254c654c28d4c2726186b4e825adccee"
+access = "Direct public download at the pinned revision."
+size_bytes = 5009
+sha256 = "3835b02a571a0774917f3204941b83d090c41b727347fd37d63e4ae74d6a9bb4"
+local_path = "downloads/comma2k19_global_pose_ecef_positions_f64/README.md"
+notes = "License (`license: mit`) and dataset identity evidence."
+
+[[resources]]
+id = "chunk_01"
+origin = "hf_commaai_comma2k19"
+url = "https://huggingface.co/datasets/commaai/comma2k19/resolve/4bff77c7254c654c28d4c2726186b4e825adccee/raw_data/Chunk_1.zip"
+type = "archive"
+version = "4bff77c7254c654c28d4c2726186b4e825adccee"
+access = "HTTP range requests only. Fetch the 4 KiB tail, the central directory (1,725,354 B, sha256 f298130c...3999), and 188 frame_positions member ranges (3,613,277 B)."
+size_bytes = 8731252405
+sha256 = "b7f18b77ca5980e36d536344995bcfaffd4cbe6b84fe43ca443ea20c26547e30"
+local_path = "downloads/comma2k19_global_pose_ecef_positions_f64/members/chunk_01/"
+notes = "sha256 is the whole-archive LFS hash. It is checked against the resolve response's x-linked-etag header, not by hashing the archive. Member bytes are checked against central-directory CRC32."
+
+[[resources]]
+id = "chunk_02"
+origin = "hf_commaai_comma2k19"
+url = "https://huggingface.co/datasets/commaai/comma2k19/resolve/4bff77c7254c654c28d4c2726186b4e825adccee/raw_data/Chunk_2.zip"
+type = "archive"
+version = "4bff77c7254c654c28d4c2726186b4e825adccee"
+access = "HTTP range requests only: tail, central directory (1,806,386 B), 194 frame_positions member ranges (3,735,018 B)."
+size_bytes = 9054474112
+sha256 = "8a3f1272e3cce07cc7d9171e68311816aae4c13e70d010d1f0a2ec084abc3c45"
+local_path = "downloads/comma2k19_global_pose_ecef_positions_f64/members/chunk_02/"
+notes = "Pins for all chunks live in chunks.tsv."
+
+[[resources]]
+id = "chunk_03"
+origin = "hf_commaai_comma2k19"
+url = "https://huggingface.co/datasets/commaai/comma2k19/resolve/4bff77c7254c654c28d4c2726186b4e825adccee/raw_data/Chunk_3.zip"
+type = "archive"
+version = "4bff77c7254c654c28d4c2726186b4e825adccee"
+access = "HTTP range requests only: tail, central directory (1,909,777 B), 202 frame_positions member ranges (3,849,559 B)."
+size_bytes = 9412088454
+sha256 = "09f959b9ea2d98087ba84e8d356c7833bbc0a8b39de7f1878cf592caa48de636"
+local_path = "downloads/comma2k19_global_pose_ecef_positions_f64/members/chunk_03/"
+notes = "Pins for all chunks live in chunks.tsv."
+
+[[resources]]
+id = "chunk_04"
+origin = "hf_commaai_comma2k19"
+url = "https://huggingface.co/datasets/commaai/comma2k19/resolve/4bff77c7254c654c28d4c2726186b4e825adccee/raw_data/Chunk_4.zip"
+type = "archive"
+version = "4bff77c7254c654c28d4c2726186b4e825adccee"
+access = "HTTP range requests only: tail, central directory (1,928,553 B), 205 frame_positions member ranges (3,875,378 B)."
+size_bytes = 9490564706
+sha256 = "36a71a1aa2b4d78070ef6ed4edb1422f6d79362a88857423fa01ad8d6b2996c7"
+local_path = "downloads/comma2k19_global_pose_ecef_positions_f64/members/chunk_04/"
+notes = "Pins for all chunks live in chunks.tsv."
+
+[[resources]]
+id = "chunk_05"
+origin = "hf_commaai_comma2k19"
+url = "https://huggingface.co/datasets/commaai/comma2k19/resolve/4bff77c7254c654c28d4c2726186b4e825adccee/raw_data/Chunk_5.zip"
+type = "archive"
+version = "4bff77c7254c654c28d4c2726186b4e825adccee"
+access = "HTTP range requests only: tail, central directory (1,997,073 B), 211 frame_positions member ranges (4,041,219 B)."
+size_bytes = 9812054419
+sha256 = "8073883bff6d2c3159f24b9a82c259de729a5f7b2ff5da667104d6b5bcde8dd4"
+local_path = "downloads/comma2k19_global_pose_ecef_positions_f64/members/chunk_05/"
+notes = "Pins for all chunks live in chunks.tsv."
+
+[[resources]]
+id = "chunk_06"
+origin = "hf_commaai_comma2k19"
+url = "https://huggingface.co/datasets/commaai/comma2k19/resolve/4bff77c7254c654c28d4c2726186b4e825adccee/raw_data/Chunk_6.zip"
+type = "archive"
+version = "4bff77c7254c654c28d4c2726186b4e825adccee"
+access = "HTTP range requests only: tail, central directory (1,886,947 B), 206 frame_positions member ranges (3,957,878 B)."
+size_bytes = 9526597274
+sha256 = "355024fb361a8b50f6925a037d12d2e6f90934d8ed056dfff5e131c82889c497"
+local_path = "downloads/comma2k19_global_pose_ecef_positions_f64/members/chunk_06/"
+notes = "Pins for all chunks live in chunks.tsv."
+
+[[resources]]
+id = "chunk_07"
+origin = "hf_commaai_comma2k19"
+url = "https://huggingface.co/datasets/commaai/comma2k19/resolve/4bff77c7254c654c28d4c2726186b4e825adccee/raw_data/Chunk_7.zip"
+type = "archive"
+version = "4bff77c7254c654c28d4c2726186b4e825adccee"
+access = "HTTP range requests only: tail, central directory (1,898,193 B), 201 frame_positions member ranges (3,825,716 B)."
+size_bytes = 9286503359
+sha256 = "bc41711118d70eb924a417fa5f5f4856bb3e20833680d374aaec4b27683ab865"
+local_path = "downloads/comma2k19_global_pose_ecef_positions_f64/members/chunk_07/"
+notes = "Pins for all chunks live in chunks.tsv."
+
+[[resources]]
+id = "chunk_08"
+origin = "hf_commaai_comma2k19"
+url = "https://huggingface.co/datasets/commaai/comma2k19/resolve/4bff77c7254c654c28d4c2726186b4e825adccee/raw_data/Chunk_8.zip"
+type = "archive"
+version = "4bff77c7254c654c28d4c2726186b4e825adccee"
+access = "HTTP range requests only: tail, central directory (1,930,782 B), 208 frame_positions member ranges (3,971,414 B)."
+size_bytes = 9634728776
+sha256 = "3b7dd599681895815c8666838df580d37ae408a72bdc1fabe72e3e276ec8c323"
+local_path = "downloads/comma2k19_global_pose_ecef_positions_f64/members/chunk_08/"
+notes = "Pins for all chunks live in chunks.tsv."
+
+[[resources]]
+id = "chunk_09"
+origin = "hf_commaai_comma2k19"
+url = "https://huggingface.co/datasets/commaai/comma2k19/resolve/4bff77c7254c654c28d4c2726186b4e825adccee/raw_data/Chunk_9.zip"
+type = "archive"
+version = "4bff77c7254c654c28d4c2726186b4e825adccee"
+access = "HTTP range requests only: tail, central directory (1,965,335 B), 210 frame_positions member ranges (3,953,612 B)."
+size_bytes = 9773161870
+sha256 = "f7012bf0b16f2cda8385c87e3556f92c940ea451d8b809683ccf1b31828987f6"
+local_path = "downloads/comma2k19_global_pose_ecef_positions_f64/members/chunk_09/"
+notes = "Pins for all chunks live in chunks.tsv."
+
+[[resources]]
+id = "chunk_10"
+origin = "hf_commaai_comma2k19"
+url = "https://huggingface.co/datasets/commaai/comma2k19/resolve/4bff77c7254c654c28d4c2726186b4e825adccee/raw_data/Chunk_10.zip"
+type = "archive"
+version = "4bff77c7254c654c28d4c2726186b4e825adccee"
+access = "HTTP range requests only: tail, central directory (2,000,672 B), 210 frame_positions member ranges (4,010,694 B)."
+size_bytes = 9901342289
+sha256 = "83228bc8ae378561e4bf8b5afdab35a55611fa5961c34a32891b848a2c98044d"
+local_path = "downloads/comma2k19_global_pose_ecef_positions_f64/members/chunk_10/"
+notes = "Pins for all chunks live in chunks.tsv."
+
+[local_paths]
+downloads = "downloads/comma2k19_global_pose_ecef_positions_f64/"
+filtered = "filtered/comma2k19_global_pose_ecef_positions_f64/"
+index = "index/comma2k19_global_pose_ecef_positions_f64/"
+samples = "samples/comma2k19_global_pose_ecef_positions_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/comma2k19_global_pose_ecef_positions_f64/samples.jsonl"
+summary = "Range-fetch the ZIP64 central directory and every <route>/<segment>/global_pose/frame_positions member from the ten pinned comma2k19 chunk archives (~58 MB instead of ~94 GB), inflate and CRC-check each member, decode its (N,3) '<f8' NPY array, and emit the array body unchanged as one little-endian float64 sample per segment."
+deterministic_notes = "chunks.tsv pins revision, archive sizes, LFS sha256, ZIP64 EOCD and central-directory offsets/sizes/SHA-256/entry counts, and per-chunk member counts and byte totals. A member's range runs from its local header to the next local header in offset order, so local extra lengths (28 B, different from the central directory) are re-read from the local header. Build requires exactly 2,035 segments, 7,291,422 values and 58,331,376 bytes; finite values, 6.3e6 < |r| < 6.4e6 m, no all-zero rows, no constant component, and no duplicate segment payloads. Samples follow chunk then archive-offset order. Inter-frame steps over 4 m (80 m/s) are flagged in the index and stats, never dropped. Verify re-derives the member set from the central directories, re-inflates, re-parses NPY headers with a separate parser, and compares every sample byte."
+
+[[series]]
+id = "comma2k19_frame_positions_ecef_f64"
+description = "Per-frame ECEF position of the road-facing camera for one one-minute comma2k19 segment, row-major x,y,z."
+semantic_meaning = "Earth-centred, Earth-fixed Cartesian camera position in metres (x, y, z), one row per 20 Hz video frame. Estimated by comma.ai's tightly coupled INS/GNSS/vision pose optimizer on Laika-processed raw GNSS. Values are near (-2.71e6, -4.26e6, 3.88e6) m with sub-millimetre fractional digits."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Upstream publishes each segment's positions as an NPY array with descr '<f8', C order, shape (N, 3). The emitted sample is that array body byte-for-byte, with no rescaling, reordering, or width change."
+source_resources = ["chunk_01", "chunk_02", "chunk_03", "chunk_04", "chunk_05", "chunk_06", "chunk_07", "chunk_08", "chunk_09", "chunk_10"]
+source_format = "deflate-compressed ZIP64 member holding a NumPy .npy v1.0 array"
+source_field = "global_pose/frame_positions (N x 3 float64 ECEF x, y, z in metres)"
+filtered_input_path = "filtered/comma2k19_global_pose_ecef_positions_f64/ingest_stats.json"
+filtering = "Keep every segment in the ten chunks: 2,035 segments on 178 routes from two devices, 2018-05-01..2018-11-19. Exclude frame_times, frame_gps_times, frame_orientations, frame_velocities, processed_log CAN/IMU/GNSS, raw_log, video and preview members."
+missing_value_policy = "No missing-value sentinel exists. Non-finite values, all-zero rows, geocentric radius outside (6.3e6, 6.4e6) m, wrong dtype/order/shape, or CRC/size mismatches are fatal; nothing is dropped or imputed. Large inter-frame steps (> 4 m) are flagged, not removed. Short segments (min 194 frames) are kept as natural records."
+conversion = "Inflate the raw deflate stream (zlib wbits -15), check CRC32 and size against the central directory, parse the NPY header, and write the (N,3) little-endian float64 body unchanged. Index min/max come from the stored float64 values."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64 row-major (frames, 3) ECEF position matrix"
+sample_geometry = "vehicle_camera_trajectory_ecef_xyz"
+sample_rank = 2
+sample_axes = ["frame_20hz", "ecef_xyz_m"]
+natural_record_kind = "comma2k19_one_minute_segment_global_pose_frame_positions"
+sample_count = 2035
+total_size_bytes = 58331376
+output_path = "samples/comma2k19_global_pose_ecef_positions_f64/comma2k19_frame_positions_ecef_f64/"

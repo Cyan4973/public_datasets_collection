@@ -308,6 +308,7 @@ ena_fastq_quality_phred	ok	75000000	75000000	150	500000	500000	0	0	0	1	none	none
 mace_mp_foundation_model_weights_f64	ok	77043968	616351744	247	32768	262144	0	0	0	1	none	none
 openneuro_ds004212_things_meg_ctf_i32	ok	80179200	320716800	192	417600	1670400	0	0	0	1	none	none
 fingrid_nordic_grid_frequency_10hz_f32	ok	80261336	321045344	93	863917	3455668	0	0	0	1	none	none
+ceda_ukdale_iam_appliance_power_u16	ok	82837497	165674994	51	1842782	3685564	82837497	331349988	51	1	none	none
 figshare_fukuchi_forceplate_c3d_f32	ok	83857942	335431768	1966	30192	120768	0	0	0	1	none	none
 noaa_stofs2d_glo_adcirc_station_water_level_f64	ok	85075200	680601600	40	2126880	17015040	0	0	0	1	none	none
 uci_hydraulic_system_cycles_f32	ok	85182000	340728000	14197	6000	24000	0	0	0	1	none	none

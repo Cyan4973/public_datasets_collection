@@ -120,6 +120,12 @@ FOCUS_DOMAINS = [
 ]
 
 ROLE_AGENT = {role: f"autocollect-{role}" for role in ("scout", "screener", "builder", "judge")}
+# Meta's sanctioned agent internet access: open internet, no user-data stores
+# (agent role internet_without_user_data). Without it, agents only reach the
+# security team's short destination allowlist.
+AGENT_INTERNET_FLAGS = ["--secure-internet-mode"]
+IDENTITY_PROBE_URL = "https://zenodo.org/"
+AGENT_ROLE_MARKER = '"agent_role":"internet_without_user_data"'
 READ_TOOLS = [
     "Read",
     "Glob",
@@ -603,6 +609,7 @@ def run_agent(cfg: Config, role: str, subject: str, prompt: str, schema: dict, s
         "--max-budget-usd", str(cfg.budgets_usd[role]),
         "--allowedTools", *ROLE_ALLOWED_TOOLS[role],
         "--disallowedTools", *ROLE_DENIED_TOOLS[role],
+        *AGENT_INTERNET_FLAGS,
     ]
     cmd += ["--resume", session_id] if resume else ["--session-id", session_id]
     if cfg.model:
@@ -1553,6 +1560,18 @@ def cmd_unpause(args) -> int:  # noqa: ARG001
     return 0
 
 
+def proxy_identity() -> str:
+    """The forward proxy's view of this process: the X-FB-IP-Type header."""
+    probe = subprocess.run(
+        ["curl", "-sv", "-o", "/dev/null", "-r", "0-0", "--max-time", "20", IDENTITY_PROBE_URL],
+        text=True, capture_output=True, env=child_env(),
+    )
+    for line in probe.stderr.splitlines():
+        if "X-FB-IP-Type:" in line:
+            return line.split("X-FB-IP-Type:", 1)[1].strip()
+    return ""
+
+
 def cmd_run(args) -> int:
     RUNTIME_DIR.mkdir(parents=True, exist_ok=True)
     lock = LOCK_PATH.open("w")
@@ -1575,6 +1594,15 @@ def cmd_run(args) -> int:
         return 1
     if shutil.which("claude") is None:
         print("claude CLI not found")
+        return 1
+    identity = proxy_identity()
+    if AGENT_ROLE_MARKER not in identity and not args.allow_user_identity_downloads:
+        print(
+            "refusing to start: download.sh scripts are agent-written, so the driver must run under the\n"
+            "secure-internet agent role, but the forward proxy sees this process as: " + (identity or "(no identity header)") + "\n"
+            "Launch the driver from a Claude Code session started with --secure-internet-mode (see\n"
+            "tools/autocollect/README.md). --allow-user-identity-downloads overrides this; not recommended."
+        )
         return 1
     cfg = Config(
         agents=args.agents,
@@ -1617,6 +1645,8 @@ def main() -> int:
     run.add_argument("--disk-budget-gb", type=float, default=500.0)
     run.add_argument("--keep-rejected-data", action="store_true")
     run.add_argument("--notify-cmd", default=None, help="shell command receiving each milestone message on stdin (e.g. a pingme script)")
+    run.add_argument("--allow-user-identity-downloads", action="store_true",
+                     help="run downloads even when the driver is not under the secure-internet agent role (not recommended)")
     requeue = sub.add_parser("requeue", help="reset a candidate's status (e.g. after a pause)")
     requeue.add_argument("candidate_id")
     requeue.add_argument("--status", default="queued", choices=ACTIVE_STATUSES)

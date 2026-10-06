@@ -77,6 +77,26 @@ python3 tools/autocollect/driver.py run --agents 8 \
   --notify-cmd ~/.claude/plugins/cache/agent-market/source-control-at-meta/3.2.0/skills/pingme/scripts/pingme.sh
 ```
 
+## Internet access and identity
+
+At Meta, outbound traffic from Claude Code agents carries an agent identity
+that the forward proxy filters. A plain agent identity reaches only the
+security team's short destination allowlist (Zenodo, GitHub, figshare,
+Dryad, PhysioNet, EBI FTP and similar hosts are denied). The sanctioned way to
+give agents the open internet is `--secure-internet-mode`: agent role
+`internet_without_user_data`, open internet, no user-data stores. The driver
+passes it to every agent.
+
+The driver also runs `download.sh` scripts that agents wrote, so it must run
+under the same role. Otherwise those scripts run with your full user
+identity: internet plus internal access, the combination the role exists to
+separate. `run` checks its identity at startup (`X-FB-IP-Type` from the
+proxy) and refuses to start without the role. Launch it from a Claude Code
+session started with `claude --secure-internet-mode`, for example as a
+background task of that session; children inherit the session's identity.
+A plain tmux shell does not have the role. `--allow-user-identity-downloads`
+overrides the check; not recommended.
+
 ## Guardrails
 
 - Downloads run only through the driver, in their own process group. They are

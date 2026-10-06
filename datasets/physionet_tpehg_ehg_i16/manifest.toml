@@ -1,0 +1,146 @@
+manifest_version = 1
+dataset_id = "physionet_tpehg_ehg_i16"
+name = "PhysioNet Term-Preterm EHG Database Unfiltered Electrohysterogram Int16"
+description = "Native signed-int16 ADC codes of the three unfiltered bipolar abdominal electrohysterogram (uterine EMG) channels from all 300 recordings of the PhysioNet Term-Preterm EHG Database v1.0.1, one sample per channel per recording, split into two primary series by the two ADC code lattices present in the release (full 16-bit codes vs codes on a step-16 lattice)."
+homepage = "https://physionet.org/content/tpehgdb/1.0.1/"
+
+[license]
+name = "Open Data Commons Attribution License v1.0"
+spdx = "ODC-By-1.0"
+url = "https://opendatacommons.org/licenses/by/1-0/"
+citation = "Fele-Zorz, G., Kavsek, G., Novak-Antolic, Z., & Jager, F. (2008). A comparison of various linear and non-linear signal processing techniques to separate uterine EMG records of term and pre-term delivery groups. Medical & Biological Engineering & Computing, 46(9), 911-922. Term-Preterm EHG Database v1.0.1, PhysioNet, DOI 10.13026/C2FW2V. Standard PhysioNet citation: Pollard, T., Moody, B. E., Lehman, L., Gow, B., Fernandes, C., Xie, C., Johnson, A., Mark, R. G., & Heldt, T. (2026). PhysioNet as a global platform for biomedical research. Nature Health. DOI 10.1038/s44360-026-00096-z."
+notes = "The project page (https://physionet.org/content/tpehgdb/1.0.1/) states 'Access Policy: Anyone can access the files, as long as they conform to the terms of the specified license. License: Open Data Commons Attribution License v1.0'. The 1.0.1 release ships no LICENSE file, so download.sh fetches the project page and fails unless it still names that license. Open access, no credentialing. Preserve the article, dataset DOI, and PhysioNet attribution."
+
+[safety]
+contains_sensitive_data = true
+contains_personal_data = false
+provenance_notes = "De-identified abdominal EHG recordings from 300 pregnancies (one per pregnancy) made 1997-2005 at the University Medical Centre Ljubljana and published by PhysioNet as an open-access project. Records are named only by a numeric record id. Header comments carry clinical fields (gestation, age, parity, abortions, weight, hypertension, diabetes, placental position, bleeding, funneling, smoking)."
+usage_notes = "Treat as human health-related material. Emitted samples contain only the three unfiltered EHG ADC waveforms; no header comment, clinical field, term/preterm label, tpehgdb.smr summary, or .fvl feature table is emitted (the summary and feature files are not even downloaded). Index rows carry only record id, channel, signal geometry, the header sampling-frequency string, and value statistics."
+
+[[origins]]
+id = "physionet_tpehgdb_1_0_1"
+name = "Term-Preterm EHG Database (TPEHG DB) v1.0.1"
+url = "https://physionet.org/content/tpehgdb/1.0.1/"
+type = "data_portal"
+notes = "Official PhysioNet project page, DOI 10.13026/C2FW2V, published 2012-08-21 (1.0.0 in 2010; 1.0.1 only added clinical header comments)."
+
+[[origins]]
+id = "physionet_open_s3"
+name = "PhysioNet open-data S3 bucket"
+url = "https://physionet-open.s3.amazonaws.com/tpehgdb/1.0.1/"
+type = "bucket"
+notes = "Anonymous mirror of the same release advertised on the project page ('aws s3 sync --no-sign-request s3://physionet-open/tpehgdb/1.0.1/'); identical files to https://physionet.org/files/tpehgdb/1.0.1/."
+
+[[resources]]
+id = "tpehgdb_sha256sums"
+origin = "physionet_open_s3"
+url = "https://physionet-open.s3.amazonaws.com/tpehgdb/1.0.1/SHA256SUMS.txt"
+type = "file"
+version = "1.0.1"
+access = "Direct public download."
+size_bytes = 52554
+sha256 = "6da37c0d996bf7706964f291282861449ccb84005500a1c16aefda3d8fcdbf3e"
+local_path = "downloads/physionet_tpehg_ehg_i16/SHA256SUMS.txt"
+notes = "Official checksum list (606 entries); pinned here, and it pins RECORDS and every .hea/.dat file."
+
+[[resources]]
+id = "tpehgdb_records_list"
+origin = "physionet_open_s3"
+url = "https://physionet-open.s3.amazonaws.com/tpehgdb/1.0.1/RECORDS"
+type = "file"
+version = "1.0.1"
+access = "Direct public download."
+size_bytes = 5301
+sha256 = "dcdc856eba3d915313c875151104add9aeaa7fddc79f7f416b0f9aec576b0f87"
+local_path = "downloads/physionet_tpehg_ehg_i16/RECORDS"
+notes = "300 entries of the form tpehgdb/tpehgNNNN, sorted."
+
+[[resources]]
+id = "tpehgdb_wfdb_records"
+origin = "physionet_open_s3"
+url = "https://physionet-open.s3.amazonaws.com/tpehgdb/1.0.1/tpehgdb/"
+type = "wfdb_format_16_records"
+version = "1.0.1"
+access = "Direct public download, one .hea and one .dat per RECORDS entry."
+size_bytes = 256043818
+sha256 = ""
+local_path = "downloads/physionet_tpehg_ehg_i16/tpehgdb/"
+notes = "300 .hea (302,194 B total) + 300 .dat (255,741,624 B total) files, each checked against SHA256SUMS.txt. Each .dat is 12 interleaved format-16 signals; size = frames * 24 for every record. Frames per record 15,060-39,873, total 10,655,901."
+
+[[resources]]
+id = "tpehgdb_project_page"
+origin = "physionet_tpehgdb_1_0_1"
+url = "https://physionet.org/content/tpehgdb/1.0.1/"
+type = "other"
+version = "1.0.1"
+access = "Public HTML page."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/physionet_tpehg_ehg_i16/license_evidence/tpehgdb_1.0.1_project_page.html"
+notes = "License evidence only (about 40 KB, dynamic HTML, so not hash-pinned); download.sh requires it to contain 'Open Data Commons Attribution License v1.0'."
+
+[local_paths]
+downloads = "downloads/physionet_tpehg_ehg_i16/"
+filtered = "filtered/physionet_tpehg_ehg_i16/"
+index = "index/physionet_tpehg_ehg_i16/"
+samples = "samples/physionet_tpehg_ehg_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/physionet_tpehg_ehg_i16/samples.jsonl"
+summary = "Fetch all 300 TPEHG DB WFDB records, validate them against the official SHA256SUMS.txt and the fixed 12-signal format-16 layout, deinterleave the three unfiltered bipolar channels (signal indices 0, 4, 8) and emit one canonical little-endian int16 sample per channel per record, routed to the step1 or step16 series by the record's ADC code lattice."
+deterministic_notes = "Pinned: SHA256SUMS.txt sha256 (transitively every source file), 300 records, 255,741,624 .dat bytes, 302,194 .hea bytes, 10,655,901 frames, 900 samples, 31,967,703 values, 63,935,406 primary bytes; per series 174 records / 18,356,100 values (step1) and 126 records / 13,611,603 values (step16). Every header must declare 12 signals in the fixed order 1, 1_DOCFILT-4-0.08-4, 1_DOCFILT-4-0.3-3, 1_DOCFILT-4-0.3-4, 2, ..., 3_DOCFILT-4-0.3-4, each format 16, gain 13107/mV, ADC resolution 16, ADC zero 0, block size 0, and sampling frequency exactly '20.000000' or '20.000110', recorded as-is. The two header frequency strings coincide exactly with two ADC code lattices (measured on all 900 channels on 2026-10-05): every '20.000000' channel uses all 16 residues mod 16 with the two most common holding at most 0.157 of values; every '20.000110' channel uses exactly two adjacent residues mod 16. The frequency string routes a record to its series, and build and verify both assert the lattice for every channel (step1: 16 residues and top-2 share <= 0.5; step16: at most two adjacent residues). The initial value and 16-bit WFDB checksum of all 12 signals are checked. Samples are written in RECORDS order, channels 1, 2, 3. verify.sh re-derives everything with a separate parser and struct-based little-endian decoder and compares all sample bytes and index fields."
+
+[[series]]
+id = "tpehg_ehg_unfiltered_adc_step1_i16"
+description = "Unfiltered bipolar abdominal electrohysterogram (uterine EMG) waveforms with full 16-bit ADC codes, about 30 minutes at 20 Hz, one complete channel of one TPEHG DB recording per sample (the 174 records whose header says 20.000000 Hz)."
+semantic_meaning = "Successive raw signed 16-bit ADC codes of the potential difference between two abdominal surface electrodes (S1 = E2-E1, S2 = E2-E3, S3 = E4-E3, electrodes 3.5 cm from the navel), digitized at 20 Hz over +/-2.5 mV (13107 ADC units per mV, ADC zero 0). Only analog acquisition filtering precedes digitization; these are the database's 'unfiltered' channels. In these records the codes use the full step-1 lattice."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "WFDB format 16 stores two-byte little-endian two's-complement integers. Values are the stored ADC codes, not converted through the gain to physical units. The nine '*_DOCFILT-*' signals in the same frames are offline 4-pole Butterworth band-pass derivatives of these channels and are excluded."
+source_resources = ["tpehgdb_wfdb_records"]
+source_format = "WFDB format 16, 12 frame-interleaved signals per .dat"
+source_field = "WFDB signals '1', '2', '3' (signal indices 0, 4, 8): unfiltered EHG channels S1, S2, S3"
+filtered_input_path = "filtered/physionet_tpehg_ehg_i16/ingest_stats.json"
+missing_value_policy = "No values are dropped, clipped, or imputed. WFDB's -32768 invalid-sample code and the +32767 rail are preserved unchanged and counted per sample in the index (saturated_low_count, saturated_high_count; none occur in this release). A missing file, checksum mismatch, layout deviation, lattice mismatch, constant or degenerate channel (fewer than 32 distinct values, fewer than 5% value changes, or more than 50% rail values), or duplicate sample fails the recipe."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian signed-int16 ADC sequence"
+sample_geometry = "variable_length_biopotential_waveform_1d"
+sample_rank = 1
+sample_axes = ["time_sample"]
+natural_record_kind = "complete_tpehg_recording_unfiltered_bipolar_channel"
+filtering = "The 174 records whose header sampling frequency is '20.000000', all frames, the three unfiltered channels of each; every channel must use all 16 residues mod 16 with the two most common holding at most half of the values. The DOCFILT signals, header comments, tpehgdb.smr, .fvl feature files and the PDF are not emitted."
+conversion = "Read each .dat as frames x 12 little-endian int16, take every 12th value starting at signal index 0, 4, and 8, and write each channel unchanged as canonical little-endian int16 to samples/physionet_tpehg_ehg_i16/tpehg_ehg_unfiltered_adc_step1_i16/<record>_ch<1|2|3>.bin. One sample is one complete channel of one recording; records and channels are never concatenated or split."
+sample_count = 522
+total_size_bytes = 36712200
+output_path = "samples/physionet_tpehg_ehg_i16/tpehg_ehg_unfiltered_adc_step1_i16/"
+
+[[series]]
+id = "tpehg_ehg_unfiltered_adc_step16_i16"
+description = "Unfiltered bipolar abdominal electrohysterogram (uterine EMG) waveforms whose ADC codes lie on a step-16 lattice, about 30 minutes at 20 Hz, one complete channel of one TPEHG DB recording per sample (the 126 records whose header says 20.000110 Hz)."
+semantic_meaning = "Successive raw signed 16-bit ADC codes of the same bipolar abdominal EHG channels at the same 13107 units/mV scale, 20 Hz and +/-2.5 mV range. In these records every stored value falls on two adjacent residues mod 16, so the effective resolution is about 12 bits scaled by 16 into the 16-bit code range; they appear to come from a different acquisition setup (the headers also give a different nominal clock, 20.000110 Hz). They are kept as their own series so that no series mixes code lattices."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "WFDB format 16 stores two-byte little-endian two's-complement integers. Values are the stored ADC codes, not converted through the gain to physical units. The nine '*_DOCFILT-*' signals in the same frames are offline 4-pole Butterworth band-pass derivatives of these channels and are excluded."
+source_resources = ["tpehgdb_wfdb_records"]
+source_format = "WFDB format 16, 12 frame-interleaved signals per .dat"
+source_field = "WFDB signals '1', '2', '3' (signal indices 0, 4, 8): unfiltered EHG channels S1, S2, S3"
+filtered_input_path = "filtered/physionet_tpehg_ehg_i16/ingest_stats.json"
+missing_value_policy = "No values are dropped, clipped, or imputed. WFDB's -32768 invalid-sample code and the +32767 rail are preserved unchanged and counted per sample in the index (saturated_low_count, saturated_high_count; none occur in this release). A missing file, checksum mismatch, layout deviation, lattice mismatch, constant or degenerate channel (fewer than 32 distinct values, fewer than 5% value changes, or more than 50% rail values), or duplicate sample fails the recipe."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian signed-int16 ADC sequence"
+sample_geometry = "variable_length_biopotential_waveform_1d"
+sample_rank = 1
+sample_axes = ["time_sample"]
+natural_record_kind = "complete_tpehg_recording_unfiltered_bipolar_channel"
+filtering = "The 126 records whose header sampling frequency is '20.000110', all frames, the three unfiltered channels of each; every channel must use at most two adjacent residues mod 16. The DOCFILT signals, header comments, tpehgdb.smr, .fvl feature files and the PDF are not emitted."
+conversion = "Read each .dat as frames x 12 little-endian int16, take every 12th value starting at signal index 0, 4, and 8, and write each channel unchanged as canonical little-endian int16 to samples/physionet_tpehg_ehg_i16/tpehg_ehg_unfiltered_adc_step16_i16/<record>_ch<1|2|3>.bin. The stored codes are not divided by 16 or otherwise rescaled. One sample is one complete channel of one recording; records and channels are never concatenated or split."
+sample_count = 378
+total_size_bytes = 27223206
+output_path = "samples/physionet_tpehg_ehg_i16/tpehg_ehg_unfiltered_adc_step16_i16/"

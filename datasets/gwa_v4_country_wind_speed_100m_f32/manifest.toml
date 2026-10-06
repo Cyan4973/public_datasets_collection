@@ -1,0 +1,84 @@
+manifest_version = 1
+dataset_id = "gwa_v4_country_wind_speed_100m_f32"
+name = "Global Wind Atlas v4 Country Rasters: Mean Wind Speed at 100 m Float32"
+description = "Thirty-one complete Global Wind Atlas 4.0 country rasters of modelled long-term mean wind speed at 100 m above ground (0.0025 degree, about 250 m, WGS84 grid; land plus offshore exclusive economic zone), decoded from the official ZSTD/predictor-3 BigTIFFs to raw little-endian float32 with the source NaN nodata preserved outside each country mask."
+homepage = "https://globalwindatlas.info/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://globalwindatlas.info/en/about/TermsOfUse"
+citation = "Data obtained from the Global Wind Atlas version 4.0, a free, web-based application developed, owned and operated by the Technical University of Denmark (DTU). The Global Wind Atlas version 4.0 is released in partnership with the World Bank Group, utilizing data provided by Vortex, using funding provided by the Energy Sector Management Assistance Program (ESMAP). For additional information: https://globalwindatlas.info. Main reference: Davis, N. N., Badger, J., Hahmann, A. N., et al., The Global Wind Atlas: A high-resolution dataset of climatologies and associated web-based application, Bulletin of the American Meteorological Society 104(8), E1507-E1525, 2023, https://doi.org/10.1175/BAMS-D-21-0075.1"
+notes = "Grant, from the GWA Terms of Use (served in https://globalwindatlas.info/mapframe.bundle.js, fetched 2026-10-06): 'You are encouraged to use the GWA App and the Works to benefit yourself and others in creative ways. The Works are licensed under the Creative Commons Attribution 4.0 International license, CC BY 4.0, except where expressly stated that another license applies.' No other license is stated for the wind-speed GIS layers (the only other license line in the app is CC-BY-4.0 for the Global Atlas of Siting Parameters). Access conditions quoted in the README and honoured by download.sh: the GIS page says 'The provided URL can also be used as an API service' and 'This API service is not to be used for bulk downloads of all countries or datasets'; the Terms of Use also ask users not to 'Use any robot, spider or other automatic device, process or means to access the GWA App for any purpose, including monitoring or copying any of the material on the GWA App'. The recipe fetches a fixed list of 31 country files of one layer at one height (out of roughly 250 countries, 12 layers and 5 heights), sequentially with pauses, directly from the CDN object that the documented API URL redirects to. Attribute DTU/GWA 4.0 with the requested text."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official GWA 4.0 country GIS files from the GWA CDN (gwa.cdn.nazkamapps.com, the redirect target of https://globalwindatlas.info/api/gis/country/{ISO3}/wind-speed/100). Modelled wind climatology on a geographic grid; no people, personal data or sensitive content."
+usage_notes = "Modelled climatology (ERA5 2008-2017 forcing, WRF mesoscale at 3 km, PyWAsP microscale downscaling), not measurement. Keep the GWA attribution; do not imply DTU or World Bank endorsement."
+
+[[origins]]
+id = "gwa_cdn"
+name = "Global Wind Atlas 4.0 country GIS files (CDN)"
+url = "https://gwa.cdn.nazkamapps.com/country_tifs_v4/"
+type = "bucket"
+notes = "Amazon S3 + CloudFront static objects; anonymous GET with byte ranges; single-part S3 ETags equal the file MD5. The official API URL https://globalwindatlas.info/api/gis/country/{ISO3}/wind-speed/100 answers 302 to these objects (checked for all 31 pinned countries by discover.sh)."
+
+[[origins]]
+id = "gwa_app"
+name = "Global Wind Atlas web application (Terms of Use, GIS page, methodology)"
+url = "https://globalwindatlas.info/"
+type = "website"
+notes = "Single-page app; the Terms of Use, GIS-page warning and methodology text are served in https://globalwindatlas.info/mapframe.bundle.js."
+
+[[resources]]
+id = "gwa4_country_wind_speed_100m_tifs"
+origin = "gwa_cdn"
+url = "https://gwa.cdn.nazkamapps.com/country_tifs_v4/{ISO3}_wind-speed_100m.tif"
+type = "file"
+version = "GWA 4.0 country_tifs_v4; objects last modified 2025-06-11 .. 2025-06-13; exact per-file size, ETag (MD5) and Last-Modified pinned in countries.tsv"
+access = "Public anonymous HTTPS, sequential resumable curl, one file at a time with a pause."
+size_bytes = 176707851
+sha256 = ""
+local_path = "downloads/gwa_v4_country_wind_speed_100m_f32/country_tifs_v4/"
+notes = "31 files: NLD EST LVA LTU CZE HUN CHE SVN SRB BGR LBN CYP KWT QAT ARE GEO AZE SWZ LSO RWA UGA DJI SEN GMB BTN BGD KHM SLV PAN BLZ JAM. Each is a GDAL COG BigTIFF (LAYOUT=IFDS_BEFORE_DATA): IFD0 = full-resolution float32 band, 512x512 tiles, Compression 50000 (ZSTD), Predictor 3, GDAL_NODATA nan, EPSG:4326, ModelPixelScale 0.0025 deg; IFD1.. = NewSubfileType 1 overviews (ignored). Integrity: exact size, MD5 equal to the pinned ETag, and per-file sha256 pinned in countries.tsv (from the 2026-10-06 download), enforced by download.sh, build.sh and verify.sh; source sha256 is also recorded in the sample index."
+
+[local_paths]
+downloads = "downloads/gwa_v4_country_wind_speed_100m_f32/"
+filtered = "filtered/gwa_v4_country_wind_speed_100m_f32/"
+index = "index/gwa_v4_country_wind_speed_100m_f32/"
+samples = "samples/gwa_v4_country_wind_speed_100m_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/gwa_v4_country_wind_speed_100m_f32/samples.jsonl"
+summary = "Fetch 31 pinned GWA 4.0 country wind-speed-at-100-m BigTIFFs, validate size, MD5 (= S3 ETag) and BigTIFF structure, decode every IFD0 tile (zstd CLI, then undo the TIFF floating-point predictor), crop edge tiles, and write each complete country grid as raw little-endian float32."
+deterministic_notes = "countries.tsv is the single pinned list (iso3, URL, size, ETag/MD5, optional sha256, Last-Modified, IFD0 width/height/tile count, upper-left corner, overview valid-share estimate); discover.sh documents how it was resolved on 2026-10-06 from a 77-country hand-picked pool (rule: HEAD 200, single-part ETag, <= 17 MB, smallest-overview valid share >= 0.45; 31 of the 43 qualifying countries pinned for regional spread under ~400 MB). Only the wind-speed layer at 100 m is used; no other GWA layer or height is fetched. scripts/gwa_tiff.py self-tests its predictor/BigTIFF decoder on synthetic input at every build. verify.sh re-derives every raster with a separate decoder and byte-compares it."
+
+[[series]]
+id = "gwa_v4_wind_speed_100m_f32"
+description = "Global Wind Atlas 4.0 modelled long-term mean wind speed at 100 m above ground level, one complete country raster per sample."
+semantic_meaning = "Per-pixel mean wind speed (m/s) at 100 m a.g.l. from the GWA 4.0 microscale model: ERA5 reanalysis (2008-2017) drives WRF mesoscale simulations at 3 km, whose generalized wind climates are downscaled with PyWAsP to a predicted wind climate every 0.0025 degrees (Copernicus DEM30 terrain, WorldCover 2021 land cover, ETH tree heights) within each country boundary including its offshore exclusive economic zone. This is a modelled climatology, not a measurement."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "GWA distributes this layer as float32 GeoTIFF; the recipe only removes TIFF tiling, ZSTD compression and the floating-point predictor (all lossless) and changes byte order to little-endian. No resampling, reprojection, masking, unit change or reordering is applied; NaN nodata is kept bit-exact."
+source_resources = ["gwa4_country_wind_speed_100m_tifs"]
+source_format = "gdal_cloud_optimized_bigtiff_zstd_floating_point_predictor_float32"
+source_field = "band_1_mean_wind_speed_100m_agl_m_per_s"
+filtered_input_path = "filtered/gwa_v4_country_wind_speed_100m_f32/ingest_stats.json"
+filtering = "Keep every pixel of the full-resolution IFD0 of each of the 31 pinned country files. Overview IFDs, other GWA layers (power density, capacity factors, Weibull parameters, air density, IEC classes) and other heights (10, 50, 150, 200 m) are not used."
+missing_value_policy = "Pixels outside the GWA country + EEZ mask are the source nodata NaN (GDAL_NODATA 'nan', bit pattern 0x7fc00000) and are preserved in place, not stripped or imputed. build.sh and verify.sh both require every NaN to carry exactly that bit pattern, a per-country valid share within 0.30..0.90, all valid values finite within 0..40 m/s, at least 10,000 distinct valid values and a valid span of at least 0.5 m/s; verify.sh also requires the dataset-wide valid share within 0.45..0.75. Per-country nan_count, valid_count and valid_share are recorded in the sample index. Realized: valid share 0.520 (KHM) .. 0.736 (SWZ) per country; 55,783,476 valid and 39,827,941 NaN values overall (valid share 0.583); valid values span 0.066 .. 21.62 m/s. Any size/MD5/structure mismatch, short tile, foreign NaN pattern or degenerate raster is fatal."
+conversion = "Parse the BigTIFF IFD chain with struct; for each IFD0 tile, decompress with the zstd CLI (each tile must yield exactly 512*512*4 bytes), undo the TIFF floating-point predictor per tile row (byte-wise cumulative sum mod 256 over 4*512 bytes, then rebuild each float from the four MSB-first byte planes at offsets 0, 512, 1024, 1536), write little-endian float32, place tiles into a height x width row-major grid (north row first, west column first) and crop right/bottom edge tiles. One sample per country file. Index min/max are computed over non-NaN stored float32 values."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 raster"
+sample_geometry = "country_bounding_grid_0p0025_deg_wgs84"
+sample_rank = 2
+sample_axes = ["latitude_north_to_south", "longitude_west_to_east"]
+natural_record_kind = "complete_gwa_v4_country_raster_full_resolution_ifd0"
+sample_count = 31
+total_size_bytes = 382445668
+output_path = "samples/gwa_v4_country_wind_speed_100m_f32/gwa_v4_wind_speed_100m_f32/"

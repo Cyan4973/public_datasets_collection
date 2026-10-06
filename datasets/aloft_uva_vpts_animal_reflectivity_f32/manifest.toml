@@ -1,0 +1,113 @@
+manifest_version = 1
+dataset_id = "aloft_uva_vpts_animal_reflectivity_f32"
+name = "UVA_VPTS German Weather-Radar Vertical Profiles of Animal Reflectivity (eta) Float32"
+description = "Animal reflectivity (eta) vertical-profile time series from 18 German DWD C-band weather radars, one float32 time-by-height matrix per published radar-month VPTS file of the UVA_VPTS deposit."
+homepage = "https://doi.org/10.5281/zenodo.14711244"
+
+[license]
+name = "Creative Commons Zero v1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "Shamoun-Baranes, J., Wijers, B.-C., Kranstauber, B., Hoekstra, B., Huybrechts, P., Dokter, A. M., Leijnse, H., Reyniers, M., Stephan, K., Desmet, P. UVA_VPTS - Vertical profiles of biological targets derived from weather radars in Belgium, Germany and the Netherlands. Zenodo, 2025, DOI 10.5281/zenodo.14711244. Described in Desmet et al. (2025), Scientific Data, DOI 10.1038/s41597-025-04641-5."
+notes = "Zenodo record 14711244 metadata declares license id 'cc-zero' (validated by download.sh). The Aloft data portal FAQ (https://aloftdata.eu/faq/) states: 'The data in the bucket are available under a Creative Commons Zero waiver.' The record lists https://aloftdata.eu/browse/?prefix=uva/monthly/ as isVariantFormOf. Only the uva/ (UvA-processed RMI/DWD/KNMI) data are used; the Aloft baltrad/ prefix, whose raw inputs come through an OPERA research-only agreement, is not touched. Attribution is not legally required under CC0 but the citation is preserved."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official frozen Zenodo deposit published by INBO with the University of Amsterdam; derived by vol2bird from German Weather Service (DWD) C-band radar volumes. No mirrors."
+usage_notes = "Environmental remote-sensing profiles of biological scatterers (mainly migrating birds); no personal or sensitive content. Only the eta column is emitted."
+
+[[origins]]
+id = "zenodo_uva_vpts"
+name = "UVA_VPTS Zenodo deposit (version published 2025-01-25)"
+url = "https://zenodo.org/records/14711244"
+type = "repository"
+notes = "Latest version of concept DOI 10.5281/zenodo.13629330 (earlier version 13629331, 2024-09-13). Files are organized per country (.tgz), radar (directory), year (directory) and month (.csv.gz)."
+
+[[resources]]
+id = "zenodo_record_metadata"
+origin = "zenodo_uva_vpts"
+url = "https://zenodo.org/api/records/14711244"
+type = "api_query_result"
+version = "record 14711244"
+access = "Anonymous Zenodo REST API; validated for record id, title, publication date 2025-01-25, license cc-zero, and the exact size/MD5 of the three files below. Not hash-pinned because view/download statistics change."
+size_bytes = 10964
+sha256 = ""
+local_path = "downloads/aloft_uva_vpts_animal_reflectivity_f32/record.json"
+notes = "Size as fetched on 2026-10-06; it varies slightly with live statistics."
+
+[[resources]]
+id = "uva_vpts_de_tgz"
+origin = "zenodo_uva_vpts"
+url = "https://zenodo.org/api/records/14711244/files/de.tgz/content"
+type = "archive"
+version = "UVA_VPTS 2025-01-25"
+access = "Direct anonymous download with HTTP Range resume; exact size and Zenodo MD5 enforced, then the member set is checked against coverage.csv."
+size_bytes = 1231349011
+sha256 = ""
+local_path = "downloads/aloft_uva_vpts_animal_reflectivity_f32/de.tgz"
+notes = "Zenodo MD5 77459683bb0d30c16af21ab2d706b260. Gzip-compressed macOS (libarchive) PAX tar: 465 radar-month VPTS CSV .csv.gz members under de/<radar>/<year>/, plus AppleDouble '._*' resource-fork entries and PAX quarantine xattr headers, which are validated and skipped. Each .csv.gz is multi-member gzip with the header line in its own member."
+
+[[resources]]
+id = "uva_vpts_coverage_csv"
+origin = "zenodo_uva_vpts"
+url = "https://zenodo.org/api/records/14711244/files/coverage.csv/content"
+type = "file"
+version = "UVA_VPTS 2025-01-25"
+access = "Direct anonymous download; exact size and MD5 enforced."
+size_bytes = 920447
+sha256 = ""
+local_path = "downloads/aloft_uva_vpts_animal_reflectivity_f32/coverage.csv"
+notes = "Zenodo MD5 cdc339b008122fcebc9d3414969c07a4. Per radar and date: unique hours, unique heights, source files and records. Germany: 465 radar-months, 11,861 radar-days, 28,369,050 records, unique_heights = 25 everywhere."
+
+[[resources]]
+id = "uva_vpts_table_schema"
+origin = "zenodo_uva_vpts"
+url = "https://zenodo.org/api/records/14711244/files/vpts-csv-table-schema.json/content"
+type = "file"
+version = "VPTS CSV v1.0"
+access = "Direct anonymous download; exact size and MD5 enforced; field list, missingValues and eta definition validated."
+size_bytes = 7238
+sha256 = ""
+local_path = "downloads/aloft_uva_vpts_animal_reflectivity_f32/vpts-csv-table-schema.json"
+notes = "Zenodo MD5 f94e2865bb363c56f37e1b4cd87edba2. Declares missingValues ['', 'NA', 'NaN'] and eta = 'Animal reflectivity in cm^2/km^3'."
+
+[local_paths]
+downloads = "downloads/aloft_uva_vpts_animal_reflectivity_f32/"
+filtered = "filtered/aloft_uva_vpts_animal_reflectivity_f32/"
+index = "index/aloft_uva_vpts_animal_reflectivity_f32/"
+samples = "samples/aloft_uva_vpts_animal_reflectivity_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/aloft_uva_vpts_animal_reflectivity_f32/samples.jsonl"
+summary = "Stream the pinned UVA_VPTS de.tgz without extraction and emit, for each of the 465 German radar-month VPTS files, the eta column as one row-major little-endian float32 matrix of (profile datetime x 25 height bins) in stored order."
+deterministic_notes = "Pins Zenodo record identity, license, publication date, file sizes and MD5s. Archive members must equal coverage.csv's 465 German radar-months; per-file rows and per-day row counts must equal coverage.csv; every file must carry the exact 26-field VPTS CSV header, the 0..4800 m step 200 m height lattice in order for every profile, unique datetimes inside the file month, rcs 11, sd_vvp_threshold 2 and C-band wavelengths; the radar column must be the ODIM code and/or one WMO number that is consistent per radar across the archive. Every finite eta token must lie within one unit of its last written decimal place of its nearest binary32 value (observed maximum 0.568 units) and is classified exact, unique (bit-exact recovery) or coarse. verify.sh re-derives every sample with an independent parser and byte-compares it. Samples are written in archive order; the index is sorted by radar then month. Realized aggregate SHA-256 of per-sample SHA-256s: a763eb29196e357598a8df0ab52676f1089a757e22186349e49f8560eb1f8ada."
+
+[[series]]
+id = "uva_vpts_eta_f32"
+description = "Radar-month animal reflectivity (eta) vertical-profile time series from 18 German DWD C-band weather radars, 2015-02 to 2019-05."
+semantic_meaning = "eta is the reflectivity of biological scatterers (mostly nocturnally migrating birds) in cm^2/km^3, estimated by vol2bird after rain and clutter screening for each 200 m altitude bin from 0 to 4800 m above sea level. Each matrix row is one vertical profile (one radar volume scan, normally every 15 minutes; 5 minutes for deasb 2019-02..2019-05) and each column is one height bin."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "The deposit publishes vol2bird eta as VPTS CSV decimal text, and each finite token is rounded once to IEEE binary32 (round to nearest). Three writer styles occur: 15-significant-digit R renderings with 'NaN' for missing (most files), the shortest repr of the binary32-exact double with blank for missing (e.g. deess 2019-04), and fixed 7-10 decimal places with blank for missing (7 files: deboo 2017-11 and 2018-11, dehnr 2017-11 and 2018-11, deros 2017-11, defld 2018-11, deess 2018-11). 24,771,271 of 24,788,600 finite values (99.93%) are exact or lie within one last-place unit of exactly one binary32 value, so the rounding recovers the source binary32 bit-exactly; arbitrary decimals would not sit on the binary32 lattice. The other 17,329 values (0.07%, all in the 7 fixed-decimal files, small magnitudes) were published with fewer digits than binary32 resolution and are stored as the binary32 nearest to the published decimal. The label is derived_operational_numeric because the stored value is the published decimal rounded once, as in other decimal-table recipes; the width is native (vol2bird binary32), not a widening."
+source_resources = ["uva_vpts_de_tgz", "uva_vpts_coverage_csv", "uva_vpts_table_schema"]
+source_format = "VPTS CSV v1.0 table (multi-member gzip .csv.gz), one radar-month per member of the UVA_VPTS de.tgz country archive"
+source_field = "eta column (animal reflectivity, cm^2/km^3), all 25 height rows of every datetime"
+filtered_input_path = "filtered/aloft_uva_vpts_animal_reflectivity_f32/ingest_stats.json"
+filtering = "All 465 German radar-month members (18 radars). Only the eta column is kept. Excluded: dens (eta/rcs with rcs = 11 cm^2 where a bin is retained and 0 where screening zeroed it, i.e. a scaled, masked copy of eta), dbz (log transform of eta), dbz_all (total reflectivity including precipitation), u/v/w/ff/dd/sd_vvp kinematics, gap flag, n_* point counts, and constant radar metadata. Belgian and Dutch archives are not downloaded."
+missing_value_policy = "The schema's missingValues tokens '', 'NA' and 'NaN' are each mapped to the canonical binary32 quiet NaN 0x7fc00000 and counted per sample (index nan_count); realized: 3,237,714 'NaN' and 342,736 blank tokens, no 'NA', 12.62% of values. They mark bins below the radar antenna, bins without valid biological signal, and failed scans; the time-by-height geometry is preserved. Any other non-decimal token (including Inf), negative or non-finite values, tokens farther than one last-place unit from binary32, or structural defects are fatal. A sample with no finite value, a constant finite value, or only zeros is rejected as degenerate by build.sh and verify.sh (none occur; per-sample NaN fraction 0.16%-38.9%, zero fraction of finite values 0.01%-42.7%). Zeros (bins with zero biological reflectivity) are kept as real values and counted (index zero_count; 10.16% of finite values). Missing profile times are not filled."
+conversion = "Stream de.tgz with tarfile, gunzip each multi-member VPTS CSV member, parse rows, check that every datetime has exactly 25 rows in height order 0..4800 m, round each finite eta decimal once to IEEE binary32, and write the values in stored row order (profile-major, height-minor) as one little-endian float32 sample per radar-month, shape (profiles, 25). Stored order is kept even where a file lists one day's hourly profiles before the same day's 15-minute profiles (denhb 2015-04 and deumd 2015-09, one order break each, index datetime_order_breaks)."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 row-major profile-by-height eta matrix"
+sample_geometry = "radar_month_vertical_profile_time_series_profile_by_height_matrix_2d"
+sample_rank = 2
+sample_axes = ["profile_datetime", "height_bin_0_to_4800_m_step_200"]
+natural_record_kind = "uva_vpts_radar_month_vertical_profile_time_series"
+sample_count = 465
+total_size_bytes = 113476200
+output_path = "samples/aloft_uva_vpts_animal_reflectivity_f32/uva_vpts_eta_f32/"

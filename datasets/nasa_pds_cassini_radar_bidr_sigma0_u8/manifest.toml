@@ -1,0 +1,78 @@
+manifest_version = 1
+dataset_id = "nasa_pds_cassini_radar_bidr_sigma0_u8"
+name = "Cassini RADAR Titan SAR BIDR Backscatter (BIBQH, 128 pix/deg) UInt8"
+description = "Twenty-two complete Cassini RADAR synthetic-aperture-radar swath images of Titan (flybys Ta/T00A through T19, 2004-10 to 2006-10) from the PDS BIDR archive, each emitted as its native uint8 incidence-angle-corrected sigma0 dB image at 128 pixels/degree."
+homepage = "https://asc-pds-cassini.s3.us-west-2.amazonaws.com/RADAR/CORADR_0035/AAREADME.TXT"
+
+[license]
+name = "U.S. public domain (USGS-produced NASA PDS product); NASA SMD open scientific data"
+spdx = "LicenseRef-USGS-Public-Domain"
+url = "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits"
+citation = "Cassini RADAR Team / USGS Astrogeology (R. L. Kirk), CO-SSA-RADAR-5-BIDR-V1.0, Cassini Orbiter SSA RADAR 5 BIDR V1.0, NASA Planetary Data System. Preserve mission, instrument, data-set ID and product IDs."
+notes = "Every selected label declares PRODUCER_INSTITUTION_NAME = \"U.S.G.S. FLAGSTAFF\" and the volume ERRATA.TXT item 8 states the byte-valued backscatter images (BIB*.IMG) were produced by USGS. USGS Copyrights and Credits: 'USGS-authored or produced data and information are considered to be in the U.S. public domain.' The data are also NASA SMD mission data released openly through PDS (https://science.nasa.gov/researchers/science-data/science-information-policy/), the policy used by the accepted nasa_pds_cassini_vims_qube_i16. Neither policy page could be re-fetched in the authoring session (proxy HTTP 403); the quote is from the published USGS policy."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official PDS3 archive volumes (CORADR_*) served anonymously from the USGS Astrogeology PDS Cassini S3 bucket asc-pds-cassini (us-west-2). No mirrors."
+usage_notes = "Robotic radar imagery of Titan's surface. Only image pixels are emitted; PDS labels and map-projection metadata are excluded from samples."
+
+[[origins]]
+id = "usgs_asc_pds_cassini"
+name = "USGS Astrogeology PDS Cassini archive (S3)"
+url = "https://asc-pds-cassini.s3.us-west-2.amazonaws.com/?list-type=2&prefix=RADAR/&delimiter=/"
+type = "bucket"
+version = "CORADR volumes as listed 2026-10-05 (234 volumes; RADAR/superseded/ ignored)"
+notes = "Anonymous public S3 bucket. Object ETags are single-part MD5 digests and are pinned in sources.tsv."
+
+[[resources]]
+id = "bibqh_titan_t00a_t019_zips"
+origin = "usgs_asc_pds_cassini"
+url = "https://asc-pds-cassini.s3.us-west-2.amazonaws.com/RADAR/"
+type = "pinned_pds3_product_zip_selection"
+version = "22 products pinned in sources.tsv (all PRODUCT_VERSION_ID 03)"
+access = "Direct anonymous HTTPS GET of RADAR/<CORADR_vvvv>/DATA/BIDR/<product>.ZIP, resumable (curl -C -)."
+size_bytes = 89704750
+sha256 = "b59c6fabe0d1941ac6bc85f65367f9aa713799700cb974438643f7c5b5895caf"
+local_path = "downloads/nasa_pds_cassini_radar_bidr_sigma0_u8/"
+notes = "The SHA-256 identifies the tracked source plan sources.tsv. For each product it pins volume, ZIP size and MD5 (S3 ETag), ZIP member CRC32 and compressed size, uncompressed .IMG size and MD5 (S3 ETag of the sibling .IMG object), RECORD_BYTES, FILE_RECORDS, LABEL_RECORDS, ^IMAGE, LINES, LINE_SAMPLES, label CHECKSUM, START/STOP_TIME. Produced by discover.sh (metadata-only)."
+
+[local_paths]
+downloads = "downloads/nasa_pds_cassini_radar_bidr_sigma0_u8/"
+filtered = "filtered/nasa_pds_cassini_radar_bidr_sigma0_u8/"
+index = "index/nasa_pds_cassini_radar_bidr_sigma0_u8/"
+samples = "samples/nasa_pds_cassini_radar_bidr_sigma0_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_pds_cassini_radar_bidr_sigma0_u8/samples.jsonl"
+summary = "Fetch 22 pinned BIBQH product ZIPs, inflate each single-member ZIP, parse the attached PDS3 label, and emit the LINES x LINE_SAMPLES uint8 image window unchanged as one sample per product."
+deterministic_notes = "Selection rule: every BIBQH* product (B = byte sigma0 dB, Q = oblique cylindrical, H = 128 pix/deg) in a CORADR volume whose name carries Titan flyby index T00A..T019; this is all 22 such products, one per SAR imaging segment, no duplicate product bases, all version 03. Excluded: BIBQH69S301_D232_E016S01_V02 (Enceladus, OFFSET -15.1), other kinds (F/D/S/U/X/E/T/N float, M/L backplanes), other resolutions (B-G, I), RADAR/superseded/, and flybys after T19 (the full Titan H set is 159 products / 3.68 GB). download.sh rejects size/MD5/CRC32 mismatches, ZIPs with other than one DEFLATE member named <product>.IMG, label geometry or family-constant drift, FILE_RECORDS inconsistency, label CHECKSUM != sum of image bytes, and constant or all-missing images. build.sh and verify.sh re-check the same; verify.sh re-derives every sample with an independent ZIP/label decoder and byte-compares. Output order: flyby, then segment."
+
+[[series]]
+id = "cassini_radar_bidr_sigma0_db_u8"
+description = "Cassini RADAR SAR normalized backscatter (sigma0) images of Titan, incidence-angle corrected, dB-quantized to uint8, 128 pixels/degree (~351 m/pixel), oblique cylindrical projection."
+semantic_meaning = "Per-pixel Ku-band (13.78 GHz) SAR normalized backscatter cross-section of Titan's surface in dB, dB = DN * 0.10000012 - 20.10001, after multiplication by the label-documented incidence-angle function f(I); DN 1 is the -20 dB clipping floor (all lower or negative noise-subtracted sigma0), DN 0 is MISSING_CONSTANT (no SAR coverage in the projected frame)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The archived BIBQ product itself stores SAMPLE_TYPE=UNSIGNED_INTEGER, SAMPLE_BITS=8 pixels with SCALING_FACTOR=1.0000012E-01, OFFSET=-2.0100010E+01, MISSING_CONSTANT=0 (asserted on every product). This 8-bit dB quantization is the USGS-produced PDS deliverable (BIDR SIS: 'The 8-bit (byte) images produced by USGS will contain backscatter values which have been converted to dB then scaled and offset so that the dynamic range of the data is 0 to 255'); the recipe copies those stored bytes without any remap."
+source_resources = ["bibqh_titan_t00a_t019_zips"]
+source_format = "ZIP (single DEFLATE member) containing a PDS3 attached-label fixed-length IMAGE file (CO-SSA-RADAR-5-BIDR-V1.0)"
+source_field = "PDS3 IMAGE object: LINES x LINE_SAMPLES UNSIGNED_INTEGER 8-bit SAR sigma0 dB DN"
+filtered_input_path = "filtered/nasa_pds_cassini_radar_bidr_sigma0_u8/ingest_stats.json"
+filtering = "Keep all 22 BIBQH Titan products of flybys T00A-T019 listed in sources.tsv; skip the LABEL_RECORDS*RECORD_BYTES attached label; keep every pixel of the IMAGE object."
+missing_value_policy = "DN 0 (label MISSING_CONSTANT: pixels of the oblique-cylindrical frame outside the SAR swath) is preserved in place, never dropped or imputed; it is 70.3% of all realized pixels (56.3%-94.2% per product; 102,140,599 non-missing pixels remain, at least 182,572 per product). DN 1 (the -20 dB clip floor) is preserved. build.sh and verify.sh reject a product that is constant or entirely missing; verify.sh additionally requires at least 1% and 100,000 non-missing pixels and at least 64 distinct non-missing DN levels per product. Label/geometry/checksum mismatches are fatal."
+conversion = "Inflate the ZIP member, parse the attached PDS3 label (RECORD_BYTES 1024-4864 and LABEL_RECORDS 1-5 vary per product), seek to (^IMAGE-1)*RECORD_BYTES and copy LINES*LINE_SAMPLES bytes unchanged in line-major order (one line per record). uint8 needs no byte swapping. One sample per product; no cropping, tiling, resampling, or concatenation."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 image, line-major"
+sample_geometry = "map_projected_sar_swath_image_2d"
+sample_rank = 2
+sample_axes = ["line", "sample"]
+natural_record_kind = "cassini_radar_bidr_titan_sar_imaging_segment"
+sample_count = 22
+total_size_bytes = 343474176
+output_path = "samples/nasa_pds_cassini_radar_bidr_sigma0_u8/cassini_radar_bidr_sigma0_db_u8/"

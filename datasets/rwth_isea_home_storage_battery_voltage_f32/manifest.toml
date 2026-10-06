@@ -1,0 +1,90 @@
+manifest_version = 1
+dataset_id = "rwth_isea_home_storage_battery_voltage_f32"
+name = "RWTH ISEA Residential PV Home-Storage Battery Pack Voltage 1 Hz Float32 (48 V class)"
+description = "One float32 1 Hz battery pack terminal-voltage series per complete system-month from 12 privately operated 48 V-class PV home storage systems measured by ISEA/CARL RWTH Aachen in Germany, 2015-2022."
+homepage = "https://doi.org/10.5281/zenodo.12091223"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Figgener, J., Haberschusz, D., Wessels, O., Kairies, K.-P., Bors, J., van Ouwerkerk, J., Sauer, D. U. Data for: Multi-year field measurements of home storage systems and their use in capacity estimation. Zenodo record 12091223 (2024), DOI 10.5281/zenodo.12091223; accompanying Nature Energy 9, DOI 10.1038/s41560-024-01620-9."
+notes = "The Zenodo record metadata declares license id cc-by-4.0 for the deposit, which contains the Data_ID_*.zip measurement archives and Metadata_and_Code.zip. download.sh re-checks the license id on every run. Preserve attribution to the authors, ISEA/CARL RWTH Aachen University, the DOI and the Nature Energy article."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Zenodo deposit by the measuring institute. Systems are identified only by numeric ID 1-21 and anonymized manufacturer letters A-E; no household location, owner, or address data is published or emitted."
+usage_notes = "Only the battery pack voltage column is emitted. Household load or PV behaviour is not reconstructable from pack voltage alone, and no personal attributes are present."
+
+[[origins]]
+id = "zenodo_isea_hss_field_data"
+name = "Zenodo record 12091223: Data for Multi-year field measurements of home storage systems and their use in capacity estimation"
+url = "https://zenodo.org/records/12091223"
+type = "repository"
+version = "record 12091223, published 2024-08-26 (API revision 6 at probe time 2026-10-06)"
+notes = "21 systems, 106 system-years, 1,270 monthly CSV files at a 1 s sample rate in 21 per-system zips (0.33-2.15 GB each, standard ZIP, deflate, no ZIP64), plus a 31,123-byte Metadata_and_Code.zip."
+
+[[resources]]
+id = "isea_selected_system_month_members"
+origin = "zenodo_isea_hss_field_data"
+url = "https://zenodo.org/api/records/12091223/files/Data_ID_{07..21}.zip/content"
+type = "range_extracted_zip_members"
+version = "36 pinned members listed in selection.tsv"
+access = "Exact HTTP range requests (206) for the local header and deflate data of each pinned member, located from the zip central directories (discover.sh). Each span is checked against the pinned local-header name, method, CRC32 and sizes, then inflated in full and checked against the CRC32 and uncompressed size. Archive sizes and MD5s are checked against the live record JSON."
+size_bytes = 806046462
+sha256 = ""
+local_path = "downloads/rwth_isea_home_storage_battery_voltage_f32/members/"
+notes = "Members come from 12 archives: Data_ID_07..12, 14..16 and 19..21. Spans total 806,046,462 bytes; inflated CSVs total 5,560,597,884 bytes and are never written to disk. Per-member offsets, sizes and CRC32s are in selection.tsv; download.sh writes per-span SHA-256s to member_validation.tsv."
+
+[[resources]]
+id = "isea_metadata_and_code"
+origin = "zenodo_isea_hss_field_data"
+url = "https://zenodo.org/api/records/12091223/files/Metadata_and_Code.zip/content"
+type = "archive"
+version = "md5 23720da306f63fd2fd20fdc1a7b8f106"
+access = "Direct public download, MD5-checked."
+size_bytes = 31123
+sha256 = ""
+local_path = "downloads/rwth_isea_home_storage_battery_voltage_f32/Metadata_and_Code.zip"
+notes = "Metadata_Systems.xlsx gives nominal voltage, cells in series, manufacturer letter and chemistry per system ID. Build reads it to confirm that every selected system is a 46-51.8 V nominal pack with 13-16 cells in series."
+
+[local_paths]
+downloads = "downloads/rwth_isea_home_storage_battery_voltage_f32/"
+filtered = "filtered/rwth_isea_home_storage_battery_voltage_f32/"
+index = "index/rwth_isea_home_storage_battery_voltage_f32/"
+samples = "samples/rwth_isea_home_storage_battery_voltage_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/rwth_isea_home_storage_battery_voltage_f32/samples.jsonl"
+summary = "Range-fetch 36 pinned system-month CSV members, inflate them in memory, check that every second of the month is present, and emit the V_in_V column as one little-endian float32 sample per complete system-month."
+deterministic_notes = "The selection is fixed in selection.tsv, which discover.sh re-derives from the record JSON and central directories: 3 months for each of systems 7-12, 14-16 and 19-21, spread over each system's record and the seasons. The list was finalized after two download/build rounds: 12 candidate months that failed completeness (gaps, partial months) or the voltage range (disconnection readings) were replaced by the next candidate in a fixed order; README lists them, along with 4 passing extra candidates left unused so each system keeps 3 months. Build and verify both require: exactly days*86400 rows with Time equal to every second of the month in order; V_in_V finite in [25, 65] V with no blank or NaN; Interpolated in {0,1} with at most 1% of rows set to 1; logged tokens exact in float32; at least half of logged tokens with six significant digits. Verify re-derives every sample with a separate parser, byte-compares it, recomputes index min/max from the stored float32 values, and rejects samples with fewer than 100 distinct values, a range under 0.5 V, or a duplicate."
+
+[[series]]
+id = "isea_hss_pack_terminal_voltage_f32"
+description = "1 Hz battery pack terminal voltage of 48 V-class residential PV home storage systems, one complete calendar month per sample."
+semantic_meaning = "System-level DC battery voltage V_in_V in volts, logged once per second by the ISEA field measurement campaign on a privately operated lithium-ion home storage system (NMC 13s/14s or LFP 14s/16s, 46-51.8 V nominal) during normal PV self-consumption operation."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "The source publishes decimal text. Logged values carry at most six significant digits, mostly 0.1-0.6 mV steps. Each value is rounded once to IEEE-754 binary32, which is exact for every logged value: %.6g of the stored float32 reproduces the source decimal, and both build and verify check this. Interpolated=1 rows are the publisher's linear gap fills, printed with up to 15 significant digits. They are rounded to the nearest float32 and capped at 1% of each month."
+source_resources = ["isea_selected_system_month_members", "isea_metadata_and_code"]
+source_format = "Comma-separated text (MATLAB writetable) inside deflate ZIP members, columns Time,P_in_W,V_in_V,I_in_A,T_Bat_in_C,T_Room_in_C,Interpolated"
+source_field = "V_in_V column (battery pack terminal voltage, volts)"
+filtered_input_path = "filtered/rwth_isea_home_storage_battery_voltage_f32/ingest_stats.json"
+filtering = "Systems 7-21 are the 46-51.8 V nominal packs; systems 1-6 (146.7 V nominal, 40 cells in series) are a different scale and are excluded. Systems 13 (1 mV voltage prints) and 17 (10 mV prints) use a coarser logger lattice than the six-significant-digit prints of the other systems and are also excluded. System 18 is excluded because none of its months is complete and free of disconnection readings. Each kept system contributes 3 complete months from different years and seasons. The P_in_W, I_in_A, T_Bat_in_C and T_Room_in_C columns are other quantities and are not emitted."
+missing_value_policy = "Months are whole or rejected. A selected month must contain every second exactly once, in order, so gaps, duplicates and DST shifts are fatal. Blank, NaN, non-finite or out-of-range ([25, 65] V) V_in_V values are fatal. Observed out-of-range readings were 0 V or about 0.1 V while the pack was disconnected; they are missing-value readings, not pack voltages, so those months were dropped from the selection. In-range values are never clipped or edited: one 1 s reading of 63.04 V during a 75 A charge in 21/2016-09 is kept as published. Interpolated=1 rows, the publisher's linear fills of short gaps, stay in place to keep the 1 Hz lattice, but a month with more than 1% of them is rejected. Their run positions are recorded in filtered/<id>/interpolated_runs/ and their counts in the index."
+conversion = "Inflate the deflate member in a stream, check the CSV header, parse V_in_V per row in file (time) order, convert with float() then pack as '<f' (round-to-nearest binary32), and write one raw little-endian float32 array per system-month with no header or padding."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 1 Hz voltage time series"
+sample_geometry = "regular_1hz_time_series_one_calendar_month"
+sample_rank = 1
+sample_axes = ["second_of_month"]
+natural_record_kind = "complete_system_month_csv_file_of_one_home_storage_system"
+sample_count = 36
+total_size_bytes = 380160000
+output_path = "samples/rwth_isea_home_storage_battery_voltage_f32/isea_hss_pack_terminal_voltage_f32/"

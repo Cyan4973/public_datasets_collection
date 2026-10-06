@@ -199,6 +199,11 @@ class Config:
     stop_after: int | None = None
     model: str | None = None
     effort: str | None = None
+    # Cost tuning (2026-10-05): user settings run Opus 5.5 at xhigh everywhere.
+    # Mechanical roles get lower effort; the judge keeps full thoroughness.
+    role_effort: dict = dataclasses.field(default_factory=lambda: {"scout": "medium", "screener": "medium", "builder": "high", "judge": "xhigh"})
+    # Builders accumulate large contexts that are re-read every turn.
+    role_autocompact: dict = dataclasses.field(default_factory=lambda: {"builder": "300k"})
     keep_rejected_data: bool = False
     notify_cmd: str | None = None
     poll_s: int = 15
@@ -614,8 +619,11 @@ def run_agent(cfg: Config, role: str, subject: str, prompt: str, schema: dict, s
     cmd += ["--resume", session_id] if resume else ["--session-id", session_id]
     if cfg.model:
         cmd += ["--model", cfg.model]
-    if cfg.effort:
-        cmd += ["--effort", cfg.effort]
+    effort = cfg.effort or cfg.role_effort.get(role)
+    if effort:
+        cmd += ["--effort", effort]
+    if cfg.role_autocompact.get(role):
+        cmd += ["--autocompact", cfg.role_autocompact[role]]
     stamp = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
     log_path = LOGS_DIR / subject / f"{role}.{stamp}.jsonl"
     started = time.monotonic()
@@ -1622,6 +1630,11 @@ def cmd_run(args) -> int:
         keep_rejected_data=args.keep_rejected_data,
         notify_cmd=args.notify_cmd,
     )
+    for item in filter(None, (args.role_effort or "").split(",")):
+        role, _, level = item.partition("=")
+        cfg.role_effort[role.strip()] = level.strip()
+    if args.builder_autocompact:
+        cfg.role_autocompact["builder"] = args.builder_autocompact
     return Driver(cfg).run()
 
 
@@ -1645,7 +1658,9 @@ def main() -> int:
     run.add_argument("--max-cost-usd", type=float, default=None, help="stop launching agents after this much spend in this run")
     run.add_argument("--stop-after", type=int, default=None, help="stop launching new work after N terminal decisions (pilot runs)")
     run.add_argument("--model", default=None)
-    run.add_argument("--effort", default=None, choices=["low", "medium", "high", "xhigh", "max"])
+    run.add_argument("--effort", default=None, choices=["low", "medium", "high", "xhigh", "max"], help="one effort for every role (overrides --role-effort)")
+    run.add_argument("--role-effort", default=None, help="per-role effort overrides, e.g. scout=low,builder=medium (defaults: scout/screener medium, builder high, judge xhigh)")
+    run.add_argument("--builder-autocompact", default=None, help="builder context compaction window (default 300k; 'auto' for the CLI default)")
     run.add_argument("--download-cap-gb", type=float, default=5.0)
     run.add_argument("--disk-budget-gb", type=float, default=500.0)
     run.add_argument("--keep-rejected-data", action="store_true")

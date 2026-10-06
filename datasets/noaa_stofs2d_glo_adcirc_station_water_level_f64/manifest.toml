@@ -1,0 +1,89 @@
+manifest_version = 1
+dataset_id = "noaa_stofs2d_glo_adcirc_station_water_level_f64"
+name = "NOAA STOFS-2D-Global v2.1 (ADCIRC) Forecast-Cycle Station Water-Surface Elevation (fort.61) Float64"
+description = "Native full-precision float64 ADCIRC water-surface elevation at the 1,688 fixed STOFS-2D-Global v2.1 output stations, one complete 1260-step (6-minute, -5.9 h to +120 h) station matrix per 00z forecast cycle, for 40 cycles spaced 20 days apart from 2024-06-01 to 2026-07-21, decoded from the cycle's stofs_2d_glo_fcst.61.nc (NetCDF4/HDF5, shuffle+deflate) with a pure-stdlib HDF5 reader."
+homepage = "https://registry.opendata.aws/noaa-gestofs/"
+
+[license]
+name = "NOAA open data (NODD; open to the public, attribution requested)"
+spdx = "LicenseRef-NOAA-NODD-Open-Data"
+url = "https://registry.opendata.aws/noaa-gestofs/"
+citation = "Office of Coast Survey; National Centers for Environmental Prediction. (2020). NOAA Global Surge and Tide Operational Forecast System 2-D (STOFS-2D-Global). National Oceanic and Atmospheric Administration. https://doi.org/10.25923/ng4h-4b85"
+notes = "AWS Registry of Open Data entry (awslabs/open-data-registry datasets/noaa-gestofs.yaml), License field: 'NOAA data disseminated through NODD are open to the public and can be used as desired. NOAA makes data openly available to ensure maximum use of our data, and to spur and encourage exploration and innovation throughout the industry. NOAA requests attribution for the use or dissemination of unaltered NOAA data. However, it is not permissible to state or imply endorsement by or affiliation with NOAA. If you modify NOAA data, you may not state or imply that it is original, unaltered NOAA data.' Keep the DOI citation; do not imply NOAA endorsement. Samples are byte-exact copies of the decoded NOAA zeta values (no modification)."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NOAA operational model output from the NOAA Open Data Dissemination (NODD) bucket noaa-gestofs-pds (us-east-1, anonymous HTTPS, not requester-pays). Hydrodynamic simulation of water levels; no personal content. The file header names a NOAA contact e-mail, which the recipe does not emit."
+usage_notes = "Public U.S. Government environmental model output suitable for model training with NOAA attribution retained."
+
+[[origins]]
+id = "noaa_nodd_gestofs_s3"
+name = "NOAA NODD bucket noaa-gestofs-pds (STOFS-2D-Global)"
+url = "https://noaa-gestofs-pds.s3.amazonaws.com/"
+type = "bucket"
+notes = "Listed on the AWS Registry of Open Data as noaa-gestofs; bucket README at https://noaa-gestofs-pds.s3.amazonaws.com/README.html."
+
+[[resources]]
+id = "s3_object_listings"
+origin = "noaa_nodd_gestofs_s3"
+url = "https://noaa-gestofs-pds.s3.amazonaws.com/?list-type=2&prefix=stofs_2d_glo.{YYYYMMDD}/00/rerun/stofs_2d_glo_fcst.61.nc"
+type = "api_query_result"
+version = "ListObjectsV2 responses checked against sources.tsv (SHA-256 26338f9530df0c1d6bec2df2a6d2e53df69fdc91c46ed20972aa1e23c7a89d6d)"
+access = "40 anonymous ListObjectsV2 requests (about 1 KB each), one per pinned object."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/noaa_stofs2d_glo_adcirc_station_water_level_f64/listings/"
+notes = "Each listing must contain exactly one object whose key, size and ETag equal the row pinned in sources.tsv; download fails if NOAA removes, replaces or reprocesses any pinned object. Listing XML bytes are not pinned (S3 adds metadata over time). discover.sh documents how sources.tsv was produced."
+
+[[resources]]
+id = "fcst61_netcdf_00z_cycles"
+origin = "noaa_nodd_gestofs_s3"
+url = "https://noaa-gestofs-pds.s3.amazonaws.com/stofs_2d_glo.{YYYYMMDD}/00/rerun/stofs_2d_glo_fcst.61.nc"
+type = "file"
+version = "STOFS-2D-Global v2.1 (global attribute version = noaa.stofs.2d.glo.v2.1.0r1.v55.12, runid STOFS 2D GLOBAL v5.6.5, netcdf 4.7.4 / HDF5 1.10.6); 00z cycles 2024-06-01 + 20k days, k = 0..39 (last 2026-07-21)"
+access = "40 anonymous HTTPS GETs, resumable (curl -C -), validated by size and the locally recomputed S3 multipart ETag (8 MiB parts, '-2' suffix) pinned in sources.tsv."
+size_bytes = 632438615
+sha256 = ""
+local_path = "downloads/noaa_stofs2d_glo_adcirc_station_water_level_f64/nc/"
+notes = "Per-object sizes and multipart ETags (MD5-of-part-MD5s) are pinned in sources.tsv, itself pinned by SHA-256 in scripts/stofs61.py. These files live in the cycle's rerun/ folder, which the bucket README describes as holding files of the system run 'stored for NOAA internal reference'; they are the native ADCIRC fort.61 station output. Excluded: the 06/12/18z cycles (forecast windows would overlap 00z ones), prep.61 (nowcast-only run), fort.62/63/64/68 and max* files (velocity, full-mesh fields), the post-processed public points.cwl/htp/swl.nc products (classic NetCDF with decimal-rounded, datum/anomaly-adjusted values), fort.61 files up to at least 2024-05-11 (title STOFS_2D_GLOBAL.V1.1.0, version attribute 0d82f1a, 1,687 stations, 960 steps, ~12.1 MB) and cycles from 2026-08-21 on (STOFS v3.1, operational from the 2026-08-17 12z cycle per the bucket README; surf/tide products, no fcst.61)."
+
+[local_paths]
+downloads = "downloads/noaa_stofs2d_glo_adcirc_station_water_level_f64/"
+filtered = "filtered/noaa_stofs2d_glo_adcirc_station_water_level_f64/"
+index = "index/noaa_stofs2d_glo_adcirc_station_water_level_f64/"
+samples = "samples/noaa_stofs2d_glo_adcirc_station_water_level_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_stofs2d_glo_adcirc_station_water_level_f64/samples.jsonl"
+summary = "Check 40 pinned S3 objects against fresh listings, download them resumably, validate size and multipart ETag, decode each file's zeta variable (1260 x 1688 float64, chunked (1, 1688), shuffle+deflate) with a pure-stdlib HDF5 reader, and emit one raw little-endian float64 matrix per 00z cycle in native time-major order."
+deterministic_notes = "sources.tsv (date, key, size, ETag) is pinned by SHA-256 and must follow the 00z / 20-day lattice from 2024-06-01. Each file must have superblock v0, exactly the root links time/station/namelen/station_name/x/y/zeta, global version noaa.stofs.2d.glo.v2.1.0r1.v55.12 plus pinned model/agrid/title/runid/grid_type/_NCProperties/_FillValue/dry_Value/dt/ihot, rundes naming the cycle, rnday equal to the cycle day, zeta attributes (long_name, standard_name, units m, _FillValue -99999.0), zeta little-endian IEEE float64 shape (1260, 1688), chunk dims (1, 1688), filter pipeline exactly [shuffle(8), deflate(2)], 1260 chunks with offsets (t, 0) and filter mask 0, each inflating to exactly 13,504 bytes, a time axis equal to cycle - 21600 s + 360 s * (i + 1), x/y SHA-256 5849e368...519751 and station_name SHA-256 95ccd6fd... (cycles before 2025-03-08) or 228aa2dd... (from 2025-03-08; one station label renamed). h5lite verifies the lookup3 checksum of every v2 object header chunk. Build takes the chunk list by recursive B-tree descent and unshuffles; verify rebuilds it from the leaf sibling chain and re-shuffles samples for byte comparison. A synthetic HDF5 self-test (scripts/selftest_stofs.py) runs before check-downloads, build and verify. Samples sorted by cycle date. Floors: 40 samples of 2,126,880 values (median 2,126,880); 85,075,200 values total."
+
+[[series]]
+id = "stofs2d_glo_fcst61_zeta_f64"
+description = "STOFS-2D-Global v2.1 ADCIRC station water-surface elevation, one full 1260 x 1688 station matrix per 00z forecast cycle."
+semantic_meaning = "Simulated water-surface elevation above the geoid in metres (zeta, standard_name sea_surface_height_above_geoid; combined astronomical tide + GFS-forced storm surge + sea-ice effects) from NOAA's operational ADCIRC STOFS-2D-Global v2.1 run, at the 1,688 fixed output stations (coastal tide gauges and NOAA/NWS forecast and verification points worldwide), every 6 minutes from cycle - 5.9 h (end of the nowcast) to cycle + 120 h. Across the 40 cycles 1,687 stations stay within -10.73..+8.23 m; station index 1649 (label 'UJ816 SOUS00 SA816', 35.44E 46.22N on the Sea of Azov coast) carries an unphysical native model level of 45.9..219.8 m in every cycle (a model artifact at that node, not a real water level) and is kept unchanged as published."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The NetCDF4 variable zeta is stored as little-endian IEEE float64 (full 52-bit mantissa model output, not decimal-rounded). The recipe inflates each (1, 1688) chunk, reverses the HDF5 byte-shuffle (element size 8) and writes the resulting doubles unchanged; no scaling, rounding, masking or reordering."
+source_resources = ["s3_object_listings", "fcst61_netcdf_00z_cycles"]
+source_format = "NetCDF4/HDF5 (ADCIRC fort.61 station output), variable chunked (1, 1688) with shuffle + deflate filters and indexed by a version-1 chunk B-tree"
+source_field = "zeta (float64, dims time=1260 x station=1688)"
+filtered_input_path = "filtered/noaa_stofs2d_glo_adcirc_station_water_level_f64/ingest_stats.json"
+filtering = "Keep only the 00z cycle's stofs_2d_glo_fcst.61.nc on 40 dates spaced 20 days apart (2024-06-01 .. 2026-07-21, inside the homogeneous STOFS v2.1 / 1,688-station / 1,260-step window 2024-05-21 .. 2026-08-11), so the 126-hour windows never overlap. All 1260 time steps and all 1688 stations of each matrix are kept; no cycle, station or step is dropped."
+missing_value_policy = "Native fill is preserved: ADCIRC writes -99999.0 (the variable's _FillValue and the global dry_Value) where a station's node is dry at that output step. These sentinels are kept in place, counted per sample (fill_count, stations_with_fill, always_fill_stations) and excluded from the recorded min/max/mean. Realized: 132,410 fill values (0.156% of 85,075,200), 6..33 stations with any fill per cycle, and exactly one station (index 119, Fajardo PR, NOAA 9753216) that is fill at every step of every cycle; it is kept as an all-fill column. The anomalous station 1649 (see semantic_meaning) is likewise kept unmodified. Every non-fill value must be finite and inside the sanity bounds (-100, 500) m (no clipping; anything outside is fatal), each sample needs at least 100,000 distinct non-fill values and differing first/last steps, and no two samples may be identical. Build and verify apply the same rules; any NaN/Inf, out-of-bounds value, wrong product/version/lattice/station set, filter change or chunk anomaly is fatal."
+conversion = "Resolve root link zeta (compact link messages), check Dataspace (1260, 1688), Datatype float64 LE, Filter Pipeline [shuffle(8), deflate(2)] and Layout v3 chunked (1, 1688, 8); take the 1260 chunk addresses from the version-1 B-tree, zlib-inflate each to exactly 13,504 bytes, byte-unshuffle with element size 8 (byte j of element k is stored at j*1688 + k) and concatenate the rows in time order. Each sample is one raw little-endian float64 file of 1260 x 1688 values (row = time step, column = station in file order), 17,015,040 bytes."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 station x time matrix"
+sample_geometry = "1260_time_steps_x_1688_stations_6_minute"
+sample_rank = 2
+sample_axes = ["time", "station"]
+natural_record_kind = "stofs2d_glo_00z_cycle_fort61_station_zeta_matrix"
+sample_count = 40
+total_size_bytes = 680601600
+output_path = "samples/noaa_stofs2d_glo_adcirc_station_water_level_f64/stofs2d_glo_fcst61_zeta_f64/"

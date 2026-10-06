@@ -1,0 +1,223 @@
+manifest_version = 1
+dataset_id = "zenodo_esrf_mxene_aerogel_microct_slices_u8"
+name = "ESRF ID15 Synchrotron Micro-CT of a Freeze-Cast MXene (Ti3C2Tx) Aerogel Under Compressive Strain: Reconstructed Axial Slices UInt8"
+description = "220 reconstructed 1381x1381 uint8 axial slices (3.1 um voxels), 20 evenly spaced per volume with a 5% end margin, from all 11 published ESRF ID15 X-ray micro-tomography volumes of one lamellar Ti3C2Tx MXene aerogel imaged at 0-50% compressive strain in 5% steps (Zenodo records 4761663, 4764282, 4766087)."
+homepage = "https://doi.org/10.5281/zenodo.4761663"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Rawson, S. D., Bayram, V., McDonald, S. A., Yang, P., Courtois, L., Guo, Y., Xu, J., Burnett, T. L., Barg, S., and Withers, P. J. CT data; freeze cast aerogel as-cast and following compressive strain; uploads 1-3 of 3. Zenodo, 2021. DOI 10.5281/zenodo.4761663, 10.5281/zenodo.4764282, 10.5281/zenodo.4766087. Accompanies the publication 'Tailoring lamellar MXene aerogel microstructure by compressive straining' (Rawson et al.)."
+notes = "The Zenodo metadata of all three records declares license id cc-by-4.0 with access_right open for the whole deposit (the .raw volumes and .txt descriptors). download.sh re-checks title, license, access, and every used file's size and MD5 before fetching anything else. Preserve the authors and DOIs."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official author deposits on Zenodo (University of Manchester / ESRF beamtime). Materials-science instrument data of a synthetic aerogel; no people, animals, or personal data involved."
+usage_notes = "Public CC BY 4.0 scientific imaging data; only reconstructed voxel grey levels are emitted."
+
+[[origins]]
+id = "zenodo_mxene_ct"
+name = "Zenodo records 4761663, 4764282, 4766087 (Rawson et al. 2021, uploads 1-3 of 3)"
+url = "https://zenodo.org/records/4761663"
+type = "repository"
+version = "published 2021-05-14 / 2021-05-15 / 2021-05-16"
+notes = "11 X-ray micro-CT volumes of the same freeze-cast MXene aerogel at 0, 5, ..., 50% compressive strain, ESRF beamline ID15, each a headerless .raw stack with a .txt descriptor. Record 4761663 holds 00/05/10/15%, 4764282 holds 20/25/30/35%, 4766087 holds 40/45/50%. The exact record/file map, sizes, MD5s, and descriptor SHA-256s are pinned in volumes.tsv."
+
+[[resources]]
+id = "record_metadata"
+origin = "zenodo_mxene_ct"
+url = "https://zenodo.org/api/records/4761663"
+type = "api_query_result"
+version = "records 4761663, 4764282, 4766087"
+access = "Public Zenodo REST API, https://zenodo.org/api/records/<id> for each of the three records; re-fetched on every run and validated for title, cc-by-4.0, open access, ESRF ID15 description, and the size and MD5 of every used .raw and .txt file."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/zenodo_esrf_mxene_aerogel_microct_slices_u8/records/"
+notes = "Live JSON (view/download statistics change), so validated semantically rather than hashed."
+
+[[resources]]
+id = "volume_descriptors"
+origin = "zenodo_mxene_ct"
+url = "https://zenodo.org/api/records/4761663/files/00percent.txt/content"
+type = "file"
+version = "11 files NNpercent.txt, NN = 00..50; MD5 and SHA-256 pinned in volumes.tsv"
+access = "Direct public download from https://zenodo.org/api/records/<record>/files/<NN>percent.txt/content."
+size_bytes = 788
+sha256 = ""
+local_path = "downloads/zenodo_esrf_mxene_aerogel_microct_slices_u8/descriptors/"
+notes = "Free-form ASCII lines such as 'lattice info: 1381 x 1381 x 3155 voxels / 8 bit / little endian / voxel size: 3.1 x 3.1 x 3.1 microns'. Every descriptor declares 1381 x 1381 x Z, 8 bit, little endian and 3.1 um, and 1381*1381*Z equals the pinned .raw size exactly. '05percent.txt' describes the file '05 percent.raw' (space in the name)."
+
+[[resources]]
+id = "raw_00pct_slices"
+origin = "zenodo_mxene_ct"
+url = "https://zenodo.org/api/records/4761663/files/00percent.raw/content"
+type = "shard"
+version = "00percent.raw, 6,017,092,955 bytes (1381x1381x3155), md5:9cb3bcda145893e1b18a59531a8d8bb2"
+access = "HTTP Range requests, one per kept slice z = 158, 307, ..., 2996 (20 slices); slice z is bytes [z*1907161, (z+1)*1907161); each response must be 206 with Content-Range total 6017092955 and exactly 1,907,161 bytes."
+size_bytes = 38143220
+sha256 = ""
+local_path = "downloads/zenodo_esrf_mxene_aerogel_microct_slices_u8/slices/s00_zZZZZ.bin"
+notes = "Whole-file MD5 cannot check ranges; per-slice SHA-256 values are pinned in slice_sha256.tsv in this recipe."
+
+[[resources]]
+id = "raw_05pct_slices"
+origin = "zenodo_mxene_ct"
+url = "https://zenodo.org/api/records/4761663/files/05%20percent.raw/content"
+type = "shard"
+version = "'05 percent.raw', 5,734,833,127 bytes (1381x1381x3007), md5:bdde4d13ab070532b402e1e4af4b27ff"
+access = "HTTP Range requests for z = 151, 293, ..., 2855 (20 slices); 206 with Content-Range total 5734833127 required. The file name contains a space, URL-encoded as %20."
+size_bytes = 38143220
+sha256 = ""
+local_path = "downloads/zenodo_esrf_mxene_aerogel_microct_slices_u8/slices/s05_zZZZZ.bin"
+notes = "Per-slice SHA-256 pinned in slice_sha256.tsv."
+
+[[resources]]
+id = "raw_10pct_slices"
+origin = "zenodo_mxene_ct"
+url = "https://zenodo.org/api/records/4761663/files/10percent.raw/content"
+type = "shard"
+version = "10percent.raw, 5,418,244,401 bytes (1381x1381x2841), md5:03aea0fc6c5de16a32f7a1bbd03ae004"
+access = "HTTP Range requests for z = 143, 277, ..., 2697 (20 slices); 206 with Content-Range total 5418244401 required."
+size_bytes = 38143220
+sha256 = ""
+local_path = "downloads/zenodo_esrf_mxene_aerogel_microct_slices_u8/slices/s10_zZZZZ.bin"
+notes = "Per-slice SHA-256 pinned in slice_sha256.tsv."
+
+[[resources]]
+id = "raw_15pct_slices"
+origin = "zenodo_mxene_ct"
+url = "https://zenodo.org/api/records/4761663/files/15percent.raw/content"
+type = "shard"
+version = "15percent.raw, 5,086,398,387 bytes (1381x1381x2667), md5:5421027f10f5e12d77f30f042a369b43"
+access = "HTTP Range requests for z = 134, 260, ..., 2532 (20 slices); 206 with Content-Range total 5086398387 required."
+size_bytes = 38143220
+sha256 = ""
+local_path = "downloads/zenodo_esrf_mxene_aerogel_microct_slices_u8/slices/s15_zZZZZ.bin"
+notes = "Per-slice SHA-256 pinned in slice_sha256.tsv."
+
+[[resources]]
+id = "raw_20pct_slices"
+origin = "zenodo_mxene_ct"
+url = "https://zenodo.org/api/records/4764282/files/20percent.raw/content"
+type = "shard"
+version = "20percent.raw, 4,806,045,720 bytes (1381x1381x2520), md5:0681d9388acee8c81fec3139ca73d4ff"
+access = "HTTP Range requests for z = 126, 245, ..., 2393 (20 slices); 206 with Content-Range total 4806045720 required."
+size_bytes = 38143220
+sha256 = ""
+local_path = "downloads/zenodo_esrf_mxene_aerogel_microct_slices_u8/slices/s20_zZZZZ.bin"
+notes = "Per-slice SHA-256 pinned in slice_sha256.tsv."
+
+[[resources]]
+id = "raw_25pct_slices"
+origin = "zenodo_mxene_ct"
+url = "https://zenodo.org/api/records/4764282/files/25percent.raw/content"
+type = "shard"
+version = "25percent.raw, 4,577,186,400 bytes (1381x1381x2400), md5:cef735047f9f8c519521c2ef09077b45"
+access = "HTTP Range requests for z = 120, 234, ..., 2279 (20 slices); 206 with Content-Range total 4577186400 required."
+size_bytes = 38143220
+sha256 = ""
+local_path = "downloads/zenodo_esrf_mxene_aerogel_microct_slices_u8/slices/s25_zZZZZ.bin"
+notes = "Per-slice SHA-256 pinned in slice_sha256.tsv."
+
+[[resources]]
+id = "raw_30pct_slices"
+origin = "zenodo_mxene_ct"
+url = "https://zenodo.org/api/records/4764282/files/30percent.raw/content"
+type = "shard"
+version = "30percent.raw, 4,270,133,479 bytes (1381x1381x2239), md5:3b906288f74a83e74f09f4bbf34c35f5"
+access = "HTTP Range requests for z = 112, 218, ..., 2126 (20 slices); 206 with Content-Range total 4270133479 required."
+size_bytes = 38143220
+sha256 = ""
+local_path = "downloads/zenodo_esrf_mxene_aerogel_microct_slices_u8/slices/s30_zZZZZ.bin"
+notes = "Per-slice SHA-256 pinned in slice_sha256.tsv."
+
+[[resources]]
+id = "raw_35pct_slices"
+origin = "zenodo_mxene_ct"
+url = "https://zenodo.org/api/records/4764282/files/35percent.raw/content"
+type = "shard"
+version = "35percent.raw, 3,968,802,041 bytes (1381x1381x2081), md5:3c0db8a31ea19b37988c127f064cecfb"
+access = "HTTP Range requests for z = 105, 203, ..., 1975 (20 slices); 206 with Content-Range total 3968802041 required."
+size_bytes = 38143220
+sha256 = ""
+local_path = "downloads/zenodo_esrf_mxene_aerogel_microct_slices_u8/slices/s35_zZZZZ.bin"
+notes = "Per-slice SHA-256 pinned in slice_sha256.tsv."
+
+[[resources]]
+id = "raw_40pct_slices"
+origin = "zenodo_mxene_ct"
+url = "https://zenodo.org/api/records/4766087/files/40percent.raw/content"
+type = "shard"
+version = "40percent.raw, 3,640,770,349 bytes (1381x1381x1909), md5:107e399809fdab04a278ff59a0c7c428"
+access = "HTTP Range requests for z = 96, 186, ..., 1812 (20 slices); 206 with Content-Range total 3640770349 required."
+size_bytes = 38143220
+sha256 = ""
+local_path = "downloads/zenodo_esrf_mxene_aerogel_microct_slices_u8/slices/s40_zZZZZ.bin"
+notes = "Per-slice SHA-256 pinned in slice_sha256.tsv."
+
+[[resources]]
+id = "raw_45pct_slices"
+origin = "zenodo_mxene_ct"
+url = "https://zenodo.org/api/records/4766087/files/45percent.raw/content"
+type = "shard"
+version = "45percent.raw, 3,371,860,648 bytes (1381x1381x1768), md5:3ee565b7714125cf941b16a125f40caa"
+access = "HTTP Range requests for z = 89, 173, ..., 1678 (20 slices); 206 with Content-Range total 3371860648 required."
+size_bytes = 38143220
+sha256 = ""
+local_path = "downloads/zenodo_esrf_mxene_aerogel_microct_slices_u8/slices/s45_zZZZZ.bin"
+notes = "Per-slice SHA-256 pinned in slice_sha256.tsv."
+
+[[resources]]
+id = "raw_50pct_slices"
+origin = "zenodo_mxene_ct"
+url = "https://zenodo.org/api/records/4766087/files/50percent.raw/content"
+type = "shard"
+version = "50percent.raw, 3,373,767,809 bytes (1381x1381x1769), md5:b0818b27256561d543a7cb675e25d7d2"
+access = "HTTP Range requests for z = 89, 173, ..., 1679 (20 slices); 206 with Content-Range total 3373767809 required."
+size_bytes = 38143220
+sha256 = ""
+local_path = "downloads/zenodo_esrf_mxene_aerogel_microct_slices_u8/slices/s50_zZZZZ.bin"
+notes = "Per-slice SHA-256 pinned in slice_sha256.tsv."
+
+[local_paths]
+downloads = "downloads/zenodo_esrf_mxene_aerogel_microct_slices_u8/"
+filtered = "filtered/zenodo_esrf_mxene_aerogel_microct_slices_u8/"
+index = "index/zenodo_esrf_mxene_aerogel_microct_slices_u8/"
+samples = "samples/zenodo_esrf_mxene_aerogel_microct_slices_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_esrf_mxene_aerogel_microct_slices_u8/samples.jsonl"
+summary = "Range-fetch 20 evenly spaced reconstructed axial slices (5% end margin) from each of the 11 ESRF ID15 MXene aerogel micro-CT volumes, then write each 1381x1381 uint8 slice unchanged as its own sample (220 samples, 419,575,420 bytes)."
+deterministic_notes = "Fixed records, files, exact .raw sizes, MD5s and descriptor SHA-256s (volumes.tsv). Slice plan per volume of Z slices: margin m = ceil(0.05*Z), z_k = m + round_half_up(k*(Z-1-2m)/19) for k = 0..19; download.sh computes it in bash integer arithmetic, build in Python integer arithmetic, verify with exact fractions. download.sh requires HTTP 206 with the exact Content-Range 'bytes start-end/<pinned size>' and exactly 1,907,161 bytes per slice, rejects degenerate slices, and enforces the per-slice SHA-256 pins in slice_sha256.tsv when present (always writing realized values to downloads/<id>/slice_sha256.tsv). Degeneracy rules, identical in download, build and verify: at least 64 distinct values, modal value at most 10% of voxels, no constant voxel row or column, slice mean grey level within [72, 104], no duplicate payloads. Samples are ordered by strain then z. verify.sh re-parses the descriptors, re-derives the plan, byte-compares every sample with its downloaded slice, checks the pins, recomputes every index field and statistic, checks that the sample directory holds exactly the planned files, and checks manifest sample_count and total_size_bytes. Per-slice SHA-256 pins come from the verified 2026-10-06 autocollect download (all 220 slices 206 on the first attempt); the SHA-256 over '<sample name>\\t<sample sha256>' lines in index order is pinned in verify (eff23b6f7a8b4102e9ccea6c767e81e1273477d89bc17080c641acb20bbbe0d3)."
+
+[[series]]
+id = "mxene_aerogel_microct_slice_u8"
+description = "Reconstructed synchrotron X-ray micro-CT axial slices (1381x1381 uint8, 3.1 um voxels) of one freeze-cast lamellar Ti3C2Tx MXene aerogel at 11 compressive-strain states."
+semantic_meaning = "Each value is the authors' published 8-bit grey level of one 3.1 x 3.1 x 3.1 um voxel of a tomographic reconstruction (X-ray attenuation) recorded at ESRF beamline ID15: bright thin sheets are the MXene lamellae, the mid-grey background is pore space plus reconstruction noise. A faint circle marks the edge of the reconstructed field of view; the sample is wider than that field, so lamellar texture continues to the square edges. Slices from the 11 volumes show the same specimen at 0, 5, ..., 50% applied compressive strain."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The authors exported each reconstructed volume as a headerless 8-bit little-endian raw stack (lattice 1381 x 1381 x Z, x fastest, then y, then z) and chose the 8-bit grey-level windowing of the reconstruction per volume; the mapping to attenuation coefficient is not published. Values are emitted exactly as published: no rescaling, re-windowing, cropping, masking or filtering. Interior slice means sit near 85-90 in every volume."
+source_resources = ["volume_descriptors", "raw_00pct_slices", "raw_05pct_slices", "raw_10pct_slices", "raw_15pct_slices", "raw_20pct_slices", "raw_25pct_slices", "raw_30pct_slices", "raw_35pct_slices", "raw_40pct_slices", "raw_45pct_slices", "raw_50pct_slices"]
+source_format = "Headerless 8-bit little-endian raw voxel volume (Fiji 'Import > Raw' layout: width 1381, height 1381, Z images), geometry from the per-volume .txt descriptor"
+source_field = "Reconstructed voxel grey level (uint8) of axial slice z: the 1381x1381 image at byte offset z*1907161"
+filtered_input_path = "filtered/zenodo_esrf_mxene_aerogel_microct_slices_u8/ingest_stats.json"
+filtering = "All 11 volumes; per volume 20 axial slices evenly spaced between ceil(5% of Z) and Z-1-ceil(5% of Z), i.e. 83-150 slices (0.26-0.47 mm) apart. The end zones are excluded because their slices are not aerogel interior: probes show the slice mean rising from about 85-90 to 101-113 within the last 1-3% of every volume (z = 0 reads 92-106 in 10 of 11 volumes), and the final slice of the 50% volume is a uniform disc with ring artefacts and no aerogel texture (most likely the compression platen or the reconstruction edge). Every voxel of each kept slice is emitted."
+missing_value_policy = "uint8 reconstructed grey levels have no missing-value sentinel. Every voxel is kept as published, including 0 and 255, which are the clipped extremes of the authors' windowing. Fatal, identically in download, build and verify: a wrong Content-Range, size or pinned SHA-256; fewer than 64 distinct values; a modal value above 10% of voxels; a constant voxel row or column; a slice mean outside [72, 104]; a duplicate slice payload. Nothing is dropped or imputed."
+conversion = "Each kept slice is the byte range [z*1907161, (z+1)*1907161) of the .raw stack, i.e. 1381 rows of 1381 uint8 voxels (y-major, x fastest), written unchanged as one sample named strainNNpct_zZZZZ.bin; byte order is irrelevant for 8-bit values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 1381x1381 reconstructed CT slice, row-major"
+sample_geometry = "tomographic_reconstruction_axial_slice_2d"
+sample_rank = 2
+sample_shape = [1381, 1381]
+sample_axes = ["voxel_y", "voxel_x"]
+natural_record_kind = "reconstructed_axial_slice"
+sample_count = 220
+total_size_bytes = 419575420
+output_path = "samples/zenodo_esrf_mxene_aerogel_microct_slices_u8/mxene_aerogel_microct_slice_u8/"

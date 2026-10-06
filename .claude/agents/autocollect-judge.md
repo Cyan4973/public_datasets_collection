@@ -42,7 +42,9 @@ absence of red flags.
    Label the novelty kind honestly.
 7. Homogeneity: one unit, scale, tick lattice, and generation process.
 8. Volume and shape: sized to the population rather than the floor; not a
-   thin aggregate behind a huge download; reasonable diversity.
+   thin aggregate behind a huge download; reasonable diversity; a sample
+   count that reflects what the source offers (see the sample-count guidance
+   in the criteria).
 
 ## Decisions
 

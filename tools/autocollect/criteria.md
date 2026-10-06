@@ -75,6 +75,9 @@ all of them.
 - Sample-count guidance (soft): about 5 natural samples is a minimum, about 20
   is acceptable when sources are limited, 50+ is desirable when the source
   offers plenty.
+  When the source offers plenty of natural records, a recipe well under ~20
+  samples should take more of them rather than stop near the minimum; that is
+  a repair request, not an acceptance.
 
 ## Homogeneity comes first
 

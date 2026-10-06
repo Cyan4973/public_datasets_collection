@@ -1,0 +1,102 @@
+manifest_version = 1
+dataset_id = "openneuro_ds003097_aomic_cortical_thickness_f32"
+name = "AOMIC-ID1000 FreeSurfer 6 Per-Vertex Cortical Thickness Float32"
+description = "Per-vertex cortical grey-matter thickness maps (mm, native float32) from FreeSurfer 6.0.1 recon-all, one map per hemisphere for 200 evenly spaced AOMIC-ID1000 participants on OpenNeuro ds003097."
+homepage = "https://openneuro.org/datasets/ds003097"
+
+[license]
+name = "Creative Commons CC0 1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "Snoek, L., van der Miesen, M.M., Beemsterboer, T., van der Leij, A., Eigenhuis, A., & Scholte, H.S. (2021). The Amsterdam Open MRI Collection, a set of multimodal MRI datasets for individual difference analyses. Scientific Data 8, 85. OpenNeuro ds003097 (AOMIC-ID1000), DOI 10.18112/openneuro.ds003097.v1.2.1."
+notes = "The dataset-level dataset_description.json declares \"License\": \"CC0\" for ds003097; the dataset README states the dataset contains both raw and preprocessed data and other derivatives. The FreeSurfer derivatives directory carries no separate license file. (derivatives/fmriprep/dataset_description.json contains only the unfilled fMRIPrep template string for License; it is not used by this recipe.) Preserve the HowToAcknowledge citation."
+
+[safety]
+contains_sensitive_data = true
+contains_personal_data = false
+provenance_notes = "Public deidentified human-subject MRI derivatives released by the AOMIC authors (University of Amsterdam) through OpenNeuro's official S3 bucket; anonymization was designed with GDPR advice per the dataset acknowledgements."
+usage_notes = "Human-subject neuroimaging derivative, flagged sensitive per the openneuro_ds000030 precedent. The recipe keeps only per-vertex cortical thickness values; it downloads no participant tables, demographics, psychometrics, images or free text. Participant IDs appear only as the OpenNeuro sub-NNNN directory labels."
+
+[[origins]]
+id = "openneuro_ds003097"
+name = "OpenNeuro ds003097 AOMIC-ID1000"
+url = "https://openneuro.org/datasets/ds003097"
+type = "bucket"
+version = "1.2.1"
+notes = "Public anonymous S3 bucket https://s3.amazonaws.com/openneuro.org, prefix ds003097/derivatives/freesurfer/ (928 sub-NNNN participant directories plus fsaverage and fsaverage5 templates, which are skipped)."
+
+[[resources]]
+id = "dataset_description"
+origin = "openneuro_ds003097"
+url = "https://s3.amazonaws.com/openneuro.org/ds003097/dataset_description.json"
+type = "file"
+version = "1.2.1"
+access = "Direct public S3 object; download.sh requires License == CC0 and Name == AOMIC-ID1000."
+size_bytes = 1290
+sha256 = "077aaf2ad49e2c2681ed30bc21b743294885d135d7ced167526dec1abed43a95"
+local_path = "downloads/openneuro_ds003097_aomic_cortical_thickness_f32/dataset_description.json"
+notes = "DatasetDOI 10.18112/openneuro.ds003097.v1.2.1. A changed sha256 is logged as a warning; a changed license is fatal."
+
+[[resources]]
+id = "selected_thickness_maps"
+origin = "openneuro_ds003097"
+url = "https://s3.amazonaws.com/openneuro.org/ds003097/derivatives/freesurfer/"
+type = "other"
+version = "1.2.1 (S3 objects last modified 2025-12-02)"
+access = "400 exact public S3 objects sub-NNNN/surf/{lh,rh}.thickness, pinned in selection.tsv by key, byte size and single-part ETag (= MD5)."
+size_bytes = 227687388
+sha256 = ""
+local_path = "downloads/openneuro_ds003097_aomic_cortical_thickness_f32/freesurfer/"
+notes = "selection.tsv sha256 a0e39a37b018c2a751da726c685fcdd46d25427f84f9719f423d18eb1970e32c. Per-object MD5s are in selection.tsv; no aggregate sha256 is published upstream."
+
+[[resources]]
+id = "selected_build_stamps"
+origin = "openneuro_ds003097"
+url = "https://s3.amazonaws.com/openneuro.org/ds003097/derivatives/freesurfer/"
+type = "other"
+version = "1.2.1"
+access = "200 exact public S3 objects sub-NNNN/scripts/build-stamp.txt (58 bytes each, MD5 774616272edc9c5e46abf1ead8e96ff4)."
+size_bytes = 11600
+sha256 = ""
+local_path = "downloads/openneuro_ds003097_aomic_cortical_thickness_f32/freesurfer/"
+notes = "Homogeneity evidence only: every selected participant must carry the exact stamp freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.1-f53a55a. Not emitted as a series."
+
+[local_paths]
+downloads = "downloads/openneuro_ds003097_aomic_cortical_thickness_f32/"
+filtered = "filtered/openneuro_ds003097_aomic_cortical_thickness_f32/"
+index = "index/openneuro_ds003097_aomic_cortical_thickness_f32/"
+samples = "samples/openneuro_ds003097_aomic_cortical_thickness_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/openneuro_ds003097_aomic_cortical_thickness_f32/samples.jsonl"
+summary = "Validate the CC0 dataset description, fetch 400 pinned FreeSurfer thickness maps and 200 build stamps, and emit one little-endian float32 per-vertex thickness array per hemisphere file."
+deterministic_notes = "discover.sh reproduces selection.tsv from anonymous S3 listings: the 928 sub-NNNN participants are sorted and 200 evenly spaced slots floor(i*928/200) are taken, walking forward to the next participant only if a slot fails eligibility (both thickness files present with MD5 ETags, recon-all.done present, no recon-all.error, exact v6.0.1 build stamp); in the pinned run no participant failed, so no replacements occurred. download.sh checks every object's size and MD5, then the FreeSurfer curv structure (magic FF FF FF, nfaces == 2*nvertices-4, values-per-vertex == 1, size == 15+4*nvertices) and the value domain. build.sh and verify.sh use two independent decoders (array byteswap vs struct unpack/pack), sort samples by participant then hemisphere, compute index min/max from stored float32, reject constant, non-finite, out-of-range, mostly-zero (>15%), mostly-clamped (>5%) or low-diversity (<25% distinct) maps, require the realized 400 samples / 56,920,347 values / 227,681,388 bytes, and enforce the corpus floors and the 1 GB cap."
+
+[[series]]
+id = "aomic_cortical_thickness_f32"
+description = "Per-vertex cortical thickness maps from FreeSurfer 6.0.1 recon-all, one per hemisphere per participant."
+semantic_meaning = "Cortical grey-matter thickness in millimetres at every vertex of one hemisphere's white-surface triangle mesh: FreeSurfer's distance between the white (grey/white boundary) and pial surfaces, computed from 3T T1-weighted MRI of one AOMIC-ID1000 participant."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "FreeSurfer writes thickness as big-endian IEEE-754 float32; values are copied exactly, only the byte order changes. No rescaling, masking, smoothing or resampling to a template mesh."
+source_resources = ["selected_thickness_maps"]
+source_format = "FreeSurfer 6.0.1 new-curv binary (big-endian float32 per-vertex overlay)"
+source_field = "surf/{lh,rh}.thickness per-vertex cortical thickness (mm)"
+filtered_input_path = "filtered/openneuro_ds003097_aomic_cortical_thickness_f32/ingest_stats.json"
+filtering = "Keep surf/lh.thickness and surf/rh.thickness for the 200 participants pinned in selection.tsv (evenly spaced over the sorted 928 sub-NNNN directories). fsaverage/fsaverage5 templates and all other FreeSurfer outputs (curvature, sulc, area, volume, surfaces, labels, stats) are excluded."
+missing_value_policy = "FreeSurfer stores no NaN or sentinel; any non-finite value or any value outside [0, 5] is fatal. Zero-thickness vertices are preserved as distributed: they lie overwhelmingly on the non-cortical medial wall where the white and pial surfaces coincide (sub-0001 lh: 6,067 zeros, 6,042 outside lh.cortex.label, about 4.6% of vertices). Values exactly 5.0 are FreeSurfer's default 5 mm thickness clamp and are preserved. Realized per-map zero fraction 3.33-5.42% and clamp fraction 0.01-0.54% (pooled 4.25% and 0.12%). A map with more than 15% zeros, more than 5% clamped values, fewer than 25% distinct values or a constant value is rejected by both build and verify."
+conversion = "Validate the 15-byte header (FF FF FF magic, int32 BE nvertices, nfaces == 2*nvertices-4, values-per-vertex == 1) and size == 15 + 4*nvertices, decode the nvertices big-endian float32 values, and write them unchanged in source vertex order as little-endian float32, one sample per hemisphere file. Sample length varies with each participant's mesh (108,686 to 191,104 vertices)."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 per-vertex cortical thickness map"
+sample_geometry = "surface_mesh_vertex_scalar_field"
+sample_rank = 1
+sample_axes = ["surface_vertex"]
+natural_record_kind = "per-hemisphere surface vertex thickness map"
+sample_count = 400
+total_size_bytes = 227681388
+output_path = "samples/openneuro_ds003097_aomic_cortical_thickness_f32/aomic_cortical_thickness_f32/"

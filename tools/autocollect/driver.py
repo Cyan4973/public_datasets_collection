@@ -186,6 +186,7 @@ class Config:
     screen_batch: int = 8
     download_cap_bytes: int = 5_000_000_000
     download_timeout_s: int = 6 * 3600
+    download_stall_s: int = 20 * 60
     build_timeout_s: int = 4 * 3600
     min_free_bytes: int = 200_000_000_000
     disk_budget_bytes: int = 500_000_000_000
@@ -746,9 +747,19 @@ def task_download(cfg: Config, cid: str) -> dict:
     stamp = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
     log_path = LOGS_DIR / cid / f"download.{stamp}.log"
 
+    progress = {"bytes": candidate_bytes(cid), "at": time.monotonic()}
+
     def monitor() -> str:
         used = candidate_bytes(cid)
-        return f"byte cap exceeded ({used:,} > {cfg.download_cap_bytes:,})" if used > cfg.download_cap_bytes else ""
+        if used > cfg.download_cap_bytes:
+            return f"byte cap exceeded ({used:,} > {cfg.download_cap_bytes:,})"
+        # A script stuck in an error/retry loop adds no bytes; stop it instead of
+        # hammering the host until the time limit.
+        if used != progress["bytes"]:
+            progress.update(bytes=used, at=time.monotonic())
+        elif time.monotonic() - progress["at"] > cfg.download_stall_s:
+            return f"no download progress for {cfg.download_stall_s // 60} min ({used:,} bytes)"
+        return ""
 
     started = time.monotonic()
     rc, reason = run_proc(["bash", f"staging/{cid}/download.sh"], log_path=log_path, timeout_s=cfg.download_timeout_s, monitor=monitor, poll_s=cfg.poll_s)

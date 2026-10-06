@@ -1,0 +1,102 @@
+manifest_version = 1
+dataset_id = "nasa_pds_voyager_iss_saturn_raw_u8"
+name = "Voyager 2 ISS Narrow-Angle Saturn-Encounter Raw Vidicon Frames (8-bit DN)"
+description = "Full 800x800 unsigned-byte raw vidicon frames from the Voyager 2 Imaging Science Subsystem narrow-angle camera, Saturn and ring targets, 1981-08-22 to 1981-08-31, scan rate 3:1, full-resolution edit mode, decoded from the PDS Rings Node VGISS_0005 decompressed raw images (Cnnnnnnn_RAW.IMG) with the per-line 224-byte engineering prefix removed."
+homepage = "https://asc-pds-voyager.s3.us-west-2.amazonaws.com/VGISS_0005/AAREADME.TXT"
+
+[license]
+name = "NASA SMD Open Scientific Data Policy (public NASA PDS mission data)"
+spdx = "LicenseRef-NASA-SMD-Open-Data"
+url = "https://science.nasa.gov/researchers/science-data/science-information-policy/"
+citation = "Showalter, M.R., M.K. Gordon, and D. Olson, VG1/VG2 SATURN ISS PROCESSED IMAGES V1.0, VGISS_0001-0038, NASA Planetary Data System, 2006. Acknowledge the Voyager Imaging Team led by Dr. Brad Smith."
+notes = "Voyager is a NASA mission; these products are archived by the NASA Planetary Data System (PDS Rings Node data set VG1/VG2-S-ISS-2/3/4/6-PROCESSED-V1.0) and served from the public anonymous asc-pds-voyager S3 bucket (USGS Astrogeology, PDS Cartography and Imaging Sciences Node). NASA SMD policy: information produced from SMD-funded scientific research is held as a public trust, made publicly available, and openly shared. Same rights basis as the accepted nasa_pds_cassini_vims_qube_i16 and nasa_pds_mastcamz_raw_i16 recipes. The volume AAREADME.TXT imposes no use restriction; it only asks users to cite the PDS Rings Node data set and acknowledge the Voyager imaging team. download.sh fetches that AAREADME from the bucket (size/MD5 pinned) and fails unless the citation request and DATA_SET_ID are present. The NASA policy page itself is not fetched by download.sh because science.nasa.gov is unreachable through the collection proxy."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NASA PDS archive objects over anonymous HTTPS from the asc-pds-voyager public bucket; 1981 robotic spacecraft camera frames of Saturn and its rings."
+usage_notes = "Only image DN values are emitted. VICAR labels (which contain the archivist processing user name), binary engineering headers, line prefixes and PDS label text are never written to samples. Index rows carry only observation metadata (FDS image number, image id, time, target, filter, exposure, shutter mode)."
+
+[[origins]]
+id = "pds_voyager_bucket"
+name = "NASA PDS Voyager archive on AWS S3 (asc-pds-voyager, us-west-2)"
+url = "https://asc-pds-voyager.s3.us-west-2.amazonaws.com/?list-type=2&prefix=VGISS_0005/&delimiter=/"
+type = "bucket"
+notes = "Public anonymous bucket holding VGISS_0004, VGISS_0005, VGISS_0026-0038 (raw images and labels only) and the original vg_0001-0038 EDR volumes. VGISS_0005 is the Voyager 2 'selected Saturn images' volume (FDS 43901.59-44304.45). ListObjectsV2 returns at most 1000 keys per page; discover.py follows continuation tokens (2,848 keys under VGISS_0005/)."
+
+[[resources]]
+id = "vgiss_0005_raw_frames"
+origin = "pds_voyager_bucket"
+url = "https://asc-pds-voyager.s3.us-west-2.amazonaws.com/VGISS_0005/"
+type = "file"
+version = "VGISS_0005 V1.0 (PDS publication 2006-08-15; bucket objects Last-Modified 2025-05-06), 339 frames resolved 2026-10-05 by discover.py"
+access = "Anonymous HTTPS GET. download.sh fetches exactly the 339 Cnnnnnnn_RAW.IMG files (823,296 bytes each) and their detached Cnnnnnnn_RAW.LBL labels listed in sources.tsv, each pinned by size and MD5 (the S3 ETag of these single-part objects), and rejects any frame whose label or VICAR structure fails the checks."
+size_bytes = 280354134
+sha256 = ""
+local_path = "downloads/nasa_pds_voyager_iss_saturn_raw_u8/raw/"
+notes = "size_bytes = 279,097,344 image bytes + 1,256,790 label bytes. Per-file URL, size, MD5 and Last-Modified live in sources.tsv; download_plan.tsv records the SHA-256 of every fetched image."
+
+[[resources]]
+id = "vgiss_0005_index"
+origin = "pds_voyager_bucket"
+url = "https://asc-pds-voyager.s3.us-west-2.amazonaws.com/VGISS_0005/INDEX/INDEX.TAB"
+type = "table_export"
+version = "VGISS_0005 INDEX.TAB, 8,412 rows x 395 bytes, PRODUCT_CREATION_TIME 2006-06-07"
+access = "Anonymous HTTPS GET; pinned size 3,322,740 bytes, MD5 9952de72d9a6013e5e0c0ae78de50c97. INDEX.LBL pinned at 12,267 bytes, MD5 751cc4334b9cf5972a7df21b43a007fd."
+size_bytes = 3335007
+sha256 = ""
+local_path = "downloads/nasa_pds_voyager_iss_saturn_raw_u8/index/"
+notes = "Selection evidence, not a sample source. download.sh, build.py and verify.py (with an independent CSV parser) re-derive the 339-frame selection from it and fail if it differs from sources.tsv."
+
+[[resources]]
+id = "vgiss_0005_aareadme"
+origin = "pds_voyager_bucket"
+url = "https://asc-pds-voyager.s3.us-west-2.amazonaws.com/VGISS_0005/AAREADME.TXT"
+type = "file"
+version = "PUBLICATION_DATE 2006-08-15"
+access = "Anonymous HTTPS GET; pinned size 16,978 bytes, MD5 519163f73a17285da8d6288992bc61f4."
+size_bytes = 16978
+sha256 = ""
+local_path = "downloads/nasa_pds_voyager_iss_saturn_raw_u8/evidence/AAREADME.TXT"
+notes = "Citation/rights evidence and file-type definitions (Cnnnnnnn_RAW.IMG: uncompressed, raw image). Not a sample source."
+
+[local_paths]
+downloads = "downloads/nasa_pds_voyager_iss_saturn_raw_u8/"
+filtered = "filtered/nasa_pds_voyager_iss_saturn_raw_u8/"
+index = "index/nasa_pds_voyager_iss_saturn_raw_u8/"
+samples = "samples/nasa_pds_voyager_iss_saturn_raw_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_pds_voyager_iss_saturn_raw_u8/samples.jsonl"
+summary = "Fetch 339 pinned VGISS_0005 Voyager 2 narrow-angle raw frames plus labels, validate label and VICAR structure, and emit the 800 x 800 uint8 image DN of each frame (224-byte line prefixes dropped, VICAR labels and binary headers skipped) unchanged as one raw sample per frame; 337 frames are emitted after the fill-line exclusion rule drops 2."
+deterministic_notes = "Selection rule applied to VGISS_0005/INDEX/INDEX.TAB (discover.py; re-applied by download, build and verify): PRODUCT_TYPE = DECOMPRESSED_RAW_IMAGE, SPACECRAFT_NAME = VOYAGER 2, MISSION_PHASE_NAME = SATURN ENCOUNTER, INSTRUMENT_NAME = NARROW ANGLE CAMERA, SCAN_MODE = 3:1, EDIT_MODE = 1:1, GAIN_MODE = LOW, TARGET_NAME in {SATURN, S RINGS}, SHUTTER_MODE != BODARK, not under CALIB/, DATA_ANOMOLY = NONE, exposure not null; sorted by FDS image number. Result: 339 pinned frames (145 SATURN, 194 S RINGS) from 1981-08-22T16:29:35 to 1981-08-31T02:34:22; the exclusion rule drops 2 (C4414941 with 68 and C4415358 with 59 all-zero lines, both SATURN), leaving 337 emitted frames (143 SATURN, 194 S RINGS). 33 emitted frames carry 1-39 fill lines; 255 of 337 emitted frames reproduce the embedded VICAR DN histogram exactly, confirming the NLB=2 image offset. Label checks: RECORD_BYTES 1024, FILE_RECORDS 804, INSTRUMENT_ID ISSN, SPACECRAFT_ID VG2, SCAN_MODE_ID 3:1, EDIT_MODE_ID 1:1, GAIN_MODE_ID LOW, LINES = LINE_SAMPLES = 800, LINE_PREFIX_BYTES 224, SAMPLE_BITS 8 unsigned, IMAGE_NUMBER and PRODUCT_ID match. VICAR checks: LBLSIZE 1024, RECSIZE 1024, NLB 2, NBB 224, NL = NS = 800, FORMAT BYTE, ORG BSQ, EOL 1, LAB02 names VGR-2 and the FDS count, LAB03 NA CAMERA scan rate 3:1, LAB04 FULL; extension label at byte 822,272; first image-line prefix carries the frame FDS count (u16 LE at prefix offset 22, u8 at 24) and at least 90% of the line prefixes whose FDS field is non-zero carry a count within 8 of it. Exclusion rule (build and verify, identical): a frame is not emitted if more than 40 of its 800 image lines are entirely zero (telemetry-dropout fill) or if it has fewer than 16 distinct DN values. Duplicate frames fail. verify.sh re-parses INDEX.TAB as CSV, re-derives each frame from its own VICAR label offsets, byte-compares every sample, and checks index rows, counts, totals, and the aggregate DN histogram (>= 200 levels, no single DN above half of all pixels)."
+
+[[series]]
+id = "vg2_issn_saturn_raw_dn_u8"
+description = "Full-frame raw Voyager 2 narrow-angle camera frames (800 lines x 800 samples of 8-bit data numbers) of Saturn and its rings from the 1981 encounter."
+semantic_meaning = "Uncalibrated 8-bit vidicon data numbers (DN 0-255) read out from the Voyager 2 ISS narrow-angle vidicon camera (0.42 deg field of view per the label): the Saturn disk, limb or crescent and the A/B/C/F rings, Cassini division and spokes, with the vidicon dark-current background, the reseau-mark grid, blemishes, radiation/cosmic-ray spikes, saturated pixels and occasional zero-filled telemetry-dropout lines, exactly as decompressed losslessly from the archival IMQ EDR. No dark subtraction, flat field or geometric correction."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "PDS label: SAMPLE_TYPE UNSIGNED_INTEGER, SAMPLE_BITS 8, PRODUCT_TYPE DECOMPRESSED_RAW_IMAGE, SOURCE_PRODUCT_ID Cnnnnnnn.IMQ (the image was 'expanded using VICAR routine VGRCDCOPY' from the compressed EDR on the Voyager ISS CD-ROMs). The 8-bit DN are the native camera quantization; values are copied unchanged."
+source_resources = ["vgiss_0005_raw_frames"]
+source_format = "PDS3 detached-label VICAR image (Cnnnnnnn_RAW.IMG): 1024-byte VICAR label, 2 VICAR binary-label records, 800 image records of 1024 bytes (224-byte binary line prefix + 800 unsigned 8-bit samples), 1024-byte VICAR extension label"
+source_field = "IMAGE object: 800 x 800 unsigned 8-bit vidicon data numbers (the last 800 bytes of each image record)"
+filtered_input_path = "filtered/nasa_pds_voyager_iss_saturn_raw_u8/ingest_stats.json"
+filtering = "339 pinned frames: every VGISS_0005 decompressed raw image that is Voyager 2, narrow-angle camera, scan rate 3:1, edit mode 1:1 (full resolution), low gain, nominal target SATURN or S RINGS, shutter mode NAONLY/BOTSIM/BOTALT (not BODARK dark frames), outside CALIB/, no data anomaly. Wide-angle frames, Voyager 1 frames, other scan rates (1:1, 5:1), partial-resolution edit modes (1:2, 1:3), satellite/sky/system targets and calibration frames are excluded. Frames with more than 40 all-zero image lines or fewer than 16 distinct DN are dropped by the deterministic exclusion rule (listed in ingest_stats.json); realized: 337 of 339 frames emitted."
+missing_value_policy = "Every pixel of every emitted frame is preserved, including zero-filled telemetry-dropout lines (at most 40 per emitted frame), DN 0 dark pixels, DN 255 saturated pixels, reseau marks and spikes; nothing is masked, filled, interpolated or rescaled. Frames over the fill-line limit are dropped whole by the shared deterministic rule. Any size/MD5 mismatch, label or VICAR deviation, misaligned prefix, duplicate or constant frame fails the recipe."
+conversion = "For each pinned Cnnnnnnn_RAW.IMG (823,296 bytes): skip the 1024-byte VICAR label and the two 1024-byte VICAR binary-label records (NLB = 2; the PDS label's ^IMAGE = record 2 ignores them), then for each of the 800 following 1024-byte records drop the first 224 bytes (NBB binary line prefix) and keep the last 800 bytes; ignore the VICAR extension label at byte 822,272. Concatenate the 800 rows in file order (LINE_DISPLAY_DIRECTION DOWN, SAMPLE_DISPLAY_DIRECTION RIGHT) and write the resulting 640,000 bytes as samples/nasa_pds_voyager_iss_saturn_raw_u8/vg2_issn_saturn_raw_dn_u8/Cnnnnnnn.u8. Byte order is irrelevant for 8-bit values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 vidicon data numbers"
+sample_geometry = "fixed_800x800_voyager_vidicon_raw_frame"
+sample_rank = 2
+sample_shape = [800, 800]
+sample_axes = ["vidicon_line", "vidicon_sample"]
+natural_record_kind = "voyager_iss_decompressed_raw_vidicon_frame"
+sample_count = 337
+total_size_bytes = 215680000
+output_path = "samples/nasa_pds_voyager_iss_saturn_raw_u8/vg2_issn_saturn_raw_dn_u8/"

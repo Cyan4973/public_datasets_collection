@@ -1,0 +1,96 @@
+manifest_version = 1
+dataset_id = "jpl_gnssro_cosmic1_l1b_excess_phase_f64"
+name = "COSMIC-1 GNSS Radio-Occultation Calibrated L1 Excess Phase (JPL L1b v2.6) Float64"
+description = "Native float64 calibrated GPS L1 excess-phase profiles (metres, 50 Hz) of individual COSMIC-1 radio-occultation soundings processed by NASA JPL, one sample per occultation, from a pinned 2007-2016 spread of the AWS Open Data GNSS-RO archive v2.0."
+homepage = "https://registry.opendata.aws/gnss-ro-opendata/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "COSMIC-1 radio occultation calibrated excess phase processed by the NASA Jet Propulsion Laboratory, California Institute of Technology (institution_version v2.6), reformatted and hosted by Verisk Atmospheric and Environmental Research in the AWS Registry of Open Data 'Earth Radio Occultation' archive (s3://gnss-ro-data, contributed/v2.0). References carried by every file: doi:10.1016/S1364-6826(01)00114-6, doi:10.1029/2003JD003909, doi:10.1029/2008JD010483."
+notes = "Three agreeing statements: (1) the AWS Open Data Registry entry (awslabs/open-data-registry datasets/gnss-ro-opendata.yaml) says 'a creative commons license (.../licenses/by/4.0/legalcode) applied to the data contributed by the NASA JPL of the California Institute of Technology' and that each file names its license in 'data_use_license'; (2) the gnss-ro/aws-opendata Readme 'Data use licenses' section lists NASA JPL under the same CC BY 4.0 link (both documents misspell the host as 'creativecommmons.org'; the path is the CC BY 4.0 legal code); (3) every downloaded file's global attribute data_use_license is 'http://creativecommons.org/licenses/by/4.0/' and institution is 'jpl' (checked per file by download.sh, build.sh and verify.sh). UCAR and ROM SAF contributions, which carry different terms, are excluded. Attribute NASA JPL / Caltech and the AWS RO archive."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official AWS Open Data Registry bucket maintained for the NASA ACCESS-funded GNSS-RO archive; satellite remote-sensing observations of the atmosphere, no human subjects."
+usage_notes = "Only the decoded L1 excess_phase float64 values are emitted; orbit, SNR, model and metadata variables are not part of the payload."
+
+[[origins]]
+id = "aws_gnss_ro_opendata"
+name = "AWS Registry of Open Data: Earth Radio Occultation (gnss-ro-data)"
+url = "https://registry.opendata.aws/gnss-ro-opendata/"
+type = "bucket"
+notes = "Anonymous S3 HTTPS endpoint https://gnss-ro-data.s3.amazonaws.com/ (us-east-1, not requester-pays). JPL contribution path contributed/v2.0/gnssro_cosmic1_jpl_l1b/YYYY/MM/DD/; objects last modified 2025-07 (ProductionDateTime 2025-07-08)."
+
+[[origins]]
+id = "gnss_ro_aws_opendata_docs"
+name = "gnss-ro/aws-opendata documentation repository"
+url = "https://github.com/gnss-ro/aws-opendata"
+type = "repository"
+notes = "Data description and license statement (Readme.md) and the reformatting writer (reformatting_system/rorefcat/src/rorefcat/Versions/version2.py) that defines excess_phase as f8 (signal, time), units 'meter', _FillValue -9.99e20."
+
+[[resources]]
+id = "cosmic1_jpl_l1b_pinned_selection"
+origin = "aws_gnss_ro_opendata"
+url = "https://gnss-ro-data.s3.amazonaws.com/contributed/v2.0/gnssro_cosmic1_jpl_l1b/"
+type = "file"
+version = "2,393 objects listed 2026-10-06; sources.tsv SHA-256 5debe8b2bad08a9f38427568b37c7b62a3ec79852c56de572f4cc26648a56c75"
+access = "Fetch exactly the keys in sources.tsv (curl, anonymous HTTPS, resumable) and validate each object's byte size and single-part S3 ETag MD5, then decode and check the product identity attributes."
+size_bytes = 1702213576
+sha256 = ""
+local_path = "downloads/jpl_gnssro_cosmic1_l1b_excess_phase_f64/files/"
+notes = "One NetCDF4 (HDF5 superblock v2) file per occultation, 251,672-1,337,792 bytes. Selection (discover.sh): for each month 2007-01..2016-12 the available day nearest the 15th (2016-07 -> 03, 2016-08 -> 28, 2016-11 -> 02, 2016-12 -> 30, all others the 15th), all keys of that day sorted, 20 evenly spaced (index floor((2i+1)n/40)); 2016-08-28 has only 13 files. Per-file sizes and MD5s are pinned in sources.tsv; the list's SHA-256 is enforced by scripts/gnssro.py."
+
+[[resources]]
+id = "aws_opendata_readme"
+origin = "gnss_ro_aws_opendata_docs"
+url = "https://raw.githubusercontent.com/gnss-ro/aws-opendata/master/Readme.md"
+type = "file"
+version = "master at download time"
+access = "Fetched by download.sh as license evidence; the 'Data use licenses' section must still state CC BY 4.0 for NASA JPL."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/jpl_gnssro_cosmic1_l1b_excess_phase_f64/aws-opendata-Readme.md"
+notes = "Documentation only; not decoded into samples. Not checksum-pinned because the README is a living document; the license sentence is checked instead."
+
+[local_paths]
+downloads = "downloads/jpl_gnssro_cosmic1_l1b_excess_phase_f64/"
+filtered = "filtered/jpl_gnssro_cosmic1_l1b_excess_phase_f64/"
+index = "index/jpl_gnssro_cosmic1_l1b_excess_phase_f64/"
+samples = "samples/jpl_gnssro_cosmic1_l1b_excess_phase_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/jpl_gnssro_cosmic1_l1b_excess_phase_f64/samples.jsonl"
+summary = "Validate 2,393 pinned JPL COSMIC-1 v2.6 L1b NetCDF4 files, locate the GPS L1 row of excess_phase through phase_observation_code and carrier_frequency, strip leading/trailing _FillValue, and emit the remaining native little-endian float64 values of each occultation as one sample."
+deterministic_notes = "sources.tsv pins keys, sizes and S3 MD5 ETags (list SHA-256 enforced). Every file must carry mission=cosmic1, institution=jpl, institution_version=v2.6, VersionID=2.0, ShortName=gnssro_cosmic1_jpl_l1b, ProcessingLevel=1B, data_use_license=CC BY 4.0 and GranuleID equal to its key, or the recipe fails. A pure-stdlib HDF5 reader (scripts/h5lite.py) verifies every Jenkins-lookup3 metadata checksum; excess_phase must be the exact IEEE little-endian f8 datatype with contiguous layout and no filter pipeline. Samples are written in sources.tsv order under samples/<id>/<series>/<year>/. verify.sh re-derives every sample through the creation-order link index with separate array-based code, byte-compares, re-reads each sample to reject fill, NaN/inf, |x| >= 1e9, fewer than 1,000 values, constant or low-diversity series and exact duplicates, recomputes the drop counts and aggregate SHA-256, requires all ten years to be present, and checks manifest totals. A synthetic HDF5 self-test (scripts/selftest_gnssro.py) runs first in build and verify."
+
+[[series]]
+id = "cosmic1_jpl_l1b_l1_excess_phase_f64"
+description = "Calibrated GPS L1 excess phase of one COSMIC-1 radio-occultation sounding, JPL processing v2.6."
+semantic_meaning = "Excess phase, the carrier phase path in excess of the vacuum optical path between the GPS transmitter and the COSMIC-1 receiver, in metres, sampled at 50 Hz (open-loop tracking) over one atmospheric limb occultation of about 1-2.5 minutes. The profile is a smooth ramp of up to several thousand metres as the ray descends into or rises out of the troposphere, with fine atmospheric and tracking structure superimposed."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The NetCDF4 variable is stored as IEEE-754 little-endian float64; emitted bytes are copied unchanged from the contiguous raw-data extent of the L1 row (no rescaling, differencing or re-encoding)."
+source_resources = ["cosmic1_jpl_l1b_pinned_selection"]
+source_format = "NetCDF4 (HDF5) GNSS-RO L1b calibratedPhase file, AWS RO archive format version 2.0"
+source_field = "excess_phase (signal, time), the row whose phase_observation_code starts with L1 and whose carrier_frequency is 1575.42 MHz"
+filtered_input_path = "filtered/jpl_gnssro_cosmic1_l1b_excess_phase_f64/ingest_stats.json"
+filtering = "One sample per pinned occultation file. Only the GPS L1 row is kept; L2 rows (semi-codeless L2W or L2C/L2X, often with long fill runs) and all other variables are excluded. A sounding is dropped (counted by reason in ingest_stats.json) if it has no unique L1 row at 1575.42 MHz, the L1 row is entirely fill, the trimmed L1 span contains interior fill/NaN, is shorter than 1,000 values or is constant, the time axis over the span is not monotonic 50 Hz (median step outside 0.0199-0.0201 s), or excess_phase is not contiguous unfiltered little-endian f8."
+missing_value_policy = "_FillValue -9.99e20 and non-finite values are missing. Leading and trailing missing values of the L1 row are stripped; a sounding with any missing value inside the remaining span is dropped rather than gap-concatenated. No value is imputed or altered; verify.sh asserts no fill, NaN or inf remains in any sample."
+conversion = "Parse the HDF5 metadata with scripts/h5lite.py, resolve excess_phase, phase_observation_code, carrier_frequency and time through the root group's dense link index, select the L1 row, and copy bytes [addr + 8*(row*ntimes + start), addr + 8*(row*ntimes + end)) of the contiguous excess_phase extent to one sample file in time order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 excess-phase time series"
+sample_geometry = "occultation_time_series_1d"
+sample_rank = 1
+sample_axes = ["time_50hz"]
+natural_record_kind = "gnss_radio_occultation_sounding_l1_excess_phase_profile"
+sample_count = 2393
+total_size_bytes = 107770888
+output_path = "samples/jpl_gnssro_cosmic1_l1b_excess_phase_f64/cosmic1_jpl_l1b_l1_excess_phase_f64/"

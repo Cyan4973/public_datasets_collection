@@ -1,0 +1,155 @@
+manifest_version = 1
+dataset_id = "csiro_parkes_uwl_search_mode_u8"
+name = "CSIRO Parkes UWL/Medusa 8-bit Search-Mode Filterbank Rows (P1018 Proxima Centauri)"
+description = "Native unsigned 8-bit detected radio power and cross-power (AA, BB, CR, CI coherency products) from eight complete PSRFITS SEARCH-mode SUBINT rows recorded by the Parkes 64 m telescope's Ultra-Wideband Low receiver and Medusa backend while tracking Proxima Centauri (project P1018, April-May 2019)."
+homepage = "https://data.csiro.au/collection/csiro:39717"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Zic, Andrew; Murphy, Tara; Lenc, Emil; Price, Danny; Croft, Steve; Lynch, Christene; & Kaplan, David (2019): Parkes observations for project P1018 semester 2019APRS_01 ... _07. v1. CSIRO. Data Collection. DOIs 10.25919/5ccc698a95721 (_01), 10.25919/5cd04712280ca (_02), 10.25919/5cd09f3af1dd7 (_03), 10.25919/5cd159a5f273a (_04), 10.25919/5cd1b5aad4a5b (_05), 10.25919/5cda6d25e9d25 (_06), 10.25919/5d9516d17f6d0 (_07)."
+notes = "Each DAP collection record and its /data endpoint declare licence 'Creative Commons Attribution 4.0 International Licence' (DAP licence 1121, rightsUri https://creativecommons.org/licenses/by/4.0/), accessLevel 'Public', dataRestricted FALSE, no embargo; rights 'All Rights (including copyright) CSIRO 2019.' download.sh re-checks licence, licence link, access level, DOI and title for every collection on every run. Attribution must cite the CSIRO collection DOIs above."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official CSIRO Data Access Portal (DAP) collections for Australia Telescope National Facility project P1018; anonymous presigned S3 links issued by the public DAP API. No mirrors."
+usage_notes = "Radio-astronomy instrument data of a stellar target; no personal or sensitive content."
+
+[[origins]]
+id = "csiro_dap_p1018"
+name = "CSIRO Data Access Portal: Parkes observations for project P1018 semester 2019APRS"
+url = "https://data.csiro.au/dap/ws/v2/collections?q=Parkes%20observations%20for%20project%20P1018"
+type = "data_portal"
+notes = "Nine P1018 collections exist; 66064 is empty and 41516 holds BPSR (different backend) files, so only the seven UWL/Medusa collections 39663, 39717, 39718, 39719, 39720, 39722, 41486 are used. Each collection's <id>.log maps files to the source directory (ProxCen_S, 1421-490_S, 1934-638_S, J1644-4559_S, *_R, *_ND_S, *_ND_R)."
+
+[[resources]]
+id = "p1018_proxcen_subint_rows"
+origin = "csiro_dap_p1018"
+url = "https://data.csiro.au/dap/ws/v2/collections/{collection_id}/data"
+type = "shard"
+version = "DAP collections v1 (published 2019-05-07 .. 2019-10-04); pinned file ids, sizes and SHA-256 values in sources.tsv"
+access = "Anonymous DAP API listing returns presigned s3.data.csiro.au links (48 h expiry), refreshed every run. Two exact HTTP 206 byte ranges per file: bytes 0-25919 (primary + HISTORY + SUBINT headers) and one 54,792,232-byte SUBINT row (row 112 of 224) starting at 25920 + 112 * 54792232."
+size_bytes = 438545216
+sha256 = ""
+local_path = "downloads/csiro_parkes_uwl_search_mode_u8/"
+notes = "Eight ProxCen_S on-source observations, one row each from file _8 (the middle file of each 16-file observation): uwl_190429_130235, uwl_190429_163748, uwl_190430_162008, uwl_190501_150103, uwl_190502_150319, uwl_190503_135452, uwl_190504_134200, uwl_190504_173107. Every source file is 12,273,488,640 bytes; whole-file MD5s from the collection logs are recorded in sources.tsv for provenance but cannot be checked against ranges. Header-range, row-aux-prefix and full-row SHA-256 values are all pinned in sources.tsv (row hashes recorded from the first driver download on 2026-10-05; every row arrived in one exact 206 range). Size = 8 * (25,920 + 54,792,232) = 438,545,216 bytes, excluding ~1 MB of DAP API JSON; the realized downloads directory is 439,509,771 bytes including API JSON and checksum sidecars."
+
+[local_paths]
+downloads = "downloads/csiro_parkes_uwl_search_mode_u8/"
+filtered = "filtered/csiro_parkes_uwl_search_mode_u8/"
+index = "index/csiro_parkes_uwl_search_mode_u8/"
+samples = "samples/csiro_parkes_uwl_search_mode_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/csiro_parkes_uwl_search_mode_u8/samples.jsonl"
+summary = "Refresh DAP presigned links, range-fetch the FITS headers and one mid-file SUBINT row from each of eight pinned ProxCen_S observations, validate PSRFITS cards and row auxiliary columns, then split each row's DATA cell (TDIM (3328,4,4096), channel fastest, then polarization, then time) into four raw uint8 planes of 4096 time samples x 3328 channels, one per polarization product."
+deterministic_notes = "Selection rule (documented in discover.sh / scripts/select_sources.py): among the 39 ProxCen_S observations that have all 16 files inside one UWL collection, take indices round(i*38/7), i=0..7, in time order; use file _8 and row NAXIS2//2 = 112. All eight headers carry FRONTEND UWL, BACKEND Medusa, OBS_MODE SEARCH, SRC_NAME ProxCen_S, TRK_MODE TRACK, CAL_MODE OFF, OBSFREQ 2368, NBITS 8, SIGNINT 0, ZERO_OFF 127.5, NPOL 4, POL_TYPE AABBCRCI, NCHAN 3328, CHAN_BW 1 MHz, NSBLK 4096, TBIN 128 us, NAXIS1 54792232, NAXIS2 224, NSUBOFFS 1792. The DATA column offset (266,280 bytes) is computed from TFORM1..9 widths and must equal NAXIS1 minus the 54,525,952-byte DATA cell; the HDU layout must predict the DAP fileSize exactly. Pinned rows must have OFFS_SUB = (112 + 0.5) * TSUBINT, DAT_FREQ = 704.5 + k MHz, and all 3328 DAT_WTS nonzero. Output order and file names are deterministic; floors: 32 samples of 13,631,488 values each. Realized build: 32 samples, 436,207,616 bytes; SHA-256 over the concatenated raw 32-byte per-sample SHA-256 digests, sorted by sample_path (raw bytes, not hex strings), is 40fef49881f6b3188443e2e05f67e245d04c06daa2459cc67e9827db93d3ba25."
+
+[[series]]
+id = "parkes_uwl_search_aa_u8"
+description = "AA (receptor A auto-power) plane of one Parkes UWL SEARCH-mode SUBINT row."
+semantic_meaning = "Requantized detected power of receptor A (linear feed) per 1 MHz channel (704-4032 MHz) and per 128 us sample over one 0.524 s sub-integration while tracking Proxima Centauri; 8-bit unsigned code with ZERO_OFF 127.5, scaled per channel by the backend."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "PSRFITS SEARCH-mode DATA with NBITS 8 and SIGNINT 0 stores one unsigned byte per value; bytes are copied verbatim (no byte swapping, scaling, or offset). DAT_SCL/DAT_OFFS (outval = dataval*scl + offs) are not applied."
+source_resources = ["p1018_proxcen_subint_rows"]
+source_format = "PSRFITS (FITS binary table) SEARCH-mode SUBINT HDU, Medusa backend, 8-bit unsigned samples"
+source_field = "SUBINT column DATA (TFORM '54525952B', TDIM '(3328,4,4096)'), polarization index 0 (AA) of POL_TYPE AABBCRCI"
+filtered_input_path = "filtered/csiro_parkes_uwl_search_mode_u8/ingest_stats.json"
+filtering = "One complete SUBINT row (row 112 of 224, file _8) from each of eight pinned ProxCen_S on-source observations; calibrator scans (1421-490_S, 1934-638_S), pulsar J1644-4559_S, reference (_R) and noise-diode (_ND_S, _ND_R) scans are excluded."
+missing_value_policy = "No values are dropped, imputed, or masked. Pinned rows must have all 3328 channels with nonzero DAT_WTS (a zero-weight channel fails the recipe). Clipped code 255 values are genuine and kept; no pinned AA plane contains code 0. verify requires the combined 0/255 share to stay below 2% per plane."
+conversion = "Bytes data[t*13312 + 0*3328 + c] for t in 0..4095, c in 0..3327 of the DATA cell are written in (t, c) order: a row-major 4096 x 3328 uint8 matrix per sample."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw uint8 matrix, time-major, frequency channel fastest"
+sample_geometry = "dynamic_spectrum_time_by_frequency_channel_2d"
+sample_rank = 2
+sample_axes = ["time_sample", "frequency_channel"]
+natural_record_kind = "psrfits_search_subint_row_polarization_plane"
+sample_count = 8
+total_size_bytes = 109051904
+output_path = "samples/csiro_parkes_uwl_search_mode_u8/parkes_uwl_search_aa_u8/"
+
+[[series]]
+id = "parkes_uwl_search_bb_u8"
+description = "BB (receptor B auto-power) plane of one Parkes UWL SEARCH-mode SUBINT row."
+semantic_meaning = "Requantized detected power of receptor B (linear feed) per 1 MHz channel (704-4032 MHz) and per 128 us sample over one 0.524 s sub-integration while tracking Proxima Centauri; 8-bit unsigned code with ZERO_OFF 127.5, scaled per channel by the backend."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "PSRFITS SEARCH-mode DATA with NBITS 8 and SIGNINT 0 stores one unsigned byte per value; bytes are copied verbatim (no byte swapping, scaling, or offset). DAT_SCL/DAT_OFFS are not applied."
+source_resources = ["p1018_proxcen_subint_rows"]
+source_format = "PSRFITS (FITS binary table) SEARCH-mode SUBINT HDU, Medusa backend, 8-bit unsigned samples"
+source_field = "SUBINT column DATA (TFORM '54525952B', TDIM '(3328,4,4096)'), polarization index 1 (BB) of POL_TYPE AABBCRCI"
+filtered_input_path = "filtered/csiro_parkes_uwl_search_mode_u8/ingest_stats.json"
+filtering = "Same eight pinned SUBINT rows as parkes_uwl_search_aa_u8."
+missing_value_policy = "No values are dropped, imputed, or masked. Pinned rows must have all 3328 channels with nonzero DAT_WTS. Clipped code 255 values are genuine and kept; verify requires the combined 0/255 share to stay below 2% per plane. Exception: in uwl_190503_135452 BB, all 6,505 code-0 values come from eight unflagged single-sample zero-power dropouts (t multiple of 512, sub-bands 1344-2368 MHz) rather than clipping; they are kept verbatim, not masked. No other pinned BB plane contains code 0."
+conversion = "Bytes data[t*13312 + 1*3328 + c] for t in 0..4095, c in 0..3327 of the DATA cell are written in (t, c) order: a row-major 4096 x 3328 uint8 matrix per sample."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw uint8 matrix, time-major, frequency channel fastest"
+sample_geometry = "dynamic_spectrum_time_by_frequency_channel_2d"
+sample_rank = 2
+sample_axes = ["time_sample", "frequency_channel"]
+natural_record_kind = "psrfits_search_subint_row_polarization_plane"
+sample_count = 8
+total_size_bytes = 109051904
+output_path = "samples/csiro_parkes_uwl_search_mode_u8/parkes_uwl_search_bb_u8/"
+
+[[series]]
+id = "parkes_uwl_search_cr_u8"
+description = "CR (real part of the A-B cross product) plane of one Parkes UWL SEARCH-mode SUBINT row."
+semantic_meaning = "Requantized real part of the cross-correlation of receptors A and B per 1 MHz channel (704-4032 MHz) and per 128 us sample over one 0.524 s sub-integration while tracking Proxima Centauri; 8-bit unsigned code centred on ZERO_OFF 127.5 (signed physical quantity), scaled per channel by the backend."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "PSRFITS SEARCH-mode DATA with NBITS 8 and SIGNINT 0 stores one unsigned byte per value; bytes are copied verbatim (no byte swapping, scaling, or offset). DAT_SCL/DAT_OFFS are not applied."
+source_resources = ["p1018_proxcen_subint_rows"]
+source_format = "PSRFITS (FITS binary table) SEARCH-mode SUBINT HDU, Medusa backend, 8-bit unsigned samples"
+source_field = "SUBINT column DATA (TFORM '54525952B', TDIM '(3328,4,4096)'), polarization index 2 (CR) of POL_TYPE AABBCRCI"
+filtered_input_path = "filtered/csiro_parkes_uwl_search_mode_u8/ingest_stats.json"
+filtering = "Same eight pinned SUBINT rows as parkes_uwl_search_aa_u8."
+missing_value_policy = "No values are dropped, imputed, or masked. Pinned rows must have all 3328 channels with nonzero DAT_WTS. The rare extreme codes 0 and 255 (together at most 0.015% of a plane) are clipped tails of the signed cross term and are kept; verify requires their combined share to stay below 2% per plane."
+conversion = "Bytes data[t*13312 + 2*3328 + c] for t in 0..4095, c in 0..3327 of the DATA cell are written in (t, c) order: a row-major 4096 x 3328 uint8 matrix per sample."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw uint8 matrix, time-major, frequency channel fastest"
+sample_geometry = "dynamic_spectrum_time_by_frequency_channel_2d"
+sample_rank = 2
+sample_axes = ["time_sample", "frequency_channel"]
+natural_record_kind = "psrfits_search_subint_row_polarization_plane"
+sample_count = 8
+total_size_bytes = 109051904
+output_path = "samples/csiro_parkes_uwl_search_mode_u8/parkes_uwl_search_cr_u8/"
+
+[[series]]
+id = "parkes_uwl_search_ci_u8"
+description = "CI (imaginary part of the A-B cross product) plane of one Parkes UWL SEARCH-mode SUBINT row."
+semantic_meaning = "Requantized imaginary part of the cross-correlation of receptors A and B per 1 MHz channel (704-4032 MHz) and per 128 us sample over one 0.524 s sub-integration while tracking Proxima Centauri; 8-bit unsigned code centred on ZERO_OFF 127.5 (signed physical quantity), scaled per channel by the backend."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "PSRFITS SEARCH-mode DATA with NBITS 8 and SIGNINT 0 stores one unsigned byte per value; bytes are copied verbatim (no byte swapping, scaling, or offset). DAT_SCL/DAT_OFFS are not applied."
+source_resources = ["p1018_proxcen_subint_rows"]
+source_format = "PSRFITS (FITS binary table) SEARCH-mode SUBINT HDU, Medusa backend, 8-bit unsigned samples"
+source_field = "SUBINT column DATA (TFORM '54525952B', TDIM '(3328,4,4096)'), polarization index 3 (CI) of POL_TYPE AABBCRCI"
+filtered_input_path = "filtered/csiro_parkes_uwl_search_mode_u8/ingest_stats.json"
+filtering = "Same eight pinned SUBINT rows as parkes_uwl_search_aa_u8."
+missing_value_policy = "No values are dropped, imputed, or masked. Pinned rows must have all 3328 channels with nonzero DAT_WTS. The rare extreme codes 0 and 255 (together at most 0.015% of a plane) are clipped tails of the signed cross term and are kept; verify requires their combined share to stay below 2% per plane."
+conversion = "Bytes data[t*13312 + 3*3328 + c] for t in 0..4095, c in 0..3327 of the DATA cell are written in (t, c) order: a row-major 4096 x 3328 uint8 matrix per sample."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw uint8 matrix, time-major, frequency channel fastest"
+sample_geometry = "dynamic_spectrum_time_by_frequency_channel_2d"
+sample_rank = 2
+sample_axes = ["time_sample", "frequency_channel"]
+natural_record_kind = "psrfits_search_subint_row_polarization_plane"
+sample_count = 8
+total_size_bytes = 109051904
+output_path = "samples/csiro_parkes_uwl_search_mode_u8/parkes_uwl_search_ci_u8/"

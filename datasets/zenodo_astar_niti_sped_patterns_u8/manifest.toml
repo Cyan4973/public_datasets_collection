@@ -1,0 +1,194 @@
+manifest_version = 1
+dataset_id = "zenodo_astar_niti_sped_patterns_u8"
+name = "NanoMegas ASTAR Scanning Precession Electron Diffraction Patterns UInt8 (NiTi Shape-Memory Wire, FZU Prague)"
+description = "Raw 8-bit 144x144 precession electron diffraction (SPED) spot patterns, one per TEM probe position, from every 16th scan row of the eight NiTi wire ASTAR orientation maps (blockfiles) in Zenodo records 15183487 and 15183021."
+homepage = "https://doi.org/10.5281/zenodo.15183487"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Molnárová, O., Tyc, O., Klinger, M., and Šittner, P. Data of the Reconstruction of martensite variant microstructures in grains of deformed NiTi shape memory alloy by TEM. Zenodo, 2024, DOI 10.5281/zenodo.15183487 (article: Materials Characterization, DOI 10.1016/j.matchar.2024.114084). Tyc, O. and Šittner, P. Dataset for Martensitic transformation induced by cooling NiTi wire under various tensile stresses. Zenodo record 15183021, 2024 (article: Applied Materials Today, DOI 10.1016/j.apmt.2024.102448)."
+notes = "Both Zenodo records declare license id cc-by-4.0 with access_right open for the whole deposit; each readme states that the .blo files are the raw data from ASTAR mapping. download.sh re-checks both live records (title, license, access, size and MD5 of every used .blo) before fetching. Record 15183021 carries the article DOI as its Zenodo DOI, so it is cited by record id. Preserve the authors and DOIs."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official author deposits on Zenodo from the Institute of Physics of the Czech Academy of Sciences (FZU, Prague); TEM instrument data of NiTi wire lamellae, no people involved."
+usage_notes = "Public CC BY 4.0 scientific instrument data; only diffraction-pattern camera intensities are emitted."
+
+[[origins]]
+id = "zenodo_15183487"
+name = "Zenodo record 15183487 (Molnárová, Tyc, Klinger, Šittner 2024)"
+url = "https://zenodo.org/records/15183487"
+type = "repository"
+version = "published 2024-06-19, record revision 10 (latest version)"
+notes = "Figure PNGs plus raw ASTAR blockfiles (.blo) and ACOM index results (.res) for Figs 5-8 and S5 of the Materials Characterization article on martensite variants in deformed NiTi wire grains."
+
+[[origins]]
+id = "zenodo_15183021"
+name = "Zenodo record 15183021 (Tyc, Šittner 2024)"
+url = "https://zenodo.org/records/15183021"
+type = "repository"
+version = "published 2024-10-03, record revision 12 (latest version)"
+notes = "Raw ASTAR blockfiles (.blo) and ACOM index results (.res) for Figs 9-11 of the Applied Materials Today article on martensite formed by cooling NiTi #5 wire under 50, 300 and 600 MPa."
+
+[[resources]]
+id = "record_15183487_metadata"
+origin = "zenodo_15183487"
+url = "https://zenodo.org/api/records/15183487"
+type = "api_query_result"
+version = "record 15183487"
+access = "Public Zenodo REST API; re-fetched on every run to re-check title, license (cc-by-4.0), access_right (open), and the size and MD5 of the five used blockfiles."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/zenodo_astar_niti_sped_patterns_u8/record_15183487.json"
+notes = "Live JSON whose bytes change with Zenodo statistics, so it is validated semantically rather than hashed."
+
+[[resources]]
+id = "record_15183021_metadata"
+origin = "zenodo_15183021"
+url = "https://zenodo.org/api/records/15183021"
+type = "api_query_result"
+version = "record 15183021"
+access = "Public Zenodo REST API; re-fetched on every run to re-check title, license (cc-by-4.0), access_right (open), and the size and MD5 of the three used blockfiles."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/zenodo_astar_niti_sped_patterns_u8/record_15183021.json"
+notes = "Live JSON, validated semantically."
+
+[[resources]]
+id = "fig5_blo"
+origin = "zenodo_15183487"
+url = "https://zenodo.org/api/records/15183487/files/Fig5.blo/content"
+type = "shard"
+version = "Fig5.blo md5:a726b0a4478bf93790dc8ad579da702a, 453,653,506 bytes"
+access = "HTTP Range requests: header bytes 0-4095, then scan rows 0, 16, ..., 160 of 162 (NX 135), row r = [25966 + r*135*20742, 25966 + (r+1)*135*20742). Each response must be 206 with Content-Range total 453653506."
+size_bytes = 30805966
+sha256 = ""
+local_path = "downloads/zenodo_astar_niti_sped_patterns_u8/Fig5.{header,rowNNN}.bin"
+notes = "Header SHA-256 6f6b3522fc910a845996f0b09f7eb35fcf2ec872ed7eb16d08aae5fe66835997; 11 rows x 2,800,170 bytes; per-row SHA-256 pins in row_sha256.tsv."
+
+[[resources]]
+id = "fig6_blo"
+origin = "zenodo_15183487"
+url = "https://zenodo.org/api/records/15183487/files/Fig6.blo/content"
+type = "shard"
+version = "Fig6.blo md5:f9e2647ef0b52a77b22c7a52b1a6f9cb, 583,380,228 bytes"
+access = "HTTP Range requests: header bytes 0-4095, then scan rows 0, 16, ..., 176 of 178 (NX 158), row r = [32220 + r*158*20742, ...). Each response must be 206 with Content-Range total 583380228."
+size_bytes = 39330928
+sha256 = ""
+local_path = "downloads/zenodo_astar_niti_sped_patterns_u8/Fig6.{header,rowNNN}.bin"
+notes = "Header SHA-256 7be6c4e7b05e1cba663dbd7eb9dd46615fd59a32d69965c0ae62db40b208e086; 12 rows x 3,277,236 bytes."
+
+[[resources]]
+id = "fig7_blo"
+origin = "zenodo_15183487"
+url = "https://zenodo.org/api/records/15183487/files/Fig7.blo/content"
+type = "shard"
+version = "Fig7.blo md5:745633a3a3be45bbc337b19a266a5e86, 635,258,471 bytes"
+access = "HTTP Range requests: header bytes 0-4095, then scan rows 0, 16, ..., 160 of 175 (NX 175), row r = [34721 + r*175*20742, ...). Each response must be 206 with Content-Range total 635258471."
+size_bytes = 39932446
+sha256 = ""
+local_path = "downloads/zenodo_astar_niti_sped_patterns_u8/Fig7.{header,rowNNN}.bin"
+notes = "Header SHA-256 bb35bc211256eef89ef36d0d21cb3432f68b524ea0e01f24e6cfe8fad6fc2e67; 11 rows x 3,629,850 bytes."
+
+[[resources]]
+id = "fig8_blo"
+origin = "zenodo_15183487"
+url = "https://zenodo.org/api/records/15183487/files/Fig8.blo/content"
+type = "shard"
+version = "Fig8.blo md5:d604fc67001a74514bbe5511367b44e8, 622,045,180 bytes"
+access = "HTTP Range requests: header bytes 0-4095, then scan rows 0, 16, ..., 192 of 204 (NX 147), row r = [34084 + r*147*20742, ...). Each response must be 206 with Content-Range total 622045180."
+size_bytes = 39642058
+sha256 = ""
+local_path = "downloads/zenodo_astar_niti_sped_patterns_u8/Fig8.{header,rowNNN}.bin"
+notes = "Header SHA-256 e3492609166990d19f419fc7a5686636eb3218f79776407360de9ca2b02f3673; 13 rows x 3,049,074 bytes."
+
+[[resources]]
+id = "figs5_blo"
+origin = "zenodo_15183487"
+url = "https://zenodo.org/api/records/15183487/files/Fig%20S5.blo/content"
+type = "shard"
+version = "Fig S5.blo md5:3c89835f180722c8a47212536eb4354d, 543,055,836 bytes"
+access = "HTTP Range requests: header bytes 0-4095, then scan rows 0, 16, ..., 160 of 170 (NX 154), row r = [30276 + r*154*20742, ...). Each response must be 206 with Content-Range total 543055836. The file key contains a space and is URL-encoded as Fig%20S5.blo."
+size_bytes = 35141044
+sha256 = ""
+local_path = "downloads/zenodo_astar_niti_sped_patterns_u8/FigS5.{header,rowNNN}.bin"
+notes = "Header SHA-256 efe138455c15a638945f518ece0fe7ba6fcce64e60f15f0251c62082226aae97; 11 rows x 3,194,268 bytes."
+
+[[resources]]
+id = "fig9_blo"
+origin = "zenodo_15183021"
+url = "https://zenodo.org/api/records/15183021/files/Fig9_ASTAR_NiTi5_15ms_chlazeni50MPa_zrno5_CL145mm_0p6precese.blo/content"
+type = "shard"
+version = "md5:feb1e665447b9da0de1a9b72d6a39566, 463,485,688 bytes"
+access = "HTTP Range requests: header bytes 0-4095, then scan rows 0, 16, ..., 144 of 147 (NX 152), row r = [26440 + r*152*20742, ...). Each response must be 206 with Content-Range total 463485688."
+size_bytes = 31531936
+sha256 = ""
+local_path = "downloads/zenodo_astar_niti_sped_patterns_u8/Fig9.{header,rowNNN}.bin"
+notes = "Header SHA-256 923248db0710b62695da2058eaf6d6bb064e7391c11a020a4e5cfbb2e9d83c40; 10 rows x 3,152,784 bytes."
+
+[[resources]]
+id = "fig10_blo"
+origin = "zenodo_15183021"
+url = "https://zenodo.org/api/records/15183021/files/Fig10_ASTAR_NiTi5_15ms_300MPa_chlazeni_zrno5.blo/content"
+type = "shard"
+version = "md5:c2c8ef14513453020309e942ab4f28b5, 963,309,016 bytes"
+access = "HTTP Range requests: header bytes 0-4095, then scan rows 0, 16, ..., 208 of 216 (NX 215), row r = [50536 + r*215*20742, ...). Each response must be 206 with Content-Range total 963309016."
+size_bytes = 62437516
+sha256 = ""
+local_path = "downloads/zenodo_astar_niti_sped_patterns_u8/Fig10.{header,rowNNN}.bin"
+notes = "Header SHA-256 e5d37c17252b1e8eb7f1b6683d4936275e7615db96c32eeee7de41557b4c6085; 14 rows x 4,459,530 bytes."
+
+[[resources]]
+id = "fig11_blo"
+origin = "zenodo_15183021"
+url = "https://zenodo.org/api/records/15183021/files/Fig11_ASTAR_NiTi5_15ms_chlazeni600MPa_zrno2_CL100mm_0p5precese_2_2.blo/content"
+type = "shard"
+version = "md5:6bd1b28d465b88059b8a6f1ed575b8d8, 430,836,206 bytes"
+access = "HTTP Range requests: header bytes 0-4095, then scan rows 0, 16, ..., 144 of 155 (NX 134), row r = [24866 + r*134*20742, ...). Each response must be 206 with Content-Range total 430836206."
+size_bytes = 27798376
+sha256 = ""
+local_path = "downloads/zenodo_astar_niti_sped_patterns_u8/Fig11.{header,rowNNN}.bin"
+notes = "Header SHA-256 6c58ceb0e759e6cb234045c7d45be966476ce945b71daa32c367f11e129b8b15; 10 rows x 2,779,428 bytes."
+
+[local_paths]
+downloads = "downloads/zenodo_astar_niti_sped_patterns_u8/"
+filtered = "filtered/zenodo_astar_niti_sped_patterns_u8/"
+index = "index/zenodo_astar_niti_sped_patterns_u8/"
+samples = "samples/zenodo_astar_niti_sped_patterns_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_astar_niti_sped_patterns_u8/samples.jsonl"
+summary = "Range-fetch the IMGBLO header and every 16th scan row of the eight NiTi ASTAR blockfiles, validate and strip each frame's 6-byte prefix, and write each 144x144 uint8 diffraction pattern unchanged as its own sample."
+deterministic_notes = "Fixed records, files, sizes, MD5s, header SHA-256s, row stride 16 (rows 0, 16, ... of each map; 92 rows), and per-row SHA-256 pins. download.sh checks 206 status, exact Content-Range and length for every range, the parsed header tuple (IMGBLO, magic 258, VBF offset 4096, DP offset, DP_SZ 144, NX, NY, DP offset + NX*NY*20742 == file size), and every frame prefix (u16 0x55AA, u32 index == row*NX + col). Samples are written in scan order Fig5, Fig6, Fig7, Fig8, FigS5, Fig9, Fig10, Fig11, then scan row, then scan column. verify.sh re-reads the headers by byte offset, byte-compares every sample with the pixel raster of its source frame, rejects constant patterns, patterns with fewer than 8 distinct values, and duplicate rates above 0.5%, and checks manifest totals. Row pins in row_sha256.tsv come from the first driver-run download (2026-10-06). Realized aggregate SHA-256 of all samples in index order: f6792033f01fb98b996caae1137f399c95f7996768066db827c102c35d95b974."
+
+[[series]]
+id = "sped_diffraction_pattern_u8"
+description = "Raw 8-bit 144x144 precession electron diffraction spot patterns from the NanoMegas ASTAR camera, one per TEM probe position, from eight NiTi wire orientation maps."
+semantic_meaning = "Camera intensity (8-bit digital number) at each pixel of the 144x144 ASTAR external-camera image of the TEM fluorescent screen, recorded while the 200 kV beam precesses (0.5-0.7 deg where noted) at one probe position of a 3-4 nm-step scan over a NiTi shape-memory wire lamella: sparse Bragg spots on a dark background with a saturated direct beam."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "A NanoMegas blockfile (.blo) holds a 4096-byte IMGBLO header, an NX*NY uint8 virtual bright-field image, then NX*NY diffraction frames in (NY, NX) raster order. Each frame is a 6-byte prefix (u16 0x55AA, u32 frame index) followed by 144*144 uint8 camera pixels, row-major. The prefix is validated and stripped; pixel values are emitted exactly as stored, with no rescaling, background subtraction, centring or binning. The virtual bright-field image is not emitted."
+source_resources = ["fig5_blo", "fig6_blo", "fig7_blo", "fig8_blo", "figs5_blo", "fig9_blo", "fig10_blo", "fig11_blo"]
+source_format = "NanoMegas ASTAR blockfile (.blo, IMGBLO header magic 258): per-scan-point precession diffraction frames in (NY, NX) raster order after the virtual bright-field image"
+source_field = "diffraction-pattern raster (uint8 camera DN per 144x144 pixel)"
+filtered_input_path = "filtered/zenodo_astar_niti_sped_patterns_u8/ingest_stats.json"
+filtering = "The eight NiTi 144x144 blockfiles (Fig5, Fig6, Fig7, Fig8, Fig S5 of record 15183487; Fig9, Fig10, Fig11 of record 15183021); scan rows 0, 16, 32, ... of each map; every scan point of each kept row (14,781 of 226,341 patterns). Figure PNGs, .res ACOM index results, virtual bright-field images, and blockfiles from other deposits (TiO2, FeCr 512x512) are not used."
+missing_value_policy = "uint8 camera frames have no missing-value sentinel. Every value is kept as stored, including 255 (saturated direct beam and strong reflections) and 0 (dark background in low-offset scans). A frame-prefix mismatch, a constant pattern, a pattern with fewer than 8 distinct values, a short row, a Content-Range or checksum mismatch, or byte-identical duplicates above 0.5% of patterns fail the recipe; nothing is dropped or imputed."
+conversion = "For each downloaded scan row of NX frames, check each frame's u16 0x55AA marker and u32 index (row*NX + col), drop that 6-byte prefix, and write the following 20,736 pixel values unchanged as one 144x144 uint8 sample named <scan>_r<row>_c<col>.bin; byte order is irrelevant for 8-bit values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 144x144 precession electron diffraction pattern, row-major"
+sample_geometry = "electron_diffraction_detector_frame_2d"
+sample_rank = 2
+sample_axes = ["detector_row", "detector_col"]
+natural_record_kind = "sped_scan_point_diffraction_pattern"
+sample_count = 14781
+total_size_bytes = 306498816
+output_path = "samples/zenodo_astar_niti_sped_patterns_u8/sped_diffraction_pattern_u8/"

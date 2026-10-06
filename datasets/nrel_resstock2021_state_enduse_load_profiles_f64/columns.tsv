@@ -1,0 +1,55 @@
+column	kind	fuel	end_use	expected	evidence
+out.electricity.bath_fan.energy_consumption	end_use	electricity	bath_fan	drop	dropped; b: <1,000 distinct values in 49 states (min 20)
+out.electricity.ceiling_fan.energy_consumption	end_use	electricity	ceiling_fan	keep	kept: no flag in any state; distinct values per state min 33950, median 35036 of 35,040; no exactly rescaled state pair
+out.electricity.clothes_dryer.energy_consumption	end_use	electricity	clothes_dryer	keep	kept: no flag in any state; distinct values per state min 21323, median 34904 of 35,040; no exactly rescaled state pair
+out.electricity.clothes_washer.energy_consumption	end_use	electricity	clothes_washer	keep	kept: no flag in any state; distinct values per state min 16518, median 34594 of 35,040; no exactly rescaled state pair
+out.electricity.cooking_range.energy_consumption	end_use	electricity	cooking_range	keep	kept: no flag in any state; distinct values per state min 27502, median 35036 of 35,040; no exactly rescaled state pair
+out.electricity.cooling.energy_consumption	end_use	electricity	cooling	keep	kept: no flag in any state; distinct values per state min 35012, median 35040 of 35,040; no exactly rescaled state pair
+out.electricity.dishwasher.energy_consumption	end_use	electricity	dishwasher	keep	kept: no flag in any state; distinct values per state min 11956, median 34208 of 35,040; no exactly rescaled state pair
+out.electricity.ext_holiday_light.energy_consumption	end_use	electricity	ext_holiday_light	drop	dropped; a: all +-0 in all 49 states (not modeled)
+out.electricity.exterior_lighting.energy_consumption	end_use	electricity	exterior_lighting	drop	dropped; b: <1,000 distinct values in 49 states (min 168); c: 168 of the state pairs are exact rescalings (fixed schedule x stock size)
+out.electricity.extra_refrigerator.energy_consumption	end_use	electricity	extra_refrigerator	drop	dropped; b: <1,000 distinct values in 49 states (min 91)
+out.electricity.fans_cooling.energy_consumption	end_use	electricity	fans_cooling	keep	kept: no flag in any state; distinct values per state min 23167, median 34347 of 35,040; no exactly rescaled state pair
+out.electricity.fans_heating.energy_consumption	end_use	electricity	fans_heating	keep	kept: no flag in any state; distinct values per state min 22399, median 32484 of 35,040; no exactly rescaled state pair
+out.electricity.freezer.energy_consumption	end_use	electricity	freezer	drop	dropped; b: <1,000 distinct values in 49 states (min 72); c: 168 of the state pairs are exact rescalings (fixed schedule x stock size)
+out.electricity.garage_lighting.energy_consumption	end_use	electricity	garage_lighting	drop	dropped; b: <1,000 distinct values in 49 states (min 168); c: 168 of the state pairs are exact rescalings (fixed schedule x stock size)
+out.electricity.heating.energy_consumption	end_use	electricity	heating	keep	kept: no flag in any state; distinct values per state min 23455, median 32572 of 35,040; no exactly rescaled state pair
+out.electricity.heating_supplement.energy_consumption	end_use	electricity	heating_supplement	drop	dropped; a: all +-0 in VT
+out.electricity.hot_tub_heater.energy_consumption	end_use	electricity	hot_tub_heater	drop	dropped; b: <1,000 distinct values in 49 states (min 75); c: 170 of the state pairs are exact rescalings (fixed schedule x stock size)
+out.electricity.hot_tub_pump.energy_consumption	end_use	electricity	hot_tub_pump	drop	dropped; b: <1,000 distinct values in 49 states (min 75); c: 170 of the state pairs are exact rescalings (fixed schedule x stock size)
+out.electricity.house_fan.energy_consumption	end_use	electricity	house_fan	drop	dropped; a: all +-0 in all 49 states (not modeled)
+out.electricity.interior_lighting.energy_consumption	end_use	electricity	interior_lighting	keep	kept: no flag in any state; distinct values per state min 31838, median 32118 of 35,040; no exactly rescaled state pair
+out.electricity.plug_loads.energy_consumption	end_use	electricity	plug_loads	keep	kept: no flag in any state; distinct values per state min 34415, median 35036 of 35,040; no exactly rescaled state pair
+out.electricity.pool_heater.energy_consumption	end_use	electricity	pool_heater	drop	dropped; a: all +-0 in CO ID MT OR UT WA WY; b: <1,000 distinct values in 42 states (min 128); c: 217 of the state pairs are exact rescalings (fixed schedule x stock size)
+out.electricity.pool_pump.energy_consumption	end_use	electricity	pool_pump	drop	dropped; b: <1,000 distinct values in 49 states (min 128); c: 170 of the state pairs are exact rescalings (fixed schedule x stock size)
+out.electricity.pumps_cooling.energy_consumption	end_use	electricity	pumps_cooling	drop	dropped; a: all +-0 in all 49 states (not modeled)
+out.electricity.pumps_heating.energy_consumption	end_use	electricity	pumps_heating	keep	kept: no flag in any state; distinct values per state min 19740, median 29481 of 35,040; no exactly rescaled state pair
+out.electricity.pv.energy_consumption	end_use	electricity	pv	drop	dropped; a: all +-0 in AL GA KY MS ND NE SD WV WY
+out.electricity.range_fan.energy_consumption	end_use	electricity	range_fan	drop	dropped; b: <1,000 distinct values in 49 states (min 14)
+out.electricity.recirc_pump.energy_consumption	end_use	electricity	recirc_pump	drop	dropped; a: all +-0 in all 49 states (not modeled)
+out.electricity.refrigerator.energy_consumption	end_use	electricity	refrigerator	drop	dropped; b: <1,000 distinct values in 49 states (min 72); c: 168 of the state pairs are exact rescalings (fixed schedule x stock size)
+out.electricity.total.energy_consumption	total	electricity	total	total	total: sum of the electricity end uses excluding pv (max rel. dev. over all 49 x 35,040 rows: 3.5e-14 across all fuel totals)
+out.electricity.vehicle.energy_consumption	end_use	electricity	vehicle	drop	dropped; a: all +-0 in all 49 states (not modeled)
+out.electricity.water_systems.energy_consumption	end_use	electricity	water_systems	keep	kept: no flag in any state; distinct values per state min 34860, median 35040 of 35,040; no exactly rescaled state pair
+out.electricity.well_pump.energy_consumption	end_use	electricity	well_pump	drop	dropped; b: <1,000 distinct values in 49 states (min 136); c: 170 of the state pairs are exact rescalings (fixed schedule x stock size)
+out.fuel_oil.heating.energy_consumption	end_use	fuel_oil	heating	drop	dropped; a: all +-0 in AR AZ NM UT
+out.fuel_oil.total.energy_consumption	total	fuel_oil	total	total	total: sum of the fuel_oil end uses
+out.fuel_oil.water_systems.energy_consumption	end_use	fuel_oil	water_systems	drop	dropped; a: all +-0 in DC ND SD
+out.natural_gas.clothes_dryer.energy_consumption	end_use	natural_gas	clothes_dryer	keep	kept: no flag in any state; distinct values per state min 1309, median 30080 of 35,040; no exactly rescaled state pair
+out.natural_gas.cooking_range.energy_consumption	end_use	natural_gas	cooking_range	keep	kept: no flag in any state; distinct values per state min 14495, median 34416 of 35,040; no exactly rescaled state pair
+out.natural_gas.fireplace.energy_consumption	end_use	natural_gas	fireplace	drop	dropped; b: <1,000 distinct values in 49 states (min 136); c: 184 of the state pairs are exact rescalings (fixed schedule x stock size)
+out.natural_gas.grill.energy_consumption	end_use	natural_gas	grill	drop	dropped; b: <1,000 distinct values in 49 states (min 114); c: 181 of the state pairs are exact rescalings (fixed schedule x stock size)
+out.natural_gas.heating.energy_consumption	end_use	natural_gas	heating	keep	kept: no flag in any state; distinct values per state min 23646, median 31381 of 35,040; no exactly rescaled state pair
+out.natural_gas.hot_tub_heater.energy_consumption	end_use	natural_gas	hot_tub_heater	drop	dropped; a: all +-0 in CT DC MA ME NH RI VT; b: <1,000 distinct values in 42 states (min 75); c: 130 of the state pairs are exact rescalings (fixed schedule x stock size)
+out.natural_gas.lighting.energy_consumption	end_use	natural_gas	lighting	drop	dropped; a: all +-0 in DC; b: <1,000 distinct values in 48 states (min 136); c: 214 of the state pairs are exact rescalings (fixed schedule x stock size)
+out.natural_gas.pool_heater.energy_consumption	end_use	natural_gas	pool_heater	drop	dropped; a: all +-0 in DC ME VT; b: <1,000 distinct values in 46 states (min 128); c: 172 of the state pairs are exact rescalings (fixed schedule x stock size)
+out.natural_gas.total.energy_consumption	total	natural_gas	total	total	total: sum of the natural_gas end uses
+out.natural_gas.water_systems.energy_consumption	end_use	natural_gas	water_systems	keep	kept: no flag in any state; distinct values per state min 35040, median 35040 of 35,040; no exactly rescaled state pair
+out.propane.clothes_dryer.energy_consumption	end_use	propane	clothes_dryer	drop	dropped; a: all +-0 in DC; b: <1,000 distinct values in 3 states (min 785)
+out.propane.cooking_range.energy_consumption	end_use	propane	cooking_range	drop	dropped; b: <1,000 distinct values in 1 states (min 15, DC)
+out.propane.heating.energy_consumption	end_use	propane	heating	drop	dropped; a: all +-0 in DC
+out.propane.total.energy_consumption	total	propane	total	total	total: sum of the propane end uses
+out.propane.water_systems.energy_consumption	end_use	propane	water_systems	drop	dropped; a: all +-0 in DC
+out.site_energy.total.energy_consumption	total	site_energy	total	total	total: sum of the five fuel totals to <= 3.9e-7 relative
+out.wood.heating.energy_consumption	end_use	wood	heating	drop	dropped; a: all +-0 in all 49 states (not modeled)
+out.wood.total.energy_consumption	total	wood	total	total	total: sum of the wood end uses (all zero)

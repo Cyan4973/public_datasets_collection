@@ -1,0 +1,23 @@
+# Cassini RADAR Titan SAR BIDR Backscatter (BIBQ, 128 pix/deg) UInt8
+
+- Candidate id: `nasa_pds_cassini_radar_bidr_sigma0_u8`
+- Width: uint8
+- Quantity: Cassini Ku-band SAR normalized backscatter cross-section, incidence-angle corrected, in dB. Stored as uint8 DN with dB = DN*0.10000012 - 20.10001 and MISSING_CONSTANT=0. Oblique cylindrical projection at 128 pixels/degree (~351 m/pixel).
+- Source: https://asc-pds-cassini.s3.us-west-2.amazonaws.com/RADAR/CORADR_0035/AAREADME.TXT
+- Resources: https://asc-pds-cassini.s3.us-west-2.amazonaws.com/?list-type=2&prefix=RADAR/&delimiter=/, https://asc-pds-cassini.s3.us-west-2.amazonaws.com/RADAR/CORADR_0035/DATA/BIDR/BIBQH49N071_D035_T00AS01_V03.LBL, https://asc-pds-cassini.s3.us-west-2.amazonaws.com/RADAR/CORADR_0035/DATA/BIDR/BIBQH49N071_D035_T00AS01_V03.ZIP, https://asc-pds-cassini.s3.us-west-2.amazonaws.com/RADAR/CORADR_0045/DATA/BIDR/BIBQH22N068_D045_T003S01_V03.IMG
+- License: Public domain (USGS-produced NASA PDS product; NASA SMD open data)
+- License evidence: https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits
+- License quote: USGS Copyrights and Credits: 'USGS-authored or produced data and information are considered to be in the U.S. public domain.' The label gives PRODUCER_INSTITUTION_NAME = "U.S.G.S. FLAGSTAFF". Also covered by the NASA SMD policy used for the accepted nasa_pds_cassini_vims_qube_i16. The page exists per web search, but I could not re-fetch the quote this session because the proxy blocks it.
+- Natural record: One BIDR product: one SAR imaging segment (Sxx) of one Titan flyby (Txx) at 128 pix/deg. File BIBQH*.IMG, a 2D uint8 image (e.g. 13184x2048) after a fixed-length attached label.
+- Estimated samples: 37
+- Estimated primary values: 805,000,000
+- Estimated download bytes: 150,000,000
+- Estimated primary bytes: 805,000,000
+- Decode path: Fetch the .ZIP (stdlib zipfile, deflate) or the uncompressed .IMG. Parse the attached PDS3 label: RECORD_BYTES (2048 or 1536), LABEL_RECORDS (3-4), ^IMAGE start record, LINES, LINE_SAMPLES, SAMPLE_BITS=8, UNSIGNED_INTEGER. Skip LABEL_RECORDS*RECORD_BYTES and read LINES*LINE_SAMPLES bytes. A 1.7 MB BIBQF product decoded this way gave exactly 3296x512 pixels.
+- Novelty kind: new_source
+- Novelty evidence: novelty.py with --url .../RADAR/ and --terms cassini radar bidr titan gave no URL match. Hits are the accepted nasa_pds_cassini_vims_qube_i16 (same mission, different instrument: VIMS IR spectral cubes, i16, different files), SHARAD f32 radargrams, NEXRAD u8 weather radials and GPR i16. There is no planetary SAR backscatter imagery at any width. I label this new_source rather than new_modality only because the Magellan F-MIDR candidate is also planetary SAR. If this one is built first, it is new_modality.
+- Homogeneity: Use only BIBQ (8-bit dB backscatter), only the H tier (128 ppd), and only TARGET_NAME=TITAN. That gives 159 Titan products with identical SCALING_FACTOR 0.10000012 and OFFSET -20.10001, verified from all 160 H labels. Exclude the single Enceladus product (different offset, -15.1). Exclude the float BIDQ/BIEQ/BIFQ/BINQ products and the auxiliary 8-bit BILQ/BIMQ. The full H set is 3.68 GB, so take a chronological subset: flybys T0A-T28 (2004-10 to 2007-04), 37 products, ~805 M pixels, ZIPs ~150 MB. A shorter T0A-T19 cut (22 products, 344 MB) is also coherent.
+- Risks: 1) Swath-in-oblique-cylindrical framing leaves much MISSING_CONSTANT=0 fill (72% zeros in a probed T0A F-tier product). It is real but zero-heavy, and it must not be treated as degenerate. 2) Product versions are mixed V02/V03, but there are no duplicate product bases, so each product appears once. 3) A subset is required because of the 1 GB cap, so the cut point must be pinned. 4) The license relies on USGS public-domain and NASA SMD policy (precedent: accepted PDS recipes). The quote was not re-fetched due to the proxy. 5) Label RECORD_BYTES varies (2048 vs 1536) and LABEL_RECORDS varies (3 vs 4), so the parser must read them per file.
+- Probe evidence: The asc-pds-cassini listing has 234 CORADR volumes. Enumerating DATA/BIDR/BIBQ* .IMG in all volumes found 53 volumes with BIBQ: D:210, E:13, F:197, G:34, H:160, I:61 products. All 160 BIBQH labels were fetched: 159 TITAN plus 1 ENCELADUS, SAMPLE_BITS=8, scaling consistent. The CORADR_0035 BIBQH LBL documents SAR normalized backscatter in dB with the incidence correction f(I). A one-byte range GET on BIBQH22N068_D045_T003S01_V03.IMG returned 206. I decoded one 1.7 MB BIBQF product: 239 distinct values, non-zero range 1-251, mean 130.8, zlib ratio 0.23 (fill-dominated).
+
+Proposed by the autocollect scout on 2026-10-05 (transcript `.data/pipeline/logs/scout_8bit/scout.20261005_174424.jsonl`).

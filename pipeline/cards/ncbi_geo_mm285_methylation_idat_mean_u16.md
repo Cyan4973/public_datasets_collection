@@ -1,0 +1,23 @@
+# GEO GSE290585 Infinium Mouse Methylation (MM285) IDAT Bead-Type Mean Intensities UInt16
+
+- Candidate id: `ncbi_geo_mm285_methylation_idat_mean_u16`
+- Width: uint16
+- Quantity: Per-bead-type mean fluorescence intensity (iScan scanner DN, uint16) from Illumina Infinium Mouse Methylation BeadChip (GPL30650) IDAT files, field code 104 'Mean'; one value per bead type (361,821 per IDAT), Grn or Red channel
+- Source: https://ftp.ncbi.nlm.nih.gov/geo/series/GSE290nnn/GSE290585/
+- Resources: https://ftp.ncbi.nlm.nih.gov/geo/series/GSE290nnn/GSE290585/suppl/filelist.txt, https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM8817nnn/GSM8817338/suppl/GSM8817338_206102340052_R01C01_Grn.idat.gz, https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM8817nnn/GSM8817691/suppl/GSM8817691_207810940109_R06C01_Grn.idat.gz, https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=gds&id=200290585&retmode=json
+- License: NCBI public data: unrestricted (precedent: accepted ncbi_refseq_viral_genomes_u8, LicenseRef-NCBI-Public-Data)
+- License evidence: https://ftp.ncbi.nlm.nih.gov/README.ftp
+- License quote: You have reached the NCBI ftp server. NOTE: ALL DATA HERE IS PUBLIC, NON-SENSITIVE, UNRESTRICTED SCIENTIFIC DATA SHARING AMONG SCIENTIFIC COMMUNITIES. THESE SERVERS ARE INTENTIONALLY PUBLIC.
+- Natural record: One IDAT file = one BeadChip array position x one color channel (e.g. GSM8817338_206102340052_R01C01_Grn.idat.gz). Sample = the complete Mean array (N=361,821 uint16) in native IlluminaID order. Do not merge channels or arrays.
+- Estimated samples: 150
+- Estimated primary values: 54,273,150
+- Estimated download bytes: 400,141,383
+- Estimated primary bytes: 108,546,300
+- Decode path: curl per-sample .idat.gz from geo/samples/GSMxxxnnn/GSMxxxxxxx/suppl/ (names and sizes pinned from the series filelist.txt). gzip.open, then struct: magic 'IDAT', int64 version==3, int32 nFields, field table of (uint16 code, int64 offset). Field 1000 = int32 nSNPsRead N; field 104 = N little-endian uint16 Mean. Validate N==361821, version 3, and that barcode (402) / position fields match the filename. SD (103) and NBeads (107) are auxiliary at most.
+- Novelty kind: new_modality
+- Novelty evidence: novelty.py --url on the GSE290585 series dir: same-host-only matches (ncbi_taxdump, ncbi_gene_human, refseq recipes, all non-microarray). Terms 'idat illumina methylation', 'microarray' and 'ftp.ncbi.nlm.nih.gov/geo' returned no matches in recipes, registry, ledger, downstream or downstream_registry. No microarray or bead-array intensity material exists at any width locally or downstream.
+- Homogeneity: Single platform (GPL30650 MM285 BeadChip), single series and lab, iScan scanner, same 361,821-bead-type layout in every file. Grn and Red channels have different intensity distributions but the same unit and process. Builder may emit them as one series (each IDAT a sample) or as two primary series of the same family. Some samples in this atlas used bACE rather than bisulfite conversion; that changes biology, not instrument physics. Mouse tissues only: no human or personal data.
+- Risks: (1) Rights: GEO's own disclaimer (proxy-blocked here) says NCBI places no restrictions but submitters may claim IP. The evidence is the NCBI FTP README quote plus the accepted RefSeq NCBI-public-data precedent. Machine-generated intensities are factual data. (2) Extraction ratio is about 27% of compressed bytes (0.72 MB Mean per ~2.65 MB gz); the absolute kept signal (~108 MB) is solid. (3) Builder must confirm every file has version 3 and the same N; skip any odd file rather than pad. (4) Values span the background (~hundreds) to bright probes (tens of thousands), so the u16 width is used honestly. (5) Pick a deterministic subset, e.g. the first 75 GSM accessions by sort order (150 IDATs). The full series is 1,068 IDATs / 2.85 GB, too large to need.
+- Probe evidence: E-utilities: GPL30650 = 'Infinium Mouse Methylation BeadChip', Mus musculus; GSE290585 has 534 samples, suppfile IDAT, PMID 41057935. Series filelist.txt lists 1,068 IDAT.gz (534 Grn + 534 Red), 2.44-2.79 MB each, 2,853,410,148 B total; the first 75 GSMs = 150 files = 400,141,383 B. Per-sample suppl directory listing (GSM8817691) shows the Grn and Red .idat.gz. One-byte -L range GET on GSM8817338 Grn returned 206. A 64 KB range of one IDAT.gz, partially gunzipped, gave magic IDAT, version 3, 19 fields, nSNPsRead N=361,821, IlluminaID@210, SD@1,447,494, Mean@2,171,136, NBeads@2,894,778. The offsets confirm 2-byte Mean values (2,894,778-2,171,136 = 723,642 = 2N).
+
+Proposed by the autocollect scout on 2026-10-05 (transcript `.data/pipeline/logs/scout_16bit/scout.20261005_180613.jsonl`).

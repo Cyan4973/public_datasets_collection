@@ -236,6 +236,7 @@ gfz_gracefo_fgm_acal_bnec_f64	ok	16588788	132710304	64	259200	2073600	0	0	0	1	no
 modis_active_fire_mask_u8	ok	17280000	17280000	12	1440000	1440000	0	0	0	1	none	none
 tcia_lung_pet_ct_dx_u16	ok	18080000	36160000	3	5800000	11600000	0	0	0	1	none	none
 ncbi_taxdump	ok	18084993	57095412	5	2840433	11361732	0	0	0	1	none	none
+leap_climsim_lowres_e3sm_mmf_state_fields_f64	ok	19008000	152064000	825	23040	184320	0	0	0	1	none	none
 google_open_buildings_v3_s2_073_geometry_f32	ok	21297542	85190168	4	2173642.5	8694570	0	0	0	1	none	none
 osm_daily_way_references_i64	ok	21307666	170461328	3	6908370	55266960	0	0	0	1	none	none
 dc_lidar_2015_classification_u8	ok	21697532	21697532	3	7454412	7454412	0	0	0	1	none	none

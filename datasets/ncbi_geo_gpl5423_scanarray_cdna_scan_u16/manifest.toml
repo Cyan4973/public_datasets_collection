@@ -1,0 +1,127 @@
+manifest_version = 1
+dataset_id = "ncbi_geo_gpl5423_scanarray_cdna_scan_u16"
+name = "GEO GSE23678 Spruce cDNA Microarray Raw Laser-Scanner Images (PerkinElmer ScanArray Express, uint16)"
+description = "Native uint16 photomultiplier intensity rasters (10 um pixels, full slide) from a PerkinElmer ScanArray Express laser scanner: the Cy3 and Cy5 channel scans of 12 two-colour hybridizations of the Treenomix 21.8K spruce cDNA microarray (GEO platform GPL5423), GEO series GSE23678. The scans were decoded from the submitter's uncompressed TIFFs as published in GEO."
+homepage = "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE23nnn/GSE23678/"
+
+[license]
+name = "NCBI GEO public data (no NCBI-imposed use restrictions)"
+spdx = "LicenseRef-NCBI-Public-Data"
+url = "https://ftp.ncbi.nlm.nih.gov/README.ftp"
+citation = "GEO series GSE23678, 'Interior spruce_Bark_Leptographium abietinum_inoculation' (contributors N. Kolosova, R. White, S. Ralph, C. Breuil, J. Bohlmann; Michael Smith Laboratories, University of British Columbia), platform GPL5423 Treenomix spruce 21.8K cDNA microarray, NCBI Gene Expression Omnibus, public 2012-12-01, BioProject PRJNA130807."
+notes = "Evidence: the NCBI FTP README on the same host says 'NOTE: ALL DATA HERE IS PUBLIC, NON-SENSITIVE, UNRESTRICTED SCIENTIFIC DATA SHARING AMONG SCIENTIFIC COMMUNITIES. THESE SERVERS ARE INTENTIONALLY PUBLIC.' download.sh re-fetches README.ftp on every run and stops if that sentence is gone. Caveat: GEO's own disclaimer page (www.ncbi.nlm.nih.gov/geo/info/disclaimer.html) is proxy-blocked from this environment, so its wording was not re-verified here. As commonly quoted, it says NCBI places no restrictions on the use or distribution of GEO data, but submitters may claim patent, copyright or other IP rights in data they submit, and NCBI cannot assess such claims. The GSE23678 series and sample records carry no rights, license, copyright or restriction statement (checked in the series-matrix header). The emitted values are machine-generated scanner intensities. TIFF tag 33432 (Copyright) in every file reads 'Copyright (C) 2002 PerkinElmer, Inc.'. This is boilerplate that the ScanArray Express 2.1 acquisition software writes into each image it saves: it is byte-identical in all 24 files, dated 2002, four years before the August 2006 scans, and names the software vendor, not the lab. It is not a rights claim on the measurements, and the parser requires that exact string so a different claim would fail the build. Precedent for the NCBI-public-data basis: accepted ncbi_refseq_viral_genomes_u8 (LicenseRef-NCBI-Public-Data). Attribute GEO GSE23678 and its contributors."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NCBI GEO FTP (HTTPS) per-sample supplementary files only, pinned by name, size, gzip CRC32/ISIZE and sha256. The organism is interior spruce (Picea glauca x engelmannii) bark RNA. There are no human subjects. The TIFF Artist tag names the institution ('BC Forestry Sciences') and the HostComputer tag says 'Windows 2000'; ImageDescription carries 'ProtocolDesc=Dr. Tai'. These stay in the source files and are not emitted."
+usage_notes = "Only the decoded pixel planes are emitted. Scanner settings (PMT gain, laser power, fluor) and GEO sample identity are carried in the sample index as provenance metadata."
+
+[[origins]]
+id = "ncbi_geo_ftp"
+name = "NCBI Gene Expression Omnibus FTP (HTTPS), series GSE23678 and its sample supplementary directories"
+url = "https://ftp.ncbi.nlm.nih.gov/geo/"
+type = "data_portal"
+notes = "GSE23678: 36 two-colour hybridizations on GPL5423. Each GSM supplementary directory holds one Cy3 and one Cy5 .tif.gz scan (72 TIFFs, 1.75 GB in total, also bundled as GSE23678_RAW.tar). The series filelist.txt gives names and sizes."
+
+[[resources]]
+id = "scan_tiff_selection"
+origin = "ncbi_geo_ftp"
+url = "https://ftp.ncbi.nlm.nih.gov/geo/samples/"
+type = "file"
+version = "GEO supplementary files uploaded 2010-08-18 (Last-Modified Wed, 18 Aug 2010); scans acquired 2006-08-01 and 2006-08-03"
+access = "Anonymous HTTPS GET of 24 exact objects geo/samples/GSMnnnnnn/<GSM>/suppl/<GSM>_<slide>_<Cy3|Cy5>_<date>.tif.gz listed in sources.tsv. These are the first 12 GSM accessions of GSE23678 in sort order (hyb1..hyb12), with both channels for each. discover.sh documents how they were resolved using metadata requests only."
+size_bytes = 584061895
+sha256 = ""
+local_path = "downloads/ncbi_geo_gpl5423_scanarray_cdna_scan_u16/tiff/"
+notes = "sources.tsv pins per-file size (equal to filelist.txt and HTTP Content-Length), gzip trailer CRC32 and ISIZE (the exact uncompressed TIFF size), ImageLength, TIFF DateTime and sha256. The sha256 values were taken from download_plan.tsv after the first full download (2026-10-05), and download.sh, build.sh and verify.sh now enforce them."
+
+[[resources]]
+id = "ncbi_ftp_readme"
+origin = "ncbi_geo_ftp"
+url = "https://ftp.ncbi.nlm.nih.gov/README.ftp"
+type = "file"
+version = "fetched on every download run"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/ncbi_geo_gpl5423_scanarray_cdna_scan_u16/meta/README.ftp"
+notes = "Rights evidence. download.sh requires the public-data notice sentence to be present."
+
+[[resources]]
+id = "gse23678_filelist"
+origin = "ncbi_geo_ftp"
+url = "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE23nnn/GSE23678/suppl/filelist.txt"
+type = "file"
+version = "fetched on every download run"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/ncbi_geo_gpl5423_scanarray_cdna_scan_u16/meta/GSE23678_filelist.txt"
+notes = "Upstream drift check. Every pinned file must still be listed with its pinned size."
+
+[local_paths]
+downloads = "downloads/ncbi_geo_gpl5423_scanarray_cdna_scan_u16/"
+filtered = "filtered/ncbi_geo_gpl5423_scanarray_cdna_scan_u16/"
+index = "index/ncbi_geo_gpl5423_scanarray_cdna_scan_u16/"
+samples = "samples/ncbi_geo_gpl5423_scanarray_cdna_scan_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/ncbi_geo_gpl5423_scanarray_cdna_scan_u16/samples.jsonl"
+summary = "Download 24 pinned ScanArray Express .tif.gz scans (12 hybridizations x Cy3/Cy5), validate pins and the exact TIFF layout, gunzip, concatenate the one-row strips in StripOffsets order, and emit each whole scan as one raw little-endian uint16 raster. Cy3 and Cy5 go to separate primary series."
+deterministic_notes = "Fixed file list in sources.tsv (first 12 GSMs of GSE23678 by accession; no live listing at build time). Rows are processed in (GSM, dye) order. Samples are written as samples/<id>/<series>/<GSM>_hybNN_<cy3|cy5>.bin. The parser accepts only: 'II' 42; a single IFD (next 0) with exactly the 23 ScanArray tags; ImageWidth 2200; ImageLength 6000..8000 and equal to the pin; BitsPerSample 16; Compression 1; Photometric 1; SamplesPerPixel 1; RowsPerStrip 1; every StripByteCount 4400; strips tiling the pixel area with no gaps and ending exactly at EOF; 2540 dpi (10 um); Make 'PerkinElmer'; Model 'Express<TAB>430723...'; Software starting 'ScanArray Express'; the PerkinElmer copyright boilerplate; ImageDescription FluorName matching the filename dye, Resolution 10, ProtocolName 'Easy Scan', LaserPower 90. Build and verify fail on any duplicate raster, fewer than 1,000 distinct values, more than 5% zeros, more than 2% saturated (65535) pixels, or more than 5% constant rows. verify.sh re-derives every row with a separate streaming TIFF reader and compares it byte for byte. The parsers are self-tested on synthetic ScanArray-layout TIFFs (monotone and permuted strip placement, ten malformed variants) before every run. Floor: 24 samples, 186,067,200 values per series, median 15.5 M values per sample."
+
+[[series]]
+id = "scanarray_cy3_scan_u16"
+description = "Cy3-channel full-slide scan (543 nm laser, 570 nm emission filter) of one GPL5423 spruce cDNA microarray hybridization, one scan per sample."
+semantic_meaning = "Per-pixel photomultiplier fluorescence intensity in scanner digital numbers (uint16, 0..65535; linear, uncalibrated) at 10 um pitch over the scanned slide area. Rows step along the ~70 mm scanned length and columns span the 22 mm scanned width. The raster contains the printed cDNA spot lattice (hybridized Cy3-labelled cDNA), slide background, saturated spot cores and slide edges."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The scanner software stores each channel as an uncompressed 16-bit grayscale TIFF. GEO serves it gzip-wrapped. The recipe only removes the gzip and TIFF wrappers and joins the 1-row strips in order. Pixel words are already little-endian ('II') and are written unchanged; no scaling, cropping, tiling or background subtraction is applied."
+source_resources = ["scan_tiff_selection"]
+source_format = "Uncompressed little-endian baseline TIFF (gzip-wrapped .tif.gz) written by ScanArray Express 2.1.0.0: one IFD, 2200 x H pixels, BitsPerSample 16, Photometric BlackIsZero, 1 sample per pixel, one 4,400-byte strip per row"
+source_field = "IFD0 grayscale pixel plane of the <GSM>_..._Cy3_....tif scan: Cyanine 3 channel PMT intensity"
+filtered_input_path = "filtered/ncbi_geo_gpl5423_scanarray_cdna_scan_u16/ingest_stats.json"
+filtering = "Only the Cy3 TIFFs of the 12 selected GSMs (GSM572663..GSM575585, hyb1..hyb12). Every pixel of every scan is kept."
+missing_value_policy = "A scanner raster has no missing-value code. 0 (the lowest digitized reading) and 65535 (PMT/ADC saturation in bright spot cores) are native readings and are kept in place, never remapped or dropped. A source that fails its pins or the layout checks, or a raster that is duplicated, has fewer than 1,000 distinct values, more than 5% zeros, more than 2% saturated pixels or more than 5% constant rows, fails build and verify."
+conversion = "gunzip the .tif.gz (CRC32/ISIZE checked), parse IFD0 with struct, then for strip i = 0..H-1 take the 4,400 bytes at StripOffsets[i] and concatenate them. The result is H x 2200 little-endian uint16 words in row-major order, one .bin per scan."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw uint16 raster, row-major H x 2200 (H = 6985..7128, per-sample shape in the index)"
+sample_geometry = "2d_microarray_slide_scan_raster"
+sample_rank = 2
+sample_axes = ["scan_row", "scan_column"]
+natural_record_kind = "single_channel_microarray_slide_scan_tiff"
+sample_count = 12
+total_size_bytes = 372134400
+output_path = "samples/ncbi_geo_gpl5423_scanarray_cdna_scan_u16/scanarray_cy3_scan_u16/"
+
+[[series]]
+id = "scanarray_cy5_scan_u16"
+description = "Cy5-channel full-slide scan (633 nm laser, 670 nm emission filter) of the same 12 GPL5423 hybridizations, one scan per sample."
+semantic_meaning = "Per-pixel photomultiplier fluorescence intensity in scanner digital numbers (uint16, 0..65535; linear, uncalibrated) at 10 um pitch. This is the Cy5 (Cyanine 5) channel of the same slides as scanarray_cy3_scan_u16, recorded by the same scanner in the same session with its own PMT gain. It is a separate physical reading (different laser, filter and labelled cDNA population), not a copy of the Cy3 channel."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Same storage and handling as the Cy3 series: uncompressed 16-bit grayscale TIFF, gzip-wrapped by GEO; the recipe only removes wrappers and joins rows. Pixel words are written unchanged."
+source_resources = ["scan_tiff_selection"]
+source_format = "Uncompressed little-endian baseline TIFF (gzip-wrapped .tif.gz) written by ScanArray Express 2.1.0.0: one IFD, 2200 x H pixels, BitsPerSample 16, Photometric BlackIsZero, 1 sample per pixel, one 4,400-byte strip per row"
+source_field = "IFD0 grayscale pixel plane of the <GSM>_..._Cy5_....tif scan: Cyanine 5 channel PMT intensity"
+filtered_input_path = "filtered/ncbi_geo_gpl5423_scanarray_cdna_scan_u16/ingest_stats.json"
+filtering = "Only the Cy5 TIFFs of the 12 selected GSMs (GSM572663..GSM575585, hyb1..hyb12). Every pixel of every scan is kept."
+missing_value_policy = "Same policy as the Cy3 series: no missing-value code; 0 and 65535 are native readings kept in place. Pin or layout failures and degenerate rasters (duplicate, fewer than 1,000 distinct values, more than 5% zeros, more than 2% saturated, more than 5% constant rows) fail build and verify."
+conversion = "gunzip, parse IFD0, concatenate the H one-row 4,400-byte strips in StripOffsets order, and write H x 2200 little-endian uint16 words in row-major order, one .bin per scan."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw uint16 raster, row-major H x 2200 (H = 6985..7128, per-sample shape in the index)"
+sample_geometry = "2d_microarray_slide_scan_raster"
+sample_rank = 2
+sample_axes = ["scan_row", "scan_column"]
+natural_record_kind = "single_channel_microarray_slide_scan_tiff"
+sample_count = 12
+total_size_bytes = 372134400
+output_path = "samples/ncbi_geo_gpl5423_scanarray_cdna_scan_u16/scanarray_cy5_scan_u16/"

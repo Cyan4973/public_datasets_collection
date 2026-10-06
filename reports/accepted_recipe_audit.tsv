@@ -306,6 +306,7 @@ modelnet10_off_mesh_vertices_f32	ok	139741776	558967104	4899	8472	33888	0	0	0	1	
 figshare_fukuchi_marker_trajectories_f32	ok	144088704	576354816	5898	9768	39072	0	0	0	1	none	none
 openneuro_ds003097_aomic_dti_tensor_f32	ok	144506880	578027520	32	4515840	18063360	0	0	0	1	none	none
 weatherbench2_era5_pressure_level_fields_f32	ok	144967680	579870720	384	377520	1510080	0	0	0	1	none	none
+noaa_cdr_seaice_conc_nh_daily_u8	ok	149266432	149266432	1096	136192	136192	0	0	0	1	none	none
 mast_iue_swp_raw_image_u8	ok	150994944	150994944	256	589824	589824	0	0	0	1	none	none
 openneuro_ds004584_pd_rest_eeg_f32	ok	151477200	605908800	30	4817925	19271700	0	0	0	1	none	none
 dwd_radolan_rw_precip_i16	ok	155520000	311040000	192	810000	1620000	0	0	0	1	none	none

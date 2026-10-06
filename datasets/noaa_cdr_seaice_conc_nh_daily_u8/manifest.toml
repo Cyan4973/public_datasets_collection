@@ -1,0 +1,101 @@
+manifest_version = 1
+dataset_id = "noaa_cdr_seaice_conc_nh_daily_u8"
+name = "NOAA/NSIDC Sea-Ice Concentration CDR v4 Northern-Hemisphere Daily Grids UInt8"
+description = "Every 2022-2024 daily Northern-Hemisphere cdr_seaice_conc raster (F17, v04r00) of the NOAA/NSIDC passive-microwave sea-ice concentration climate data record, decoded from NetCDF4 with a pure-stdlib HDF5 reader to one native uint8 448x304 grid per day."
+homepage = "https://www.ncei.noaa.gov/products/climate-data-records/sea-ice-concentration"
+
+[license]
+name = "NOAA open data (U.S. Government work, no restrictions on use)"
+spdx = "LicenseRef-NOAA-NODD-Open-Data"
+url = "https://registry.opendata.aws/noaa-cdr-oceanic/"
+citation = "Meier, W. N., F. Fetterer, A. K. Windnagel, and J. S. Stewart. NOAA/NSIDC Climate Data Record of Passive Microwave Sea Ice Concentration, Version 4. Boulder, Colorado USA. NSIDC: National Snow and Ice Data Center. https://doi.org/10.7265/efmz-2t65"
+notes = "Registry of Open Data on AWS entry for the NOAA CDR oceanic buckets (including noaa-cdr-sea-ice-concentration-pds): 'NOAA data disseminated through NODD are open to the public and can be used as desired ... NOAA requests attribution'. The bucket's documentation/UseAgreement_01B-11.pdf states 'the CDR data sets are non-proprietary, publicly available, and no restrictions are placed upon their use' and asks for acknowledgement/citation. Every file carries the global attribute license = 'No constraints on data access or use' (checked per file by build and verify). Preserve NOAA/NSIDC attribution and the DOI."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NOAA Climate Data Record files from the NOAA Open Data Dissemination (NODD) S3 bucket; gridded geophysical satellite retrievals with no personal content."
+usage_notes = "Public U.S. Government environmental data suitable for model training with NOAA/NSIDC attribution retained."
+
+[[origins]]
+id = "noaa_nodd_seaice_cdr_s3"
+name = "NOAA NODD bucket noaa-cdr-sea-ice-concentration-pds"
+url = "https://noaa-cdr-sea-ice-concentration-pds.s3.amazonaws.com/"
+type = "bucket"
+notes = "Anonymous HTTPS access to the public us-east-1 bucket listed on the AWS Registry of Open Data (noaa-cdr-oceanic). No credentials or requester-pays."
+
+[[resources]]
+id = "s3_listings_2022_2024"
+origin = "noaa_nodd_seaice_cdr_s3"
+url = "https://noaa-cdr-sea-ice-concentration-pds.s3.amazonaws.com/?list-type=2&prefix=data/final/north/daily/{2022,2023,2024}/ and ?list-type=2&prefix=data/final/north/checksums/daily/{2022,2023,2024}/"
+type = "api_query_result"
+version = "ListObjectsV2 snapshot pinned by inventory SHA-256 3489cfd1292053c64c2a671e3cb93ef0a4fce0a0ded449050a4fda5530760f3d"
+access = "Six anonymous ListObjectsV2 pages (each under 1000 keys, IsTruncated=false)."
+size_bytes = 642822
+sha256 = ""
+local_path = "downloads/noaa_cdr_seaice_conc_nh_daily_u8/listings/"
+notes = "Parsed per <Contents> element into downloads/.../inventory.tsv (date, key, size, MD5 ETag). The inventory text must hash to the pinned SHA-256; download fails if NOAA adds, removes, renames or reprocesses any file in scope. Listing XML bytes themselves are not pinned because S3 adds per-object checksum metadata over time."
+
+[[resources]]
+id = "daily_checksum_manifests"
+origin = "noaa_nodd_seaice_cdr_s3"
+url = "https://noaa-cdr-sea-ice-concentration-pds.s3.amazonaws.com/data/final/north/checksums/daily/{YYYY}/seaice_conc_daily_nh_{YYYYMMDD}_f17_v04r00.nc.mnf"
+type = "file"
+version = "v04r00"
+access = "1096 anonymous HTTPS GETs (83 bytes each)."
+size_bytes = 90968
+sha256 = ""
+local_path = "downloads/noaa_cdr_seaice_conc_nh_daily_u8/checksums/"
+notes = "Each .mnf is 'filename,md5,size' and must match the listing key, ETag and size before the NetCDF file is accepted."
+
+[[resources]]
+id = "nh_daily_netcdf_2022_2024"
+origin = "noaa_nodd_seaice_cdr_s3"
+url = "https://noaa-cdr-sea-ice-concentration-pds.s3.amazonaws.com/data/final/north/daily/{YYYY}/seaice_conc_daily_nh_{YYYYMMDD}_f17_v04r00.nc"
+type = "file"
+version = "G02202 Version 4, product_version v04r00, platform DMSP F17 SSMIS, 2022-01-01..2024-12-31"
+access = "1096 anonymous HTTPS GETs (365 + 365 + 366 files), resumable, validated by size and MD5 against the .mnf manifests and S3 ETags."
+size_bytes = 258251783
+sha256 = ""
+local_path = "downloads/noaa_cdr_seaice_conc_nh_daily_u8/daily/"
+notes = "Per-file MD5s are pinned collectively through the inventory SHA-256. Files 2022-01-01..2022-05-31 (151) were written by netcdf 4.7.4/HDF5 1.10.6 (superblock v0, deflate only); 2022-06-01..2024-12-31 (945) by netcdf 4.8.1/HDF5 1.12.2 (superblock v2, shuffle+deflate). Five NSIDC processing runs (software ade5087, c9c632e, a11f275, 22aac63, dev) each cover a contiguous date block, all product_version v04r00. Excluded: Southern Hemisphere (316x332 grid), monthly and aggregate files, preliminary/ICDR files, ncei_data/ mirror, years outside 2022-2024, and all other variables (nsidc_bt/nsidc_nt intermediate estimates, stdev, qa, melt onset, interpolation flags)."
+
+[local_paths]
+downloads = "downloads/noaa_cdr_seaice_conc_nh_daily_u8/"
+filtered = "filtered/noaa_cdr_seaice_conc_nh_daily_u8/"
+index = "index/noaa_cdr_seaice_conc_nh_daily_u8/"
+samples = "samples/noaa_cdr_seaice_conc_nh_daily_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_cdr_seaice_conc_nh_daily_u8/samples.jsonl"
+summary = "List and pin the 1096 F17 v04r00 Northern-Hemisphere daily files of 2022-2024, download them with their .mnf checksum manifests, decode each file's cdr_seaice_conc variable with a pure-stdlib HDF5 reader, and emit one raw uint8 448x304 grid per day."
+deterministic_notes = "Inventory is pinned by SHA-256 over sorted (date, key, size, MD5) rows; every file is MD5-checked against its .mnf and ETag. The HDF5 reader verifies the lookup3 checksum of every metadata block it touches (superblock v2, OHDR/OCHK, fractal heap header, indirect and direct blocks, v2 B-tree header/internal/leaf nodes). The variable is selected by link name (nine uint8 variables share an identical layout), never by position. Build resolves it through the name-index v2 B-tree; verify resolves it independently through the creation-order v2 B-tree and byte-compares every sample. Per-file attribute checks: flag_values 251..255, flag_meanings, valid_range 0..100, scale_factor float32 0.01, _FillValue 255, _Unsigned true, units, standard_name, long_name; global cdr_variable, product_version v04r00, platform F17, sensor SSMIS, license, and time_coverage_start equal to the filename date. A synthetic HDF5 self-test (scripts/selftest_h5.py) runs before build and verify. Samples are sorted by date. Floors: 1096 samples of 136,192 values each (median 136,192 values); total 149,266,432 values."
+
+[[series]]
+id = "cdr_seaice_conc_nh_daily_u8"
+description = "Daily Northern-Hemisphere CDR sea-ice concentration rasters on the 25 km NSIDC polar stereographic north grid."
+semantic_meaning = "Per-cell CDR passive-microwave sea-ice concentration in percent (codes 0..100; multiply by scale_factor 0.01 for area fraction) for one UTC day, with the variable's own in-raster flag codes 251 pole_hole, 252 lakes, 253 coastal, 254 land_mask, 255 missing_data."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The NetCDF4 variable cdr_seaice_conc is stored as unsigned 8-bit integers (HDF5 fixed-point class, size 1, unsigned, little-endian; _Unsigned=true). The recipe inflates the single deflate-compressed chunk (1x448x304) and writes the stored integer codes unchanged; no scaling, masking or remapping is applied. The shuffle filter in the 945 netcdf-4.8.1 files has element size 1 and is therefore the identity permutation."
+source_resources = ["s3_listings_2022_2024", "daily_checksum_manifests", "nh_daily_netcdf_2022_2024"]
+source_format = "NetCDF4/HDF5 daily file, variable stored as a single deflate-compressed chunk indexed by a version-1 B-tree"
+source_field = "cdr_seaice_conc (uint8, dims time=1 x y=448 x x=304)"
+filtered_input_path = "filtered/noaa_cdr_seaice_conc_nh_daily_u8/ingest_stats.json"
+filtering = "Keep every 2022-2024 F17 v04r00 Northern-Hemisphere daily file (365 + 365 + 366 = 1096) and only its cdr_seaice_conc variable. No days are dropped, including days where the CDR marks part or all of the ice pack as missing_data (255); ingest_stats.json counts them."
+missing_value_policy = "Native in-raster codes are preserved as-is: 251 pole_hole, 252 lakes, 253 coastal, 254 land_mask and 255 missing_data (also _FillValue) are part of the stored variable, not recipe sentinels. Any code outside {0..100, 251..255}, a constant grid, a grid lacking the static lake/coast/land codes or any 0..100 code, a static lake/coast/land mask that differs between days, wrong shape/datatype/filters/attributes/date, a checksum or MD5 mismatch, or a chunk that does not inflate to exactly 136,192 values is fatal in both build and verify."
+conversion = "Resolve root link 'cdr_seaice_conc' through the dense link storage (Link Info -> fractal heap -> v2 B-tree), read Dataspace (1,448,304), Datatype uint8, Filter Pipeline (deflate, optionally preceded by 1-byte shuffle) and Layout v3 chunked (1,448,304,1); take the single chunk address and size from the version-1 B-tree leaf (offsets 0,0,0,0, filter mask 0), zlib-inflate it to exactly 136,192 values and write them in stored row-major (y, x) order as one raw uint8 file per day."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 sea-ice concentration grid"
+sample_geometry = "448x304_nsidc_polar_stereographic_north_25km_grid"
+sample_rank = 2
+sample_axes = ["y", "x"]
+natural_record_kind = "nsidc_cdr_daily_northern_hemisphere_concentration_grid"
+sample_count = 1096
+total_size_bytes = 149266432
+output_path = "samples/noaa_cdr_seaice_conc_nh_daily_u8/cdr_seaice_conc_nh_daily_u8/"

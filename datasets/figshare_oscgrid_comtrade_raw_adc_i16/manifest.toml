@@ -1,0 +1,117 @@
+manifest_version = 1
+dataset_id = "figshare_oscgrid_comtrade_raw_adc_i16"
+name = "OscGrid Labeled Real-World Power-Grid Oscillograms: COMTRADE Int16 Voltage and Current Sample Codes"
+description = "Point-on-wave relay-protection oscillograms from operating 0.4-35 kV substations (OscGrid labeled subset, 50 Hz grid, 1600 samples/s). For each COMTRADE-1999 ASCII oscillogram, the standardized voltage channels and the standardized current channels are emitted as two channel-major int16 matrices of the sample codes declared by the cfg."
+homepage = "https://doi.org/10.6084/m9.figshare.28465427"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Evdakov, A., Makoldin, A., Kovalenko, A., Filatova, G., Yablokov, A. (2025). A Dataset of Real-World Oscillograms from Electric Power Grids. figshare. Dataset. https://doi.org/10.6084/m9.figshare.28465427.v6. Data descriptor: Evdakov, A., Filatova, G., Yablokov, A. et al. A dataset of real-world oscillograms from electrical power grids. Sci Data (2026). https://doi.org/10.1038/s41597-026-06587-8"
+notes = "The license grant is the figshare data record itself: the public API for article 28465427 (version 6) returns license {'name': 'CC BY 4.0', 'url': 'https://creativecommons.org/licenses/by/4.0/'}, and download.sh re-checks that field and the exact file entry before downloading. The Scientific Data descriptor article is CC BY-NC-ND 4.0; it is cited for attribution and documentation only and none of its text or figures are collected. The authors' MIT-licensed converter (github.com/AIRI-Institute/oscgrid) is not used; only its published signal-name dictionary informed the channel whitelist."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official figshare deposit by the dataset authors (AIRI / Evdakov et al.). Per the descriptor, object names, manufacturer information, recording dates and file names were removed before publication: every cfg carries the placeholder date 01/01/0001 and files are named by a 32-hex hash. No site, substation, or operator identity is present in the emitted values or index."
+usage_notes = "Only analog voltage and current sample codes plus their per-channel cfg scale metadata are emitted. Digital status channels, the embedded MLsignal event-label channels, sample numbers and timestamps are not emitted."
+
+[[origins]]
+id = "figshare_oscgrid"
+name = "figshare article 28465427: A Dataset of Real-World Oscillograms from Electric Power Grids (OscGrid)"
+url = "https://doi.org/10.6084/m9.figshare.28465427"
+type = "data_portal"
+version = "6"
+notes = "Published 2025-12-03, modified 2026-02-11. The record holds 41 files; this recipe uses only the labeled raw COMTRADE archive."
+
+[[resources]]
+id = "article_metadata"
+origin = "figshare_oscgrid"
+url = "https://api.figshare.com/v2/articles/28465427"
+type = "api_query_result"
+version = "6"
+access = "Public anonymous figshare API (JSON)."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/figshare_oscgrid_comtrade_raw_adc_i16/article_28465427.json"
+notes = "Fetched on every download run and validated for article id, title, CC BY 4.0 license, embargo state, and the exact Labeled_raw_v1.1.7z file entry (id, name, size, computed_md5). Size is not pinned because figshare metadata (view counts, timestamps) changes."
+
+[[resources]]
+id = "labeled_raw_archive"
+origin = "figshare_oscgrid"
+url = "https://ndownloader.figshare.com/files/60073955"
+type = "archive"
+version = "Labeled_raw_v1.1"
+access = "Public anonymous download. ndownloader answers 302 to a signed S3 URL with a 10 s expiry, so download.sh re-resolves the redirect on every resume attempt (curl -L -C -)."
+size_bytes = 94882365
+sha256 = "33a9fae8e21446b40a3099e6ffa733b679af4f3df4d4ce90aa4b06aeddf45ff8"
+md5 = "5e15133fd38bf131115897b8737cbf19"
+local_path = "downloads/figshare_oscgrid_comtrade_raw_adc_i16/Labeled_raw_v1.1.7z"
+notes = "7z v0.3 archive with a kEncodedHeader (LZMA1, 26,230 packed bytes, 137,075 decoded) listing 960 members (480 .cfg + 480 .dat under Labeled_raw_v1.1/) in one LZMA1 solid folder (lc3 lp0 pb2, 8 MiB dictionary, 94,856,064 packed bytes, 585,730,365 unpacked). Figshare publishes only the MD5, which download.sh and verify.sh pin; verify.sh also checks the SHA-256 recorded from the 2026-10-06 download."
+
+[local_paths]
+downloads = "downloads/figshare_oscgrid_comtrade_raw_adc_i16/"
+filtered = "filtered/figshare_oscgrid_comtrade_raw_adc_i16/"
+index = "index/figshare_oscgrid_comtrade_raw_adc_i16/"
+samples = "samples/figshare_oscgrid_comtrade_raw_adc_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/figshare_oscgrid_comtrade_raw_adc_i16/samples.jsonl"
+summary = "Validate the live CC BY 4.0 figshare record, download the MD5-pinned Labeled_raw_v1.1.7z, decode it with a pure-stdlib 7z/LZMA1 reader (CRC32 per member), parse every COMTRADE cfg/dat pair, and emit per oscillogram one channel-major int16 voltage matrix and one channel-major int16 current matrix."
+deterministic_notes = "Pass 1 decodes the solid folder and parses all 480 cfgs (cfg and dat members are not adjacent in the stream, so a second pass handles dats without buffering). A record is kept only if its cfg is rev 1999, file type ASCII, line frequency 50 Hz, exactly one sampling rate equal to 1600 Hz with endsamp >= 1, timemult 1, and every analog channel declares the int16 code domain (min -32768 or -32767, max 32767). Its dat must have exactly endsamp rows, sample numbers 1..N, timestamps exactly (n-1)*625 us, and every analog token (kept or not) must be finite, within 1e-6 of an integer, and within that channel's cfg min/max; otherwise the whole record is dropped and listed with its reason in ingest_stats.json (more than 48 drops fails the build). Channel whitelist uses the standardized OscGrid names: voltage = 'U | BusBar-n | phase: X' or 'U | CableLine-n | phase: X' (X in A,B,C,N,AB,BC,CA) with unit V; current = 'I | Bus-n | phase: X' (X in A,B,C,N) with unit A (Cyrillic А and В unit letters accepted). Code-scaling homogeneity: a kept voltage channel's cfg factor a must lie within 15% of 0.016 V/code (the terminals' standard VT input, about +/-540 V secondary full scale) and a kept current channel's within 15% of 0.0092 A/code (standard CT input, about +/-300 A full scale). Excluded and counted: 'U_raw'/'I_raw' non-traditional-sensor channels (e.g. Rogowski coils, which output di/dt), relay-computed 'I | dif-n'/'I | braking-n' per-unit channels, channels on other input ranges (one terminal type with a = 1.6e-5 V/code and 3.06e-4 A/code, sensitive earth-fault current inputs with a = 0.0024 A/code), and any other name. Realized (2026-10-06): 480 records, 11 dropped (6 rev 2013, 1 BINARY, 3 cfgs declaring code range 0..0 on every channel, 1 with a -32768 code below its declared -32767 floor), 469 parsed, 467 emitted; 464 voltage and 464 current samples; excluded channels 17 I_raw, 12 dif/braking, 12 off-band voltage, 18 off-band current; no constant or duplicate samples. A series sample whose values are all equal is not emitted; a payload identical (SHA-256) to an earlier record's is not emitted; both are listed. Records are emitted in ascending hash-name order. verify.sh re-decodes the archive, re-parses every dat with an independent float()-based column parser, re-derives the drop set, byte-compares every sample, and checks index metadata and manifest totals."
+
+[[series]]
+id = "oscgrid_voltage_codes_i16"
+description = "Voltage-transformer channels of one relay-protection oscillogram, channel-major: all standardized bus-bar and cable-line voltage channels in cfg order, each the full record length at 1600 samples/s."
+semantic_meaning = "Signed 16-bit COMTRADE analog sample codes of substation voltage-transformer secondary voltages (bus-bar and cable-line phase-to-ground A/B/C, residual N, and line-to-line AB/BC/CA), recorded by relay-protection-and-automation terminals in 0.4-35 kV networks during normal operation, switching (fast automatic bus transfer), ground faults and short circuits. Secondary volts = a * code + b with per-channel cfg factors (kept channels have a = 0.01468-0.01691 V per code, so one code is about 16 mV secondary); a and b are kept per channel in the index."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The cfg declares each analog channel's code domain as -32768 (or -32767) to 32767 with physical value a * code + b, and the ASCII dat stores those codes as decimal text. The publisher's export passed the codes through floating point, so some tokens read like 3922.0000000000005 or -1930.9999999999998; each token is rounded to the nearest integer only after checking it lies within 1e-6 of it (3,990,405 such tokens in the parsed records, maximum deviation 5.5e-12). Emitted values are the declared sample codes, unscaled. This recipe claims only what the cfg states (int16 sample codes with linear scale factors), not the bit depth of the recorder's physical ADC."
+source_resources = ["labeled_raw_archive"]
+source_format = "IEEE C37.111-1999 COMTRADE cfg + ASCII dat oscillogram (7z LZMA1 solid archive member pair)"
+source_field = "dat analog sample values of cfg analog channels named 'U | BusBar-n | phase: X' or 'U | CableLine-n | phase: X' with unit V and scale a within 15% of 0.016 V/code"
+filtered_input_path = "filtered/figshare_oscgrid_comtrade_raw_adc_i16/ingest_stats.json"
+filtering = "All 480 labeled oscillograms are considered; records failing the cfg/dat rules in processing.deterministic_notes (rev-2013 FLOAT32 files among them) are dropped whole. Within a kept record only whitelisted, in-band voltage channels enter this series; 5 of the 469 parsed records have none and contribute no voltage sample. Realized: 464 samples, 4,406 channels, 48,719,331 values, 8,000-683,200 values per sample (median 83,200), codes -28,126..26,831, no full-scale codes; 20 samples (4.2% of bytes) are near-silent de-energized-bus recordings peaking below 64 codes. Digital channels (breaker positions/commands and MLsignal label channels), sample numbers and timestamps are not emitted."
+missing_value_policy = "COMTRADE-1999 ASCII has no in-range missing sentinel (99999 lies outside int16 and fails the range check). Blank, non-numeric, non-finite, non-integral or out-of-range analog tokens, wrong row or field counts, and off-grid timestamps drop the whole record; nothing is imputed, clipped or patched. Full-scale codes are kept and counted. build.sh and verify.sh apply the same rules and verify.sh requires the identical drop set."
+conversion = "Decode the LZMA1 solid folder with lzma.LZMADecompressor(FORMAT_RAW, FILTER_LZMA1, dict 8 MiB, lc3 lp0 pb2), split it by SubStreamsInfo sizes, check each member's CRC32, pair cfg/dat by hash name. Parse the dat rows (n, t, analog..., digital...), convert each analog token to an integer code, transpose the kept voltage columns to channel-major order (cfg order), and write one little-endian int16 .bin per oscillogram, shape [voltage channels, endsamp]."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian signed-int16 channel-major matrix"
+sample_geometry = "multichannel_power_grid_oscillogram_channel_by_time_2d"
+sample_rank = 2
+sample_axes = ["analog_channel", "time_sample_1600hz"]
+natural_record_kind = "comtrade_relay_oscillogram_cfg_dat_pair"
+sample_count = 464
+total_size_bytes = 97438662
+output_path = "samples/figshare_oscgrid_comtrade_raw_adc_i16/oscgrid_voltage_codes_i16/"
+
+[[series]]
+id = "oscgrid_current_codes_i16"
+description = "Current-transformer channels of one relay-protection oscillogram, channel-major: all standardized feeder/bus current channels in cfg order, each the full record length at 1600 samples/s."
+semantic_meaning = "Signed 16-bit COMTRADE analog sample codes of substation current-transformer secondary currents (phase A/B/C and residual/zero-sequence N of each bus section), recorded by relay-protection-and-automation terminals in 0.4-35 kV networks during normal operation, switching (fast automatic bus transfer), ground faults and short circuits. Secondary amperes = a * code + b with per-channel cfg factors (kept channels have a = 0.009148-0.009298 A per code, so one code is about 9.2 mA secondary); a and b are kept per channel in the index."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Same representation as the voltage series: cfg-declared int16 code domain with linear scale a * code + b, stored as ASCII decimal text with occasional floating-point round-trip artifacts, each token rounded only after a 1e-6 integrality check. Channels are classified by the standardized signal name, not by unit alone; non-traditional 'I_raw' sensor channels (Rogowski coils measure di/dt) and relay-computed differential/braking per-unit channels are excluded."
+source_resources = ["labeled_raw_archive"]
+source_format = "IEEE C37.111-1999 COMTRADE cfg + ASCII dat oscillogram (7z LZMA1 solid archive member pair)"
+source_field = "dat analog sample values of cfg analog channels named 'I | Bus-n | phase: X' with unit A and scale a within 15% of 0.0092 A/code"
+filtered_input_path = "filtered/figshare_oscgrid_comtrade_raw_adc_i16/ingest_stats.json"
+filtering = "All 480 labeled oscillograms are considered; records failing the cfg/dat rules in processing.deterministic_notes are dropped whole. Within a kept record only whitelisted, in-band current channels enter this series; 5 of the 469 parsed records have none and contribute no current sample. Realized: 464 samples, 2,125 channels, 23,310,621 values, 9,372-292,800 values per sample (median 41,600), codes -24,560..24,270, no full-scale codes. Many feeders are lightly loaded: median sample peak is 142 codes (about 1.3 A secondary) and 120 samples (34% of bytes) peak below 64 codes; they are kept as recorded. Digital channels, sample numbers and timestamps are not emitted."
+missing_value_policy = "Identical to the voltage series: no in-range missing sentinel exists; any malformed, non-integral or out-of-range analog token, wrong row or field count, or off-grid timestamp drops the whole record. Nothing is imputed, clipped or patched; full-scale codes are kept and counted; verify.sh requires the identical drop set."
+conversion = "Same decode as the voltage series; the kept current columns are transposed to channel-major order (cfg order) and written as one little-endian int16 .bin per oscillogram, shape [current channels, endsamp]."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian signed-int16 channel-major matrix"
+sample_geometry = "multichannel_power_grid_oscillogram_channel_by_time_2d"
+sample_rank = 2
+sample_axes = ["analog_channel", "time_sample_1600hz"]
+natural_record_kind = "comtrade_relay_oscillogram_cfg_dat_pair"
+sample_count = 464
+total_size_bytes = 46621242
+output_path = "samples/figshare_oscgrid_comtrade_raw_adc_i16/oscgrid_current_codes_i16/"

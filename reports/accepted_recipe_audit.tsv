@@ -299,6 +299,7 @@ tartanair_optical_flow_f32	ok	66355200	265420800	108	614400	2457600	0	0	0	1	none
 diode_val_laser_depth_f32	ok	66846720	267386880	85	786432	3145728	0	0	0	1	none	none
 openslr_rirs_noises_pcm16	ok	66979516	133959032	3810	15000	30000	0	0	0	1	none	none
 geonames_allcountries	ok	67174535	322437768	5	13434907	53739628	0	0	0	1	none	none
+figshare_oscgrid_comtrade_raw_adc_i16	ok	72029952	144059904	928	62400	124800	0	0	0	1	none	none
 bbbc039_microscopy_tiff_u16	ok	72384000	144768000	200	361920	723840	0	0	0	1	none	none
 noaa_marinecadastre_ais_2024_01_01_f32	ok	74224797	296899188	11	7293096	29172384	0	0	0	1	none	none
 hamsci_grape1_wwv10_doppler_frequency_f64	ok	74966875	599735000	903	84372	674976	0	0	0	1	none	none

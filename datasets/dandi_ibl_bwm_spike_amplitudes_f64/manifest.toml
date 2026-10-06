@@ -1,0 +1,114 @@
+manifest_version = 1
+dataset_id = "dandi_ibl_bwm_spike_amplitudes_f64"
+name = "IBL Brain-Wide Map Neuropixels Unit Spike Amplitudes (DANDI:000409) Float64"
+description = "Complete per-unit spike-amplitude vectors (microvolts, stored float64) of every spike-sorted unit with at least 1,000 spikes in two complete IBL Brain-Wide Map Neuropixels 1.0 sessions from two labs, range-extracted from the units/spike_amplitudes_uV ragged column of the published DANDI:000409 NWB files."
+homepage = "https://dandiarchive.org/dandiset/000409/0.260309.1324"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "International Brain Laboratory et al. (2026) IBL - Brain Wide Map (Version 0.260309.1324) [Data set]. DANDI Archive. https://doi.org/10.48324/dandi.000409/0.260309.1324"
+notes = "The published, immutable dandiset version 0.260309.1324 declares `license: [\"spdx:CC-BY-4.0\"]` and access `dandi:OpenAccess`; both asset records also report `dandi:OpenAccess`. download.sh re-checks the license, access status, version and asset identities on every run. Preserve the DANDI citation and the International Brain Laboratory attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official DANDI Archive S3 blobs listed in each asset's own contentUrl; mouse (Mus musculus) extracellular electrophysiology only."
+usage_notes = "Only per-spike amplitude values are emitted. Subject ids, session ids and DANDI asset ids appear only as index bookkeeping; the NWB subject metadata (age, sex, weight) is not read into samples."
+
+[[origins]]
+id = "dandi_000409"
+name = "DANDI Archive dandiset 000409 'IBL - Brain Wide Map'"
+url = "https://dandiarchive.org/dandiset/000409/0.260309.1324"
+type = "data_portal"
+version = "0.260309.1324 (published 2026-03-09, DOI 10.48324/dandi.000409/0.260309.1324)"
+notes = "459 processed NWB assets (`*_desc-processed_behavior+ecephys.nwb`) from 139 subjects in 12 labs. Two sessions are selected by the deterministic rule in README.md and selection.tsv (reproducible with discover.sh)."
+
+[[resources]]
+id = "dandiset_version_metadata"
+origin = "dandi_000409"
+url = "https://api.dandiarchive.org/api/dandisets/000409/versions/0.260309.1324/"
+type = "api_query_result"
+version = "0.260309.1324"
+access = "Anonymous HTTPS JSON; fetched on every download run."
+size_bytes = 15778
+sha256 = ""
+local_path = "downloads/dandi_ibl_bwm_spike_amplitudes_f64/metadata/dandiset_version.json"
+notes = "License evidence. Must report identifier DANDI:000409, version 0.260309.1324, name 'IBL - Brain Wide Map', license ['spdx:CC-BY-4.0'] and access dandi:OpenAccess."
+
+[[resources]]
+id = "asset_metadata"
+origin = "dandi_000409"
+url = "https://api.dandiarchive.org/api/dandisets/000409/versions/0.260309.1324/assets/{asset_id}/"
+type = "api_query_result"
+version = "0.260309.1324"
+access = "Anonymous HTTPS JSON, one request per pinned asset; fetched on every download run."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/dandi_ibl_bwm_spike_amplitudes_f64/metadata/"
+notes = "Each record must match sessions.tsv: path, contentSize, dandi:dandi-etag, dandi:sha2-256, the S3 blob contentUrl, application/x-nwb, OpenAccess and the participant id."
+
+[[resources]]
+id = "nwb_zadorlab_csh_zad_001"
+origin = "dandi_000409"
+url = "https://dandiarchive.s3.amazonaws.com/blobs/ca4/dfe/ca4dfea1-fdae-48b5-a798-cc9d453f307d"
+type = "http_ranges_from_hdf5"
+version = "asset f24e825f-f5b1-4287-a004-7ac3a20c107d, dandi-etag 326e30aff7dc4c0a6baaec85fa2f26a0-10"
+access = "Anonymous HTTPS byte ranges of the S3 blob; every 206 response must carry Content-Range */655836490 and the pinned ETag."
+size_bytes = 655836490
+sha256 = "fe3e00eead6ceed4638cf5aa1f003781fab9376607f50ea77f8005533ded3a0e"
+local_path = "downloads/dandi_ibl_bwm_spike_amplitudes_f64/sessions/f24e825f-f5b1-4287-a004-7ac3a20c107d/"
+notes = "sub-CSH-ZAD-001 session 3e7ae7c0 (zadorlab). sha256 is the whole-file dandi:sha2-256 (identity pin; the recipe fetches ranges only). Fetched: 17 x 64 KiB metadata blocks, 26 amplitude chunks (237,726,052 bytes) and the 1,864-byte index chunk; the SHA-256 of every range is recorded in range_sha256.tsv."
+
+[[resources]]
+id = "nwb_danlab_dy_008"
+origin = "dandi_000409"
+url = "https://dandiarchive.s3.amazonaws.com/blobs/5df/c5f/5dfc5fa1-4a21-410c-a0ab-7732d45a12f1"
+type = "http_ranges_from_hdf5"
+version = "asset 2a3bbcf9-3d2f-4c65-b680-fde105f5f255, dandi-etag 33dff2d345218eae0ae98900351e69a7-11"
+access = "Anonymous HTTPS byte ranges of the S3 blob; every 206 response must carry Content-Range */694652180 and the pinned ETag."
+size_bytes = 694652180
+sha256 = "8eb203fc9f712bbec7cd4df66e77dc25951c647e45161d24e4ef018d52d8245e"
+local_path = "downloads/dandi_ibl_bwm_spike_amplitudes_f64/sessions/2a3bbcf9-3d2f-4c65-b680-fde105f5f255/"
+notes = "sub-DY-008 session 0f25376f (danlab). sha256 is the whole-file dandi:sha2-256 (identity pin). Fetched: 18 x 64 KiB metadata blocks, 21 amplitude chunks (188,839,817 bytes) and the 3,559-byte index chunk."
+
+[local_paths]
+downloads = "downloads/dandi_ibl_bwm_spike_amplitudes_f64/"
+filtered = "filtered/dandi_ibl_bwm_spike_amplitudes_f64/"
+index = "index/dandi_ibl_bwm_spike_amplitudes_f64/"
+samples = "samples/dandi_ibl_bwm_spike_amplitudes_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/dandi_ibl_bwm_spike_amplitudes_f64/samples.jsonl"
+summary = "Validate the published version's license and the two pinned assets, walk each NWB file's HDF5 metadata over cached 64 KiB byte ranges, fetch only the deflate chunks of units/spike_amplitudes_uV plus its VectorIndex, and emit one complete little-endian float64 amplitude vector per spike-sorted unit with at least 1,000 spikes."
+deterministic_notes = "Session selection: labs ordered by their first processed asset in path order (lab read from /general/lab of each subject's first asset), each lab's first asset kept while the cumulative stored spike count stays <= 62,500,000 (a 500 MB float64 budget), at most three sessions; this yields zadorlab and danlab (selection.tsv; discover.sh reproduces it). Pinned per session in sessions.tsv: blob URL, size, dandi etag and sha2-256, lab, institution, subject, session eid, NWB identifier, unit and spike counts, chunk count (= ceil(spikes / 1,250,000)), total stored chunk bytes, index chunk bytes, kept units and kept spikes. The reader requires superblock v0, v1 object headers, symbol-table groups, H5T_IEEE_F64LE amplitudes and H5T_STD_U32LE index, a deflate-only filter, filter mask 0 and an exact 1-D chunk grid. Each chunk must inflate to exactly 10,000,000 bytes; the valid decoded size must equal 8 x spikes; the index must be monotone with last entry = spikes. build.sh and verify.sh first run a synthetic HDF5 self-test; verify.sh re-decodes by a different strategy and byte-compares every sample."
+
+[[series]]
+id = "ibl_unit_spike_amplitudes_uv_f64"
+description = "Per-spike peak amplitudes, in microvolts, of individual spike-sorted Neuropixels 1.0 units from the IBL Brain-Wide Map."
+semantic_meaning = "Peak amplitude of each spike assigned to one spike-sorted unit, in microvolts (NWB description: 'Peak amplitude of each spike for each unit in microvolts.'), in stored order (element-aligned with the unit's units/spike_times entries, which are not collected). Spike sorting is IBL's iblsorter (Python Kilosort 2.5) on Neuropixels 1.0 probes in head-fixed mice performing the IBL decision-making task; one sample is one unit's complete amplitude vector over the whole recording session."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The NWB column is declared H5T_IEEE_F64LE and every stored float64 bit pattern is copied unchanged. Width disclosure: the values are not full-precision float64 measurements. Within each unit every amplitude equals a float32 per-spike Kilosort amplitude multiplied by one per-unit float64 scale (consistent with the template amplitude times the probe gain, expressed in microvolts). The per-unit ratio/LCM test confirms this: all ratios v_i / v_ref are ratios of 24-bit float32 mantissas to within about 2e-16 (denominator LCM <= 24 bits), while generic float64 gives LCMs of thousands of bits. Realized build: all 1,321 kept units pass the test (LCM 23-24 bits, max relative error 4.4e-16), yet 0 of the 57,416,236 values are float32-exact, so the column cannot be narrowed to float32 without also storing the per-unit scale. build and verify record the test result for every kept unit."
+source_resources = ["nwb_zadorlab_csh_zad_001", "nwb_danlab_dy_008"]
+source_format = "NWB 2.9.0 HDF5 file (superblock v0); chunked deflate H5T_IEEE_F64LE ragged VectorData with H5T_STD_U32LE VectorIndex"
+source_field = "/units/spike_amplitudes_uV sliced by /units/spike_amplitudes_uV_index (one unit row per slice)"
+filtered_input_path = "filtered/dandi_ibl_bwm_spike_amplitudes_f64/ingest_stats.json"
+filtering = "Both selected sessions, every unit row with at least 1,000 spikes, all of that unit's spikes in stored order. Dropped as below the per-sample floor: 38 of 519 zadorlab units (12,246 spikes) and 174 of 1,014 danlab units (65,243 spikes). Units are kept regardless of Kilosort or IBL quality label. Excluded as different quantities: spike_times, spike_distances_from_probe_tip_um, waveform_mean and every per-unit summary column (firing rate, quality metrics, median/min/max amplitude, etc.)."
+missing_value_policy = "The column has no missing-value sentinel. Every value must be finite (any NaN or Inf is fatal), and nothing is clipped, imputed or reordered. Non-positive amplitudes would be kept and counted (the index records nonpositive_values). Fatal: a constant unit, a duplicate sample, a changed shape, chunk grid, dtype, filter, description, pin or range checksum, a non-monotone index, an index whose last entry differs from the spike count, or a decoded size other than 8 x spikes. Units below 1,000 spikes are excluded by rule, not by data quality."
+conversion = "For each session: navigate the symbol-table groups to /units, validate both datasets, and walk the v1 chunk B-tree of spike_amplitudes_uV (chunks of 1,250,000 values). zlib-inflate each fetched chunk to exactly 10,000,000 bytes and drop only the edge chunk's padding past the dataset length. Inflate the uint32 index, take unit u's slice [index[u-1], index[u]) (index[-1] = 0), and write those native little-endian float64 bytes unchanged to <subject>_ses-<eid8>_unit<row>.bin."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 per-unit spike-amplitude vector"
+sample_geometry = "spike_sorted_unit_amplitude_sequence_1d"
+sample_rank = 1
+sample_axes = ["spike_of_unit"]
+natural_record_kind = "complete_spike_amplitude_vector_of_one_spike_sorted_unit"
+sample_count = 1321
+total_size_bytes = 459329888
+output_path = "samples/dandi_ibl_bwm_spike_amplitudes_f64/ibl_unit_spike_amplitudes_uv_f64/"

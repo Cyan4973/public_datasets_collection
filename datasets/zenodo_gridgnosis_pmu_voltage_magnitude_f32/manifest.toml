@@ -1,0 +1,98 @@
+manifest_version = 1
+dataset_id = "zenodo_gridgnosis_pmu_voltage_magnitude_f32"
+name = "Cyprus Transmission-System PMU Phase-Voltage Magnitudes (50 frames/s) Float32"
+description = "Per-phase voltage phasor magnitudes (volts, phase-to-ground on the 132 kV grid) from the phasor measurement units of the Cyprus transmission system, one frame-by-channel float32 matrix per one-hour steady-state PMU export at 50 frames per second (GridGnosis Zenodo 20308780 plus its GridEye sibling Zenodo 17648863)."
+homepage = "https://doi.org/10.5281/zenodo.20308780"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Asprou, M., Avraamides, T., Stavrou, A., and Demetriou, A. PMU data from the GridGnosis project. Zenodo, 2026, doi:10.5281/zenodo.20308780. KIOS Research and Innovation Center of Excellence. PMU datasets from GridEye project. Zenodo, 2025, doi:10.5281/zenodo.17648863."
+notes = "Both Zenodo records declare license id cc-by-4.0 in their record metadata (checked live by download.sh before any archive byte is fetched). Attribute both deposits."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Zenodo deposits by the University of Cyprus / KIOS CoE research teams behind the GridGnosis and GridEye PMU monitoring platforms. No mirrors."
+usage_notes = "Aggregate transmission-grid electrical measurements; no personal, customer, or account data. Only voltage magnitudes are emitted."
+
+[[origins]]
+id = "zenodo_gridgnosis"
+name = "PMU data from the GridGnosis project (Zenodo record 20308780)"
+url = "https://zenodo.org/records/20308780"
+type = "repository"
+version = "2026-05-20 (record 20308780, concept 20308779)"
+notes = "Four files: frequency events, voltage events, steady state data, line parameter variation. Only `Steady state data.zip` is used."
+
+[[origins]]
+id = "zenodo_grideye"
+name = "PMU datasets from GridEye project (Zenodo record 17648863)"
+url = "https://zenodo.org/records/17648863"
+type = "repository"
+version = "2025-11-19 (record 17648863)"
+notes = "Earlier deposit from the same Cyprus transmission-system PMU monitoring work, same CSV export format. Only `Steady state data.zip` is used."
+
+[[resources]]
+id = "gridgnosis_steady_state_zip"
+origin = "zenodo_gridgnosis"
+url = "https://zenodo.org/api/records/20308780/files/Steady%20state%20data.zip/content"
+type = "archive"
+version = "Steady state data.zip"
+access = "Direct public anonymous download (curl -C -, stall-bounded retries)."
+size_bytes = 894457235
+md5 = "24df9e74aa521ee21cf1fb03d42dceaa"
+local_path = "downloads/zenodo_gridgnosis_pmu_voltage_magnitude_f32/gridgnosis_20308780_steady_state_data.zip"
+notes = "50 ZIP entries: 18 one-hour CSVs (Real_PMU_Data_processed_data/PMU_{1..6}/PMU_<k>_<start>_<end>.csv, three windows 2026-05-05 14:53, 2026-05-06 16:40, 2026-05-14 17:02 local time) plus directory and __MACOSX entries. Member names, sizes and CRC32 are pinned in members.tsv."
+
+[[resources]]
+id = "grideye_steady_state_zip"
+origin = "zenodo_grideye"
+url = "https://zenodo.org/api/records/17648863/files/Steady%20state%20data.zip/content"
+type = "archive"
+version = "Steady state data.zip"
+access = "Direct public anonymous download (curl -C -, stall-bounded retries)."
+size_bytes = 201941844
+md5 = "edf820db5b5d3dfd362df38c7cd32c8e"
+local_path = "downloads/zenodo_gridgnosis_pmu_voltage_magnitude_f32/grideye_17648863_steady_state_data.zip"
+notes = "8 ZIP entries: three one-hour CSVs from one PMU (morning, noon, evening of 2025-11-18) plus directory and __MACOSX entries. Pinned in members.tsv."
+
+[local_paths]
+downloads = "downloads/zenodo_gridgnosis_pmu_voltage_magnitude_f32/"
+filtered = "filtered/zenodo_gridgnosis_pmu_voltage_magnitude_f32/"
+index = "index/zenodo_gridgnosis_pmu_voltage_magnitude_f32/"
+samples = "samples/zenodo_gridgnosis_pmu_voltage_magnitude_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_gridgnosis_pmu_voltage_magnitude_f32/samples.jsonl"
+summary = "Fetch the two pinned steady-state ZIPs, stream each pinned one-hour PMU CSV member, and emit its Mag_V{A,B,C} columns as one frame-by-channel little-endian float32 matrix per file."
+deterministic_notes = "Zenodo record ids, license, archive sizes and MD5s are pinned and re-checked live; members.tsv pins the 21 CSV member names, compressed/uncompressed sizes and CRC32. Members are processed in members.tsv order; each sample keeps every published CSV row (one per 20 ms frame) in order and the header order of the file's own voltage-magnitude columns. Index rows record frame and channel counts, channel names, excluded foreign channels, first/last timestamps, zero-filled frame and terminal counts, absent-frame gaps, stored-float32 min/max, and SHA-256. verify.sh re-derives every sample with an independent parser and byte-compares it, re-checks that every dropped foreign column equals its owner's column, and fails on any duplicate channel column across all samples. Realized: 20 samples (17 GridGnosis + 3 GridEye), 58,442,013 float32 values, 233,768,052 bytes; 14 samples have 180,001 frames and the six 2026-05-05 samples have 175,503 frames."
+
+[[series]]
+id = "cyprus_pmu_phase_voltage_magnitude_f32"
+description = "Per-phase voltage phasor magnitudes of every line monitored by a PMU, one one-hour steady-state export per sample."
+semantic_meaning = "RMS phase-to-ground voltage phasor magnitude in volts (about 77 kV on the 132 kV Cyprus transmission grid) for phases A, B and C of each line terminal monitored by one PMU, reported at 50 frames per second (20 ms)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "PMU phasor magnitudes are IEEE float32 values; the CSV prints them with 8 significant digits. Every probed token lies within half a last-digit unit of a float32 and re-prints identically from its nearest float32 (rounding exact decimal ties half away from zero), so the stored float32 reproduces the published values exactly. No scaling, offset, or resampling."
+source_resources = ["gridgnosis_steady_state_zip", "grideye_steady_state_zip"]
+source_format = "ZIP-deflated CRLF CSV, one row per PMU frame: Date_Time, then per monitored line Mag/Angle for VA, VB, VC, IA, IB, IC, then Frequency, Dfrequency"
+source_field = "Mag_VA_<pmu>_<line>, Mag_VB_<pmu>_<line>, Mag_VC_<pmu>_<line> columns whose <pmu> is the file's own PMU (voltage phasor magnitudes, volts)"
+filtered_input_path = "filtered/zenodo_gridgnosis_pmu_voltage_magnitude_f32/ingest_stats.json"
+filtering = "All 21 pinned one-hour steady-state CSVs are read (18 GridGnosis: PMUs 1-6 x 3 windows; 3 GridEye: one PMU x morning/noon/evening). Only the Mag_V{A,B,C} columns of phasor groups whose <pmu> id equals the file's own PMU are kept; voltage angles, current magnitudes and angles, Frequency and Dfrequency are excluded. Foreign groups are dropped: every GridGnosis PMU_6 CSV carries a group labelled _4_6 that is a bit-identical copy of PMU_4's own _4_6 group in the same window (all 12 fields equal on every row; PMU 6's own Frequency differs), so Mag_V{A,B,C}_4_6 is emitted only in the PMU 4 samples. The build fails closed unless each dropped foreign voltage column is byte-identical (float32 column SHA-256, same frames and timestamps) to the owner PMU's same-named column; dropped names are recorded per index row (excluded_foreign_channels). Event archives (frequency and voltage events) and line-parameter archives are not downloaded. A file is excluded when more than half of its 20 ms lattice (zero-filled plus absent frames) is unmeasured; this removes only PMU_3_20260506_164000 (164,718 of 180,001 frames zero-filled after the PMU 3 stream stopped at 13:45:03)."
+missing_value_policy = "Three kinds of missingness occur and are handled explicitly. (1) Zero-filled frames: every numeric field of the row (all magnitudes, angles, Frequency, Dfrequency) is exactly 0; kept in place with their 0.0 voltage values (the source's own sentinel) and counted (`dropout_frame_count`). (2) Zero-filled terminals: inside an otherwise measured frame one line terminal's whole 12-field phasor group is exactly 0; its three 0.0 voltages are kept and counted (`terminal_zero_fill_voltage_values`; realized: 879 values = 293 frames of terminal 1_13 right after the 2026-05-05 gap). Any other zero voltage is fatal. (3) Absent frames: rows missing from the export, seen as a timestamp step that is a whole multiple of 20 ms; not padded or interpolated, each gap recorded in the index (`gaps`, `absent_frame_count`; realized: one 89.98 s gap, 4,498 frames, at 12:13:44.10-12:15:14.08 in all six 2026-05-05 files). Files whose zero-filled plus absent frames exceed 50% of the lattice are excluded. Blank, non-numeric, NaN/inf or negative voltage tokens, ragged rows, repeated, backward or off-grid timestamps, malformed headers, per-channel means outside 55-95 kV (a different nominal level), constant channels, and tokens that do not re-print from their nearest float32 are fatal in both build.sh and verify.sh."
+conversion = "Inflate each pinned member with Python zipfile (CRC32 checked), split CRLF rows, validate the 12-column phasor group pattern of the header, parse each Mag_V token as a decimal and round to the nearest IEEE float32, and write the frame-major matrix (row = published CSV row / 20 ms frame, column = voltage channel in header order) as raw little-endian float32. One sample per CSV file; published rows are neither dropped, padded, interpolated, nor reordered."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 frame-by-channel matrix"
+sample_geometry = "pmu_frame_by_voltage_channel_matrix_2d"
+sample_rank = 2
+sample_axes = ["frame_20ms", "voltage_magnitude_channel"]
+natural_record_kind = "one_hour_steady_state_pmu_csv_export"
+sample_count = 20
+total_size_bytes = 233768052
+output_path = "samples/zenodo_gridgnosis_pmu_voltage_magnitude_f32/cyprus_pmu_phase_voltage_magnitude_f32/"

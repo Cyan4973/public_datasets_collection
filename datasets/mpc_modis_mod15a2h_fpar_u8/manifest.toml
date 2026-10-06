@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "mpc_modis_mod15a2h_fpar_u8"
+name = "Terra MODIS MOD15A2H v061 8-Day 500 m FPAR UInt8 Tiles"
+description = "Complete source-native uint8 Fpar_500m grids (fraction of absorbed photosynthetically active radiation x 100, with the product's land-cover fill classes) from the Terra MODIS MOD15A2H Collection 6.1 8-day LAI/FPAR product: 24 land-dominant sinusoidal tiles on six continents at four seasonally spread 2024 composite periods (DOY 049, 137, 225, 313)."
+homepage = "https://planetarycomputer.microsoft.com/dataset/modis-15A2H-061"
+
+[license]
+name = "Creative Commons Zero 1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://lpdaac.usgs.gov/data/data-citation-and-policies/"
+citation = "Myneni, R., Knyazikhin, Y., Park, T. (2021). MODIS/Terra Leaf Area Index/FPAR 8-Day L4 Global 500m SIN Grid V061. NASA EOSDIS Land Processes Distributed Active Archive Center. https://doi.org/10.5067/MODIS/MOD15A2H.061"
+notes = "The Planetary Computer collection modis-15A2H-061 has rel=license link https://lpdaac.usgs.gov/data/data-citation-and-policies/, which redirects to NASA Earthdata 'Data Use Guidance' (https://www.earthdata.nasa.gov/engage/open-data-services-software-policies/data-use-guidance): 'Unless the content is marked with a use restriction or license, data provided from a NASA-led mission are licensed as Creative Commons Zero (CC0). While there are no restrictions on the use of these data, data users are very strongly urged to cite the data used in their work products.' The STAC collection names NASA LP DAAC at the USGS EROS Center as producer and licensor; MOD15A2H carries no product-specific restriction. The STAC 'license' field reads 'proprietary' only as a pointer to that link (same evidence chain as the accepted modis_active_fire_mask_u8 and mpc_modis_mod13a1_ndvi_i16). Preserve the DOI (embedded in every file as identifier_product_doi), NASA/LP DAAC attribution, collection version, item IDs, and dates."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Public NASA Earth-observation biophysical-variable grids produced by MODAPS (algorithm MODPR_15A2, Boston University/U. Montana heritage) and distributed by LP DAAC, mirrored by Microsoft Planetary Computer as COGs; no personal or sensitive data."
+usage_notes = "CC0 NASA mission data suitable for model training; cite the MOD15A2H.061 DOI."
+
+[[origins]]
+id = "planetary_computer_modis"
+name = "Microsoft Planetary Computer MODIS Collection 6.1 mirror"
+url = "https://planetarycomputer.microsoft.com/api/stac/v1/collections/modis-15A2H-061"
+type = "api"
+notes = "STAC collection modis-15A2H-061 (Terra MOD15A2H, Aqua MYD15A2H and combined MCD15A2H). Item IDs were resolved with STAC /search on modis:horizontal-tile, modis:vertical-tile, and the composite start date, keeping only IDs with the 'MOD15A2H.' prefix (the platform property is empty and MYD/MCD items match the same query). See scripts/probe.py, scripts/probe_screen_doy193_20261006.tsv (93-tile screen), and scripts/probe_pins_20261006.tsv (96 pinned items)."
+
+[[resources]]
+id = "mod15a2h_061_fpar_cogs"
+origin = "planetary_computer_modis"
+url = "https://modiseuwest.blob.core.windows.net/modis-061-cogs/MOD15A2H/"
+type = "file"
+version = "MOD15A2H Collection 6.1 (VERSIONID 61, PGEVERSION 6.1.x); 96 exact item IDs with production timestamps pinned in sources.tsv"
+access = "Public container read with the anonymous short-lived SAS signature from https://planetarycomputer.microsoft.com/api/sas/v1/token/modiseuwest/modis-061-cogs (no account or key)."
+size_bytes = 410569555
+sha256 = ""
+local_path = "downloads/mpc_modis_mod15a2h_fpar_u8/rasters/"
+notes = "96 single-band Fpar_500m COGs (24 tiles x 4 composites), 1.4-5.6 MB each. sources.tsv pins each file's byte size and the Azure x-ms-blob-content-md5; download.sh rejects size/MD5 mismatches and validates TIFF structure plus embedded HDF-EOS metadata (SHORTNAME, VERSIONID, platform, granule ID, tile numbers, range dates, NDAYS_COMPOSITED within 1..8 (the count of daily MOD15A1H inputs; 5-8 in the pinned files, recorded per sample in the index), DOI, long_name, units, fill, valid range, scale, offset). SHA-256 receipts are written at download time. Lai_500m, FparLai_QC, FparExtra_QC, and the StdDev layers of the same items are never fetched."
+
+[local_paths]
+downloads = "downloads/mpc_modis_mod15a2h_fpar_u8/"
+filtered = "filtered/mpc_modis_mod15a2h_fpar_u8/"
+index = "index/mpc_modis_mod15a2h_fpar_u8/"
+samples = "samples/mpc_modis_mod15a2h_fpar_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/mpc_modis_mod15a2h_fpar_u8/samples.jsonl"
+summary = "Download 96 pinned MOD15A2H.061 Fpar_500m COGs, decode each primary 2400x2400 uint8 grid (Deflate tiles, edge padding cropped), and emit it unchanged as one raw uint8 sample per tile and 8-day composite."
+deterministic_notes = "Fixed scope: Terra only (MOD15A2H, never MYD15A2H or MCD15A2H), Collection 6.1, layer Fpar_500m only, calendar year 2024 8-day composites starting DOY 049 (2024-02-18..25), 137 (05-16..23), 225 (08-12..19) and 313 (11-08..15), chosen 88 days apart for seasonal spread and to avoid the DOY 017/193 periods used by the accepted mpc_modis_mod13a1_ndvi_i16. Tiles: 93 land candidates were screened at DOY 193 (scripts/probe_screen_doy193_20261006.tsv); only tiles whose 300x300 overview had >= 80% pixels in 0..100 were eligible (38 passed), and 24 of them were named for continental and biome spread before download: north_america h09v05 h10v04 h10v05 h11v03 h11v04; south_america h12v09 h13v10 h12v11 h12v12; europe h19v03 h19v04 h20v03; africa h19v08 h20v09 h21v08 h20v10 h20v11; asia h22v03 h23v04 h25v06 h26v04 h27v06; oceania h29v11 h30v11. Overview IFDs are ignored. Samples follow sources.tsv order. Index min/max/sums and class counts are computed from the stored uint8 values."
+
+[[series]]
+id = "modis_mod15a2h_8day_fpar_u8"
+description = "MOD15A2H.061 8-day composite FPAR grids, one complete 2400x2400 sinusoidal tile per sample."
+semantic_meaning = "Fraction of incident photosynthetically active radiation (400-700 nm) absorbed by the green elements of the vegetation canopy, retrieved per 463.3 m cell from Terra MODIS surface reflectance by inverting a 3-D radiative-transfer look-up table (empirical NDVI back-up when the main algorithm fails) and composited over 8 days by keeping the best daily retrieval (per the user guide, the maximum-FPAR day); stored value = FPAR x 100 (0..100). Non-vegetated cells keep the product's land-cover fill classes 249..255 in the same byte."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Fpar_500m is a native uint8 SDS in the source HDF4-EOS granule (scale_factor 0.01, valid_range 0..100, _FillValue 255, units Percent, embedded fill legend 249..255). The Planetary Computer COG carries the same uint8 plane plus the HDF-EOS metadata; the recipe only removes TIFF tiling and Deflate compression. Fill classes are part of the source byte stream and are kept as stored."
+source_resources = ["mod15a2h_061_fpar_cogs"]
+source_format = "cloud_optimized_geotiff"
+source_field = "Fpar_500m"
+filtered_input_path = "filtered/mpc_modis_mod15a2h_fpar_u8/ingest_stats.json"
+filtering = "Keep all 5,760,000 primary-resolution pixels of each of the 96 pinned complete tiles. Tiles were pre-selected as land-dominant (overview valid fraction >= 0.80); build and verify require a real valid (0..100) fraction >= 0.70, at least 50 distinct valid values, no duplicate grids, and (verify) at least 5% of pixels changing between consecutive composites of each tile. Realized (build of 2026-10-06): valid fraction 0.833-0.995 per sample (min h12v12, Pacific coast); valid values span 0..100 with 72-101 distinct valid values per sample (the arid h29v11 has the fewest); reserved codes over all 96 samples: 250 urban 2,928,932, 253 barren 6,678,392, 254 water 19,383,012, 255 fill 298,052, and 248/249/251/252 never occur; each tile's reserved-code mask is identical in all four composites (static land-cover mask); 70-99% of pixels change between consecutive composites; Shannon entropy 2.7-6.5 bits/value (median 5.8); zlib-6 compresses samples to 15-74% of raw (median 57%)."
+missing_value_policy = "Values 249..255 are the source's documented fill/land-cover classes (255 _FillValue, 254 water, 253 barren/sparse, 252 perennial snow/ice, 251 permanent wetland, 250 urban, 249 unclassified) and 248 is accepted as the reserved code of the same block; all are preserved in place and counted per class in the index. Every other value must lie in 0..100; any value in 101..247, a valid fraction below 0.70, missing or truncated files, size/MD5 mismatches, unexpected TIFF structure or HDF-EOS metadata, corrupt Deflate streams, or degenerate grids are fatal."
+conversion = "Parse the classic little-endian TIFF IFD0 (2400x2400, BitsPerSample 8, SampleFormat 1, Compression 8, Predictor 1, 512x512 tiles, GDAL nodata 255), inflate its 25 tiles with exact-length checks, crop the TIFF edge padding of the last tile row/column (2400 = 4x512 + 352), and write the uint8 grid row-major (y, x) without rescaling, resampling, remapping, or concatenation."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 FPAR grid (0..100 = FPAR x 100; 248..255 source fill classes)"
+sample_geometry = "2400x2400_modis_sinusoidal_tile"
+sample_rank = 2
+sample_axes = ["y", "x"]
+natural_record_kind = "complete_mod15a2h_8_day_fpar_tile"
+sample_count = 96
+total_size_bytes = 552960000
+output_path = "samples/mpc_modis_mod15a2h_fpar_u8/modis_mod15a2h_8day_fpar_u8/"

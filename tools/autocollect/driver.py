@@ -17,6 +17,7 @@ Commands:
   driver.py init [--target 50]
   driver.py status
   driver.py activity [--minutes 120] [--lines 8]
+  driver.py follow [--backlog 3]
   driver.py run [--agents 3] [--downloads 2] [--widths 8,16] [--stop-after N] [--max-cost-usd X]
   driver.py requeue <candidate_id> [--status queued]
   driver.py unpause
@@ -168,6 +169,7 @@ class Config:
     downloads: int = 2
     widths: tuple[int, ...] = WIDTHS
     scout_batch: int = 6
+    scouts_per_width: int = 2
     queue_low_water: int = 3
     screen_batch: int = 8
     download_cap_bytes: int = 5_000_000_000
@@ -897,10 +899,11 @@ class Driver:
         for width in sorted(self.cfg.widths, key=lambda w: -deficits[w]):
             if self.agent_slots_free() <= 0:
                 break
-            if deficits[width] <= 0 or any(meta.get("width") == width for meta in self.inflight("scout")):
+            running = sum(1 for meta in self.inflight("scout") if meta.get("width") == width)
+            if deficits[width] <= 0 or running >= self.cfg.scouts_per_width:
                 continue
             waiting = sum(1 for row in self.ledger if row["width"] == str(width) and row["status"] in {"proposed", "queued"})
-            if waiting < self.cfg.queue_low_water:
+            if waiting < self.cfg.queue_low_water and (running == 0 or self.agent_slots_free() > len(self.cfg.widths)):
                 self.launch_scout(width, deficits[width])
 
     def launch_scout(self, width: int, deficit: int) -> None:
@@ -1435,6 +1438,72 @@ def cmd_activity(args) -> int:
     return 0
 
 
+def transcript_lines(raw: bytes) -> list[str]:
+    """Readable lines (tool calls, short narration, results) from stream-json events."""
+    lines: list[str] = []
+    for line in raw.splitlines():
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if event.get("type") == "assistant":
+            for item in (event.get("message") or {}).get("content") or []:
+                if not isinstance(item, dict):
+                    continue
+                if item.get("type") == "tool_use":
+                    lines.append(describe_tool_use(item))
+                elif item.get("type") == "text" and item.get("text", "").strip():
+                    lines.append("> " + one_line(item["text"], 300))
+        elif event.get("type") == "result":
+            lines.append(f"finished: {event.get('subtype')}, ${float(event.get('total_cost_usd') or 0):.2f}, {event.get('num_turns')} turns")
+    return lines
+
+
+def cmd_follow(args) -> int:
+    """Print new agent steps and driver events continuously, like tail -f."""
+    width = shutil.get_terminal_size((160, 40)).columns
+    started = time.time()
+    offsets: dict[Path, int] = {}
+
+    def emit(label: str, text: str) -> None:
+        print(f"{time.strftime('%H:%M:%S')} {label[:38]:<38} {text}"[:width], flush=True)
+
+    for path in sorted(LOGS_DIR.glob("*/*.jsonl"), key=lambda path: path.stat().st_mtime):
+        offsets[path] = path.stat().st_size
+        if args.backlog and path.stat().st_mtime >= started - 600:
+            for text in transcript_lines(path.read_bytes())[-args.backlog:]:
+                emit(f"{path.parent.name} {path.stem.split('.')[0]}", text)
+    driver_offset = DRIVER_LOG.stat().st_size if DRIVER_LOG.exists() else 0
+    try:
+        while True:
+            for path in sorted(LOGS_DIR.glob("*/*.jsonl")):
+                size = path.stat().st_size
+                offset = offsets.setdefault(path, 0)
+                if size <= offset:
+                    continue
+                with path.open("rb") as fh:
+                    fh.seek(offset)
+                    chunk = fh.read(size - offset)
+                end = chunk.rfind(b"\n")
+                if end < 0:
+                    continue
+                offsets[path] = offset + end + 1
+                for text in transcript_lines(chunk[: end + 1]):
+                    emit(f"{path.parent.name} {path.stem.split('.')[0]}", text)
+            if DRIVER_LOG.exists() and DRIVER_LOG.stat().st_size > driver_offset:
+                with DRIVER_LOG.open("rb") as fh:
+                    fh.seek(driver_offset)
+                    chunk = fh.read()
+                end = chunk.rfind(b"\n")
+                if end >= 0:
+                    driver_offset += end + 1
+                    for line in chunk[: end + 1].decode("utf-8", errors="replace").splitlines():
+                        emit("driver", one_line(line.split("] ", 1)[-1], 400))
+            time.sleep(args.interval)
+    except KeyboardInterrupt:
+        return 0
+
+
 def cmd_requeue(args) -> int:
     rows = load_ledger()
     for row in rows:
@@ -1507,6 +1576,9 @@ def main() -> int:
     activity = sub.add_parser("activity", help="latest steps of recent agent sessions")
     activity.add_argument("--minutes", type=int, default=120, help="transcripts updated within this window")
     activity.add_argument("--lines", type=int, default=8, help="steps shown per session")
+    follow = sub.add_parser("follow", help="continuously print new agent steps and driver events")
+    follow.add_argument("--backlog", type=int, default=3, help="recent steps to show per active session at start")
+    follow.add_argument("--interval", type=float, default=2.0)
     run = sub.add_parser("run", help="run the pipeline until the goal, a stop condition, or an interrupt")
     run.add_argument("--agents", type=int, default=3, help="concurrent agent sessions")
     run.add_argument("--downloads", type=int, default=2, help="concurrent download/rebuild subprocesses")
@@ -1524,7 +1596,7 @@ def main() -> int:
     requeue.add_argument("--status", default="queued", choices=ACTIVE_STATUSES)
     sub.add_parser("unpause", help="clear a global pause after inspecting its cause")
     args = parser.parse_args()
-    return {"init": cmd_init, "status": cmd_status, "activity": cmd_activity, "run": cmd_run, "requeue": cmd_requeue, "unpause": cmd_unpause}[args.command](args)
+    return {"init": cmd_init, "status": cmd_status, "activity": cmd_activity, "follow": cmd_follow, "run": cmd_run, "requeue": cmd_requeue, "unpause": cmd_unpause}[args.command](args)
 
 
 if __name__ == "__main__":

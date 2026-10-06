@@ -50,6 +50,7 @@ python3 tools/autocollect/driver.py run --stop-after 2 --max-cost-usd 150   # pi
 tmux new -s autocollect 'python3 tools/autocollect/driver.py run'           # full run
 python3 tools/autocollect/driver.py status            # anytime, from another shell
 python3 tools/autocollect/driver.py activity          # latest steps of each recent agent session
+python3 tools/autocollect/driver.py follow            # continuous log of agent steps and driver events
 ```
 
 Agents are separate headless `claude -p` processes, so they do not show up in

@@ -1,0 +1,94 @@
+# Staging draft. 920 G1 WWV10 station-day files pinned; 903 kept and 17
+# excluded by the pinned whole-file rules (statuses pinned in sources.tsv).
+manifest_version = 1
+dataset_id = "hamsci_grape1_wwv10_doppler_frequency_f64"
+name = "HamSCI PSWS Grape V1 Received WWV 10 MHz Carrier Frequency Float64"
+description = "Once-per-second received carrier-frequency estimates (Hz, 1 mHz print resolution) of the NIST WWV 10 MHz broadcast from six GPSDO-referenced Grape V1 receivers of the HamSCI Personal Space Weather Station network, 2020-07-21..2021-05-15; one little-endian float64 sample per station-day file (903 files, 74,966,875 values). Deviations from 10 MHz are dominated by HF ionospheric Doppler shift."
+homepage = "https://doi.org/10.5281/zenodo.6590283"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+evidence_url = "https://zenodo.org/api/records/6590283"
+evidence_quote = "Zenodo record 6590283 metadata: \"license\": {\"id\": \"cc-by-4.0\"}, \"access_right\": \"open\"; the record-level license covers all 3,017 deposited files."
+citation = "Collins, K. (2022). Grape V1 Data: Frequency Estimation and Amplitudes of North American Time Standard Stations [Data set]. Zenodo. https://doi.org/10.5281/zenodo.6590283. Described in: Collins, K., Gibbons, J., Frissell, N., et al. (2023). Crowdsourced Doppler measurements of time standard stations demonstrating ionospheric variability. Earth System Science Data, 15, 1403-1418. https://doi.org/10.5194/essd-15-1403-2023"
+notes = "Attribute Kristina Collins / HamSCI and the Grape station volunteers; cite the Zenodo DOI and the ESSD data paper. download.sh re-checks the live record license on every run."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Zenodo deposit by the dataset author (HamSCI community), per-file API downloads with Zenodo md5 checksums; no mirrors. The ESSD data paper's Code and data availability section cites this exact record DOI."
+usage_notes = "Only the Freq column is emitted. Source file headers carry volunteer station callsigns, city names and coordinates; these are not emitted. Index rows keep only the public PSWS node id and the 6-character Maidenhead grid square that already appear in the file names."
+
+[[origins]]
+id = "zenodo_grape_v1_6590283"
+name = "Zenodo record 6590283: Grape V1 Data: Frequency Estimation and Amplitudes of North American Time Standard Stations"
+url = "https://zenodo.org/records/6590283"
+type = "repository"
+version = "record 6590283 (concept 6584416), published 2022-05-26"
+notes = "Per-file deposit of 3,017 gzip CSV station-day files (1,992,244,203 bytes). The record lists 'isObsoletedBy 10.5281/zenodo.6622111': that later concept (latest record 13637199, also CC-BY-4.0) repackages the same files, uncompressed, into yearly ZIPs (2020.zip 886,979,372 bytes; 2021.zip 3,154,297,494 bytes) and extends coverage to 2024. Probe: the decompressed 2020-07-21/2020-07-23 N00009 WWV10 files from this record have the same uncompressed size and CRC32 as the matching members of 13637199/2020.zip, so the pinned per-file record is content-identical for the files it holds and avoids range-extracting multi-GB ZIPs."
+
+[[resources]]
+id = "zenodo_record_metadata"
+origin = "zenodo_grape_v1_6590283"
+url = "https://zenodo.org/api/records/6590283"
+type = "api_query_result"
+version = "record 6590283"
+access = "Fetched on every download run; must report id 6590283, concept 6584416, the exact title, license cc-by-4.0, open access, 3,017 files, and list every pinned file with the same size and md5."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/hamsci_grape1_wwv10_doppler_frequency_f64/record_6590283.json"
+notes = "Not hash-pinned because Zenodo embeds live view/download statistics; the pinned file list is checked field by field instead."
+
+[[resources]]
+id = "grape1_wwv10_station_day_files"
+origin = "zenodo_grape_v1_6590283"
+url = "https://zenodo.org/api/records/6590283/files/{key}/content"
+type = "file"
+version = "record 6590283"
+access = "920 direct public per-file downloads (curl, paced ~1 request/s, resumable .part files, retries on 429/5xx); exact key, size and Zenodo md5 per file pinned in sources.tsv; download.sh then gunzips every file and checks the identity line, the WWV10 beacon header and the 'UTC,Freq,Vpk' column header."
+size_bytes = 614396212
+sha256 = ""
+local_path = "downloads/hamsci_grape1_wwv10_doppler_frequency_f64/csv_gz/"
+notes = "Selection: every record file matching <date>T<HHMMSS>Z_<node>_G1_<grid>_FRQ_WWV10.csv.gz, i.e. Grape Gen 1 receivers decoding WWV 10 MHz: N00009 (FN20ge) 294, N0000007 (EN91fh) 284, N0000014 (FN21ei) 134, N0000015 (FN20mp) 113, N00010 (EN91ii) 73, N0000029 (DM45dc) 22 station-days. Excluded: S1 (commercial-receiver) nodes N0000002/N0000008/N0000013, beacons WWV5, WWV2p5 and CHU7, and 'Unknown' files."
+
+[local_paths]
+downloads = "downloads/hamsci_grape1_wwv10_doppler_frequency_f64/"
+filtered = "filtered/hamsci_grape1_wwv10_doppler_frequency_f64/"
+index = "index/hamsci_grape1_wwv10_doppler_frequency_f64/"
+samples = "samples/hamsci_grape1_wwv10_doppler_frequency_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/hamsci_grape1_wwv10_doppler_frequency_f64/samples.jsonl"
+summary = "Fetch the 920 pinned G1 WWV10 station-day CSV.gz files from Zenodo record 6590283, classify each file by fixed whole-file rules, and emit the complete Freq column of every kept file as one little-endian float64 sample in file row order."
+deterministic_notes = "sources.tsv (from discover.sh / scripts/grape_sources.py select) pins key, node, grid, file start time, size and md5 for all 920 files, ordered by node then start time, plus the expected keep/exclude status of each file. Whole-file exclusion rules, applied in scripts/grape_wwv10.py and re-derived independently in scripts/grape_wwv10_verify.py: header_mismatch (identity line or '#' block disagrees with the file name, receiver G1 or beacon WWV10, or the 'UTC,Freq,Vpk' header is missing), reference_not_gpsdo ('# Frequency Standard' does not name a GPSDO), malformed_row (a data row other than an unterminated final line is not 'YYYY-MM-DDTHH:MM:SSZ, <d+.ddd>, <token>'), time_order (a row timestamp steps backward, i.e. a clock reset after a receiver reboot, or a row lies off the file's UTC date; repeated seconds are allowed and counted as steps_0s), out_of_band (any |Freq - 10,000,000 Hz| > 100 Hz: a re-tuned receiver or another carrier), too_short (fewer than 3,600 rows, one hour at the nominal cadence), constant (fewer than two distinct values). Realized: 903 kept, 17 excluded - time_order 9 (backward jumps of 685-2,783 s landing on hh:17:15-style times; one also out_of_band), out_of_band 6 (two N0000029 files containing ~4,999,999.75 Hz WWV5 data, runs at +370 Hz / -684 Hz / +402 Hz in three files, plus 3 rows at ~20 MHz in the 2020-07-30 reboot file), too_short 4 (56, 1,759, 2,103 and 3,222 rows). Build fails if a realized status differs from the pinned one, if any of the six nodes has no kept file, if the median kept sample is below 1,000 values, or if primary bytes exceed 1 GB. Verify re-derives every status with a separate parser, checks each stored double formats ('%.3f') back to its exact source token, sha256, index min/max from stored doubles, every gap/step/deviation count in the index, no stray sample files, and manifest totals."
+
+[[series]]
+id = "grape1_wwv10_received_frequency_hz_f64"
+description = "Grape V1 received-carrier-frequency time series of the WWV 10 MHz broadcast, one station-day per sample."
+semantic_meaning = "Estimated received frequency, in Hz, of the WWV 10 MHz carrier (Fort Collins, CO) at one Grape V1 receiver, logged about once per second (UTC rows). The receiver and its estimator are disciplined by a GPS-disciplined oscillator, so departures from 10,000,000 Hz (typically within a few Hz) are dominated by ionospheric Doppler shift along the HF propagation path, plus estimator noise when the signal fades."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source prints Freq with exactly three decimals in a fixed-width %12.3f field (e.g. '  9999999.762', ' 10000000.022'): 10-11 significant digits on a 1 mHz lattice. float32 spacing near 1e7 is 1 Hz, so float32 would erase the Doppler signal; float(token) gives the nearest binary64, which formats back to the exact source token. No offset removal, rescaling, resampling or interpolation."
+source_resources = ["zenodo_record_metadata", "grape1_wwv10_station_day_files"]
+source_format = "gzip-compressed Grape V1 frequency-estimation CSV, one station-day per file: '#,<start>,<node>,<grid>,...,G1,WWV10' identity line, '#' metadata block, 'UTC,Freq,Vpk' column header, CRLF data rows with space-padded fields"
+source_field = "Freq column (estimated received carrier frequency in Hz, three decimals)"
+filtered_input_path = "filtered/hamsci_grape1_wwv10_doppler_frequency_f64/file_classification.tsv"
+filtering = "Only Grape Gen 1 (G1) files of beacon WWV10 (920 of 3,017 record files); whole files are excluded only by the pinned rules in processing.deterministic_notes (17 excluded, 903 kept: N0000007 280, N0000014 132, N0000015 110, N0000029 17, N00009 292, N00010 72), with per-file statistics in file_classification.tsv. Within a kept file every data row is emitted. The Vpk amplitude column is a different quantity and is not emitted."
+missing_value_policy = "No values are imputed or padded. Rows are emitted as logged. Across kept samples, 73,139,962 steps are 1 s, 1,808,480 are 2 s (the logger skips ~2.4% of seconds), 17,477 are longer gaps (outages, partial days) and 53 repeat a second (two distinct measurements stamped with the same second; kept in order). Missing seconds (2,408,216 in total) are not filled; per-sample first/last row time, span, missing_seconds, 0/1/2/>2 s step counts and max step are recorded in the index. Any malformed or non-numeric Freq token (e.g. nan) in a data row would exclude the whole file (none occurred); an unterminated final line that does not parse as a complete row would be dropped and counted (none occurred). Out-of-band, backward-clock, too-short and constant files are excluded whole. In-band excursions during beacon fades are real estimator output and are kept: 993,480 values (1.3%) deviate by more than 5 Hz, 99.995% of them from node N00009 after 2021-01 (bounded within about -6..+10.4 Hz), and the index carries values_beyond_5hz/values_beyond_10hz per sample."
+conversion = "gunzip, split lines, skip the identity line and '#' block, require the 'UTC,Freq,Vpk' header, match each row, parse the Freq token with float() to binary64, and write the values in file row order as raw little-endian float64, one file per kept station-day: samples/<id>/<series>/<node>/<source stem>.f64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 array"
+sample_geometry = "one_value_per_logged_utc_second_in_file_order"
+sample_rank = 1
+sample_axes = ["logged_utc_second"]
+natural_record_kind = "grape_v1_station_day_wwv10_frequency_file"
+sample_count = 903
+total_size_bytes = 599735000
+output_path = "samples/hamsci_grape1_wwv10_doppler_frequency_f64/grape1_wwv10_received_frequency_hz_f64/"

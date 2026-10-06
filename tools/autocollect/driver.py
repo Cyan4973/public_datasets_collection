@@ -66,7 +66,9 @@ LOCK_PATH = RUNTIME_DIR / "driver.lock"
 ROTATION_PATH = RUNTIME_DIR / "focus_rotation.json"
 
 WIDTHS = (8, 16, 32, 64)
-LEDGER_COLUMNS = ["candidate_id", "width", "status", "priority", "title", "source_url", "novelty_kind", "updated", "reason"]
+# `updated` stays last: an empty trailing field would end the row in a tab,
+# which `git diff --check` rejects as trailing whitespace.
+LEDGER_COLUMNS = ["candidate_id", "width", "status", "priority", "title", "source_url", "novelty_kind", "reason", "updated"]
 REGISTRY_COLUMNS = ["dataset_id", "status", "active_path", "evidence_path", "replacement_id", "reason", "retry_condition"]
 ACTIVE_STATUSES = ["proposed", "queued", "ready_for_download", "downloaded", "built", "needs_repair", "ready_for_judge"]
 REGISTRY_TERMINALS = ["rejected", "blocked", "deferred", "transient_failure", "needs_tooling"]
@@ -227,6 +229,12 @@ def tail(path: Path, lines: int = 60) -> str:
 
 def sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest() if path.exists() else ""
+
+
+def clean_markdown(text: str) -> str:
+    """Strip trailing whitespace and extra blank lines at the end, so
+    committed text passes `git diff --check`."""
+    return "\n".join(line.rstrip() for line in text.strip("\n").splitlines()) + "\n"
 
 
 def write_atomic(path: Path, text: str) -> None:
@@ -417,6 +425,7 @@ def append_registry(row: dict) -> None:
     text = REGISTRY_PATH.read_text(encoding="utf-8")
     if not text.endswith("\n"):
         text += "\n"
+    row = {**row, "reason": row.get("reason") or "No reason recorded.", "retry_condition": row.get("retry_condition") or "None recorded."}
     text += "\t".join(one_line(row.get(column, ""), 1200) for column in REGISTRY_COLUMNS) + "\n"
     REGISTRY_PATH.write_text(text, encoding="utf-8")
 
@@ -662,7 +671,7 @@ def card_markdown(candidate: dict, scout_log: str) -> str:
     ]
     lines += [f"- {name}: {one_line(value, 2000)}" for name, value in fields]
     lines += ["", f"Proposed by the autocollect scout on {dt.date.today().isoformat()} (transcript `{scout_log}`)."]
-    return "\n".join(lines) + "\n"
+    return clean_markdown("\n".join(lines))
 
 
 def scout_prompt(width: int, count: int, domains: list[str], have: int, target: int, avoid: list[str], lessons: list[str]) -> str:
@@ -1202,7 +1211,7 @@ class Driver:
             return
         width = row["width"]
         report_path = REPO_ROOT / "reports" / f"{width}bit_{cid}_development_{today()}.md"
-        write_atomic(report_path, out["report_markdown"].rstrip() + "\n")
+        write_atomic(report_path, clean_markdown(out["report_markdown"]))
         append_registry(
             {
                 "dataset_id": cid,
@@ -1254,7 +1263,7 @@ class Driver:
                 f"- Failure class: autocollect driver limit\n- What happened: {reason}\n- Evidence:\n{events}\n"
                 f"- Logs: `.data/pipeline/logs/{cid}/`, `.data/logs/{cid}/`\n- Decision: {status}\n- Retry conditions: {retry}\n"
             )
-        write_atomic(attempt_path, markdown.rstrip() + "\n")
+        write_atomic(attempt_path, clean_markdown(markdown))
         append_registry(
             {
                 "dataset_id": cid,

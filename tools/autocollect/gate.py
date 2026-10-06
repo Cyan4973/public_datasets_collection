@@ -191,6 +191,29 @@ def scan_series(series: dict, rows: list[dict], data_root: Path) -> tuple[dict, 
     return stats, failures, warnings
 
 
+def whitespace_problems(recipe_dir: Path, limit: int = 8) -> list[str]:
+    """Trailing whitespace or blank lines at EOF in files that will be
+    committed; `git diff --check` would block the acceptance commit."""
+    problems: list[str] = []
+    for path in sorted(recipe_dir.rglob("*")):
+        if not path.is_file() or "__pycache__" in path.parts or path.stat().st_size > 5_000_000:
+            continue
+        try:
+            text = path.read_bytes().decode("utf-8")
+        except UnicodeDecodeError:
+            continue
+        relative = path.relative_to(recipe_dir)
+        for number, line in enumerate(text.split("\n"), 1):
+            if line != line.rstrip():
+                problems.append(f"{relative}:{number}")
+                break
+        if text.endswith("\n\n"):
+            problems.append(f"{relative}: blank line at end of file")
+        if len(problems) >= limit:
+            break
+    return problems
+
+
 def load_registry() -> dict[str, str]:
     path = REPO_ROOT / "attempts" / "dataset_status.tsv"
     statuses: dict[str, str] = {}
@@ -224,6 +247,10 @@ def gate(recipe_dir: Path, data_root: Path) -> dict:
             for pattern in CREDENTIAL_PATTERNS:
                 if pattern.search(text):
                     warnings.append(f"{path.relative_to(recipe_dir)}: credential-like pattern {pattern.pattern!r}; recipes must use public anonymous access")
+
+    whitespace = whitespace_problems(recipe_dir)
+    if whitespace:
+        failures.append(f"trailing whitespace or blank line at EOF (blocks the commit under `git diff --check`): {', '.join(whitespace)}")
 
     registry_status = load_registry().get(dataset_id)
     if registry_status in NON_ACTIVE_DATASET_STATUSES:

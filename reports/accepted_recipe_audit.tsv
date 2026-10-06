@@ -348,6 +348,7 @@ earthbigdata_s1_global_coherence_vv_coh12_u8	ok	216000000	216000000	150	1440000	
 cartographer_backpack2d_hokuyo_ranges_f32	ok	225913467	903653868	16	13407654	53630616	0	0	0	1	none	none
 openneuro_ds000030_t1w_mri_f32	ok	230686720	922746880	20	11534336	46137344	0	0	0	1	none	none
 tcia_nsclc_radiomics_ct_i16	ok	244580352	489160704	933	262144	524288	0	0	0	1	none	none
+zenodo_nordif_ebsd_kikuchi_patterns_u8	ok	244684800	244684800	4248	57600	57600	0	0	0	1	none	none
 medmnist_pathmnist_images_u8	ok	252087360	252087360	107180	2352	2352	0	0	0	1	none	none
 empiar_10994_sbfsem_bsed_slices_u16	ok	252375600	504751200	132	1960000	3920000	0	0	0	1	none	none
 openneuro_ds000030_fmri_bold_i16	ok	257499136	514998272	10	27295744	54591488	0	0	0	1	none	none

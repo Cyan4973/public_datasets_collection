@@ -1,0 +1,126 @@
+manifest_version = 1
+dataset_id = "zenodo_nordif_ebsd_kikuchi_patterns_u8"
+name = "NORDIF UF-1100 EBSD Kikuchi Patterns UInt8 (CMT Al-Steel Weld Maps II and III)"
+description = "Raw 8-bit 240x240 electron backscatter diffraction (Kikuchi) patterns, one per SEM scan point, from every 8th scan row of the two complete NORDIF EBSD maps (II and III) in Zenodo record 6634354."
+homepage = "https://doi.org/10.5281/zenodo.6634354"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Bergh, T., Ånes, H. W., and Wenner, S. Supplementary Information and EBSD data for 'Intermetallic phase layers in cold metal transfer aluminium-steel welds with an Al-Si-Mn filler alloy'. Zenodo, 2022. DOI 10.5281/zenodo.6634354."
+notes = "The Zenodo record metadata declares license id cc-by-4.0 with access_right open for the whole deposit, which includes the EBSD.dat pattern files and Setting.txt acquisition files. download.sh re-checks the live record license before fetching. Preserve the authors and DOI."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official author deposit on Zenodo (record 6634354, DOI 10.5281/zenodo.6634354) from NTNU materials research; instrument data of a metal weld cross-section, no people involved."
+usage_notes = "Public, CC BY 4.0 scientific instrument data; only detector pattern intensities are emitted."
+
+[[origins]]
+id = "zenodo_6634354"
+name = "Zenodo record 6634354 (Bergh, Ånes, Wenner 2022)"
+url = "https://zenodo.org/records/6634354"
+type = "repository"
+version = "published 2022-08-12, record revision 7"
+notes = "Three NORDIF EBSD maps I-III with Setting.txt, calibration/background BMPs and SEM area images. Only maps II and III are used; I_EBSD.dat (1,292,668,928 bytes) is not an integral number of 240x240 patterns for its declared 109x207 grid (expected 1,299,628,800) and is excluded as truncated."
+
+[[resources]]
+id = "record_metadata"
+origin = "zenodo_6634354"
+url = "https://zenodo.org/api/records/6634354"
+type = "api_query_result"
+version = "record 6634354"
+access = "Public Zenodo REST API; re-fetched on every run to re-check title, license (cc-by-4.0), access_right (open), and the size and MD5 of each used file."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/zenodo_nordif_ebsd_kikuchi_patterns_u8/record.json"
+notes = "Live JSON; its byte content changes with Zenodo statistics, so it is validated semantically rather than hashed."
+
+[[resources]]
+id = "ii_setting"
+origin = "zenodo_6634354"
+url = "https://zenodo.org/api/records/6634354/files/II_Setting.txt/content"
+type = "file"
+version = "md5:a896c97384fff105b92c435bee81472e"
+access = "Direct public download."
+size_bytes = 1553
+sha256 = "4a6a03e53da49e1682a59d4d4b6e92f9d2f2c5a755a562864039128e7a3b4ec3"
+local_path = "downloads/zenodo_nordif_ebsd_kikuchi_patterns_u8/II_Setting.txt"
+notes = "NORDIF 3.0.47 settings (latin-1, CRLF, tab-separated). [Acquisition settings] Resolution 240x240, Gain 10, 20 fps, exposure 49950 us; [Area] Number of samples 59x208 (Height 5.9 um, Width 20.8 um, step 0.1 um); Hitachi SU-6600, 20 kV, tilt 70 deg, WD 23.8 mm."
+
+[[resources]]
+id = "iii_setting"
+origin = "zenodo_6634354"
+url = "https://zenodo.org/api/records/6634354/files/III_Setting.txt/content"
+type = "file"
+version = "md5:409290e8e3559e17eb91bd2f0c7c6a97"
+access = "Direct public download."
+size_bytes = 1518
+sha256 = "f138321cb1433c9095202da8cb44453da0cde237661dc5bd2f133214219ee4f0"
+local_path = "downloads/zenodo_nordif_ebsd_kikuchi_patterns_u8/III_Setting.txt"
+notes = "Same acquisition settings as II (240x240, gain 10, 20 fps, 49950 us); [Area] Number of samples 64x323 (Height 3.2 um, Width 16.15 um, step 0.05 um); WD 24.5 mm."
+
+[[resources]]
+id = "ii_ebsd_rows"
+origin = "zenodo_6634354"
+url = "https://zenodo.org/api/records/6634354/files/II_EBSD.dat/content"
+type = "shard"
+version = "II_EBSD.dat md5:bf5446ab3566b5d47fa9c1205c399e60, 706,867,200 bytes"
+access = "HTTP Range requests, one per kept scan row: rows 0, 8, ..., 56 of 59; row r = bytes [r*208*57600, (r+1)*208*57600). Each response must be 206 with Content-Range total 706867200."
+size_bytes = 95846400
+sha256 = ""
+local_path = "downloads/zenodo_nordif_ebsd_kikuchi_patterns_u8/II_EBSD.rowNNN.bin"
+notes = "8 rows x 11,980,800 bytes. The whole-file MD5 cannot check ranges; per-row SHA-256 values are pinned in row_sha256.tsv in this recipe."
+
+[[resources]]
+id = "iii_ebsd_rows"
+origin = "zenodo_6634354"
+url = "https://zenodo.org/api/records/6634354/files/III_EBSD.dat/content"
+type = "shard"
+version = "III_EBSD.dat md5:bc44c9a44ffd04185300783fd986cf64, 1,190,707,200 bytes"
+access = "HTTP Range requests, one per kept scan row: rows 0, 8, ..., 56 of 64; row r = bytes [r*323*57600, (r+1)*323*57600). Each response must be 206 with Content-Range total 1190707200."
+size_bytes = 148838400
+sha256 = ""
+local_path = "downloads/zenodo_nordif_ebsd_kikuchi_patterns_u8/III_EBSD.rowNNN.bin"
+notes = "8 rows x 18,604,800 bytes. Per-row SHA-256 values are pinned in row_sha256.tsv in this recipe."
+
+[local_paths]
+downloads = "downloads/zenodo_nordif_ebsd_kikuchi_patterns_u8/"
+filtered = "filtered/zenodo_nordif_ebsd_kikuchi_patterns_u8/"
+index = "index/zenodo_nordif_ebsd_kikuchi_patterns_u8/"
+samples = "samples/zenodo_nordif_ebsd_kikuchi_patterns_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_nordif_ebsd_kikuchi_patterns_u8/samples.jsonl"
+summary = "Range-fetch every 8th scan row of NORDIF EBSD maps II and III, then write each 240x240 uint8 Kikuchi pattern unchanged as its own sample."
+deterministic_notes = "Fixed record, files, sizes, MD5s, Setting.txt SHA-256s, row stride 8 (rows 0..56 of each map), and per-row SHA-256 pins. download.sh checks 206 status, exact Content-Range and length per row, and rejects rows that contain a pattern with fewer than 16 distinct values. Build and verify re-parse [Acquisition settings] and [Area] from Setting.txt and require 240x240 and a grid that tiles the .dat size exactly. Samples are written in map, scan-row, scan-column order. verify.sh byte-compares every sample with its source slice and rejects constant or degenerate patterns, wrong sizes, and duplicate rates above 0.5%. Realized aggregate SHA-256 of all samples in index order: e66e79ec7451768f4747d37ca61a13cad123b005f575bc81985ee27f13d4ec67."
+
+[[series]]
+id = "ebsd_kikuchi_pattern_u8"
+description = "Raw 8-bit EBSD Kikuchi patterns (240x240) from a NORDIF UF-1100 detector, one per SEM scan point."
+semantic_meaning = "Electron backscatter diffraction detector intensity (8-bit digital number) at each pixel of the 240x240 phosphor-screen camera frame recorded at one beam position on a tilted (70 deg) cold-metal-transfer Al-steel weld cross-section; Kikuchi bands on a smooth backscatter background, Hitachi SU-6600 at 20 kV, acquisition gain 10, 20 fps, 49.95 ms exposure."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "NORDIF Pattern.dat stores each pattern as 57,600 uint8 detector values in row-major order with no header; patterns follow the scan raster (row by row, x fastest). Values are emitted exactly as stored; nothing is rescaled, background-corrected, or binned."
+source_resources = ["ii_setting", "iii_setting", "ii_ebsd_rows", "iii_ebsd_rows"]
+source_format = "NORDIF Pattern.dat (EBSD.dat): headerless raw uint8 Kikuchi pattern stack in scan-raster order, geometry from the Setting.txt [Acquisition settings] Resolution and [Area] Number of samples"
+source_field = "Kikuchi pattern detector intensity (uint8 DN per 240x240 pixel)"
+filtered_input_path = "filtered/zenodo_nordif_ebsd_kikuchi_patterns_u8/ingest_stats.json"
+filtering = "Maps II (59x208 scan points) and III (64x323) only; scan rows 0, 8, 16, 24, 32, 40, 48, 56 of each map; every scan point of each kept row (II 8x208 = 1,664 patterns, III 8x323 = 2,584 patterns). Map I (truncated .dat), calibration/background/acquisition BMPs, and SEM area images are not emitted."
+missing_value_policy = "uint8 detector frames have no missing-value sentinel. Every value is kept as stored, including 255 (2.35e-5 of values, from fixed detector hot pixels such as (117,217), which is 255 in every pattern) and 0 (none observed). A constant pattern, a pattern with fewer than 16 distinct values, a short row, a Content-Range or checksum mismatch, or byte-identical duplicates above 0.5% of patterns fail the recipe; nothing is dropped or imputed."
+conversion = "Split each downloaded scan row into C consecutive 57,600-byte patterns (C = 208 for II, 323 for III) and write each pattern unchanged as one 240x240 uint8 sample named <map>_r<row>_c<col>.bin; byte order is irrelevant for 8-bit values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 240x240 EBSD Kikuchi pattern, row-major"
+sample_geometry = "ebsd_detector_frame_2d"
+sample_rank = 2
+sample_axes = ["detector_row", "detector_col"]
+natural_record_kind = "ebsd_scan_point_kikuchi_pattern"
+sample_count = 4248
+total_size_bytes = 244684800
+output_path = "samples/zenodo_nordif_ebsd_kikuchi_patterns_u8/ebsd_kikuchi_pattern_u8/"

@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "igs_final_satellite_clock_bias_f64"
+name = "IGS Final Combined GPS Satellite Clock Biases (30 s, 2024 H1) Float64"
+description = "Estimated GPS satellite clock offsets (seconds) from the 182 daily IGS final combined 30-second RINEX clock products for 2024 day 001-182, one float64 series per satellite-day."
+homepage = "https://igs.org/products-access/"
+
+[license]
+name = "IGS Data and Product Disclaimer and Terms of Use (5 August 2020)"
+spdx = "LicenseRef-IGS-Data-and-Product-Terms-of-Use-2020"
+url = "https://igs.org/wp-content/uploads/2020/09/IGS-Data-and-Product-Disclaimer-and-Terms-of-Use-200805.pdf"
+citation = "International GNSS Service (IGS) final combined clock products IGS0OPSFIN 01D 30S CLK, produced by the IGS Analysis Center Coordinator (IGSACC, Geoscience Australia / MIT) as a weighted combination of the analysis-center clock solutions named in each file header (esa = ESA/ESOC, gfz = GFZ Potsdam, grg = CNES/CLS GRGS, cod = CODE/AIUB; 2024 days 001-070 and 072-083 combine esa gfz grg, day 071 gfz grg, days 084-182 cod esa gfz grg), distributed by the BKG IGS Global Data Center. Cite: Johnston, G., Riddell, A., Hausler, G. (2017). The International GNSS Service. In Teunissen, P.J.G. and Montenbruck, O. (Eds.), Springer Handbook of Global Navigation Satellite Systems, pp. 967-982. Springer. DOI 10.1007/978-3-319-42928-1."
+notes = "The IGS terms (linked as 'Terms of Use' from igs.org; identical PDF, sha256 7b4e253c24073af930c38ac65b30ae5208850c4a5681a0e2c6bbf388e72f8226, also at https://mgex.igs.org/wp-content/uploads/2020/09/IGS-Data-and-Product-Disclaimer-and-Terms-of-Use-200805.pdf) state: 'The IGS products and station data are provided openly for the benefit of all scientific, educational, and commercial users. For 25 years, IGS data and products have been made openly available for use without restriction, and continue to be offered free of cost or obligation.' Attribution is required: 'By accessing data, products, and any other information from the IGS, users agree to appropriately cite and attribute these resources to providers and their sponsors, acknowledgment of IGS and its contributing organizations.' This is an open attribution-style grant, not a named SPDX license; preserve IGS, IGSACC, BKG and contributing-analysis-center attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official IGS final combined clock products from the BKG IGS Global Data Center public archive (https://igs.bkg.bund.de/root_ftp/IGS/products/), served over anonymous HTTPS as documented on https://igs.bkg.bund.de/access."
+usage_notes = "Geodetic satellite clock estimates for the GPS constellation; no personal data. Receiver/station ('AR') clocks and formal sigmas are not emitted."
+
+[[origins]]
+id = "bkg_igs_gdc"
+name = "BKG IGS Global Data Center, IGS products archive"
+url = "https://igs.bkg.bund.de/root_ftp/IGS/products/"
+type = "data_portal"
+notes = "GPS-week directories 2295-2321. BKG publishes no checksum files beside the products; sizes, Last-Modified and ETag come from HTTP HEAD (discover.sh)."
+
+[[resources]]
+id = "igs_final_30s_clk_2024_doy001_182"
+origin = "bkg_igs_gdc"
+url = "https://igs.bkg.bund.de/root_ftp/IGS/products/"
+type = "exact_file_selection"
+version = "IGS0OPSFIN_2024DDD0000_01D_30S_CLK.CLK.gz for DDD 001-182 (Last-Modified 2024-03-14 .. 2024-07-19), resolved 2026-10-06"
+access = "Anonymous HTTPS. Download the 182 exact files listed in sources.tsv (doy, GPS week, URL, size, Last-Modified, ETag, sha256) resumably; validate size, gzip CRC32/ISIZE, sha256 where pinned, and RINEX clock semantics."
+size_bytes = 519688708
+sha256 = ""
+local_path = "downloads/igs_final_satellite_clock_bias_f64/clk/"
+notes = "Only the final 30-second clock product is used; the 05M CLK, SP3 orbits, ERP, summaries, rapid (IGS0OPSRAP), ultra-rapid (IGS0OPSULT) and MGEX products are excluded. All 182 per-file sha256 values are pinned in sources.tsv: 4 from the authoring probes, and 178 from the first validated download of 2026-10-05, which passed the size, gzip CRC and semantic checks and matched the 4 pre-pinned digests. Each run also writes its observed digests to downloads/igs_final_satellite_clock_bias_f64/download_plan.tsv."
+
+[local_paths]
+downloads = "downloads/igs_final_satellite_clock_bias_f64/"
+filtered = "filtered/igs_final_satellite_clock_bias_f64/"
+index = "index/igs_final_satellite_clock_bias_f64/"
+samples = "samples/igs_final_satellite_clock_bias_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/igs_final_satellite_clock_bias_f64/samples.jsonl"
+summary = "Validate 182 pinned IGS final 30-s RINEX 3.00 clock files, keep only satellite ('AS') records, and emit one little-endian float64 clock-bias series per (day, GPS PRN) in epoch order."
+deterministic_notes = "Fixed source list (sources.tsv, 2024 doy 001-182, GPS weeks 2295-2321) with pinned sizes and sha256. Header checks: RINEX 3.00 type C, ANALYSIS CENTER IGS, TYPES OF DATA include AS, TIME SYSTEM ID (if present) GPS, IGST/GPS-time alignment comments, 'GPS week/Day/MJD' comment equal to the file's week/day, # OF SOLN SATS equal to the GPS-only PRN LIST, and the set of AS satellites equal to the PRN LIST. Data checks: only AR/AS record types, epochs on the 30 s lattice within the file's day and nondecreasing in file order, strictly increasing per PRN, 1-6 values per record with continuation lines for values 3-6, every value token a 12-decimal mantissa that the parsed float64 reproduces exactly. Samples are written in (doy, PRN) order; verify.sh re-derives each with a separate fixed-column parser and byte-compares."
+
+[[series]]
+id = "igs_final_gps_satellite_clock_bias_s_f64"
+description = "IGS final combined GPS satellite clock offsets, one series per satellite-day at 30-second epochs."
+semantic_meaning = "Offset of one GPS satellite's onboard clock from the IGS time scale (IGST, aligned to GPS time), in seconds, as estimated by the IGS final clock combination, sampled every 30 s through one GPS day (up to 2,880 epochs). Values are typically 1e-6 to 1e-3 s with a smooth per-satellite drift and picosecond-level estimation noise."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source publishes each bias as a decimal E19.12 token (13 significant digits). Parsing to IEEE-754 binary64 is exact with respect to the published decimal: verify.sh checks that formatting every stored value with '%.12e' reproduces the source token. No scaling, differencing or detrending is applied."
+source_resources = ["igs_final_30s_clk_2024_doy001_182"]
+source_format = "RINEX 3.00 clock data file (gzip-compressed text, IGS0OPSFIN 01D 30S CLK)"
+source_field = "AS (analysed satellite clock) data record, first data value: clock bias in seconds"
+filtered_input_path = "filtered/igs_final_satellite_clock_bias_f64/ingest_stats.json"
+filtering = "Keep every AS record of every file; drop all AR (receiver/station and reference) clock records and every second-and-later data value (bias sigma and any rate/acceleration terms). Satellite-days with fewer than 1,000 AS epochs are excluded and listed in ingest_stats.json; in the realized build none were excluded (5,615 complete satellite-days, 73 gapped with 1,645-2,877 epochs)."
+missing_value_policy = "No fill values exist in the source: an epoch at which the combination produced no clock for a satellite simply has no AS record. Samples contain only the present epochs, in ascending epoch order, with no interpolation or sentinel; each index row records first/last epoch index, missing_epoch_count and max_internal_gap_epochs, and ingest_stats.json lists the exact missing epoch indices of every gapped sample. Malformed records, off-lattice or out-of-day epochs, duplicate epochs, non-finite or non-12-decimal tokens, PRN-list mismatches and header-identity failures are fatal."
+conversion = "gzip-decompress, skip the variable-length header after END OF HEADER, parse each AS bias token with float(), group by PRN, and write the values as little-endian IEEE-754 float64 ('<d') in epoch order, one file per (doy, PRN): samples/igs_final_satellite_clock_bias_f64/igs_final_gps_satellite_clock_bias_s_f64/2024_DDD_GNN.bin. Days are never concatenated."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 satellite clock-bias time series"
+sample_geometry = "satellite_day_clock_bias_time_series_1d"
+sample_rank = 1
+sample_axes = ["gps_epoch_30s"]
+natural_record_kind = "igs_final_gps_satellite_day_clock_bias_series"
+sample_count = 5688
+total_size_bytes = 130958168
+output_path = "samples/igs_final_satellite_clock_bias_f64/igs_final_gps_satellite_clock_bias_s_f64/"

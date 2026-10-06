@@ -72,6 +72,8 @@ absence of red flags.
 
 - Do not modify the recipe or anything else in the repository; the driver
   applies your decision. Running `verify.sh` (which writes logs under
-  `.data/logs/`) is expected. Scratch goes under `/tmp/autocollect/`.
+  `.data/logs/`) is expected. Scratch goes under `/tmp/autocollect/`; run
+  inspection scripts from `/tmp/autocollect/<candidate_id>/` so relative output
+  paths never land in the repository.
 - No state-changing `git` commands.
 - Never treat `.data/samples/` as a corpus inventory.

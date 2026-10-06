@@ -64,6 +64,10 @@ HEARTBEAT_PATH = RUNTIME_DIR / "driver_status.json"
 PAUSE_PATH = RUNTIME_DIR / "global_pause.json"
 LOCK_PATH = RUNTIME_DIR / "driver.lock"
 ROTATION_PATH = RUNTIME_DIR / "focus_rotation.json"
+QUARANTINE_DIR = RUNTIME_DIR / "quarantine"
+# Untracked files outside these top-level areas are agent scratch (e.g. a
+# self-test run from the repo root) and get quarantined instead of pausing.
+RECIPE_AREAS = {"datasets", "attempts", "reports", "pipeline", "tools", "evaluation", ".claude", ".llms", "staging", ".data"}
 
 WIDTHS = (8, 16, 32, 64)
 # `updated` stays last: an empty trailing field would end the row in a tab,
@@ -836,8 +840,21 @@ class Driver:
 
     def check_repo_mutations(self) -> None:
         unexpected = {path for path in dirty_paths() - self.startup_dirty if not path.startswith(DRIVER_OWNED_PREFIXES)}
-        if unexpected:
-            self.pause_globally(f"unexpected repository changes outside staging/: {sorted(unexpected)[:20]}")
+        if not unexpected:
+            return
+        untracked = set(git("ls-files", "--others", "--exclude-standard").stdout.splitlines())
+        strays = sorted(path for path in unexpected if path in untracked and path.split("/", 1)[0] not in RECIPE_AREAS)
+        if strays:
+            target = QUARANTINE_DIR / dt.datetime.now().strftime("%Y%m%d_%H%M%S")
+            for path in strays:
+                destination = target / path
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.move(str(REPO_ROOT / path), str(destination))
+            log(f"quarantined {len(strays)} stray untracked files to {target}: {strays[:10]}")
+            notify(self.cfg, f"autocollect quarantined {len(strays)} stray files an agent wrote into the repo: {strays[:5]} -> {target}")
+        rest = sorted(unexpected - set(strays))
+        if rest:
+            self.pause_globally(f"unexpected repository changes outside staging/: {rest[:20]}")
 
     def budget_exhausted(self) -> bool:
         return self.cfg.max_cost_usd is not None and total_cost(self.started_at) >= self.cfg.max_cost_usd

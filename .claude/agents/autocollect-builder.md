@@ -80,6 +80,9 @@ retry condition. Abandoning early is better than forcing a weak recipe.
 ## Constraints
 
 - Edit only `staging/<candidate_id>/`; scratch goes under `/tmp/autocollect/`.
+  Run every self-test, probe, and throwaway script from
+  `/tmp/autocollect/<candidate_id>/` (`cd` there first): your working directory
+  is the repository root, so relative output paths would land in the repo.
   Never touch `datasets/`, `attempts/`, `reports/`, `pipeline/`, or `tools/`;
   the driver records outcomes.
 - No state-changing `git` commands.

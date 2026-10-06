@@ -9,6 +9,8 @@ free-text terms. Keys on stable dataset_id per AGENTS.md; never inventories
 Examples:
   novelty.py --url https://zenodo.org/records/123 --terms lidar intensity
   novelty.py --list-width 16
+  novelty.py --vocabulary                       # measurement types already collected
+  novelty.py --type sar_backscatter --archive planetarycomputer.microsoft.com/modis
 """
 from __future__ import annotations
 
@@ -28,6 +30,8 @@ DOWNSTREAM_TRANSFORMER = OPENZL_ROOT / "transformer" / "source_data"
 DOWNSTREAM_REGISTRY = DOWNSTREAM_NUMERIC / "public_datasets" / "repro" / "dataset_registry.csv"
 REGISTRY_PATH = REPO_ROOT / "attempts" / "dataset_status.tsv"
 LEDGER_PATH = REPO_ROOT / "pipeline" / "candidates.tsv"
+BREADTH_KEYS_PATH = REPO_ROOT / "pipeline" / "breadth_keys.tsv"
+BREADTH_VOCAB_PATH = REPO_ROOT / "pipeline" / "breadth_vocabulary.tsv"
 
 TRANSFORMER_WIDTH_DIRS = {8: "u8", 16: "le-u16", 32: "le-u32", 64: "le-u64"}
 URL_RE = re.compile(r"https?://[^\s'\"<>)`\\]+")
@@ -215,7 +219,44 @@ def list_width(width: int, recipes: list[dict]) -> dict:
     }
 
 
+def breadth_lookup(measurement_type: str, instrument: str, archive: str) -> dict:
+    rows = load_tsv(BREADTH_KEYS_PATH)
+    result = {}
+    if measurement_type:
+        key = measurement_type.lower()
+        result["same_measurement_type"] = [
+            row for row in rows
+            if row["measurement_type"].lower() == key or key in {t.strip().lower() for t in row.get("other_types", "").split(",")}
+        ]
+    if instrument:
+        result["same_instrument_line"] = [row for row in rows if row["instrument_line"].lower() == instrument.lower()]
+    if archive:
+        result["same_archive_collection"] = [row for row in rows if row["archive_collection"].lower().rstrip("/") == archive.lower().rstrip("/")]
+    return result
+
+
+def vocabulary() -> list[dict]:
+    rows = load_tsv(BREADTH_KEYS_PATH)
+    definitions = {row["measurement_type"]: row.get("definition", "") for row in load_tsv(BREADTH_VOCAB_PATH)}
+    members: dict[str, list[str]] = {}
+    for row in rows:
+        members.setdefault(row["measurement_type"], []).append(f"{row['dataset_id']} ({row['widths']})")
+    return [{"measurement_type": key, "definition": definitions.get(key, ""), "members": sorted(value)} for key, value in sorted(members.items())]
+
+
 def print_text(report: dict) -> None:
+    if "vocabulary" in report:
+        print(f"# measurement types already collected ({len(report['vocabulary'])})")
+        for item in report["vocabulary"]:
+            print(f"- {item['measurement_type']}: {item['definition']} [{len(item['members'])}] {', '.join(item['members'][:6])}")
+        return
+    if "breadth" in report:
+        for section, rows in report["breadth"].items():
+            print(f"# {section} ({len(rows)})")
+            for row in rows:
+                print(f"- {row['dataset_id']} widths={row['widths']} type={row['measurement_type']} line={row['instrument_line']} "
+                      f"archive={row['archive_collection']} origin={row['origin']} verdict={row.get('verdict', '')}")
+        return
     if "list_width" in report:
         listing = report["list_width"]
         print(f"# {listing['width']}-bit coverage")
@@ -252,15 +293,23 @@ def main() -> int:
     parser.add_argument("--url", action="append", default=[], help="source/landing/resource URL (repeatable)")
     parser.add_argument("--terms", nargs="*", default=[], help="case-insensitive substrings to search")
     parser.add_argument("--list-width", type=int, choices=sorted(TRANSFORMER_WIDTH_DIRS), help="list local and downstream coverage at a width")
+    parser.add_argument("--vocabulary", action="store_true", help="measurement types already collected, with members")
+    parser.add_argument("--type", default="", help="families with this measurement_type, at any width")
+    parser.add_argument("--instrument", default="", help="families with this instrument_line")
+    parser.add_argument("--archive", default="", help="families from this archive_collection")
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
 
     recipes = load_recipes(REPO_ROOT / "datasets", "datasets") + load_recipes(REPO_ROOT / "staging", "staging")
-    if args.list_width:
-        report: dict = {"list_width": list_width(args.list_width, recipes)}
+    if args.vocabulary:
+        report: dict = {"vocabulary": vocabulary()}
+    elif args.type or args.instrument or args.archive:
+        report = {"breadth": breadth_lookup(args.type, args.instrument, args.archive)}
+    elif args.list_width:
+        report = {"list_width": list_width(args.list_width, recipes)}
     else:
         if not args.url and not args.terms:
-            parser.error("give --url and/or --terms, or --list-width")
+            parser.error("give --url and/or --terms, --list-width, --vocabulary, or --type/--instrument/--archive")
         report = {
             "url_matches": url_matches(args.url, recipes),
             "term_matches": term_matches(args.terms, recipes, load_tsv(REGISTRY_PATH), load_tsv(LEDGER_PATH)),

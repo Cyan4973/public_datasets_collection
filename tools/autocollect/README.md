@@ -102,6 +102,28 @@ background task of that session; children inherit the session's identity.
 A plain tmux shell does not have the role. `--allow-user-identity-downloads`
 overrides the check; not recommended.
 
+## Breadth enforcement
+
+Breadth is checked mechanically, after the 2026-10-06 audit
+(`reports/autocollect_diversity_audit_20261006.md`) found that 41 of the first
+85 acceptances were new content in a measurement type the corpus already had.
+
+- `pipeline/breadth_keys.tsv` holds `measurement_type`, `instrument_line` and
+  `archive_collection` for every family, baseline included, and
+  `pipeline/breadth_vocabulary.tsv` defines the measurement types.
+  `novelty.py --vocabulary` and `novelty.py --type/--instrument/--archive`
+  query them.
+- The screener and the judge each assign the keys. The driver then rejects a
+  candidate whose measurement type already exists at any width. If the agent
+  claims a measured statistical difference (`breadth_override`), or the
+  candidate would be the third from one archive collection in this effort, the
+  candidate is paused and you get a ping. Decide with
+  `driver.py approve-breadth <id> [--note ...]` or
+  `driver.py reject <id> --reason ...`.
+- Each acceptance gets a breadth verdict (`STRONG`, `OK`, `WEAK`), recorded in
+  the ledger and the breadth registry. Only `STRONG` and `OK` count toward the
+  per-width goal; `status` shows counted and weak families separately.
+
 ## Guardrails
 
 - Downloads run only through the driver, in their own process group. They are

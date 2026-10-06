@@ -20,6 +20,8 @@ Commands:
   driver.py follow [--backlog 3]
   driver.py run [--agents 3] [--downloads 2] [--widths 8,16] [--stop-after N] [--max-cost-usd X]
   driver.py requeue <candidate_id> [--status queued]
+  driver.py approve-breadth <candidate_id> [--note ...]
+  driver.py reject <candidate_id> --reason ...
   driver.py unpause
 """
 from __future__ import annotations
@@ -52,6 +54,17 @@ CARDS_DIR = PIPELINE_DIR / "cards"
 LEDGER_PATH = PIPELINE_DIR / "candidates.tsv"
 BASELINE_PATH = PIPELINE_DIR / "baseline.json"
 REGISTRY_PATH = REPO_ROOT / "attempts" / "dataset_status.tsv"
+# Breadth registry: one row per family (baseline and autocollect) with its
+# measurement type, instrument line and archive collection. The breadth gate
+# compares candidates against it across all widths.
+BREADTH_KEYS_PATH = PIPELINE_DIR / "breadth_keys.tsv"
+BREADTH_COLUMNS = ["dataset_id", "origin", "widths", "measurement_type", "instrument_line", "archive_collection", "other_types", "verdict"]
+COUNTED_VERDICTS = {"STRONG", "OK"}
+# Bare multi-tenant hosts are not one archive collection; the per-archive cap skips them.
+MULTI_TENANT_HOSTS = {
+    "zenodo.org", "figshare.com", "github.com", "raw.githubusercontent.com", "huggingface.co", "s3.amazonaws.com",
+    "osf.io", "dataverse.harvard.edu", "datadryad.org", "storage.googleapis.com",
+}
 STAGING_DIR = REPO_ROOT / "staging"
 DATASETS_DIR = REPO_ROOT / "datasets"
 RUNTIME_DIR = DATA_ROOT / "pipeline"
@@ -72,7 +85,7 @@ RECIPE_AREAS = {"datasets", "attempts", "reports", "pipeline", "tools", "evaluat
 WIDTHS = (8, 16, 32, 64)
 # `updated` stays last: an empty trailing field would end the row in a tab,
 # which `git diff --check` rejects as trailing whitespace.
-LEDGER_COLUMNS = ["candidate_id", "width", "status", "priority", "title", "source_url", "novelty_kind", "reason", "updated"]
+LEDGER_COLUMNS = ["candidate_id", "width", "status", "priority", "title", "source_url", "novelty_kind", "breadth", "reason", "updated"]
 REGISTRY_COLUMNS = ["dataset_id", "status", "active_path", "evidence_path", "replacement_id", "reason", "retry_condition"]
 ACTIVE_STATUSES = ["proposed", "queued", "ready_for_download", "downloaded", "built", "needs_repair", "ready_for_judge"]
 REGISTRY_TERMINALS = ["rejected", "blocked", "deferred", "transient_failure", "needs_tooling"]
@@ -194,6 +207,7 @@ class Config:
     max_build_cycles: int = 4
     max_repair_cycles: int = 2
     max_agent_failures: int = 2
+    max_per_archive: int = 2
     budgets_usd: dict = dataclasses.field(default_factory=lambda: {"scout": 10.0, "screener": 8.0, "builder": 40.0, "judge": 15.0})
     timeouts_s: dict = dataclasses.field(default_factory=lambda: {"scout": 5400, "screener": 5400, "builder": 4 * 3600, "judge": 2 * 3600})
     max_cost_usd: float | None = None
@@ -420,12 +434,55 @@ def load_baseline() -> dict:
     return json.loads(BASELINE_PATH.read_text(encoding="utf-8"))
 
 
-def progress() -> dict[int, list[str]]:
+def load_breadth() -> list[dict]:
+    if not BREADTH_KEYS_PATH.exists():
+        return []
+    with BREADTH_KEYS_PATH.open(encoding="utf-8", newline="") as fh:
+        return [dict(row) for row in csv.DictReader(fh, delimiter="\t")]
+
+
+def append_breadth(row: dict) -> None:
+    rows = [existing for existing in load_breadth() if existing["dataset_id"] != row["dataset_id"]]
+    rows.append(row)
+    lines = ["\t".join(BREADTH_COLUMNS)] + ["\t".join(one_line(item.get(column, "") or "-", 300) for column in BREADTH_COLUMNS) for item in rows]
+    write_atomic(BREADTH_KEYS_PATH, "\n".join(lines) + "\n")
+
+
+def breadth_matches(measurement_type: str, exclude: str = "") -> list[str]:
+    """Families of the same measurement type at any width, baseline included."""
+    key = measurement_type.strip().lower()
+    if not key or key == "-":
+        return []
+    hits = []
+    for row in load_breadth():
+        if row["dataset_id"] == exclude:
+            continue
+        types = {row["measurement_type"].strip().lower()} | {t.strip().lower() for t in row.get("other_types", "").split(",") if t.strip() not in ("", "-")}
+        if key in types:
+            hits.append(row["dataset_id"])
+    return hits
+
+
+def archive_count(archive: str, exclude: str = "") -> int:
+    key = archive.strip().lower().rstrip("/")
+    if not key or key == "-" or key in MULTI_TENANT_HOSTS:
+        return 0
+    return sum(1 for row in load_breadth() if row["origin"] == "autocollect" and row["dataset_id"] != exclude
+               and row["archive_collection"].strip().lower().rstrip("/") == key)
+
+
+def progress(counted_only: bool = True) -> dict[int, list[str]]:
+    """New recipes since the baseline per width. Autocollect families count
+    toward the goal only with a STRONG or OK breadth verdict; recipes added
+    outside the pipeline count as they are."""
     baseline = load_baseline()
     known = set(baseline["accepted_ids"])
+    verdicts = {row["candidate_id"]: row.get("breadth", "") or "" for row in load_ledger()}
     new: dict[int, list[str]] = {width: [] for width in WIDTHS}
     for dataset_id, widths in accepted_widths().items():
         if dataset_id in known:
+            continue
+        if counted_only and dataset_id in verdicts and verdicts[dataset_id].upper() not in COUNTED_VERDICTS:
             continue
         for width in widths:
             new[width].append(dataset_id)
@@ -534,6 +591,9 @@ SCOUT_SCHEMA = {
                     "decode_path": STR,
                     "novelty_kind": {"type": "string", "enum": NOVELTY_KINDS[:-1]},
                     "novelty_evidence": STR,
+                    "measurement_type": STR,
+                    "instrument_line": STR,
+                    "archive_collection": STR,
                     "homogeneity_notes": STR,
                     "risks": STR,
                     "probe_evidence": STR,
@@ -543,6 +603,7 @@ SCOUT_SCHEMA = {
                     "license", "license_evidence_url", "license_quote", "natural_record", "est_samples",
                     "est_primary_values", "est_download_bytes", "est_primary_bytes", "decode_path",
                     "novelty_kind", "novelty_evidence", "homogeneity_notes", "risks", "probe_evidence",
+                    "measurement_type", "instrument_line", "archive_collection",
                 ],
             },
         },
@@ -564,8 +625,14 @@ SCREEN_SCHEMA = {
                     "priority": {"type": "integer", "minimum": 1, "maximum": 5},
                     "reason": STR,
                     "builder_notes": STR,
+                    "measurement_type": STR,
+                    "instrument_line": STR,
+                    "archive_collection": STR,
+                    "breadth_override": {"type": "boolean"},
+                    "measured_difference": STR,
                 },
-                "required": ["candidate_id", "decision", "priority", "reason", "builder_notes"],
+                "required": ["candidate_id", "decision", "priority", "reason", "builder_notes", "measurement_type",
+                             "instrument_line", "archive_collection", "breadth_override", "measured_difference"],
             },
         }
     },
@@ -592,6 +659,12 @@ JUDGE_SCHEMA = {
     "properties": {
         "decision": {"type": "string", "enum": ["accept", "repair", *REGISTRY_TERMINALS]},
         "novelty_kind": {"type": "string", "enum": NOVELTY_KINDS},
+        "breadth_verdict": {"type": "string", "enum": ["STRONG", "OK", "WEAK"]},
+        "measurement_type": STR,
+        "instrument_line": STR,
+        "archive_collection": STR,
+        "breadth_override": {"type": "boolean"},
+        "measured_difference": STR,
         "summary": STR,
         "checks": {"type": "object", "properties": {check: STR for check in JUDGE_CHECKS}, "required": JUDGE_CHECKS},
         "repair_instructions": STR,
@@ -599,7 +672,9 @@ JUDGE_SCHEMA = {
         "retry_condition": STR,
         "report_markdown": STR,
     },
-    "required": ["decision", "novelty_kind", "summary", "checks", "repair_instructions", "registry_reason", "retry_condition", "report_markdown"],
+    "required": ["decision", "novelty_kind", "breadth_verdict", "measurement_type", "instrument_line", "archive_collection",
+                 "breadth_override", "measured_difference", "summary", "checks", "repair_instructions", "registry_reason",
+                 "retry_condition", "report_markdown"],
 }
 
 
@@ -684,6 +759,9 @@ def card_markdown(candidate: dict, scout_log: str) -> str:
         ("Estimated primary bytes", f"{candidate['est_primary_bytes']:,}"),
         ("Decode path", candidate["decode_path"]),
         ("Novelty kind", candidate["novelty_kind"]),
+        ("Measurement type", candidate.get("measurement_type", "")),
+        ("Instrument line", candidate.get("instrument_line", "")),
+        ("Archive collection", candidate.get("archive_collection", "")),
         ("Novelty evidence", candidate["novelty_evidence"]),
         ("Homogeneity", candidate["homogeneity_notes"]),
         ("Risks", candidate["risks"]),
@@ -736,7 +814,9 @@ def judge_prompt(row: dict, state: dict, cfg: Config, gate_warnings: list[str]) 
         f"Card: pipeline/cards/{cid}.md\n"
         f"Repair cycles used: {state.get('repair_cycles', 0)} of {cfg.max_repair_cycles}\n\n"
         f"The driver already re-ran build.sh and verify.sh from the current scripts and gate.py passed. Gate warnings:\n{warnings}\n\n"
-        f"Builder summary:\n{state.get('builder_summary', '(none)')}\n"
+        f"Screener breadth keys: {json.dumps(state.get('breadth_keys', {}))}\n"
+        + (f"Breadth override APPROVED by the user: {state.get('breadth_approval_note', '')}\n" if state.get("breadth_approved") else "")
+        + f"\nBuilder summary:\n{state.get('builder_summary', '(none)')}\n"
     )
 
 
@@ -1105,6 +1185,33 @@ class Driver:
         save_ledger(self.ledger)
         log(f"scout {width}-bit proposed {added} candidates (cost ${agent['cost']:.2f})")
 
+    def breadth_gate(self, cid: str, measurement_type: str, archive: str, override: bool, difference: str) -> tuple[str, str]:
+        """Mechanical breadth rule: a measurement type already collected at any
+        width (baseline included) is rejected unless the user approves an
+        override backed by a measured difference; a third family from the same
+        archive collection needs the user's sign-off."""
+        if load_state(cid).get("breadth_approved"):
+            return "ok", ""
+        prior = breadth_matches(measurement_type, exclude=cid)
+        if prior:
+            if override and difference.strip():
+                return "signoff", (f"breadth override requested: measurement_type {measurement_type} already collected "
+                                   f"({', '.join(prior[:6])}); claimed measured difference: {one_line(difference, 400)}")
+            return "reject", f"breadth: measurement_type {measurement_type} already collected ({', '.join(prior[:6])})"
+        count = archive_count(archive, exclude=cid)
+        if count >= self.cfg.max_per_archive:
+            return "signoff", f"archive cap: {count} families already accepted from {archive} in this effort"
+        return "ok", ""
+
+    def hold_for_signoff(self, cid: str, reason: str) -> None:
+        state = load_state(cid)
+        state["paused_from"] = self.row(cid)["status"]
+        state["breadth_signoff"] = reason
+        save_state(cid, state)
+        self.set_status(cid, PAUSED, reason)
+        notify(self.cfg, f"autocollect needs your sign-off for {cid}: {one_line(reason, 500)}. "
+                         f"Approve: driver.py approve-breadth {cid}; refuse: driver.py reject {cid} --reason ...")
+
     def apply_screen(self, cids: list[str], agent: dict) -> None:
         decisions = {item["candidate_id"]: item for item in agent["structured"].get("decisions", [])} if agent["ok"] else {}
         if not agent["ok"]:
@@ -1122,8 +1229,15 @@ class Driver:
             if decision["decision"] == "approve":
                 state["screener_notes"] = decision["builder_notes"]
                 state["preexisting_data"] = any((DATA_ROOT / sub / cid).exists() for sub in DATA_SUBDIRS_PRUNABLE)
+                state["breadth_keys"] = {key: decision.get(key, "") for key in ("measurement_type", "instrument_line", "archive_collection")}
                 save_state(cid, state)
+                verdict, why = self.breadth_gate(cid, decision.get("measurement_type", ""), decision.get("archive_collection", ""),
+                                                 bool(decision.get("breadth_override")), decision.get("measured_difference", ""))
                 self.set_status(cid, "queued", decision["reason"], priority=decision["priority"])
+                if verdict == "reject":
+                    self.set_status(cid, "screened_out", why)
+                elif verdict == "signoff":
+                    self.hold_for_signoff(cid, why)
             else:
                 save_state(cid, state)
                 self.set_status(cid, "screened_out", decision["reason"])
@@ -1213,6 +1327,24 @@ class Driver:
         if decision == "accept" and out.get("novelty_kind") == "not_new":
             decision = "rejected"
             out["registry_reason"] = out.get("registry_reason") or "Judge labeled the material not new."
+        if decision == "accept":
+            verdict, why = self.breadth_gate(cid, out.get("measurement_type", ""), out.get("archive_collection", ""),
+                                             bool(out.get("breadth_override")), out.get("measured_difference", ""))
+            if verdict == "signoff":
+                log(f"judge {cid}: accept held for breadth sign-off — {why}")
+                self.hold_for_signoff(cid, why)
+                return
+            if verdict == "reject":
+                decision = "rejected"
+                out["registry_reason"] = f"{why}. Judge summary: {one_line(out.get('summary', ''), 400)}"
+                out["retry_condition"] = "Retry only with a measured statistical difference from the existing families and the user's sign-off."
+            elif breadth_matches(out.get("measurement_type", ""), exclude=cid):
+                # Approved override: same measurement type exists, so never STRONG or new_modality.
+                if out.get("breadth_verdict") == "STRONG":
+                    out["breadth_verdict"] = "OK"
+                if out.get("novelty_kind") == "new_modality":
+                    out["novelty_kind"] = "new_content_same_modality"
+                    self.row(cid)["novelty_kind"] = out["novelty_kind"]
         log(f"judge {cid}: {decision} — {one_line(out.get('summary', ''), 300)}")
         if decision == "accept":
             self.promote(cid, out)
@@ -1267,17 +1399,31 @@ class Driver:
             }
         )
         subprocess.run([sys.executable, "tools/audit_acceptance.py"], cwd=REPO_ROOT, text=True, capture_output=True, check=False)
+        verdict = out.get("breadth_verdict") or "WEAK"
+        append_breadth(
+            {
+                "dataset_id": cid,
+                "origin": "autocollect",
+                "widths": ",".join(str(width) for width in accepted_widths().get(cid, [])),
+                "measurement_type": out.get("measurement_type", ""),
+                "instrument_line": out.get("instrument_line", ""),
+                "archive_collection": out.get("archive_collection", ""),
+                "other_types": "",
+                "verdict": verdict,
+            }
+        )
+        self.row(cid)["breadth"] = verdict
         self.set_status(cid, "accepted", one_line(out.get("registry_reason") or out.get("summary", ""), 400))
         try:
             name = tomllib.loads((target / "manifest.toml").read_text(encoding="utf-8")).get("name") or cid
         except tomllib.TOMLDecodeError:
             name = cid
         paths = [f"datasets/{cid}", str(report_path.relative_to(REPO_ROOT)), *SHARED_FILES, "pipeline"]
-        if commit(paths, f"Add {name}\n\nAccepted by the autocollect judge ({row['novelty_kind'] or 'novelty unlabeled'})."):
+        if commit(paths, f"Add {name}\n\nAccepted by the autocollect judge ({row['novelty_kind'] or 'novelty unlabeled'}, breadth {verdict})."):
             self.terminal_this_run += 1
             sha = git("rev-parse", "--short", "HEAD").stdout.strip()
             have = len(progress()[int(width)])
-            notify(self.cfg, f"autocollect accepted {cid} ({width}-bit, {row['novelty_kind']}): {name}. "
+            notify(self.cfg, f"autocollect accepted {cid} ({width}-bit, {row['novelty_kind']}, breadth {verdict}): {name}. "
                              f"{width}-bit progress {have}/{load_baseline()['target_new_per_width']}. Commit {sha}.")
         else:
             self.pause_globally(f"could not commit accepted dataset {cid}; files are promoted but uncommitted")
@@ -1438,12 +1584,15 @@ def cmd_status(args) -> int:  # noqa: ARG001
     }
     groups = ["proposed", "waiting", "authoring", "building", "judging", "accepted", "screened_out", "not_accepted", "paused"]
     print(f"baseline {baseline['created']}, target +{target} accepted families per width\n")
-    print(f"{'width':>5} {'base':>5} {'new':>7}  " + " ".join(f"{name:>12}" for name in groups))
+    weak = {width: sum(1 for row in ledger if row["width"] == str(width) and row["status"] == "accepted"
+                       and (row.get("breadth") or "").upper() not in COUNTED_VERDICTS) for width in WIDTHS}
+    print(f"{'width':>5} {'base':>5} {'counted':>8} {'weak':>5}  " + " ".join(f"{name:>12}" for name in groups))
     for width in WIDTHS:
         rows = [row for row in ledger if row["width"] == str(width)]
         stage = [live.get(row["candidate_id"]) or resting.get(row["status"], row["status"]) for row in rows]
-        print(f"{width:>5} {baseline['accepted_per_width'][str(width)]:>5} {len(new[width]):>3}/{target:<3}  " + " ".join(f"{stage.count(name):>12}" for name in groups))
-    print("\nwaiting = screened and queued for a free builder slot; authoring = builder writing the recipe now;")
+        print(f"{width:>5} {baseline['accepted_per_width'][str(width)]:>5} {len(new[width]):>4}/{target:<3} {weak[width]:>5}  " + " ".join(f"{stage.count(name):>12}" for name in groups))
+    print("\ncounted = new families with a STRONG or OK breadth verdict (the goal); weak = accepted but same measurement type")
+    print("waiting = screened and queued for a free builder slot; authoring = builder writing the recipe now;")
     print("building = download, build/verify, driver rebuild check, or repair; judging = with the judge or next in line")
     print(f"\ntotal agent cost: ${total_cost():.2f}")
     if PAUSE_PATH.exists():
@@ -1559,6 +1708,37 @@ def cmd_follow(args) -> int:
             time.sleep(args.interval)
     except KeyboardInterrupt:
         return 0
+
+
+def cmd_approve_breadth(args) -> int:
+    rows = load_ledger()
+    row = next((item for item in rows if item["candidate_id"] == args.candidate_id), None)
+    if row is None:
+        print(f"unknown candidate {args.candidate_id}")
+        return 1
+    state = load_state(args.candidate_id)
+    if not state.get("breadth_signoff"):
+        print(f"{args.candidate_id} has no pending breadth sign-off")
+        return 1
+    state["breadth_approved"] = True
+    state["breadth_approval_note"] = args.note or state["breadth_signoff"]
+    restore = state.pop("paused_from", "") or "queued"
+    add_event(state, "breadth_approved", note=state["breadth_approval_note"])
+    save_state(args.candidate_id, state)
+    row["status"], row["updated"] = restore, now_iso()
+    save_ledger(rows)
+    print(f"{args.candidate_id}: breadth override approved; back to {restore}")
+    return 0
+
+
+def cmd_reject(args) -> int:
+    rows = load_ledger()
+    if not any(item["candidate_id"] == args.candidate_id for item in rows):
+        print(f"unknown candidate {args.candidate_id}")
+        return 1
+    Driver(Config()).terminal(args.candidate_id, "rejected", args.reason, args.retry, None)
+    print(f"{args.candidate_id}: recorded as rejected")
+    return 0
 
 
 def cmd_requeue(args) -> int:
@@ -1682,8 +1862,16 @@ def main() -> int:
     requeue.add_argument("candidate_id")
     requeue.add_argument("--status", default="queued", choices=ACTIVE_STATUSES)
     sub.add_parser("unpause", help="clear a global pause after inspecting its cause")
+    approve = sub.add_parser("approve-breadth", help="approve a pending breadth override or archive-cap sign-off")
+    approve.add_argument("candidate_id")
+    approve.add_argument("--note", default="", help="why the override is justified")
+    reject = sub.add_parser("reject", help="record a candidate as rejected (e.g. a refused breadth sign-off)")
+    reject.add_argument("candidate_id")
+    reject.add_argument("--reason", required=True)
+    reject.add_argument("--retry", default="Retry only with the user's explicit approval.")
     args = parser.parse_args()
-    return {"init": cmd_init, "status": cmd_status, "activity": cmd_activity, "follow": cmd_follow, "run": cmd_run, "requeue": cmd_requeue, "unpause": cmd_unpause}[args.command](args)
+    return {"init": cmd_init, "status": cmd_status, "activity": cmd_activity, "follow": cmd_follow, "run": cmd_run, "requeue": cmd_requeue, "unpause": cmd_unpause,
+            "approve-breadth": cmd_approve_breadth, "reject": cmd_reject}[args.command](args)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,161 @@
+measurement_type	definition	member_count
+reanalysis_point_series	Reanalysis/model-derived weather variables extracted as point time series	20
+bibliographic_metadata	Numeric fields of scholarly/publication catalog records (citation/author/page counts, dates, sizes)	17
+registry_record_metadata	Numeric fields of non-bibliographic registry/API records (IDs, timestamps, counts, flags, sizes)	16
+met_station_obs	In-situ meteorological station/buoy observations	15
+geo_product_raster	Derived or modelled gridded geo products (land cover/classification, vegetation/snow/fire/sea-ice indices, soil, climate, wind, ground-motion grids)	13
+geo_point_catalog	Static point coordinates (lat/lon, elevation, population) of places, sites, stations or occurrences	9
+ml_feature_table	Engineered feature columns of ML benchmark tables	9
+identifier_stream	Streams of entity identifiers / categorical ID codes	8
+laser_range	Laser/depth ranging returns and attributes (lidar points, range scans, depth maps, laser altimeter returns)	8
+pcm_audio	Airborne/body acoustic audio waveforms (PCM or companded)	8
+raw_space_frame	Space-instrument detector image frames/cubes (planetary, solar, astronomical cameras and spectrographs), single read	7
+statistical_indicator_panel	Official statistical indicators by entity x period (labour, population, energy, emissions, health)	7
+inertial_vibration	Inertial/vibration sensor waveforms (accelerometers, gyros/IMU, seismometers, DAS)	6
+public_health_counts	Public-health surveillance counts (cases, deaths, hospitalizations, vaccinations)	6
+sat_radiance_raster	Orbital imager radiance/reflectance/brightness-temperature DN rasters (multispectral, thermal IR), scene or map projected	6
+surface_biopotential	Surface-electrode biopotential waveforms (ECG, EMG, EHG)	6
+trajectory_positions	Positions/poses of moving entities (vehicles, vessels, aircraft, cameras, trips)	6
+nn_weights	Trained neural-network parameter tensors	5
+user_engagement_stats	Consumer-platform engagement stats (ratings, votes, likes, downloads, popularity ranks, item attributes)	5
+water_quality_series	In-situ water-quality/temperature series (DO, pH, conductance, water temperature)	5
+energy_load_series	Metered electricity/energy consumption or load time series (household, appliance, client)	4
+news_event_records	Coded news-event record attributes (tone, mentions, sources)	4
+segmentation_label_map	Pixel/voxel segmentation label maps (annotation masks)	4
+seismic_event_catalog	Earthquake catalog event parameters (magnitude, depth, gap, moment tensor)	4
+traffic_counts	Usage/traffic count series (web pageviews/clicks, network bytes, ride/parking counts)	4
+water_column_backscatter	Echosounder/ADCP water-column acoustic backscatter (power, angles, echo intensity)	4
+ct_projection	Tomographic projection measurements (sinograms / projection views; X-ray or neutron)	3
+financial_price_series	Official commodity/securities price and yield time series	3
+fluorescence_microscopy_image	Widefield fluorescence microscopy intensity images	3
+incident_report_records	Incident/adverse-event report record fields (crashes, storm events, device events)	3
+mri_volume	Magnetic-resonance image volumes and voxelwise MRI derivatives (T1w, BOLD, DTI)	3
+sar_backscatter	Synthetic-aperture-radar backscatter amplitude/sigma0 images or mosaics (Earth or planetary)	3
+scalp_eeg	Scalp electroencephalography channel streams (raw or windowed)	3
+sim_fluid_field	Simulated fluid/plasma fields from CFD/PDE/GRMHD solvers	3
+space_event_catalog	Space-weather and small-body event catalogs (CMEs, flares, close approaches)	3
+spectrum_1d	1-D measured spectra/patterns on a fixed axis (XRD, mass spectra, IR absorbance)	3
+streamflow_stage	River discharge and gage-height series	3
+text_encoding_stream	Encoded text streams (tokenizer IDs, UTF-16 code units)	3
+token_frequency_counts	Frequency counts of vocabulary items (n-grams, tag keys/values)	3
+water_level	Coastal water-level / sea-surface-height station series (observed or forecast)	3
+weather_radar_precip	Weather-radar reflectivity/precipitation products (radials, composites, VIL mosaics)	3
+battery_voltage	Battery cell/pack terminal-voltage time series	2
+bio_catalog_attributes	Catalog attributes of genomes/proteins (sizes, masses, GC content)	2
+bio_sequence_symbols	Biological sequence letters (genomes, multiple-sequence alignments)	2
+clinical_monitor_waveform	Clinical bedside-monitor physiological waveforms (PPG, respiration, intracranial pressure)	2
+ct_reconstructed_slice	Reconstructed CT / micro-CT slices	2
+dem_elevation_raster	Digital elevation / topography rasters	2
+dense_vector_field	Dense 2-D displacement/velocity vector fields (PIV, optical flow)	2
+ebsd_pattern	Electron backscatter (Kikuchi) diffraction detector patterns	2
+event_label_sequence	Annotation/label code sequences aligned to recordings	2
+genomic_positions	Genomic base-pair coordinates of features or variants	2
+gis_vector_geometry	GIS vector feature geometry vertex coordinates (polygons, polylines, footprints)	2
+gnss_carrier_phase	GNSS carrier-phase / pseudorange observables (ground and radio-occultation receivers)	2
+graph_topology_ids	Graph edge endpoint or node-reference ID streams	2
+hdr_radiance_image	Floating-point scene-linear HDR radiance images	2
+machine_condition_telemetry	Industrial machine condition-monitoring sensor streams	2
+market_ohlcv_bars	Exchange OHLCV candlestick bars	2
+market_snapshot	Cross-sectional ticker snapshots of many traded assets	2
+meg	Magnetoencephalography SQUID sensor channel streams	2
+mesh_geometry	3-D mesh vertex coordinates or index topology	2
+mocap_marker_positions	Motion-capture body marker / landmark trajectories	2
+natural_image_rgb	Photographic RGB image pixel planes	2
+order_book_quotes	Order-book best quotes / depth snapshots	2
+packet_capture_fields	Network packet/protocol header fields from captures	2
+pbr_texture_map	PBR material texture maps (displacement, roughness)	2
+photon_event_attributes	Per-photon event-list attributes other than time (PI energy channel, detector address)	2
+projection_radiograph	Single-view projection X-ray radiographs (mammography, chest CR)	2
+radargram	Radar-sounder / GPR radargrams (along-track trace x two-way-time)	2
+radio_dynamic_spectrum	Detected radio power versus time and frequency (filterbank / spectrograph dynamic spectra)	2
+rf_iq_baseband	Complex baseband I/Q radio recordings	2
+room_impulse_response	Measured room acoustic impulse responses	2
+rt_dose_grid	Radiotherapy planned dose grids	2
+sem_bse_image	Scanning-electron-microscope backscattered-electron images (incl. serial block-face slices)	2
+seq_quality_score	Phred-scaled sequencing base/mapping quality scores	2
+sim_atmos_field	Reanalysis or climate-model gridded atmospheric state fields	2
+spike_sorting_output	Spike-sorter outputs (waveform templates, per-unit spike amplitudes)	2
+sports_game_records	Sports/game match records (ratings, game lengths, event pitch positions)	2
+spot_diffraction	Bragg-spot electron/X-ray diffraction detector frames (MicroED, SPED)	2
+star_catalog_parameters	Star-catalog astrometric/photometric parameters	2
+trade_ticks	Exchange trade-by-trade price/quantity ticks	2
+ultrasound_image	Ultrasound images and image sequences (B-mode, functional ultrasound)	2
+vehicle_telemetry	Vehicle bus/telemetry channels (speed, RPM, OBD PIDs)	2
+adcp_current_velocity	ADCP water-current velocity profiles	1
+air_quality_concentration	Ambient air-pollutant concentration series	1
+atomic_coordinates	Biomolecular structure atom Cartesian coordinates	1
+battery_eis	Battery electrochemical impedance spectra	1
+bbox_annotations	Object bounding-box annotation geometry and flags	1
+blockchain_tx_values	Blockchain transaction output values	1
+brdf_tensor	Measured (spectral) BRDF reflectance tensors	1
+calcium_roi_traces	Calcium-imaging ROI fluorescence time series	1
+chemical_assay_values	Laboratory physicochemical assay measurements	1
+cmb_sky_map	Full-sky microwave temperature/polarization maps	1
+dna_methylation_level	Per-CpG DNA methylation levels from sequencing	1
+eit_image	Electrical impedance tomography image sequences	1
+em_counting_frame	Sparse electron-counting direct-detector movie frames	1
+energy_load_series_simulated	Simulated building energy end-use load profiles	1
+ephemeris_coefficients	Planetary ephemeris polynomial (Chebyshev) coefficients	1
+extracellular_ephys	Raw extracellular neural voltage streams	1
+financial_statement_values	Reported financial-statement fact values	1
+flow_cytometry_events	Flow-cytometry event x channel measurements	1
+force_plate_signal	Force-platform force/moment analog signals	1
+forest_inventory_measurements	Field forest-inventory tree measurements	1
+gamma_binned_counts	Time-binned multichannel gamma-ray count spectra	1
+geo_embedding_raster	Learned embedding-axis rasters derived from satellite imagery	1
+glyph_outline_coords	Font glyph outline control-point coordinates	1
+gnss_clock	GNSS satellite clock-bias estimates	1
+gravity_field_coefficients	Spherical-harmonic gravity-field model coefficients	1
+grid_frequency	Power-system electrical frequency series	1
+grid_phasor	Synchrophasor (PMU) phasor magnitude streams	1
+grid_point_on_wave	Point-on-wave power-grid voltage/current oscillograms	1
+ground_magnetometer	Ground-observatory geomagnetic field component series	1
+gw_detector_strain	Gravitational-wave detector strain time series	1
+hf_doppler	HF radio received-carrier Doppler/frequency series	1
+histology_rgb_image	Brightfield histopathology RGB image tiles	1
+hyperspectral_cube	Laboratory/airborne hyperspectral detector cubes	1
+insar_coherence	Interferometric SAR coherence rasters	1
+intracellular_ephys	Intracellular (patch/whole-cell) membrane-potential recordings	1
+io_table	Economic input-output flow matrices	1
+kernel_runtime_benchmark	Measured compute-kernel runtime benchmarks	1
+microarray_probe_intensity	Per-probe microarray scanner intensities	1
+microarray_slide_image	Raw microarray laser-scanner slide images	1
+midi_note_events	Symbolic MIDI note events (pitch, velocity)	1
+mobility_index_series	Aggregated human-mobility index series	1
+molecular_dynamics_frames	Molecular-dynamics atom coordinates and forces per configuration	1
+molecular_levels	Molecular state energy term values	1
+mri_surface_scalar	Per-vertex scalar fields on MRI-derived cortical surface meshes	1
+nanopore_raw_signal	Nanopore ionic-current raw signal traces	1
+neuron_morphology	Neuron tree reconstructions (node coordinates, parent links)	1
+ocean_ctd_profile	In-situ ocean CTD pressure/temperature/salinity profiles	1
+ocean_wave_spectrum	Ocean wave spectral density versus frequency over time	1
+orbital_magnetometer	Magnetic-field vectors measured on orbiting spacecraft	1
+oscilloscope_trace	Digitized oscilloscope detector voltage traces	1
+pet_volume	PET radiotracer activity volumes	1
+photon_event_times	Per-photon arrival-time tags from high-energy event lists	1
+power_grid_case_data	Power-grid network case matrices (bus, branch, generator data)	1
+radio_visibilities	Radio-interferometer complex visibilities	1
+raw_space_ramp_cube	Multi-read up-the-ramp detector exposure cubes (IR array non-destructive reads)	1
+residue_pair_matrix	Residue-by-residue protein matrices (predicted aligned error, contact/distance maps)	1
+rf_signal_strength	Received radio signal strength (RSSI) series	1
+sanger_dye_trace	Sanger capillary-electrophoresis dye fluorescence traces	1
+sequence_profile_scores	Profile-HMM position-specific emission scores	1
+sidescan_sonar	Side-scan sonar seafloor backscatter pings	1
+sim_calorimeter_shower	Simulated particle-calorimeter shower energy deposits	1
+sim_solid_field	Simulated solid-mechanics stress/displacement fields	1
+solar_activity_index	Solar activity indices (sunspot number)	1
+spacecraft_attitude	Spacecraft attitude quaternions and body angular rates	1
+sparse_matrix_entries	Sparse matrix coordinate/value entries	1
+stellar_light_curve	Stellar photometric flux time series	1
+stratigraphic_unit_ages	Geologic/stratigraphic unit ages and interval positions	1
+subbottom_reflection_trace	Sub-bottom/seismic acoustic reflection traces	1
+survey_microdata	Census/survey person-level microdata fields	1
+tem_image	Dense transmission-electron-microscope images / tilt-series projections	1
+transit_schedule	Public-transit timetable fields (stop times, sequences, distances)	1
+twophoton_movie	Raw two-photon microscopy movies	1
+ui_pointer_trace	Human pointer/mouse trace coordinates and timings	1
+video_frames	Decoded video frame planes	1
+vm_telemetry	Cloud VM resource-utilization telemetry	1
+weather_radar_bio_profile	Weather-radar-derived vertical profiles of biological scatterers	1
+weather_radar_velocity	Weather-radar Doppler radial-velocity products	1
+xtal_structure_factors	Crystallographic structure-factor reflection amplitudes	1

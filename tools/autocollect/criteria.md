@@ -42,12 +42,42 @@ all of them.
   not new and usually violates protocol rule 2.
 - A family the downstream corpus has but the local corpus lacks
   (`downstream_mirror_fill`) is legitimate and welcome; just label it as such.
-- Breadth across the collection matters too. Once a modality already has two
-  or more new families at a width in this collection effort (rows with status
-  `accepted` in `pipeline/candidates.tsv`), further families of that modality
-  are lower value even when each source is new. For example: raw camera
-  frames from different space missions, or SAR backscatter mosaics of
-  different bodies.
+
+## Breadth is enforced
+
+Diversity of the collection matters more than its size. An audit of the first
+85 automated acceptances (`reports/autocollect_diversity_audit_20261006.md`)
+found that 41 were new content in a measurement type the corpus already had,
+while the judge labelled them new. The rules below are therefore enforced by
+the driver, not just advised.
+
+- Every family has three keys, recorded in `pipeline/breadth_keys.tsv` for the
+  baseline and for every acceptance:
+  - `measurement_type`: what is measured and how, at the granularity of the
+    controlled vocabulary (`python3 tools/autocollect/novelty.py --vocabulary`),
+    e.g. `sar_backscatter`, `raw_space_frame`, `spot_diffraction`, `meg`,
+    `laser_range`, `geo_product_raster`. Reuse an existing type whenever the
+    material is the same kind of measurement, whatever the source, region,
+    date, body, or width. Coin a new type only when none fits, at the same
+    granularity.
+  - `instrument_line`: the instrument or product family (e.g.
+    `modis_terra_land_products`, `vidicon_space_camera`).
+  - `archive_collection`: host plus collection path (e.g.
+    `planetarycomputer.microsoft.com/modis`, `ftp.ebi.ac.uk/empiar`).
+- Look them up with `novelty.py --type <t> --instrument <i> --archive <a>`.
+- A measurement type that already exists at any width, baseline included, is
+  rejected. The only exception is a measured statistical difference (value
+  distribution, dynamic range, correlation structure, generation process)
+  that a compressor would care about, stated as `measured_difference`. Such
+  an override always waits for the user's sign-off.
+- A third family from the same archive collection in this effort also waits
+  for the user's sign-off.
+- `new_modality` means the measurement type appears nowhere: no family at any
+  width, locally or downstream. "The first X at N bits" is not a new modality.
+- Breadth verdict on acceptance: `STRONG` (measurement type new to the corpus
+  and downstream), `OK` (new measurement type within a known broad domain,
+  with a different generation process or statistics), `WEAK` (anything else).
+  Only `STRONG` and `OK` count toward the per-width goal.
 
 ## Genuine numeric quantity
 

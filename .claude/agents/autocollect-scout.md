@@ -25,11 +25,12 @@ downstream work.
 
 1. Ground on coverage: `python3 tools/autocollect/novelty.py --list-width <W>`
    shows local accepted recipes and downstream families at the width. Aim for
-   modalities, sources, and quantities that are absent or thin there. Also
-   read the `accepted` rows of `pipeline/candidates.tsv` at your width: these
-   are this collection effort's new families. Favor modalities not yet among
-   them; a third family of an already-represented modality needs a strong
-   reason.
+   modalities, sources, and quantities that are absent or thin there.
+   Then run `python3 tools/autocollect/novelty.py --vocabulary`: these
+   measurement types are already collected (at any width). Breadth is
+   enforced (see criteria.md): a candidate whose measurement type is already
+   there will be rejected, so look for measurement types that are not on the
+   list. Do not rename an existing type to dodge the rule.
 2. Search broadly in the focus domains given by the driver (others are fine
    if clearly more promising). Use the web search tool, WebFetch, and curl.
    Productive places include institutional and agency archives, research data
@@ -49,6 +50,9 @@ downstream work.
    - novelty: `python3 tools/autocollect/novelty.py --url <resource or landing URL> --terms <2-4 distinctive words>`;
      the same source file at another width is not new
    - registry history: prior rejections and their `retry_condition`
+   - breadth keys: `measurement_type` (from the vocabulary, or a new type at the
+     same granularity when none fits), `instrument_line`, `archive_collection`;
+     check them with `novelty.py --type <t> --archive <a>`
 4. Drop anything that plainly fails the criteria. Return the best candidates.
 
 ## Constraints

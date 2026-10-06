@@ -39,13 +39,19 @@ claims that matter.
    under the 1 GB primary cap with a bounded download, sized to the
    population, not a thin aggregate behind a huge download.
 8. Decodability with pure standard-library Python.
+9. Breadth (enforced): assign the three breadth keys yourself, independently
+   of the scout, using `novelty.py --vocabulary` (reuse an existing
+   `measurement_type` whenever it is the same kind of measurement; never coin
+   a new name for an existing type). Check with `novelty.py --type <t>
+   --archive <a>`. If the type already exists at any width, reject, unless
+   you can state a measured statistical difference a compressor would care
+   about; then approve with `breadth_override=true` and `measured_difference`,
+   and the driver will hold the candidate for the user's sign-off. The driver
+   applies the rule mechanically to the keys you return.
 
 Approve when acceptance looks at least about even odds. Give each approval a
 priority from 1 (best: genuinely new material, clean source) to 5, and builder
-notes naming the specific pitfalls to watch. Check the `accepted` rows of
-`pipeline/candidates.tsv` at the candidate's width: if its modality already has
-two or more new families there, give it priority 4-5 unless it is exceptional,
-so more diverse candidates are built first. Make rejection reasons short and
+notes naming the specific pitfalls to watch. Make rejection reasons short and
 specific; they are fed back to future scouts.
 
 ## Constraints

@@ -1,0 +1,126 @@
+manifest_version = 1
+dataset_id = "empiar_10318_microed_diffraction_frames_u16"
+name = "EMPIAR-10318 200 kV MicroED Continuous-Rotation Electron-Diffraction Frames UInt16"
+description = "24 native little-endian uint16 4096x4096 electron-diffraction frames (1 degree rotation wedges, 5.72 s exposures) from the eight continuous-rotation MicroED series of FUS(37-42) SYSGYS peptide nanocrystals in EMPIAR-10318, three evenly spaced frames per crystal series, decoded from SMV images inside the deposited ZIP archives."
+homepage = "https://www.ebi.ac.uk/empiar/EMPIAR-10318/"
+
+[license]
+name = "Creative Commons CC0 1.0 Universal Public Domain Dedication"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "Zhou H, Luo F, Luo Z, Li D, Liu C, Li X (2021). EMPIAR-10318: 200kV MicroED structure of FUS (37-42) SYSGYS solved from merged datasets at 0.65 A. Electron Microscopy Public Image Archive, DOI 10.6019/EMPIAR-10318. Associated publication: Zhou H, Luo F, Luo Z, Li D, Liu C, Li X. Programming Conventional Electron Microscopes for Solving Ultrahigh-Resolution Structures of Small and Macro-Molecules. Anal. Chem. 91(17):10996-11003 (2019), DOI 10.1021/acs.analchem.9b01162. Related: EMD-0696, PDB 6KJ1."
+notes = "EMPIAR FAQ (https://www.ebi.ac.uk/empiar/faq): 'All data in EMPIAR is freely and publicly available to the global community under the CC0 license'. download.sh fetches the FAQ and fails if that sentence disappears. Citing the entry DOI is good practice, not a licence condition."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official EMPIAR archive files served anonymously over HTTPS by ftp.ebi.ac.uk; no mirrors. Synthetic hexapeptide (FUS residues 37-42) crystals; no human or animal material."
+usage_notes = "Samples hold only detector values. The SMV header fields (rotation angle, beam centre, distance, wavelength) are validated and copied into index metadata, never into samples. The .cec beam-centre sidecars are not downloaded."
+
+[[origins]]
+id = "empiar"
+name = "Electron Microscopy Public Image Archive (EMBL-EBI)"
+url = "https://www.ebi.ac.uk/empiar/EMPIAR-10318/"
+type = "data_portal"
+notes = "Entry EMPIAR-10318, deposited 2019-09-19, released 2021-06-09, experiment type MicroED, 9.5 GB, one imageset (category 'diffraction images', SMV, 8 ZIP archives, one per crystal). FEI Tecnai F20 at 200 kV, electron wavelength 0.02507 A."
+
+[[resources]]
+id = "empiar_10318_entry"
+origin = "empiar"
+url = "https://www.ebi.ac.uk/empiar/api/entry/EMPIAR-10318/"
+type = "api_query_result"
+version = "release 2021-06-09"
+access = "Anonymous JSON API; validated for title, DOI, REL status, MicroED type and the single SMV imageset (8 archives, 4096x4096, 51 um pixel, 200 kV / 0.02507 A / 8 crystals in the details text)."
+size_bytes = 4714
+sha256 = ""
+local_path = "downloads/empiar_10318_microed_diffraction_frames_u16/empiar_10318_entry.json"
+notes = "Metadata only; not used to build samples. Size is indicative, not enforced. Its voxel_type label 'SIGNED 16 BIT INTEGER' is recorded but not trusted; the per-frame SMV header (TYPE=unsigned_short) governs the decode."
+
+[[resources]]
+id = "empiar_faq_license"
+origin = "empiar"
+url = "https://www.ebi.ac.uk/empiar/faq"
+type = "file"
+version = "fetched at download time"
+access = "Anonymous HTML; must contain the CC0 licence sentence."
+size_bytes = 44045
+sha256 = ""
+local_path = "downloads/empiar_10318_microed_diffraction_frames_u16/empiar_faq.html"
+notes = "Licence evidence only. Size is indicative, not enforced."
+
+[[resources]]
+id = "data_listing"
+origin = "empiar"
+url = "https://ftp.ebi.ac.uk/empiar/world_availability/10318/data/"
+type = "file"
+version = "server mtimes 2021-06-09"
+access = "Anonymous autoindex; must list exactly the eight pinned ZIP archives."
+size_bytes = 2552
+sha256 = ""
+local_path = "downloads/empiar_10318_microed_diffraction_frames_u16/data_listing.html"
+notes = "Inventory check only. Size is indicative, not enforced."
+
+[[resources]]
+id = "zip_central_directories"
+origin = "empiar"
+url = "https://ftp.ebi.ac.uk/empiar/world_availability/10318/data/"
+type = "other"
+version = "20180316_032-131.zip, 20180316_144-204.zip, 20180316_517_616.zip, 20180316_721_810.zip, 20180317_008-097.zip, 20180317_198-296.zip, 20180317_424-505.zip, 20180317_865-955.zip"
+access = "One exact byte range per archive, from the central directory offset to EOF (central directory, ZIP64 end record and locator where present, EOCD); each pinned in scripts/archives.tsv by archive size, entry count, offset, length and SHA-256."
+size_bytes = 70645
+sha256 = ""
+local_path = "downloads/empiar_10318_microed_diffraction_frames_u16/<archive>.cdtail"
+notes = "The eight archives total 10,167,940,116 bytes and hold 713 frames (100, 61, 100, 90, 90, 99, 82, 91) plus one .cec sidecar each. Seven of them carry ZIP64 end records although every offset fits in 32 bits; no member uses ZIP64 sizes."
+
+[[resources]]
+id = "selected_frame_members"
+origin = "empiar"
+url = "https://ftp.ebi.ac.uk/empiar/world_availability/10318/data/"
+type = "other"
+version = "24 members, pinned in scripts/frames.tsv"
+access = "One exact byte range per selected frame: 30-byte ZIP local header + 15-byte name + DEFLATE data (local headers carry no extra field; the central directory's 32-byte NTFS timestamp extra is not repeated there). Each range is pinned by offset, length, compressed size, CRC-32 (from the SHA-256-pinned central directory), rotation angle and SHA-256 of the 512-byte SMV header."
+size_bytes = 341983518
+sha256 = ""
+local_path = "downloads/empiar_10318_microed_diffraction_frames_u16/<archive>__<member>.zipmember"
+notes = "Selection: within each series of n frames (name order), positions floor(n*(2k+1)/6) for k = 0, 1, 2, i.e. the 1/6, 1/2 and 5/6 points of the rotation sweep. All 713 frames are 33,554,944 bytes inflated, so the whole entry (23.9 GB of frames) exceeds the 1 GB cap and at most 29 frames fit; three per crystal keeps every series equally represented."
+
+[local_paths]
+downloads = "downloads/empiar_10318_microed_diffraction_frames_u16/"
+filtered = "filtered/empiar_10318_microed_diffraction_frames_u16/"
+index = "index/empiar_10318_microed_diffraction_frames_u16/"
+samples = "samples/empiar_10318_microed_diffraction_frames_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/empiar_10318_microed_diffraction_frames_u16/samples.jsonl"
+summary = "Range-fetch 24 pinned SMV frame members (341,983,518 bytes) and the eight central directories from the EMPIAR-10318 ZIPs, inflate each member, validate its SMV header, and emit the 4096x4096 uint16 pixel block unchanged as one raw sample per frame (24 samples, 805,306,368 bytes)."
+deterministic_notes = "discover.sh documents pin resolution (listing, HEAD, 64 KiB tail per archive, 4 KiB member-head ranges) and diffs against scripts/archives.tsv and scripts/frames.tsv. download.sh requires an exact 206 Content-Range for every chunk, resumes partial ranges from the bytes on disk, and validates each central directory (SHA-256, EOCD, ZIP64 record and locator, consecutive D520mm_NNNN.img numbering, one .cec, every image 33,554,944 bytes DEFLATE) and each member (local header name, flags 0, method 8, CRC, sizes, own name/extra lengths ending exactly at the range end; raw DEFLATE ending exactly at the member boundary; inflated length 33,554,944 and CRC-32; SMV header). The SMV header must have exactly the keys HEADER_BYTES, DIM, BYTE_ORDER, TYPE, SIZE1, SIZE2, PIXEL_SIZE, BIN, DETECTOR_SN, TIME, DISTANCE, PHI, OSC_START, OSC_RANGE, WAVELENGTH, BEAM_CENTER_X, BEAM_CENTER_Y in that order with HEADER_BYTES=512, DIM=2, BYTE_ORDER=little_endian, TYPE=unsigned_short, SIZE1=SIZE2=4096, PIXEL_SIZE=0.051000, BIN=1x1, TIME=5.720000, DISTANCE=3064.000000, OSC_RANGE=1.000000, WAVELENGTH=0.025071, PHI=OSC_START equal to the pinned angle, a beam centre constant within each series, only form-feed/space padding after the closing brace, and its SHA-256 equal to the pin. Each frame must have at least 256 distinct values, a zero fraction and a modal fraction of at most 0.5, at least 1,000 pixels above 255 and a maximum of at least 1,000 (diffraction signal above background), no constant row or column, and a unique payload. The SHA-256 over '<sample name>\\t<sample sha256>' lines in pin order is pinned (efa1456a2c4eb3e31054d1a6c96c0fa15ca84c223288bc8c69efc4723227a73d) and enforced by build and verify. verify.sh re-inflates every member with a separate one-shot decoder and regex header check, byte-compares each sample, recomputes all statistics and index rows, checks that the sample directory matches the index exactly, and checks manifest sample_count and total_size_bytes. Samples are written in pin order (archive name, then frame position)."
+
+[[series]]
+id = "microed_200kv_diffraction_frame_u16"
+description = "MicroED continuous-rotation electron-diffraction frames of FUS(37-42) SYSGYS nanocrystals, one 4096x4096 detector frame per sampled 1 degree rotation wedge."
+semantic_meaning = "Each value is the 16-bit detector reading for one pixel of a 4k x 4k camera on an FEI Tecnai F20 at 200 kV (wavelength 0.025071 A), integrated over one 5.72 s exposure while the crystal rotated continuously through 1 degree (0.0572 e/A^2 per frame). Frames show sparse Bragg reflections and a diffuse halo around the shadow of the beam stop on a low background (per-frame median 7 to 19, 99th percentile 114 to 331, maxima 10,141 to 32,747 in the realized 24 frames). Values are as stored by the depositors' SMV conversion. The header declares a 51 um pixel and an equivalent camera distance of 3064 mm so that X-ray crystallography software (e.g. HKL2000) accepts the frames as a 4k x 4k ADSC Q210 image; these are geometry labels, and the pixel values themselves are not rescaled."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The SMV header of every frame declares TYPE=unsigned_short, BYTE_ORDER=little_endian, SIZE1=SIZE2=4096 and HEADER_BYTES=512; the samples are bytes 512..33,554,943 of the inflated member, unchanged. EMPIAR's imageset metadata labels the voxel type 'SIGNED 16 BIT INTEGER'; the recipe follows the per-file header, and build/verify record the observed global maximum: 32,747 over the realized 24 frames, with no pixel above 32767, so the sign interpretation is moot."
+source_resources = ["selected_frame_members"]
+source_format = "SMV (ADSC-style) diffraction image: 512-byte ASCII '{ KEY=VALUE; }' header + 4096x4096 little-endian unsigned 16-bit raster, stored as a raw-DEFLATE member of a per-crystal ZIP archive"
+source_field = "SMV image raster after the 512-byte header (SIZE1 fast x SIZE2 slow, TYPE=unsigned_short): detector counts per pixel"
+filtered_input_path = "filtered/empiar_10318_microed_diffraction_frames_u16/ingest_stats.json"
+filtering = "All eight crystal series are kept, three frames each at the 1/6, 1/2 and 5/6 points of every rotation sweep (rotation angles -50 to +35 degrees). The other 689 frames are not downloaded, to stay under the 1 GB cap. The .cec beam-centre sidecars are skipped. The sibling 120 kV entry EMPIAR-10319 is excluded: a different accelerating voltage and wavelength is a different regime. Every pixel of each kept frame is emitted; nothing is cropped or masked."
+missing_value_policy = "There are no missing-value sentinels. Zero is a genuine reading (the beam-stop shadow and dark-noise pixels; 7.8 % to 21.3 % of pixels per realized frame, median 15.7 %) and stays in place. Fatal, identically in build and verify: any size, checksum, CRC, ZIP-structure or SMV-header deviation; a constant frame; fewer than 256 distinct values; a zero or modal fraction above 0.5; fewer than 1,000 pixels above 255 or a maximum below 1,000; any constant row or column; a duplicate frame payload."
+conversion = "Parse the ZIP local header using its own name and extra lengths, raw-inflate (zlib wbits -15) to exactly 33,554,944 bytes, check CRC-32, parse and validate the SMV header, and write bytes 512.. (4096 rows of 4096 uint16, slow axis first, little-endian as stored) as one raw sample per frame. No byte swap, rescaling, flipping or cropping."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian uint16 MicroED diffraction frame"
+sample_geometry = "electron_diffraction_detector_frame_2d"
+sample_rank = 2
+sample_shape = [4096, 4096]
+sample_axes = ["detector_slow_y", "detector_fast_x"]
+natural_record_kind = "microed_rotation_series_smv_frame"
+sample_count = 24
+total_size_bytes = 805306368
+output_path = "samples/empiar_10318_microed_diffraction_frames_u16/microed_200kv_diffraction_frame_u16/"

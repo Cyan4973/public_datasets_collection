@@ -1,0 +1,90 @@
+manifest_version = 1
+dataset_id = "aalto_arni_room_impulse_response_f32"
+name = "Aalto Arni Variable-Acoustics Room Impulse Responses Float32"
+description = "Measured room impulse responses of the Arni variable-absorption laboratory (Aalto Acoustics Lab), one native IEEE float32 44.1 kHz mono WAV per source-receiver measurement, for one panel configuration at each of 53 absorption levels (numClosed 0..55 except 11, 27, 35) and all five receivers."
+homepage = "https://doi.org/10.5281/zenodo.6985104"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Prawda, K., Schlecht, S. J., and Välimäki, V. Dataset of impulse responses from variable acoustics room Arni at Aalto Acoustic Labs. Zenodo, 2022. DOI 10.5281/zenodo.6985104. See also Prawda, Schlecht and Välimäki, 'Calibrating the Sabine and Eyring formulas', J. Acoust. Soc. Am."
+notes = "The Zenodo record metadata (API field metadata.license.id) declares cc-by-4.0 with open access for every file of the record; download.sh re-checks this on every run. Preserve authorship, DOI and attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Zenodo deposit by the Aalto Acoustics Lab authors. Acoustic measurements of an empty laboratory room; no speech, people or personal data."
+usage_notes = "Only the float32 impulse-response sample blocks are emitted; panel configuration metadata is kept in the sample index for provenance."
+
+[[origins]]
+id = "zenodo_6985104"
+name = "Zenodo record 6985104: Dataset of impulse responses from variable acoustics room Arni at Aalto Acoustic Labs"
+url = "https://zenodo.org/records/6985104"
+type = "repository"
+version = "2022-08-12 (single published version)"
+notes = "Record JSON https://zenodo.org/api/records/6985104; 132,037 IR WAVs in six ZIP archives split by numClosed range, plus combinations_setup.csv."
+
+[[resources]]
+id = "arni_ir_zip_members"
+origin = "zenodo_6985104"
+url = "https://zenodo.org/records/6985104/files/IR_Arni_upload_numClosed_{0-5,6-15,16-25,26-35,36-45,46-55}.zip?download=1"
+type = "range_extracted_zip_members"
+version = "Zenodo record 6985104 files as pinned in zip_archives.tsv"
+access = "Anonymous HTTP byte-range GETs (~1 request/s): a 64 KiB tail and the exact central directory of each archive, then one exact local-header-plus-DEFLATE range per selected member. Every 206 Content-Range total must equal the pinned archive size."
+size_bytes = 112211600
+sha256 = ""
+local_path = "downloads/aalto_arni_room_impulse_response_f32/wav/"
+notes = "Outer archives total 50,887,756,849 bytes and are never downloaded whole; their Zenodo MD5s are recorded in zip_archives.tsv as provenance only. Integrity is enforced by central-directory SHA-256 pins (zip_archives.tsv, 17,635,185 bytes of directories) and per-member CRC-32 (selection.tsv). size_bytes is the 265 inflated WAV members (423,440 bytes each); the transferred member ranges total 103,038,459 bytes."
+
+[[resources]]
+id = "combinations_setup_csv"
+origin = "zenodo_6985104"
+url = "https://zenodo.org/records/6985104/files/combinations_setup.csv?download=1"
+type = "file"
+version = "Zenodo md5 6024ff21d2e709d0e20c23b26a8e1542"
+access = "Direct public download."
+size_bytes = 1206376
+sha256 = "6cd64c3f2360a729396888aba6a3f332a6f1954a7ea5452e53bef8ccd05fbd98"
+local_path = "downloads/aalto_arni_room_impulse_response_f32/combinations_setup.csv"
+notes = "Panel state (0 reflective, 1 absorptive) for combinations 0..5341 and panels 1..55. Used only to cross-check that numClosed equals the number of reflective panels of each selected combination and to annotate the index; not emitted as a series."
+
+[local_paths]
+downloads = "downloads/aalto_arni_room_impulse_response_f32/"
+filtered = "filtered/aalto_arni_room_impulse_response_f32/"
+index = "index/aalto_arni_room_impulse_response_f32/"
+samples = "samples/aalto_arni_room_impulse_response_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/aalto_arni_room_impulse_response_f32/samples.jsonl"
+summary = "Range-extract 265 pinned impulse-response WAV members from the six Arni ZIP archives on Zenodo, validate ZIP/DEFLATE/CRC-32 and RIFF/WAVE structure plus receiver distinctness, and emit each member's IEEE float32 data chunk as one raw little-endian sample of 105,840 values (2.4 s at 44.1 kHz)."
+deterministic_notes = "Selection rule (scripts/arni_zip.py select_members): for every numClosed k = 0..55 except EXCLUDED_LEVELS (11, 27, 35), take the lowest global numComb outside the special block 2..31 whose sweep_1 file exists for all five receivers with a central-directory compressed size of at least MIN_COMPRESSED_BYTES = 200,000 each, and emit mic 1..5 sweep_1 for that combination (53 x 5 = 265). numComb numbering: 0 = all reflective (numClosed 55), 1 = all absorptive (numClosed 0), 2..31 = 30 out-of-sequence special configurations, 32..86 = numClosed 54, 87..141 = numClosed 1, then 100 per level. Both exclusions remove upstream recordings in which several receiver labels repeat one acoustic response (zero-lag Pearson r on sample indices [1500, 17884)): special combos 5, 7, 21, 27 (mics 1-3 r >= 0.9997 sharing one direct-sound arrival index; in 7, 21, 27 also mics 4-5 r >= 0.9995), and the first regular configurations 1042, 2642, 3442 of numClosed 11, 27, 35 (mics 1-3 r = 0.9999). Partial-range probes found the same duplication at numClosed 11: 1043, 1060, 1100, 1120, 1141; 27: 2643, 2660, 2700, 2720; 35: 3443, 3470, 3500, 3520 (only 2741 and 3541, the last configurations of 27 and 35, measured distinct), so these three levels are excluded entirely instead of selecting atypical end-of-block configurations by a content-driven scan. The compressed-size rule removes four upstream members holding int16-quantized data written as float32: numClosed 16, mic 5, sweep 1, numComb 1542/1543/1544/1594, which DEFLATE to 12.8-13.8 KB while every other of the 132,037 members is >= 342,676 B. The 1542 member has 100% of values on the 2^-15 lattice, 192 distinct codes in -377..323 and 86.5% of values equal to -1/32768. The rule moves only numClosed 16, from 1542 to 1545 (probed before pinning: 0 values on the lattice, max pairwise |r| 0.055). Repeat sweeps 2..5 are excluded as near-duplicates; combinations with an upstream-discarded sweep_1 are skipped in favour of the next numComb (numClosed 1: 7 combinations, numClosed 30 and 49: one each). Receiver distinctness is fatal in download.sh (arni_tool.py distinctness) and, separately implemented, in verify.sh: for each configuration the maximum zero-lag Pearson |r| over the 10 receiver pairs on indices [1500, 17884) must be < 0.5 (current output: 53 configurations, max 0.0863, median 0.0597); both log per-configuration values and the largest cross-configuration same-receiver |r| (0.9715, mic 4, numClosed 54 vs 55, one panel apart; informational). A fatal float-lattice / degeneracy check (fraction of values with x*32768 integral < 0.01 and >= 50,000 distinct float32 bit patterns per sample) runs in arni_zip.float32_stats (download extract/final-check and build) and, separately implemented, in verify.sh, which also asserts every selected member's central-directory compressed size >= 200,000; genuine samples measure <= 1 lattice value in 105,840 and >= 105,039 distinct patterns. discover.sh regenerates zip_archives.tsv and selection.tsv from the live record; download.sh re-derives both and requires byte equality with the pinned tables, and deletes cached WAVs outside the pinned selection. verify.sh re-derives every sample with an independent RIFF walker, checks CRC-32 against the archive central directories, recomputes min/max/SHA-256 from the stored float32 bytes and checks manifest totals."
+
+[[series]]
+id = "arni_room_impulse_response_f32"
+description = "Measured acoustic room impulse responses of the Arni variable-acoustics room, one omnidirectional loudspeaker to one of five fixed microphones, 2.4 s at 44.1 kHz."
+semantic_meaning = "Sweep-deconvolved sound-pressure impulse response (dimensionless full-scale amplitude) from the fixed source to one receiver, for one configuration of 55 open/closed absorptive wall panels; numClosed is the number of reflective panels. Each of the five receivers of a configuration is a distinct response (pairwise |r| < 0.5 enforced) and every sample is genuine float data (int16-lattice fraction < 1%, >= 50,000 distinct bit patterns enforced). Across the 265 samples peak |x| is 1.61e-3..2.38e-2 (median 6.47e-3), values span -2.23e-2..2.38e-2, and the 2.0-2.4 s noise-tail RMS is 2.63e-7..2.41e-6 (median 2.07e-6)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The upstream WAV files store WAVE_FORMAT_IEEE_FLOAT (format tag 3) 32-bit little-endian samples; the emitted bytes are the data chunk's float32 values with unchanged bit patterns. A probe found 0% of values on the int16 or int24 lattice, i.e. genuine float data rather than widened PCM. Four upstream members (numClosed 16, mic 5, sweep 1, numComb 1542/1543/1544/1594) hold int16-quantized data written as float32 (100% on the 2^-15 lattice, ~13 KB compressed) and are excluded by the compressed-size rule; a fatal lattice/distinct-pattern check guards every emitted sample. Recordings where several receiver labels repeat one response (special combos numComb 2..31 and absorption levels numClosed 11, 27, 35) are not used."
+source_resources = ["arni_ir_zip_members"]
+source_format = "RIFF/WAVE, WAVE_FORMAT_IEEE_FLOAT mono 44,100 Hz 32-bit (fmt, fact, PEAK, data chunks), DEFLATE-compressed inside ZIP/ZIP64 archives"
+source_field = "WAVE data chunk float32 sample amplitudes (105,840 per file)"
+filtered_input_path = "filtered/aalto_arni_room_impulse_response_f32/ingest_stats.json"
+filtering = "Keep only the 265 members listed in selection.tsv: 53 absorption levels (numClosed 0..55 except 11, 27, 35), one configuration per level (lowest numComb outside the special block 2..31 with sweep_1 for all five receivers), receivers 1..5, sweep 1, every selected member >= 200,000 compressed bytes. Excludes sweeps 2..5, the special block numComb 2..31, levels 11, 27, 35, the four int16-quantized numClosed 16 mic 5 members and all other configurations; every configuration must pass the receiver-distinctness check (max pairwise |r| < 0.5 on samples [1500, 17884)). The fmt, fact and PEAK chunks are validated and then dropped."
+missing_value_policy = "Impulse responses have no missing-value sentinel. Any NaN or Inf, an all-zero or constant sample, a wrong fmt, a fact length other than 105,840, a PEAK chunk inconsistent with max |x|, a CRC-32 or size mismatch, a configuration whose receivers are not distinct (max pairwise |r| >= 0.5), or a sample with >= 1% of values on the int16 (2^-15) lattice or < 50,000 distinct float32 bit patterns (widened integer data) is fatal; nothing is dropped or imputed. Upstream-discarded sweeps are handled only by the documented selection rule."
+conversion = "Range-GET the local header and DEFLATE data of each selected member, inflate with raw zlib, require the exact compressed boundary and the central-directory CRC-32, walk the RIFF chunks, require fmt (3, 1, 44100, 176400, 4, 32) and write the 423,360-byte data chunk as one little-endian float32 sample file per impulse response."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 room impulse response"
+sample_geometry = "single_channel_time_series_44100_hz_2_4_s"
+sample_rank = 1
+sample_axes = ["time_sample_44100_hz"]
+natural_record_kind = "single_receiver_swept_sine_room_impulse_response_measurement"
+sample_count = 265
+total_size_bytes = 112190400
+output_path = "samples/aalto_arni_room_impulse_response_f32/arni_room_impulse_response_f32/"

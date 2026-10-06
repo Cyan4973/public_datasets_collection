@@ -1,0 +1,102 @@
+manifest_version = 1
+dataset_id = "pdebench_2d_cfd_turb_m1_density_f32"
+name = "PDEBench 2D Compressible Navier-Stokes Turbulence (M=1.0) Density Trajectories, Native Float32"
+description = "Whole native-float32 density trajectories (21 saved time steps x 512 x 512 periodic grid) of 40 evenly spaced simulations from the PDEBench 2D_CFD_Turb_M1.0_Eta1e-08_Zeta1e-08_periodic_512 training file, fetched by HTTP byte range without downloading the 88 GB file."
+homepage = "https://doi.org/10.18419/darus-2986"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Takamoto, M., Praditia, T., Leiteritz, R., MacKinlay, D., Alesiani, F., Pflueger, D., Niepert, M. PDEBench Datasets. DaRUS, V8, 2022. https://doi.org/10.18419/darus-2986"
+notes = "The DaRUS dataset record (latestVersion 8.0, released 2024-02-13) declares license {\"name\": \"CC BY 4.0\", \"uri\": \"http://creativecommons.org/licenses/by/4.0\"} with empty termsOfUse and termsOfAccess; file 164686 is not restricted. download.sh re-checks this on every run. Preserve the dataset citation and DOI."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official DaRUS (University of Stuttgart) Dataverse deposit of the PDEBench benchmark by its authors; numerical PDE simulation output with no human subjects."
+usage_notes = "Public, CC BY 4.0, anonymous access through the DaRUS access API. Only the /density dataset is emitted."
+
+[[origins]]
+id = "darus_pdebench"
+name = "PDEBench Datasets on DaRUS"
+url = "https://darus.uni-stuttgart.de/dataset.xhtml?persistentId=doi:10.18419/darus-2986"
+type = "data_portal"
+version = "8.0"
+notes = "Dataverse dataset 133015, DOI 10.18419/darus-2986, 336 files. The access API redirects (HTTP 303) to an expiring presigned s3.tik.uni-stuttgart.de URL, so every request goes back through the API with curl --location."
+
+[[resources]]
+id = "darus_catalog"
+origin = "darus_pdebench"
+url = "https://darus.uni-stuttgart.de/api/datasets/:persistentId/?persistentId=doi:10.18419/darus-2986"
+type = "api_query_result"
+version = "8.0"
+access = "Anonymous Dataverse native API JSON, fetched on every download run."
+size_bytes = 277219
+sha256 = ""
+local_path = "downloads/pdebench_2d_cfd_turb_m1_density_f32/darus_2986_dataset.json"
+notes = "size_bytes is the size at first acquisition (2026-10-06). Not hash-pinned because Dataverse metadata (view counts, timestamps) can change; download.sh instead asserts the release state, CC BY 4.0 license, empty terms, and the exact file id, name, directory, size and MD5 below."
+
+[[resources]]
+id = "cfd_turb_m1_train_hdf5_metadata"
+origin = "darus_pdebench"
+url = "https://darus.uni-stuttgart.de/api/access/datafile/164686"
+type = "file"
+version = "2D_CFD_Turb_M1.0_Eta1e-08_Zeta1e-08_periodic_512_Train.hdf5 (88,080,392,528 bytes, MD5 3f2c7376cde5fb072db0f9814f1c6992, S3 ETag c094ed9959bb5a60411550403524df31-10000)"
+access = "Two HTTP Range requests: bytes 0-2047 (superblock, root group B-tree/SNOD/heap header, density/pressure/Vx object headers) and bytes 66060290048-66060292095 (root link-name heap data and Vy/x/y/t object headers)."
+size_bytes = 4096
+sha256 = "4b901a23ac2c49174a8726031b60eba8953127bc29c0a1bf7438fde63b0e8b09 (bytes 0-2047); ac53bc506b485b7de64f97a6e1740ad2e934480dee9c5e9e1d102b98526b99ba (bytes 66060290048-66060292095)"
+local_path = "downloads/pdebench_2d_cfd_turb_m1_density_f32/hdf5_prefix.bin"
+notes = "The island range is stored as hdf5_island.bin. Parsed by scripts/pdebench_h5.py, which asserts /density shape (1000, 21, 512, 512), H5T_IEEE_F32LE, contiguous layout at address 2048 with size 22,020,096,000, no filter pipeline and no external storage."
+
+[[resources]]
+id = "cfd_turb_m1_train_density_trajectories"
+origin = "darus_pdebench"
+url = "https://darus.uni-stuttgart.de/api/access/datafile/164686"
+type = "file"
+version = "same file as cfd_turb_m1_train_hdf5_metadata"
+access = "40 HTTP Range requests (resumable) of bytes [2048 + i*22020096, 2048 + (i+1)*22020096 - 1] for i = 0, 25, 50, ..., 975. Each response must be HTTP 206 with exactly that Content-Range of total 88,080,392,528. The whole 88 GB file is never requested."
+size_bytes = 880803840
+sha256 = "per-trajectory values pinned in trajectory_sha256.tsv (recipe directory)"
+local_path = "downloads/pdebench_2d_cfd_turb_m1_density_f32/"
+notes = "Files are density_traj_NNNN.f32. Per-trajectory SHA-256 values from the first acquisition (2026-10-06) are pinned in the recipe's trajectory_sha256.tsv and enforced by download.sh, build.sh and verify.sh. Aggregate SHA-256 of the 40 samples in index order: 2af53ee815e601251e263ef10f9e1ce9f12c3a0272628ae4c492a1a0dcc963f1."
+
+[local_paths]
+downloads = "downloads/pdebench_2d_cfd_turb_m1_density_f32/"
+filtered = "filtered/pdebench_2d_cfd_turb_m1_density_f32/"
+index = "index/pdebench_2d_cfd_turb_m1_density_f32/"
+samples = "samples/pdebench_2d_cfd_turb_m1_density_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/pdebench_2d_cfd_turb_m1_density_f32/samples.jsonl"
+summary = "Validate the DaRUS license and file identity, parse the pinned HDF5 metadata ranges with a pure-stdlib reader to locate the contiguous unfiltered float32 /density dataset, fetch 40 evenly spaced whole trajectories by byte range, and emit each as one raw little-endian float32 sample of shape (21, 512, 512)."
+deterministic_notes = "Selection is fixed: trajectory indices 0, 25, ..., 975 (stride 25 over the 1000 simulations in file order). Offsets are derived from the parsed HDF5 layout. Samples are the stored IEEE-754 float32 values unchanged. build.sh and verify.sh reject non-finite or non-positive values, any frame t >= 1 with fewer than 10,000 distinct values, duplicate trajectories, and any size or hash mismatch. The t = 0 frame is the uniform initial density 1.0 and is kept as part of the natural record. Index min/max are computed from the stored float32 values."
+
+[[series]]
+id = "cfd_turb_m1_density_trajectory_f32"
+description = "Mass density of one 2D compressible Navier-Stokes turbulence simulation over its 21 saved time steps on a 512 x 512 periodic grid."
+semantic_meaning = "Nondimensional fluid mass density per grid cell of a 2D compressible, nearly inviscid (shear and bulk viscosity 1e-8) Navier-Stokes simulation started from uniform density 1.0 and a random turbulent velocity field at Mach number 1.0 on the periodic unit square, saved at t = 0, 0.05, ..., 1.0."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The HDF5 /density dataset is H5T_IEEE_F32LE with contiguous, unfiltered storage, so the fetched byte range of one trajectory is exactly its row-major float32 values; they are written unchanged."
+source_resources = ["cfd_turb_m1_train_hdf5_metadata", "cfd_turb_m1_train_density_trajectories"]
+source_format = "HDF5 v0 file with contiguous unfiltered little-endian float32 datasets (PDEBench [b, t, x, y] convention)"
+source_field = "root dataset /density, one (21, 512, 512) slab per leading-axis simulation index"
+filtered_input_path = "filtered/pdebench_2d_cfd_turb_m1_density_f32/ingest_stats.json"
+filtering = "Keep only /density for simulations 0, 25, ..., 975 of the M=1.0, eta=zeta=1e-8, periodic 512 training file. Vx, Vy, pressure, the coordinate arrays, the other 960 simulations, the M=0.1 and Rand files, and the 1D/3D files are excluded."
+missing_value_policy = "No missing values exist in the source; any NaN, infinity or non-positive density is fatal in download, build and verify. Nothing is dropped, filled or clipped. The uniform t = 0 frame is a genuine initial condition and is retained."
+conversion = "Read the stored little-endian IEEE float32 values of /density[i, :, :, :] from bytes [2048 + i*22020096, 2048 + (i+1)*22020096) and write them unchanged as one sample of 5,505,024 values in (time_step, x, y) row-major order."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 density trajectory"
+sample_geometry = "periodic_cartesian_grid_time_by_x_by_y_3d"
+sample_rank = 3
+sample_axes = ["time_step", "x", "y"]
+natural_record_kind = "pdebench_2d_cfd_turb_m1_simulation_trajectory_density_field"
+sample_count = 40
+total_size_bytes = 880803840
+output_path = "samples/pdebench_2d_cfd_turb_m1_density_f32/cfd_turb_m1_density_trajectory_f32/"

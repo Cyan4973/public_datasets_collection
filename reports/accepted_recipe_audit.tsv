@@ -385,6 +385,7 @@ google_alphaearth_satellite_embeddings_i8	ok	402653184	402653184	384	1048576	104
 empiar_10318_microed_diffraction_frames_u16	ok	402653184	805306368	24	16777216	33554432	0	0	0	1	none	none
 mast_jwst_nircam_sw_uncal_ramps_u16	ok	402653184	805306368	12	33554432	67108864	0	0	0	1	none	none
 mpc_modis_mod10a1_ndsi_snow_cover_u8	ok	403200000	403200000	70	5760000	5760000	0	0	0	1	none	none
+noaa_rstn_sagamore_hill_srs_spectra_u8	ok	404523186	404523186	72	5547634.5	5547634.5	504393	2017572	36	1	none	none
 pfam_seed_alignments_u8	ok	411242401	411242401	22719	6150	6150	0	0	0	1	none	none
 sevir_vil_storm_events_u8	ok	433520640	433520640	60	7225344	7225344	0	0	0	1	none	none
 csiro_parkes_uwl_search_mode_u8	ok	436207616	436207616	32	13631488	13631488	0	0	0	1	none	none

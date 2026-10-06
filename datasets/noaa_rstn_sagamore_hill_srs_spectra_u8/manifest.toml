@@ -1,0 +1,141 @@
+manifest_version = 1
+dataset_id = "noaa_rstn_sagamore_hill_srs_spectra_u8"
+name = "USAF RSTN Sagamore Hill Solar Radio Spectrograph (SRS) Daily Dynamic Spectra 25-180 MHz UInt8 (2024)"
+description = "Native unsigned 8-bit spectrum-analyser levels (relative logarithmic power, 0-255) from the US Air Force Radio Solar Telescope Network (RSTN) Solar Radio Spectrograph at Sagamore Hill, Massachusetts (site 5), archived by NOAA NCEI: 36 complete 2024 station-day dynamic spectra, each split into its band A (25-75 MHz) and band B (75-180 MHz) sweep-by-channel matrices of 401 linearly spaced channels at a nominal 3 s sweep cadence."
+homepage = "https://www.ngdc.noaa.gov/stp/space-weather/solar-data/solar-features/solar-radio/rstn-spectral/"
+
+[license]
+name = "U.S. Government Public Domain"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ngdc.stp.solar:solar-features_solar-features_solar-radio/xml"
+citation = "U.S. Air Force Radio Solar Telescope Network (RSTN), Sagamore Hill Solar Radio Spectrograph data; archived and distributed by NOAA National Centers for Environmental Information (NCEI), Solar Radio collection (gov.noaa.ngdc.stp.solar:solar-features_solar-features_solar-radio), https://www.ngdc.noaa.gov/stp/space-weather/solar-data/solar-features/solar-radio/rstn-spectral/"
+notes = "The NCEI ISO 19115 record for the 'Solar Radio' collection (fileIdentifier gov.noaa.ngdc.stp.solar:solar-features_solar-features_solar-radio), whose description lists '1-sec solar flux measurements from the Radio Solar Telescope Netword (RSTN), and RSTN solar spectral measurements', states 'Access Constraints: None Use Constraints: None' followed by a NOAA distribution-liability disclaimer; download.sh re-fetches this record and checks those phrases on every run. NCEI's collection readme (documentation/readme_solar-features_solar-radio.pdf) lists 'Sagamore Hill (USAF Radio Solar Telescope Network)', so the data are a work of the U.S. Air Force, i.e. U.S. Government works with no copyright under 17 U.S.C. 105. Only Sagamore Hill is used; Learmonth (jointly operated with the Australian Bureau of Meteorology) and the other stations are excluded. Attribution to USAF RSTN and NOAA NCEI is retained as a courtesy."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NOAA NCEI (formerly NGDC) public HTTPS archive of RSTN spectral data; anonymous Apache directory listing and direct file downloads. No mirrors."
+usage_notes = "Solar radio-astronomy instrument data (sweeping spectrum analyser levels); no personal or sensitive content."
+
+[[origins]]
+id = "ncei_rstn_spectral"
+name = "NOAA NCEI Solar Radio archive: RSTN spectral data, Sagamore Hill"
+url = "https://www.ngdc.noaa.gov/stp/space-weather/solar-data/solar-features/solar-radio/rstn-spectral/sagamore-hill/2024/"
+type = "website"
+notes = "Apache directory index with one subdirectory per month; one gzip-compressed SRS day file kYYMMDD.srs.gz per local observing day (k7 = Sagamore Hill prefix). 2024 has 362 listed day files (about 2.7 GB gz). Format documentation: ../documentation/Srsdispl.doc (section 2.2 'SRS Data Records')."
+
+[[resources]]
+id = "sagamore_hill_2024_srs_days"
+origin = "ncei_rstn_spectral"
+url = "https://www.ngdc.noaa.gov/stp/space-weather/solar-data/solar-features/solar-radio/rstn-spectral/sagamore-hill/2024/{MM}/k724{MM}{DD}.srs.gz"
+type = "file"
+version = "NCEI archive state probed 2026-10-06; per-file size, Last-Modified, gzip trailer CRC32/ISIZE, record count and first sweep time pinned in sources.tsv"
+access = "Direct anonymous HTTPS download with byte-range support (curl -C - resumable)."
+size_bytes = 277776099
+sha256 = ""
+local_path = "downloads/noaa_rstn_sagamore_hill_srs_spectra_u8/"
+notes = "36 day files: the 1st, 11th and 21st of each month of 2024, each replaced by the first later day (up to +9, same month) that exists and passes the probe in discover.sh. Two substitutions: 2024-07-01 is a 297-record outage file and 2024-07-02 is not archived, so 2024-07-03 is used; 2024-08-21 and 2024-08-22 are not archived, so 2024-08-23 (a late-start day, first sweep 15:49:27 UT, 9076 records) is used. The gzip trailer pins the uncompressed content (CRC32 + length) before download; whole-file SHA-256 values were recorded from the first driver download (2026-10-06, all 36 files validated record by record) and are pinned in sources.tsv and enforced by download.sh, build.sh and verify.sh. Sum of pinned file sizes is 277,776,099 bytes; decompressed 416,628,618 bytes."
+
+[[resources]]
+id = "ncei_iso_solar_radio_metadata"
+origin = "ncei_rstn_spectral"
+url = "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ngdc.stp.solar:solar-features_solar-features_solar-radio/xml"
+type = "file"
+version = "fetched on every download run (about 64 KB)"
+access = "Direct anonymous HTTPS."
+size_bytes = 63868
+sha256 = ""
+local_path = "downloads/noaa_rstn_sagamore_hill_srs_spectra_u8/license/ncei_iso_solar_radio.xml"
+notes = "Rights evidence only; not a sample source. download.sh requires the fileIdentifier, 'RSTN solar spectral measurements', 'Access Constraints: None' and 'Use Constraints: None'."
+
+[local_paths]
+downloads = "downloads/noaa_rstn_sagamore_hill_srs_spectra_u8/"
+filtered = "filtered/noaa_rstn_sagamore_hill_srs_spectra_u8/"
+index = "index/noaa_rstn_sagamore_hill_srs_spectra_u8/"
+samples = "samples/noaa_rstn_sagamore_hill_srs_spectra_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_rstn_sagamore_hill_srs_spectra_u8/samples.jsonl"
+summary = "Fetch 36 pinned Sagamore Hill 2024 SRS day files from NCEI, validate every 826-byte sweep record header, and split each day into a band A (25-75 MHz) and a band B (75-180 MHz) row-major uint8 matrix of sweeps x 401 channels, plus an auxiliary uint32 sweep-start time series per day."
+deterministic_notes = "Selection (discover.sh): requested days 2024-MM-01/11/21; first acceptable file among d..d+9 in the same month, where acceptable means listed, gzip ISIZE a multiple of 826 with >= 5000 records, and every record decoded from a 32 KiB head range matching site 5 / 2 bands / (25,75,401,20,0) / (75,180,401,20,0) / the file's own date. download.sh and build.sh re-validate every record of every file: site 5, nbands 2, band A descriptor exactly (25 MHz, 75 MHz, 401 bytes, ref level 20, attenuation 0 dB), band B exactly (75, 180, 401, 20, 0), header date equal to the file date or the following UT day, valid h/m/s; any violation is fatal (no mixing of analyser scales). Pinned per file: size, gzip CRC32 and ISIZE, record count, first sweep time, and (after the first download) SHA-256. Sweep cadence is not enforced: realized steps are mostly 3 s with occasional 2 s, 4 s and 5 s steps (per day: 0-12 steps of 4 s, 1-9 of 2 s), plus 19 intra-day observing gaps longer than 5 s on 11 of 36 days (12 s to 4,124 s, the longest on 2024-09-11); timestamps are strictly increasing on every day and are kept in the auxiliary series. On 33 of 36 days the file begins with a fixed ~35-record start-up sequence (records ~19-53, about 1.5 min after the first sweep) in which levels repeat in groups of four identical sweeps (24-30 verbatim repeats per day, all within records 20-59) and which holds every code-0 value except two sweeps on 2024-03-01 (records 6308-6309); 2024-06-21, 2024-08-23 and 2024-10-11 lack it. It is part of the station-day file and is kept verbatim (no trimming). Output names: samples/<id>/<series>/sagamore_hill_YYYYMMDD_band_{a,b}.u8 and ..._sweep_start_utc_s.u32; index rows sorted by sample_path. Realized scope: 36 station-days, 504,393 sweeps (9,076-17,942 per day, median 13,834.5); 72 primary samples totalling 404,523,186 bytes; median primary sample 5,547,634.5 values. Realized value statistics per band sample: 178-256 distinct codes, mode share <= 7.83%, code 0 <= 0.0134%, code 255 <= 0.0167%, one flat sweep in the whole collection (an all-255 band B sweep on 2024-01-11 13:45:29 UT); daily means 33.2-51.0 DN (band A) and 61.2-71.4 DN (band B). verify.sh re-decodes with an independent streaming parser and compares every sample byte for byte."
+
+[[series]]
+id = "srs_band_a_25_75mhz_u8"
+description = "Band A (25-75 MHz) dynamic spectrum of one Sagamore Hill SRS station-day: sweeps x 401 channels of uint8 analyser level."
+semantic_meaning = "Output level of the band A swept spectrum analyser (relative logarithmic power, 0-255, no absolute calibration) at 401 linearly spaced frequencies f = 25 + 50*(n-1)/400 MHz, n = 1..401, for every sweep of the observing day at Sagamore Hill (site 5); analyser reference level 20 and attenuation 0 dB on every sweep. Daily mean 33-51 DN; quiet-Sun and galactic background with man-made interference lines (the documentation notes TV, FM, aviation and utility carriers in this range) and, on active days, solar radio bursts."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Each SRS record stores the band A analyser levels as 401 unsigned bytes in increasing frequency; they are copied verbatim, with no scaling, offset, masking or resampling."
+source_resources = ["sagamore_hill_2024_srs_days"]
+source_format = "RSTN Solar Radio Spectrograph day file (.srs, gzip): fixed 826-byte sweep records, 24-byte header + 401 band A levels + 401 band B levels (NCEI Srsdispl.doc section 2.2)"
+source_field = "record bytes 25-425 (1-based): band A spectrum-analyser level per frequency channel, 25.00-75.00 MHz"
+filtered_input_path = "filtered/noaa_rstn_sagamore_hill_srs_spectra_u8/ingest_stats.json"
+filtering = "All sweep records of the 36 pinned Sagamore Hill 2024 day files; no sweeps or channels are dropped. Other RSTN stations and other years are excluded."
+missing_value_policy = "No values are dropped, imputed or masked. Codes 0 and 255 are genuine analyser extremes and are kept (realized code 0 occurs only inside the daily start-up sequence apart from two sweeps on 2024-03-01, at most 0.0134% of a sample; code 255 at most 0.0167%); verify requires their combined share below 1% per sample. Gaps in observing (between sweeps) are not filled; the auxiliary sweep-start series records the actual sweep times. A file with any header violation, a length that is not a multiple of 826, or fewer than 5000 records is fatal, never partially used."
+conversion = "Decompress the .gz, split into 826-byte records, and write bytes [24:425) (0-based) of each record in file order: a row-major (sweeps x 401) uint8 matrix per station-day, channel fastest."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw uint8 matrix, sweep-major, frequency channel fastest"
+sample_geometry = "dynamic_spectrum_sweep_by_frequency_channel_2d"
+sample_rank = 2
+sample_axes = ["sweep", "frequency_channel"]
+natural_record_kind = "rstn_srs_station_day_band_dynamic_spectrum"
+sample_count = 36
+total_size_bytes = 202261593
+output_path = "samples/noaa_rstn_sagamore_hill_srs_spectra_u8/srs_band_a_25_75mhz_u8/"
+
+[[series]]
+id = "srs_band_b_75_180mhz_u8"
+description = "Band B (75-180 MHz) dynamic spectrum of one Sagamore Hill SRS station-day: sweeps x 401 channels of uint8 analyser level."
+semantic_meaning = "Output level of the band B swept spectrum analyser (relative logarithmic power, 0-255, no absolute calibration) at 401 linearly spaced frequencies f = 75 + 105*(n-1)/400 MHz, n = 1..401, for every sweep of the observing day at Sagamore Hill (site 5); analyser reference level 20 and attenuation 0 dB on every sweep. Daily mean 61-71 DN; background with FM/TV/aviation interference lines and, on active days, solar radio bursts."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Each SRS record stores the band B analyser levels as 401 unsigned bytes in increasing frequency; they are copied verbatim, with no scaling, offset, masking or resampling."
+source_resources = ["sagamore_hill_2024_srs_days"]
+source_format = "RSTN Solar Radio Spectrograph day file (.srs, gzip): fixed 826-byte sweep records, 24-byte header + 401 band A levels + 401 band B levels (NCEI Srsdispl.doc section 2.2)"
+source_field = "record bytes 426-826 (1-based): band B spectrum-analyser level per frequency channel, 75.00-180.00 MHz"
+filtered_input_path = "filtered/noaa_rstn_sagamore_hill_srs_spectra_u8/ingest_stats.json"
+filtering = "Same 36 pinned day files and all sweeps as srs_band_a_25_75mhz_u8."
+missing_value_policy = "No values are dropped, imputed or masked. Codes 0 and 255 are genuine analyser extremes and are kept; verify requires their combined share below 1% per sample. A file with any header violation, a length that is not a multiple of 826, or fewer than 5000 records is fatal, never partially used."
+conversion = "Decompress the .gz, split into 826-byte records, and write bytes [425:826) (0-based) of each record in file order: a row-major (sweeps x 401) uint8 matrix per station-day, channel fastest."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw uint8 matrix, sweep-major, frequency channel fastest"
+sample_geometry = "dynamic_spectrum_sweep_by_frequency_channel_2d"
+sample_rank = 2
+sample_axes = ["sweep", "frequency_channel"]
+natural_record_kind = "rstn_srs_station_day_band_dynamic_spectrum"
+sample_count = 36
+total_size_bytes = 202261593
+output_path = "samples/noaa_rstn_sagamore_hill_srs_spectra_u8/srs_band_b_75_180mhz_u8/"
+
+[[series]]
+id = "srs_sweep_start_utc_seconds_u32"
+description = "Auxiliary sweep start times for one Sagamore Hill SRS station-day."
+semantic_meaning = "Start time of each sweep in whole seconds since 00:00:00 UT of the file's date (values above 86399 mean the following UT day), aligned row for row with the two band matrices of the same day."
+role = "auxiliary"
+representation_class = "derived_operational_numeric"
+representation_notes = "Header bytes 1-6 (year, month, day, hour, minute, second) of each record re-expressed as seconds from the file date's midnight UT, to preserve the irregular 2-4 s sweep cadence. Alignment metadata only; not counted toward acceptance."
+source_resources = ["sagamore_hill_2024_srs_days"]
+source_format = "RSTN Solar Radio Spectrograph day file (.srs, gzip), 24-byte record header"
+source_field = "record header bytes 1-6: year (2 digits), month, day, hour, minute, second (UT)"
+filtered_input_path = "filtered/noaa_rstn_sagamore_hill_srs_spectra_u8/ingest_stats.json"
+filtering = "One value per sweep record of each pinned day file."
+missing_value_policy = "No sentinels; every record has a valid timestamp (fatal otherwise)."
+conversion = "(header date - file date) * 86400 + hour*3600 + minute*60 + second, written as little-endian uint32, one per sweep."
+numeric_kind = "uint"
+bit_width = 32
+endianness = "little"
+sample_format = "raw uint32 vector"
+sample_geometry = "per_sweep_timestamp_1d"
+sample_rank = 1
+sample_axes = ["sweep"]
+natural_record_kind = "rstn_srs_station_day_sweep_times"
+sample_count = 36
+total_size_bytes = 2017572
+output_path = "samples/noaa_rstn_sagamore_hill_srs_spectra_u8/srs_sweep_start_utc_seconds_u32/"

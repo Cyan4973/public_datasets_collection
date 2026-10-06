@@ -1,0 +1,152 @@
+manifest_version = 1
+dataset_id = "openneuro_ds003483_vectorview_meg_mag_i16"
+name = "OpenNeuro ds003483 Elekta Neuromag Vectorview MEG Magnetometer tSSS Int16 Channel Streams"
+description = "612 complete native signed-int16 magnetometer channel streams (all 102 Vectorview SQ20950N magnetometers x the deduction-task run of 6 participants, 1000 Hz, 696-805 s each) decoded from the MaxFilter 2.2.10 tSSS-processed FIFF raw files of the CC0 OpenNeuro logical-reasoning MEG dataset ds003483."
+homepage = "https://openneuro.org/datasets/ds003483"
+
+[license]
+name = "Creative Commons CC0 1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "Cognitive and Computational Neuroscience Laboratory (UPM - UCM); PIs Fernando Maestu, Carmen Requena, Francisco Salto Alemany. Logical reasoning study. OpenNeuro ds003483, doi:10.18112/openneuro.ds003483.v1.0.2."
+notes = "The official BIDS dataset_description.json (pinned S3 object version 5n.o11Crl3Nvg7AKgzfAfroeS016CLTf, MD5 2672ea7a59f7aff3183edb230044d904) declares \"License\": \"CC0\" and DatasetDOI 10.18112/openneuro.ds003483.v1.0.2; download.sh and build.sh re-check Name, License and DOI. Citation is courteous, not required."
+
+[safety]
+contains_sensitive_data = true
+contains_personal_data = false
+provenance_notes = "Public, de-identified human magnetoencephalography released by the UPM-UCM laboratory through OpenNeuro under CC0. Files are fetched from the official anonymous OpenNeuro S3 bucket at pinned object versions; no mirrors."
+usage_notes = "Human-participant neuroimaging. Only anonymous magnetometer code streams keyed by BIDS pseudonymous labels (sub-015..sub-028) are emitted. The FIFF subject block (106: pseudonymous names, birth date, sex, handedness), measurement date, file IDs, digitised head points, HPI fits, gradiometer/EOG/ECG/STI/CHPI channels, participants.tsv and event files are never decoded into samples or the index; the downloaded FIF files stay in the local download cache only."
+
+[[origins]]
+id = "openneuro_ds003483"
+name = "Logical reasoning study (OpenNeuro ds003483)"
+url = "https://openneuro.org/datasets/ds003483"
+type = "bucket"
+version = "1.0.2"
+notes = "Anonymous public S3 bucket s3://openneuro.org (https://s3.amazonaws.com/openneuro.org/ds003483/). The bucket is versioned; every object is requested with ?versionId=. All objects date from 2021-01-24; CHANGES lists 1.0.1 (2021-01-24, 'Final version') while dataset_description.json carries the v1.0.2 DOI. Single-part ETags equal content MD5s."
+
+[[resources]]
+id = "dataset_description"
+origin = "openneuro_ds003483"
+url = "https://s3.amazonaws.com/openneuro.org/ds003483/dataset_description.json?versionId=5n.o11Crl3Nvg7AKgzfAfroeS016CLTf"
+type = "file"
+version = "1.0.2"
+access = "Direct public anonymous GET of a pinned object version."
+size_bytes = 352
+md5 = "2672ea7a59f7aff3183edb230044d904"
+sha256 = "ba2b5e8c919d6f2e274bfc3308816257e3cd7c33ee3874eb3b8e77a161fe784b"
+local_path = "downloads/openneuro_ds003483_vectorview_meg_mag_i16/dataset_description.json"
+notes = "License evidence; requires Name='Logical reasoning study', License='CC0', DatasetDOI='10.18112/openneuro.ds003483.v1.0.2'."
+
+[[resources]]
+id = "fif_sub027"
+origin = "openneuro_ds003483"
+url = "https://s3.amazonaws.com/openneuro.org/ds003483/sub-027/ses-1/meg/sub-027_ses-1_task-deduction_run-1_meg.fif?versionId=adSmel7Imr754MnYaBXC5mDQEynceCup"
+type = "file"
+version = "1.0.2"
+access = "Resumable public anonymous GET of a pinned object version."
+size_bytes = 450600455
+md5 = "251cc2d65cf0eeaaa4b9312708a31378"
+local_path = "downloads/openneuro_ds003483_vectorview_meg_mag_i16/fif/sub-027_ses-1_task-deduction_run-1_meg.fif"
+notes = "696 x 1-s DAU_PACK16 buffers, leading FIFF_DATA_SKIP 11, FIFF_DIR at 450574503 (selection.tsv)."
+
+[[resources]]
+id = "fif_sub018"
+origin = "openneuro_ds003483"
+url = "https://s3.amazonaws.com/openneuro.org/ds003483/sub-018/ses-1/meg/sub-018_ses-1_task-deduction_run-1_meg.fif?versionId=HTpMzik4o5FafRs093aNvGnFmhQXaHew"
+type = "file"
+version = "1.0.2"
+access = "Resumable public anonymous GET of a pinned object version."
+size_bytes = 453158419
+md5 = "873bfb258cd6776bf2cfd755c82455ec"
+local_path = "downloads/openneuro_ds003483_vectorview_meg_mag_i16/fif/sub-018_ses-1_task-deduction_run-1_meg.fif"
+notes = "700 buffers, leading skip 132, FIFF_DIR at 453133187."
+
+[[resources]]
+id = "fif_sub028"
+origin = "openneuro_ds003483"
+url = "https://s3.amazonaws.com/openneuro.org/ds003483/sub-028/ses-1/meg/sub-028_ses-1_task-deduction_run-1_meg.fif?versionId=WLXnkCz1ddUK7q4uxdDMJSZEXaem7cMP"
+type = "file"
+version = "1.0.2"
+access = "Resumable public anonymous GET of a pinned object version."
+size_bytes = 458916159
+md5 = "9dd5dbdb67484435402aafe1f1fb89a9"
+local_path = "downloads/openneuro_ds003483_vectorview_meg_mag_i16/fif/sub-028_ses-1_task-deduction_run-1_meg.fif"
+notes = "709 buffers, leading skip 8, FIFF_DIR at 458891455."
+
+[[resources]]
+id = "fif_sub024"
+origin = "openneuro_ds003483"
+url = "https://s3.amazonaws.com/openneuro.org/ds003483/sub-024/ses-1/meg/sub-024_ses-1_task-deduction_run-1_meg.fif?versionId=9JHFIlrnlj3j_aKvkAp.vfYJaJOiCp91"
+type = "file"
+version = "1.0.2"
+access = "Resumable public anonymous GET of a pinned object version."
+size_bytes = 473639111
+md5 = "a0076d52212ffb6cdd2f5b90971d4a9a"
+local_path = "downloads/openneuro_ds003483_vectorview_meg_mag_i16/fif/sub-024_ses-1_task-deduction_run-1_meg.fif"
+notes = "732 buffers, leading skip 82, FIFF_DIR at 473613335."
+
+[[resources]]
+id = "fif_sub017"
+origin = "openneuro_ds003483"
+url = "https://s3.amazonaws.com/openneuro.org/ds003483/sub-017/ses-1/meg/sub-017_ses-1_task-deduction_run-1_meg.fif?versionId=0uHeOnq6VCd7mq1BWbifcS_Tm8AGT5uq"
+type = "file"
+version = "1.0.2"
+access = "Resumable public anonymous GET of a pinned object version."
+size_bytes = 498598595
+md5 = "55393b5d71aaace30721f5f699916f93"
+local_path = "downloads/openneuro_ds003483_vectorview_meg_mag_i16/fif/sub-017_ses-1_task-deduction_run-1_meg.fif"
+notes = "771 buffers, leading skip 12, FIFF_DIR at 498572739."
+
+[[resources]]
+id = "fif_sub015"
+origin = "openneuro_ds003483"
+url = "https://s3.amazonaws.com/openneuro.org/ds003483/sub-015/ses-1/meg/sub-015_ses-1_task-deduction_run-1_meg.fif?versionId=f9836sFjDZp358TQ7fA55Vl4sX0bbcsD"
+type = "file"
+version = "1.0.2"
+access = "Resumable public anonymous GET of a pinned object version."
+size_bytes = 520361207
+md5 = "6831d9e76532fe157aeef2d70dcb272e"
+local_path = "downloads/openneuro_ds003483_vectorview_meg_mag_i16/fif/sub-015_ses-1_task-deduction_run-1_meg.fif"
+notes = "805 buffers, leading skip 176, FIFF_DIR at 520334471."
+
+[local_paths]
+downloads = "downloads/openneuro_ds003483_vectorview_meg_mag_i16/"
+filtered = "filtered/openneuro_ds003483_vectorview_meg_mag_i16/"
+index = "index/openneuro_ds003483_vectorview_meg_mag_i16/"
+samples = "samples/openneuro_ds003483_vectorview_meg_mag_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/openneuro_ds003483_vectorview_meg_mag_i16/samples.jsonl"
+summary = "Validate the CC0 dataset description, fetch six pinned whole FIFF raw files (FIFF buffers are time-major, so per-channel byte ranges do not exist), validate every file's tag chain against its FIFF_DIR directory and the pinned acquisition/processing signature, decode every big-endian FIFFT_DAU_PACK16 buffer, de-interleave the 102 coil-3024 magnetometer columns, and write each complete channel as one little-endian int16 sample."
+deterministic_notes = "Selection rule: the six smallest task-deduction run-1 FIF objects in ds003483 by size (sub-027, 018, 028, 024, 017, 015; 2,855,273,946 B), the largest subject set whose full magnetometer output stays under the 1 GB primary cap. Each file is pinned by key, versionId, size, MD5 (= single-part ETag), FIFF_DIR offset, buffer count and leading-skip value (selection.tsv). Every file must: start with FIFF_FILE_ID; have a tag chain (followed via next pointers) identical to its trailing FIFF_DIR directory, with FIFF_DIR ending at EOF; carry measurement-info NCHAN=320 with 320 FIFF_CH_INFO records, SFREQ=1000, DATA_PACK=16, LOWPASS=330, HIGHPASS=0.1, LINE_FREQ=50; contain exactly 102 kind-1 coil-3024 channels (all range 1.9073486e-05, cal 4.14e-11, unit T) and 204 coil-3012 gradiometers in identical channel order across runs; contain exactly two FIFFB_PROCESSING_RECORDs, each created by 'maxfilter 2.2.10' with one CHANNEL_DECOUPLER ('create_ct_matrix 1.0'), SSS_INFO (job 5 MOVEC_FIT, head frame, Lin 8, Lout 3, 306 channels), SSS_CAL and SSS_ST_INFO (job 10 tSSS, correlation 0.9, 10 s) block; and have one FIFFB_RAW_DATA block holding one leading FIFF_DATA_SKIP followed only by type-16 640,000-byte buffers (no inner skips, no FIRST_SAMPLE tags). Streams are rejected if they have <1000 distinct values, peak-to-peak <1000 codes, a flat run >100 samples, a constant 1-s block, an int16-extreme value, or a duplicate payload or 1-s block. Floor: 612 samples x 696,000-805,000 values far exceeds the 10,000-value / 1,000-value-median floor."
+
+[[series]]
+id = "vectorview_magnetometer_tsss_i16"
+description = "Elekta Neuromag Vectorview SQ20950N magnetometer field codes after MaxFilter 2.2.10 tSSS with head-movement compensation, one complete continuous channel per deduction-task run."
+semantic_meaning = "Signed 16-bit FIFF DAU_PACK16 code of the magnetic field normal to one Vectorview magnetometer pickup loop (FIFF coil type 3024), sampled at 1000 Hz (online 0.1-330 Hz) over one whole continuous deduction-task run while a participant solved logical-reasoning problems in the CTB-UPM Madrid Vectorview (device serial 3058). Field in tesla = code x range x cal = code x 1.9073486e-05 x 4.14e-11 (about 0.79 fT per code), identical for all 612 streams. These are not raw ADC readings: the published files are MaxFilter 2.2.10 output (temporal signal-space separation with 10-s window and 0.9 correlation limit, head-movement compensation, cross-talk and fine-calibration correction), re-quantised by MaxFilter into the vendor's int16 FIFF storage format. Continuous HPI coils (169/176/183/190 Hz) were active during acquisition."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The int16 codes are the stored values of the published FIFF files (FIFFT_DAU_PACK16 buffers written by Elekta MaxFilter, the standard machine-facing Neuromag raw format); they are copied unchanged and only byte-swapped to little-endian. No scaling, offset removal, filtering, resampling or channel combination is applied. Realised codes span -18,254..15,965 without saturation (per-stream median min/max -4,031/3,949; 1,937-10,058 distinct values per stream, median 3,865; longest identical run 2-4 samples; in a 1-in-6 stream scan 74.5% of values exceed |127|, 0.26% exceed |2,047|). The bulk occupies about 12 bits, with rare mid-run broadband bursts (cause not established) driving the extremes, so int16 is the native and appropriate width, not a widening; per-stream minima, maxima, distinct counts and flat-run lengths are recorded in the index. Scale factors (range, cal, tesla_per_code) and the FIFF leading skip are kept only as index metadata."
+source_resources = ["fif_sub027", "fif_sub018", "fif_sub028", "fif_sub024", "fif_sub017", "fif_sub015"]
+source_format = "Elekta Neuromag FIFF raw file (big-endian tag chain; FIFFB_RAW_DATA FIFFT_DAU_PACK16 buffers, time-major [1000 samples][320 channels])"
+source_field = "FIFF_DATA_BUFFER int16 column of one FIFF_CH_INFO channel with kind=1 (MEG) and coil_type=3024 (Vectorview magnetometer)"
+filtered_input_path = "filtered/openneuro_ds003483_vectorview_meg_mag_i16/ingest_stats.json"
+filtering = "Keep all 102 coil-3024 magnetometer channels of the task-deduction run-1 FIF of six participants (sub-027, 018, 028, 024, 017, 015), selected in ch_info order (indices 2, 5, ..., 305). Exclude the 204 coil-3012 planar gradiometers (different unit T/m and scale), EOG061, ECG062, STI101/201/301 and CHPI001-009, the 15 other deduction runs and all 20 induction runs (cap), the preprocessing derivatives, and all header blocks (subject, HPI, digitisation, processing history)."
+missing_value_policy = "DAU_PACK16 has no missing-value sentinel; every sample of every buffer is kept in source order and nothing is dropped, clipped or imputed. The FIFF_DATA_SKIP that opens each raw block is a start offset (MNE first_samp = skip x 1000; values 8-176 buffers), not missing data, and is recorded as index metadata. A FIFF_DATA_SKIP between buffers (a true gap), a FIFF_FIRST_SAMPLE tag, a non-DAU_PACK16 buffer, a changed object version/size/MD5/structure pin, or a degenerate stream is fatal in download, build and verify alike."
+conversion = "Walk the FIFF tag chain, read each FIFF_DATA_BUFFER (640,000 bytes = 1000 samples x 320 channels of big-endian int16), byte-swap to native order, take column k (k = ch_info index of each magnetometer) and append it as little-endian int16 to that channel's output; one file per (run, magnetometer) with 696,000-805,000 values. Values are unchanged; no concatenation across runs or channels."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian signed-int16 MaxFilter tSSS magnetometer codes"
+sample_geometry = "1d_continuous_meg_magnetometer_channel"
+sample_rank = 1
+sample_axes = ["time_sample"]
+sample_rate_hz = 1000.0
+natural_record_kind = "complete_fiff_magnetometer_channel_run_stream"
+sample_count = 612
+total_size_bytes = 900252000
+output_path = "samples/openneuro_ds003483_vectorview_meg_mag_i16/vectorview_magnetometer_tsss_i16/"

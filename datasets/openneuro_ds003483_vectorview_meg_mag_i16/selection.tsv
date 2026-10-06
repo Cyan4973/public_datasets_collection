@@ -1,0 +1,7 @@
+subject	session	task	run	key	version_id	size_bytes	md5	dir_pointer	n_buffers	leading_skip_buffers
+sub-027	ses-1	deduction	run-1	ds003483/sub-027/ses-1/meg/sub-027_ses-1_task-deduction_run-1_meg.fif	adSmel7Imr754MnYaBXC5mDQEynceCup	450600455	251cc2d65cf0eeaaa4b9312708a31378	450574503	696	11
+sub-018	ses-1	deduction	run-1	ds003483/sub-018/ses-1/meg/sub-018_ses-1_task-deduction_run-1_meg.fif	HTpMzik4o5FafRs093aNvGnFmhQXaHew	453158419	873bfb258cd6776bf2cfd755c82455ec	453133187	700	132
+sub-028	ses-1	deduction	run-1	ds003483/sub-028/ses-1/meg/sub-028_ses-1_task-deduction_run-1_meg.fif	WLXnkCz1ddUK7q4uxdDMJSZEXaem7cMP	458916159	9dd5dbdb67484435402aafe1f1fb89a9	458891455	709	8
+sub-024	ses-1	deduction	run-1	ds003483/sub-024/ses-1/meg/sub-024_ses-1_task-deduction_run-1_meg.fif	9JHFIlrnlj3j_aKvkAp.vfYJaJOiCp91	473639111	a0076d52212ffb6cdd2f5b90971d4a9a	473613335	732	82
+sub-017	ses-1	deduction	run-1	ds003483/sub-017/ses-1/meg/sub-017_ses-1_task-deduction_run-1_meg.fif	0uHeOnq6VCd7mq1BWbifcS_Tm8AGT5uq	498598595	55393b5d71aaace30721f5f699916f93	498572739	771	12
+sub-015	ses-1	deduction	run-1	ds003483/sub-015/ses-1/meg/sub-015_ses-1_task-deduction_run-1_meg.fif	f9836sFjDZp358TQ7fA55Vl4sX0bbcsD	520361207	6831d9e76532fe157aeef2d70dcb272e	520334471	805	176

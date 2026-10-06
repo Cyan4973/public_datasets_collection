@@ -1,0 +1,23 @@
+# ICON MIGHTI Level-2.2 Green-Line (557.7 nm) Thermospheric Horizontal Vector Wind Profiles (Zonal / Meridional) Float64
+
+- Candidate id: `icon_mighti_l22_thermospheric_vector_wind_f64`
+- Width: float64
+- Quantity: Horizontal neutral wind in the lower thermosphere (~90-190 km by day, ~90-110 km at night), in m/s. Retrieved by Doppler Michelson interferometry of the O(1S) 557.7 nm airglow seen on the limb by ICON's two MIGHTI sensors and combined into vector winds. Variables ICON_L22_Zonal_Wind (positive east) and ICON_L22_Meridional_Wind (positive north) are two components of one quantity, each a (time x 84 altitudes) field.
+- Source: https://gov-nasa-hdrl-data1.s3.amazonaws.com/spdf/cdaweb/data/icon/l2-2_mighti_vector-wind-green/
+- Resources: https://gov-nasa-hdrl-data1.s3.amazonaws.com/?list-type=2&prefix=spdf/cdaweb/data/icon/l2-2_mighti_vector-wind-green/, https://gov-nasa-hdrl-data1.s3.amazonaws.com/spdf/cdaweb/data/icon/l2-2_mighti_vector-wind-green/2021/icon_l2-2_mighti_vector-wind-green_20210711_v05r001.nc, ftp://icon-science.ssl.berkeley.edu/pub/Documentation/ICON_L2-2_MIGHTI_Vector-Wind_v06.pdf, https://science.data.nasa.gov/about/license
+- License: CC0-1.0 (NASA-led mission data, per the NASA Science Data Licenses page). The file attribute reads Rules_of_Use = 'Public Data for Scientific Use'.
+- License evidence: https://science.data.nasa.gov/about/license
+- License quote: "Unless the data file is marked with a restrictive notice or license, data that is provided from a NASA-led mission including observations, engineering, calibration, and auxiliary data are licensed as Creative Commons Zero. There are no restrictions on the usage of these data." The ICON Rules of the Road say: 'All data released to the public may be utilized for scientific analysis and publication with no restrictions imposed by the ICON mission.'
+- Natural record: One ICON MIGHTI L2.2 green-line daily NetCDF4 file: a 2-D wind field of (~2,209 vector-wind times x 84 altitude levels) per component. Suggested samples: one per (day, component), valid values in (time, altitude) order with NetCDF default fill 9.969209968386869e+36 removed or masked. ~61k valid values per sample.
+- Estimated samples: 300
+- Estimated primary values: 18,400,000
+- Estimated download bytes: 200,000,000
+- Estimated primary bytes: 147,000,000
+- Decode path: NetCDF4/HDF5 superblock v2, dense links. Each 2-D variable is one chunk (2209 x 84 x 8 B) with shuffle(2)+deflate(1), so it is one contiguous compressed blob of ~0.49 MB per variable per file. Pure-stdlib h5lite.py (jpl_gnssro recipe) plus unshuffle and zlib, as exercised by the probe. download.sh can range-read metadata plus two chunk blobs per file (~1 MB/day) instead of the 17 MB file.
+- Novelty kind: new_modality
+- Novelty evidence: novelty.py --url .../icon/l2-2_mighti_vector-wind-green/ --terms MIGHTI thermospheric 'neutral wind': same host only (HelioCloud IRIS i16); no term hits in recipes, registry, ledger or downstream. No remote-sensed upper-atmosphere wind profiles exist at any width. It differs from the companion ICON IVM candidate: neutral gas, not ions; optical limb interferometry, not an in-situ sensor; altitude profiles, not along-track series; separate source files.
+- Homogeneity: Green line only. The red-line (630 nm, ~150-300 km) product is a different altitude regime and is excluded. One product version (v05). Both components share unit (m/s), retrieval and grid. Precision/accuracy/error variables, VER and geolocation stay out, or auxiliary at most.
+- Risks: (1) Same rights caveat as the IVM candidate ('Public Data for Scientific Use'); a rights rejection of one likely applies to both. (2) Fill dominates: ~67% of grid cells are fill (61,433 valid of 185,556 per component on 2021-07-11); the missing-value policy must be explicit. (3) The builder should consider Wind_Quality (auxiliary) and document whether low-quality winds are kept. (4) 899 files, 2019-12 to 2022-11, with gaps; Rules_of_Use and version must be checked per file.
+- Probe evidence: One-byte range GET with -L on icon_l2-2_mighti_vector-wind-green_20210711_v05r001.nc returned 206 (17,876,583 bytes). The listing shows 899 files, 15.5 GB. A lazy range walk (~1.5 MB fetched) showed ICON_L22_Zonal_Wind and Meridional_Wind as float64 (2209, 84), one chunk each, shuffle+deflate, ~491-496 KB stored. A decode showed 61,433 distinct valid values per component, range -543.6 to +... m/s, full-precision values such as -246.0754434422416, fill 9.969209968386869e+36 (FillVal attribute). Units m/s; Rules_of_Use 'Public Data for Scientific Use'.
+
+Proposed by the autocollect scout on 2026-10-06 (transcript `.data/pipeline/logs/scout_64bit/scout.20261006_034331.jsonl`).

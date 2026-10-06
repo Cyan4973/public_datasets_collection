@@ -330,6 +330,7 @@ mpc_goes18_abi_cmi_c13_fulldisk_u16	ok	353037312	706074624	12	29419776	58839552	
 sentinel1_grd_measurement_u16	ok	365856036	731712072	4	91464009	182928018	0	0	0	1	none	none
 bbbc021_microscopy_tiff_u16	ok	393216000	786432000	300	1310720	2621440	0	0	0	1	none	none
 google_alphaearth_satellite_embeddings_i8	ok	402653184	402653184	384	1048576	1048576	0	0	0	1	none	none
+mast_jwst_nircam_sw_uncal_ramps_u16	ok	402653184	805306368	12	33554432	67108864	0	0	0	1	none	none
 pfam_seed_alignments_u8	ok	411242401	411242401	22719	6150	6150	0	0	0	1	none	none
 csiro_parkes_uwl_search_mode_u8	ok	436207616	436207616	32	13631488	13631488	0	0	0	1	none	none
 zenodo_v16_nb_iot_sigmf_ci16	ok	438824272	877648544	2	219412136	438824272	0	0	0	1	none	none

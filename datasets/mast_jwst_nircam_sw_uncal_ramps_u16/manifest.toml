@@ -1,0 +1,90 @@
+manifest_version = 1
+dataset_id = "mast_jwst_nircam_sw_uncal_ramps_u16"
+name = "JWST NIRCam Short-Wave Full-Frame Uncalibrated Up-the-Ramp Exposures (uint16 DN)"
+description = "12 whole SCI ramp cubes (8 groups x 2048 x 2048 uint16 DN) of JWST NIRCam short-wavelength H2RG detectors (NRCA1-4, NRCB1-4), FULL frame, MEDIUM8 readout, from the Early Release Observation of galaxy cluster SMACS J0723.3-7327 (program 2736, observation 1; F090W and F200W), decoded from the MAST Level-1b *_uncal.fits files."
+homepage = "https://archive.stsci.edu/missions-and-data/jwst"
+
+[license]
+name = "Public domain (NASA mission data hosted at MAST)"
+spdx = "LicenseRef-MAST-Public-Domain"
+url = "https://archive.stsci.edu/publishing/data-use"
+citation = "James Webb Space Telescope (NASA/ESA/CSA), NIRCam, program 2736 (JWST Early Release Observations; Pontoppidan et al. 2022, ApJL 936, L14), Mikulski Archive for Space Telescopes (MAST), Space Telescope Science Institute."
+notes = "The MAST Data Use Policy states: 'Most data hosted at MAST are in the public domain (see: open data), and therefore do not have restrictions on use.' It names three restricted subsets: exclusive-access data (which 'may not be retrieved except by authorized and authenticated persons'; after expiry 'science data become available for public use without restriction'), community HLSPs (CC BY 4.0), and the copyrighted DSS and Guide Star Catalogs. These files are JWST mission pipeline Level-1b products (not HLSPs, not DSS/GSC), served anonymously from the jwst/public/ prefix of the MAST public bucket, observed 2022-06-07 and released with the ERO package on 2022-07-12. Header CATEGORY = 'COM' because the EROs were executed at the end of commissioning. archive.stsci.edu returned proxy 403 during authoring, so the text was first quoted from the copy saved by the accepted mast_iue_swp_raw_image_u8 recipe. The driver's download.sh run on 2026-10-05 then fetched the page itself; the copy is byte-identical to the IUE copy (81,786 bytes, sha256 f309e1b4708217eafff51feab3fc9780e5b0c7fef79452e6fde486030b37e2c3) and passed the public-domain and copyrighted-list checks. The fetch stays best-effort: a transport failure only warns, a changed page is fatal. Acknowledge JWST, NIRCam, MAST and STScI."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official MAST public bucket (s3://stpubdata, anonymous HTTPS, not requester-pays); raw infrared detector readings of a galaxy-cluster field."
+usage_notes = "Only the SCI data unit (detector DN) is emitted. FITS header text, including the PI name card, is never written to samples or the index; index rows carry only file name, detector, filter, exposure numbers, observation date/time, pipeline version and value statistics."
+
+[[origins]]
+id = "mast_stpubdata"
+name = "MAST public data bucket (STScI, AWS Open Data)"
+url = "https://stpubdata.s3.amazonaws.com/"
+type = "bucket"
+notes = "Anonymous S3 ListObjectsV2 of prefix jwst/public/jw02736/jw02736001001/ (discover.sh); objects carry a version id and a full-object CRC64-NVME checksum (x-amz-checksum-crc64nvme with x-amz-checksum-mode: ENABLED)."
+
+[[resources]]
+id = "nircam_sw_uncal_selection"
+origin = "mast_stpubdata"
+url = "https://stpubdata.s3.amazonaws.com/jwst/public/jw02736/jw02736001001/"
+type = "file"
+version = "12 objects, SDP_VER 2026_1b, S3 Last-Modified 2026-08-02, version ids pinned in sources.tsv (resolved 2026-10-05 by discover.sh)"
+access = "Anonymous HTTPS GET of <key>?versionId=<id>. download.sh pins per-file size (75,556,800), S3 version id and full-object CRC64-NVME, re-walks the FITS HDU chain and rejects any file outside the header regime."
+size_bytes = 906681600
+sha256 = ""
+local_path = "downloads/mast_jwst_nircam_sw_uncal_ramps_u16/uncal/"
+notes = "Per-file pins live in sources.tsv (URL with versionId, key, size, CRC64-NVME, ETag, Last-Modified, detector, filter, exposure, observation time, SDP_VER, and the content SHA-256 frozen from download_plan.tsv after the first full download on 2026-10-05; download, build and verify enforce it). MAST reprocesses JWST data; a future reprocessing creates a new object version and may drop the pinned one, in which case download.sh fails loudly and discover.sh must be re-run."
+
+[[resources]]
+id = "mast_data_use_policy"
+origin = "mast_stpubdata"
+url = "https://archive.stsci.edu/publishing/data-use"
+type = "file"
+version = "fetched at download time (best effort)"
+access = "Anonymous HTTPS; semantically checked for the public-domain sentence and the copyrighted-collections list when reachable."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/mast_jwst_nircam_sw_uncal_ramps_u16/evidence/mast_data_use.html"
+notes = "Rights evidence only; not a sample source."
+
+[local_paths]
+downloads = "downloads/mast_jwst_nircam_sw_uncal_ramps_u16/"
+filtered = "filtered/mast_jwst_nircam_sw_uncal_ramps_u16/"
+index = "index/mast_jwst_nircam_sw_uncal_ramps_u16/"
+samples = "samples/mast_jwst_nircam_sw_uncal_ramps_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/mast_jwst_nircam_sw_uncal_ramps_u16/samples.jsonl"
+summary = "Fetch 12 version-pinned NIRCam SW uncal FITS files, check CRC64-NVME and the FITS header regime, and emit each SCI extension (BITPIX 16, BZERO 32768, 2048 x 2048 x 8 x 1) as one little-endian uint16 ramp cube per detector exposure."
+deterministic_notes = "discover.sh listed all 84 NIRCam SW (nrca1-4/nrcb1-4) *_uncal.fits objects publicly available in jw02736001001 (30 F090W in visit group 02101, 54 F200W in 02105); every one passed the header regime and is 75,556,800 bytes. Twelve were pinned (scripts/discover.py SELECTION): six F090W and six F200W, all eight SW detectors, dither exposures spread. Header regime (primary): TELESCOP=JWST, INSTRUME=NIRCAM, DATAMODL=Level1bModel, PROGRAM=02736, OBSERVTN=001, VISIT=001, EXP_TYPE=NRC_IMAGE, CHANNEL=SHORT, PUPIL=CLEAR, SUBARRAY=FULL, SUBSTRT1/2=1, SUBSIZE1/2=2048, READPATT=MEDIUM8, NGROUPS=8, NINTS=1, NFRAMES=8, FRMDIVSR=8, GROUPGAP=2, NSAMPLES=1, COMPRESS=F, DATAPROB=F, ENG_QUAL=OK, ZEROFRAM=T, FILENAME/DETECTOR/FILTER/SDP_VER/ACT_ID/EXPOSURE/DATE-OBS/TIME-OBS equal to the pin; (SCI) XTENSION=IMAGE, EXTNAME=SCI, BITPIX=16, NAXIS=4, NAXIS1=NAXIS2=2048, NAXIS3=8, NAXIS4=1, PCOUNT=0, GCOUNT=1, BZERO=32768, BSCALE=1, BUNIT=DN, no BLANK. The HDU chain must be exactly PRIMARY, SCI, ZEROFRAME, GROUP, INT_TIMES, ASDF and end at the file size; SCI padding must be zero. Header offsets are parsed, not hard-coded (observed: primary 17,280 bytes, SCI data at byte 25,920). Each cube must have >= 1024 distinct values, no constant group, no two identical groups, interior-row mean of group 8 greater than group 1 (accumulated signal), and no duplicate cube. verify.sh re-walks each file with its own FITS parser, recomputes CRC64-NVME with a separate implementation, decodes the SCI cube by a different method, byte-compares every sample, and checks index rows, min/max/distinct from the stored uint16, counts, totals and detector/filter coverage. scripts/selftest.py (run by build.sh) checks both decoders, both HDU walkers and both CRC implementations on a synthetic FITS file with edge values 0..65535."
+
+[[series]]
+id = "nircam_sw_full_medium8_uncal_ramp_dn_u16"
+description = "Whole up-the-ramp SCI cubes of JWST NIRCam short-wave detectors: 8 non-destructive group reads x 2048 rows x 2048 columns of raw uint16 DN per detector exposure."
+semantic_meaning = "Raw analog-to-digital readings (DN) of every pixel of one NIRCam short-wavelength 2048 x 2048 HgCdTe H2RG detector at each of the 8 non-destructive group reads of one 837 s MEDIUM8 integration (each group is the on-board average of 8 frames, FRMDIVSR = 8; 2 frames dropped between groups). The signal accumulates up the ramp: per-pixel bias/pedestal (~5,000-11,000 DN), dark current, sky and astronomical flux of the SMACS J0723.3-7327 field, cosmic-ray jumps, hot and saturated pixels, 1/f and reference-pixel structure; the outer 4 rows and columns are reference pixels."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "FITS stores the SCI array as BITPIX = 16 with BZERO = 32768 and BSCALE = 1, the standard FITS encoding of unsigned 16-bit integers; adding BZERO recovers the native uint16 DN exactly. Values are not scaled, clipped or re-quantized. The array is in the JWST DMS science orientation produced by the STScI level-1b pipeline (FASTAXIS = +/-1 depending on detector), exactly as archived."
+source_resources = ["nircam_sw_uncal_selection"]
+source_format = "FITS (JWST Level1bModel *_uncal.fits): PRIMARY header, SCI int16 image extension with BZERO = 32768, ZEROFRAME, GROUP, INT_TIMES and ASDF extensions"
+source_field = "SCI extension data unit: raw detector DN, NAXIS1 = 2048 columns x NAXIS2 = 2048 rows x NAXIS3 = 8 groups x NAXIS4 = 1 integration"
+filtered_input_path = "filtered/mast_jwst_nircam_sw_uncal_ramps_u16/ingest_stats.json"
+filtering = "12 pinned exposures of program 2736 observation 1 (SMACS J0723.3-7327, 2022-06-07): F090W visit group 02101 exposures 1,1,2,3,4,6 on NRCA3, NRCB4, NRCA2, NRCA1, NRCB1, NRCA4 and F200W visit group 02105 exposures 3,4,5,6,7,9 on NRCA2, NRCA3, NRCB1, NRCB2, NRCB3, NRCB4. Long-wave detectors, other observations/programs, subarrays, other readout patterns and group counts are excluded. ZEROFRAME, GROUP, INT_TIMES and ASDF extensions are not emitted."
+missing_value_policy = "Every pixel of every group is preserved, including the reference-pixel border, hot pixels, saturated 65535 DN readings (0-73 per cube) and the rare archived 0 DN readings (0-46 per cube, mid-ramp after large charge deposits); nothing is masked, filled or dropped. The SCI extension declares no BLANK value. Any size, CRC64-NVME, SHA-256, FITS structure or header-regime deviation, non-zero padding, degenerate cube or duplicate cube fails the recipe rather than being skipped."
+conversion = "Parse the 2,880-byte FITS header blocks to locate the SCI data unit, read NAXIS1*NAXIS2*NAXIS3*NAXIS4*2 = 67,108,864 bytes of big-endian two's-complement int16, add BZERO = 32768 (equivalently XOR 0x8000 on each big-endian word) and write the whole cube as little-endian uint16 in FITS axis order (column fastest, then row, then group) to samples/mast_jwst_nircam_sw_uncal_ramps_u16/nircam_sw_full_medium8_uncal_ramp_dn_u16/<exposure>_<detector>.u16; one sample per detector exposure, no cropping or tiling."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian uint16 detector DN ramp cube"
+sample_geometry = "fixed_8x2048x2048_nircam_sw_full_frame_ramp"
+sample_rank = 3
+sample_shape = [8, 2048, 2048]
+sample_axes = ["group", "dms_row_y", "dms_column_x"]
+natural_record_kind = "jwst_nircam_sw_full_frame_exposure_sci_ramp"
+sample_count = 12
+total_size_bytes = 805306368
+output_path = "samples/mast_jwst_nircam_sw_uncal_ramps_u16/nircam_sw_full_medium8_uncal_ramp_dn_u16/"

@@ -1,0 +1,78 @@
+manifest_version = 1
+dataset_id = "fmi_radar_ppi_vrad_u8"
+name = "FMI Korpo (fikor) Weather Radar 0.5-degree PPI Doppler Radial Velocity, QC (uint8 rasters)"
+description = "Native uint8 Doppler radial-velocity codes (v = 0.5 x code - 64 m/s, folded into the single-PRF Nyquist interval) from the lowest 0.5-degree PPI of the Finnish Meteorological Institute's Korpo C-band radar after FMI quality control: 75 scans across March 2025 to March 2026, one 2003x2003 Cartesian raster (250 m pixels) per scan, decoded from FMI's LZW GeoTIFFs."
+homepage = "https://en.ilmatieteenlaitos.fi/radar-data-on-aws-s3"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Finnish Meteorological Institute (FMI) weather radar open data, fmi-opendata-radar-geotiff (AWS Open Data Registry: https://registry.opendata.aws/fmi-radar/), CC BY 4.0."
+notes = "FMI's 'Radar data on AWS S3' page states: 'The data is licensed by the Creative Commons Attribution 4.0 International license (CC BY 4.0).' The AWS Open Data Registry entry (open-data-registry datasets/fmi-radar.yaml) lists 'License: Creative Commons Attribution 4.0 International (CC BY 4.0)'. Attribute FMI with any redistribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official FMI bucket fmi-opendata-radar-geotiff (eu-west-1) in the AWS Open Data program; anonymous public HTTPS, not requester-pays; each object pinned by S3 version id and ETag MD5; no mirrors."
+usage_notes = "Operational weather-radar velocity product over the Archipelago Sea / southwestern Finland; no personal data."
+
+[[origins]]
+id = "fmi_radar_geotiff_s3"
+name = "FMI weather radar open data, GeoTIFF bucket fmi-opendata-radar-geotiff (AWS S3, eu-west-1)"
+url = "https://fmi-opendata-radar-geotiff.s3.amazonaws.com/"
+type = "bucket"
+notes = "Object naming per FMI documentation: {year}/{month}/{day}/{site}/{timestamp}_{site}_{product}_{parameter}_{quantity}_{qualitycontrol}.tif; 'qc means quality control was used'. Single-radar files every 5 minutes. The bucket is versioned and anonymous versionId GETs work."
+
+[[resources]]
+id = "fikor_ppi_0p5_vrad_qc_scans"
+origin = "fmi_radar_geotiff_s3"
+url = "https://fmi-opendata-radar-geotiff.s3.amazonaws.com/"
+type = "file"
+version = "75 objects <YYYY>/<MM>/<DD>/fikor/<YYYYMMDDHH>00_fikor_ppi_0.5_vrad_qc.tif, scan times 2025-03-05 to 2026-03-19, Software tag 'Rack_fmi.fi 10.7'; S3 version ids pinned in sources.tsv"
+access = "Anonymous HTTPS GET of the exact objects (with ?versionId=) listed in sources.tsv (scan_time, key, size, ETag MD5, Last-Modified, version id, software, URL), resolved by discover.sh from HEAD requests and 4 KiB header range reads only."
+size_bytes = 31677353
+sha256 = ""
+local_path = "downloads/fmi_radar_ppi_vrad_u8/scans/"
+notes = "Selection (discover.sh): HEAD all 1,584 candidates (every day 2025-03-01..2026-03-31 at 00/06/12/18 UTC; 1,554 exist, 30 are outage 404s); keep the largest file per day (LZW size tracks echo coverage); per calendar month take the six largest day-best scans of at least 200,000 bytes whose header passes the pinned product check (including Software 'Rack_fmi.fi 10.7'), skipping same/adjacent days. February 2026 yields only three. download.sh enforces size, MD5, layout and semantics and records per-file SHA-256 in download_plan.tsv."
+
+[local_paths]
+downloads = "downloads/fmi_radar_ppi_vrad_u8/"
+filtered = "filtered/fmi_radar_ppi_vrad_u8/"
+index = "index/fmi_radar_ppi_vrad_u8/"
+samples = "samples/fmi_radar_ppi_vrad_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/fmi_radar_ppi_vrad_u8/samples.jsonl"
+summary = "Download 75 pinned fikor ppi_0.5_vrad_qc GeoTIFF scans by S3 version id, validate size/MD5/layout/GDAL metadata/software version, LZW-decode the 16 tiles of 512x512 with a pure-Python TIFF-LZW decoder, crop to 2003x2003, and emit one raw uint8 velocity-code raster per scan."
+deterministic_notes = "Fixed scan list with per-object size, ETag MD5 and S3 version id in sources.tsv; no live listing at download time. Scans are processed in scan-time order and written as samples/<id>/fikor_ppi_0p5_vrad_qc_u8/<YYYYMMDDHHMM>.bin. The decoder self-test (synthetic LZW streams with KwKwK, clear-code, 12-bit and truncation cases; a synthetic 2003x2003 tiled GeoTIFF; drift-rejection cases) runs before every download, build and verify; during authoring the decoder matched an independent bit-serial TIFF-LZW implementation byte-for-byte on a real scan. Build, verify and download fail on any layout or metadata deviation (GDAL SCALE 0.5 / OFFSET -64 / UNITS VRADH / IMAGETYPE 'Weather Radar,fikor', GDAL_NODATA '255', Predictor 1, SampleFormat 1, Software 'Rack_fmi.fi 10.7', description 'COMP:VRADH:PPI:elangles(0.5)', DateTime equal to the key timestamp, 250 m TM35FIN grid with the pinned tiepoint), any pixel code outside {0, 112..143, 255}, NoData fraction outside 0.20..0.30, velocity-pixel fraction below 0.05, fewer than 16 distinct velocity codes, near-identical rows, or a duplicate raster. Floor: 75 samples x 4,012,009 values (median 4,012,009)."
+
+[[series]]
+id = "fikor_ppi_0p5_vrad_qc_u8"
+description = "Quality-controlled Doppler radial velocity of the lowest (0.5 degree) PPI of FMI's Korpo (fikor) C-band radar, one 2003x2003 Cartesian raster per scan."
+semantic_meaning = "uint8 code per 250 m pixel of a 500 km x 500 km TM35FIN square centred on the radar. Codes 112..143 are radial velocity v = 0.5 x code - 64 m/s (-8.0 .. +7.5 m/s, per the GDAL_METADATA SCALE/OFFSET and UNITS VRADH); velocities are folded (aliased) into this single-PRF Nyquist interval by the radar, not dealiased. Code 0 marks pixels inside coverage where no echo was detected (inferred ODIM 'undetect'); code 255 is the declared GDAL NoData, the corners outside the 250 km coverage disc. Rows run north to south, columns west to east."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "FMI stores the velocity product as unsigned 8-bit codes in band 1 of each GeoTIFF with an embedded linear scale (0.5) and offset (-64). The recipe only undoes the lossless TIFF LZW compression and the 512x512 tiling (cropping GDAL's edge-tile padding); all codes, including 0 and 255, are emitted unchanged. No dealiasing, rescaling or remapping."
+source_resources = ["fikor_ppi_0p5_vrad_qc_scans"]
+source_format = "GeoTIFF (classic little-endian TIFF, 2003x2003, 8-bit unsigned, LZW, Predictor 1, 16 tiles of 512x512, GDAL_METADATA SCALE 0.5 / OFFSET -64 / UNITS VRADH, GDAL_NODATA 255, EPSG:3067)"
+source_field = "band 1 of <timestamp>_fikor_ppi_0.5_vrad_qc.tif: QC'd horizontal-polarization radial velocity code VRADH (v = 0.5 x code - 64 m/s)"
+filtered_input_path = "filtered/fmi_radar_ppi_vrad_u8/ingest_stats.json"
+filtering = "One site (fikor), one product (ppi 0.5 deg, quantity vrad, qc), one processing-software version (Rack_fmi.fi 10.7), scan times 2025-03..2026-03 at 00/06/12/18 UTC, at most one scan per day and no two scans on adjacent days, six per month (three in February 2026), chosen as the largest files (most echo) of each month. Other sites, elevations (0.7/1.5 deg), quantities (dbzh, hclass, etop), raw (non-QC) products, earlier Rack 8.3.2 and later Rack 14.0.1/16.4 files and the 2026-09+ 'finrad' naming are never downloaded."
+missing_value_policy = "Code 255 (GDAL NoData, outside radar coverage, ~21.6% of every raster) and code 0 (inside coverage, no echo detected) are preserved in place as native codes, never remapped or dropped. A scan fails download/build/verify if any code lies outside {0, 112..143, 255}, if the 255 fraction is outside 0.20..0.30, if velocity codes cover less than 5% of the raster (near-empty scan), if it has fewer than 16 distinct velocity codes, or if it duplicates another raster."
+conversion = "Parse the classic TIFF IFD with struct, check the pinned layout and metadata, LZW-decode each of the 16 tiles (MSB-first codes, 256 clear, 257 EOI, early change, 9-12 bit; each tile must decode to exactly 512x512 bytes ending in EOI), place tiles row-major on a 2048x2048 canvas and crop to the 2003x2003 image (no predictor to undo). Write the uint8 codes unchanged, row-major, one file per scan."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw uint8 raster, row-major 2003 x 2003"
+sample_geometry = "single_site_cartesian_ppi_raster"
+sample_rank = 2
+sample_shape = [2003, 2003]
+sample_axes = ["northing_row_north_to_south", "easting_col_west_to_east"]
+natural_record_kind = "single_radar_ppi_scan_geotiff"
+sample_count = 75
+total_size_bytes = 300900675
+output_path = "samples/fmi_radar_ppi_vrad_u8/fikor_ppi_0p5_vrad_qc_u8/"

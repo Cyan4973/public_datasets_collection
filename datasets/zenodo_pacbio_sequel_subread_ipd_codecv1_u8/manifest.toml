@@ -1,0 +1,89 @@
+manifest_version = 1
+dataset_id = "zenodo_pacbio_sequel_subread_ipd_codecv1_u8"
+name = "PacBio Sequel Subread Inter-Pulse Duration (IPD, CodecV1 uint8)"
+description = "Per-base polymerase inter-pulse durations stored by a PacBio Sequel instrument as 8-bit CodecV1 codes in the 'ip' tag of an unaligned subreads BAM; one sample per subread from a pinned 256 MiB prefix of one CC BY 4.0 Veillonella parvula SMRT Cell movie."
+homepage = "https://zenodo.org/records/13306684"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Cokelaer, Thomas (2024). Material for LORA paper (Veillonella Parvula case). Zenodo. https://doi.org/10.5281/zenodo.13306684. Original sequencing study: PubMed 32817093 (ENA/SRA run ERR3958992)."
+notes = "The Zenodo record metadata declares license id cc-by-4.0 for the record and all its files; download.sh re-checks this on every run. The record text says the subreads BAM 'was kindly provided by the authors and is shared here to ensure full reproducibility'. Preserve the DOI, title and creator attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Bacterial isolate (Veillonella parvula) sequenced on a PacBio Sequel instrument; no human material. Only per-base IPD codes are emitted; read names (movie/ZMW/coordinates) are instrument identifiers kept in the ephemeral index."
+usage_notes = "One movie, one instrument, one chemistry, one codec. Pulse width ('pw'), bases, quality values and SNR are deliberately excluded."
+
+[[origins]]
+id = "zenodo_13306684"
+name = "Zenodo record 13306684: Material for LORA paper (Veillonella Parvula case)"
+url = "https://zenodo.org/records/13306684"
+type = "repository"
+notes = "Record metadata API: https://zenodo.org/api/records/13306684 (latest version is 13306684 itself)."
+
+[[resources]]
+id = "subreads_bam_prefix"
+origin = "zenodo_13306684"
+url = "https://zenodo.org/api/records/13306684/files/veillonella.subreads.bam/content"
+type = "bounded_byte_range_selection"
+version = "record-13306684; full file 5,927,559,159 bytes, md5 5c2a00da331ed1b8479e7c080b800835"
+access = "Anonymous HTTPS range request for bytes 0-268435455 (first 256 MiB) of the BGZF-compressed BAM, resumed by offset ranges."
+size_bytes = 268435456
+sha256 = "1f5b05dd9f69dcbcc3b6c595b3a0d328d7f238f2eba2f96106dabf5b0b782ecb"
+local_path = "downloads/zenodo_pacbio_sequel_subread_ipd_codecv1_u8/veillonella.subreads.prefix_268435456.bam"
+notes = "The full-file md5 applies to the whole object, not the prefix; download.sh checks the record still lists that md5 and size, then pins the prefix by size and SHA-256 (also recorded in download_inventory.json). The truncated final BGZF member and the truncated final BAM record of the prefix are dropped."
+
+[[resources]]
+id = "record_metadata"
+origin = "zenodo_13306684"
+url = "https://zenodo.org/api/records/13306684"
+type = "api_query_result"
+version = "record-13306684"
+access = "Anonymous JSON API."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/zenodo_pacbio_sequel_subread_ipd_codecv1_u8/record_13306684.json"
+notes = "Used to assert record identity, title, cc-by-4.0 license, file size and md5 at download time; not a sample source."
+
+[local_paths]
+downloads = "downloads/zenodo_pacbio_sequel_subread_ipd_codecv1_u8/"
+filtered = "filtered/zenodo_pacbio_sequel_subread_ipd_codecv1_u8/"
+index = "index/zenodo_pacbio_sequel_subread_ipd_codecv1_u8/"
+samples = "samples/zenodo_pacbio_sequel_subread_ipd_codecv1_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_pacbio_sequel_subread_ipd_codecv1_u8/samples.jsonl"
+summary = "Fetch a fixed 256 MiB prefix of the subreads BAM, inflate complete BGZF members (CRC/ISIZE checked), assert the @RG header declares SUBREAD reads with Ipd:CodecV1=ip, FRAMERATEHZ=80 and PM:SEQUEL, walk complete BAM records and emit each subread's 'ip' B:C array unchanged as one uint8 sample."
+deterministic_notes = "Pinned record, file size, full-file md5 listing, prefix length and prefix SHA-256. Pure-stdlib BGZF/BAM parser (self-tested on synthetic records covering aux types A,c,C,s,S,i,I,f,Z,H and all B subtypes). Records are taken in physical file order; every complete record in the prefix is used, so the subread count is fixed by the pinned prefix. Empty or single-valued 'ip' arrays are dropped and counted (none were seen in a 4 MiB probe). verify.sh re-derives every sample with an independent gzip-member inflater and aux walker and compares bytes, order, index fields and manifest totals."
+
+[[series]]
+id = "subread_ipd_codecv1_u8"
+description = "Per-base inter-pulse duration (IPD) of one PacBio subread, as 8-bit CodecV1 codes."
+semantic_meaning = "For each called base of a subread, the number of 80 Hz camera frames between the end of the previous fluorescent incorporation pulse and the start of this base's pulse (polymerase kinetics), companded by PacBio CodecV1: codes 0-63 = 0-63 frames, 64-127 = 64-190 frames in steps of 2, 128-191 = 192-444 in steps of 4, 192-255 = 448-952 in steps of 8 (255 = capped at 952 frames)."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "CodecV1 is the instrument's own pinned, per-value, monotone companding code (the Sequel default production configuration writes kinetics this way; the PacBio BAM spec documents it and pbcore implements it). The 8-bit codes are emitted exactly as stored in the BAM; they are not decoded to frames and not widened to uint16. Same shape as the accepted G.711 mu-law recipe: a standardized machine-facing per-sample code with magnitude ordering."
+source_resources = ["subreads_bam_prefix"]
+source_format = "PacBio unaligned subreads BAM (BGZF), PacBio BAM spec pb:3.0.3, basecaller 5.0.0.6236"
+source_field = "BAM aux tag 'ip' (B:C uint8 array, one CodecV1 IPD code per called base), declared by @RG DS Ipd:CodecV1=ip"
+filtered_input_path = "filtered/zenodo_pacbio_sequel_subread_ipd_codecv1_u8/ingest_stats.json"
+filtering = "Every complete BAM record in the pinned 256 MiB prefix, in file order. Only the 'ip' tag is kept; 'pw', sequence, qualities, sn, rq and other tags are excluded. Empty or single-valued 'ip' arrays are dropped and counted. Short subreads (under 1,000 bases) are kept. Records must be unaligned (flag 4), carry read group dbce2615, and have zm/qs/qe tags matching the read name."
+missing_value_policy = "No values are filled, removed or recoded inside a subread. Code 255 (durations of 952 frames or more, capped by the codec) is preserved as a native value. The truncated final BGZF member and final BAM record of the prefix are excluded. A non-B:C 'ip' tag, an 'ip' length different from l_seq or qEnd-qStart, a duplicate read name, a missing tag, or a header without Ipd:CodecV1=ip, FRAMERATEHZ=80 and PM:SEQUEL fail the recipe."
+conversion = "Copy the 'ip' array payload bytes (after the B, C subtype and int32 count) of each subread record unchanged into one raw uint8 file. One file per subread (movie/ZMW/qStart_qEnd); subreads of the same ZMW are never concatenated. Endianness is irrelevant for 8-bit values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 CodecV1 IPD code array"
+sample_geometry = "per_base_subread_sequence_1d"
+sample_rank = 1
+sample_axes = ["called_base"]
+natural_record_kind = "pacbio_subread_bam_record"
+sample_count = 14550
+total_size_bytes = 139127891
+output_path = "samples/zenodo_pacbio_sequel_subread_ipd_codecv1_u8/subread_ipd_codecv1_u8/"

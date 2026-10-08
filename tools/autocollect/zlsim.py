@@ -504,6 +504,8 @@ def adopt(dataset_id: str) -> int:
 def cmd_gate(args) -> int:
     report = gate_recipe(Path(args.recipe_dir).resolve(), args.jobs)
     print(json.dumps(report, indent=1))
+    if args.output:
+        Path(args.output).write_text(json.dumps(report, indent=1), encoding="utf-8")
     return 3 if report["redundant"] else (2 if report["verdict"] == "ERROR" else 0)
 
 
@@ -591,6 +593,7 @@ def main() -> int:
     gate = sub.add_parser("gate")
     gate.add_argument("recipe_dir")
     gate.add_argument("--jobs", type=int, default=16)
+    gate.add_argument("--output", default="", help="also write the JSON report to this file")
     adopt_parser = sub.add_parser("adopt")
     adopt_parser.add_argument("dataset_id")
     args = parser.parse_args()

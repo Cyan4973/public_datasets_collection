@@ -869,14 +869,16 @@ def task_rebuild(cfg: Config, cid: str) -> dict:
     similarity = None
     if report.get("ok"):
         # Byte-level breadth: compression equivalence AND feature proximity (zlsim.py).
-        log_path = LOGS_DIR / cid / f"zlsim_gate.{stamp}.json"
-        sim = subprocess.run([*ZLSIM, "gate", f"staging/{cid}", "--jobs", "16"], cwd=REPO_ROOT, text=True, capture_output=True,
-                             env={**child_env(), **ZLSIM_ENV}, timeout=3 * 3600)
-        log_path.write_text(sim.stdout + sim.stderr, encoding="utf-8")
+        # Through run_proc so an interrupt can kill it (process group, tracked).
+        report_path = LOGS_DIR / cid / f"zlsim_gate.{stamp}.json"
+        log_path = LOGS_DIR / cid / f"zlsim_gate.{stamp}.log"
+        os.environ.update(ZLSIM_ENV)
+        rc, reason = run_proc([*ZLSIM, "gate", f"staging/{cid}", "--jobs", "16", "--output", str(report_path)],
+                              log_path=log_path, timeout_s=3 * 3600, poll_s=cfg.poll_s)
         try:
-            similarity = json.loads(sim.stdout)
-        except json.JSONDecodeError:
-            similarity = {"verdict": "ERROR", "error": one_line(sim.stderr, 800)}
+            similarity = json.loads(report_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            similarity = {"verdict": "ERROR", "error": f"rc={rc} {reason}: {one_line(tail(log_path, 5), 600)}"}
     return {"kind": "rebuild", "cid": cid, "ok": bool(report.get("ok")), "steps": steps, "gate": report, "similarity": similarity}
 
 

@@ -1,0 +1,108 @@
+manifest_version = 1
+dataset_id = "icon_ivm_a_l27_ion_drift_velocity_f64"
+name = "ICON IVM-A Level-2.7 In-Situ Ion Drift Velocity (Magnetic Zonal / Meridional / Field-Aligned, 1 Hz) Float64"
+description = "Native float64 thermal-ion drift velocities (m/s, relative to corotation, in magnetic zonal, meridional and field-aligned components) measured in situ at about 590 km by the Ion Velocity Meter A on NASA's Ionospheric Connection Explorer, one sample per (UTC day, component) for 120 evenly spaced days of the IVM-A L2-7 v06 product (2019-11 to 2022-09), range-extracted from the HelioCloud mirror of the CDAWeb NetCDF4 files."
+homepage = "https://icon.ssl.berkeley.edu/Data"
+
+[license]
+name = "Creative Commons Zero v1.0 Universal (NASA Science Data license for NASA-led mission data)"
+spdx = "CC0-1.0"
+url = "https://science.data.nasa.gov/about/license"
+citation = "ICON IVM-A Level-2.7 ion parameters, version 6 (Data Product 2.7: IVM Ionospheric Parameters). NASA Ionospheric Connection Explorer (PI T. J. Immel, UC Berkeley SSL; IVM by the University of Texas at Dallas). Immel, T.J., England, S.L., Mende, S.B. et al. (2018), Space Sci Rev 214: 13, https://doi.org/10.1007/s11214-017-0449-2. Heelis, R.A. et al. (2017), Ion Velocity Measurements for the Ionospheric Connections Explorer, Space Sci Rev 212: 615-629. Data served by NASA SPDF/CDAWeb via the NASA GSFC HelioCloud bucket gov-nasa-hdrl-data1."
+notes = "NASA Science Data license page (fetched and checked by download.sh): 'Unless the data file is marked with a restrictive notice or license, data that is provided from a NASA-led mission including observations, engineering, calibration, and auxiliary data are licensed as Creative Commons Zero. There are no restrictions on the usage of these data.' ICON is a NASA Explorer mission; every file's Acknowledgement attribute calls it 'the NASA Ionospheric Connection Explorer mission' and Project = 'NASA > ICON'. The in-file Rules_of_Use attribute reads 'Public Data for Scientific Use' (checked per file); the ICON Rules of the Road PDF linked from icon.ssl.berkeley.edu/Data states 'All data released to the public may be utilized for scientific analysis and publication with no restrictions imposed by the ICON mission' and asks users to cite the mission and consult instrument teams. Rules_of_Use is read here as a public-release label rather than a restrictive license; a stricter reading would treat it as a scientific-use notice (see README 'Rights')."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NASA mission data (ICON Science Data Center products archived at NASA SPDF/CDAWeb) read from NASA GSFC's public HelioCloud S3 bucket with anonymous HTTPS range requests; space-plasma measurements, no human subjects."
+usage_notes = "Only the three decoded ion-velocity variables are emitted; density, temperature, flags, geolocation and all other variables are not read into samples."
+
+[[origins]]
+id = "heliocloud_spdf_icon"
+name = "NASA GSFC HelioCloud public bucket, SPDF CDAWeb ICON holdings"
+url = "https://gov-nasa-hdrl-data1.s3.amazonaws.com/?list-type=2&prefix=spdf/cdaweb/data/icon/l2-7_ivm-a/"
+type = "bucket"
+notes = "Anonymous S3 HTTPS endpoint (us-east-1, not requester-pays). Prefix spdf/cdaweb/data/icon/l2-7_ivm-a/YYYY/ holds 1,000 daily IVM-A L2-7 files icon_l2-7_ivm-a_YYYYMMDD_v06rNNN.nc (2019-11-18 to 2022-09-01; 44/364/348/244 per year; revisions r000-r003 of version 6, one file per day; 45.5 GB) plus four yearly CSV indexes, an HTML index and a catalog stub. Objects are multipart (ETag 'md5-N') with a full-object CRC64NVME checksum; listed 2026-10-08, LastModified 2025-03-22. IVM-B lives under a separate prefix and is not used."
+
+[[origins]]
+id = "icon_ssl"
+name = "ICON mission data page, UC Berkeley Space Sciences Laboratory"
+url = "https://icon.ssl.berkeley.edu/Data"
+type = "website"
+notes = "Links the ICON Rules of the Road (Rules_of_The_Road_ICON_v0.3.pdf) and the IVM-A L2-7 product documentation (ICON_L2-7_IVM-A_v08.pdf). Documentation only."
+
+[[resources]]
+id = "ivm_a_l27_pinned_days"
+origin = "heliocloud_spdf_icon"
+url = "https://gov-nasa-hdrl-data1.s3.amazonaws.com/spdf/cdaweb/data/icon/l2-7_ivm-a/"
+type = "http_ranges_from_hdf5"
+version = "120 objects listed 2026-10-08; sources.tsv SHA-256 5a24feca57bb015b98f221307584568f498a1feffd705b32e8fa7beb9c540893"
+access = "Anonymous HTTPS byte ranges of the keys in sources.tsv; every 206 response must carry Content-Range */<pinned size> and the pinned S3 ETag."
+size_bytes = 5463353792
+sha256 = ""
+local_path = "downloads/icon_ivm_a_l27_ion_drift_velocity_f64/days/"
+notes = "size_bytes is the sum of the 120 whole objects (42.1-47.5 MB each, except the 3.6 MB partial-day file 2021-09-03); only about 2.2 MB per day is fetched: the 16 KiB-aligned blocks holding the HDF5 metadata the parser walks (superblock, root group, link and attribute heaps and B-trees, three dataset headers, three chunk B-trees; about 36 blocks) and one contiguous byte span per velocity component covering its chunks (169 x 512 values for a full day; about 0.50-0.59 MB, within 10% of the stored chunk bytes). Selection (discover.sh): all IVM-A v06 daily keys sorted by date, keys at indexes floor((2k+1)N/240), k = 0..119, N = 1,000. Revisions: 18 r000, 51 r001, 6 r002, 45 r003."
+
+[[resources]]
+id = "ivm_a_l27_control_file"
+origin = "heliocloud_spdf_icon"
+url = "https://gov-nasa-hdrl-data1.s3.amazonaws.com/spdf/cdaweb/data/icon/l2-7_ivm-a/2021/icon_l2-7_ivm-a_20210407_v06r003.nc"
+type = "file"
+version = "v06r003, S3 ETag 22b87f19a3c0f45f0b2a3f1568239f0d-6"
+access = "Anonymous HTTPS, resumable curl; size and ETag must match, HDF5 signature required."
+size_bytes = 45811248
+sha256 = ""
+local_path = "downloads/icon_ivm_a_l27_ion_drift_velocity_f64/control/icon_l2-7_ivm-a_20210407_v06r003.nc"
+notes = "One selected day downloaded whole as a cross-check: download.sh (inventory), build.sh and verify.sh require its cached metadata blocks to equal the same bytes of the whole file and its three range-decoded components to be byte-identical to a whole-file decode. Not a sample source on its own (the day's samples come from the same ranges as every other day)."
+
+[[resources]]
+id = "nasa_science_data_license"
+origin = "heliocloud_spdf_icon"
+url = "https://science.data.nasa.gov/about/license"
+type = "file"
+version = "live page at download time"
+access = "Fetched by download.sh; must still contain the CC0 sentence for NASA-led mission data."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/icon_ivm_a_l27_ion_drift_velocity_f64/license/nasa_science_data_license.html"
+notes = "License evidence only; not decoded into samples."
+
+[local_paths]
+downloads = "downloads/icon_ivm_a_l27_ion_drift_velocity_f64/"
+filtered = "filtered/icon_ivm_a_l27_ion_drift_velocity_f64/"
+index = "index/icon_ivm_a_l27_ion_drift_velocity_f64/"
+samples = "samples/icon_ivm_a_l27_ion_drift_velocity_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/icon_ivm_a_l27_ion_drift_velocity_f64/samples.jsonl"
+summary = "Check the NASA CC0 license page, walk the HDF5 metadata of 120 pinned IVM-A L2-7 daily files over cached 16 KiB byte ranges, fetch one contiguous chunk span per ion-velocity component, inflate and byte-unshuffle every 512-value chunk, drop the NaN fill, and emit each (day, component) as one raw little-endian float64 sample; cross-check one complete file."
+deterministic_notes = "sources.tsv pins 120 keys with size, multipart S3 ETag and LastModified (list SHA-256 enforced). Every file must carry Instrument=IVM-A, LogicalSource=ICON_L2-7_IVM-A, Logical_File_ID=ICON_L2-7_IVM-A_<date>_<version>, Project='NASA > ICON', Rules_of_Use='Public Data for Scientific Use', Time_Resolution='1 Second', Data_Version_Major=6, and the name and creation-order link indexes must agree. Each velocity variable must be H5T_IEEE_F64LE, rank 1 with 1-86,500 records (86,400 normally; 86,404 on 2019-11-22; the partial-day file 2021-09-03 has 5,600), equal across the three components, chunked <k> x f8 (k = 512 normally, 510 in the partial file) with filter pipeline shuffle(8)+deflate, Units m/s, Depend_0 Epoch, FillVal NaN, Valid_Min/Max -500/500, a complete 0..n-1 chunk grid with zero filter masks and a byte span at most 1.10 x the stored chunk bytes. Every Jenkins-lookup3 metadata checksum is verified (scripts/h5lite.py, pure stdlib). Samples are written in sources.tsv order to samples/<id>/<series>/<year>/icon_ivm_a_<date>_<version>_<component>.bin. build.sh and verify.sh run a synthetic self-test first (scripts/selftest.py); verify.sh re-derives every sample via the creation-order link index, one-shot inflate and byte-plane unshuffle, byte-compares, recomputes all index fields, rejects NaN/inf, constant, short (< 1,000), low-diversity (< 50% distinct) and duplicate samples, checks the four years 2019-2022 are present, decodes the whole control file independently and checks manifest totals."
+
+[[series]]
+id = "ivm_a_ion_drift_velocity_f64"
+description = "ICON IVM-A ion drift velocity relative to corotation, one magnetic-coordinate component over one UTC day at 1 Hz."
+semantic_meaning = "Bulk thermal-ion (mostly O+) drift velocity in m/s relative to Earth's corotation, measured in situ by the Ion Velocity Meter A (Retarding Potential Analyzer for the ram component, Drift Meter for the two cross-track components) on the ICON spacecraft (circular orbit, 27 degree inclination, about 590 km), rotated into a geomagnetic basis: zonal (perpendicular to B and to the magnetic meridian plane, positive east), meridional (perpendicular to B within the meridian plane, vertical at the magnetic equator, positive up) or field-aligned (along B). One sample is one component's finite values over one UTC day in stored record order; the three components share unit, instrument, cadence and fit process, and their day-to-day statistics overlap (daytime E x B drifts of tens of m/s, larger excursions near the terminators and at night when ion density is low)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The NetCDF4 variables are stored as IEEE-754 little-endian float64 (Format 'f8'); after inflate and HDF5 byte-unshuffle the stored 8-byte patterns are copied unchanged. Values are full-precision float64 fit outputs (all values within a day distinct in the probes, none float32-exact), not widened integers or decimal-rounded readings."
+source_resources = ["ivm_a_l27_pinned_days"]
+source_format = "NetCDF4 (HDF5 superblock v2) ICON IVM-A Level-2.7 daily file, version 6, chunked shuffle+deflate float64 variables"
+source_field = "ICON_L27_Ion_Velocity_Zonal, ICON_L27_Ion_Velocity_Meridional, ICON_L27_Ion_Velocity_Field_Aligned (each (Epoch,) float64, m/s)"
+filtered_input_path = "filtered/icon_ivm_a_l27_ion_drift_velocity_f64/ingest_stats.json"
+filtering = "120 pinned days x 3 components. Excluded as other quantities or duplicates of the same vector: ion density and temperature (other units), the instrument-frame Ion_Velocity_X/Y/Z, raw and original velocities, East/North/Up and equator- or footpoint-mapped velocities (linear re-projections of the same measurement), all flags and geolocation. IVM-B files are not listed. A (day, component) with fewer than 1,000 finite values would be skipped and recorded in ingest_stats.json."
+missing_value_policy = "The variables' FillVal is NaN; NaN records (instrument off, low ion density, or values the IVM pipeline blanked) are dropped and the remaining finite values are kept in record order, so a sample is the day's valid values without gap markers (the drop count is recorded per sample in the index as nan_fill_dropped). +-inf is fatal (none expected). Values outside Valid_Min/Valid_Max (-500/500 m/s) are kept, not clipped (counted as outside_valid_range_kept). The quality flags ICON_L27_DM_Flag and ICON_L27_RPA_Flag (0 good, 1 caution, 2 photoemission-corrected / should be rejected, 3 should be rejected) are not applied and not emitted: they do not alter the stored values, and filtering on them is an analysis choice. No value is imputed, rescaled or reordered."
+conversion = "Walk the HDF5 metadata (scripts/h5lite.py over cached 16 KiB blocks) to each variable's v1 chunk B-tree; read its chunks (169 x 512 values for a full day, edge chunk padded; the chunk length k comes from the layout message) from the cached contiguous span; zlib-inflate each to exactly 8k bytes, undo the HDF5 byte shuffle (byte plane j of k elements -> byte j of each element), concatenate, truncate to the dataset length, drop NaN, and write the native little-endian float64 bytes to one file per (day, component)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 velocity time series"
+sample_geometry = "daily_in_situ_time_series_1d"
+sample_rank = 1
+sample_axes = ["time_1hz_valid_records"]
+natural_record_kind = "one_velocity_component_of_one_icon_ivm_a_l27_daily_file"
+sample_count = 360
+total_size_bytes = 223439232
+output_path = "samples/icon_ivm_a_l27_ion_drift_velocity_f64/ivm_a_ion_drift_velocity_f64/"

@@ -31,6 +31,7 @@ from audit_acceptance import MIN_MEDIAN_SAMPLE_VALUES, MIN_SAMPLE_BYTES, MIN_VAL
 from audit_series_quality import FMT_MAP, MINORITY_THRESHOLD  # noqa: E402
 from check_repo_hygiene import (  # noqa: E402
     AMBIGUOUS_NATURAL_RECORD_KINDS,
+    BLIND_CONCAT_PATTERNS,
     NON_ACTIVE_DATASET_STATUSES,
     OPAQUE_PRIMARY_REPRESENTATION_CLASSES,
     OPAQUE_PRIMARY_TEXT_PATTERNS,
@@ -269,6 +270,13 @@ def gate(recipe_dir: Path, data_root: Path) -> dict:
         report["ok"] = False
         return report
 
+    lowered = manifest_path.read_text(encoding="utf-8").lower()
+    for pattern_name, needles in BLIND_CONCAT_PATTERNS:
+        if all(needle in lowered for needle in needles):
+            failures.append(
+                f"manifest wording matches check_repo_hygiene.py blind-concatenation pattern {pattern_name!r} {needles}: "
+                "if samples really are natural records, reword; otherwise fix the sample boundaries"
+            )
     if manifest.get("dataset_id") != dataset_id:
         failures.append(f"manifest dataset_id {manifest.get('dataset_id')!r} != directory name {dataset_id!r}")
     license_table = manifest.get("license", {})

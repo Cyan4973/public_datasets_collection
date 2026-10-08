@@ -1,0 +1,109 @@
+manifest_version = 1
+dataset_id = "zenodo_mimii_valve_mic_array_i16"
+name = "MIMII Industrial Solenoid Valve Sound Recordings, 8-Channel Microphone Array, 16 kHz PCM16 (6 dB SNR product, Hitachi, Zenodo 3384388)"
+description = "160 whole 10-second 8-channel microphone-array clips of industrial solenoid valves (product models id_00, id_02, id_04, id_06; 30 normal and 10 abnormal clips per model, evenly spaced), from the 6 dB SNR valve product of the Hitachi MIMII dataset. Each clip is one native little-endian int16 sample of interleaved 8-channel frames (160,000 frames x 8 channels), range-fetched from the 6.9 GB ZIP64 archive and decoded from its deflate WAV members."
+homepage = "https://zenodo.org/records/3384388"
+
+[license]
+name = "Creative Commons Attribution-ShareAlike 4.0 International"
+spdx = "CC-BY-SA-4.0"
+url = "https://creativecommons.org/licenses/by-sa/4.0/"
+citation = "Harsh Purohit, Ryo Tanabe, Kenji Ichige, Takashi Endo, Yuki Nikaido, Kaori Suefusa, and Yohei Kawaguchi (Hitachi, Ltd.), \"MIMII Dataset: Sound Dataset for Malfunctioning Industrial Machine Investigation and Inspection,\" Proc. 4th Workshop on Detection and Classification of Acoustic Scenes and Events (DCASE), 2019; arXiv:1909.09347. Data: Zenodo record 3384388, version \"public 1.0\", doi:10.5281/zenodo.3384388."
+notes = "The Zenodo record states: \"This dataset is made available by Hitachi, Ltd. under a Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0) license.\" and its metadata license id is cc-by-sa-4.0 (access_right open). download.sh re-fetches the record JSON and fails unless the license id, that sentence, access_right, version 'public 1.0', and the pinned file key, size and md5 of 6_dB_valve.zip are unchanged. Attribution: credit Hitachi, Ltd. and the authors above, link the record and the license, and indicate changes (here: members extracted from the ZIP, RIFF headers stripped, PCM data chunk kept unchanged). ShareAlike: adapted material that is shared must be offered under CC BY-SA 4.0 or a compatible license; redistributed samples keep this attribution and license."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Zenodo record published by Hitachi, Ltd. with the DCASE 2019 workshop paper; files are served directly by zenodo.org with HTTP range support. Recordings of industrial machines (solenoid valves) mixed with background noise recorded in real factories; no speech content is targeted and no human subjects are involved."
+usage_notes = "Public CC BY-SA 4.0 machine-condition acoustic recordings; appropriate for reproducible numeric dataset collection with attribution and ShareAlike preserved. Only the PCM waveform is emitted; the normal/abnormal label and model id go to the sample index as bookkeeping."
+
+[[origins]]
+id = "zenodo_record_3384388"
+name = "Zenodo record 3384388: MIMII Dataset (version public 1.0)"
+url = "https://zenodo.org/records/3384388"
+type = "repository"
+version = "public 1.0 (published 2019-09-20; latest version of concept record 3384387)"
+notes = "12 ZIP archives: {-6, 0, 6} dB SNR x {fan, pump, slider, valve}, 6.9-10.9 GB each. Version public 1.0 contains product models id_00, id_02, id_04 and id_06 of each machine type. This recipe uses only 6_dB_valve.zip."
+
+[[origins]]
+id = "zenodo_api"
+name = "Zenodo REST API"
+url = "https://zenodo.org/api/records/3384388"
+type = "api"
+notes = "Anonymous record JSON (license, version, file keys, sizes, md5) used for the license and identity checks. File content is served from /api/records/3384388/files/<key>/content with Range support."
+
+[[resources]]
+id = "record_json"
+origin = "zenodo_api"
+url = "https://zenodo.org/api/records/3384388"
+type = "api_query_result"
+version = "public 1.0"
+access = "Anonymous JSON GET."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/zenodo_mimii_valve_mic_array_i16/record_3384388.json"
+notes = "About 10 KB. Not byte-pinned (view and download counters change); validated field by field: license id cc-by-sa-4.0, the CC BY-SA 4.0 sentence in the description, access_right open, version 'public 1.0', and 6_dB_valve.zip size 6,915,951,837 with checksum md5:fe5fb7c337cd701b1d31dc641e621892."
+
+[[resources]]
+id = "archive_tail"
+origin = "zenodo_record_3384388"
+url = "https://zenodo.org/api/records/3384388/files/6_dB_valve.zip/content"
+type = "other"
+version = "public 1.0"
+access = "One HTTP range request for bytes 6,915,459,463-6,915,951,836 (the last 492,374 bytes) of 6_dB_valve.zip."
+size_bytes = 492374
+sha256 = "209786dc47b446d51160124a79a9e23a8600142e93fb79512ab08730cb9cd0ae"
+local_path = "downloads/zenodo_mimii_valve_mic_array_i16/archive_tail.bin"
+notes = "Central directory (4,183 entries: 4,170 deflate WAV members and 13 directory entries; 492,276 bytes at offset 6,915,459,463), ZIP64 EOCD record, ZIP64 EOCD locator and EOCD (whose 32-bit central-directory offset is the 0xFFFFFFFF sentinel). Content-Range total must equal the pinned archive size. Used to re-derive the member selection and to check each member's name, offset, span, sizes and CRC32."
+
+[[resources]]
+id = "member_spans"
+origin = "zenodo_record_3384388"
+url = "https://zenodo.org/api/records/3384388/files/6_dB_valve.zip/content"
+type = "other"
+version = "public 1.0"
+access = "One HTTP range request per pinned member (160), 2 in parallel, paced with a 1.2 s pause per request to stay under Zenodo's anonymous rate limit (133 requests/min observed); curl retries 429/5xx honouring Retry-After; up to 8 passes."
+size_bytes = 265037035
+sha256 = ""
+local_path = "downloads/zenodo_mimii_valve_mic_array_i16/members/"
+notes = "Each span is exactly [member local header offset, next central-directory entry offset): 30-byte local header, 31- or 33-byte name, local extra (0 bytes in every probed member; the central-directory extras are 36 or 48 bytes and are never reused), deflate data. members.tsv pins name, central-directory index, offset, span, compressed and uncompressed sizes and CRC32. Each span must inflate to exactly 2,560,080 bytes with the central-directory CRC32 and parse as the expected WAV. The zip-level md5 cannot be checked without the whole 6.9 GB archive; the sha256-pinned central directory plus per-member CRC32 stand in for it."
+
+[local_paths]
+downloads = "downloads/zenodo_mimii_valve_mic_array_i16/"
+filtered = "filtered/zenodo_mimii_valve_mic_array_i16/"
+index = "index/zenodo_mimii_valve_mic_array_i16/"
+samples = "samples/zenodo_mimii_valve_mic_array_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_mimii_valve_mic_array_i16/samples.jsonl"
+summary = "Range-fetch the ZIP64 central directory of 6_dB_valve.zip, re-derive the pinned 160-member selection, range-fetch those members, inflate each deflate member to its WAV, and emit the WAVE_FORMAT_EXTENSIBLE PCM data chunk (interleaved 8-channel int16 frames) as one little-endian sample per 10-second clip."
+deterministic_notes = "Selection (scripts/mimii.py select_members, pinned in members.tsv): members matching ^valve/(id_00|id_02|id_04|id_06)/(normal|abnormal)/[0-9]{8}.wav$ are partitioned by (model id, condition) and ordered by name; group sizes must equal 119/991 (id_00 abnormal/normal), 120/708 (id_02), 120/1000 (id_04), 120/992 (id_06), which match Table 1 of the MIMII paper; each group gives K evenly spaced members at ranks floor((2k+1) N / (2K)), k = 0..K-1, with K = 10 for abnormal and K = 30 for normal; rows are written in central-directory order. download.sh, build.sh and verify.sh each re-derive the selection from the local sha256-pinned archive tail and fail if it differs from members.tsv; discover.sh reproduces the pins from scratch. Validation: Content-Range (requested span and archive total), local header name/flags/method/CRC/sizes against the central directory using the local header's own name and extra lengths, span = 30 + name + local extra + compressed size, raw deflate ending exactly at the span end with exactly 2,560,080 output bytes, CRC32, RIFF size, chunk walk (fmt 40 B, fact, data), fmt = WAVE_FORMAT_EXTENSIBLE 0xFFFE, 8 channels, 16000 Hz, 256000 B/s, block align 16, 16 bits, cbSize 22, 16 valid bits, subformat GUID KSDATAFORMAT_SUBTYPE_PCM, fact = 160,000 frames, data chunk exactly 2,560,000 bytes. build.sh and verify.sh run a synthetic self-test (zipfile ZIP_DEFLATED members including a forced ZIP64 local extra absent from the central directory, a hand-built ZIP64 EOCD and ZIP64 offset extra, corruption, CRC, truncation and name rejection, non-PCM subformat, 7-channel, short data chunk and plain-PCM-tag rejection, dead-channel exclusion, selection arithmetic). verify.sh re-decodes each member with the stdlib zipfile and wave modules (Python 3.12+) instead of the build decoder and compares bytes, every index field, exclusions, the aggregate output SHA-256 and the manifest totals. Floors: at least 10,000 primary values or 100 KB, median at least 1,000 values. Realized 2026-10-06: 160 samples (10 abnormal + 30 normal for each of id_00, id_02, id_04, id_06), 0 exclusions, 1,280,000 values per clip, 204,800,000 values, 409,600,000 bytes, aggregate output SHA-256 efd9215c50362b3918751d831e14d88742c19e4789717123d089193dd22ac754; every member has RIFF layout fmt,fact,data and channel mask 0x0000063F; per-clip peak |x| 2,578 to 16,675 (median 8,122), 1,921 to 6,375 distinct codes (median 4,028), no full-scale codes; download 265,549,260 bytes in one pass with no rejected spans."
+
+[[series]]
+id = "mimii_valve_6db_array_pcm_i16"
+description = "Whole 10-second 8-channel microphone-array recordings of industrial solenoid valves (normal and abnormal operation) with real factory background noise mixed in by the publisher at 6 dB SNR, one sample per WAV clip, interleaved frames as published."
+semantic_meaning = "Successive signed 16-bit PCM amplitude codes of sound pressure at the eight microphones of a TAMAGO-03 circular microphone array (System In Frontier Inc.) placed 10 cm from an industrial solenoid valve that is repeatedly opened and closed, sampled at 16,000 frames per second in a reverberant environment. Abnormal clips record valves with contamination faults. Per the MIMII paper, background noise recorded continuously in several real factories with the same array was mixed into each channel separately by the publisher, scaled so that 10 log10(a / b) = 6 dB, where a is the mean power of all segments of that valve model and b the power of the randomly chosen noise segment; the clean machine recordings are not published. Frame t holds channels 0..7 in order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The WAV fmt chunk declares WAVE_FORMAT_EXTENSIBLE (0xFFFE), 8 channels, 16000 Hz, byte rate 256000, block align 16, 16 bits per sample, 16 valid bits, subformat KSDATAFORMAT_SUBTYPE_PCM; build rejects anything else. Emitted values are the stored PCM codes, unchanged and in the stored interleaved frame order: no gain, filtering, resampling, channel selection, de-interleaving or mixing. The fmt channel mask 0x0000063F is a nominal surround mask written by the recording tool, not a speaker layout; the channels are the eight array microphones."
+source_resources = ["member_spans", "archive_tail", "record_json"]
+source_format = "RIFF/WAVE WAVE_FORMAT_EXTENSIBLE PCM (8 channels, 16 kHz, 16-bit) stored as deflate (ZIP method 8) members of the ZIP64 archive 6_dB_valve.zip"
+source_field = "WAV data chunk: interleaved 8-channel 16-bit PCM sound-pressure frames"
+filtered_input_path = "filtered/zenodo_mimii_valve_mic_array_i16/ingest_stats.json"
+filtering = "The 160 clips pinned in members.tsv (selection rule in processing.deterministic_notes): 6 dB SNR product only, machine type valve only, all four published product models (id_00, id_02, id_04, id_06), 30 normal and 10 abnormal clips per model. No other SNR level (-6 or 0 dB) and no other machine type (fan, pump, slider) is mixed in. Clips with fewer than 64 distinct PCM codes, with any constant microphone channel, or whose PCM payload is byte-identical to an earlier selected clip are excluded and listed in ingest_stats.json; more than 1% exclusions fails the build. The fact chunk is checked and not emitted."
+missing_value_policy = "PCM has no missing-value sentinel. Every value of every retained clip is emitted, including full-scale (-32768 or 32767) codes, whose count is reported per sample in the index and in total in ingest_stats.json. Content-Range, local-header, deflate, CRC32, RIFF structure, fmt, GUID or data-size mismatches are fatal; verify recomputes the same exclusion rule from the downloads."
+conversion = "Parse the 30-byte ZIP local header with its own name and extra lengths (name, flags, method 8, CRC and sizes must equal the central directory, ZIP64 local extras widened if present; span must equal header + name + extra + compressed size). Inflate the deflate data with zlib.decompressobj(-15): the stream must end exactly at the span end and produce exactly 2,560,080 bytes, whose zlib CRC32 must match the central directory. Walk the RIFF chunks (fmt, fact, data), require the exact fmt above and a 2,560,000-byte data chunk, and write the data chunk bytes unchanged (already little-endian int16, interleaved frames, channel fastest) as one .bin per clip, in members.tsv order. Sample shape [160000 frames, 8 channels]."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian signed-int16 PCM, interleaved 8-channel frames"
+sample_geometry = "multichannel_audio_waveform_frames_by_channels"
+sample_rank = 2
+sample_axes = ["time_frame_16000hz", "microphone_channel_8"]
+natural_record_kind = "complete_10s_8ch_machine_sound_wav_clip"
+sample_count = 160
+total_size_bytes = 409600000
+output_path = "samples/zenodo_mimii_valve_mic_array_i16/mimii_valve_6db_array_pcm_i16/"

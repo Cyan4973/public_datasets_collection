@@ -412,3 +412,4 @@ pdebench_2d_cfd_turb_m1_density_f32	autocollect	32	sim_fluid_field	pdebench_solv
 the_well_post_neutron_star_merger_density_f32	autocollect	32	sim_fluid_field	nubhlight_grmhd	huggingface.co/polymathic-ai	-	OK
 umich_nclt_velodyne_hdl32e_xyz_u16	autocollect	16	laser_range	velodyne_lidar	s3.us-east-2.amazonaws.com/nclt.perl.engin.umich.edu	-	OK
 zenodo_pacbio_sequel_subread_ipd_codecv1_u8	autocollect	8	polymerase_kinetics	pacbio_sequel_smrt	zenodo	-	OK
+zenodo_mimii_valve_mic_array_i16	autocollect	16	pcm_audio	tamago03_circular_mic_array_machine_sound	zenodo	-	OK

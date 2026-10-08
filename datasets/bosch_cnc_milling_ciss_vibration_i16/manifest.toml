@@ -1,0 +1,89 @@
+manifest_version = 1
+dataset_id = "bosch_cnc_milling_ciss_vibration_i16"
+name = "Bosch CNC Milling CISS Tri-Axial Vibration Runs Int16"
+description = "Complete tri-axial (X, Y, Z) 2 kHz accelerometer recordings of individual machining operations on two brownfield CNC milling machines (M01, M02), one int16 (n, 3) sample per published run, from the CC BY 4.0 Bosch CNC_Machining dataset."
+homepage = "https://github.com/boschresearch/CNC_Machining"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Tnani, M.-A.; Feil, M.; Diepold, K. Smart Data Collection System for Brownfield CNC Milling Machines: A New Benchmark Dataset for Data-Driven Machine Monitoring. Procedia CIRP 2022, 107, 131-136. https://doi.org/10.1016/j.procir.2022.04.022"
+notes = "The repository README at commit d60581d6a3ab6015dcc5488c3d76112bb8e1bcb1 states: 'The dataset created for the research located in the directory [data](data) are licensed under a Creative Commons Attribution 4.0 International License (CC-BY-4.0).' The repository LICENSE file (BSD-3-Clause) covers the code only; no code is used. download.sh re-fetches that README by git blob SHA-1 and fails if the CC BY 4.0 statement is missing. Cite the paper and credit Robert Bosch GmbH / Bosch Rexroth AG."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official publisher repository (boschresearch on GitHub), fetched anonymously from raw.githubusercontent.com at a pinned commit; every file is matched to its git blob SHA-1 in the commit tree. Content is machine vibration only: no people, locations, or personal identifiers."
+usage_notes = "Industrial machine-monitoring sensor data published for research benchmarking; emitted unchanged as integer acceleration readings for numeric compression research."
+
+[[origins]]
+id = "boschresearch_cnc_machining"
+name = "boschresearch/CNC_Machining GitHub repository"
+url = "https://github.com/boschresearch/CNC_Machining"
+type = "repository"
+notes = "Companion data repository of Tnani et al. 2022. main == d60581d6a3ab6015dcc5488c3d76112bb8e1bcb1 (git ls-remote, 2026-10-06); 1,702 .h5 files, 952,229,265 bytes, under data/<machine>/<operation>/<good|bad>/."
+
+[[resources]]
+id = "cnc_h5_runs_m01_m02"
+origin = "boschresearch_cnc_machining"
+url = "https://raw.githubusercontent.com/boschresearch/CNC_Machining/d60581d6a3ab6015dcc5488c3d76112bb8e1bcb1/data/"
+type = "exact_file_selection"
+version = "commit d60581d6a3ab6015dcc5488c3d76112bb8e1bcb1"
+access = "Anonymous raw.githubusercontent.com GETs of the 1,163 paths in sources.tsv (all M01 and M02 runs); no GitHub API calls at download time."
+size_bytes = 642164273
+sha256 = ""
+local_path = "downloads/bosch_cnc_milling_ciss_vibration_i16/data/"
+notes = "Per-file byte size and git blob SHA-1 (sha1 over 'blob <size>\\0' + bytes, i.e. the object id in the commit tree) are pinned in sources.tsv together with the dataset shape and container dtype read from each file's HDF5 header during authoring. M03 (539 files, 336,474,750 int16 bytes) is excluded so the output stays under 1 GB."
+
+[[resources]]
+id = "cnc_repository_readme"
+origin = "boschresearch_cnc_machining"
+url = "https://raw.githubusercontent.com/boschresearch/CNC_Machining/d60581d6a3ab6015dcc5488c3d76112bb8e1bcb1/README.md"
+type = "file"
+version = "commit d60581d6a3ab6015dcc5488c3d76112bb8e1bcb1, git blob 76e64e205cf889ae10a2ffdbb9c29e4205cb1738"
+access = "Anonymous raw GET; license and data-structure evidence."
+size_bytes = 3201
+sha256 = "de3f91fe2a15ee0cf46e1d7e36901603f166e9ff9925dc1c842c6ba3cf170239"
+local_path = "downloads/bosch_cnc_milling_ciss_vibration_i16/README.md"
+notes = "States the CC BY 4.0 data license, the 2 kHz tri-axial Bosch CISS accelerometer, and the (acc_values, n_channels) dataset layout with channels 0: X, 1: Y, 2: Z."
+
+[local_paths]
+downloads = "downloads/bosch_cnc_milling_ciss_vibration_i16/"
+filtered = "filtered/bosch_cnc_milling_ciss_vibration_i16/"
+index = "index/bosch_cnc_milling_ciss_vibration_i16/"
+samples = "samples/bosch_cnc_milling_ciss_vibration_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/bosch_cnc_milling_ciss_vibration_i16/samples.jsonl"
+summary = "Fetch the 1,163 pinned M01/M02 HDF5 run files by git blob SHA-1, decode each file's vibration_data dataset with a pure-stdlib HDF5 reader, check that every value is an exact integer within int16, and emit one int16 (n, 3) row-major sample per run."
+deterministic_notes = "Selection is every run file of machines M01 and M02 at the pinned commit (both labels, all operations and timeframes), listed in sources.tsv in path order. download.sh verifies size and git blob SHA-1 for each file plus the README, then parses every file's HDF5 metadata (root links, shape, dtype, filters, complete chunk grid) against the pins. build.sh runs a synthetic-HDF5 parser self-test, re-checks identities, decodes every chunk, and applies a per-file width policy: a file is kept only if all values are finite, integral and within [-32768, 32767] (float -0.0 counts as 0). Files with a constant axis or a duplicate output are dropped too. Nothing is rounded, clipped, scaled, reordered or concatenated. verify.sh re-derives every sample through an independent struct-based conversion and checks bytes, index fields, drop records, stray files, floors, the 1 GB cap and manifest scope."
+
+[[series]]
+id = "cnc_ciss_vibration_xyz_i16"
+description = "Tri-axial accelerometer vibration of one complete machining-operation run on a brownfield CNC milling machine, sampled at 2 kHz."
+semantic_meaning = "Integer acceleration readings of the Bosch CISS sensor mounted inside the machine, axes X, Y, Z (columns 0, 1, 2), in time order for one execution of one machining process (OP00-OP14) on machine M01 or M02, labelled good or bad, from one of six half-year timeframes (Feb 2019 to Aug 2021). The Z axis carries a gravity offset of about -1000 counts, which suggests milli-g units (an inference; the publisher documents no unit)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The values are integer sensor readings. The publisher wrapped them in three different HDF5 container dtypes, chosen per file, for the same content: int64 (566 selected files, all 2020-2021 runs except two), float64 (470, mostly Aug 2019) and float32 (127, mostly Feb 2019). The Z-axis gravity offset (about -1000 counts) is the same in all three, so the scale does not differ. Every value in every kept file is checked to be finite, exactly integral and within int16, so the int16 sample converts back to the source container value exactly for every element (bit-exact except a float -0.0, which becomes 0). Emitting float32/float64/int64 would be a gratuitous widening of 16-bit integer content. Precedents: zenodo_aegis_obd_pid_u8 keeps exact integers at their native width; goose_vls128_lidar_scan_xyz_f32 dropped an integer-valued float field rather than widen it."
+source_resources = ["cnc_h5_runs_m01_m02", "cnc_repository_readme"]
+source_format = "HDF5 file per machining run (superblock v0, chunked, deflate)"
+source_field = "vibration_data[n, 3] tri-axial acceleration (X, Y, Z)"
+filtered_input_path = "filtered/bosch_cnc_milling_ciss_vibration_i16/ingest_stats.json"
+filtering = "All 1,163 run files of machines M01 (519) and M02 (644) at the pinned commit, both good (1,102) and bad (61) labels. Machine M03 is excluded to respect the 1 GB cap. Within a file every row and axis is kept."
+missing_value_policy = "The source has no missing-value sentinel. A file with any non-finite, non-integral or out-of-int16 value is dropped whole and recorded in ingest_stats.json. Files with a constant axis and later exact duplicates are dropped and recorded too. Structural deviations (root links other than vibration_data, a shape or dtype that differs from the pins, unsupported filters, an incomplete chunk grid, an identity mismatch) are fatal. No value is rounded, clipped, rescaled or imputed."
+conversion = "Pure-stdlib HDF5 decode: superblock v0, then the symbol-table root group, then the v1 object header of vibration_data (dataspace, datatype, filter pipeline, layout v3). Walk the v1 chunk B-tree, zlib-inflate each (rows x 1) column chunk and scatter it into a C-order (n, 3) array. Reinterpret as the container dtype (float32/float64/int64 LE), convert each value to int16 exactly, and write the little-endian int16 values row-major as interleaved X, Y, Z. One sample per source file."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw little-endian int16 array, row-major (n, 3), interleaved X,Y,Z"
+sample_geometry = "time_by_axis_2d_row_major"
+sample_rank = 2
+sample_axes = ["time_sample_2khz", "accelerometer_axis_xyz"]
+natural_record_kind = "complete_cnc_machining_operation_run_vibration_record"
+sample_count = 1163
+total_size_bytes = 735132690
+output_path = "samples/bosch_cnc_milling_ciss_vibration_i16/cnc_ciss_vibration_xyz_i16/"

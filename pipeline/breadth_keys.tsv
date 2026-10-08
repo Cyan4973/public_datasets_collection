@@ -413,3 +413,4 @@ the_well_post_neutron_star_merger_density_f32	autocollect	32	sim_fluid_field	nub
 umich_nclt_velodyne_hdl32e_xyz_u16	autocollect	16	laser_range	velodyne_lidar	s3.us-east-2.amazonaws.com/nclt.perl.engin.umich.edu	-	OK
 zenodo_pacbio_sequel_subread_ipd_codecv1_u8	autocollect	8	polymerase_kinetics	pacbio_sequel_smrt	zenodo	-	OK
 zenodo_mimii_valve_mic_array_i16	autocollect	16	pcm_audio	tamago03_circular_mic_array_machine_sound	zenodo	-	OK
+bosch_cnc_milling_ciss_vibration_i16	autocollect	16	inertial_vibration	bosch_ciss_triaxial_mems_accelerometer_cnc_mill	github.com/boschresearch	-	OK

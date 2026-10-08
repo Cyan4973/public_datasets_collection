@@ -416,3 +416,4 @@ zenodo_mimii_valve_mic_array_i16	autocollect	16	pcm_audio	tamago03_circular_mic_
 bosch_cnc_milling_ciss_vibration_i16	autocollect	16	inertial_vibration	bosch_ciss_triaxial_mems_accelerometer_cnc_mill	github.com/boschresearch	-	OK
 zenodo_m3d_iwr6843_radar_adc_i16	autocollect	16	fmcw_radar_adc	ti_iwr6843aop_dca1000	zenodo	-	OK
 icon_ivm_a_l27_ion_drift_velocity_f64	autocollect	64	space_plasma_drift	icon_ivm	nasa_heliocloud_spdf	-	OK
+zenodo_epfl_loraiq_sf10_iq_frames_f32	autocollect	32	rf_iq_baseband	ettus_usrp2920_sdr_rrh	zenodo	-	OK

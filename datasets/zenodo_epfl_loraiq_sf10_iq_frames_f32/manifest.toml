@@ -1,0 +1,90 @@
+manifest_version = 1
+dataset_id = "zenodo_epfl_loraiq_sf10_iq_frames_f32"
+name = "LoRaIQ (EPFL) SF10/250 kHz Over-the-Air LoRa Frame Recordings, SigMF cf32_le I/Q"
+description = "Native complex-float32 baseband I/Q recordings (500 ksps, 862.5 MHz) of single LoRa SF10/CR4-5/BW250 kHz drone uplink frames received by four EPFL rooftop USRP-2920 remote radio heads; one SigMF recording per sample."
+homepage = "https://zenodo.org/records/17708397"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Joachim Tapparel and Andreas Burg (EPFL), LoRaIQ: Experimental LoRa Dataset with Annotated IQ Samples, version 1.0.0, Zenodo, 2025-12-01, doi:10.5281/zenodo.17708397."
+notes = "Zenodo record metadata declares license id cc-by-4.0 for the whole record (sigmfs.zip, dataset.csv). download.sh re-checks the license id, record version 1.0.0, and the pinned file sizes/MD5s on every run. Preserve author, record, and DOI attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Zenodo record from the EPFL Telecommunications Circuits Lab; bytes fetched by HTTP range from the record's own sigmfs.zip."
+usage_notes = "RF recordings of a test LoRa transmitter carried by a UAV. The SigMF annotations and dataset.csv include transmitter GPS positions of the experiment drone; these are not emitted as series. No personal data."
+
+[[origins]]
+id = "zenodo_17708397"
+name = "LoRaIQ: Experimental LoRa Dataset with Annotated IQ Samples"
+url = "https://zenodo.org/records/17708397"
+type = "repository"
+version = "1.0.0 (doi:10.5281/zenodo.17708397)"
+notes = "Zenodo record API https://zenodo.org/api/records/17708397 is validated by download.sh."
+
+[[resources]]
+id = "sigmfs_zip_member_ranges"
+origin = "zenodo_17708397"
+url = "https://zenodo.org/api/records/17708397/files/sigmfs.zip/content"
+type = "archive"
+version = "1.0.0"
+access = "Public anonymous HTTP range GETs (206) into the 49,746,561,196-byte ZIP64 archive (md5 3dc5fbc66ad24aeaa1d1d2a1801c400a); 256 ranges listed in selection.tsv."
+size_bytes = 319698270
+sha256 = ""
+local_path = "downloads/zenodo_epfl_loraiq_sf10_iq_frames_f32/members/"
+notes = "Each range spans the .sigmf-data local header + deflated member and the immediately following .sigmf-meta local header + member, ending just before the next member. Ranges were derived by scripts/discover.py from the ZIP64 EOCD (143,275 entries, central directory 17,305,251 bytes at offset 49,729,255,847, CD sha256 67649655a99f07102bb4adbb3294fe8c283a7a45812c253e8f84919ec0b634fa). Per-member CRC32 and compressed/uncompressed sizes are pinned in selection.tsv."
+
+[[resources]]
+id = "dataset_csv"
+origin = "zenodo_17708397"
+url = "https://zenodo.org/api/records/17708397/files/dataset.csv/content"
+type = "file"
+version = "1.0.0"
+access = "Direct public download."
+size_bytes = 18306157
+sha256 = ""
+local_path = "downloads/zenodo_epfl_loraiq_sf10_iq_frames_f32/dataset.csv"
+notes = "Frame table (75,086 rows), md5 b92831a0c897154e95430e399122791c. Used to select the SF10 configuration and cross-check each recording's SigMF annotation."
+
+[local_paths]
+downloads = "downloads/zenodo_epfl_loraiq_sf10_iq_frames_f32/"
+filtered = "filtered/zenodo_epfl_loraiq_sf10_iq_frames_f32/"
+index = "index/zenodo_epfl_loraiq_sf10_iq_frames_f32/"
+samples = "samples/zenodo_epfl_loraiq_sf10_iq_frames_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_epfl_loraiq_sf10_iq_frames_f32/samples.jsonl"
+summary = "Validate the CC BY 4.0 Zenodo record v1.0.0, fetch dataset.csv and 256 exact ZIP byte ranges, inflate each SigMF data/meta pair, validate it, and emit each complete cf32_le recording unchanged as one sample."
+deterministic_notes = "Selection (selection.tsv, reproducible with discover.sh): dataset.csv rows with sf=10, cr=1, fc=862.5, bandwidth=250000, rx_sample_rate=500000 (41,229 rows, one frame per file); stratified by (session, RRH) over 16 drone sessions x 4 RRHs = 64 strata; within each stratum files sorted by integer file number and 4 taken at positions floor((k+0.5)*N/4). Validation: HTTP 206 with exact Content-Range; local headers parsed with their own name/extra lengths; raw DEFLATE (wbits -15) must end exactly at the member boundary; inflated size and CRC32 must match the pinned central-directory values; SigMF core:datatype cf32_le, core:sample_rate 500000, core:frequency 862.5, one channel, one capture at sample 0, core:sha512 must match the data; exactly one annotation whose sf/cr/fc/bandwidth/rx_sample_rate/sigmf_file match; build cross-checks the annotation against dataset.csv. Width honesty: build and verify reject any sample with more than 1% of values on the 1/32768 grid or fewer than 50% unique float32 values. Index min/max are computed from the stored float32 values."
+
+[[series]]
+id = "loraiq_sf10_iq_cf32"
+description = "Interleaved float32 in-phase/quadrature complex baseband samples of one received LoRa SF10 frame plus surrounding channel noise."
+semantic_meaning = "Over-the-air complex baseband RF waveform at 500 ksps centred on 862.5 MHz, as recorded by a USRP-2920 remote radio head (after the capture software's scaling and filtering), containing one detected LoRa SF10/CR4-5/BW250 kHz uplink frame from a UAV transmitter in LOS or NLOS conditions."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "SigMF core:datatype cf32_le: every 8 source bytes are one complex sample, little-endian float32 I followed by float32 Q. Values are genuinely continuous (probe: 0-0.001% on the 1/32768 grid, ~97-99% unique, full mantissa use), not widened int16."
+source_resources = ["sigmfs_zip_member_ranges", "dataset_csv"]
+source_format = "SigMF 1.2.0 recording (.sigmf-data cf32_le + .sigmf-meta JSON) inside a ZIP64 deflate archive"
+source_field = "interleaved complex I/Q sample stream of the .sigmf-data file"
+filtered_input_path = "filtered/zenodo_epfl_loraiq_sf10_iq_frames_f32/ingest_stats.json"
+filtering = "Only SF10 / CR 4-5 / BW 250 kHz / 500 ksps / 862.5 MHz drone recordings (drone_los, drone_nlos; 16 sessions from 2025-09-11 to 2025-10-07, RRH 1-4); the SF7 / BW 125 kHz / 250 ksps pedestrian_nlos sessions are excluded as a different sample-rate and occupancy regime. 4 evenly spaced recordings per (session, RRH)."
+missing_value_policy = "No values are dropped, imputed, or trimmed. Any range, header, CRC32, size, SigMF metadata, sha512, annotation, or dataset.csv mismatch, non-finite value, constant I or Q component, partial complex sample, or on-grid/low-uniqueness sample is fatal."
+conversion = "Inflate the deflated .sigmf-data member and write its bytes unchanged (already little-endian float32, interleaved I,Q); one output file per SigMF recording, no concatenation or splitting."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous interleaved float32 I/Q array"
+sample_geometry = "complex_time_series"
+sample_rank = 2
+sample_axes = ["complex_sample", "component_iq"]
+natural_record_kind = "sigmf_recording_single_lora_frame"
+sample_count = 256
+total_size_bytes = 358499128
+output_path = "samples/zenodo_epfl_loraiq_sf10_iq_frames_f32/loraiq_sf10_iq_cf32/"

@@ -28,9 +28,10 @@ downstream work.
    modalities, sources, and quantities that are absent or thin there.
    Then run `python3 tools/autocollect/novelty.py --vocabulary`: these
    measurement types are already collected (at any width). Breadth is
-   enforced (see criteria.md): a candidate whose measurement type is already
-   there will be rejected, so look for measurement types that are not on the
-   list. Do not rename an existing type to dodge the rule.
+   measured on the bytes after the build (see criteria.md): material that
+   compresses and looks like an existing family is rejected whatever its
+   name, after costing a full build. Prefer material whose statistics are
+   likely to differ from what the corpus already holds.
 2. Search broadly in the focus domains given by the driver (others are fine
    if clearly more promising). Use the web search tool, WebFetch, and curl.
    Productive places include institutional and agency archives, research data

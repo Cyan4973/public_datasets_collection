@@ -43,41 +43,35 @@ all of them.
 - A family the downstream corpus has but the local corpus lacks
   (`downstream_mirror_fill`) is legitimate and welcome; just label it as such.
 
-## Breadth is enforced
+## Breadth is measured on bytes
 
-Diversity of the collection matters more than its size. An audit of the first
-85 automated acceptances (`reports/autocollect_diversity_audit_20261006.md`)
-found that 41 were new content in a measurement type the corpus already had,
-while the judge labelled them new. The rules below are therefore enforced by
-the driver, not just advised.
+Diversity of the collection matters more than its size, and it is judged on
+the bytes, not on names. Two families are similar when one existing family is
+both:
 
-- Every family has three keys, recorded in `pipeline/breadth_keys.tsv` for the
-  baseline and for every acceptance:
-  - `measurement_type`: what is measured and how, at the granularity of the
-    controlled vocabulary (`python3 tools/autocollect/novelty.py --vocabulary`),
-    e.g. `sar_backscatter`, `raw_space_frame`, `spot_diffraction`, `meg`,
-    `laser_range`, `geo_product_raster`. Reuse an existing type whenever the
-    material is the same kind of measurement, whatever the source, region,
-    date, body, or width. Coin a new type only when none fits, at the same
-    granularity.
-  - `instrument_line`: the instrument or product family (e.g.
-    `modis_terra_land_products`, `vidicon_space_camera`).
-  - `archive_collection`: host plus collection path (e.g.
-    `planetarycomputer.microsoft.com/modis`, `ftp.ebi.ac.uk/empiar`).
-- Look them up with `novelty.py --type <t> --instrument <i> --archive <a>`.
-- A measurement type that already exists at any width, baseline included, is
-  rejected. The only exception is a measured statistical difference (value
-  distribution, dynamic range, correlation structure, generation process)
-  that a compressor would care about, stated as `measured_difference`. Such
-  an override always waits for the user's sign-off.
-- A third family from the same archive collection in this effort also waits
-  for the user's sign-off.
-- `new_modality` means the measurement type appears nowhere: no family at any
-  width, locally or downstream. "The first X at N bits" is not a new modality.
-- Breadth verdict on acceptance: `STRONG` (measurement type new to the corpus
-  and downstream), `OK` (new measurement type within a known broad domain,
-  with a different generation process or statistics), `WEAK` (anything else).
-  Only `STRONG` and `OK` count toward the per-width goal.
+- compression-equivalent: its trained OpenZL compressor compresses the
+  candidate's held-out samples within 3% of the candidate's own compressor;
+- statistically close: percentile distance at most 0.05 over the
+  Transformer's numeric features plus order-0, order-1, delta and byte-lane
+  entropies. Two copies of the same material typically sit within that
+  distance; unrelated families almost never do.
+
+`tools/autocollect/zlsim.py gate` measures this after the build, against
+every baseline, downstream and accepted family of the same width. A recipe
+whose primary series are all redundant is rejected automatically. Verdicts:
+`STRONG` (nearest family at least 0.12 away, as far as unrelated material),
+`OK` (novel), `WEAK` (redundant, rejected). Only `STRONG` and `OK` count toward
+the per-width goal. History: `reports/autocollect_diversity_audit_20261006.md`
+and `reports/autocollect_similarity_calibration_20261008.md`.
+
+- The breadth keys (`measurement_type`, `instrument_line`,
+  `archive_collection`) and `novelty.py --vocabulary` are descriptive aids
+  for scouting, not a gate. Use them to avoid proposing obvious repeats: a
+  redundant recipe costs a full build before the gate rejects it.
+- A third acceptance from the same resource host in this effort waits for the
+  user's sign-off.
+- A sample dominated by one value (fill or no-data) is flagged; the judge must
+  justify it or ask for a repair.
 
 ## Genuine numeric quantity
 

@@ -104,25 +104,26 @@ overrides the check; not recommended.
 
 ## Breadth enforcement
 
-Breadth is checked mechanically, after the 2026-10-06 audit
-(`reports/autocollect_diversity_audit_20261006.md`) found that 41 of the first
-85 acceptances were new content in a measurement type the corpus already had.
+Breadth is measured on the bytes (`tools/autocollect/zlsim.py`). After the
+driver's rebuild check, `zlsim.py gate` trains the candidate's OpenZL
+compressor and feature fingerprint (Transformer numeric features plus
+entropies), then compares it with its nearest families of the same width in a
+library of every baseline, downstream and accepted family. A series is
+redundant if one existing family is within 3% compression loss AND 0.05
+percentile feature distance (calibrated on same-material mirror pairs,
+`reports/autocollect_similarity_calibration_20261008.md`). A recipe whose
+series are all redundant is rejected before the judge; accepted recipes join
+the library (`zlsim.py adopt`). The measured verdict (`STRONG`, `OK`) is what
+counts toward the per-width goal; `status` shows counted and weak families.
 
-- `pipeline/breadth_keys.tsv` holds `measurement_type`, `instrument_line` and
-  `archive_collection` for every family, baseline included, and
-  `pipeline/breadth_vocabulary.tsv` defines the measurement types.
-  `novelty.py --vocabulary` and `novelty.py --type/--instrument/--archive`
-  query them.
-- The screener and the judge each assign the keys. The driver then rejects a
-  candidate whose measurement type already exists at any width. If the agent
-  claims a measured statistical difference (`breadth_override`), or the
-  candidate would be the third from one archive collection in this effort, the
-  candidate is paused and you get a ping. Decide with
-  `driver.py approve-breadth <id> [--note ...]` or
-  `driver.py reject <id> --reason ...`.
-- Each acceptance gets a breadth verdict (`STRONG`, `OK`, `WEAK`), recorded in
-  the ledger and the breadth registry. Only `STRONG` and `OK` count toward the
-  per-width goal; `status` shows counted and weak families separately.
+- `pipeline/breadth_keys.tsv` and `pipeline/breadth_vocabulary.tsv` describe
+  every family (measurement type, instrument line, archive) for scouting.
+  They are not a gate.
+- A third acceptance from one resource host pauses for your sign-off:
+  `driver.py approve-breadth <id> [--note ...]` or `driver.py reject <id> --reason ...`.
+- Library maintenance: `zlsim.py build-library` (resumable) trains missing
+  families; the gate needs the zli binary and the Transformer feature library
+  (paths overridable with `ZLSIM_ZLI` and `ZLSIM_FEATURE_LIB`).
 
 ## Guardrails
 

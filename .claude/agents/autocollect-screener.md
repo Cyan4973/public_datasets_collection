@@ -39,15 +39,13 @@ claims that matter.
    under the 1 GB primary cap with a bounded download, sized to the
    population, not a thin aggregate behind a huge download.
 8. Decodability with pure standard-library Python.
-9. Breadth (enforced): assign the three breadth keys yourself, independently
-   of the scout, using `novelty.py --vocabulary` (reuse an existing
-   `measurement_type` whenever it is the same kind of measurement; never coin
-   a new name for an existing type). Check with `novelty.py --type <t>
-   --archive <a>`. If the type already exists at any width, reject, unless
-   you can state a measured statistical difference a compressor would care
-   about; then approve with `breadth_override=true` and `measured_difference`,
-   and the driver will hold the candidate for the user's sign-off. The driver
-   applies the rule mechanically to the keys you return.
+9. Breadth: assign the three descriptive breadth keys from
+   `novelty.py --vocabulary` (reuse an existing `measurement_type` when it is
+   the same kind of measurement). Breadth itself is measured on the bytes
+   after the build (criteria.md), so a near-copy of existing material costs a
+   full build and is then rejected. Reject candidates that are very likely to
+   be statistically redundant, e.g. another product from the same instrument
+   and archive as existing families.
 
 Approve when acceptance looks at least about even odds. Give each approval a
 priority from 1 (best: genuinely new material, clean source) to 5, and builder

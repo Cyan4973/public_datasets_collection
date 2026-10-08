@@ -45,6 +45,7 @@ import time
 import tomllib
 import uuid
 from pathlib import Path
+from urllib.parse import urlparse
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -60,6 +61,8 @@ REGISTRY_PATH = REPO_ROOT / "attempts" / "dataset_status.tsv"
 BREADTH_KEYS_PATH = PIPELINE_DIR / "breadth_keys.tsv"
 BREADTH_COLUMNS = ["dataset_id", "origin", "widths", "measurement_type", "instrument_line", "archive_collection", "other_types", "verdict"]
 COUNTED_VERDICTS = {"STRONG", "OK"}
+ZLSIM = [sys.executable, "tools/autocollect/zlsim.py"]
+ZLSIM_ENV = {"ZLSIM_PARETO_TIMEOUT_S": "600"}
 # Bare multi-tenant hosts are not one archive collection; the per-archive cap skips them.
 MULTI_TENANT_HOSTS = {
     "zenodo.org", "figshare.com", "github.com", "raw.githubusercontent.com", "huggingface.co", "s3.amazonaws.com",
@@ -448,27 +451,20 @@ def append_breadth(row: dict) -> None:
     write_atomic(BREADTH_KEYS_PATH, "\n".join(lines) + "\n")
 
 
-def breadth_matches(measurement_type: str, exclude: str = "") -> list[str]:
-    """Families of the same measurement type at any width, baseline included."""
-    key = measurement_type.strip().lower()
-    if not key or key == "-":
-        return []
-    hits = []
-    for row in load_breadth():
-        if row["dataset_id"] == exclude:
-            continue
-        types = {row["measurement_type"].strip().lower()} | {t.strip().lower() for t in row.get("other_types", "").split(",") if t.strip() not in ("", "-")}
-        if key in types:
-            hits.append(row["dataset_id"])
-    return hits
+def url_archive(url: str) -> str:
+    host = urlparse(url.strip()).netloc.lower().split("@")[-1].split(":")[0]
+    return host[4:] if host.startswith("www.") else host
 
 
-def archive_count(archive: str, exclude: str = "") -> int:
-    key = archive.strip().lower().rstrip("/")
-    if not key or key == "-" or key in MULTI_TENANT_HOSTS:
-        return 0
-    return sum(1 for row in load_breadth() if row["origin"] == "autocollect" and row["dataset_id"] != exclude
-               and row["archive_collection"].strip().lower().rstrip("/") == key)
+def recipe_archives(recipe_dir: Path) -> set[str]:
+    """Archive hosts of a recipe's declared resources (facts, not agent labels).
+    Bare multi-tenant hosts (Zenodo, GitHub, ...) are not one archive."""
+    try:
+        manifest = tomllib.loads((recipe_dir / "manifest.toml").read_text(encoding="utf-8"))
+    except (OSError, tomllib.TOMLDecodeError):
+        return set()
+    hosts = {url_archive(item.get("url", "")) for item in manifest.get("resources", []) if isinstance(item, dict)}
+    return {host for host in hosts if host and host not in MULTI_TENANT_HOSTS}
 
 
 def progress(counted_only: bool = True) -> dict[int, list[str]]:
@@ -628,11 +624,9 @@ SCREEN_SCHEMA = {
                     "measurement_type": STR,
                     "instrument_line": STR,
                     "archive_collection": STR,
-                    "breadth_override": {"type": "boolean"},
-                    "measured_difference": STR,
                 },
                 "required": ["candidate_id", "decision", "priority", "reason", "builder_notes", "measurement_type",
-                             "instrument_line", "archive_collection", "breadth_override", "measured_difference"],
+                             "instrument_line", "archive_collection"],
             },
         }
     },
@@ -663,8 +657,6 @@ JUDGE_SCHEMA = {
         "measurement_type": STR,
         "instrument_line": STR,
         "archive_collection": STR,
-        "breadth_override": {"type": "boolean"},
-        "measured_difference": STR,
         "summary": STR,
         "checks": {"type": "object", "properties": {check: STR for check in JUDGE_CHECKS}, "required": JUDGE_CHECKS},
         "repair_instructions": STR,
@@ -673,7 +665,7 @@ JUDGE_SCHEMA = {
         "report_markdown": STR,
     },
     "required": ["decision", "novelty_kind", "breadth_verdict", "measurement_type", "instrument_line", "archive_collection",
-                 "breadth_override", "measured_difference", "summary", "checks", "repair_instructions", "registry_reason",
+                 "summary", "checks", "repair_instructions", "registry_reason",
                  "retry_condition", "report_markdown"],
 }
 
@@ -814,7 +806,10 @@ def judge_prompt(row: dict, state: dict, cfg: Config, gate_warnings: list[str]) 
         f"Card: pipeline/cards/{cid}.md\n"
         f"Repair cycles used: {state.get('repair_cycles', 0)} of {cfg.max_repair_cycles}\n\n"
         f"The driver already re-ran build.sh and verify.sh from the current scripts and gate.py passed. Gate warnings:\n{warnings}\n\n"
-        f"Screener breadth keys: {json.dumps(state.get('breadth_keys', {}))}\n"
+        f"Measured breadth (zlsim, compression + features): verdict {(state.get('similarity') or {}).get('verdict')}; "
+        f"nearest per series: {json.dumps([{'series': s_.get('key'), 'nearest_distance': s_.get('nearest_distance'), 'mode_share': s_.get('mode_share'), 'closest': (s_.get('neighbors') or [None])[0]} for s_ in (state.get('similarity') or {}).get('series', [])])}\n"
+        f"Fill warnings (one value dominates the samples; justify or repair): {(state.get('similarity') or {}).get('fill_warnings', [])}\n"
+        f"Screener breadth keys (descriptive): {json.dumps(state.get('breadth_keys', {}))}\n"
         + (f"Breadth override APPROVED by the user: {state.get('breadth_approval_note', '')}\n" if state.get("breadth_approved") else "")
         + f"\nBuilder summary:\n{state.get('builder_summary', '(none)')}\n"
     )
@@ -871,7 +866,18 @@ def task_rebuild(cfg: Config, cid: str) -> dict:
         report = json.loads(gate.stdout)
     except json.JSONDecodeError:
         report = {"ok": False, "failures": [f"gate crashed: {one_line(gate.stderr, 800)}"], "warnings": []}
-    return {"kind": "rebuild", "cid": cid, "ok": bool(report.get("ok")), "steps": steps, "gate": report}
+    similarity = None
+    if report.get("ok"):
+        # Byte-level breadth: compression equivalence AND feature proximity (zlsim.py).
+        log_path = LOGS_DIR / cid / f"zlsim_gate.{stamp}.json"
+        sim = subprocess.run([*ZLSIM, "gate", f"staging/{cid}", "--jobs", "16"], cwd=REPO_ROOT, text=True, capture_output=True,
+                             env={**child_env(), **ZLSIM_ENV}, timeout=3 * 3600)
+        log_path.write_text(sim.stdout + sim.stderr, encoding="utf-8")
+        try:
+            similarity = json.loads(sim.stdout)
+        except json.JSONDecodeError:
+            similarity = {"verdict": "ERROR", "error": one_line(sim.stderr, 800)}
+    return {"kind": "rebuild", "cid": cid, "ok": bool(report.get("ok")), "steps": steps, "gate": report, "similarity": similarity}
 
 
 def task_agent(cfg: Config, kind: str, role: str, subject: str, prompt: str, schema: dict, payload: dict, session_id: str | None = None, resume: bool = False) -> dict:
@@ -1177,6 +1183,7 @@ class Driver:
             )
             state = load_state(cid)
             state["expected_download_bytes"] = int(candidate.get("est_download_bytes") or 0)
+            state["resource_urls"] = list(candidate.get("resource_urls") or [])
             add_event(state, "proposed", log=agent["log"])
             save_state(cid, state)
             known.add(cid)
@@ -1185,22 +1192,21 @@ class Driver:
         save_ledger(self.ledger)
         log(f"scout {width}-bit proposed {added} candidates (cost ${agent['cost']:.2f})")
 
-    def breadth_gate(self, cid: str, measurement_type: str, archive: str, override: bool, difference: str) -> tuple[str, str]:
-        """Mechanical breadth rule: a measurement type already collected at any
-        width (baseline included) is rejected unless the user approves an
-        override backed by a measured difference; a third family from the same
-        archive collection needs the user's sign-off."""
-        if load_state(cid).get("breadth_approved"):
+    def archive_gate(self, cid: str, archives: set[str]) -> tuple[str, str]:
+        """A third acceptance from the same archive host in this effort needs the
+        user's sign-off. Hosts come from declared resource URLs, not agent labels."""
+        if load_state(cid).get("breadth_approved") or not archives:
             return "ok", ""
-        prior = breadth_matches(measurement_type, exclude=cid)
-        if prior:
-            if override and difference.strip():
-                return "signoff", (f"breadth override requested: measurement_type {measurement_type} already collected "
-                                   f"({', '.join(prior[:6])}); claimed measured difference: {one_line(difference, 400)}")
-            return "reject", f"breadth: measurement_type {measurement_type} already collected ({', '.join(prior[:6])})"
-        count = archive_count(archive, exclude=cid)
-        if count >= self.cfg.max_per_archive:
-            return "signoff", f"archive cap: {count} families already accepted from {archive} in this effort"
+        accepted = [row["candidate_id"] for row in self.ledger if row["status"] == "accepted" and row["candidate_id"] != cid]
+        shared = {}
+        for other in accepted:
+            common = archives & recipe_archives(DATASETS_DIR / other)
+            for host in common:
+                shared.setdefault(host, []).append(other)
+        crowded = {host: ids for host, ids in shared.items() if len(ids) >= self.cfg.max_per_archive}
+        if crowded:
+            host, ids = next(iter(crowded.items()))
+            return "signoff", f"archive cap: {len(ids)} families already accepted from {host} ({', '.join(ids[:4])})"
         return "ok", ""
 
     def hold_for_signoff(self, cid: str, reason: str) -> None:
@@ -1231,12 +1237,10 @@ class Driver:
                 state["preexisting_data"] = any((DATA_ROOT / sub / cid).exists() for sub in DATA_SUBDIRS_PRUNABLE)
                 state["breadth_keys"] = {key: decision.get(key, "") for key in ("measurement_type", "instrument_line", "archive_collection")}
                 save_state(cid, state)
-                verdict, why = self.breadth_gate(cid, decision.get("measurement_type", ""), decision.get("archive_collection", ""),
-                                                 bool(decision.get("breadth_override")), decision.get("measured_difference", ""))
+                archives = {url_archive(url) for url in state.get("resource_urls", [])} - MULTI_TENANT_HOSTS - {""}
+                verdict, why = self.archive_gate(cid, archives)
                 self.set_status(cid, "queued", decision["reason"], priority=decision["priority"])
-                if verdict == "reject":
-                    self.set_status(cid, "screened_out", why)
-                elif verdict == "signoff":
+                if verdict == "signoff":
                     self.hold_for_signoff(cid, why)
             else:
                 save_state(cid, state)
@@ -1302,10 +1306,25 @@ class Driver:
         state["bytes"] = candidate_bytes(cid)
         add_event(state, "rebuild", ok=result["ok"])
         save_state(cid, state)
-        if result["ok"]:
-            self.set_status(cid, "ready_for_judge", "driver rebuild, verify and gate passed")
-        else:
+        if not result["ok"]:
             self.set_status(cid, "downloaded", "driver rebuild check failed")
+            return
+        similarity = result.get("similarity") or {"verdict": "ERROR", "error": "no similarity report"}
+        state["similarity"] = similarity
+        save_state(cid, state)
+        verdict = similarity.get("verdict")
+        if verdict == "WEAK":
+            matches = "; ".join(
+                f"{series['key'].split(':')[-1]} ~ {series['match']['key']} (distance {series['match']['distance']}, loss {series['match']['loss']:+.3f})"
+                for series in similarity.get("series", []) if series.get("match")
+            )
+            self.terminal(cid, "rejected",
+                          f"byte-level breadth: every primary series is compression- and feature-equivalent to an existing family: {matches}",
+                          "Retry only with material whose bytes differ measurably (zlsim.py gate) from the existing families.", None)
+        elif verdict == "ERROR":
+            self.set_status(cid, PAUSED, f"similarity gate failed: {one_line(similarity.get('error', ''), 300)}")
+        else:
+            self.set_status(cid, "ready_for_judge", f"driver rebuild, verify, gate and similarity ({verdict}) passed")
 
     def apply_judge(self, cid: str, agent: dict) -> None:
         state = load_state(cid)
@@ -1328,23 +1347,15 @@ class Driver:
             decision = "rejected"
             out["registry_reason"] = out.get("registry_reason") or "Judge labeled the material not new."
         if decision == "accept":
-            verdict, why = self.breadth_gate(cid, out.get("measurement_type", ""), out.get("archive_collection", ""),
-                                             bool(out.get("breadth_override")), out.get("measured_difference", ""))
+            verdict, why = self.archive_gate(cid, recipe_archives(STAGING_DIR / cid))
             if verdict == "signoff":
-                log(f"judge {cid}: accept held for breadth sign-off — {why}")
+                log(f"judge {cid}: accept held for archive sign-off — {why}")
                 self.hold_for_signoff(cid, why)
                 return
-            if verdict == "reject":
-                decision = "rejected"
-                out["registry_reason"] = f"{why}. Judge summary: {one_line(out.get('summary', ''), 400)}"
-                out["retry_condition"] = "Retry only with a measured statistical difference from the existing families and the user's sign-off."
-            elif breadth_matches(out.get("measurement_type", ""), exclude=cid):
-                # Approved override: same measurement type exists, so never STRONG or new_modality.
-                if out.get("breadth_verdict") == "STRONG":
-                    out["breadth_verdict"] = "OK"
-                if out.get("novelty_kind") == "new_modality":
-                    out["novelty_kind"] = "new_content_same_modality"
-                    self.row(cid)["novelty_kind"] = out["novelty_kind"]
+            # Breadth is measured on bytes (zlsim), not judged from names.
+            measured = (state.get("similarity") or {}).get("verdict")
+            if measured in COUNTED_VERDICTS:
+                out["breadth_verdict"] = measured
         log(f"judge {cid}: {decision} — {one_line(out.get('summary', ''), 300)}")
         if decision == "accept":
             self.promote(cid, out)
@@ -1422,6 +1433,7 @@ class Driver:
         if commit(paths, f"Add {name}\n\nAccepted by the autocollect judge ({row['novelty_kind'] or 'novelty unlabeled'}, breadth {verdict})."):
             self.terminal_this_run += 1
             sha = git("rev-parse", "--short", "HEAD").stdout.strip()
+            subprocess.run([*ZLSIM, "adopt", cid], cwd=REPO_ROOT, text=True, capture_output=True, check=False)
             have = len(progress()[int(width)])
             notify(self.cfg, f"autocollect accepted {cid} ({width}-bit, {row['novelty_kind']}, breadth {verdict}): {name}. "
                              f"{width}-bit progress {have}/{load_baseline()['target_new_per_width']}. Commit {sha}.")

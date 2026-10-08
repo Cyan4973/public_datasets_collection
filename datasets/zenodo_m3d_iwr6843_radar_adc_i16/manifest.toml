@@ -1,0 +1,78 @@
+manifest_version = 1
+dataset_id = "zenodo_m3d_iwr6843_radar_adc_i16"
+name = "M3D Motion TI IWR6843AOP 60 GHz FMCW Radar Raw ADC Captures (DCA1000 HSI) Int16"
+description = "Raw complex baseband IF ADC samples of a TI IWR6843AOP 60 GHz FMCW radar observing a person walking or doing squats, captured with a TI DCA1000 board. All 16 captures of Zenodo record 22811456 that use one exact chirp profile (64 complex samples, 4 RX, 3-TX TDM, 100 ms frames, 48 or 64 loops per frame). One native little-endian int16 sample per capture file, with the 64-byte HSI chirp headers removed."
+homepage = "https://zenodo.org/records/22811456"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Marinaro, G. M3D Motion - Millimeter-Wave Motion and Dynamics Dataset. Zenodo, 2026-09-17. https://zenodo.org/records/22811456 (concept record 21802511)."
+notes = "The Zenodo record metadata (API field metadata.license.id) declares cc-by-4.0 for the record; download.sh re-checks it on every run. Preserve author attribution and the record link."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Zenodo deposit by the author (VSB - Technical University of Ostrava). People appear only as mmWave radar reflections in raw IF samples; no images, audio, names or other identifying data."
+usage_notes = "Only the int16 ADC payloads are emitted; the session/capture ids and the author's legend label (for example 'one person walking') are kept in the sample index for provenance."
+
+[[origins]]
+id = "zenodo_22811456"
+name = "Zenodo record 22811456: M3D Motion - Millimeter-Wave Motion and Dynamics Dataset"
+url = "https://zenodo.org/records/22811456"
+type = "repository"
+version = "record 22811456 (published 2026-09-17; second version of concept 21802511, which also holds record 21802513 / dataset_260807.zip)"
+notes = "Record JSON https://zenodo.org/api/records/22811456. One file, dataset_260917.zip (3,712,631,577 bytes, md5 ce7e75179bcabac8fd3f934f75a863f4), holding 80 DCA1000 captures from 11 sessions with their conf_file.cfg, LogFile.csv, legend and notes."
+
+[[resources]]
+id = "m3d_capture_zip_members"
+origin = "zenodo_22811456"
+url = "https://zenodo.org/api/records/22811456/files/dataset_260917.zip/content"
+type = "range_extracted_zip_members"
+version = "dataset_260917.zip, central directory SHA-256 7038083082f33d9ba0e7dc2e1b82c35a07d6375ce6f3a74a4402eb3269064f4f (349 entries, offset 3,712,592,250, 39,305 bytes)"
+access = "Anonymous HTTP byte-range GETs: the last 64 KiB, one range per small metadata member (69 conf_file.cfg, 80 LogFile.csv and 9 session legends, 152,120 bytes), and one exact local-header-plus-DEFLATE range (+ up to 512 bytes slack) per selected capture. Every 206 Content-Range must match the request and the pinned archive size."
+size_bytes = 453565185
+sha256 = ""
+local_path = "downloads/zenodo_m3d_iwr6843_radar_adc_i16/ranges/"
+notes = "The outer archive is never downloaded whole. Zenodo publishes only a whole-archive MD5, so integrity is enforced by the pinned central-directory SHA-256 and each member's CRC-32/size (selection.tsv). size_bytes is the 16 capture range files (453,555,633 compressed member bytes plus local headers and slack); they inflate to 783,360,000 bytes (720,000 chirp records of 1,088 bytes)."
+
+[local_paths]
+downloads = "downloads/zenodo_m3d_iwr6843_radar_adc_i16/"
+filtered = "filtered/zenodo_m3d_iwr6843_radar_adc_i16/"
+index = "index/zenodo_m3d_iwr6843_radar_adc_i16/"
+samples = "samples/zenodo_m3d_iwr6843_radar_adc_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_m3d_iwr6843_radar_adc_i16/samples.jsonl"
+summary = "Range-extract the 16 IWR6843AOP DCA1000 captures recorded with the pinned chirp profile from dataset_260917.zip on Zenodo, validate ZIP/DEFLATE/CRC-32, the radar configuration, the DCA1000 log and every HSI chirp header, then drop the 64-byte headers and emit each capture's int16 I/Q payload stream as one little-endian sample."
+deterministic_notes = "Selection rule (scripts/m3d_tool.py derive, re-run by download.sh and compared byte for byte with the pinned selection.tsv): every capture datacard_record_hdr_0ADC_0.bin whose sibling conf_file.cfg contains exactly 'dfeDataOutputMode 1', 'channelCfg 15 7 0', 'adcCfg 2 1', 'adcbufCfg -1 0 1 1 1', 'profileCfg 0 61.2 60 17 50 657930 0 55.27 1 64 2000 2 1 36', exactly three chirpCfg lines '0 0 0 0 0 0 0 1', '1 1 0 0 0 0 0 2', '2 2 0 0 0 0 0 4', 'lvdsStreamCfg -1 1 1 1' and one frameCfg '0 2 L 0 100 1 0' (100 ms frames) with L in {48, 64}. Result: 260722/07 and 260729/00-06, 260730/00-04 (48 loops, 13 captures) and 260722/08-10 (64 loops, 3 captures). Excluded: 4 captures with the same chirp profile but 224 loops and 120 ms frames (260722/00-03, 862.8 MB, which would push the total above 1 GB), 11 captures without a conf_file.cfg (250529/08-11, 260720/01-04,06-08), and 49 captures in 5 other configurations (96-, 128- or 256-sample profiles, 2-TX chirping, 55 ms frames). Each selected capture's DCA1000 LogFile.csv must report 0 out-of-sequence and 0 zero-filled packets and exactly size/1088 received packets. Each member must inflate to exactly its central-directory size with the right CRC-32, its length must be a multiple of 1,088, and every 64-byte chirp header must equal the pinned header (hex dc0ada0cdc0ada0c300400000000000080072000040200020f0101008000 followed by 22 zero bytes and 12 bytes 0x0f). The headers carry no counter and are dropped. Samples are written in selection order, one per capture, with chirps in stored order. verify.sh re-derives every sample with an independent local-header parser and one-shot inflate, requires byte equality, recomputes min/max/SHA-256 and the full distinct-value count (>= 1000), and rejects samples with >= 1% all-zero chirps, > 5% zero values or full-scale clipping in both directions. It also checks index fields and manifest totals."
+
+[[series]]
+id = "m3d_iwr6843_hsi_adc_iq_i16"
+description = "Raw complex baseband IF ADC samples of a TI IWR6843AOP 60 GHz FMCW radar (4 RX, 3-TX TDM), one capture file of a person walking or doing squats per sample."
+semantic_meaning = "Signed 16-bit ADC codes of the dechirped (beat-frequency) IF signal: 64 complex samples per chirp at 2,000 ksps for each of 4 receive channels, for a 60 GHz-start chirp sweeping 55.27 MHz/us over a 50 us ramp. Chirps cycle TX0, TX1, TX2 and repeat 48 or 64 times per 100 ms frame. Captures last 17-33 s and hold 24,000 or 48,000 chirps. Each 1,024-byte chirp payload is 512 int16 values laid out RX0..RX3, each RX block holding 64 complex samples. With adcbufCfg sampleSwap = 1, every complex sample is stored as Q then I (Q in the low half-word) per TI's adcbufCfg documentation; the RX-block layout is also seen empirically, because the large transient values sit only at the last complex sample of each 128-value block. Probe values span about -4,031..3,960. Most values are small (|x| < 500, std ~10-50 per position), with a ramp-end transient of about -1,900 / +3,900 at the last complex sample of each RX block."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The DCA1000 writes the radar's LVDS/HSI stream as little-endian int16 ADC codes (adcCfg 2 1 = 16-bit, complex 1x). The emitted bytes are those codes unchanged, in stored order. Only the constant 64-byte HSI chirp header in front of every 1,024-byte payload is removed. Nothing is reordered, deinterleaved, converted or rescaled."
+source_resources = ["m3d_capture_zip_members"]
+source_format = "TI DCA1000 raw capture (datacard_record_hdr_0ADC_0.bin): 1,088-byte HSI chirp records (64-byte header + 1,024-byte payload), DEFLATE-compressed inside dataset_260917.zip"
+source_field = "HSI chirp payload: int16 complex IF ADC samples, 64 samples x 4 RX x (Q, I) per chirp"
+filtered_input_path = "filtered/zenodo_m3d_iwr6843_radar_adc_i16/ingest_stats.json"
+filtering = "Keep only the 16 captures of the pinned chirp profile at 100 ms frames (48 or 64 loops), as listed in selection.tsv. Their conf_file.cfg, DCA1000 log and legend are validated and kept only as index metadata. HSI headers (46,080,000 bytes in total, all identical) are validated and dropped."
+missing_value_policy = "Raw ADC codes have no missing-value sentinel. A DCA1000 log reporting out-of-sequence or zero-filled packets, a packet count other than size/1088, a CRC-32 or size mismatch, a length not divisible by 1,088, any HSI header differing from the pinned header, a cfg not matching the pinned profile, a constant sample, too few distinct values, >= 1% all-zero chirps or > 5% zero values are all fatal. Nothing is dropped, padded or imputed. Captures end on a packet-count limit (24,000 or 48,000 chirps), not on a frame boundary, and are kept as stored."
+conversion = "Range-GET the local header and DEFLATE data of each selected member, inflate with raw zlib, and check the exact compressed boundary, size and central-directory CRC-32. Split the stream into 1,088-byte records, check every header, and write the 1,024-byte payloads back to back as one raw little-endian int16 sample file per capture (24,000 chirps = 12,288,000 values or 48,000 chirps = 24,576,000 values)."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian int16 FMCW radar IF ADC stream"
+sample_geometry = "chirp_major_rx_complex_iq_stream"
+sample_rank = 1
+sample_axes = ["chirp x rx(4) x complex_sample(64) x (Q, I)"]
+natural_record_kind = "dca1000_raw_adc_capture_file"
+sample_count = 16
+total_size_bytes = 737280000
+output_path = "samples/zenodo_m3d_iwr6843_radar_adc_i16/m3d_iwr6843_hsi_adc_iq_i16/"

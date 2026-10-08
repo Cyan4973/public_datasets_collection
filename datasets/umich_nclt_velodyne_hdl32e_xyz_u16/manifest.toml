@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "umich_nclt_velodyne_hdl32e_xyz_u16"
+name = "UMich NCLT Velodyne HDL-32E Revolution Point Coordinates (x,y,z) Native Scaled UInt16"
+description = "Per-hit x, y, z coordinates of Velodyne HDL-32E LiDAR revolutions from the University of Michigan North Campus Long-Term (NCLT) Segway robot, session 2013-01-10, kept in the publisher's native uint16 5 mm offset-binary encoding: one N x 3 sample per published velodyne_sync file, every 5th of the 5,120 files in time order (1,024 samples, 46,219,538 hits, 277,317,228 bytes)."
+homepage = "http://robots.engin.umich.edu/nclt/"
+
+[license]
+name = "Open Database License 1.0 (database) + Database Contents License 1.0 (contents)"
+spdx = "ODbL-1.0"
+url = "https://opendatacommons.org/licenses/odbl/1-0/"
+citation = "Nicholas Carlevaris-Bianco, Arash K. Ushani, and Ryan M. Eustice. University of Michigan North Campus Long-Term Vision and Lidar Dataset. International Journal of Robotics Research, 35(9):1023-1035, 2016. http://robots.engin.umich.edu/nclt/"
+notes = "The NCLT page (http://robots.engin.umich.edu/nclt/index.html#license) states: 'The NCLT Dataset is made available under the Open Database License (available here). Any rights in individual contents of the database are licensed under the Database Contents License (available here). In short, this means that you are free to use this dataset, share, create derivative works, or adapt it, as long as you credit our work, offer any publically used adapted version of this dataset under the same license, and keep any redistribution of this dataset open. When using the NCLT Dataset, please credit our work by citing the paper above.' The links point to http://opendatacommons.org/licenses/odbl/1.0/ and http://opendatacommons.org/licenses/dbcl/1.0/. ODbL is share-alike: the derived sample files are an adapted database that must be credited to the NCLT authors and, if publicly used or redistributed, offered under ODbL 1.0 and kept open."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NCLT S3 bucket linked from the NCLT download table (object velodyne_data/2013-01-10_vel.tar.gz, Last-Modified 2022-09-27, multipart ETag \"3c9d1400e8ccec9c40bdd757221ad172-349\"). No mirrors."
+usage_notes = "Campus LiDAR geometry (buildings, trees, ground, parked cars, passers-by) as anonymous point coordinates only. No imagery, intensity, GPS position, or identifiers are emitted."
+
+[[origins]]
+id = "nclt"
+name = "University of Michigan North Campus Long-Term Vision and LIDAR Dataset (NCLT)"
+url = "http://robots.engin.umich.edu/nclt/"
+type = "website"
+notes = "Official dataset page: 27 Segway sessions (Jan 2012 to Apr 2013) with per-session tarballs in the public bucket nclt.perl.engin.umich.edu (us-east-2). Format reference: nclt.pdf section 7.3 and the publisher script python/read_vel_sync.py."
+
+[[resources]]
+id = "nclt_2013_01_10_vel_tar_gz"
+origin = "nclt"
+url = "https://s3.us-east-2.amazonaws.com/nclt.perl.engin.umich.edu/velodyne_data/2013-01-10_vel.tar.gz"
+type = "archive"
+version = "2013-01-10 session Velodyne tarball; Last-Modified Tue, 27 Sep 2022 11:37:44 GMT; S3 multipart ETag \"3c9d1400e8ccec9c40bdd757221ad172-349\" (349 parts of 8,388,608 bytes, confirmed with ?partNumber=1 and ?partNumber=349 HEAD requests)"
+access = "Anonymous HTTPS GET of the whole object (resumable curl -C -). The velodyne_sync members sit after the 2,771,041,792-byte velodyne_hits.bin member, so no byte range can reach them without the preceding gzip stream."
+size_bytes = 2926183916
+sha256 = "92118ba5dc8e197eb0dfd817a006b1acc20ff1efb2fa53be02f61d40d6438ccb"
+local_path = "downloads/umich_nclt_velodyne_hdl32e_xyz_u16/2013-01-10_vel.tar.gz"
+notes = "Gzip (GNU tar, ustar-GNU headers) of 2013-01-10/velodyne_hits.bin followed by 2013-01-10/velodyne_sync/<16-digit utime>.bin files (one per Ladybug3 image, 5 Hz, about 320 KB each). download.sh recomputes the multipart ETag and records SHA-256 in archive_receipt.json (pinned here from the 2026-10-06 download and re-checked by verify.sh), then streams gzip+tar to EOF (CRC32/ISIZE) and writes members.tsv. Realized scan: 4,609,914,880 uncompressed bytes; members are velodyne_hits.bin then 5,120 velodyne_sync files in ascending utime order (1357847238332442 to 1357848263017383, 1,024.7 s at 0.2 s spacing), 1,834,968,048 bytes and 229,371,006 hits; no other members; maximum code 37,848. Probe of the last 2 MiB (raw-inflate resync) showed sync members ...261417566.bin to ...263017383.bin of 316,576-331,320 bytes and 7,168 bytes of trailing tar zero padding; the gzip ISIZE trailer is 314,947,584 (uncompressed size mod 2^32)."
+
+[local_paths]
+downloads = "downloads/umich_nclt_velodyne_hdl32e_xyz_u16/"
+filtered = "filtered/umich_nclt_velodyne_hdl32e_xyz_u16/"
+index = "index/umich_nclt_velodyne_hdl32e_xyz_u16/"
+samples = "samples/umich_nclt_velodyne_hdl32e_xyz_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/umich_nclt_velodyne_hdl32e_xyz_u16/samples.jsonl"
+summary = "Download the pinned 2013-01-10 NCLT Velodyne tarball, stream it without extraction, select every 5th velodyne_sync revolution file in utime order, and copy the x, y, z uint16 fields of every 8-byte hit record into one N x 3 little-endian uint16 sample per revolution."
+deterministic_notes = "Selection: sort all velodyne_sync members by the utime in their file name and take ranks 0, 5, 10, ... (stride 5, i.e. one 0.1 s revolution per second of the 5 Hz image-synchronized stream). Selected revolutions with fewer than 1,000 hits are skipped and listed in filtered/.../build_stats.json; nothing is substituted. Validation: size + multipart ETag of the archive; gzip CRC32/ISIZE by reading to EOF; one velodyne_hits.bin of 2,771,041,792 bytes starting with the 4 x 0xAD9C packet magic; every sync member size is a multiple of 8 and every laser_id is 0..31 (download.sh); emitted codes must lie in the documented 0..40000 range and no sample or axis may be constant (build.sh and verify.sh). Index rows carry hit_count, sample_shape [N, 3], utime, sync_rank, source member, source and sample SHA-256, per-axis and overall min/max of the stored uint16 codes, and the count of z code 0 hits. verify.sh re-streams the archive, re-decodes the indexed members with independent code, re-derives the stride selection from its own member census, and checks inventory, hashes, stats and manifest totals. Realized: 5,120 sync files, stride 5, 1,024 selected, 0 skipped (the smallest sync file has 13,869 hits); 1,024 samples, 46,219,538 hits, 138,658,614 values, 277,317,228 bytes; hits per sample 13,869 to 178,951 (median 45,171; median 135,510 values); codes 1,959 to 37,120 (x 1,959-37,028, y 2,987-37,120, z 11,356-22,559); aggregate SHA-256 of samples in index order 735534d4e23b915f0431feb531cc07e1d5b1e864bfd1dc4da673cea9ebd5578a. Informational diagnostics (build_stats.json, index): max hits on one laser_id and azimuth wraps of that busiest laser; 10 samples (33 of 5,120 files) hold about three revolutions and 24 (135 files) show no wrap."
+
+[[series]]
+id = "nclt_velodyne_sync_xyz_u16"
+description = "Cartesian x, y, z codes of every hit in one NCLT velodyne_sync Velodyne HDL-32E revolution, Segway body frame, 5 mm offset-binary uint16."
+semantic_meaning = "Position of each laser return of one HDL-32E revolution (per the publisher, the 0.1 s preceding one Ladybug3 image; 33 of the 5,120 files hold about three revolutions), motion-compensated by the publisher for the Segway's egomotion and expressed in the Segway body frame (origin on the wheel axle, x forward, y right, z down), recorded on the University of Michigan North Campus on 2013-01-10. Metres = code x 0.005 - 100, so code 20000 is 0 m and the documented code range 0..40000 spans -100 m to +100 m."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The publisher stores each coordinate as a little-endian uint16 code on a 5 mm lattice offset by 100 m (nclt.pdf section 7.3; read_vel_sync.py converts with code * 0.005 - 100). The sample keeps those codes bit-exactly; no rescaling or rounding is done locally. Motion compensation and the body-frame transform were applied by the publisher before encoding, so this is the dataset's pinned per-revolution representation, not a local remap. The per-hit intensity (uint8) and laser_id (uint8) fields are dropped and not emitted."
+source_resources = ["nclt_2013_01_10_vel_tar_gz"]
+source_format = "NCLT velodyne_sync/<utime>.bin revolution file inside the gzip tar 2013-01-10_vel.tar.gz: packed 8-byte little-endian hit records (uint16 x, uint16 y, uint16 z, uint8 intensity, uint8 laser_id)"
+source_field = "per-hit x, y, z uint16 coordinate codes (bytes 0..5 of each 8-byte hit record)"
+filtered_input_path = "filtered/umich_nclt_velodyne_hdl32e_xyz_u16/build_stats.json"
+filtering = "Session 2013-01-10 only (the smallest of the 27 NCLT Velodyne tarballs). Every 5th of the 5,120 velodyne_sync files in sorted utime order, starting with the first (1,024 selected, one per second of the 5 Hz stream); files with fewer than 1,000 hits would be skipped and reported, and none was (minimum 13,869 hits). All hits of each selected revolution are kept in source order. velodyne_hits.bin (the raw per-packet sensor-frame stream), intensity, laser_id, Hokuyo scans and other sessions are not used."
+missing_value_policy = "The publisher omits laser shots with no return (the HDL-32E is mounted upside down, so many beams see sky), so hit counts vary per revolution. Hits that the sensor reported out of range are documented as set to (0, 0, 0) in the sensor frame before motion compensation, so after the body-frame transform they are not a fixed code; they are kept as published. Codes at the lattice floor would also be kept: the pre-download tail probe showed z code 0 on laser_id 15 and y codes 0 to 60 in unselected files near the end of the session, but no selected sample has any code below 1,959. Files holding more than one revolution (10 selected) and files without an azimuth wrap (24 selected) are kept as published. Nothing is filtered, clipped, or imputed. Fatal in build.sh and verify.sh: record framing not a multiple of 8 bytes, laser_id above 31, any code above 40000, a constant sample or axis, or a hash mismatch."
+conversion = "Stream the gzip tar; for each selected velodyne_sync member read N = size / 8 hit records and copy bytes 0..5 (x, y, z uint16 little-endian) of every record into an N x 3 point-major little-endian uint16 array, in source hit order. One sample file per revolution, named <utime>.bin."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw little-endian uint16 N x 3 point-coordinate code array (x, y, z interleaved per hit)"
+sample_geometry = "lidar_point_cloud_points_by_xyz"
+sample_rank = 2
+sample_axes = ["hit", "xyz_component"]
+natural_record_kind = "nclt_velodyne_sync_per_image_scan_file"
+sample_count = 1024
+total_size_bytes = 277317228
+output_path = "samples/umich_nclt_velodyne_hdl32e_xyz_u16/nclt_velodyne_sync_xyz_u16/"

@@ -410,3 +410,4 @@ fermi_gbm_tte_nai_photon_arrival_times_f64	autocollect	64	photon_event_times	fer
 orex_ola_l2_lidar_point_xyz_f64	autocollect	64	laser_range	osiris_rex_ola	sbnarchive.psi.edu/pds4/orex	-	OK
 pdebench_2d_cfd_turb_m1_density_f32	autocollect	32	sim_fluid_field	pdebench_solver	darus.uni-stuttgart.de	-	OK
 the_well_post_neutron_star_merger_density_f32	autocollect	32	sim_fluid_field	nubhlight_grmhd	huggingface.co/polymathic-ai	-	OK
+umich_nclt_velodyne_hdl32e_xyz_u16	autocollect	16	laser_range	velodyne_lidar	s3.us-east-2.amazonaws.com/nclt.perl.engin.umich.edu	-	OK

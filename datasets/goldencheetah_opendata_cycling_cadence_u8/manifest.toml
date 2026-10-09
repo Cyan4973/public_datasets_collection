@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "goldencheetah_opendata_cycling_cadence_u8"
+name = "GoldenCheetah OpenData Per-Second Cycling Pedalling Cadence UInt8"
+description = "Native integer pedalling cadence (rpm) from bike-computer cadence sensors on a 1 s time lattice, one uint8 sample per cycling activity, from 460 pinned athlete archives of the CC0 GoldenCheetah OpenData project (OSF 6hfpz)."
+homepage = "https://osf.io/6hfpz/"
+
+[license]
+name = "CC0 1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "GoldenCheetah OpenData Project, Open Science Framework, DOI 10.17605/OSF.IO/6HFPZ."
+notes = "The OSF API node https://api.osf.io/v2/nodes/6hfpz/ (public, 'GoldenCheetah OpenData Project') links node_license 563c1cf88c5e4a3877f9e96c, which https://api.osf.io/v2/licenses/563c1cf88c5e4a3877f9e96c/ names 'CC0 1.0 Universal'. The upstream README (github.com/GoldenCheetah/OpenData) states the data is entirely anonymised and that no personally identifiable information is stored or made available."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official OSF project storage, fetched via the osf.io/download/<file id>/ endpoints. Athletes are identified only by random UUIDs; the activity CSVs carry no GPS coordinates."
+usage_notes = "Only the cadence column of cycling activities is emitted. Power, heart rate, speed/distance, altitude, ride metrics and the ATHLETE demographics block (gender, year of birth) are never emitted, and the demographics are never read."
+
+[[origins]]
+id = "osf_6hfpz"
+name = "Open Science Framework project 6hfpz (GoldenCheetah OpenData)"
+url = "https://osf.io/6hfpz/"
+type = "repository"
+notes = "osfstorage root holds 6,613 athlete zips ('<athlete uuid>.zip', 115,614,412,283 bytes) plus an INDEX folder of summary CSVs (not used). They were listed on 2026-10-09 through the files API with sort=name and page[size]=100 (67 pages)."
+
+[[resources]]
+id = "athlete_zip_selection"
+origin = "osf_6hfpz"
+url = "https://osf.io/download/<osf_file_id>/"
+type = "archive"
+version = "OSF listing 2026-10-09; files last modified 2018-11..2021-12"
+access = "Public anonymous HTTPS. osf.io/download/<id>/ redirects to a short-lived signed storage URL, so the recipe always resolves through the osf.io/download endpoint."
+size_bytes = 2807759073
+sha256 = ""
+local_path = "downloads/goldencheetah_opendata_cycling_cadence_u8/zips/"
+notes = "460 athlete zips pinned in sources.tsv with OSF file id, size, SHA-256 and MD5. Selection: walk zips in ascending name order (names are random UUIDs), keep those of 100,000 to 20,000,000 bytes, and stop once the cumulative size reaches 2.8e9 bytes. scripts/select_sources.py implements the rule and discover.sh re-derives it."
+
+[local_paths]
+downloads = "downloads/goldencheetah_opendata_cycling_cadence_u8/"
+filtered = "filtered/goldencheetah_opendata_cycling_cadence_u8/"
+index = "index/goldencheetah_opendata_cycling_cadence_u8/"
+samples = "samples/goldencheetah_opendata_cycling_cadence_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/goldencheetah_opendata_cycling_cadence_u8/samples.jsonl"
+summary = "Download 460 pinned athlete zips and validate size, SHA-256, MD5 and zip structure. Match each activity CSV to its RIDES metadata entry and keep sport=='Bike' activities flagged as having cadence and recorded on a 1 s lattice. Drop overlapping same-athlete recordings and emit each remaining activity's complete integer cad column as uint8."
+deterministic_notes = "Athletes are processed in sources.tsv order and CSVs in sorted member-name order. Each CSV name (local start time) is matched to a RIDES 'date' (UTC) at a whole quarter-hour offset within ±14 h. If several entries qualify, the athlete's modal offset from unique matches breaks the tie; CSVs still ambiguous, and entries claimed by two CSVs, are skipped. Per-activity skips, in order: malformed rows, or any cad cell that is empty, non-integer or above 255 (nothing is rounded or imputed); then the time lattice (secs_not_integer, secs_not_strictly_increasing, secs_step_not_1s if fewer than 95% of steps are exactly 1 s); then fewer than 1,000 values, more than 90% zeros, fewer than 10 distinct values, or a nonzero value repeated for at least 300 consecutive rows (a held-value dropout plateau). GoldenCheetah exports each activity at the recording device's own interval (1 s, 0.5 s, smart-recording 1.26 s or 2-8 s, or with doubled or repeated-timestamp rows). Only activities on a strictly increasing integer 1 s lattice are kept: every secs cell is an integer, every step is at least 1, and at least 95% of steps are exactly 1 s. Remaining gaps over 1 s are recording pauses, kept as published. Same-athlete overlap rule: per athlete, the activities that pass every per-activity filter are ordered by RIDES UTC start (ties by CSV name). One is kept only if its start is at or after the latest end (UTC start + last secs) of that athlete's already-kept activities; otherwise it is skipped as overlapping_recording (dual-device recordings of one ride). The global byte-identical dedup is then applied in emitted order (athletes in sources.tsv order, chronological within an athlete). One pinned athlete zip (1293c64a-7388-4366-9a8c-3c7951ae61a8.zip) is skipped whole because its published RIDES JSON is syntactically invalid upstream (the SHA-256 matches OSF); any other unparseable RIDES JSON is fatal. verify.sh re-derives everything with an independent implementation (csv module, datetime matching and overlap, itertools) and compares byte for byte. The index carries auxiliary per-sample fields secs_last and secs_gap_count (steps over 1 s) for traceability; they are not series."
+
+[[series]]
+id = "gc_bike_cadence_rpm_u8"
+description = "Pedalling cadence (rpm) of one cycling activity recorded by a bike computer with a crank or pedal cadence sensor, on a 1 s time lattice."
+semantic_meaning = "Crank revolutions per minute at each row of a GoldenCheetah activity export on a 1 s lattice, in source row order (rows are consecutive seconds apart from recording pauses). 0 means coasting or stopped; typical pedalling sits at 60-120 rpm."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source CSV stores cadence as decimal integers in 0..255; values are copied exactly into uint8 with no scaling."
+source_resources = ["athlete_zip_selection"]
+source_format = "GoldenCheetah OpenData athlete zip: per-activity CSV (secs,km,power,hr,cad,alt) plus RIDES JSON"
+source_field = "cad column"
+filtered_input_path = "filtered/goldencheetah_opendata_cycling_cadence_u8/ingest_stats.json"
+filtering = "Keep activities whose matched RIDES entry has sport == 'Bike' and a 'C' as the 6th character of the 'data' presence flags. Other sports (Run cadence is in steps/min), VirtualRide and free-text sport labels are excluded. GoldenCheetah exports each activity at the recording device's own interval (1 s, 0.5 s, smart-recording 1.26 s or 2-8 s, or with doubled or repeated-timestamp rows). Only activities on a strictly increasing integer 1 s lattice are kept: every secs cell is an integer, every step is at least 1, and at least 95% of steps are exactly 1 s. Remaining gaps over 1 s are recording pauses, kept as published. Same-athlete overlap rule: per athlete, the activities that pass every per-activity filter are ordered by RIDES UTC start (ties by CSV name). One is kept only if its start is at or after the latest end (UTC start + last secs) of that athlete's already-kept activities; otherwise it is skipped as overlapping_recording (dual-device recordings of one ride). The global byte-identical dedup is then applied in emitted order (athletes in sources.tsv order, chronological within an athlete). The other skip rules are in processing.deterministic_notes. Skip counts per reason and per athlete are written to ingest_stats.json."
+missing_value_policy = "No values are dropped within an activity and none are imputed, rounded or resampled. An activity is dropped whole if any row is malformed or any cad cell is empty, non-integer (GoldenCheetah interpolated fractional values such as 82.5) or above 255. It is also dropped if it is off the 1 s lattice (non-integer secs, zero or backward secs steps, or fewer than 95% one-second steps), fails the degeneracy rules (fewer than 1,000 values, more than 90% zeros, fewer than 10 distinct values, or a nonzero plateau of at least 300 rows), or overlaps an earlier kept recording of the same athlete. Recording pauses (secs steps over 1) are kept as published, with no gap filling."
+conversion = "Decode the CSV as UTF-8, read column 5 (cad) of each data row as a base-10 unsigned integer, and write the values as raw uint8 in row order. One file per activity is written to samples/<id>/gc_bike_cadence_rpm_u8/<athlete uuid>__<activity csv stem>.bin."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 cadence array"
+sample_geometry = "activity_time_series_1d"
+sample_rank = 1
+sample_axes = ["activity_second"]
+natural_record_kind = "goldencheetah_cycling_activity_cadence_series"
+sample_count = 19108
+total_size_bytes = 94052531
+output_path = "samples/goldencheetah_opendata_cycling_cadence_u8/gc_bike_cadence_rpm_u8/"

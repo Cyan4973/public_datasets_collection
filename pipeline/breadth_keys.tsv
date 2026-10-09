@@ -480,3 +480,4 @@ nims_mdr_phonondb_displacement_forces_f64	autocollect	64	dft_supercell_forces	va
 goldencheetah_opendata_cycling_cadence_u8	autocollect	8	exercise_cadence	bike_computer_cadence_sensor	osf.io/6hfpz (GoldenCheetah OpenData)	-	OK
 hutubs_measured_hrir_f64	autocollect	64	head_related_impulse_response	tu_berlin_anechoic_hrtf_rig	sofacoustics.org/hutubs	-	OK
 gazebase_eyelink1000_gaze_position_f64	autocollect	64	eye_gaze_position	sr_research_eyelink_1000	figshare.com/GazeBase	-	OK
+nasa_heliocloud_trace_171_euv_frames_i16	autocollect	16	raw_space_frame	TRACE EUV telescope CCD (171 Å)	gov-nasa-hdrl-data1.s3.amazonaws.com/sdac	-	OK

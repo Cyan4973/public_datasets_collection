@@ -1,0 +1,102 @@
+manifest_version = 1
+dataset_id = "nasa_heliocloud_trace_171_euv_frames_i16"
+name = "TRACE 171 A Full-Frame 1024x1024 EUV Images from Near-Lossless Onboard-JPEG Programs, 1998 (int16, HelioCloud SDAC)"
+description = "Whole 1024 x 1024 int16 images of the Sun in the Fe IX/X 171 A passband from NASA's TRACE telescope (amplifier A, unsummed, full CCD, 0.5 arcsec pixels), April-October 1998, as archived by SDAC in NASA GSFC HelioCloud after trace_prep dark subtraction and flat-fielding; restricted to frame programs that used the near-lossless onboard JPEG table (FRM_NAM allowlist, confirmed by a per-frame ringing test) and to frames with no empty near-zero histogram bin."
+homepage = "https://sdowww.lmsal.com/TRACE/"
+
+[license]
+name = "TRACE open data policy; NASA SMD Open Scientific Data Policy"
+spdx = "LicenseRef-NASA-SMD-Open-Data"
+url = "https://sdowww.lmsal.com/TRACE/Data/DataArchive/dapolicy.htm"
+citation = "TRACE (Transition Region and Coronal Explorer) was a NASA Small Explorer mission built and operated by the Lockheed Martin Solar and Astrophysics Laboratory. Handy et al. 1999, Solar Physics 187, 229 (The Transition Region and Coronal Explorer). Data served by the NASA GSFC HelioCloud (gov-nasa-hdrl-data1, SDAC holdings)."
+notes = "TRACE data policy page (https://sdowww.lmsal.com/TRACE/Data/DataArchive/dapolicy.htm, HTTP 200 on 2026-10-09; download.sh re-fetches it best effort into downloads/<id>/evidence/trace_dapolicy.htm): 'One feature of the TRACE mission is the open data policy. ... Our fundamental data policy is simple: All TRACE data will be equally available to everyone on the World Wide Web.' The page names no formal license, copyright or attribution clause. NASA basis, as for the accepted nasa_heliocloud_iris_l1_fuv_frames_i16 recipe in the same bucket: the NASA SMD Science Information Policy (https://science.nasa.gov/researchers/science-data/science-information-policy/, fetched best effort by download.sh) states that 'NASA holds this information, including publications, data, and software, as a public trust' and that SMD-funded mission data be made publicly available. TRACE was an SMD Heliophysics Small Explorer; these files are its archived science images served anonymously by NASA GSFC's HelioCloud bucket (no README or license object exists under sdac/trace/). These are open-data policies, not a named license. NASA guidance forbids attributing outputs to NASA or using NASA insignia; cite the mission as above."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NASA GSFC HelioCloud public bucket (anonymous HTTPS, not requester-pays), SDAC TRACE holdings; images of the solar corona."
+usage_notes = "Samples contain only calibrated CCD counts of the Sun in extreme ultraviolet. No personal, human-subject or Earth-observation data. Do not attribute model outputs to NASA or use NASA insignia."
+
+[[origins]]
+id = "nasa_gsfc_heliocloud"
+name = "NASA GSFC HelioCloud public bucket (SDAC TRACE holdings)"
+url = "https://gov-nasa-hdrl-data1.s3.amazonaws.com/sdac/trace/"
+type = "bucket"
+notes = "Prefixes YYYY/MM/DD/ (1998-2010) holding one FITS file per image named trac_<wave>_a<SOU_AREA>_<YYYYMMDD_HHMMSS>.fts (the a0/a1/a2 suffix equals the header SOU_AREA source-area index; a2 files are 768x768 extracts), indices/ (yearly CSVs of start,stop,s3key,filesize only, with corrupt timestamps and no compression metadata; never fetched) and weekly/. Objects are single-part (ETag = content MD5)."
+
+[[resources]]
+id = "trace_171_full_frame_pool_1998"
+origin = "nasa_gsfc_heliocloud"
+url = "https://gov-nasa-hdrl-data1.s3.amazonaws.com/sdac/trace/1998/"
+type = "file"
+version = "95 objects pinned in sources.tsv (S3 Last-Modified 2024-02-22..23; resolved 2026-10-09 by discover.sh, repair cycle 1)"
+access = "Anonymous HTTPS GET of each pinned key; download.sh enforces exact size (2,105,280 bytes), MD5 = pinned ETag, the FITS header regime, filename/DATE_OBS agreement, pinned header facts and zero data padding, and records each SHA-256 in download_plan.tsv, which build.py and verify.py re-check."
+size_bytes = 200001600
+sha256 = "05fc1e62bee34aa4a5484975f41101b17eab5bdff53318efb26142cb5250129a"
+local_path = "downloads/nasa_heliocloud_trace_171_euv_frames_i16/fits/"
+notes = "The resource sha256 above identifies the sources.tsv inventory. Every pinned frame already passes the header regime including the near-lossless FRM_NAM allowlist; build.py applies the data-level checks (ringing, empty near-zero bins, degeneracy) and keeps the frames that pass (see series.filtering). Per-file pins (key, size, MD5/ETag, Last-Modified, DATE_OBS, FRM_NAM, OBS_PROG, SHT_MDUR, IMG_MIN/MAX/AVG, XCEN/YCEN, HISTORY signature) live in sources.tsv."
+
+[[resources]]
+id = "trace_data_policy_page"
+origin = "nasa_gsfc_heliocloud"
+url = "https://sdowww.lmsal.com/TRACE/Data/DataArchive/dapolicy.htm"
+type = "file"
+version = "fetched at download time (best effort)"
+access = "Anonymous HTTPS; a transport failure only warns. download.sh logs whether the phrase 'equally available to everyone' is present."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/nasa_heliocloud_trace_171_euv_frames_i16/evidence/trace_dapolicy.htm"
+notes = "Rights evidence only; not a sample source."
+
+[[resources]]
+id = "nasa_smd_policy_page"
+origin = "nasa_gsfc_heliocloud"
+url = "https://science.nasa.gov/researchers/science-data/science-information-policy/"
+type = "file"
+version = "fetched at download time (best effort)"
+access = "Anonymous HTTPS; a transport failure only warns. download.sh logs whether the phrase 'public trust' is present."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/nasa_heliocloud_trace_171_euv_frames_i16/evidence/nasa_smd_science_information_policy.html"
+notes = "Rights evidence only; not a sample source. The page is dynamic."
+
+[local_paths]
+downloads = "downloads/nasa_heliocloud_trace_171_euv_frames_i16/"
+filtered = "filtered/nasa_heliocloud_trace_171_euv_frames_i16/"
+index = "index/nasa_heliocloud_trace_171_euv_frames_i16/"
+samples = "samples/nasa_heliocloud_trace_171_euv_frames_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_heliocloud_trace_171_euv_frames_i16/samples.jsonl"
+summary = "Fetch 95 pinned TRACE 171 A full-frame FITS files from 1998-04-20..1998-10-31 whose frame program is a near-lossless onboard-JPEG program, check pins and the header regime, decode each 1024 x 1024 big-endian int16 image, keep the frames without lossy-JPEG ringing around spikes, without an empty near-zero histogram bin and not degenerate, and write each kept frame whole as little-endian int16."
+deterministic_notes = "discover.sh (authoring only) listed every day prefix sdac/trace/1998/MM/DD/trac_171____a0_ from 1998-04-20 to 1998-10-31 (195 days, 80,616 keys, 77,518 of 2,105,280 bytes) and range-read the 5,760-byte header of up to 32 evenly spaced frames per day plus every frame of the 00 UT hour, where the disk-centre synoptic program runs (8,234 headers). Header regime (222 pass): SIMPLE, BITPIX 16, NAXIS 2, NAXIS1 = NAXIS2 = 1024, TELESCOP/INSTRUME TRACE, WAVE_LEN 171, AMP A, SUM_CCDX = SUM_CCDY = BIN_CCD = TBIN_CCD = 1, SOU_AREA 0, SRI_LLEX = SRI_LLEY = 0, PERCENTD 100, SHT_MDUR >= 1 s, IMG_MAX >= 300, no BZERO/BSCALE/BLANK/PBADPIX, a HISTORY of exactly [optional 'trace_prep Replaced N saturated pixels with value > 4100'], 'tr_dark_sub VERSION: 2.10', 'tr_flat_sub VERSION: 1.60', 'trace_wave2point', and FRM_NAM in the near-lossless allowlist (contains 'lossless', ends in 'Q0', or equals cjs.caldc171) or the conditional program ras.jpeg171.aecm4. Passes were kept greedily in time order at least 3 h apart and at most 2 per day: 95 frames on 80 days. build.sh runs scripts/selftest.py (synthetic FITS through both the build and the independent verify path: clean frame accepted; ringing, 1.5x-scaled lattice, 8x8-blocky and degenerate frames rejected; program-class rules; nine header-regime violations rejected), then build.py re-checks size, MD5, SHA-256, header regime and pins, measures every pinned frame and writes filtered/<id>/pool_metrics.tsv and ingest_stats.json. Data checks: (1) ringing: over aligned 8x8 cells with rows/columns 8..1015, spike cells have median (mean of the 32nd and 33rd sorted values) < 60 DN and max > 400 DN; D = median over spike cells of (cell min - cell median) must be > -15 DN when there are >= 5 spike cells (>= 20 required for the conditional program); an allowlisted frame with < 5 spike cells must have no pixel < -15; (2) lattice: for k in -60..1500, a bin whose two neighbours both hold >= 300 pixels must hold >= half the smaller neighbour, and >= 8 bins must be tested; (3) JPEG cell edges (secondary): mean |difference| across x%8 = 7 and y%8 = 7 boundaries over the mean inside cells within 0.80-1.06 on both axes; (4) dominant value <= 15%, zeros <= 15%, >= 256 distinct values, no constant row or column. verify.py re-implements header walking, the allowlist, struct decoding and all metrics, re-derives the kept set over every pinned frame and requires it to equal the index, byte-compares every sample, and checks index fields (including n_spike_cells, ring_d, lattice_worst_k/ratio), SHA-256s, uniqueness, manifest totals and scope (>= 20 samples, >= 5 months)."
+
+[[series]]
+id = "trace_171_full_frame_dn_i16"
+description = "Whole TRACE 171 A EUV images: 1024 x 1024 int16 calibrated counts per exposure, full unsummed CCD read through amplifier A, 1998-04-20..1998-10-31."
+semantic_meaning = "Dark-subtracted, flat-fielded CCD data numbers of the Sun seen through the TRACE 171 A (Fe IX/X, ~1 MK) EUV passband at 0.5 arcsec per pixel, one exposure (2.9-78 s) per frame, as written by trace_prep (tr_dark_sub 2.10, tr_flat_sub 1.60) into the SDAC archive in 2007. Two thirds of the kept frames are disk-centre calibration or synoptic pointings (cjs.caldc171), the rest focus, bulletproof (pointing/stability), sub-pixel and tracking sequences. Off-limb and quiet regions sit near 0 with read noise (negative values to -90 occur after dark subtraction); active regions and loops reach thousands of DN (max 5,110 after flat division)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The FITS image is BITPIX 16 with no scaling keywords; values are copied unchanged. It is not level-0 raw DN: trace_prep subtracted the dark pedestal/current and divided by a corrected flat field that carries a time-dependent gain g, rounding to integers. Inside the window g is close to but not exactly 1: kept frames show a partial near-zero histogram dip (lattice_worst_k/lattice_worst_ratio in the index) that drifts from |k| ~ 30 in early May (g ~ 1.015) through ~14 in June and ~8 in August to ~5-6 in October (g ~ 1.09); frames where that bin falls below half its neighbours are dropped, and from November 1998 on g grows further (~1.25 mid 1999, ~1.45-1.5 from 2000, ~1.9 in 2003) and leaves periodic empty bins. TRACE compressed every image onboard with a modified 12-bit JPEG, either near-lossless (error <= 1 count) or with lossy tables; the table is fixed by the frame program named in FRM_NAM. Only near-lossless programs are kept: lossy programs show undershoot ringing around particle spikes (D = -23 to -82 DN on the 1998 pool) whereas near-lossless programs give -5 to -11 DN. The 8x8 cell-edge ratio cannot detect this ringing (lossy frames measure 0.93-1.0) and is only a secondary check."
+source_resources = ["trace_171_full_frame_pool_1998"]
+source_format = "FITS primary image (two 2880-byte header blocks, BITPIX 16, NAXIS1 = NAXIS2 = 1024), SDAC TRACE trac_171____a0_*.fts"
+source_field = "Primary HDU image array (1024 x 1024 big-endian int16 pixels, row-major from the bottom CCD row)"
+filtered_input_path = "filtered/nasa_heliocloud_trace_171_euv_frames_i16/pool_metrics.tsv"
+filtering = "Pinned: 95 header-regime frames from near-lossless frame programs (see processing.deterministic_notes). Kept: 72 frames on 65 days (April 7, May 13, June 10, July 14, August 17, September 8, October 3). By program: cjs.caldc171 48 (CJS.scene.caldiskcenter 29, CJS.scene.CDSsynoptic 19), com.losslessdefaecfull_171 9 (STD.focus_euv), cjs.stdfull171Q0 8 (STD.fdm.bulletproof), com.losslesslastaecfull_171 6 (TDT.uv_subpixel 5, STD.flats_171 1), cjs.stdaecfull171Q0 1. Kept frames: ringing D -11 to -5 DN, 56-653 tested lattice bins with worst bin ratio >= 0.516 (the partial near-zero dip at |k| = 6 measures 0.60-0.79 in September-October kept frames), cell-edge ratios 0.948-1.038, 263-2,875 distinct values, dominant value <= 7.8%. Rejected (first reason): 9 for an empty near-zero bin (k = 42-45 on 1998-04-26..28, k = 6 from 1998-09-28 on: the gain drift), 12 degenerate (11 with < 256 distinct values, mostly short disk-centre synoptic exposures; 1 with 16% zeros), 2 ringing-untestable (a caldc171 frame with no spike cells and one pixel < -15; the conditional ras.jpeg171.aecm4 frame with only 18 spike cells). No kept frame comes from a lossy program; excluded programs include cjs.stdaecfull171, cjs.stdfull171, ras.aecfb171*, cck.FeX.* and the aecoffset programs (all D <= -23 DN on the first-cycle pool). Also excluded: other wavelengths, binned/summed, sub-area (SOU_AREA != 0) and partial (PERCENTD < 100) frames, exposures under 1 s, non-canonical processing histories and frames after 1998-10-31."
+missing_value_policy = "Frames are kept whole and uncropped; PERCENTD = 100 is required, and frames whose HISTORY reports missing-pixel filling are excluded, so no fill values are expected. Saturated pixels replaced by trace_prep (logged in HISTORY) are kept as written. Negative values are genuine dark-subtracted noise. Any pin, header-regime, layout or padding problem in a pinned file is fatal; data-regime failures drop the frame from the selection and are listed in pool_metrics.tsv."
+conversion = "Walk the FITS header to END (data offset 5,760), read 1,048,576 big-endian int16 pixels, byteswap to little-endian and write the 1024 x 1024 frame row-major (x fastest, FITS order) to samples/nasa_heliocloud_trace_171_euv_frames_i16/trace_171_full_frame_dn_i16/<source stem>.i16; one sample per FITS file, no scaling, cropping or tiling."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian int16 CCD frame"
+sample_geometry = "fixed_1024x1024_trace_euv_frame"
+sample_rank = 2
+sample_shape = [1024, 1024]
+sample_axes = ["ccd_row_y", "ccd_column_x"]
+natural_record_kind = "trace_171_full_frame_exposure"
+sample_count = 72
+total_size_bytes = 150994944
+output_path = "samples/nasa_heliocloud_trace_171_euv_frames_i16/trace_171_full_frame_dn_i16/"

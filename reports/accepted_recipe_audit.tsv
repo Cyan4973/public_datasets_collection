@@ -383,6 +383,7 @@ figshare_rousettus_vocalizations_i16	ok	184216832	368433664	400	369488	738976	0	
 cifar10_pixels_u8	ok	184320000	184320000	180000	1024	1024	0	0	0	1	none	none
 nasa_heasarc_batse_cont_counts_i16	ok	191592448	383184896	50	3966976	7933952	0	0	0	1	none	none
 uci_dorothea_binary_molecular_features_u8	ok	195000000	195000000	1950	100000	100000	0	0	0	1	none	none
+cmip6_cesm2_historical_daily_precip_f32	ok	201830400	807321600	3650	55296	221184	0	0	0	1	none	none
 mpc_aster_l1t_tir_u16	ok	202936125	405872250	51	3902080	7804160	0	0	0	1	none	none
 physionet_charis_icp_i16	ok	204043652	408087304	9	17095224	34190448	0	0	0	1	none	none
 zenodo_mimii_valve_mic_array_i16	ok	204800000	409600000	160	1280000	2560000	0	0	0	1	none	none

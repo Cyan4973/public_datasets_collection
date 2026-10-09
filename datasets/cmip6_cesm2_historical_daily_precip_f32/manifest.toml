@@ -1,0 +1,96 @@
+manifest_version = 1
+dataset_id = "cmip6_cesm2_historical_daily_precip_f32"
+name = "CMIP6 NCAR CESM2 Historical r1i1p1f1 Daily Global Precipitation Flux Fields (1940-1949), Native Float32"
+description = "All 3650 daily-mean global precipitation-flux fields (pr, kg m-2 s-1) of the CMIP6 CESM2 historical run, member r1i1p1f1, for the pinned 1940-1949 decade file (dataset version v20190401). They are decoded from NetCDF4 with a pure-stdlib HDF5 reader into one native little-endian float32 192x288 (lat x lon) field per model day."
+homepage = "https://registry.opendata.aws/cmip6/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International (CESM2 CMIP6 output; originally published under CC BY-SA 4.0)"
+spdx = "CC-BY-4.0"
+url = "https://wcrp-cmip.github.io/CMIP6_CVs/docs/CMIP6_source_id_licenses.html"
+citation = "Danabasoglu, Gokhan (2019). NCAR CESM2 model output prepared for CMIP6 CMIP historical. Version 20190401. Earth System Grid Federation. https://doi.org/10.22033/ESGF/CMIP6.7627"
+notes = "The official WCRP CMIP6 source_id license table lists source_id CESM2 (institution NCAR) with license 'CC BY 4.0' and history '2019-02-18: initially published under CC BY-SA 4.0; 2022-06-16: relaxed to CC BY 4.0'. download.sh fetches that page and checks the row. The PCMDI CMIP6 Terms of Use (TermsOfUse6-2.html) state that as of October 2022 all CMIP6 modeling groups relaxed their licenses to CC BY 4.0. The DataCite record for DOI 10.22033/ESGF/CMIP6.7627 also lists 'Creative Commons Attribution 4.0 International'. The file itself (written 2019-03-13, before the relaxation) still carries the global attribute 'CMIP6 model data produced by <The National Center for Atmospheric Research> is licensed under a Creative Commons Attribution-[]ShareAlike 4.0 International License'. build and verify check that this attribute is present. Under either reading the data is openly licensed with attribution. If the embedded CC BY-SA 4.0 notice is honored conservatively, derivatives must carry the same license (share-alike), which this repository already accepts for other recipes. Keep the NCAR attribution, the dataset citation above and the CMIP6 Terms of Use acknowledgement."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official CMIP6 model output published through the Earth System Grid Federation and mirrored unchanged (same tracking_id hdl:21.14100/c9b7ee29-8ac2-46d4-9e5c-b309b1ef0999) in the anonymous esgf-world S3 bucket listed on the AWS Registry of Open Data (cmip6). Simulated geophysical fields; no personal content."
+usage_notes = "Openly licensed climate-model output suitable for numeric compression training, with NCAR/CMIP6 attribution retained."
+
+[[origins]]
+id = "esgf_world_s3"
+name = "ESGF CMIP6 NetCDF mirror, s3://esgf-world (AWS Registry of Open Data: cmip6)"
+url = "https://esgf-world.s3.amazonaws.com/"
+type = "bucket"
+notes = "Anonymous HTTPS access to the public us-east-2 bucket. No credentials or requester-pays. ListObjectsV2 for prefix CMIP6/CMIP/NCAR/CESM2/historical/r1i1p1f1/day/pr/ shows 17 v20190401 files: 16 decades from 1850 to 2009 (about 663 MB each) plus 2010-2014."
+
+[[origins]]
+id = "wcrp_cmip6_cvs"
+name = "WCRP CMIP6 controlled vocabularies: source_id license table"
+url = "https://wcrp-cmip.github.io/CMIP6_CVs/docs/CMIP6_source_id_licenses.html"
+type = "website"
+notes = "Authoritative per-model license status for CMIP6 output."
+
+[[resources]]
+id = "pr_day_1940_1949"
+origin = "esgf_world_s3"
+url = "https://esgf-world.s3.amazonaws.com/CMIP6/CMIP/NCAR/CESM2/historical/r1i1p1f1/day/pr/gn/v20190401/pr_day_CESM2_historical_r1i1p1f1_gn_19400101-19491231.nc"
+type = "file"
+version = "CMIP6 dataset version v20190401; tracking_id hdl:21.14100/c9b7ee29-8ac2-46d4-9e5c-b309b1ef0999; creation_date 2019-03-13T15:01:21Z"
+access = "One anonymous HTTPS GET, resumable (curl -C -), stall-bounded."
+size_bytes = 663390696
+sha256 = "fce6d860a9e01b259b9534150392681c0766c6e904814737ad9ea657e36addba"
+local_path = "downloads/cmip6_cesm2_historical_daily_precip_f32/pr_day_CESM2_historical_r1i1p1f1_gn_19400101-19491231.nc"
+notes = "Pinned by exact size and S3 multipart ETag accfa4a438ca6393474430698d9489dd-80. download.sh recomputes the 8 MiB-part multipart MD5 locally and requires it to equal the ETag, and checks the pinned SHA-256. It also runs a structural decode check (cesm2_pr.py check-source). The other decades, members, versions and variables are deliberately excluded."
+
+[[resources]]
+id = "license_docs"
+origin = "wcrp_cmip6_cvs"
+url = "https://wcrp-cmip.github.io/CMIP6_CVs/docs/CMIP6_source_id_licenses.html ; https://pcmdi.llnl.gov/CMIP6/TermsOfUse/TermsOfUse6-2.html ; https://raw.githubusercontent.com/awslabs/open-data-registry/main/datasets/cmip6.yaml"
+type = "file"
+version = "fetched on every download run"
+access = "Three small anonymous HTTPS GETs."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/cmip6_cesm2_historical_daily_precip_f32/docs/"
+notes = "Evidence only (about 90 KB in total, not pinned by hash because the pages are maintained documents). download.sh requires that the CESM2 row of the license table reads CC BY 4.0 with the relaxation history, that the Terms of Use page contains the CC BY 4.0 / October 2022 relaxation text, and that the AWS registry entry still lists the esgf-world bucket."
+
+[local_paths]
+downloads = "downloads/cmip6_cesm2_historical_daily_precip_f32/"
+filtered = "filtered/cmip6_cesm2_historical_daily_precip_f32/"
+index = "index/cmip6_cesm2_historical_daily_precip_f32/"
+samples = "samples/cmip6_cesm2_historical_daily_precip_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/cmip6_cesm2_historical_daily_precip_f32/samples.jsonl"
+summary = "Download the single pinned 1940-1949 CESM2 historical r1i1p1f1 daily pr NetCDF4 file, decode the pr variable with a pure-stdlib HDF5 reader (v1 B-tree chunk index, deflate + 4-byte unshuffle), and emit each of the 3650 daily 192x288 float32 fields unchanged as one raw little-endian sample."
+deterministic_notes = "Single pinned object (size + multipart-MD5 ETag). The HDF5 reader verifies the lookup3 checksum of every metadata block it touches (OHDR/OCHK object headers, fractal heap, v2 B-trees). Build and verify require: global attributes source_id CESM2, institution_id NCAR, experiment_id historical, activity_id CMIP, variant_label r1i1p1f1, variable_id pr, table_id day, frequency day, grid_label gn, mip_era CMIP6, and the pinned tracking_id. pr must be shape (3650,192,288), little-endian IEEE float32, chunked (1,192,288) with the pipeline shuffle(4)+deflate exactly, units kg m-2 s-1, standard_name precipitation_flux, cell_methods 'area: time: mean', and _FillValue/missing_value 1e20. The time axis must be days since 0001-01-01, noleap calendar, with time[i] = 707735 + i (1940-01-01 .. 1949-12-31 in the file's time coordinate) and time_bnds[i] = (time[i]-1, time[i]). lat must run from -90 to 90 (192 points) and lon from 0 to 358.75 in 1.25 degree steps. The chunk index must hold exactly one chunk per time step with filter mask 0. Samples are written in time order and named by the noleap date of the time coordinate. Build resolves pr through the name index; verify resolves it through the creation-order index, byte-compares every sample against a fresh decode, and checks 11 spot days with an independent per-element unshuffle. It also recomputes all statistics from bit patterns and sorted values and checks the manifest totals. A synthetic HDF5 self-test (scripts/selftest.py: superblock v0, shuffle+deflate chunks, 12 rejection cases) runs before build and verify. Floors: 3650 samples of 55,296 values each (median 55,296); 201,830,400 values; 807,321,600 bytes."
+
+[[series]]
+id = "pr_day_f32"
+description = "Daily-mean global precipitation flux from the CESM2 coupled climate model (CMIP6 historical, r1i1p1f1), 1940-1949."
+semantic_meaning = "Surface precipitation flux (liquid plus solid, large-scale plus convective) in kg m-2 s-1, averaged over one model day, on the CESM2 native 0.9x1.25 degree finite-volume lat-lon grid (192 latitudes from -90 to 90, 288 longitudes from 0 to 358.75 east). Values are the model's float32 output as published to CMIP6."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The NetCDF4 variable pr is stored as little-endian IEEE float32 (HDF5 floating-point class, size 4). The recipe inflates each chunk, reverses the 4-byte shuffle and writes the stored float32 values unchanged. There is no scaling, masking, regridding, thinning or remapping."
+source_resources = ["pr_day_1940_1949"]
+source_format = "NetCDF4/HDF5 (superblock v0, version-2 object headers); variable chunked one time step per chunk, shuffle+deflate, indexed by a version-1 B-tree"
+source_field = "pr (float32, dims time=3650 x lat=192 x lon=288)"
+filtered_input_path = "filtered/cmip6_cesm2_historical_daily_precip_f32/build_summary.json"
+filtering = "Keep all 3650 time steps of the one pinned decade file, and only its pr variable. No days are dropped. Excluded: other decades of the same run, other ensemble members, other models, experiments and variables, and coordinate and bounds variables (they are validated but not emitted)."
+missing_value_policy = "The source declares _FillValue = missing_value = 1e20. The CESM2 atmosphere has no masked cells, so none are expected. Any 1e20 sentinel, any value of magnitude 1e19 or more, any NaN or Inf, a field with fewer than 1000 distinct values or no positive value, a missing or duplicate chunk, a nonzero chunk filter mask, or a chunk that does not inflate to exactly 221,184 bytes is fatal in both build and verify. Exact zeros (about 1% of cells, for example dry subtropical cells) and any tiny negative values the model emits are genuine model output and are kept verbatim. Their counts are recorded per sample in the index (zero_values, negative_values)."
+conversion = "Resolve root link 'pr', read Dataspace, Datatype, Fill Value, Filter Pipeline and Layout v3 chunked (1,192,288,4). Walk the version-1 B-tree to get each chunk's address and stored size. zlib-inflate each chunk, reverse the HDF5 byte shuffle (element size 4) and write the 55,296 float32 values in stored row-major (lat, lon) order, one raw little-endian file per time step, named pr_day_<YYYYMMDD>.bin from the noleap date of time[i]. Index min/max are computed from the stored float32 values."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 precipitation-flux grid"
+sample_geometry = "192x288_cesm2_fv_0.9x1.25_lat_lon_grid"
+sample_rank = 2
+sample_axes = ["lat", "lon"]
+natural_record_kind = "cmip6_model_daily_mean_global_field_time_step"
+sample_count = 3650
+total_size_bytes = 807321600
+output_path = "samples/cmip6_cesm2_historical_daily_precip_f32/pr_day_f32/"

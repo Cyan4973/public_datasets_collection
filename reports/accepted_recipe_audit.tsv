@@ -269,6 +269,7 @@ zenodo_leconte_chirp_segy_f32	ok	31345093	125380372	6895	4332	17328	0	0	0	1	none
 icraf_afsis1_soil_mir_spectra_f32	ok	31914003	127656012	18247	1749	6996	0	0	0	1	none	none
 physionet_tpehg_ehg_i16	ok	31967703	63935406	900	35350	70700	0	0	0	1	none	none
 uci_emg_gestures_i8	ok	33265144	33265144	568	57841	57841	0	0	0	1	none	none
+noaa_goes16_xrs_1s_flux_f32	ok	33523200	134092800	388	86400	345600	0	0	0	1	none	none
 goose_vls128_lidar_scan_xyz_f32	ok	34501233	138004932	64	583156.5	2332626	0	0	0	1	none	none
 zenodo_npx_opto_templates_f32	ok	35104768	140419072	14	2385161	9540644	0	0	0	1	none	none
 wikimedia_clickstream_enwiki	ok	35605767	142423068	1	35605767	142423068	0	0	0	1	none	none

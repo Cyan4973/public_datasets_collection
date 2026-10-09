@@ -1,0 +1,103 @@
+manifest_version = 1
+dataset_id = "noaa_goes16_xrs_1s_flux_f32"
+name = "GOES-16 EXIS/XRS Science-Quality 1-Second Solar Soft X-Ray Flux (XRS-A 0.05-0.4 nm, XRS-B 0.1-0.8 nm) Daily Series Float32"
+description = "Native float32 whole-Sun soft X-ray flux at 1 s cadence from the GOES-16 EXIS X-Ray Sensor, NOAA NCEI science-quality Level-2 product xrsf-l2-flx1s_science v2-2-1: the primary XRS-A and XRS-B channel fluxes of 194 UTC days (the 1st and 15th of every month, 2017-02-15..2025-04-01, spanning solar minimum and the solar-cycle-25 maximum; 2 of the 196 selected days are entirely fill and dropped), decoded from NetCDF4/HDF5 with a pure-stdlib reader into one 86,400-value sample per day and channel."
+homepage = "https://www.ncei.noaa.gov/products/goes-r-extreme-ultraviolet-xray-irradiance"
+
+[license]
+name = "U.S. Government Public Domain (NOAA/NESDIS); file license attribute: redistribution and use without restriction"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ncei.swx:exis-l2-goesr/xml"
+citation = "Machol, Janet, Stefan Codrescu, and Rodney Viereck. 'GOES-R Series Extreme Ultraviolet and X-ray Irradiance Sensors (EXIS) Level 2 Products'. NOAA National Centers for Environmental Information, 2018. https://doi.org/10.25921/94P8-YE57"
+notes = "Every source file carries the global attribute license = 'These data may be redistributed and used without restriction. ' and institution = 'DOC/NOAA/NESDIS'; both are checked per file by download, build and verify. The NCEI ISO 19115 record gov.noaa.ncei.swx:exis-l2-goesr lists only a citation request ('Cite this dataset when used as a source: ...') and the standard NCEI liability disclaimer as use constraints. NOAA/NESDIS products are works of the U.S. Government (17 U.S.C. 105). Preserve the citation/DOI."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NOAA NCEI archive of GOES-R EXIS Level-2 products (data.ngdc.noaa.gov), anonymous HTTPS; satellite solar irradiance measurements with no personal content."
+usage_notes = "Public U.S. Government space-weather data suitable for model training with the NCEI citation retained."
+
+[[origins]]
+id = "ncei_goes16_l2_xrs"
+name = "NOAA NCEI GOES-16 Level-2 EXIS/XRS archive (xrsf-l2-flx1s_science)"
+url = "https://data.ngdc.noaa.gov/platforms/solar-space-observing-satellites/goes/goes16/l2/data/xrsf-l2-flx1s_science/"
+type = "data_portal"
+notes = "Apache directory listing, year/month subdirectories, one daily NetCDF4 file per UTC day. Probed 2026-10-08: 2,981 files 2017-02-07..2025-04-06 with no missing days, all product version v2-2-1, all last-modified 2025-12-05 (date_created 2025-12-05, netcdf 4.9.2 / HDF5 1.14.3). Users guide: https://data.ngdc.noaa.gov/platforms/solar-space-observing-satellites/goes/goes16/l2/docs/GOES-R_XRS_L2_Data_Users_Guide.pdf"
+
+[[resources]]
+id = "xrs_flx1s_daily_netcdf"
+origin = "ncei_goes16_l2_xrs"
+url = "https://data.ngdc.noaa.gov/platforms/solar-space-observing-satellites/goes/goes16/l2/data/xrsf-l2-flx1s_science/{YYYY}/{MM}/sci_xrsf-l2-flx1s_g16_d{YYYYMMDD}_v2-2-1.nc"
+type = "file"
+version = "sci xrsf-l2-flx1s v2-2-1 (algorithm xrs05_1s.py v1.4, reprocessed 2025-12-05)"
+access = "196 anonymous HTTPS GETs (curl, resumable .part files, 4 parallel), listed with exact byte sizes in files.tsv."
+size_bytes = 676343852
+sha256 = ""
+local_path = "downloads/noaa_goes16_xrs_1s_flux_f32/daily/"
+notes = "Selection: the files dated the 1st and 15th of every month in the archive span (first 2017-02-15, last 2025-04-01), a fixed calendar rule chosen before looking at data so solar minimum (2018-2020) and the cycle-25 maximum (2023-2025) are both covered; 196 of 2,981 available days (~6.6%), sized so the primary output (~135 MB) sits just above the ~100 MB downstream selection budget. Per-file byte sizes are pinned (HTTP HEAD content-length, 2026-10-08); per-file SHA-256 of all 196 files is pinned in files.tsv (5 from probe downloads, 191 from the first driver download's observed_sha256.tsv, cross-checked against the 5 probe hashes); plan and build reject any mismatch. download.sh fully decodes every file (HDF5 checksums, datatype, filters, attributes, time axis) before succeeding. Excluded: every other variable in the file (xrsa1/a2/b1/b2 per-diode fluxes, *_flags, *_primary_chan, corrected_current_*, au_factor, roll_angle, yaw_flip_flag, time), other cadences/products (flx1m, avg1m, flare summaries), other satellites (GOES-17/18/19) and the operational (non-science) stream."
+
+[local_paths]
+downloads = "downloads/noaa_goes16_xrs_1s_flux_f32/"
+filtered = "filtered/noaa_goes16_xrs_1s_flux_f32/"
+index = "index/noaa_goes16_xrs_1s_flux_f32/"
+samples = "samples/noaa_goes16_xrs_1s_flux_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_goes16_xrs_1s_flux_f32/samples.jsonl"
+summary = "Download the 196 pinned daily XRS 1-s science files, decode xrsa_flux and xrsb_flux with a pure-stdlib HDF5 reader (shuffle + deflate, single chunk, v1 chunk B-tree), and write each day's 86,400 stored float32 values unchanged as one raw little-endian sample per channel."
+deterministic_notes = "Inventory files.tsv fixes the 196 dates, filenames and byte sizes. The HDF5 reader (scripts/h5lite.py, copied unchanged from datasets/noaa_cdr_seaice_conc_nh_daily_u8) verifies the lookup3 checksum of every metadata block it touches. Variables are selected by link name; build resolves them through the name-index v2 B-tree, verify independently through the creation-order v2 B-tree with its own un-shuffle and bit-pattern missing-value classification, and byte-compares every sample. Per file: superblock v2; datatype message exactly little-endian IEEE float32 (11201f00...177f000000); dataspace (86400,); filter pipeline exactly [shuffle(4), deflate]; one chunk (86400) with filter mask 0 that inflates to exactly 345,600 bytes and ends the zlib stream; variable attributes units 'W/m2', long_name 'Primary XRS-A/B channel flux.', _FillValue -9999.0; global id = filename, platform g16, title, institution, license, time_coverage_resolution PT1S, time_coverage_start = filename date; the float64 time variable must be strictly increasing and lie within the UTC day (+-2 s). Day policy: a day is dropped (both channels) if either channel is more than 50% fill/NaN or has fewer than 100 distinct valid values; dropped days are listed in filtered/.../ingest_stats.json and re-derived by verify. Samples sorted by series then date. A synthetic HDF5 self-test (scripts/selftest_xrs.py) runs before build and verify. Realized: 196 inventory days, 2 dropped (2017-05-01 and 2017-12-01: both channels 100% fill, GOES-16 post-launch commissioning outages), 194 days kept; maximum kept-day fill fraction 7.4% (2024-09-15, 6,379 fill records). Floors: 388 samples of 86,400 values (median 86,400); 33,523,200 primary values."
+
+[[series]]
+id = "goes16_xrsa_flux_1s_f32"
+description = "GOES-16 XRS-A (0.05-0.4 nm) primary-channel whole-Sun soft X-ray flux, 1 s cadence, one UTC day per sample."
+semantic_meaning = "Science-quality Level-2 solar soft X-ray irradiance in W/m^2 in the short-wavelength XRS-A band, one value per 1-s record (86,400 per UTC day). xrsa_flux is the product's primary XRS-A channel: XRS-A1 normally, switching to the high-flux XRS-A2 diode during large flares (xrsa_primary_chan, not emitted). Values are as measured at the spacecraft (the file's au_factor variable, not applied, converts to 1 AU). Values near the instrument noise floor (quiet Sun, eclipse periods) can be slightly negative (probed minimum about -2e-8 W/m^2); they are kept as published."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "xrsa_flux is stored in the NetCDF4 file as IEEE float32 (HDF5 floating-point class, size 4, little-endian). The recipe inflates and un-shuffles the single chunk and writes the stored 32-bit words unchanged; no scaling, interpolation, masking or remapping."
+source_resources = ["xrs_flx1s_daily_netcdf"]
+source_format = "NetCDF4/HDF5 daily file (sci_xrsf-l2-flx1s v2-2-1), variable stored as one shuffle+deflate chunk indexed by a version-1 B-tree"
+source_field = "xrsa_flux (float32, dims time=86400, units W/m2, _FillValue -9999)"
+filtered_input_path = "filtered/noaa_goes16_xrs_1s_flux_f32/ingest_stats.json"
+filtering = "Keep only xrsa_flux from each of the 196 inventory days. Records flagged in xrsa_flags (eclipse, particle_spike, calibration, off_point, ...) are kept with their stored flux values, exactly as published; flags are not emitted. Days failing the day policy (more than 50% fill/NaN in either channel, or fewer than 100 distinct valid values) are dropped for both channels (realized: 2017-05-01 and 2017-12-01, both 100% fill)."
+missing_value_policy = "The product's own _FillValue -9999.0 (missing records, e.g. around data gaps) is preserved in place as the stored float32 word 0xC61C3C00, and any NaN would be preserved bit-exactly; probed days hold 0-481 fill values (2024-05-10: 481) and no NaN. Per-sample fill_count and nan_count are recorded in the index. Infinite values, a wrong datatype/shape/filter/attribute/date, a non-monotonic or out-of-day time axis, a checksum failure or a chunk that does not inflate to exactly 86,400 values are fatal in build and verify. Fill-dominated days (>50%) are dropped as described in filtering; verify re-applies the same rule from its own decode."
+conversion = "Resolve root link 'xrsa_flux' (dense link storage: Link Info -> fractal heap -> v2 B-tree), read Dataspace (86400), Datatype float32 LE, Filter Pipeline [shuffle element size 4, deflate] and Layout v3 chunked (86400, 4); take the single chunk from the version-1 B-tree leaf (offsets 0,0; filter mask 0), zlib-inflate to exactly 86,400 x 4 B, invert the 4-lane byte shuffle and write the 86,400 little-endian float32 values in record order to samples/.../goes16_xrsa_flux_1s_f32/YYYYMMDD.f32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 time series"
+sample_geometry = "one_utc_day_of_1s_records"
+sample_rank = 1
+sample_axes = ["time"]
+natural_record_kind = "goes16_xrs_l2_flx1s_science_daily_file_variable"
+sample_count = 194
+total_size_bytes = 67046400
+output_path = "samples/noaa_goes16_xrs_1s_flux_f32/goes16_xrsa_flux_1s_f32/"
+
+[[series]]
+id = "goes16_xrsb_flux_1s_f32"
+description = "GOES-16 XRS-B (0.1-0.8 nm) primary-channel whole-Sun soft X-ray flux, 1 s cadence, one UTC day per sample."
+semantic_meaning = "Science-quality Level-2 solar soft X-ray irradiance in W/m^2 in the long-wavelength XRS-B band (the band that defines the A/B/C/M/X flare classes), one value per 1-s record (86,400 per UTC day). xrsb_flux is the product's primary XRS-B channel (XRS-B1 normally, XRS-B2 during large flares; xrsb_primary_chan, not emitted). Values are as measured at the spacecraft (au_factor not applied). Typically ~10x larger than XRS-A, hence a separate series."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "xrsb_flux is stored in the NetCDF4 file as IEEE float32 (HDF5 floating-point class, size 4, little-endian). The recipe inflates and un-shuffles the single chunk and writes the stored 32-bit words unchanged; no scaling, interpolation, masking or remapping."
+source_resources = ["xrs_flx1s_daily_netcdf"]
+source_format = "NetCDF4/HDF5 daily file (sci_xrsf-l2-flx1s v2-2-1), variable stored as one shuffle+deflate chunk indexed by a version-1 B-tree"
+source_field = "xrsb_flux (float32, dims time=86400, units W/m2, _FillValue -9999)"
+filtered_input_path = "filtered/noaa_goes16_xrs_1s_flux_f32/ingest_stats.json"
+filtering = "Keep only xrsb_flux from each of the 196 inventory days. Records flagged in xrsb_flags are kept with their stored flux values, exactly as published; flags are not emitted. Days failing the day policy (more than 50% fill/NaN in either channel, or fewer than 100 distinct valid values) are dropped for both channels (realized: 2017-05-01 and 2017-12-01, both 100% fill)."
+missing_value_policy = "The product's own _FillValue -9999.0 is preserved in place as the stored float32 word 0xC61C3C00, and any NaN would be preserved bit-exactly; probed days hold 0-481 fill values and no NaN. Per-sample fill_count and nan_count are recorded in the index. Infinite values, a wrong datatype/shape/filter/attribute/date, a non-monotonic or out-of-day time axis, a checksum failure or a chunk that does not inflate to exactly 86,400 values are fatal in build and verify. Fill-dominated days (>50%) are dropped as described in filtering; verify re-applies the same rule from its own decode."
+conversion = "Resolve root link 'xrsb_flux' (dense link storage), read Dataspace (86400), Datatype float32 LE, Filter Pipeline [shuffle element size 4, deflate] and Layout v3 chunked (86400, 4); take the single chunk from the version-1 B-tree leaf (offsets 0,0; filter mask 0), zlib-inflate to exactly 86,400 x 4 B, invert the 4-lane byte shuffle and write the 86,400 little-endian float32 values in record order to samples/.../goes16_xrsb_flux_1s_f32/YYYYMMDD.f32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 time series"
+sample_geometry = "one_utc_day_of_1s_records"
+sample_rank = 1
+sample_axes = ["time"]
+natural_record_kind = "goes16_xrs_l2_flx1s_science_daily_file_variable"
+sample_count = 194
+total_size_bytes = 67046400
+output_path = "samples/noaa_goes16_xrs_1s_flux_f32/goes16_xrsb_flux_1s_f32/"

@@ -1,0 +1,179 @@
+manifest_version = 1
+dataset_id = "grail_lgrs_kbr1c_ka_band_ranging_f64"
+name = "GRAIL LGRS Level-1B Dual-One-Way Ka-Band Inter-Satellite Ranging (KBR1C), Extended Mission 2 s, Float64"
+description = "Biased dual one-way Ka-band range (m), range rate (m/s) and range acceleration (m/s^2) between the GRAIL-A and GRAIL-B lunar spacecraft from the Lunar Gravity Ranging System (LGRS), Level-1B KBR1C Release-4 products of the GRAIL extended mission (2012-08-30 .. 2012-12-14, 2-second cadence). One sample per published daily product and quantity, as native little-endian float64 parsed from the archived 16-significant-digit ASCII."
+homepage = "https://pds-geosciences.wustl.edu/missions/grail/default.htm"
+
+[license]
+name = "NASA SMD Open Scientific Data Policy"
+spdx = "LicenseRef-NASA-SMD-Open-Data"
+url = "https://science.nasa.gov/researchers/science-data/science-information-policy/"
+citation = "Kahan, D.S., GRAIL LGRS Calibrated and Resampled Science Data Set V1.0, GRAIL-L-LGRS-3-CDR-V1.0, NASA Planetary Data System, 2012 (volume GRAIL_0101, Release 5)."
+notes = "NASA SMD policy: 'NASA holds this information, including publications, data, and software, as a public trust to increase knowledge and serve the public good. It is Science Mission Directorate (SMD) policy, consistent with NASA and Federal policies, that information produced from SMD-funded scientific research activities be made publicly available.' GRAIL is a NASA Discovery mission; the CDR volume is archived by the NASA PDS Geosciences Node and served anonymously over HTTPS. Neither the product labels, the volume AAREADME.TXT nor the dataset catalog (LGRS_CDR_DS.CAT) state any use restriction. Same basis as the accepted orex_ola_l2_lidar_point_xyz_f64 recipe. Cite the dataset as above."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NASA PDS Geosciences Node archive (pds-geosciences.wustl.edu), volume GRAIL_0101. Every product's size and the volume's own published MD5 (grail_0101_230316.md5, SHA-256 pinned) are checked; no mirrors."
+usage_notes = "Spacecraft-to-spacecraft microwave ranging telemetry of a lunar gravity mission; no people, imagery or personal information."
+
+[[origins]]
+id = "pds_geosciences_grail"
+name = "NASA PDS Geosciences Node - GRAIL LGRS CDR volume GRAIL_0101"
+url = "https://pds-geosciences.wustl.edu/grail/grail-l-lgrs-3-cdr-v1/grail_0101/"
+type = "mirrorless_archive"
+notes = "GRAIL-L-LGRS-3-CDR-V1.0 (Release 5, 2014-07-01; KBR1C introduced in Release 4, 2014-04-01, replacing KBR1B). Only level_1b/<date>/kbr1c_<date>_x_04.{asc,lbl} of the 107 extended-mission dates are used; the 90 primary-mission dates (5 s cadence) and all other product types are not touched."
+
+[[resources]]
+id = "volume_md5_manifest"
+origin = "pds_geosciences_grail"
+url = "https://pds-geosciences.wustl.edu/grail/grail-l-lgrs-3-cdr-v1/grail_0101_230316.md5"
+type = "file"
+version = "2023-03-16 volume checksum manifest (Last-Modified 2023-03-17)"
+access = "Direct anonymous HTTPS download."
+size_bytes = 2948426
+sha256 = "66193455e5258c971985dd7e2b352416504cddbd531cf3c845818fdaf43185ae"
+local_path = "downloads/grail_lgrs_kbr1c_ka_band_ranging_f64/grail_0101_230316.md5"
+notes = "Plain-text 'MD5  path' list (CRLF) of every file on the volume, including 197 KBR1C .asc products. download.sh, build and verify require every pinned .asc/.lbl MD5 to be listed in it."
+
+[[resources]]
+id = "kbr1c_labels"
+origin = "pds_geosciences_grail"
+url = "https://pds-geosciences.wustl.edu/grail/grail-l-lgrs-3-cdr-v1/grail_0101/level_1b/<date>/kbr1c_<date>_x_04.lbl"
+type = "file"
+version = "107 PDS3 labels, MD5 pinned in sources.tsv (from the volume manifest)"
+access = "Direct anonymous HTTPS download, one request per label."
+size_bytes = 115346
+sha256 = ""
+local_path = "downloads/grail_lgrs_kbr1c_ka_band_ranging_f64/<date>/kbr1c_<date>_x_04.lbl"
+notes = "1,078 bytes each. Labels identify the product (PRODUCT_ID, DATA_SET_ID, START/STOP_TIME) and point to DPSIS Table 43 for the format."
+
+[[resources]]
+id = "kbr1c_products"
+origin = "pds_geosciences_grail"
+url = "https://pds-geosciences.wustl.edu/grail/grail-l-lgrs-3-cdr-v1/grail_0101/level_1b/<date>/kbr1c_<date>_x_04.asc"
+type = "file"
+version = "107 KBR1C RL04 ASCII products 2012_08_30..2012_12_14 (created 2014-02 by grailops, CombineLevel1.c r581)"
+access = "Direct anonymous HTTPS download, resumable (curl -C -); the host serves about 1.7 MB/s."
+size_bytes = 1431187536
+sha256 = ""
+local_path = "downloads/grail_lgrs_kbr1c_ka_band_ranging_f64/<date>/kbr1c_<date>_x_04.asc"
+notes = "Served sizes, header record counts, data record counts, first/last TDB and the published MD5 of each product are pinned in sources.tsv (resolved by discover.sh from the MD5 manifest and 4 KB range reads). The header's 'FILESIZE (BYTES)' field describes the LF-terminated original and is smaller than the served CRLF file by (records - 632) or (records - 656) bytes; it is pinned but not used as the size check."
+
+[local_paths]
+downloads = "downloads/grail_lgrs_kbr1c_ka_band_ranging_f64/"
+filtered = "filtered/grail_lgrs_kbr1c_ka_band_ranging_f64/"
+index = "index/grail_lgrs_kbr1c_ka_band_ranging_f64/"
+samples = "samples/grail_lgrs_kbr1c_ka_band_ranging_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/grail_lgrs_kbr1c_ka_band_ranging_f64/samples.jsonl"
+summary = "Fetch the 107 pinned extended-mission KBR1C daily ASCII products (plus labels and the volume MD5 manifest), parse columns 1-4 of every record (DPSIS Table 43), and emit per product three little-endian float64 primary samples (biased range, range rate, range acceleration) and one int64 auxiliary TDB-seconds sample, all from the same records in source order."
+deterministic_notes = "Scope rule (discover.sh): every KBR1C_YYYY_MM_DD_X_04.ASC listed in grail_0101_230316.md5 dated in the extended mission, 2012-08-30..2012-12-14 (107 products, 2 s cadence); sources.tsv pins them in date order. The 90 primary-mission products (2012-03-01..2012-05-29) are 5 s cadence, a different sampling lattice, and are excluded rather than mixed. Two products are partial days as published: 2012_08_30 starts 16:31:38 (13,373 records) and 2012_12_14 ends 20:54:42 (37,195 records); 2012_12_13/14 follow the end of the science phase (2012-12-12) but are the same instrument, product version and cadence. 28 further days have published data gaps (42,501..43,122 of 43,200 epochs, mostly the weekly Ka boresight-calibration days); records are never spliced, filled or reordered, and the auxiliary TDB series plus index fields gap_count, missing_epochs, max_gap_s, gaps (first 50), rebias_steps (steps where |d range - mean rate * dt| > 1 m, i.e. new carrier-phase arcs with a new range bias) and calslew_flag_records make every discontinuity explicit. Index rows also carry date, source_file, source_md5, record_count, first/last TDB, partial_day, distinct_values, sample_sha256 and min/max computed from the stored float64 values. verify.sh re-checks size and published MD5 of every product, re-parses the ASCII with its own reader, re-derives all four samples byte for byte, checks that within phase arcs the published range rate integrates to the range (>= 99% of steps within 1 m), and rejects constant, low-distinct (< 100) or float32-representable samples. Realized: 107 products, 4,578,310 records, 321 primary samples, 13,734,930 primary values, 109,879,440 primary bytes (36,626,480 per series) plus 36,626,480 auxiliary bytes; 13,373..43,200 values per sample, median 43,200; every primary sample has all-distinct values. 30 days carry 38 gaps (8,783 missing 2 s epochs, longest 996 s), 29 range re-bias steps on 25 days, 31,202 calibration-slew-flagged records, 0 records with other flag digits. SHA-256 of all primary samples concatenated in index order 018188b69b8e41fea56b429540de9608d2b66b5b5eb59fe5a490dd6747fdc00b."
+
+[[series]]
+id = "kbr1c_biased_range_f64"
+description = "Biased dual one-way Ka-band range between GRAIL-A and GRAIL-B, one array per daily KBR1C product."
+semantic_meaning = "DPSIS Table 43 column 2: 'Biased dual one-way range between GRAIL-A and GRAIL-B (m)', digitally filtered, not corrected for time of flight or antenna offset. Within each continuous carrier-phase arc the value equals the true inter-spacecraft range plus an unknown constant bias; at a phase break (data gap) a new arc starts with a new bias, so the series jumps by up to tens of km there (e.g. +34.5 km after the 956 s gap at TDB 408433978 on 2012-12-10). Realized values span -211,773.19 .. +475,435.13 m across the 107 days (the bias makes the absolute level arbitrary per arc), printed to 1e-10 m."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The archive prints each double with up to 16-17 significant digits (e.g. -29030.1360341154, 0.07050382816793005); Python float() yields the correctly rounded IEEE-754 double of the published decimal, stored unchanged as little-endian float64. The values are not float32-representable, so 64 bits is the native precision, not a widening."
+source_resources = ["kbr1c_products", "kbr1c_labels", "volume_md5_manifest"]
+source_format = "PDS3 STREAM ASCII table (GRAIL LGRS KBR1C RL04, CRLF lines): variable-length text header ending 'END OF HEADER', then one 20-column whitespace-separated record per 2 s epoch (DPSIS Table 43)"
+source_field = "column 2, biased dual one-way range between GRAIL-A and GRAIL-B (m)"
+filtered_input_path = "filtered/grail_lgrs_kbr1c_ka_band_ranging_f64/build_stats.json"
+filtering = "All records of the 107 pinned products, in source order; no records, columns or time ranges are dropped."
+missing_value_policy = "The products contain no sentinel or fill values in columns 1-4 (gaps up to 20 s are already interpolated upstream; longer gaps are simply absent records). All records are kept as published, including records flagged with quality digit 1 ('from raw data for Ka boresight calibration slew'), which are counted per sample (calslew_flag_records); records with any other flag digit set are counted (other_flag_records). Fatal in download validation, build and verify: a record without exactly 20 columns, a non-integer TDB, a non-finite value, |value| >= 1e7 m, a malformed 8-digit flag, a record count or first/last TDB different from the header and sources.tsv, or a TDB step that is not a positive multiple of 2 s."
+conversion = "For each record (lines after 'END OF HEADER', CRLF-split, whitespace-split), float(column 2) packed as '<d'; one sample <date>.f64 per product, records in source (time) order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64 1-D array"
+sample_geometry = "time_series"
+sample_rank = 1
+sample_axes = ["epoch"]
+natural_record_kind = "published_grail_kbr1c_daily_product"
+sample_count = 107
+total_size_bytes = 36626480
+output_path = "samples/grail_lgrs_kbr1c_ka_band_ranging_f64/kbr1c_biased_range_f64/"
+
+[[series]]
+id = "kbr1c_range_rate_f64"
+description = "GRAIL-A/GRAIL-B Ka-band range rate, one array per daily KBR1C product."
+semantic_meaning = "DPSIS Table 43 column 3: 'Range rate between GRAIL-A and GRAIL-B (m/s)', the first derivative of the filtered dual one-way range (not corrected for time of flight or antenna offset). Unbiased and continuous across phase arcs; realized values span -1.2263 .. +1.1798 m/s, printed with 16 significant digits."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Parsed from 16-17 significant digit ASCII into the correctly rounded IEEE-754 double; not float32-representable."
+source_resources = ["kbr1c_products", "kbr1c_labels", "volume_md5_manifest"]
+source_format = "PDS3 STREAM ASCII table (GRAIL LGRS KBR1C RL04, CRLF lines): variable-length text header ending 'END OF HEADER', then one 20-column whitespace-separated record per 2 s epoch (DPSIS Table 43)"
+source_field = "column 3, range rate between GRAIL-A and GRAIL-B (m/s)"
+filtered_input_path = "filtered/grail_lgrs_kbr1c_ka_band_ranging_f64/build_stats.json"
+filtering = "All records of the 107 pinned products, in source order; no records, columns or time ranges are dropped."
+missing_value_policy = "Same record set and fatal checks as kbr1c_biased_range_f64 (|value| >= 100 m/s is fatal). No sentinels; calibration-slew-flagged records kept and counted."
+conversion = "float(column 3) packed as '<d'; one sample <date>.f64 per product, records in source order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64 1-D array"
+sample_geometry = "time_series"
+sample_rank = 1
+sample_axes = ["epoch"]
+natural_record_kind = "published_grail_kbr1c_daily_product"
+sample_count = 107
+total_size_bytes = 36626480
+output_path = "samples/grail_lgrs_kbr1c_ka_band_ranging_f64/kbr1c_range_rate_f64/"
+
+[[series]]
+id = "kbr1c_range_accl_f64"
+description = "GRAIL-A/GRAIL-B Ka-band range acceleration, one array per daily KBR1C product."
+semantic_meaning = "DPSIS Table 43 column 4: 'Range acceleration between GRAIL-A and GRAIL-B (m/s**2)', the second derivative of the filtered dual one-way range; the gravity-science observable. Realized values span -4.226e-3 .. +3.446e-3 m/s^2, printed with 16 significant digits."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Parsed from 16-17 significant digit ASCII into the correctly rounded IEEE-754 double; not float32-representable."
+source_resources = ["kbr1c_products", "kbr1c_labels", "volume_md5_manifest"]
+source_format = "PDS3 STREAM ASCII table (GRAIL LGRS KBR1C RL04, CRLF lines): variable-length text header ending 'END OF HEADER', then one 20-column whitespace-separated record per 2 s epoch (DPSIS Table 43)"
+source_field = "column 4, range acceleration between GRAIL-A and GRAIL-B (m/s^2)"
+filtered_input_path = "filtered/grail_lgrs_kbr1c_ka_band_ranging_f64/build_stats.json"
+filtering = "All records of the 107 pinned products, in source order; no records, columns or time ranges are dropped."
+missing_value_policy = "Same record set and fatal checks as kbr1c_biased_range_f64 (|value| >= 10 m/s^2 is fatal). No sentinels; calibration-slew-flagged records kept and counted."
+conversion = "float(column 4) packed as '<d'; one sample <date>.f64 per product, records in source order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64 1-D array"
+sample_geometry = "time_series"
+sample_rank = 1
+sample_axes = ["epoch"]
+natural_record_kind = "published_grail_kbr1c_daily_product"
+sample_count = 107
+total_size_bytes = 36626480
+output_path = "samples/grail_lgrs_kbr1c_ka_band_ranging_f64/kbr1c_range_accl_f64/"
+
+[[series]]
+id = "kbr1c_tdb_seconds_i64"
+description = "Record epochs (TDB seconds past 2000-01-01 12:00:00) aligned with the three primary samples of the same product."
+semantic_meaning = "DPSIS Table 43 column 1, 'TDB, seconds past 12:00:00 noon 01-Jan-2000'; integer even seconds. Emitted so the published gaps (and the range re-bias points that follow them) are explicit; does not count toward acceptance."
+role = "auxiliary"
+representation_class = "native_numeric"
+representation_notes = "Integer timestamps printed without a fractional part; stored as int64."
+source_resources = ["kbr1c_products"]
+source_format = "PDS3 STREAM ASCII table (GRAIL LGRS KBR1C RL04)"
+source_field = "column 1, TDB seconds past J2000 noon"
+filtered_input_path = "filtered/grail_lgrs_kbr1c_ka_band_ranging_f64/build_stats.json"
+filtering = "Same records as the primary series."
+missing_value_policy = "Same fatal checks as the primary series; strictly increasing, steps a positive multiple of 2 s."
+conversion = "int(column 1) packed as '<q'; one sample <date>.i64 per product."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian int64 1-D array"
+sample_geometry = "time_series_axis"
+sample_rank = 1
+sample_axes = ["epoch"]
+natural_record_kind = "published_grail_kbr1c_daily_product"
+sample_count = 107
+total_size_bytes = 36626480
+output_path = "samples/grail_lgrs_kbr1c_ka_band_ranging_f64/kbr1c_tdb_seconds_i64/"

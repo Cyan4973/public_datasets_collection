@@ -428,3 +428,4 @@ sxs_bbh_extrapolated_strain_modes_f64	autocollect	64	sim_gravitational_waveform	
 ambientcg_photogrammetry_normalgl_u16	autocollect	16	pbr_texture_map	ambientcg_heightfield_photogrammetry	ambientcg.com	-	WEAK
 apple_hypersim_normal_cam_f16	autocollect	16	rendered_gbuffer	vray_hypersim_render	docs-assets.developer.apple.com/ml-research/datasets/hypersim	-	STRONG
 google_clusterdata2011_task_usage_f32	autocollect	32	vm_telemetry	google_borg_task_usage_monitor	storage.googleapis.com/clusterdata-2011-2	-	OK
+grail_lgrs_kbr1c_ka_band_ranging_f64	autocollect	64	intersatellite_ranging	grail_lgrs_ka_band_dowr	pds-geosciences.wustl.edu/grail	-	OK

@@ -1165,7 +1165,9 @@ class Driver:
         known = {row["candidate_id"] for row in self.ledger} | {row["dataset_id"] for row in registry_rows()}
         known |= {path.name for path in DATASETS_DIR.iterdir() if path.is_dir()}
         known |= {path.name for path in STAGING_DIR.iterdir() if path.is_dir()}
-        seen_urls = {row["source_url"].rstrip("/").lower() for row in self.ledger}
+        # One source may yield families at several widths (e.g. LAS intensity u16 and
+        # GPS time f64); the screener rejects width-only variants of one quantity.
+        seen_sources = {(row["source_url"].rstrip("/").lower(), row["width"]) for row in self.ledger}
         added = 0
         for candidate in agent["structured"].get("candidates", []):
             cid = candidate.get("candidate_id", "")
@@ -1173,9 +1175,10 @@ class Driver:
             if not CANDIDATE_ID_RE.match(cid) or cid in known:
                 log(f"scout candidate skipped (invalid or known id): {cid}")
                 continue
-            if url and url in seen_urls:
-                log(f"scout candidate skipped (source already in ledger): {cid} {url}")
+            if url and (url, str(candidate.get("width"))) in seen_sources:
+                log(f"scout candidate skipped (source already in ledger at this width): {cid} {url}")
                 continue
+            seen_sources.add((url, str(candidate.get("width"))))
             write_atomic(CARDS_DIR / f"{cid}.md", card_markdown(candidate, agent["log"]))
             self.ledger.append(
                 {

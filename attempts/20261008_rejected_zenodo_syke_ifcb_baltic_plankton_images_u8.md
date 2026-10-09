@@ -4,27 +4,26 @@
 - Status: rejected
 - Candidate dataset: SYKE-plankton_IFCB_2025: Imaging FlowCytobot Baltic Sea plankton ROI images (8-bit grayscale PNG), as uint8 rasters
 - Source: https://zenodo.org/records/17601020 (CC-BY-4.0). File: Syke-plankton_IFCB_2025.zip, 1,577,775,859 bytes, md5 badd9f0db1bd4d6584f8a6125fb11763.
-- Why it looked promising: novelty.py found no imaging-flow-cytometry or plankton imagery in the corpus. The licence is permissive and explicit. The ZIP64 archive is range-addressable and mostly stored. Each ROI image is a natural record with a median well above the floor.
-- Failure class: not novel on bytes (zlsim breadth gate WEAK)
+- Why it looked promising: novelty.py found no imaging-flow-cytometry or plankton imagery in the corpus. The licence is permissive and explicit. The ZIP64 archive is range-addressable and mostly stored. Each ROI image is a natural record with a median above the floor.
+- Failure class: not novel on bytes (zlsim breadth gate WEAK, confirmed on two runs)
 - What happened:
-  - Downloading took 233,157,015 bytes:
-    - the record JSON;
-    - the pinned 11,782,208-byte ZIP64 central-directory tail;
-    - 151 per-class byte ranges, all CRC-checked.
+  - Download: the record JSON, the pinned 11,782,208-byte ZIP64 central-directory tail, and 151 per-class byte ranges (233 MB, all CRC-checked).
   - Reading the full central directory: 71,765 entries, 152 classes and 71,606 PNGs. This reconciles the record's "~71k images, 152 classes"; the scout's 139 came from a partial tail read.
   - Selection:
     - the first 200 distinct PNGs per class in central-directory order;
+    - 13 duplicate payloads and 6 non-image members skipped;
     - Bubble2 excluded;
     - 15,525 members selected.
-  - Of the selected members, 3,115 were curator RGB or palette re-saves and were skipped. The rest decoded to 12,410 native gray8 samples (244,407,130 bytes) from 133 classes, split IFCB114 11,492 and IFCB167 918.
+  - 3,115 selected members were RGB or palette re-saves and were skipped. The rest decoded to 12,410 native gray8 samples (244,407,130 bytes) from 133 classes, split IFCB114 11,492 and IFCB167 918.
   - Sample sizes in pixels: median 9,280, minimum 2,016, maximum 848,592.
   - build.sh, verify.sh and gate.py all passed.
-  - `zlsim.py gate` returned WEAK. The single primary series matches `zenodo_nordif_ebsd_kikuchi_patterns_u8` with distance 0.0467 (threshold 0.05) and compression loss 0.0 (threshold 0.03). The next nearest families are statlog Landsat NIR2 (0.0587), downstream cifar10 (0.0635) and Magellan SAR (0.0667, loss 0.006).
+  - zlsim gate, first run: WEAK, matching zenodo_nordif_ebsd_kikuchi_patterns_u8 at distance 0.0467 with loss 0.0.
+  - zlsim gate, re-run after the driver's re-download with the current zlsim: WEAK. It matches noaa_rstn_sagamore_hill_srs_spectra_u8:srs_band_a_25_75mhz_u8 (distance 0.0403, loss 0.0) and EBSD (distance 0.0487, loss 0.0). The thresholds are loss 0.03 and distance 0.05.
 - Evidence:
-  - zlsim JSON: /tmp/autocollect/zenodo_syke_ifcb_baltic_plankton_images_u8/zlsim.json
+  - zlsim JSON: /tmp/autocollect/zenodo_syke_ifcb_baltic_plankton_images_u8/zlsim.json and zlsim2.json
   - build summary: .data/filtered/zenodo_syke_ifcb_baltic_plankton_images_u8/ingest_stats.json
 - Logs:
   - .data/logs/zenodo_syke_ifcb_baltic_plankton_images_u8/{download,build,verify}.latest.log
-  - .data/pipeline/logs/zenodo_syke_ifcb_baltic_plankton_images_u8/download.20261008_155455.log
-- Decision: reject. Noisy 8-bit bright-field particle crops compress the same way as an accepted 8-bit microscopy/diffraction family. Changing the class cap or selection does not change the byte statistics.
-- Retry conditions: retry only if the zlsim similarity thresholds or library are recalibrated so that this material measures OK against `zenodo_nordif_ebsd_kikuchi_patterns_u8`, or if that family leaves the corpus. The staged recipe (range-fetch, ZIP64 reader, gray8 PNG decoder, independent verify) is reusable as is.
+  - .data/pipeline/logs/zenodo_syke_ifcb_baltic_plankton_images_u8/download.20261008_195753.log
+- Decision: reject. Noisy 8-bit bright-field particle crops compress like accepted 8-bit spectrogram and diffraction-pattern families. Changing the selection cannot change the byte statistics.
+- Retry conditions: retry only if the zlsim thresholds or library are recalibrated so this material measures OK against both noaa_rstn_sagamore_hill_srs_spectra_u8 and zenodo_nordif_ebsd_kikuchi_patterns_u8. The staged recipe is reusable as is.

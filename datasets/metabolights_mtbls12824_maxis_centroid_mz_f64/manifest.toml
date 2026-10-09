@@ -1,0 +1,102 @@
+# Staged recipe (autocollect); counts reflect the realized 2026-10-09 build.
+manifest_version = 1
+dataset_id = "metabolights_mtbls12824_maxis_centroid_mz_f64"
+name = "MetaboLights MTBLS12824 Negative-Ion HILIC MS1 Centroid m/z (float64)"
+description = "Native float64 centroid m/z arrays, one sample per MS1 spectrum, from 20 pinned negative-ion HILIC LC-MS runs of human skeletal-muscle extracts (Bruker UHR-QTOF, ProteoWizard mzML) in MetaboLights study MTBLS12824."
+homepage = "https://www.ebi.ac.uk/metabolights/MTBLS12824"
+
+[license]
+name = "Creative Commons Zero v1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "MetaboLights MTBLS12824: Delayed molecular aging, preservation of energy metabolism and enhanced exercise response in exercise-trained human muscle. https://www.ebi.ac.uk/metabolights/MTBLS12824"
+notes = "The study's i_Investigation.txt carries 'Comment[License]<TAB>CC0 1.0 Universal'; download.sh re-fetches it and fails unless that exact line is present."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official EMBL-EBI MetaboLights public FTP/HTTPS study directory. Source material is de-identified human muscle-biopsy extracts; participants are referenced only by study codes (ELMIHnnn) in metadata the recipe does not emit."
+usage_notes = "Only instrument m/z peak positions are emitted (no intensities, sample names, phenotypes or other participant metadata). Bulk centroid m/z lists of small-molecule ions carry no personal identifiers."
+
+[[origins]]
+id = "metabolights_ftp"
+name = "EMBL-EBI MetaboLights public study FTP (HTTPS)"
+url = "https://ftp.ebi.ac.uk/pub/databases/metabolights/studies/public/MTBLS12824/"
+type = "repository"
+notes = "Public anonymous HTTPS directory listing; HASHES/data_sha256.json publishes per-file SHA-256."
+
+[[resources]]
+id = "investigation_license"
+origin = "metabolights_ftp"
+url = "https://ftp.ebi.ac.uk/pub/databases/metabolights/studies/public/MTBLS12824/i_Investigation.txt"
+type = "file"
+version = "2026-04-09 revision (sha256 7d9b350329d1bc3e74ee689c72e50587f10c2e3f71911f2217a3cb2e5ad8a579 when probed 2026-10-08)"
+access = "Direct public download; license line checked, not hash-pinned, because MetaboLights may revise metadata."
+size_bytes = 28139
+sha256 = ""
+local_path = "downloads/metabolights_mtbls12824_maxis_centroid_mz_f64/i_Investigation.txt"
+notes = "License and study identifier gate."
+
+[[resources]]
+id = "upstream_sha256_manifest"
+origin = "metabolights_ftp"
+url = "https://ftp.ebi.ac.uk/pub/databases/metabolights/studies/public/MTBLS12824/HASHES/data_sha256.json"
+type = "file"
+version = "2026-04-09 (sha256 27a820f98d75d1f1d497d9fb4c8f13da82ea7e658ddd87ebba652b839022e27d when probed)"
+access = "Direct public download; must agree with the 20 hashes pinned in scripts/runs.tsv."
+size_bytes = 63354
+sha256 = ""
+local_path = "downloads/metabolights_mtbls12824_maxis_centroid_mz_f64/data_sha256.json"
+notes = "Upstream SHA-256 for every data file."
+
+[[resources]]
+id = "neg_hilic_tissue_runs"
+origin = "metabolights_ftp"
+url = "https://ftp.ebi.ac.uk/pub/databases/metabolights/studies/public/MTBLS12824/FILES/"
+type = "exact_file_selection"
+version = "20 mzML runs listed in scripts/runs.tsv: 21P0055_Tissue_Georges_NEG_N_01..10 and NEG_V_01..10 (first ten of each group in sorted-name order)"
+access = "Resumable curl of each pinned file; size, upstream SHA-256 and full mzML semantic validation enforced."
+size_bytes = 649970118
+sha256 = ""
+local_path = "downloads/metabolights_mtbls12824_maxis_centroid_mz_f64/"
+notes = "Per-file SHA-256 and byte sizes are pinned in scripts/runs.tsv."
+
+[local_paths]
+downloads = "downloads/metabolights_mtbls12824_maxis_centroid_mz_f64/"
+filtered = "filtered/metabolights_mtbls12824_maxis_centroid_mz_f64/"
+index = "index/metabolights_mtbls12824_maxis_centroid_mz_f64/"
+samples = "samples/metabolights_mtbls12824_maxis_centroid_mz_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/metabolights_mtbls12824_maxis_centroid_mz_f64/samples.jsonl"
+summary = "Validate license and pinned hashes, stream-parse each mzML run, and emit the zlib/base64-decoded native float64 m/z array of every negative-ion centroid MS1 spectrum as its own little-endian sample, in run (sorted name) then acquisition order."
+deterministic_notes = "Fixed 20-run selection (scripts/runs.tsv, sizes + SHA-256 pinned and cross-checked against upstream HASHES/data_sha256.json). Every spectrum must be ms level 1, MS1 spectrum, negative scan, centroid, with one 64-bit-float zlib m/z array and one 64-bit-float zlib intensity array whose decoded lengths equal defaultArrayLength; spectrumList count must match. No length filtering, no concatenation; zero-length spectra (if any) are counted and emit nothing. verify.sh re-decodes with an independent line-streaming regex decoder and compares index rows, sample SHA-256, and manifest totals."
+
+[[series]]
+id = "neg_hilic_ms1_centroid_mz_f64"
+description = "Negative-ion HILIC MS1 centroid peak m/z arrays (float64)."
+semantic_meaning = "Calibrated mass-to-charge ratios (m/z, Th) of the centroided peaks in one negative-ion MS1 survey scan of a human skeletal-muscle extract, ascending within the scan as stored by the instrument software."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "mzML declares the array '64-bit float' (MS:1000523); values use the full binary64 mantissa (0 of the 45,760,543 emitted values is exactly representable as float32). Bytes are emitted exactly as decoded, without rescaling or reordering."
+source_resources = ["neg_hilic_tissue_runs"]
+source_format = "PSI mzML 1.1 (indexedmzML, ProteoWizard 3.0.24214 from Bruker BAF, CompassXtract peak picking)"
+source_field = "spectrum.binaryDataArray[m/z array MS:1000514, 64-bit float, zlib] of MS1 negative-scan centroid spectra"
+filtered_input_path = "filtered/metabolights_mtbls12824_maxis_centroid_mz_f64/spectrum_stats.json"
+filtering = "Keep every spectrum of the 20 pinned NEG_N/NEG_V tissue runs (all are MS1). POS, Blank, QC and PRERUN runs are not downloaded. Intensity arrays (integral detector counts stored as float64) are decoded for validation only and discarded."
+missing_value_policy = "Wrong MS level/polarity/spectrum type, missing or extra arrays, non-64-bit or non-zlib declarations, base64/zlib failures, decoded length != defaultArrayLength, non-finite or out-of-range (outside 1..5000) m/z, descending m/z, and spectrumList count mismatches are fatal. Zero-length spectra emit no sample and are counted in spectrum_stats.json."
+conversion = "base64-decode, zlib-decompress, check length = 8 * defaultArrayLength, write the resulting IEEE-754 binary64 little-endian bytes unchanged as one .bin per spectrum."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 m/z array"
+sample_geometry = "centroid_peak_mz_array"
+sample_rank = 1
+sample_axes = ["centroid_peak"]
+natural_record_kind = "negative_ion_ms1_centroid_spectrum"
+sample_count = 24622
+total_size_bytes = 366084344
+output_path = "samples/metabolights_mtbls12824_maxis_centroid_mz_f64/neg_hilic_ms1_centroid_mz_f64/"

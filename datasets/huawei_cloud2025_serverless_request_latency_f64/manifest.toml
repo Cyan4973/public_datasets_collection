@@ -1,0 +1,155 @@
+manifest_version = 1
+dataset_id = "huawei_cloud2025_serverless_request_latency_f64"
+name = "Huawei Public Cloud Trace 2025 Serverless Per-Request Latencies (Region 5, Day 30), Float64"
+description = "Per-function, time-ordered per-request service times (end-to-end frontend latency, worker-pod time, runtime time, busProxy time) in seconds from the Huawei YuanRong serverless platform request table for Region 5, day 30, as little-endian float64."
+homepage = "https://github.com/sir-lab/data-release/blob/main/README_data_release_2025.md"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Artjom Joosen, Ahmed Hassan, Martin Asenov, Rajkarn Singh, Luke Darlow, Jianfeng Wang, Qiwen Deng, Adam Barker. Serverless Cold Starts and Where to Find Them. EuroSys 2025. https://doi.org/10.1145/3689031.3696073 (arXiv:2410.06145). Data: Huawei Public Cloud Trace 2025, SIR Lab (Huawei Research UK, Edinburgh) and Huawei YuanRong, https://github.com/sir-lab/data-release"
+notes = "The sir-lab/data-release README (commit 84a9d7727aefed486ea69e022b5ed2476d588700) states: 'Licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) license.' It links README_data_release_2025.md, whose request-table section links the Region 5 Google Drive object used here. Attribute the SIR Lab and Huawei and cite the EuroSys 2025 paper."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official release by the trace authors: a Google Drive object linked from the sir-lab/data-release GitHub README. No mirrors are used. User, function and pod identifiers are anonymized integers or opaque strings and are not emitted."
+usage_notes = "Only the four latency columns are emitted as numeric payload. Request IDs, user and function IDs, timestamps, CPU and memory usage, and body sizes are excluded."
+
+[[origins]]
+id = "sir_lab_data_release"
+name = "SIR Lab (Huawei Research UK) data-release, Huawei Public Cloud Trace 2025"
+url = "https://github.com/sir-lab/data-release"
+type = "repository"
+notes = "GitHub README documents the schema and license and links the Google Drive objects."
+
+[[resources]]
+id = "r5_request_table_zip"
+origin = "sir_lab_data_release"
+url = "https://drive.usercontent.google.com/download?id=102AFIHkEQHuvG8-hZeWHVFqXeeI-a8xS&export=download&confirm=t"
+type = "archive"
+version = "Region 5 request table, day 30 (Drive last-modified 2025-11-20T11:04:02Z)"
+access = "Anonymous Google Drive usercontent download (confirm=t), range-capable; served as attachment filename R5.zip."
+size_bytes = 269637125
+sha256 = "5825f74443cf6e4f5df264f8c94d439fc9eae576399f9786a50ca4cb3316e60d"
+local_path = "downloads/huawei_cloud2025_serverless_request_latency_f64/R5.zip"
+notes = "Zip of 200 Spark CSV parts R5/part-00000..00199-7553bf50-4dbd-4c65-84df-39bf88b4f156-c000.csv (Deflate, 730,289,350 bytes uncompressed). Each part is a consecutive time slice of day 30, ordered by time_worker. download.sh pins the byte size and the SHA-256 of the 21,000-byte central directory (68bd434f9a9f812826658c8b9c3150833e8871eb1cc8a7560d16bea0d9ca6a8b), which fixes every member's name, size and CRC-32. It CRC-checks every member, checks every CSV header, checks the whole-file SHA-256 against the value pinned here and in download.sh (measured on the first fetch, 2026-10-09), and records it in download_inventory.json."
+
+[local_paths]
+downloads = "downloads/huawei_cloud2025_serverless_request_latency_f64/"
+filtered = "filtered/huawei_cloud2025_serverless_request_latency_f64/"
+index = "index/huawei_cloud2025_serverless_request_latency_f64/"
+samples = "samples/huawei_cloud2025_serverless_request_latency_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/huawei_cloud2025_serverless_request_latency_f64/samples.jsonl"
+summary = "Validate the pinned R5.zip, parse the 200 CSV parts, key rows by deployed function (funcName, userID, podID pool prefix), keep functions with at least 1,000 valid requests, sort each function's requests by time_frontend, and emit one little-endian float64 file per function for each of totalCost_frontend, totalCost_worker, runtimeCost and busCost."
+deterministic_notes = "One fixed Drive object; size and central-directory SHA-256 pinned; members read in name order. A function key is (funcName, userID, podID with its trailing '-<digits>' pod counter removed), matching the upstream funcID definition (funcName + userID + poolName). Within a function, requests are stable-sorted by time_frontend, with ties kept in source order (zip member order, then row order, which is time_worker ascending). The minimum is 1,000 retained requests per function. Sample files are named f<funcName>_u<userID>_<pool>.bin. verify.sh re-derives every sample from the zip with an independent parser and checks byte-exact SHA-256, value counts, finite non-negative values, non-constant samples (a constant (function, series) sample is skipped for that series only and listed in build_stats.json), no duplicate samples, equal row counts across the four series of a function, drop counts, and the manifest's sample_count and total_size_bytes."
+
+[[series]]
+id = "total_cost_frontend_f64"
+description = "End-to-end request latency measured by the frontend."
+semantic_meaning = "End-to-end time of one request as measured by the platform frontend (frontend log), in seconds. One sample is the complete day-30 request sequence of one deployed function, in time_frontend order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source logs decimal seconds with microsecond resolution, printed as Java double text (for example '9.31E-4' or '0.023749'). Each cell is parsed with Python float(), which gives the correctly rounded IEEE-754 binary64 value, and stored unchanged. There is no rounding, rescaling or integer conversion."
+source_resources = ["r5_request_table_zip"]
+source_format = "Spark CSV request table (zip of 200 parts)"
+source_field = "totalCost_frontend"
+filtered_input_path = "filtered/huawei_cloud2025_serverless_request_latency_f64/build_stats.json"
+filtering = "Region 5, day 30 only. Rows are kept when time_frontend and all four latency columns are valid (see missing_value_policy), so the four series of a function stay row-aligned. Functions with fewer than 1,000 retained requests are excluded. Regions 1 and 3 are excluded because R1 is a top-100-pods-per-function selection and R3 is a subsample, which are different sampling regimes."
+missing_value_policy = "A row is dropped from all four series when time_frontend is blank or non-finite (worker-only rows with no frontend join), when funcName/userID is blank or podID lacks a '-<digits>' suffix, or when any of totalCost_frontend, totalCost_worker, runtimeCost or busCost is blank, non-finite (NaN or Inf) or negative. Zero is a valid value. Unparseable non-blank tokens and rows with the wrong column count are fatal. Drop counts per reason are written to build_stats.json, and verify.sh re-derives and checks them."
+conversion = "float(text) to IEEE-754 binary64, little-endian, one file per function in time_frontend order (stable over source order)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 array"
+sample_geometry = "per_function_request_sequence_1d"
+sample_rank = 1
+sample_axes = ["request_in_time_frontend_order"]
+natural_record_kind = "serverless_function_day_request_latency_sequence"
+sample_count = 37
+total_size_bytes = 27326392
+output_path = "samples/huawei_cloud2025_serverless_request_latency_f64/total_cost_frontend_f64/"
+
+[[series]]
+id = "total_cost_worker_f64"
+description = "Time spent in the function worker pod."
+semantic_meaning = "Total time one request spent in the function worker pod (worker log), in seconds. One sample is the complete day-30 request sequence of one deployed function, in time_frontend order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source logs decimal seconds with microsecond resolution, printed as Java double text (for example '9.31E-4' or '0.023749'). Each cell is parsed with Python float(), which gives the correctly rounded IEEE-754 binary64 value, and stored unchanged. There is no rounding, rescaling or integer conversion."
+source_resources = ["r5_request_table_zip"]
+source_format = "Spark CSV request table (zip of 200 parts)"
+source_field = "totalCost_worker"
+filtered_input_path = "filtered/huawei_cloud2025_serverless_request_latency_f64/build_stats.json"
+filtering = "Region 5, day 30 only. Rows are kept when time_frontend and all four latency columns are valid (see missing_value_policy), so the four series of a function stay row-aligned. Functions with fewer than 1,000 retained requests are excluded. Regions 1 and 3 are excluded because R1 is a top-100-pods-per-function selection and R3 is a subsample, which are different sampling regimes."
+missing_value_policy = "A row is dropped from all four series when time_frontend is blank or non-finite (worker-only rows with no frontend join), when funcName/userID is blank or podID lacks a '-<digits>' suffix, or when any of totalCost_frontend, totalCost_worker, runtimeCost or busCost is blank, non-finite (NaN or Inf) or negative. Zero is a valid value. Unparseable non-blank tokens and rows with the wrong column count are fatal. Drop counts per reason are written to build_stats.json, and verify.sh re-derives and checks them."
+conversion = "float(text) to IEEE-754 binary64, little-endian, one file per function in time_frontend order (stable over source order)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 array"
+sample_geometry = "per_function_request_sequence_1d"
+sample_rank = 1
+sample_axes = ["request_in_time_frontend_order"]
+natural_record_kind = "serverless_function_day_request_latency_sequence"
+sample_count = 37
+total_size_bytes = 27326392
+output_path = "samples/huawei_cloud2025_serverless_request_latency_f64/total_cost_worker_f64/"
+
+[[series]]
+id = "runtime_cost_f64"
+description = "Time spent in the language runtime."
+semantic_meaning = "Time one request spent in the function's language runtime inside the worker pod (worker log), in seconds. It is close to totalCost_worker minus workerCost (within a few microseconds), so it is correlated with total_cost_worker_f64, but it is separately logged by the platform. One sample is the complete day-30 request sequence of one deployed function, in time_frontend order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source logs decimal seconds with microsecond resolution, printed as Java double text (for example '9.31E-4' or '0.023749'). Each cell is parsed with Python float(), which gives the correctly rounded IEEE-754 binary64 value, and stored unchanged. There is no rounding, rescaling or integer conversion."
+source_resources = ["r5_request_table_zip"]
+source_format = "Spark CSV request table (zip of 200 parts)"
+source_field = "runtimeCost"
+filtered_input_path = "filtered/huawei_cloud2025_serverless_request_latency_f64/build_stats.json"
+filtering = "Region 5, day 30 only. Rows are kept when time_frontend and all four latency columns are valid (see missing_value_policy), so the four series of a function stay row-aligned. Functions with fewer than 1,000 retained requests are excluded. Regions 1 and 3 are excluded because R1 is a top-100-pods-per-function selection and R3 is a subsample, which are different sampling regimes."
+missing_value_policy = "A row is dropped from all four series when time_frontend is blank or non-finite (worker-only rows with no frontend join), when funcName/userID is blank or podID lacks a '-<digits>' suffix, or when any of totalCost_frontend, totalCost_worker, runtimeCost or busCost is blank, non-finite (NaN or Inf) or negative. Zero is a valid value. Unparseable non-blank tokens and rows with the wrong column count are fatal. Drop counts per reason are written to build_stats.json, and verify.sh re-derives and checks them. Additionally, a (function, series) sample whose values are all identical is skipped for that series only and listed in build_stats.json; in this build one function (f49_u128_pool22-300-128, 40,561 requests) logs runtimeCost = 0.0 for every request, so this series has 36 samples while the other three have 37."
+conversion = "float(text) to IEEE-754 binary64, little-endian, one file per function in time_frontend order (stable over source order)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 array"
+sample_geometry = "per_function_request_sequence_1d"
+sample_rank = 1
+sample_axes = ["request_in_time_frontend_order"]
+natural_record_kind = "serverless_function_day_request_latency_sequence"
+sample_count = 36
+total_size_bytes = 27001904
+output_path = "samples/huawei_cloud2025_serverless_request_latency_f64/runtime_cost_f64/"
+
+[[series]]
+id = "bus_cost_f64"
+description = "Time spent in the busProxy component."
+semantic_meaning = "Time one request spent in the busProxy forwarding component on the VM between frontend and worker pod (frontend log), in seconds. One sample is the complete day-30 request sequence of one deployed function, in time_frontend order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source logs decimal seconds with microsecond resolution, printed as Java double text (for example '9.31E-4' or '0.023749'). Each cell is parsed with Python float(), which gives the correctly rounded IEEE-754 binary64 value, and stored unchanged. There is no rounding, rescaling or integer conversion."
+source_resources = ["r5_request_table_zip"]
+source_format = "Spark CSV request table (zip of 200 parts)"
+source_field = "busCost"
+filtered_input_path = "filtered/huawei_cloud2025_serverless_request_latency_f64/build_stats.json"
+filtering = "Region 5, day 30 only. Rows are kept when time_frontend and all four latency columns are valid (see missing_value_policy), so the four series of a function stay row-aligned. Functions with fewer than 1,000 retained requests are excluded. Regions 1 and 3 are excluded because R1 is a top-100-pods-per-function selection and R3 is a subsample, which are different sampling regimes."
+missing_value_policy = "A row is dropped from all four series when time_frontend is blank or non-finite (worker-only rows with no frontend join), when funcName/userID is blank or podID lacks a '-<digits>' suffix, or when any of totalCost_frontend, totalCost_worker, runtimeCost or busCost is blank, non-finite (NaN or Inf) or negative. Zero is a valid value. Unparseable non-blank tokens and rows with the wrong column count are fatal. Drop counts per reason are written to build_stats.json, and verify.sh re-derives and checks them."
+conversion = "float(text) to IEEE-754 binary64, little-endian, one file per function in time_frontend order (stable over source order)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 array"
+sample_geometry = "per_function_request_sequence_1d"
+sample_rank = 1
+sample_axes = ["request_in_time_frontend_order"]
+natural_record_kind = "serverless_function_day_request_latency_sequence"
+sample_count = 37
+total_size_bytes = 27326392
+output_path = "samples/huawei_cloud2025_serverless_request_latency_f64/bus_cost_f64/"

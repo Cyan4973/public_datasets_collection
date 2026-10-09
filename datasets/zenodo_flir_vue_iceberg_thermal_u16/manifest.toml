@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "zenodo_flir_vue_iceberg_thermal_u16"
+name = "Drone Thermal-Infrared Frames of a Drifting Iceberg, NE Greenland 2018 (FLIR Vue Pro R 640 T-Linear Scene Temperature, 0.04 K UInt16)"
+description = "360 native 16-bit T-linear scene-temperature frames (640x512, 0.04 K per count) from an uncooled FLIR Vue Pro R 640 microbolometer on a DJI Phantom 3, imaging a drifting iceberg and surrounding seawater in Dickson Fjord, NE Greenland (20-21 Aug 2018); every 8th 1 Hz frame of five unique flight sessions, emitted unchanged as uint16 LE."
+homepage = "https://zenodo.org/records/10641368"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Carlson, D. (2024). Drone thermal infrared imagery of a drifting iceberg in Northeast Greenland in August 2018 [Data set]. Zenodo. https://doi.org/10.5281/zenodo.10641368"
+notes = "Zenodo API https://zenodo.org/api/records/10641368 (fetched 2026-10-08): metadata.license = {'id': 'cc-by-4.0'}; the record page shows 'Creative Commons Attribution 4.0 International'. The licence applies to the deposited files (the session zips and the example notebook). Attribution to Daniel Carlson and the DOI must be preserved."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Zenodo deposit by the data author (DOI 10.5281/zenodo.10641368, published 2024-02-09). Anonymous HTTP byte-range requests to zenodo.org/records/10641368/files/<zip>?download=1."
+usage_notes = "Thermal images of an iceberg and open fjord water from a research cruise (HDMS Lauge Koch). No people, identities, or personal fields."
+
+[[origins]]
+id = "zenodo"
+name = "Zenodo record 10641368"
+url = "https://zenodo.org/records/10641368"
+type = "repository"
+notes = "Record metadata from https://zenodo.org/api/records/10641368; six session zips plus an example notebook (make_FLIR_vid.ipynb)."
+
+[[resources]]
+id = "session_zip_members"
+origin = "zenodo"
+url = "https://zenodo.org/records/10641368/files/<session>.zip?download=1"
+type = "file"
+version = "Zenodo record 10641368 v1 (2024-02-09); frame table pinned 2026-10-08 in scripts/frames.tsv (sha256 191717dab038259d87c8aecf64c0c96ffc9c4c741593641904f1453b32362fc5): zip size, member local-header offset, range end, compressed/uncompressed size, CRC32 per frame"
+access = "Direct public download; HTTP byte-range GET of [local file header .. data descriptor] for each of 360 selected .tiff members in five zips. download.sh requires HTTP 206 with an exact Content-Range whose total equals the pinned zip size, then checks the local header (signature, method 8, member name, deferred-or-final crc/sizes), raw-inflates and checks CRC32 + sizes against the pinned central directory and the data descriptor, and parses the TIFF IFD (640x512, BitsPerSample 16, Compression 1, SamplesPerPixel 1, Make FLIR / Model Vue Pro R 640)."
+size_bytes = 82015205
+sha256 = ""
+local_path = "downloads/zenodo_flir_vue_iceberg_thermal_u16/<session>/<frame>.tiff.zipmember"
+notes = "82,015,205 bytes of member ranges are transferred (each = 114 bytes of header/descriptor + deflated TIFF). Whole-zip md5 values from the Zenodo API are recorded in scripts/flir.py (SESSIONS) for provenance but cannot be checked from ranges; per-member integrity is pinned by CRC32 + sizes from each zip's central directory. Zip sizes: 20180820_035505 70,929,301; 20180820_040000 77,082,289; 20180821_034534 138,761,841; 20180821_092823 324,409,553; 20180821_155204 453,347,875. 20180821_160000.zip (71,072,781 bytes) is excluded: all 311 of its members are byte-identical (name + CRC32) to members of 20180821_155204.zip."
+
+[local_paths]
+downloads = "downloads/zenodo_flir_vue_iceberg_thermal_u16/"
+filtered = "filtered/zenodo_flir_vue_iceberg_thermal_u16/"
+index = "index/zenodo_flir_vue_iceberg_thermal_u16/"
+samples = "samples/zenodo_flir_vue_iceberg_thermal_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_flir_vue_iceberg_thermal_u16/samples.jsonl"
+summary = "Range-download 360 TIFF members (every 8th 1 Hz frame per session) from five pinned Zenodo zips, raw-inflate and CRC-check each, parse the TIFF IFD, and emit each 640x512 uint16 T-linear temperature plane (0.04 K per count) unchanged as one little-endian sample per frame."
+deterministic_notes = "Population: all 2,859 unique .tiff frames in the five non-duplicate session zips (295 + 346 + 634 + 798 + 786; the 20180820 pair is one flight split at 04:00:00). Consecutive 1 Hz frames are near-duplicates, so the bounded subset is frames with index % 8 == 0 in filename (= capture time) order within each session: 37 + 44 + 80 + 100 + 99 = 360 frames, pinned in scripts/frames.tsv (which also lists the unselected frames, selected = 0). discover.sh re-derives the table from tail ranges of the zips. TIFF decode honours II/MM byte order and StripOffsets/StripByteCounts (all observed frames are II with one 655,360-byte strip at offset 8, but this is not assumed). Every frame must carry XMP Camera:TlinearGain = 0.04 (exactly once) and Camera:IsNormalized = 1, else fatal in download/build/verify. Per-frame semantic gates: >= 32 distinct values, modal value <= 25% of pixels, max - min >= 50 steps (2 K), <= 0.1% of pixels at 0 or 65535. Build rejects duplicate frame content (sha256). verify.sh re-inflates and re-decodes every member, compares bytes with the stored sample, recomputes statistics from the stored files, and checks index fields, uniqueness, directory contents, ingest stats, and the manifest totals."
+
+[[series]]
+id = "flir_tlinear_temperature_u16"
+description = "In-camera T-linear scene (brightness) temperatures, 0.04 K per count, from a FLIR Vue Pro R 640 (13 mm) uncooled microbolometer: 640x512 frames of a drifting iceberg and surrounding seawater."
+semantic_meaning = "Per pixel, the camera's in-camera T-linear scene (brightness) temperature in units of 0.04 K: kelvin = value x 0.04 (Celsius = value x 0.04 - 273.15). Observed 6,647-8,031 = about 265.9-321.2 K: iceberg about -6 to 0 C, seawater about 10-17 C, the ship deck at takeoff up to about 48 C. The camera applies its own radiometric calibration and linearization; these are uncorrected scene brightness temperatures (the recipe applies no emissivity or atmospheric correction and no scaling). Evidence: every frame's XMP packet (TIFF tag 700) declares <Camera:TlinearGain>0.04</Camera:TlinearGain> and <Camera:IsNormalized>1</Camera:IsNormalized> (checked for all 360 selected frames and enforced by decode_tiff), and the uploader's notebook make_FLIR_vid.ipynb in the same record converts pixels with image_array * 0.04 - 273.15."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The camera itself writes linearized temperatures (T-linear high-resolution mode, 0.04 K per count, IsNormalized = 1) as an uncompressed 16-bit single-channel TIFF strip; the recipe reverses only the zip deflate and (if MM) byte order and applies no scaling or offset. Evidence: every frame's XMP packet (TIFF tag 700) declares <Camera:TlinearGain>0.04</Camera:TlinearGain> and <Camera:IsNormalized>1</Camera:IsNormalized> (checked for all 360 selected frames and enforced by decode_tiff), and the uploader's notebook make_FLIR_vid.ipynb in the same record converts pixels with image_array * 0.04 - 273.15. The rest of the XMP/EXIF metadata is not emitted."
+source_resources = ["session_zip_members"]
+source_format = "Uncompressed baseline TIFF (BitsPerSample 16, SamplesPerPixel 1, Photometric MinIsBlack, Make FLIR, Model 'Vue Pro R 640 13mm') stored as a deflated zip member <session>/<YYYYMMDD_HHMMSS>.tiff"
+source_field = "IFD0 image strip(s): 640x512 uint16 T-linear scene-temperature raster (0.04 K per count)"
+filtered_input_path = "filtered/zenodo_flir_vue_iceberg_thermal_u16/ingest_stats.json"
+filtering = "Every 8th frame in capture-time order within each of five unique sessions (360 of 2,859). All pixels of each selected frame are kept. Excluded: the duplicate session zip 20180821_160000.zip, AVI renders and __MACOSX resource forks inside the zips, the example notebook, and the TIFF metadata (EXIF/XMP/FLIR maker notes; the XMP T-linear gain is checked, not emitted)."
+missing_value_policy = "Radiometric frames have no missing pixels or sentinel values. Any range-length, Content-Range, CRC32, size, data-descriptor, TIFF-structure mismatch, or missing/different XMP Camera:TlinearGain (must be exactly 0.04) or Camera:IsNormalized (must be 1) is fatal in download.sh, build.sh, and verify.sh, as is any frame failing the semantic gates (distinct values, modal fraction, dynamic range, 0/65535 fraction) or duplicating another frame. Nothing is dropped or imputed."
+conversion = "Raw-inflate the zip member, parse TIFF IFD0 with the declared byte order, concatenate StripOffsets/StripByteCounts strips (655,360 bytes), byte-swap only if the TIFF is big-endian (none observed), and write the 327,680 uint16 values unchanged in row-major order as little-endian; one file per frame named <YYYYMMDD_HHMMSS>_h512_w640_u16le.bin."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 T-linear scene-temperature raster, 0.04 K per count"
+sample_geometry = "2d_thermal_camera_frame"
+sample_rank = 2
+sample_axes = ["image_y", "image_x"]
+natural_record_kind = "thermal_camera_frame"
+sample_count = 360
+total_size_bytes = 235929600
+output_path = "samples/zenodo_flir_vue_iceberg_thermal_u16/flir_tlinear_temperature_u16/"

@@ -464,3 +464,4 @@ ign_lidarhd_terrainmapper_intensity_u16	autocollect	16	laser_range	Leica Terrain
 cdip_waverider_m3_z_displacement_f32	autocollect	32	wave_buoy_displacement	datawell_dwr_mk3_waverider	thredds.cdip.ucsd.edu	-	OK
 noaa_nos_sfbofs_fvcom_salinity_f32	autocollect	32	sim_ocean_field	noaa_nos_fvcom_ofs	noaa-nos-ofs-pds.s3.amazonaws.com	-	OK
 usgs_3dep_nc_geiger_laz_x_i32	autocollect	32	laser_range	Harris IntelliEarth Geiger-mode (GmAPD) airborne lidar, sensor S/N003, USGS 3DEP NC Phase 4 (LAS 1.4 PDRF 6 LAZ)	USGS 3DEP LPC (rockyweb.usgs.gov / prd-tnm.s3.amazonaws.com StagedProducts)	-	OK
+usgs_3dep_id_northforkpayette_laz_return_number_u8	autocollect	8	laser_range	airborne_lidar_las_usgs3dep_ql1_pdrf6_merge (Quantum Spatial, Riegl VQ-1560i, LAS 1.4 PDRF 6 LAZ)	rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/ID_NorthForkPayette_2020_B20	-	OK

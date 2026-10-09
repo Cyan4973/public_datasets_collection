@@ -1,0 +1,120 @@
+manifest_version = 1
+dataset_id = "usgs_3dep_id_northforkpayette_laz_return_number_u8"
+name = "USGS 3DEP ID North Fork Payette 2020 QL1 Lidar (Riegl VQ-1560i, LAS 1.4 PDRF 6) Per-Point Return Number UInt8"
+description = "Native LAS 1.4 point-format-6 return numbers (the 4-bit ordinal 1..15 of each echo within its emitted laser pulse, low nibble of record byte 14) of every point in 20 complete 750 m LAZ tiles from the USGS 3DEP ID_NorthForkPayette_1_2020 work unit (Quantum Spatial, Riegl VQ-1560i, collected 2020-09-03..2020-10-09 over the Payette National Forest, Idaho), one uint8 array per tile in file point order."
+homepage = "https://prd-tnm.s3.amazonaws.com/index.html?prefix=StagedProducts/Elevation/LPC/Projects/ID_NorthForkPayette_2020_B20/ID_NorthForkPayette_1_2020/"
+
+[license]
+name = "U.S. Government Public Domain"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://www.usgs.gov/faqs/what-are-terms-uselicensing-map-services-and-data-national-map"
+citation = "U.S. Geological Survey, 2022, USGS Lidar Point Cloud ID_NorthForkPayette_2020_B20 (3D Elevation Program), accessed via https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/ID_NorthForkPayette_2020_B20/."
+notes = "AWS Open Data Registry entry for USGS 3DEP lidar (https://raw.githubusercontent.com/awslabs/open-data-registry/main/datasets/usgs-lidar.yaml): 'License: US Government Public Domain https://www.usgs.gov/faqs/what-are-terms-uselicensing-map-services-and-data-national-map'. Per-tile FGDC metadata (e.g. metadata/USGS_LPC_ID_NorthForkPayette_2020_B20_11TNK56629597.xml on the prd-tnm bucket): origin 'U.S. Geological Survey', pubdate 20220205, accconst 'None. Any downloading and use of these data signifies a user's agreement to comprehension and compliance of the USGS Standard Disclaimer...', useconst is an accuracy disclaimer plus 'Acknowledgement of the originating agencies would be appreciated...'. Modification performed here: only the return-number nibble of each point record is kept."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official USGS 3DEP staged LPC delivery. LAZ tiles come only from rockyweb.usgs.gov (not mirrored on the prd-tnm S3 bucket); the project VPC, link list and the USGS work-package report come from the public prd-tnm S3 bucket (anonymous, not requester-pays). No mirrors."
+usage_notes = "Airborne lidar echo ordinals over mountain conifer forest, meadows and water in rural central Idaho. Per-point return numbers carry no identity or imagery."
+
+[[origins]]
+id = "usgs_prd_tnm_s3"
+name = "USGS The National Map staged products (prd-tnm S3 bucket)"
+url = "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/ID_NorthForkPayette_2020_B20/ID_NorthForkPayette_1_2020/"
+type = "bucket"
+notes = "Public anonymous bucket with the work-unit VPC (STAC FeatureCollection, pc:count and proj:bbox per tile), 0_file_download_links.txt, per-tile FGDC metadata, and the project work-package report under StagedProducts/Elevation/metadata/ID_NorthForkPayette_2020_B20/."
+
+[[origins]]
+id = "usgs_rockyweb"
+name = "USGS rockyweb staged elevation delivery"
+url = "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/ID_NorthForkPayette_2020_B20/ID_NorthForkPayette_1_2020/LAZ/"
+type = "website"
+notes = "Anonymous HTTPS host for the LAZ tiles (nginx, byte ranges, ETag = mtime-size). Connections through the egress proxy fail intermittently (503), so download.sh retries at two levels."
+
+[[resources]]
+id = "project_vpc"
+origin = "usgs_prd_tnm_s3"
+url = "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/ID_NorthForkPayette_2020_B20/ID_NorthForkPayette_1_2020/ID_NorthForkPayette_1_2020.vpc"
+type = "file"
+version = "Last-Modified 2026-09-13T02:12:14Z, ETag 07bb9841c6d0e24237ec3c480580460c"
+access = "Direct public download."
+size_bytes = 29483672
+sha256 = "a62a72a0855a35dd28f6ff2e1a633aa0cbd03108023d1db30bb3d9cdd8dbdbbe"
+local_path = "downloads/usgs_3dep_id_northforkpayette_laz_return_number_u8/meta/ID_NorthForkPayette_1_2020.vpc"
+notes = "9,761 tile features with pc:count, proj:bbox and asset href. Used to re-derive the selection; a changed digest is a warning (USGS regenerates VPCs), a changed selection is fatal."
+
+[[resources]]
+id = "download_links"
+origin = "usgs_prd_tnm_s3"
+url = "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/ID_NorthForkPayette_2020_B20/ID_NorthForkPayette_1_2020/0_file_download_links.txt"
+type = "file"
+version = "Last-Modified 2022-05-24T22:53:25Z, ETag 7e95e11d61d3681f4ae1d9f6627dbe0b"
+access = "Direct public download."
+size_bytes = 1864351
+sha256 = "81fa503b952bd6665950ebd1ccfebb93e5250f683aa0560bb8ade0b3f3cbc13f"
+local_path = "downloads/usgs_3dep_id_northforkpayette_laz_return_number_u8/meta/0_file_download_links.txt"
+notes = "9,761 official rockyweb LAZ URLs; every VPC tile and every selected tile must appear in it."
+
+[[resources]]
+id = "work_package_report"
+origin = "usgs_prd_tnm_s3"
+url = "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/metadata/ID_NorthForkPayette_2020_B20/USGS_ID_NorthForkPayette_2020_B20_WP_Report.pdf"
+type = "file"
+version = "Report date 2022-03-09; Last-Modified 2022-12-04T04:02:28Z, ETag ac6871307399aa6515a727079731a4b1"
+access = "Direct public download."
+size_bytes = 53411
+sha256 = "ba001930d4b9ebd50e10caa3adc8abb96792c7f2cf4cea41995444e848a2bf64"
+local_path = "downloads/usgs_3dep_id_northforkpayette_laz_return_number_u8/meta/USGS_ID_NorthForkPayette_2020_B20_WP_Report.pdf"
+notes = "USGS project lineage: Lidar Base Specification 2.1, primary contractor Quantum Spatial Inc, LAS 1.4, linear-mode lidar, sensor 'Riegl VQ-1560i - Aerial Oscillating Mirror', collection 2020-09-03..2020-10-09, work unit ID_NorthForkPayette_1_2020 (197398) Quality Level 1, EPSG 6340 + 5703 (GEOID18)."
+
+[[resources]]
+id = "laz_tiles"
+origin = "usgs_rockyweb"
+url = "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/ID_NorthForkPayette_2020_B20/ID_NorthForkPayette_1_2020/LAZ/"
+type = "file"
+version = "20 LAZ files USGS_LPC_ID_NorthForkPayette_2020_B20_<tile>.laz, Last-Modified 2022-02-04/05, pinned in sources.tsv"
+access = "Direct public download, one file per tile."
+size_bytes = 1007660019
+sha256 = ""
+local_path = "downloads/usgs_3dep_id_northforkpayette_laz_return_number_u8/laz/"
+notes = "sources.tsv pins tile id, VPC pc:count, URL, size, ETag, Last-Modified, header creation day and the 15 extended points-by-return counts read from 8 KiB header range GETs; per-file sha256 (recorded by the first driver download, 2026-10-08) is pinned in sources.tsv column 10 and enforced by download.sh and build.sh (the manifest sha256 is empty because the resource is 20 files). Every tile is validated before it is kept: LAS 1.4, system identifier MERGE, generating software 'LiDAR Suite', creation year 2021, compressed PDRF 6 with 30-byte records, scale 0.01, offset 0, WKT global-encoding bit, header point count == VPC pc:count, points-by-return == pinned, LASzip compressor 3 (POINT14 v3, chunk 50000), contractor VLR NIIRS10, chunk-table pointer, and an OGC WKT EVLR for NAD83(2011) / UTM zone 11N."
+
+[local_paths]
+downloads = "downloads/usgs_3dep_id_northforkpayette_laz_return_number_u8/"
+filtered = "filtered/usgs_3dep_id_northforkpayette_laz_return_number_u8/"
+index = "index/usgs_3dep_id_northforkpayette_laz_return_number_u8/"
+samples = "samples/usgs_3dep_id_northforkpayette_laz_return_number_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/usgs_3dep_id_northforkpayette_laz_return_number_u8/samples.jsonl"
+summary = "Fetch 20 pinned QL1 LAZ tiles, decode them with the repository's pure-stdlib LASzip decoder (tools/laz/laszip.py), keep the low nibble of byte 14 (return number) of every 30-byte LAS 1.4 PDRF-6 record, and emit one uint8 sample per tile in file point order."
+deterministic_notes = "Selection rule (scripts/nfp_tiles.py select, documented by discover.sh; never looks at return numbers): VPC features of the work unit whose proj:bbox minimum easting is >= 500,000 m (the contiguous Idaho area; drops the disjoint 596-tile 11TLL block near lon -118.5 in northeastern Oregon), with a full 750 m footprint (x and y extents >= 749 m), and pc:count in [8,000,000, 11,000,000) (lower quartile of per-tile counts, to bound pure-Python decode time); sorted by tile id, the 20 tiles at ranks floor((2i+1)*962/40) of the 962 qualifying tiles. download.sh re-derives the selection from the live VPC and link list and refuses to proceed if it differs from sources.tsv. build.sh re-validates every tile, decodes all chunks in file order, fails on any return number 0, on any difference between the decoded per-return histogram and the header's 15 extended points-by-return counts, on a point-count mismatch, on a constant tile, or if more than 0.1% of points have return number > number of returns. verify.sh re-decodes each tile through the whole-file decode path, re-extracts return numbers with struct.iter_unpack and compares bytes, hashes, histograms (against the header again), index fields and manifest totals, and rejects samples with fewer than 1,000 non-first returns or one value above 99.99%. Expected realization (header counts pinned): 20 samples, 196,763,633 values and bytes; median 9,834,908 values per sample (8,321,172 to 10,980,768)."
+
+[[series]]
+id = "nfp_2020_return_number_u8"
+description = "LAS 1.4 return number of every lidar point in one published USGS 3DEP North Fork Payette QL1 LAZ tile, as the native 4-bit field widened to one byte."
+semantic_meaning = "Ordinal position (1 = first echo, 2 = second, ... up to 15; up to 9 occur in the pinned headers) of each recorded echo within the laser pulse that produced it, as assigned by the Riegl VQ-1560i's online waveform processing and kept through the contractor's processing (header system id MERGE, software LiDAR Suite), for every point of a 750 m x 750 m tile over the Payette National Forest (conifer forest, meadows, reservoirs) collected 2020-09-03..2020-10-09. High values mark deep canopy penetration; runs of 1 mark open ground, water or single-surface targets. Values follow the file's delivered point order (stored in LASzip 50,000-point chunks); the build does not reorder."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "LAS 1.4 PDRF 6 packs return number (bits 0-3) and number of returns (bits 4-7) into record byte 14. The sample keeps bits 0-3 unchanged as an unsigned byte (b & 0x0F); number of returns, classification, scan angle, intensity and coordinates are not emitted."
+source_resources = ["laz_tiles"]
+source_format = "LAZ (LASzip 3.4r3 layered-chunked compressor, POINT14 v3 item, 50,000-point chunks) encoding LAS 1.4 point data record format 6, 30-byte records"
+source_field = "return number (bits 0-3 of byte 14 of each LAS 1.4 PDRF-6 point record)"
+filtered_input_path = "filtered/usgs_3dep_id_northforkpayette_laz_return_number_u8/build_stats.json"
+filtering = "20 tiles chosen by the selection rule. All points of each selected tile are kept regardless of classification, withheld, overlap, synthetic or scanner-channel flags; every other field is dropped."
+missing_value_policy = "LAS return numbers have no missing sentinel; 0 is invalid in LAS 1.4 and is fatal. Every record is kept. The decoded record count must equal the header point count (== VPC pc:count) and the per-return histogram must equal the header's 15 extended points-by-return counts exactly; any violation is fatal in build.sh and verify.sh. Nothing is dropped, reordered, clipped or imputed."
+conversion = "Decode each tile chunk by chunk with tools/laz/laszip.py iter_chunks; take records[14::30] and map each byte through a 256-entry low-nibble table (b & 0x0F); one sample file <tile file stem>.return_number_u8.bin per tile, value i = point i in file order."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw uint8 1-D array"
+sample_geometry = "per_point_attribute_in_file_point_order"
+sample_rank = 1
+sample_axes = ["point"]
+natural_record_kind = "complete_published_usgs_3dep_laz_tile"
+sample_count = 20
+total_size_bytes = 196763633
+output_path = "samples/usgs_3dep_id_northforkpayette_laz_return_number_u8/nfp_2020_return_number_u8/"

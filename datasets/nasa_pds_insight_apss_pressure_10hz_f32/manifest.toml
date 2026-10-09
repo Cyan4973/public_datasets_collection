@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "nasa_pds_insight_apss_pressure_10hz_f32"
+name = "InSight APSS Pressure Sensor Calibrated Martian Surface Atmospheric Pressure, 10 Hz Full-Sol Records (Pa), Float32"
+description = "Calibrated Mars surface atmospheric pressure in pascal measured at 10 samples/s by the InSight lander's APSS pressure sensor (Elysium Planitia), from the NASA PDS Atmospheres Node bundle urn:nasa:pds:insight_ps (data_calibrated collection). 28 full-sol 10 Hz products evenly spaced over the 496 such sol files (sols 169-1098, more than 1.4 Mars years). Each sol's PRESSURE column, 4-decimal ASCII in the source, is parsed into one raw little-endian float32 sample of about 887,770 values in row order."
+homepage = "https://atmos.nmsu.edu/data_and_services/atmospheres_data/INSIGHT/insight.html"
+
+[license]
+name = "Creative Commons Zero v1.0 Universal (NASA Science Data license for NASA-led mission data)"
+spdx = "CC0-1.0"
+url = "https://science.data.nasa.gov/about/license"
+citation = "Banfield, D., APSS PS Data (InSight Auxiliary Payload Sensor Suite pressure sensor bundle urn:nasa:pds:insight_ps), editors L. Mora Sotomayor and L. Huber, NASA Planetary Data System Atmospheres Node, 2019, https://doi.org/10.17189/1518939. Instrument paper: Banfield, D. et al. (2019), InSight Auxiliary Payload Sensor Suite (APSS), Space Sci Rev 215:4, https://doi.org/10.1007/s11214-018-0570-x (DOI cited in the bundle label)."
+notes = "NASA's science data license page (science.data.nasa.gov/about/license) states that, unless the data file is marked with a restrictive notice or license, observational, engineering, calibration and auxiliary data from a NASA-led mission are licensed as Creative Commons Zero, with no restrictions on use. InSight is a NASA Discovery mission led by JPL, and the APSS pressure sensor was provided by JPL. The PDS4 labels and the bundle label carry no restrictive notice. NASA SMD Scientific Information Policy (https://science.nasa.gov/researchers/science-data/science-information-policy/): 'It is Science Mission Directorate (SMD) policy, consistent with NASA and Federal policies, that information produced from SMD-funded scientific research activities be made publicly available.' Cite the PDS bundle DOI."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NASA Planetary Data System Atmospheres Node archive (atmos.nmsu.edu), anonymous HTTPS. Planetary meteorology instrument readings with no personal content."
+usage_notes = "Public NASA mission science data, CC0 per the NASA science data license. Retain the PDS citation."
+
+[[origins]]
+id = "pds_atm_insight_ps"
+name = "NASA PDS Atmospheres Node, InSight APSS PS bundle, data_calibrated collection"
+url = "https://atmos.nmsu.edu/PDS/data/PDS4/InSight/ps_bundle/data_calibrated/"
+type = "data_portal"
+notes = "Apache listings, 14 sol_NNNN_NNNN subdirectories. Each product is ps_calib_<SOL>_<VV>.csv plus a PDS4 XML label with file_size, records and md5_checksum. collection_ps_data_calibrated_inventory.tab (2023-07-21) lists 932 ps_calib and 589 ps_calibevent products. Probed 2026-10-08: the listings show 496 full-sol ps_calib products at ~87M (sols 169-1098). The other ps_calib products are partial sols or 2 Hz/20 Hz files of other sizes. Calibrated products are version 1.0 or 2.0 ('Time conversions updated', 2023-06-04)."
+
+[[resources]]
+id = "ps_calib_full_sol_10hz_csv"
+origin = "pds_atm_insight_ps"
+url = "https://atmos.nmsu.edu/PDS/data/PDS4/InSight/ps_bundle/data_calibrated/{sol_dir}/{file}"
+type = "file"
+version = "PDS4 bundle urn:nasa:pds:insight_ps, data_calibrated, product versions 1.0/2.0 as listed 2026-10-08 (files dated 2023-07-21)"
+access = "28 anonymous HTTPS GETs (curl, resumable .part files, 3 parallel), listed in files.tsv."
+size_bytes = 2540943006
+sha256 = ""
+local_path = "downloads/nasa_pds_insight_apss_pressure_10hz_f32/csv/"
+notes = "files.tsv pins the sol directory, file name, sol number, byte size, PDS4-label MD5, table record count, header length and label start/stop time for each of the 28 files. download.sh and build.sh reject any size or MD5 mismatch. Selection, resolved by discover.sh and scripts/select_files.py: fetch the labels of all 496 ~87M ps_calib products and keep those whose table holds 887,000-888,500 records over 88,700-88,800 s (one Mars sol at 10 Hz) with the standard 9-field schema (all 496 qualify; records 887,702-887,780). Then take 28 at evenly spaced positions of the sol-ordered list (index round(i*495/27)). This rule was fixed before looking at any pressure values. Excluded: the other 468 full-sol 10 Hz files (download-cap headroom; ~100 MB primary is the downstream selection budget), partial-sol and 2 Hz/20 Hz ps_calib products (other cadence regimes), ps_calibevent products, data_raw, and the TWINS wind/temperature bundles."
+
+[local_paths]
+downloads = "downloads/nasa_pds_insight_apss_pressure_10hz_f32/"
+filtered = "filtered/nasa_pds_insight_apss_pressure_10hz_f32/"
+index = "index/nasa_pds_insight_apss_pressure_10hz_f32/"
+samples = "samples/nasa_pds_insight_apss_pressure_10hz_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_pds_insight_apss_pressure_10hz_f32/samples.jsonl"
+summary = "Download 28 pinned full-sol 10 Hz calibrated APSS PS CSV tables, parse the PRESSURE column, keep rows with a non-empty PRESSURE at PRESSURE_FREQUENCY 10.0, and write each sol's values in row order as one raw little-endian float32 sample."
+deterministic_notes = "files.tsv fixes the 28 files, byte sizes and label MD5s. A synthetic self-test (scripts/selftest_apss.py) runs before download checks, build and verify. Per file: the header must be exactly the 9 PDS4 field names, CRLF-terminated (91 bytes = label header object_length); every record must split into 9 comma-separated fields; the record count must equal the label's Table_Delimited records. PRESSURE must match ^[0-9]{3,4}\\.[0-9]{4}$, lie in [100, 1500] Pa and round-trip through float32 to the identical 4-decimal string (checked for every value in build and verify; the float32 half-ulp below 1024 Pa is 3.05e-5 < 5e-5). Rows with an empty PRESSURE are dropped and counted. Rows with PRESSURE present at a PRESSURE_FREQUENCY other than '10.0' are dropped and counted; more than 1% of a file's rows is fatal (a misselected cadence regime). Samples are written in source row order, one per sol file, named ps_calib_<SOL>_<VV>.f32. Index rows carry source file, label MD5, sol, record/drop counts, min/max computed from the stored float32 and the sample SHA-256; filtered/.../ingest_stats.json holds per-file statistics. verify.sh re-parses each CSV with a different code path (csv module, struct.pack per value), byte-compares each sample, re-checks the round trip, index fields, ingest stats and manifest totals, and rejects samples with fewer than 1,000 distinct values or zero variance. Realized (build 2026-10-08): 28 samples, 24,857,573 values, 99,430,292 bytes, median 887,773 values per sample (range 887,702-887,780); 0 blank-PRESSURE rows and 0 non-10 Hz rows dropped in all 28 files, so every source row is kept; per-sample range 593.0015-811.9196 Pa, 241,577-374,285 distinct values per sample."
+
+[[series]]
+id = "insight_apss_pressure_10hz_f32"
+description = "InSight APSS calibrated surface atmospheric pressure (Pa), 10 samples/s, one Mars sol per sample."
+semantic_meaning = "Calibrated ambient atmospheric pressure at the InSight lander (Elysium Planitia, Mars) in pascal, measured by the APSS pressure sensor (a Tavis-built sensor inside the lander body, sampling ambient air through an inlet on the deck) at 10 Hz over one full sol (~88,775 s, ~887,770 records). Realized values span 593.0-811.9 Pa. The series holds the seasonal CO2-cycle level, the diurnal tide and the high-frequency pressure drops from convective vortices (dust-devil signatures)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source publishes PRESSURE as ASCII_Real with field_format %10.4f (1e-4 Pa resolution). The recipe parses each decimal into the nearest IEEE float32. Every stored value rounds back to the identical source string at 4 decimals, so the float32 sample is a lossless re-encoding of the published decimal lattice, not a remap. There is no scaling, resampling, interpolation or gap filling."
+source_resources = ["ps_calib_full_sol_10hz_csv"]
+source_format = "PDS4 Table_Delimited (PDS DSV 1, comma-separated, CRLF) calibrated APSS PS product ps_calib_<SOL>_<VV>.csv"
+source_field = "PRESSURE (field 6, ASCII_Real %10.4f, unit pascal), rows with PRESSURE_FREQUENCY (field 7) == 10.0"
+filtered_input_path = "filtered/nasa_pds_insight_apss_pressure_10hz_f32/ingest_stats.json"
+filtering = "Keep only field 6 (PRESSURE) of rows where it is non-empty and field 7 (PRESSURE_FREQUENCY) is exactly '10.0'. Excluded fields: AOBT, SCLK, LMST, LTST and UTC (timestamps, never primary), PRESSURE_FREQUENCY (cadence flag), and PRESSURE_TEMP with PRESSURE_TEMP_FREQUENCY (sensor temperature, a separate quantity filled only every 50th row at 0.2 Hz)."
+missing_value_policy = "The source has no numeric sentinel. Missing pressure appears as an empty field, and such rows are dropped and counted per file (index blank_pressure_rows, ingest_stats). Non-10 Hz pressure rows are dropped and counted (index non_10hz_rows). Above 1% per file this is fatal. A malformed decimal, a value outside [100, 1500] Pa, a failed float32 round trip, a wrong field count or record count, or a size/MD5 mismatch is fatal in build and verify. verify.sh re-applies the same policy from its own parse."
+conversion = "Read the CSV bytes, check the header, split records on CRLF and fields on ',', parse PRESSURE with float() and append to array('f') (IEEE float32, round-to-nearest). Write the values little-endian in source row order to samples/nasa_pds_insight_apss_pressure_10hz_f32/insight_apss_pressure_10hz_f32/ps_calib_<SOL>_<VV>.f32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 time series"
+sample_geometry = "one_mars_sol_of_10hz_records"
+sample_rank = 1
+sample_axes = ["time"]
+natural_record_kind = "insight_apss_ps_calibrated_sol_product"
+sample_count = 28
+total_size_bytes = 99430292
+output_path = "samples/nasa_pds_insight_apss_pressure_10hz_f32/insight_apss_pressure_10hz_f32/"

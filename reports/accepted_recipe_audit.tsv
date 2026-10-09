@@ -453,6 +453,7 @@ sevir_vil_storm_events_u8	ok	433520640	433520640	60	7225344	7225344	0	0	0	1	none
 csiro_parkes_uwl_search_mode_u8	ok	436207616	436207616	32	13631488	13631488	0	0	0	1	none	none
 zenodo_v16_nb_iot_sigmf_ci16	ok	438824272	877648544	2	219412136	438824272	0	0	0	1	none	none
 esc50_environmental_audio_i16	ok	441000000	882000000	2000	220500	441000	0	0	0	1	none	none
+gavo_hdap_walz_photographic_plate_scans_u16	ok	443106625	886213250	25	15998398	31996796	0	0	0	1	none	none
 zenodo_nanopore_slow5_i16	ok	449967586	899935172	15670	21995	43990	0	0	0	1	none	none
 openneuro_ds003483_vectorview_meg_mag_i16	ok	450126000	900252000	612	720500	1441000	0	0	0	1	none	none
 nihcc_chestxray14_frontal_radiograph_png_u8	ok	450887680	450887680	430	1048576	1048576	0	0	0	1	none	none

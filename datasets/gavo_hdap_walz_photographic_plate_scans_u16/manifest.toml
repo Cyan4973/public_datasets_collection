@@ -1,0 +1,89 @@
+manifest_version = 1
+dataset_id = "gavo_hdap_walz_photographic_plate_scans_u16"
+name = "HDAP Heidelberg 72 cm Walz Reflector Lunar Glass-Plate Scans (1906-1924), Native UInt16"
+description = "25 complete digitized historic photographic glass plates of the Moon exposed with the Heidelberg-Königstuhl 72 cm Walz reflector between 1906 and 1924, scanned for the Heidelberg Digitized Astronomical Plates (HDAP) archive and served by the GAVO data centre as BITPIX 16 + BZERO 32768 FITS images. Each plate's primary image is emitted unchanged as one row-major little-endian uint16 raster."
+homepage = "https://dc.g-vo.org/lswscans/res/positions/siap/info"
+
+[license]
+name = "Creative Commons Zero v1.0 Universal (public-domain dedication)"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "This work made use of the HDAP which was produced at Landessternwarte Heidelberg-Königstuhl under grant No. 00.071.2005 of the Klaus-Tschira-Foundation. Served by the GAVO Data Center (dc.g-vo.org), resource ivo://org.gavo.dc/lswscans/res/positions/siap."
+notes = "The VOResource record of the HDAP service (OAI-PMH GetRecord, ivo://org.gavo.dc/lswscans/res/positions/siap) carries <rights rightsURI=\"https://spdx.org/licenses/CC0-1.0.html\">To the extent possible under law, the publisher has waived all copyright and related or neighboring rights to the HDAP scans. ... Of course, you should still give proper credit when using this data as required by good scientific practice.</rights>, alongside an acknowledgement request (the citation above). Fetched 2026-10-09 (39,580 bytes, sha256 d5460a2d63743ea93d77288fb1a2e5811c0344693ba4fd54e96906381dabd359). download.sh re-fetches it and fails if the CC0 rights element disappears or changes; a pure transport failure only warns."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official GAVO Data Center product URLs (DaCHS getproduct) for HDAP plate scans; historic astronomical photographs of the Moon, 1906-1924."
+usage_notes = "Only the primary-HDU image values are emitted. FITS header text (which names the historic observer M. Wolf, 1863-1932) is not written to samples; index rows carry plate ID, observation date and value statistics only."
+
+[[origins]]
+id = "gavo_dc_hdap"
+name = "GAVO Data Center, HDAP -- Heidelberg Digitized Astronomical Plates (lswscans)"
+url = "https://dc.g-vo.org/lswscans/res/positions/siap/info"
+type = "data_portal"
+notes = "Plate metadata from the public TAP table lsw.plates (https://dc.g-vo.org/tap); files from http://dc.g-vo.org/getproduct/lswscans/data/part2/Walz/FITS/<plate>.fits (Range/resume supported, Last-Modified 2013-08-01)."
+
+[[resources]]
+id = "walz_lunar_plate_fits_selection"
+origin = "gavo_dc_hdap"
+url = "http://dc.g-vo.org/getproduct/lswscans/data/part2/Walz/FITS/"
+type = "file"
+version = "25 plates pinned in sources.tsv on 2026-10-09 (server Last-Modified 2013-08-01)"
+access = "Anonymous HTTP GET per plate with curl -C - resume, retries and stall detection. Pinned per plate: URL, size (lsw.plates.accsize, equal to the Content-Range total), NAXIS1/NAXIS2, header length, SHA-256 of the 5,760-byte primary header (from a Range probe), FITS DATE-OBS and the season. Upstream publishes no file checksum; download.sh records each full-file SHA-256 in downloads/<id>/download_plan.tsv and build/verify require it."
+size_bytes = 886386240
+sha256 = ""
+local_path = "downloads/gavo_hdap_walz_photographic_plate_scans_u16/fits/"
+notes = "Selection from the 46 Walz lunar plates (object 'Moon*') of 4,035 Walz plates in lsw.plates: 43 eligible at <= 62 MB; all plates of the sparse seasons 1906/07 winter (3), 1918 (3), 1920 (1, catalogued 'Moon (Eclipse)') and 1924 (3) plus 7 of 15 from March-April 1907 and 8 of 18 from 1909 at evenly spaced date ranks. See scripts/discover.py and discover.sh."
+
+[[resources]]
+id = "hdap_vor_rights_record"
+origin = "gavo_dc_hdap"
+url = "https://dc.g-vo.org/oai.xml?verb=GetRecord&metadataPrefix=ivo_vor&identifier=ivo://org.gavo.dc/lswscans/res/positions/siap"
+type = "file"
+version = "fetched at download time"
+access = "Anonymous HTTPS; checked for the HDAP title and the CC0-1.0 rights element."
+size_bytes = 39580
+sha256 = "d5460a2d63743ea93d77288fb1a2e5811c0344693ba4fd54e96906381dabd359"
+local_path = "downloads/gavo_hdap_walz_photographic_plate_scans_u16/evidence/hdap_siap_vor_record.xml"
+notes = "Rights evidence only; not a sample source. The sha256 is the 2026-10-09 copy; the record may be regenerated, so download.sh checks content, not the hash."
+
+[local_paths]
+downloads = "downloads/gavo_hdap_walz_photographic_plate_scans_u16/"
+filtered = "filtered/gavo_hdap_walz_photographic_plate_scans_u16/"
+index = "index/gavo_hdap_walz_photographic_plate_scans_u16/"
+samples = "samples/gavo_hdap_walz_photographic_plate_scans_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/gavo_hdap_walz_photographic_plate_scans_u16/samples.jsonl"
+summary = "Fetch 25 pinned HDAP Walz lunar plate FITS files, validate the primary-only uint16 header regime, and emit each complete primary image as one little-endian uint16 raster."
+deterministic_notes = "Header regime enforced in download, build and verify: SIMPLE = T, BITPIX = 16, NAXIS = 2, NAXIS1/NAXIS2 equal to the pin, BZERO = 32768, BSCALE = 1, no BLANK, TELESCOP = '72cm Walz Reflektor', OBJECT starting 'Moon', header SHA-256 equal to the pin, and file size exactly header (5,760) + NAXIS1*NAXIS2*2 + padding to 2,880, so no extension HDU exists (EXTEND = T is declared but unused). Build fails on fewer than 256 distinct values, a single value covering more than 90% of a plate (a blank plate), duplicate images, or missing season coverage; it records min, max, distinct count, dominant value and fraction, 0 and 65535 counts and nonzero padding bytes per plate. verify.sh uses its own header reader, decodes by array byteswap + sign-bit XOR and by exact struct arithmetic on every 97th row, byte-compares every sample, recomputes the statistics from the stored uint16, and checks manifest totals. scripts/selftest.py (run by build.sh) checks both parsers, both decoders and the regime rejections on a synthetic 1003 x 1001 FITS plate with edge values 0..65535."
+
+[[series]]
+id = "walz_lunar_plate_scan_dn_u16"
+description = "Complete 16-bit scanner rasters of historic Walz-reflector photographic glass plates of the Moon, one per plate."
+semantic_meaning = "16-bit gray value (DN) recorded by the HDAP flatbed scan of one photographic glass negative of the Moon exposed with the Heidelberg-Königstuhl 72 cm Walz reflector (focal length 2,815 mm, 73.3 arcsec/mm); most plates carry two 1 s exposures of the lunar disk. Values increase with emulsion density, so the dense lunar disks are bright and unexposed clear glass sits at the tone-curve floor 1422. HDAP publishes no density calibration for these plates. The rasters hold lunar surface detail, emulsion grain, plate edges, defects and scanner-border columns."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "FITS stores the image as BITPIX = 16 with BZERO = 32768 and BSCALE = 1, the standard encoding of unsigned 16-bit integers; adding BZERO recovers the archived uint16 exactly. Values are neither scaled nor clipped. The archived codes occupy a sparse, non-uniform subset of 0..65535 (a probe of D482 found about 3,400 distinct codes in 1 M pixels, with typical gaps of 10-22 DN in the 47,000-58,000 range), consistent with a scanner tone curve; this is preserved as archived."
+source_resources = ["walz_lunar_plate_fits_selection"]
+source_format = "FITS primary HDU (BITPIX 16, NAXIS 2, BZERO 32768, BSCALE 1), no extensions"
+source_field = "primary HDU image data unit: scanner gray value, NAXIS1 columns x NAXIS2 rows"
+filtered_input_path = "filtered/gavo_hdap_walz_photographic_plate_scans_u16/ingest_stats.json"
+filtering = "Only Walz-reflector plates whose lsw.plates object is 'Moon' or 'Moon (Eclipse)'; Bruce astrograph, Doppelastrograph, Calar Alto and all non-lunar Walz plates are excluded. 25 of the 43 lunar plates <= 62 MB are pinned (selection rule in scripts/discover.py); D59, D60 and D61 (75-147 MB) are excluded by size."
+missing_value_policy = "Every pixel of the primary image is kept, including unexposed clear glass, which the scanner tone curve clips to its floor code 1422 (0% to 86% of a plate, 40.7% of all values; see README), the constant scanner-border columns, saturated 65535 and any 0 values; FITS declares no BLANK and nothing is masked, filled or dropped. Any size, header-hash, header-regime, full-file SHA-256, extension-HDU, degeneracy (fewer than 256 distinct values or one value covering more than 90%) or duplicate-image deviation fails the recipe instead of being skipped."
+conversion = "Parse the 2,880-byte header blocks to END (5,760 bytes), read NAXIS1*NAXIS2 big-endian two's-complement int16 values, add BZERO = 32768 (equivalently flip bit 15) and write them as little-endian uint16 in FITS order (column fastest, then row) to samples/gavo_hdap_walz_photographic_plate_scans_u16/walz_lunar_plate_scan_dn_u16/<plate>.u16. One sample per plate; no cropping, tiling or resampling."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian uint16 plate-scan raster"
+sample_geometry = "variable_2d_plate_scan_raster"
+sample_rank = 2
+sample_axes = ["scan_row", "scan_column"]
+natural_record_kind = "hdap_walz_lunar_photographic_plate_scan"
+sample_count = 25
+total_size_bytes = 886213250
+output_path = "samples/gavo_hdap_walz_photographic_plate_scans_u16/walz_lunar_plate_scan_dn_u16/"

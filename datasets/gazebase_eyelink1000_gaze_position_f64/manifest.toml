@@ -1,0 +1,104 @@
+manifest_version = 1
+dataset_id = "gazebase_eyelink1000_gaze_position_f64"
+name = "GazeBase EyeLink 1000 1 kHz Gaze Position (degrees of visual angle), Float64"
+description = "Monocular (left-eye) horizontal and vertical gaze position in degrees of visual angle, recorded at 1,000 Hz with an SR Research EyeLink 1000 during the seven GazeBase oculomotor tasks; one float64 sample per recording CSV and axis for 24 pinned Round 1 subjects."
+homepage = "https://doi.org/10.6084/m9.figshare.12912257.v3"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Griffith, H., Lohr, D., Komogortsev, O. V. (2020). GazeBase Data Repository. figshare. Dataset. https://doi.org/10.6084/m9.figshare.12912257.v3; data descriptor: Griffith, H., Lohr, D., Abdulin, E., Komogortsev, O. GazeBase, a large-scale, multi-stimulus, longitudinal eye movement dataset. Scientific Data 8, 184 (2021)."
+notes = "The figshare API for article 12912257 (version 3) declares license {\"name\": \"CC BY 4.0\", \"url\": \"https://creativecommons.org/licenses/by/4.0/\"} for the article, whose only file is GazeBase_v2_0.zip. download.sh re-checks this on every run. Preserve attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = true
+provenance_notes = "Official figshare deposit by the GazeBase authors (Texas State University). De-identified, subject-coded (4-digit numbers) eye-movement recordings from college-aged volunteers, collected under a Texas State University IRB protocol in which subjects gave informed consent and acknowledged dissemination of their data in de-identified form (Griffith et al. 2021, Scientific Data 8:184). Eye-movement signals have biometric character even without names or demographics; GazeBase was designed for eye-movement biometrics research. The demographics workbook GazeBaseDemoInfo.xlsx (first outer-ZIP entry) is never requested."
+usage_notes = "Use only under CC BY 4.0. Do not attempt participant identification, linkage, health inference, or biometric profiling. Only gaze-angle time series are emitted; pupil area, validity flags, event labels, target positions and demographics are excluded."
+
+[[origins]]
+id = "figshare_gazebase"
+name = "GazeBase Data Repository (figshare article 12912257, version 3)"
+url = "https://api.figshare.com/v2/articles/12912257"
+type = "repository"
+version = "3"
+notes = "Published 2021-03-23. Single file GazeBase_v2_0.zip, id 27039812, 6,710,984,652 bytes, MD5 cb7eb895fb48f8661decf038ab998c9a (zip64, 892 central-directory entries: 1 xlsx, 9 round directories, 882 per-subject zips)."
+
+[[resources]]
+id = "gazebase_round1_subjects_1001_1024"
+origin = "figshare_gazebase"
+url = "https://ndownloader.figshare.com/files/27039812"
+type = "range_extracted_zip_members"
+version = "GazeBase_v2_0.zip members Round_1/Subject_1001.zip .. Round_1/Subject_1024.zip"
+access = "Public anonymous HTTP range GETs through ndownloader (302 to a short-lived signed S3 URL that answers 206). Exact (name, local-header offset, range bytes, compressed bytes, uncompressed bytes, CRC32) per member are pinned in scripts/pinned_members.tsv, taken from the outer zip64 central directory."
+size_bytes = 185124819
+sha256 = ""
+local_path = "downloads/gazebase_eyelink1000_gaze_position_f64/Round_1/"
+notes = "24 contiguous members (outer bytes 19045..185143863). Each range is checked for HTTP 206 and exact Content-Range, the local header must match the pin (method 8, flags 0, no extra field), the raw DEFLATE stream must end exactly at the member boundary, the inflated inner zip must match the pinned size and CRC32, pass zipfile.testzip, and contain only S{1,2}/.../S_<subject>_S<session>_<TASK>.csv members with the 8-column header n,x,y,val,dP,lab,xT,yT (column order varies by task). Only the inflated inner zips (~186 MB) are kept."
+
+[local_paths]
+downloads = "downloads/gazebase_eyelink1000_gaze_position_f64/"
+filtered = "filtered/gazebase_eyelink1000_gaze_position_f64/"
+index = "index/gazebase_eyelink1000_gaze_position_f64/"
+samples = "samples/gazebase_eyelink1000_gaze_position_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/gazebase_eyelink1000_gaze_position_f64/samples.jsonl"
+summary = "Range-fetch 24 pinned per-subject zips from the GazeBase bulk archive, then decode every recording CSV (one subject x session x task) into one little-endian float64 array for x and one for y, NaN preserved in place."
+deterministic_notes = "Subjects are the first 24 Round_1 entries of the outer central directory (1001-1024). Recordings are processed in sorted member-name order. Columns are located by header name. build.sh parses by line splitting and checks repr/Decimal round-trip; verify.sh re-parses with csv.DictReader and normalized-Decimal round-trip, re-derives every sample byte-for-byte, checks index fields (size, count, NaN count, finite min/max, sha256), the shared exclusion rule, non-constancy, at least 10 distinct values, that source decimals have at most 6 places, and manifest sample_count/total_size_bytes. Per-sample NaN fractions are in the index and filtered/<id>/ingest_stats.json."
+
+[[series]]
+id = "gaze_x_deg_f64"
+description = "Horizontal left-eye gaze position, one array per GazeBase recording."
+semantic_meaning = "Horizontal gaze angle of the left eye in degrees of visual angle relative to screen centre, sampled at 1 kHz by an EyeLink 1000 during one task (fixation, horizontal saccades, random saccades, reading, video 1, video 2, or the Balura game) of one session of one subject."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source publishes x as decimal text with up to 6 fractional digits (e.g. -11.457567); values sit on the converted tracker lattice (0.1 px steps of the 1680x1050 px, 474x297 mm display viewed at 550 mm: about 0.0029 deg at screen centre, smaller with eccentricity). Over all 40,396,050 emitted finite x and y values, 641,515 (about 1.6%) cannot be reproduced from float32 (round(float32(v), 6) != v); all of them have |value| >= 16 deg, where the float32 ulp exceeds 1e-6 (3.3% of values lie in that range). Only 12,391 (about 0.03%) are exactly representable in float32. float64 is the narrowest IEEE width that reproduces every published decimal; each value is float(text) exactly as published."
+source_resources = ["gazebase_round1_subjects_1001_1024"]
+source_format = "CSV inside per-subject zip inside GazeBase_v2_0.zip (header n,x,y,val,dP,lab,xT,yT in task-dependent order)"
+source_field = "x"
+filtered_input_path = "filtered/gazebase_eyelink1000_gaze_position_f64/ingest_stats.json"
+filtering = "All recording CSVs of subjects 1001-1024 (Round 1, sessions S1 and S2, all seven tasks). A recording is excluded for both axes only if either axis has fewer than 1,000 finite values or more than 50% NaN; exclusions are listed in ingest_stats.json. Columns n, val, dP, lab, xT, yT are not emitted."
+missing_value_policy = "The literal token NaN (EyeLink track loss / blink rows, val = 4) is kept in place as the canonical quiet NaN 0x7FF8000000000000, preserving 1 kHz row alignment; no rows are dropped or imputed. Exact 0 is a genuine lattice value, not a sentinel. Any other non-numeric token, inf, malformed row, or non-round-tripping decimal is fatal. build.sh and verify.sh apply the identical rule."
+conversion = "Parse each x token with float(), check that its shortest repr equals the source decimal, and pack all rows of the recording in source order as little-endian IEEE-754 float64 into samples/<id>/gaze_x_deg_f64/S_<subject>_S<session>_<TASK>.bin."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 gaze-angle time series"
+sample_geometry = "eye_tracker_gaze_time_series_1d"
+sample_rank = 1
+sample_axes = ["time_1khz"]
+natural_record_kind = "gazebase_eyelink_recording_one_subject_session_task"
+sample_count = 335
+total_size_bytes = 167782088
+output_path = "samples/gazebase_eyelink1000_gaze_position_f64/gaze_x_deg_f64/"
+
+[[series]]
+id = "gaze_y_deg_f64"
+description = "Vertical left-eye gaze position, one array per GazeBase recording."
+semantic_meaning = "Vertical gaze angle of the left eye in degrees of visual angle relative to screen centre, sampled at 1 kHz by an EyeLink 1000 during one task of one session of one subject (same recordings as gaze_x_deg_f64)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Same decimal-text origin and float64 round-trip argument as gaze_x_deg_f64."
+source_resources = ["gazebase_round1_subjects_1001_1024"]
+source_format = "CSV inside per-subject zip inside GazeBase_v2_0.zip (header n,x,y,val,dP,lab,xT,yT in task-dependent order)"
+source_field = "y"
+filtered_input_path = "filtered/gazebase_eyelink1000_gaze_position_f64/ingest_stats.json"
+filtering = "Same recordings and exclusion rule as gaze_x_deg_f64."
+missing_value_policy = "The literal token NaN (track loss / blink, val = 4) is kept in place as the canonical quiet NaN 0x7FF8000000000000; no rows are dropped or imputed. Any other non-numeric token, inf, malformed row, or non-round-tripping decimal is fatal. build.sh and verify.sh apply the identical rule."
+conversion = "Parse each y token with float(), check repr round-trip, and pack all rows in source order as little-endian float64 into samples/<id>/gaze_y_deg_f64/S_<subject>_S<session>_<TASK>.bin."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 gaze-angle time series"
+sample_geometry = "eye_tracker_gaze_time_series_1d"
+sample_rank = 1
+sample_axes = ["time_1khz"]
+natural_record_kind = "gazebase_eyelink_recording_one_subject_session_task"
+sample_count = 335
+total_size_bytes = 167782088
+output_path = "samples/gazebase_eyelink1000_gaze_position_f64/gaze_y_deg_f64/"

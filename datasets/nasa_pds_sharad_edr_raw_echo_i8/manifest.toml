@@ -1,0 +1,90 @@
+manifest_version = 1
+dataset_id = "nasa_pds_sharad_edr_raw_echo_i8"
+name = "MRO SHARAD EDR Raw Echo Samples, Mode SS19 (presum 4, 8-bit), Int8"
+description = "Twenty-four complete MRO SHARAD EDR science-telemetry products (volume MROSH_0001, 2006-2010, mode SS19), each emitted as its rows x 3600 matrix of raw signed 8-bit received-echo time samples: the on-board-presummed, requantized radar-sounder echoes before any ground processing."
+homepage = "https://pds-geosciences.wustl.edu/missions/mro/sharad.htm"
+
+[license]
+name = "NASA PDS public data (NASA SMD open scientific data policy)"
+spdx = "LicenseRef-NASA-PDS"
+url = "https://science.nasa.gov/researchers/science-data/science-information-policy/"
+citation = "Seu, R., et al., MRO SHARAD EDR, MRO-M-SHARAD-3-EDR-V1.0, NASA Planetary Data System Geosciences Node, volume MROSH_0001. Preserve mission, instrument, data set ID and product IDs."
+notes = "NASA Science Mission Directorate policy: 'It is Science Mission Directorate (SMD) policy, consistent with NASA and Federal policies, that information produced from SMD-funded scientific research activities be made publicly available.' The products are archived anonymously in the NASA PDS Geosciences Node. SHARAD was provided by the Italian Space Agency (ASI); rights rest on the NASA PDS public archive, the same basis as the accepted nasa_pds_sharad_radargram_f32. No explicit CC/PD licence text accompanies the volume."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official PDS3 archive volume MROSH_0001 served by the PDS Geosciences Node (Washington University in St. Louis). No mirrors."
+usage_notes = "Robotic orbital radar-sounder telemetry of Mars. Only the ECHO_SAMPLES bytes are emitted; the 186-byte ancillary row headers, labels and the separate auxiliary geometry table are not part of the samples."
+
+[[origins]]
+id = "pds_geosciences_sharad_edr"
+name = "PDS Geosciences Node: MRO SHARAD EDR (MRO-M-SHARAD-3-EDR-V1)"
+url = "https://pds-geosciences.wustl.edu/mro/mro-m-sharad-3-edr-v1/"
+type = "data_portal"
+version = "Volume MROSH_0001 (orbits 1689-19xxx, 2006-340 to 2010-311); volume MD5 list mrosh_0001_260909.md5"
+notes = "Anonymous HTTPS. Byte ranges supported. The volume MD5 list publishes an MD5 for every label and table; those MD5s are pinned in sources.tsv."
+
+[[resources]]
+id = "science8bit_fmt"
+origin = "pds_geosciences_sharad_edr"
+url = "https://pds-geosciences.wustl.edu/mro/mro-m-sharad-3-edr-v1/mrosh_0001/label/science8bit.fmt"
+type = "file"
+version = "MROSH_0001 label/science8bit.fmt (2007-08-14)"
+access = "Direct public download."
+size_bytes = 1307
+sha256 = "197b43068a6215bfea7125422e7cbb00150e8ca5a12acf4c49440c250ae24e47"
+local_path = "downloads/nasa_pds_sharad_edr_raw_echo_i8/science8bit.fmt"
+notes = "MD5 3bb1ee6b3bb4ed09a6e20f1ab37db517 (volume MD5 list). Declares ECHO_SAMPLES: START_BYTE 187, 3600 ITEMS x 8-bit MSB_INTEGER."
+
+[[resources]]
+id = "ss19_edr_products"
+origin = "pds_geosciences_sharad_edr"
+url = "https://pds-geosciences.wustl.edu/mro/mro-m-sharad-3-edr-v1/mrosh_0001/data/"
+type = "pinned_pds3_product_selection"
+version = "24 products pinned in sources.tsv (all PRODUCT_VERSION_ID A)"
+access = "Direct anonymous HTTPS GET of data/edrNNxxx/edrOOOOOPP/<product>.lbl and <product>_s.dat; tables fetched resumably (curl -C -)."
+size_bytes = 948446004
+sha256 = "cbea3799951cdb8bf8063d07cf49b588b24565a6148f81669add0d773497aaeb"
+local_path = "downloads/nasa_pds_sharad_edr_raw_echo_i8/"
+notes = "size_bytes is the sum of the 24 *_S.DAT tables (labels add ~0.2 MB). The SHA-256 identifies sources.tsv, produced by discover.sh (metadata only: INDEX.TAB, volume MD5 list, labels, one-row range probes). For each product it pins label and table paths, orbit, start/stop time and latitude/longitude, FILE_RECORDS, table size (= FILE_RECORDS x 3786), table MD5 and label MD5 from the volume MD5 list, and MANUAL_GAIN_CONTROL. The *_A.DAT auxiliary geometry tables are not fetched."
+
+[local_paths]
+downloads = "downloads/nasa_pds_sharad_edr_raw_echo_i8/"
+filtered = "filtered/nasa_pds_sharad_edr_raw_echo_i8/"
+index = "index/nasa_pds_sharad_edr_raw_echo_i8/"
+samples = "samples/nasa_pds_sharad_edr_raw_echo_i8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_pds_sharad_edr_raw_echo_i8/samples.jsonl"
+summary = "Fetch 24 pinned SS19 EDR labels and science telemetry tables, validate label mode/format and every row header, and emit bytes [186:3786) of every 3786-byte row unchanged as one int8 rows x 3600 sample per product."
+deterministic_notes = "Selection rule (scripts/sharad.py select, applied to MROSH_0001 INDEX.TAB): INSTRUMENT_MODE_ID SS19, DATA_QUALITY_ID 0, product-ID PRF code 700, START-STOP duration 45-70 s (1,491 candidates); products assigned to six 30-degree bands of mid sub-spacecraft latitude; within each band sorted by (orbit, product ID) and four taken at positions floor((k+0.5)n/4), stepping forward past an orbit already chosen, so 24 products on 24 distinct orbits spanning 2006-341 to 2010-258 and -85.6 to +87.2 degrees latitude. Every selected label asserts RECORD_BYTES 3786, ^STRUCTURE SCIENCE8BIT.FMT, INSTRUMENT_MODE_ID SS19, mode text 'summing 04 sequential echoes ... to 08-bit precision', PULSE_REPETITION_INTERVAL 1428 us, COMPRESSION_SELECTION_FLAG STATIC, NO COMPENSATION, closed-loop tracking DISABLED, DATA_QUALITY_ID 0 and MANUAL_GAIN_CONTROL 10. download.sh rejects size or MD5 mismatches against the volume MD5 list; validate/build reject any row whose OPERATIVE_MODE byte is not 51 (SS19), whose gain byte differs from the label, whose SCIENTIFIC_DATA_TYPE is tracking, or whose DMA_ERROR / TC_OVERRUN / FIFO_FULL / TEST flags indicate an error (all-zero 3786-byte gap-fill rows excepted, preserved and capped at 1%), and any product with fewer than 32 distinct levels, more than 5% constant echo rows, or one level above 50% of values. Output order = sources.tsv ordinal (latitude band, then orbit). verify.sh re-derives every sample independently and byte-compares."
+
+[[series]]
+id = "sharad_edr_ss19_echo_i8"
+description = "Raw SHARAD received-echo time samples, mode SS19 (on-board sum of 4 echoes, requantized from 32-bit to 8-bit), 3600 samples per echo at 26.67 MHz (real offset-video sampling, ~135 us receive window), one row per transmitted-pulse group at ~175 rows/s."
+semantic_meaning = "Signed 8-bit antenna-voltage estimates in data numbers (ECHO_SAMPLES of SCIENCE8BIT.FMT): the 20 MHz chirp echo from the Martian surface and subsurface plus receiver noise, before range compression, Doppler processing or any calibration. Rows are along-track echoes (presummed), columns fast-time samples."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The archived EDR stores the instrument's own 8-bit two's-complement samples (MSB_INTEGER, 8 bits; byte order is moot at 8 bits). The bytes are copied verbatim; no scaling, re-centring or remap."
+source_resources = ["ss19_edr_products", "science8bit_fmt"]
+source_format = "PDS3 fixed-length binary table SCIENCE_TELEMETRY_TABLE (*_S.DAT, ROW_BYTES 3786) with detached label, structure SCIENCE8BIT.FMT"
+source_field = "SCIENCE_DATA.ECHO_SAMPLES (bit column: 3600 items x 8-bit MSB_INTEGER, row bytes 187-3786)"
+filtered_input_path = "filtered/nasa_pds_sharad_edr_raw_echo_i8/build_summary.json"
+filtering = "Keep all rows of the 24 pinned products; drop only the 186-byte ancillary header (SCIENCE_ANCILLARY.FMT: timing, OST line, orbit model, receive-window fields) of each row."
+missing_value_policy = "The format declares no fill value, but the archive contains gap-fill rows whose entire 3786 bytes (header and echo) are zero: 3 consecutive rows (9908-9910) of E_0184801_002, none elsewhere. Such rows are preserved in place as 3600 zeros (row alignment with the source table kept), counted per sample as zero_fill_rows, and capped at 1% of a product's rows. No row or sample is dropped, imputed or clipped; value 0 is otherwise a genuine sample level. Any non-fill row flagged as tracking data, with FPGA error/test flags, or with an operative mode or gain other than SS19/label gain is fatal (none occur). Constant echo rows are preserved but counted; a product with more than 5% constant rows, fewer than 32 distinct levels, or one level above 50% of values is rejected by build and verify."
+conversion = "For each product, read FILE_RECORDS rows of 3786 bytes and write bytes [186:3786) of each row in order: output = rows x 3600 int8, row-major (echo, fast-time sample). One sample per EDR product; no cropping, tiling, resampling or concatenation."
+numeric_kind = "int"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous int8 matrix, row-major"
+sample_geometry = "radar_sounder_echo_matrix_2d"
+sample_rank = 2
+sample_axes = ["echo_row", "fast_time_sample"]
+natural_record_kind = "sharad_edr_observation_product"
+sample_count = 24
+total_size_bytes = 901850400
+output_path = "samples/nasa_pds_sharad_edr_raw_echo_i8/sharad_edr_ss19_echo_i8/"

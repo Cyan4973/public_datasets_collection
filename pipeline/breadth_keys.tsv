@@ -468,3 +468,4 @@ usgs_3dep_id_northforkpayette_laz_return_number_u8	autocollect	8	laser_range	air
 nasa_pds_cassini_rpws_wbr_10khz_waveform_u8	autocollect	8	plasma_wave_waveform	Cassini RPWS Wideband Receiver	space.physics.uiowa.edu/pds (RPWS PDS node)	-	OK
 wohns_unified_genealogy_node_time_f64	autocollect	64	genealogy_node_age	tsinfer_tsdate_human_arg_inference	zenodo.org	-	OK
 nmrxiv_p90_bruker_1h_fid_f64	autocollect	64	nmr_free_induction_decay	bruker_600mhz_topspin4_1h_zg30	nmrxiv	-	OK
+nasa_pds_sharad_edr_raw_echo_i8	autocollect	8	radar_sounder_raw_echo	mro_sharad	pds-geosciences.wustl.edu/mro	-	OK

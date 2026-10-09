@@ -1,0 +1,26 @@
+# Voyager 1 PWS Full-Resolution Wideband Electric-Field Waveforms (PDS VGPW_1001, 4-bit samples 0-15, 28.8 kHz) UInt8
+
+- Candidate id: `nasa_pds_voyager1_pws_wideband_waveform_u8`
+- Width: uint8
+- Quantity: Raw 4-bit AGC-scaled plasma-wave electric-field waveform samples (codes 0..15, label OFFSET -7.5) at 28,800 samples/s, 40 Hz–12 kHz bandpass, from the Voyager 1 Plasma Wave Subsystem wideband receiver (Jupiter encounter 1979 through the interstellar medium, 2023). One sample per byte after nibble unpacking.
+- Source: https://space.physics.uiowa.edu/plasma-wave/voyager/data/
+- Resources: https://space.physics.uiowa.edu/plasma-wave/voyager/data/VGPW_1001/INDEX/INDEX.TAB, https://space.physics.uiowa.edu/plasma-wave/voyager/data/VGPW_1001/AAREADME.TXT, https://space.physics.uiowa.edu/plasma-wave/voyager/data/VGPW_1001/DOCUMENT/DATATIPS.TXT, https://space.physics.uiowa.edu/plasma-wave/voyager/data/VGPW_1001/DATA/P2/V1P2_100/C1626417.DAT, https://space.physics.uiowa.edu/plasma-wave/voyager/data/VGPW_1001/DATA/P2/V1P2_100/C1626417.LBL, https://space.physics.uiowa.edu/plasma-wave/voyager/data/VGPW_1001/DATA/P2/V1P2_100/WFROWPFX.FMT
+- License: NASA SMD open data policy (public NASA PDS mission data)
+- License evidence: https://space.physics.uiowa.edu/plasma-wave/voyager/data/VGPW_1001/AAREADME.TXT
+- License quote: AAREADME.TXT: 'Users of these data are encouraged to acknowledge both the PDS and the principal investigators of the instruments whose data is used in analysis in all publications.' No use restriction. Same rights basis (NASA SMD policy that SMD-funded data be made publicly available) as the accepted nasa_pds_cassini_rpws_wbr_10khz_waveform_u8 from the same U Iowa PDS host.
+- Natural record: One PDS waveform frame file Cmmmmmnn.DAT: a 48-second MOD60 frame of up to 800 lines × 1600 4-bit samples = 1,280,000 samples (801 records × 1024 B = 820,224 B). INDEX.TAB lists 11,415 frames, 1978-08-21..2023-11-07 (about 7,000 in the 1979 Jupiter encounter, plus Saturn 1980 and 50–200 a year in cruise, heliosheath and interstellar phases).
+- Estimated samples: 400
+- Estimated primary values: 512,000,000
+- Estimated download bytes: 330,000,000
+- Estimated primary bytes: 512,000,000
+- Decode path: Pick ~400 frames from INDEX.TAB, spread evenly over time-stratified phases (fixed list pinned in sources.tsv with sizes). curl each .DAT (and optionally its .LBL). Skip record 1 (engineering header; the ASCII s/c ID and SCET string is at byte 249). For records 2..801, take bytes 221..1020 (800 B) and split each byte into two 4-bit samples, high nibble first (LABEL BIT_COLUMN START_BIT=1, ITEMS=2, ITEM_BITS=4). Emit the u8 codes 0..15 in time order. Use the WFROWPFX 220 B row prefix to detect missing or fill lines and drop or flag them. Pure stdlib.
+- Novelty kind: new_source
+- Measurement type: plasma_wave_waveform
+- Instrument line: voyager1_pws_wideband_4bit_waveform
+- Archive collection: space.physics.uiowa.edu/plasma-wave/voyager (PDS PPI node)
+- Novelty evidence: The only plasma_wave_waveform family is nasa_pds_cassini_rpws_wbr_10khz_waveform_u8 (verdict OK), a different spacecraft and receiver using full 8-bit codes. Voyager PWS uses 4-bit codes with an AGC (entropy ≈1.4–4 bits), a different compression regime. novelty.py --url matched the U Iowa host via the Cassini recipe only. No Voyager PWS entry is in the registry or ledger. Voyager ISS imaging (nasa_pds_voyager_iss_saturn_raw_u8) is a different instrument and archive.
+- Homogeneity: Single instrument (Voyager 1 PWS wideband waveform receiver), single data set VG1-J/S/SS-PWS-1-EDR-WFRM-60MS-V1.0, fixed 28.8 kHz rate, fixed 4-bit code lattice 0..15, one frame = one natural record. Exclude Voyager 2 (VGPW_2001) to keep one spacecraft. The AGC changes amplitude scale over time but not the code lattice or generation process.
+- Risks: (1) Some lines in a frame can be missing or zero-filled. In the probe, 3,200 of 320,000 samples were 0, apparently the first 16 samples of every row. The builder must decide from WFROWPFX and DATATIPS whether these are fill and document the policy, since a sample dominated by fill gets flagged. (2) Quiet cruise frames are very low entropy (probe H = 1.36 bits, codes mostly 7/8), so a mix of encounter and cruise frames is advisable. (3) 4-bit values in a u8 width: no narrower width exists, as with classification codes, but note it in the manifest. (4) The NASA rights basis is a policy statement, not an SPDX licence, as for the other accepted PDS recipes.
+- Probe evidence: Directory listings are live: VGPW_1001/DATA has partitions P2..P10, P2 has 368 subdirectories of up to 20 frames, each .DAT is 801K. The C1626417.LBL label gives RECORD_BYTES=1024, FILE_RECORDS=801, TIME_SERIES ROW_PREFIX_BYTES=220, ROW_BYTES=800, 4-bit BIT_COLUMN, VALID 0..15, 1979-03-01 JUPITER ENCOUNTER. INDEX.TAB (1,472,664 B) has 11,415 rows. A 205,824-byte range of C1626417.DAT decoded to header string 'VOYAGER-1 PWS 2/16264:17 1979-03-01T07:58:59.953Z' and 320,000 nibbles with codes {0:3200, 5:13, 6:7413, 7:133979, 8:165623, 9:9763, 10:9}.
+
+Proposed by the autocollect scout on 2026-10-09 (transcript `.data/pipeline/logs/scout_8bit/scout.20261009_010257.jsonl`).

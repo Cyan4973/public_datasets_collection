@@ -1,0 +1,201 @@
+manifest_version = 1
+dataset_id = "fermi_lat_weekly_photon_events_f32"
+name = "Fermi LAT Weekly All-Sky Photon Events (P305): Energy, Sky Direction and Instrument Angles, Native Float32"
+description = "Native float32 per-photon reconstructed energy (MeV), celestial direction (RA, DEC) and instrument-frame incidence angles (THETA, PHI) from the EVENTS tables of 18 Fermi Large Area Telescope weekly all-sky photon files (Pass 8 R3 SOURCE class, processing P305), one week per year from February 2009 to February 2026. One sample per week per field, in stored row order."
+homepage = "https://fermi.gsfc.nasa.gov/ssc/data/access/lat/"
+
+[license]
+name = "NASA SMD Open Scientific Data Policy"
+spdx = "LicenseRef-NASA-SMD-Open-Data"
+url = "https://science.nasa.gov/researchers/science-data/science-information-policy/"
+citation = "Fermi Large Area Telescope (Atwood et al. 2009, ApJ 697, 1071) weekly photon data, NASA HEASARC / Fermi Science Support Center. Preserve mission week numbers, the P305 processing label, mission/instrument attribution and HEASARC/FSSC acknowledgement."
+notes = "Re-read 2026-10-08 from the collection environment. Fermi Science Support Center data policy (https://fermi.gsfc.nasa.gov/ssc/data/policy/, 'Last Updated: 28-Aug-2025'): 'Since the beginning of the second year of operations, all LAT science data has been released as early as possible, typically within a day or two of acquisition. The LAT public archive includes the science data acquired in the first year that was initially proprietary.' NASA SMD Scientific Information Policy: information produced from SMD-funded scientific research activities is to be made publicly available. NASA Images and Media Usage Guidelines: NASA content 'generally are not subject to copyright in the United States'. Same licensing basis as the accepted HEASARC recipes fermi_gbm_tte_nai_photon_arrival_times_f64, nasa_heasarc_batse_cont_counts_i16, nasa_heasarc_nicer_pi_i16 and nasa_heasarc_nicer_detector_u8. download.sh re-fetches the FSSC policy page as soft provenance and fails if a fetched copy no longer states the LAT open-release sentence."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Fermi LAT weekly photon files (FITS, CREATOR 'FermiDataserver', ORIGIN FSSC) fetched anonymously from the HEASARC FTP-over-HTTPS archive."
+usage_notes = "Samples contain only reconstructed gamma-ray photon energies and directions from a space telescope. No human-subject, personal or Earth-imaging content, and no NASA insignia or imagery. NASA's AI-applications conditions (Images and Media Usage Guidelines) apply: do not attribute AI output to NASA or imply NASA endorsement; NASA insignia must not be used in AI training."
+
+[[origins]]
+id = "heasarc_fermi_lat_weekly"
+name = "NASA HEASARC archive, Fermi LAT weekly photon files"
+url = "https://heasarc.gsfc.nasa.gov/FTP/fermi/data/lat/weekly/photon/"
+type = "data_portal"
+version = "Directory listing read 2026-10-08: 949 files lat_photon_weekly_wNNN_p305_v001.fits, w009..w958 (w512 absent; w958 the growing current week)."
+notes = "Public, anonymous HTTPS with byte-range support. The anonymous nasa-heasarc S3 mirror only reaches w871, so the primary HEASARC host is used. discover.sh documents the listing, the deterministic week selection (scripts/select_weeks.py) and the HEAD + prefix/suffix range probes that pinned sources.tsv."
+
+[[origins]]
+id = "fermi_fssc"
+name = "Fermi Science Support Center"
+url = "https://fermi.gsfc.nasa.gov/ssc/"
+type = "website"
+notes = "Mission data policy and LAT photon-data documentation (Cicerone, LAT data columns)."
+
+[[resources]]
+id = "lat_weekly_photon_selection"
+origin = "heasarc_fermi_lat_weekly"
+url = "https://heasarc.gsfc.nasa.gov/FTP/fermi/data/lat/weekly/photon/"
+type = "file"
+version = "18 exact lat_photon_weekly_wNNN_p305_v001.fits files pinned by sources.tsv (w036 .. w924)"
+access = "Direct anonymous HTTPS GET per pinned file; resumable curl."
+size_bytes = 3507436800
+sha256 = ""
+local_path = "downloads/fermi_lat_weekly_photon_events_f32/"
+notes = "HEASARC publishes no content hash (its ETag is inode/size/mtime). Each file is pinned by exact Content-Length, Last-Modified, EVENTS NAXIS2, EVENTS DATASUM, TSTART, TSTOP and GTI row count, and verified on download by the FITS CHECKSUM of every HDU and the DATASUM of EVENTS and GTI. Per-file SHA-256 values are recorded in download_inventory.json on first download and re-checked by build.sh. Weekly files are occasionally regenerated upstream; a regenerated file fails the pins and needs re-discovery."
+
+[[resources]]
+id = "fssc_data_policy"
+origin = "fermi_fssc"
+url = "https://fermi.gsfc.nasa.gov/ssc/data/policy/"
+type = "file"
+version = "fetched 2026-10-08 (page 'Last Updated: 28-Aug-2025')"
+access = "Direct anonymous HTTPS GET; provenance only, soft failure."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/fermi_lat_weekly_photon_events_f32/fssc_data_policy.html"
+notes = "States 'all LAT science data has been released as early as possible'. The HTML may change; download.sh checks the sentence, not a hash."
+
+[local_paths]
+downloads = "downloads/fermi_lat_weekly_photon_events_f32/"
+filtered = "filtered/fermi_lat_weekly_photon_events_f32/"
+index = "index/fermi_lat_weekly_photon_events_f32/"
+samples = "samples/fermi_lat_weekly_photon_events_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/fermi_lat_weekly_photon_events_f32/samples.jsonl"
+summary = "Fetch 18 pinned LAT weekly photon FITS files, walk the headers to the EVENTS binary table by EXTNAME, validate its 23-column schema and every FITS checksum, and write the stored ENERGY, RA, DEC, THETA and PHI float32 values of every row, in stored row order, as one little-endian float32 sample per week per field."
+deterministic_notes = "Selection (scripts/select_weeks.py, run once by discover.sh): population = the 940 listed weekly files w010..w950 (w009 is the partial first week; w512, the March 2018 safe-mode week, is absent upstream; weeks after w950 excluded because the newest files are still being regenerated). 18 targets at population index floor((k + 0.5) * 940 / 18), k = 0..17, which land on one week in early February of every year 2009-2026: w036, w088, w140, w192, w245, w297, w349, w401, w453, w506, w559, w611, w663, w716, w768, w820, w872, w924. N = 18 rather than 20 keeps the 3.51 GB download plus 0.72 GB output under the pipeline's 5 GB per-candidate cap. download.sh enforces the exact size, HDU sequence PRIMARY/EVENTS/GTI, primary identity (GLAST/LAT, PROC_VER 305), the full EVENTS schema (NAXIS1 98, 23 TTYPE/TFORM pairs, TFORM-derived offsets ENERGY 0, RA 4, DEC 8, THETA 20, PHI 24, TUNIT MeV/deg, no TSCAL/TZERO/TNULL, PASS_VER P8R3, DSTYP2 BIT_MASK(EVENT_CLASS,128,P8R3)), every HDU CHECKSUM, the EVENTS and GTI DATASUM, zero padding, no trailing bytes, and the pinned NAXIS2, EVENTS DATASUM, TSTART, TSTOP and GTI row count. build.sh re-walks the file, extracts each field by strided byte copy (byte-swapping big-endian to little-endian), and requires finite values inside the physical ranges (ENERGY 0..1e7 MeV, RA 0..360, DEC -90..90, THETA 0..180, PHI 0..360 deg), the SOURCE bit set on every row's EVENT_CLASS and every TIME inside TSTART..TSTOP (row-alignment checks), at least 1,000 distinct values and min < max per sample, and unique outputs. verify.sh is a separate implementation (own FITS card parser over mmap, own DATASUM, struct.iter_unpack with a format derived from the TFORM offsets) that checks byte equality, ranges, every index statistic, the sample inventory and the manifest totals. Pinned: 18 files, 3,507,436,800 bytes, 35,784,618 photon rows (605,624-3,260,127 per week). Realized: 90 samples (18 per series), 178,923,090 primary values, 715,692,360 bytes, median 1,982,040.5 values per sample; ENERGY 7.666..3,489,360 MeV, RA 3.1e-6..360.0, DEC -89.989..89.991, THETA 0.0046..83.54, PHI 5.3e-6..360.0 deg; distinct-value fraction per sample 0.83-0.99; TIME non-decreasing in every file (0 backsteps); SOURCE bit set on every row; all CHECKSUM/DATASUM verified."
+
+[[series]]
+id = "lat_photon_energy_f32"
+description = "Whole EVENTS.ENERGY column of one LAT weekly photon file: the reconstructed energy of every SOURCE-class photon recorded in that mission week."
+semantic_meaning = "Reconstructed gamma-ray photon energy in MeV (Pass 8 R3 energy reconstruction), one value per detected photon, all-sky, in stored (time) order. Realized range 7.67 MeV to 3.49 TeV (most photons below a few GeV; steeply falling spectrum)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "EVENTS declares ENERGY as TFORM 'E' (big-endian IEEE-754 float32), TUNIT 'MeV', no TSCAL/TZERO/TNULL. The stored floats are emitted bit-exact, byte-swapped to little-endian."
+source_resources = ["lat_weekly_photon_selection"]
+source_format = "FITS (PRIMARY + EVENTS + GTI binary tables), Fermi LAT weekly photon file, P305 / P8R3 SOURCE class"
+source_field = "EVENTS.ENERGY (TFORM E, TUNIT MeV; bytes 0-3 of each 98-byte row)"
+filtered_input_path = "filtered/fermi_lat_weekly_photon_events_f32/ingest_stats.json"
+filtering = "18 pinned weekly files (see deterministic_notes). Every row of each EVENTS table is kept. The other EVENTS columns (L, B, ZENITH_ANGLE, EARTH_AZIMUTH_ANGLE, TIME, EVENT_ID, RUN_ID, versions, EVENT_CLASS/EVENT_TYPE bit arrays, CONVERSION_TYPE, LIVETIME, DIFRSP0-4) and the GTI table are not emitted."
+missing_value_policy = "No missing-value handling: the column has no TNULL or sentinel. Every stored value is emitted unchanged in stored row order; nothing is masked, clipped, imputed, sorted, deduplicated or dropped. Non-finite values or values outside 0..1e7 MeV are fatal in build and verify. verify.sh applies the same policy (byte equality with the source column)."
+conversion = "For each EVENTS row, in stored order, take the 4 big-endian bytes at row offset 0 and write them as a little-endian float32. One sample per weekly file, shape [NAXIS2]. No scaling, sorting, splitting or concatenation across weeks."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 array"
+sample_geometry = "variable_length_photon_event_column_1d"
+sample_rank = 1
+sample_axes = ["photon_event"]
+natural_record_kind = "lat_weekly_photon_file_events_column"
+sample_count = 18
+total_size_bytes = 143138472
+output_path = "samples/fermi_lat_weekly_photon_events_f32/lat_photon_energy_f32/"
+
+[[series]]
+id = "lat_photon_ra_f32"
+description = "Whole EVENTS.RA column of one LAT weekly photon file: reconstructed right ascension (J2000) of every SOURCE-class photon of that week."
+semantic_meaning = "Reconstructed photon arrival direction, right ascension J2000 in degrees (0..360), one value per photon, in stored (time) order. Follows the survey-mode scan of the sky with the spacecraft's orbit and rocking, plus the bright Galactic plane and point sources."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "TFORM 'E' float32, TUNIT 'deg', no TSCAL/TZERO/TNULL; stored floats emitted bit-exact, byte-swapped to little-endian."
+source_resources = ["lat_weekly_photon_selection"]
+source_format = "FITS (PRIMARY + EVENTS + GTI binary tables), Fermi LAT weekly photon file, P305 / P8R3 SOURCE class"
+source_field = "EVENTS.RA (TFORM E, TUNIT deg; bytes 4-7 of each 98-byte row)"
+filtered_input_path = "filtered/fermi_lat_weekly_photon_events_f32/ingest_stats.json"
+filtering = "Same 18 files and rows as lat_photon_energy_f32. Galactic L/B (a fixed rotation of RA/DEC) are deliberately not emitted."
+missing_value_policy = "No missing-value handling: no TNULL or sentinel. Every stored value is emitted unchanged in stored row order. Non-finite values or values outside 0..360 deg are fatal in build and verify."
+conversion = "Row offset 4, 4 big-endian bytes -> little-endian float32, stored row order, one sample per weekly file."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 array"
+sample_geometry = "variable_length_photon_event_column_1d"
+sample_rank = 1
+sample_axes = ["photon_event"]
+natural_record_kind = "lat_weekly_photon_file_events_column"
+sample_count = 18
+total_size_bytes = 143138472
+output_path = "samples/fermi_lat_weekly_photon_events_f32/lat_photon_ra_f32/"
+
+[[series]]
+id = "lat_photon_dec_f32"
+description = "Whole EVENTS.DEC column of one LAT weekly photon file: reconstructed declination (J2000) of every SOURCE-class photon of that week."
+semantic_meaning = "Reconstructed photon arrival direction, declination J2000 in degrees (-90..90), one value per photon, in stored (time) order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "TFORM 'E' float32, TUNIT 'deg', no TSCAL/TZERO/TNULL; stored floats emitted bit-exact, byte-swapped to little-endian."
+source_resources = ["lat_weekly_photon_selection"]
+source_format = "FITS (PRIMARY + EVENTS + GTI binary tables), Fermi LAT weekly photon file, P305 / P8R3 SOURCE class"
+source_field = "EVENTS.DEC (TFORM E, TUNIT deg; bytes 8-11 of each 98-byte row)"
+filtered_input_path = "filtered/fermi_lat_weekly_photon_events_f32/ingest_stats.json"
+filtering = "Same 18 files and rows as lat_photon_energy_f32."
+missing_value_policy = "No missing-value handling: no TNULL or sentinel. Every stored value is emitted unchanged in stored row order. Non-finite values or values outside -90..90 deg are fatal in build and verify."
+conversion = "Row offset 8, 4 big-endian bytes -> little-endian float32, stored row order, one sample per weekly file."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 array"
+sample_geometry = "variable_length_photon_event_column_1d"
+sample_rank = 1
+sample_axes = ["photon_event"]
+natural_record_kind = "lat_weekly_photon_file_events_column"
+sample_count = 18
+total_size_bytes = 143138472
+output_path = "samples/fermi_lat_weekly_photon_events_f32/lat_photon_dec_f32/"
+
+[[series]]
+id = "lat_photon_theta_f32"
+description = "Whole EVENTS.THETA column of one LAT weekly photon file: inclination angle of every SOURCE-class photon in instrument coordinates."
+semantic_meaning = "Photon incidence (off-axis) angle from the LAT boresight in degrees (TLMAX 180; SOURCE-class photons are essentially all below ~80 deg), one value per photon, in stored (time) order. Determines the instrument response; not a sky coordinate."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "TFORM 'E' float32, TUNIT 'deg', no TSCAL/TZERO/TNULL; stored floats emitted bit-exact, byte-swapped to little-endian."
+source_resources = ["lat_weekly_photon_selection"]
+source_format = "FITS (PRIMARY + EVENTS + GTI binary tables), Fermi LAT weekly photon file, P305 / P8R3 SOURCE class"
+source_field = "EVENTS.THETA (TFORM E, TUNIT deg; bytes 20-23 of each 98-byte row)"
+filtered_input_path = "filtered/fermi_lat_weekly_photon_events_f32/ingest_stats.json"
+filtering = "Same 18 files and rows as lat_photon_energy_f32."
+missing_value_policy = "No missing-value handling: no TNULL or sentinel. Every stored value is emitted unchanged in stored row order. Non-finite values or values outside 0..180 deg are fatal in build and verify."
+conversion = "Row offset 20, 4 big-endian bytes -> little-endian float32, stored row order, one sample per weekly file."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 array"
+sample_geometry = "variable_length_photon_event_column_1d"
+sample_rank = 1
+sample_axes = ["photon_event"]
+natural_record_kind = "lat_weekly_photon_file_events_column"
+sample_count = 18
+total_size_bytes = 143138472
+output_path = "samples/fermi_lat_weekly_photon_events_f32/lat_photon_theta_f32/"
+
+[[series]]
+id = "lat_photon_phi_f32"
+description = "Whole EVENTS.PHI column of one LAT weekly photon file: azimuthal angle of every SOURCE-class photon in instrument coordinates."
+semantic_meaning = "Photon azimuth around the LAT boresight in degrees (0..360), one value per photon, in stored (time) order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "TFORM 'E' float32, TUNIT 'deg', no TSCAL/TZERO/TNULL; stored floats emitted bit-exact, byte-swapped to little-endian."
+source_resources = ["lat_weekly_photon_selection"]
+source_format = "FITS (PRIMARY + EVENTS + GTI binary tables), Fermi LAT weekly photon file, P305 / P8R3 SOURCE class"
+source_field = "EVENTS.PHI (TFORM E, TUNIT deg; bytes 24-27 of each 98-byte row)"
+filtered_input_path = "filtered/fermi_lat_weekly_photon_events_f32/ingest_stats.json"
+filtering = "Same 18 files and rows as lat_photon_energy_f32."
+missing_value_policy = "No missing-value handling: no TNULL or sentinel. Every stored value is emitted unchanged in stored row order. Non-finite values or values outside 0..360 deg are fatal in build and verify."
+conversion = "Row offset 24, 4 big-endian bytes -> little-endian float32, stored row order, one sample per weekly file."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 array"
+sample_geometry = "variable_length_photon_event_column_1d"
+sample_rank = 1
+sample_axes = ["photon_event"]
+natural_record_kind = "lat_weekly_photon_file_events_column"
+sample_count = 18
+total_size_bytes = 143138472
+output_path = "samples/fermi_lat_weekly_photon_events_f32/lat_photon_phi_f32/"

@@ -1,0 +1,122 @@
+manifest_version = 1
+dataset_id = "physionet_wearable_exam_stress_e4_acc_i8"
+name = "PhysioNet Wearable Exam Stress: Empatica E4 Wrist Tri-Axial Accelerometer Int8"
+description = "All 30 Empatica E4 wristband accelerometer session recordings of PhysioNet's Wearable Exam Stress Dataset 1.0.0 (10 university students x midterm_1, midterm_2, Final). Each sample is one session's ACC.csv with its two header rows removed: interleaved x,y,z signed int8 values in the device's native 1/64 g counts (±2 g range), 32 Hz."
+homepage = "https://physionet.org/content/wearable-exam-stress/1.0.0/"
+
+[license]
+name = "Open Data Commons Attribution License v1.0"
+spdx = "ODC-By-1.0"
+url = "https://opendatacommons.org/licenses/by/1-0/"
+citation = "Amin, M. R., Wickramasuriya, D., & Faghih, R. T. (2022). A Wearable Exam Stress Dataset for Predicting Cognitive Performance in Real-World Settings (version 1.0.0). PhysioNet. RRID:SCR_007345. https://doi.org/10.13026/kvkb-aj90. Standard PhysioNet citation: Goldberger A, et al. PhysioBank, PhysioToolkit, and PhysioNet. Circulation 101(23):e215-e220 (2000)."
+notes = "The release ships LICENSE.txt (ODC-By 1.0 text, 20,402 B, SHA-256 86c0ad30..., also listed in the release SHA256SUMS.txt); download.sh pins it by hash. The project page states 'Access Policy: Anyone can access the files, as long as they conform to the terms of the specified license. License: Open Data Commons Attribution License v1.0' (open access, no credentialing or data use agreement); download.sh saves the page and requires those statements and the DOI. Same license and access class as the accepted physionet_charis_icp_i16 and physionet_bidmc_ppg_resp_i16 recipes. Preserve the dataset DOI and PhysioNet attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "De-identified human-subject wearable recordings published by PhysioNet as an open-access database (University of Houston study; 10 students, two female and eight male, gender not given per participant). Upstream unix timestamps are date-shifted for de-identification. Subjects are identified only as S1..S10."
+usage_notes = "Only the accelerometer files are fetched and emitted. StudentGrades.txt, the physiological channels (BVP, EDA, TEMP, HR, IBI) and tags.csv are never downloaded. The only header-derived metadata kept is the date-shifted session start time and the 32 Hz rate, as index fields."
+
+[[origins]]
+id = "physionet_open_wearable_exam_stress_1_0_0"
+name = "PhysioNet open-data bucket: wearable-exam-stress 1.0.0"
+url = "https://physionet-open.s3.amazonaws.com/wearable-exam-stress/1.0.0/"
+type = "bucket"
+version = "1.0.0"
+notes = "Official anonymous PhysioNet open-data S3 mirror of https://physionet.org/files/wearable-exam-stress/1.0.0/ (published 2022-05-26). Probed 2026-10-08: SHA256SUMS.txt and LICENSE.txt are byte-identical to the physionet.org copies and all 30 ACC.csv sizes match. The versioned path is immutable; every fetched file is pinned by size and SHA-256."
+
+[[origins]]
+id = "physionet_wearable_exam_stress_project_page"
+name = "PhysioNet project page: A Wearable Exam Stress Dataset for Predicting Cognitive Performance in Real-World Settings 1.0.0"
+url = "https://physionet.org/content/wearable-exam-stress/1.0.0/"
+type = "website"
+version = "1.0.0"
+notes = "Source of the access policy, license statement, DOI and data description."
+
+[[resources]]
+id = "wes_sha256sums"
+origin = "physionet_open_wearable_exam_stress_1_0_0"
+url = "https://physionet-open.s3.amazonaws.com/wearable-exam-stress/1.0.0/SHA256SUMS.txt"
+type = "file"
+version = "1.0.0"
+access = "Direct public download."
+size_bytes = 22163
+sha256 = "9b83f8414e3dc26b363d821614b9ae7a60ac8175d7231c43736f50fd2a3a7ed2"
+local_path = "downloads/physionet_wearable_exam_stress_e4_acc_i8/SHA256SUMS.txt"
+notes = "Official per-file SHA-256 list (244 entries); pinned by its own hash. Its set of ACC.csv entries must equal the 30 pinned session files exactly."
+
+[[resources]]
+id = "wes_license_txt"
+origin = "physionet_open_wearable_exam_stress_1_0_0"
+url = "https://physionet-open.s3.amazonaws.com/wearable-exam-stress/1.0.0/LICENSE.txt"
+type = "file"
+version = "1.0.0"
+access = "Direct public download."
+size_bytes = 20402
+sha256 = "86c0ad300f6d380591298bc03652e30b81f65954bbf22435812bcfd46812ab06"
+local_path = "downloads/physionet_wearable_exam_stress_e4_acc_i8/LICENSE.txt"
+notes = "ODC-By 1.0 license text shipped with the release."
+
+[[resources]]
+id = "wes_acc_csv"
+origin = "physionet_open_wearable_exam_stress_1_0_0"
+url = "https://physionet-open.s3.amazonaws.com/wearable-exam-stress/1.0.0/data/"
+type = "file"
+version = "1.0.0"
+access = "Direct public download, one resumable GET per file (curl -C - into .part, stall-bounded, no --max-time): data/S{1..10}/{midterm_1,midterm_2,Final}/ACC.csv."
+size_bytes = 137767322
+sha256 = ""
+local_path = "downloads/physionet_wearable_exam_stress_e4_acc_i8/acc/"
+notes = "The 30 ACC.csv session files (3,102,433 to 8,449,584 B each), stored locally as acc/S<n>_<exam>_ACC.csv; each pinned by size and SHA-256 in scripts/e4acc_pins.py and checked against SHA256SUMS.txt. Row 1 is the session start (unix time, date-shifted) repeated in three columns, row 2 is the sample rate 32.000000 repeated in three columns, then one 'x,y,z' integer row per 1/32 s."
+
+[[resources]]
+id = "wes_license_evidence"
+origin = "physionet_wearable_exam_stress_project_page"
+url = "https://physionet.org/content/wearable-exam-stress/1.0.0/"
+type = "file"
+version = "fetched at download time"
+access = "Direct public download of one HTML page."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/physionet_wearable_exam_stress_e4_acc_i8/license/"
+notes = "License evidence only (about 50 KB). The site-rendered page is not hash-pinned; download.sh requires the access-policy sentence, the ODC-By 1.0 license name, the DOI 10.13026/kvkb-aj90 and 'Empatica E4', and records its SHA-256 in download_inventory.json."
+
+[local_paths]
+downloads = "downloads/physionet_wearable_exam_stress_e4_acc_i8/"
+filtered = "filtered/physionet_wearable_exam_stress_e4_acc_i8/"
+index = "index/physionet_wearable_exam_stress_e4_acc_i8/"
+samples = "samples/physionet_wearable_exam_stress_e4_acc_i8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/physionet_wearable_exam_stress_e4_acc_i8/samples.jsonl"
+summary = "Fetch and checksum the 30 E4 ACC.csv session files of wearable-exam-stress 1.0.0, drop the two header rows after asserting three equal start times and a 32 Hz rate, parse every 'x,y,z' row as three integers in -128..127, and write each session's rows as interleaved signed int8 (x0,y0,z0,x1,...) unchanged, one sample per session."
+deterministic_notes = "Pinned release 1.0.0: size and SHA-256 of SHA256SUMS.txt, LICENSE.txt and all 30 ACC.csv files (scripts/e4acc_pins.py), with the SHA256SUMS ACC.csv set required to equal the pin set. Canonical order: subject S1..S10 numerically, then midterm_1, midterm_2, Final. Fatal: carriage returns, a header row that is not three equal start times or three 32.0 rate values, any data row that is not exactly three comma-separated integers matching -?[0-9]{1,3}, any value outside -128..127, blank lines, an empty body. build.py validates the body with one block regex and int() over the comma/newline split; verify.py independently re-tokenizes with the csv module (QUOTE_NONE) and per-field checks, packs each row with struct '<bbb', and compares sample bytes. Both self-test on a synthetic E4 file (rails -128/127, static stretches, with and without trailing newline) and 14 corrupted variants that must be rejected. Degenerate-sample rule (both): fewer than 57,600 frames (30 min), any axis with fewer than 16 distinct values, or a single value above 90% of the sample. Descriptive per-sample index fields (never used to cut data): per-axis min/max/distinct, most common value and fraction, fraction of frames identical to the previous frame (static_frame_fraction), count of rail values -128/127, duration. verify.sh also re-hashes sources, compares every index field, the ingest stats and aggregate hash, the manifest totals, and rejects stray sample files. Floors: at least 10,000 primary values or 100 KB, median at least 1,000 values per sample. Realized 2026-10-08: 30 samples, 14,185,278 frames, 42,555,834 int8 values and bytes, 123.1 h of recording; sample size 956,304 (S8_midterm_2) to 2,478,924 (S3_Final) values, median 1,205,433; aggregate SHA-256 over per-sample hex digests 71e32a2a9f18ac6a2b53e2807f5ef7fcae1b84e89cc654b754bf97c2c399793e. Sessions run about 2.8-3.9 h for midterms and 3.9-7.2 h for finals, i.e. the device recorded before and after the 1.5 h / 3 h exam; that time is kept. Descriptive: static_frame_fraction 0.149-0.463, most-common-value fraction 0.028-0.112, 6,693 rail values (-128/127) in total."
+
+[[series]]
+id = "e4_wrist_acc_xyz_i8"
+description = "Empatica E4 wrist tri-axial accelerometer, one sample per exam session, interleaved x,y,z signed int8 native counts (1/64 g), 32 Hz."
+semantic_meaning = "Successive 32 Hz tri-axial acceleration readings of an Empatica E4 wristband worn by a university student around and during a real midterm (1.5 h) or final (3 h) exam. Each frame is three signed counts x, y, z of 1/64 g over the device's configured ±2 g range (info.txt: 'The accelerometer is configured to measure acceleration in the range [-2g, 2g]. Therefore the unit in this file is 1/64g.'). Values include gravity, so a still wrist reads about 64 counts of magnitude; -128 and 127 are the saturation rails of fast movements. Recordings span the whole time the device ran, including mostly seated low-motion stretches, which are kept."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The E4 publishes ACC as integer counts on its native 8-bit two's-complement scale (1/64 g); the CSV text holds those integers, and the recipe writes them back as signed int8 with no scaling, offset, filtering, resampling, axis reordering or trimming. Interleaving x,y,z per frame follows the CSV row order."
+source_resources = ["wes_acc_csv", "wes_sha256sums"]
+source_format = "Empatica E4 export CSV (ACC.csv): two header rows (start unix time, sample rate) then one 'x,y,z' integer row per sample"
+source_field = "ACC.csv columns 1-3 (accelerometer x, y, z in 1/64 g)"
+filtered_input_path = "filtered/physionet_wearable_exam_stress_e4_acc_i8/ingest_stats.json"
+filtering = "Keep only ACC.csv of all 30 sessions (10 subjects x 3 exams; the release has no other sessions). The two header rows are removed; their start time and rate are kept as index metadata. Every data row is kept. BVP, EDA, TEMP, HR, IBI, tags and grades are not fetched."
+missing_value_policy = "The E4 ACC export has no missing-value sentinel. Every row must be three integers in -128..127; blank, short, long, quoted, spaced, non-integer or out-of-range rows are fatal, not skipped. Rail values -128/127 are genuine saturation and are kept and counted. Low-motion and static stretches are kept. verify.sh applies the same policy."
+conversion = "For each session: drop rows 1-2, parse each remaining row 'x,y,z' as three base-10 integers, write x,y,z as three signed bytes per frame in source row order, one .bin per session named S<n>_<exam>.bin (value_count = 3 x frame count; byte order is irrelevant for 8-bit values)."
+numeric_kind = "int"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous signed-int8 interleaved x,y,z frame sequence"
+sample_geometry = "variable_length_triaxial_wearable_timeseries"
+sample_rank = 2
+sample_axes = ["time_sample_32hz", "axis_xyz"]
+natural_record_kind = "e4_exam_session_accelerometer_recording"
+sample_count = 30
+total_size_bytes = 42555834
+output_path = "samples/physionet_wearable_exam_stress_e4_acc_i8/e4_wrist_acc_xyz_i8/"

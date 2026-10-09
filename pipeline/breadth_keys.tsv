@@ -441,3 +441,4 @@ tcia_remind_intraop_brain_ultrasound_u8	autocollect	8	ultrasound_image	amigo_int
 zenodo_mturk_fitbit_heartrate_u8	autocollect	8	wearable_heart_rate	fitbit_wrist_optical_hr	zenodo.org/records/53894	-	OK
 musopen_chopin_solo_piano_pcm_i16	autocollect	16	pcm_audio	studio_stereo_piano_recording	internet_archive_musopen	-	OK
 zenodo_flir_vue_iceberg_thermal_u16	autocollect	16	thermal_camera_image	flir_vue_pro_r_640_microbolometer	zenodo.org	-	OK
+physionet_wearable_exam_stress_e4_acc_i8	autocollect	8	inertial_vibration	empatica_e4_wrist_accelerometer	physionet.org/content/wearable-exam-stress	-	OK

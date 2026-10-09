@@ -301,6 +301,7 @@ zenodo_vacv_core_segmentation_mrc_u16	ok	53824000	107648000	1	53824000	107648000
 monado_msd_valve_index_imu_f64	ok	54157290	433258320	60	687147	5497176	9026215	72209720	30	1	none	none
 ncbi_geo_mm285_methylation_idat_mean_u16	ok	54273150	108546300	150	361821	723642	0	0	0	1	none	none
 esa_worldcover_landcover_tiles_u8	ok	54525952	54525952	52	1048576	1048576	0	0	0	1	none	none
+boreas_velodyne_alpha_prime_intensity_u8	ok	55619878	55619878	264	214646.5	214646.5	0	0	0	1	none	none
 openneuro_ds003097_aomic_cortical_thickness_f32	ok	56920347	227681388	400	140810.5	563242	0	0	0	1	none	none
 noaa_ndbc_stdmet_historical	ok	56949977	455599816	273	224130	1793040	0	0	0	1	none	none
 deepmind_gencast_checkpoint_f32	ok	57342976	229371904	160	262144	1048576	0	0	0	1	none	none

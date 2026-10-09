@@ -1,0 +1,96 @@
+manifest_version = 1
+dataset_id = "boreas_velodyne_alpha_prime_intensity_u8"
+name = "Boreas Velodyne Alpha Prime 128-Beam LiDAR Per-Point Intensity UInt8"
+description = "Per-point calibrated return intensity (native 8-bit reflectivity) of 264 complete published lidar sweeps from the roof-mounted 128-beam Velodyne Alpha Prime of the UTIAS Boreas test vehicle in Toronto: 6 evenly spaced sweeps from each of the 44 Boreas sequences recorded between 2020-11-26 and 2021-11-28, one uint8 sample per sweep in native point order."
+homepage = "https://www.boreas.utias.utoronto.ca/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Burnett, K., Yoon, D. J., Wu, Y., Li, A. Z., Zhang, H., Lu, S., Qian, J., Tseng, W.-K., Lambert, A., Leung, K. Y. K., Schoellig, A. P., and Barfoot, T. D. Boreas: A Multi-Season Autonomous Driving Dataset. The International Journal of Robotics Research, 2023. arXiv:2203.10168. Data: s3://boreas (University of Toronto Institute for Aerospace Studies, Autonomous Space Robotics Lab, UTIAS ASRL)."
+notes = "pyboreas DATA_LICENSE.md (https://raw.githubusercontent.com/utiasASRL/pyboreas/master/DATA_LICENSE.md) states: 'The Boreas and Boreas Road Trip datasets are licensed under a Creative Commons Attribution 4.0 International Public License (\"CC BY 4.0\").' The AWS Open Data Registry entry (https://registry.opendata.aws/boreas/, ARN arn:aws:s3:::boreas) lists the same license. download.sh fetches DATA_LICENSE.md and aborts if that sentence disappears; verify.sh re-checks the local copy. Attribution to UTIAS ASRL and the Boreas paper is required."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Boreas bucket s3://boreas served anonymously over HTTPS from boreas.s3.amazonaws.com (AWS Open Data sponsorship, not requester-pays). Only the 264 pinned lidar sweep objects and the license text are fetched; no mirrors."
+usage_notes = "Only the per-point intensity byte is kept; no geometry, imagery, GNSS pose or timestamps beyond the file name are emitted. Intensity values cannot identify people or vehicles. The dataset's own privacy contact is boreas@robotics.utias.utoronto.ca."
+
+[[origins]]
+id = "boreas_s3"
+name = "Boreas Autonomous Driving Dataset (UTIAS ASRL) on the AWS Open Data Registry"
+url = "https://registry.opendata.aws/boreas/"
+type = "bucket"
+notes = "Public bucket s3://boreas with one top-level prefix per sequence (127 at probe time on 2026-10-08). The 44 boreas-2020-11-* .. boreas-2021-11-* sequences are the original Boreas release with the Velodyne Alpha Prime lidar; the 2022, 2024 and 2025 prefixes (Boreas Road Trip and calibration runs, which add an Aeva FMCW lidar) are excluded."
+
+[[origins]]
+id = "pyboreas"
+name = "pyboreas devkit (utiasASRL/pyboreas on GitHub)"
+url = "https://github.com/utiasASRL/pyboreas"
+type = "repository"
+notes = "Official devkit: documents the lidar .bin layout (load_lidar: N x 6 float32 [x, y, z, intensity, laser_number, time]) and carries DATA_LICENSE.md."
+
+[[resources]]
+id = "boreas_alpha_prime_selected_sweeps"
+origin = "boreas_s3"
+url = "https://boreas.s3.amazonaws.com/"
+type = "file"
+version = "264 objects <sequence>/lidar/<timestamp_us>.bin pinned in sources.tsv (key, size, MD5) from ListObjectsV2 listings of 2026-10-08"
+access = "Anonymous HTTPS GET per object (resumable with curl -C -)."
+size_bytes = 1334877072
+sha256 = ""
+local_path = "downloads/boreas_velodyne_alpha_prime_intensity_u8/"
+notes = "Selection rule (discover.sh / scripts/boreas_lidar.py select): list each Alpha Prime era sequence's lidar/ prefix with list-type=2 following continuation tokens (460,284 sweeps across 44 sequences, 8,054 to 18,775 per sequence), sort by timestamp, take indices floor((2k+1) n / 12) for k = 0..5. Every lidar object is a single-part upload, so the S3 ETag is the plain MD5; download.sh checks size and MD5 and semantically validates every sweep before keeping it. Files are stored as downloads/<id>/<sequence>/<timestamp_us>.bin. The manifest sha256 field is empty because this resource is 264 separate files."
+
+[[resources]]
+id = "pyboreas_data_license"
+origin = "pyboreas"
+url = "https://raw.githubusercontent.com/utiasASRL/pyboreas/master/DATA_LICENSE.md"
+type = "file"
+version = "master branch at fetch time"
+access = "Anonymous HTTPS GET."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/boreas_velodyne_alpha_prime_intensity_u8/meta/DATA_LICENSE.md"
+notes = "License evidence only (a few hundred bytes); validated by content, not by checksum, because it lives on a moving branch."
+
+[local_paths]
+downloads = "downloads/boreas_velodyne_alpha_prime_intensity_u8/"
+filtered = "filtered/boreas_velodyne_alpha_prime_intensity_u8/"
+index = "index/boreas_velodyne_alpha_prime_intensity_u8/"
+samples = "samples/boreas_velodyne_alpha_prime_intensity_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/boreas_velodyne_alpha_prime_intensity_u8/samples.jsonl"
+summary = "Fetch 264 pinned Boreas Velodyne Alpha Prime sweep files (6 evenly spaced per sequence across the 44 sequences of 2020-11..2021-11), validate the 24-byte x,y,z,intensity,laser_number,time float32 records, and emit the intensity field of every point as one uint8 sample per sweep in native point order."
+deterministic_notes = "sources.tsv pins key, size, MD5, point count and the sweep's position in its sequence; discover.sh re-derives it from live listings. Point order is preserved; samples are named <sequence>__<timestamp_us>.u8 and the index lists them in sources.tsv order (sequence, then timestamp). Index rows carry sequence, timestamp, source key/MD5/size, SHA-256, min/max, zero fraction and distinct-value count. verify.sh re-decodes every source point with struct.iter_unpack('<6f') independently of the build code, re-applies the policy, compares sample bytes exactly, rejects constant samples and any sample whose most common value exceeds 80% of points, and checks inventory, scope (44 x 6) and manifest totals. Realized (build of 2026-10-08): 264 samples, 55,619,878 values and bytes, median 214,646.5 values per sample (158,874 to 232,168 points per sweep); overall zero fraction 8.18% (per sample 0.72% to 48.09%, median 6.17%), all 256 values present. payload_sha256.tsv pins the SHA-256 of all 264 downloaded sweeps (recorded from the first download) and verify.sh re-checks it."
+
+[[series]]
+id = "boreas_alpha_prime_sweep_intensity_u8"
+description = "Per-point calibrated return intensity of one published Velodyne Alpha Prime lidar revolution from the Boreas test vehicle."
+semantic_meaning = "Calibrated reflectivity of every returned laser point of one 10 Hz revolution of the 128-beam roof lidar, as reported by the sensor on its native 8-bit scale (Velodyne calibrated reflectivity: 0-100 diffuse reflectors, 101-255 retroreflectors), recorded on a repeated suburban/urban route in Toronto in all seasons and weather (snow, rain, sun, night) between November 2020 and November 2021."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The sensor produces an 8-bit intensity per return; Boreas stores it as an exactly integral float32 in field 3 (0-based) of each 24-byte point. Emitting it as uint8 restores the native width losslessly (build and verify assert every value is an integer in 0..255; nothing is clamped or rescaled). Geometry, laser_number (ring ID) and the per-point time offset are not emitted."
+source_resources = ["boreas_alpha_prime_selected_sweeps"]
+source_format = "Boreas lidar sweep file (.bin): N x 6 little-endian float32 records (x, y, z, intensity, laser_number, time), per pyboreas load_lidar"
+source_field = "per-point intensity (float32 field 3 of each 24-byte point record)"
+filtered_input_path = "filtered/boreas_velodyne_alpha_prime_intensity_u8/build_stats.json"
+filtering = "6 evenly spaced sweeps from each of the 44 Boreas sequences dated 2020-11-26 to 2021-11-28 (264 of 460,284 sweeps). Sequences from 2022, 2024 and 2025 (Boreas Road Trip, different sensor suite) are excluded. All points of each selected sweep are kept in source order; no point or sweep filtering by content."
+missing_value_policy = "Boreas sweep files contain only returned points (no padding records), so there is no missing-value sentinel. Intensity 0 is a legitimate low-reflectivity reading and is kept (zero fraction is reported per sample in README and build_stats.json). Any non-finite field, non-integral or out-of-range intensity (outside 0..255), non-integral or out-of-range laser_number (outside 0..127), or file size not a positive multiple of 24 is fatal in download.sh, build.sh and verify.sh."
+conversion = "Read each file as N = size / 24 points of six little-endian float32 fields; write int(field 3) of every point as one unsigned byte, in point order; one sample file per source sweep."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw uint8 per-point intensity vector"
+sample_geometry = "lidar_point_cloud_points"
+sample_rank = 1
+sample_axes = ["point"]
+natural_record_kind = "complete_published_alpha_prime_lidar_revolution_file"
+sample_count = 264
+total_size_bytes = 55619878
+output_path = "samples/boreas_velodyne_alpha_prime_intensity_u8/boreas_alpha_prime_sweep_intensity_u8/"

@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "mpc_usda_cdl_confidence_u8"
+name = "USDA NASS Cropland Data Layer 2021 Per-Pixel Classification Confidence, 30 m UInt8 Tiles"
+description = "Complete source-native uint8 confidence-layer grids (per-pixel percent confidence of the decision-tree rule that classified each 30 m pixel) of the USDA NASS 2021 Cropland Data Layer, as 51 complete 3000x3000 Planetary Computer COG tiles spread over seven US agricultural regions (Corn Belt, central Plains winter wheat, northern Plains spring wheat/Red River, Mississippi Delta, California Central Valley, Palouse/Columbia Basin, Southeast coastal plain)."
+homepage = "https://planetarycomputer.microsoft.com/dataset/usda-cdl"
+
+[license]
+name = "Public domain (US Government work, USDA NASS)"
+spdx = "LicenseRef-Public-Domain-USDA-NASS"
+url = "https://www.nass.usda.gov/Research_and_Science/Cropland/sarsfaqs2.php"
+citation = "USDA National Agricultural Statistics Service Cropland Data Layer. 2021. Published crop-specific data layer and confidence layer [Online]. USDA-NASS, Washington, DC. https://www.nass.usda.gov/Research_and_Science/Cropland/SARS1a.php"
+notes = "The Planetary Computer collection usda-cdl has rel=license link https://www.nass.usda.gov/Research_and_Science/Cropland/sarsfaqs2.php#Section3_5.0 and names USDA NASS as producer and licensor (the STAC 'license' field reads 'proprietary' only as a pointer to that link). The NASS CDL FAQ/metadata page states (PUBLIC RELEASE): 'The USDA NASS Cropland Data Layer is considered public domain and free to redistribute.' and (Use_Constraints): 'The USDA NASS Cropland Data Layer and the data offered on the CroplandCROS website is provided to the public as is and is considered public domain and free to redistribute.' (Access_Constraints: none). The same page describes the Confidence Layer as 'a derivative of the CDL' published by NASS. Text fetched 2026-10-09. Cite USDA NASS CDL 2021."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official USDA NASS Cropland Data Layer confidence layer, mirrored by Microsoft Planetary Computer as COG tiles (STAC source link: the 2021 National CDL zip). NASS states that no farmer-reported data are revealed or derivable from the public CDL. No personal or sensitive data."
+usage_notes = "Public-domain US Government geospatial product suitable for model training; cite USDA NASS CDL."
+
+[[origins]]
+id = "planetary_computer_usda_cdl"
+name = "Microsoft Planetary Computer usda-cdl collection"
+url = "https://planetarycomputer.microsoft.com/api/stac/v1/collections/usda-cdl"
+type = "api"
+notes = "STAC collection usda-cdl (cropland/frequency/cultivated item types, 2008-2021). Item IDs were resolved with STAC /search (usda_cdl:type = cropland, datetime in 2021; 1,095 items) and screened by scripts/probe.py on four full-resolution 512x512 tiles per candidate (results in scripts/probe_screen_20261009.tsv); the pinned set is sources.tsv."
+
+[[resources]]
+id = "cdl_2021_confidence_cogs"
+origin = "planetary_computer_usda_cdl"
+url = "https://landcoverdata.blob.core.windows.net/usda-cdl/tiles/"
+type = "file"
+version = "CDL 2021 confidence layer (2021_30m_confidence_layer_*); blobs last modified 2023-01; 51 exact item IDs with Content-Length and Content-MD5 pinned in sources.tsv"
+access = "Public container read with the anonymous short-lived SAS signature from https://planetarycomputer.microsoft.com/api/sas/v1/token/landcoverdata/usda-cdl (no account or key). Unsigned hrefs are pinned; the signature is requested by download.sh at run time."
+size_bytes = 364924830
+sha256 = ""
+local_path = "downloads/mpc_usda_cdl_confidence_u8/rasters/"
+notes = "51 single-band confidence COGs (the 'confidence' asset of cropland_2021_<x>_<y>_90000 items), 4.6-8.9 MB each. download.sh rejects size/MD5 mismatches, checks TIFF structure (3000x3000 uint8, Deflate, predictor 1, 512x512 tiles, overview chain, NAD83 Conus Albers citation, 30 m pixel scale) and that the GeoTIFF tie point matches the item ID origin; SHA-256 receipts are written at download time. The cropland class-code, cultivated, frequency and per-crop assets of the same items are never fetched."
+
+[local_paths]
+downloads = "downloads/mpc_usda_cdl_confidence_u8/"
+filtered = "filtered/mpc_usda_cdl_confidence_u8/"
+index = "index/mpc_usda_cdl_confidence_u8/"
+samples = "samples/mpc_usda_cdl_confidence_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/mpc_usda_cdl_confidence_u8/samples.jsonl"
+summary = "Download 51 pinned CDL 2021 confidence-layer COGs, decode each primary 3000x3000 uint8 grid (Deflate tiles, 6x6 tile grid, edge padding cropped), and emit it unchanged as one raw uint8 sample per tile."
+deterministic_notes = "Fixed scope: CDL year 2021 only (one classifier vintage; 2023-and-older CDL confidence = rule confidence of the decision-tree classifier), 'confidence' asset only. Region boxes (tile bbox fully inside): corn_belt lon -96.5..-84.0 lat 39.0..44.5; plains_wheat -102.0..-96.5 / 35.0..41.0; northern_plains -104.0..-96.0 / 45.0..49.0; delta -92.5..-89.5 / 31.0..36.5; central_valley -122.6..-118.8 / 35.0..40.2; palouse_columbia -120.5..-116.5 / 45.5..47.8; southeast -86.0..-77.0 / 30.8..36.0. Up to 18 candidates per region were taken evenly spaced in (x, y) order and screened on four full-resolution 512x512 tiles each (the COG overviews are average-resampled and understate the share of 100); candidates with screen zero share <= 0.02 and screen share of 100 <= 0.70 were eligible, and 8 per region were pinned evenly spaced in item-ID order (all 3 for palouse_columbia, the only tiles inside that box) = 51 tiles. Overview IFDs are ignored. Samples follow sources.tsv order. Index statistics are computed from the stored uint8 values."
+
+[[series]]
+id = "usda_cdl_2021_confidence_u8"
+description = "USDA NASS CDL 2021 confidence layer, one complete 3000x3000 30 m tile (90 km x 90 km, EPSG:5070) per sample."
+semantic_meaning = "Per-pixel predicted confidence (percent, 0..100) associated with the CDL 2021 crop/land-cover classification of each 30 m pixel. For 2023 and older CDLs NASS describes it as the confidence 'based upon the rule(s) that were used to classify it ... expressed as a percentage of confidence. A value of zero would therefore have a low confidence (always wrong), while a value of 100 would have a very high confidence (always right).' Values therefore form a discrete set of rule confidences (about 85 distinct values per tile, with 100 the mode)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The confidence layer is a native uint8 raster published by NASS alongside each annual CDL; the Planetary Computer COG carries the same uint8 plane re-tiled into 3000x3000 tiles. The recipe only removes TIFF tiling and Deflate compression; no rescaling, remapping or resampling."
+source_resources = ["cdl_2021_confidence_cogs"]
+source_format = "cloud_optimized_geotiff"
+source_field = "confidence"
+filtered_input_path = "filtered/mpc_usda_cdl_confidence_u8/ingest_stats.json"
+filtering = "Keep all 9,000,000 primary-resolution pixels of each of the 51 pinned complete tiles. Build and verify require per tile: zero (nodata) share <= 0.10, largest single-value share <= 0.78, at least 40 distinct values, all values in 0..100, and no duplicate grids. Pre-download overview check: 48 tiles have no all-nodata 8x8 blocks; three coastal tiles (central_valley -2266095_1822575 and -2266095_1912575 near Monterey Bay, southeast 1423905_1282575 near Charleston) have about 5% open-ocean nodata. Screen share of 100 per tile 0.11-0.63."
+missing_value_policy = "Value 0 is the asset's declared nodata (STAC raster:bands nodata = 0; outside the classified area, e.g. ocean) and is preserved in place and counted per sample in the index (zero_count); a tile whose zero share exceeds 0.10 is fatal. Every value must lie in 0..100; any value in 101..255, missing or truncated files, size/MD5 mismatches, unexpected TIFF structure or georeferencing, corrupt Deflate streams, or degenerate grids are fatal."
+conversion = "Parse the classic little-endian TIFF IFD0 (3000x3000, BitsPerSample 8, SamplesPerPixel 1, SampleFormat 1, Compression 8 Deflate, Predictor 1, 512x512 tiles), inflate its 36 tiles with exact-length checks, crop the TIFF edge padding of the last tile row/column (3000 = 5x512 + 440), and write the uint8 grid row-major (y north->south, x west->east) without rescaling, resampling, remapping, or concatenation."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 per-pixel classification confidence grid (1..100 percent; 0 = nodata/background)"
+sample_geometry = "3000x3000_epsg5070_30m_tile"
+sample_rank = 2
+sample_axes = ["y", "x"]
+natural_record_kind = "complete_cdl_2021_confidence_tile"
+sample_count = 51
+total_size_bytes = 459000000
+output_path = "samples/mpc_usda_cdl_confidence_u8/usda_cdl_2021_confidence_u8/"

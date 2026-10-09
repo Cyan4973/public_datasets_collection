@@ -487,3 +487,4 @@ nasa_pds_juno_junocam_perijove_rgb_framelets_u8	autocollect	8	raw_space_frame	ju
 megascenes_colmap_sfm_point_xyz_f64	autocollect	64	sfm_point_cloud	COLMAP incremental SfM on Wikimedia Commons photo collections (MegaScenes v1.0)	aws_opendata_megascenes	-	OK
 nasa_pds_cassini_iss_nac_lut8_raw_u8	autocollect	8	raw_space_frame	cassini_iss_nac_ccd_lut8	nasa_pds_imaging_node	-	OK
 tern_ozflux_l3_eddy_covariance_fluxes_f64	autocollect	64	eddy_covariance_flux	csat3_li7500_ozflux_pyfluxpro_l3	tern_ozflux_thredds	-	OK
+noaa_uscrn_subhourly_relative_humidity_u8	autocollect	8	met_station_obs	uscrn_station_rh_sensor	www.ncei.noaa.gov/pub/data/uscrn/products/subhourly01	-	OK

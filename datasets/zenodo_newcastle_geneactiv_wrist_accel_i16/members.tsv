@@ -1,0 +1,17 @@
+# Pinned selection (re-derived from the ZIP central directory by scripts/geneactiv.py select): left-wrist .bin members
+# with uncompressed size <= 100,000,000 bytes (26 of 28; excludes the multi-day MECSLEEP23 and MECSLEEP34 files),
+# ordered by participant number, every second one starting with the first (13). range_end = next local header offset - 1.
+sample_id	member	crc32	csize	usize	range_start	range_end
+MECSLEEP01_left	dataset_psgnewcastle2015_v1.0/acc/MECSLEEP01_left wrist_012870_2013-06-12 11-40-37.bin	c2ab8f63	9266979	47076953	64	9267158
+MECSLEEP10_left	dataset_psgnewcastle2015_v1.0/acc/MECSLEEP10_left wrist_012859_2013-11-01 14-03-32.bin	b643d8f0	9477362	47076951	37551355	47028832
+MECSLEEP17_left	dataset_psgnewcastle2015_v1.0/acc/MECSLEEP17_left wrist_012854_2013-12-09 11-37-24.bin	e0e407d4	9506143	47076941	69468872	78975130
+MECSLEEP27_left	dataset_psgnewcastle2015_v1.0/acc/MECSLEEP27_left wrist_012867_2014-02-06 12-49-07.bin	6c217fbf	18231024	94163454	180349904	198581043
+MECSLEEP29_left	dataset_psgnewcastle2015_v1.0/acc/MECSLEEP29_left wrist_014883_2014-02-13 11-21-35.bin	fd9396cc	19150972	94163458	256939712	276090799
+MECSLEEP32_left	dataset_psgnewcastle2015_v1.0/acc/MECSLEEP32_left wrist_012941_2014-03-07 15-38-14.bin	83268a8d	13992348	70620200	322609044	336601507
+MECSLEEP38_left	dataset_psgnewcastle2015_v1.0/acc/MECSLEEP38_left wrist_018141_2014-12-19 17-02-14.bin	5e2c50e8	17923072	94163456	494225689	512148876
+MECSLEEP42_left	dataset_psgnewcastle2015_v1.0/acc/MECSLEEP42_left wrist_018135_2015-03-10 14-31-39.bin	472479c1	15727261	80578752	565471260	581198636
+MECSLEEP48_left	dataset_psgnewcastle2015_v1.0/acc/MECSLEEP48_left wrist_018142_2015-04-09 16-48-06.bin	e01684a7	17784308	89334951	635252641	653037064
+MECSLEEP50_left	dataset_psgnewcastle2015_v1.0/acc/MECSLEEP50_left wrist_018144_2015-04-21 14-20-31.bin	4e44e7b7	17430391	94163457	697081108	714511614
+MECSLEEP52_left	dataset_psgnewcastle2015_v1.0/acc/MECSLEEP52_left wrist_018135_2015-04-23 11-14-18.bin	a77b688c	13946536	67662024	763303251	777249902
+MECSLEEP56_left	dataset_psgnewcastle2015_v1.0/acc/MECSLEEP56_left wrist_018144_2015-04-30 17-16-49.bin	3e5b3430	17580907	91388495	827075207	844656229
+MECSLEEP59_left	dataset_psgnewcastle2015_v1.0/acc/MECSLEEP59_left wrist_018135_2015-05-21 15-06-33.bin	f4ece4d9	14840533	72387470	899610608	914451256

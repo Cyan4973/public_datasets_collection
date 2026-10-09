@@ -1,0 +1,108 @@
+manifest_version = 1
+dataset_id = "zenodo_newcastle_geneactiv_wrist_accel_i16"
+name = "Newcastle PSG+Accelerometer Study 2015 (Zenodo 1160410): GENEActiv Left-Wrist Tri-Axial Raw 12-bit Accelerometer Counts, 85.7 Hz, Int16"
+description = "13 complete left-wrist GENEActiv recordings (one sleep-clinic participant each, 12 h or 24 h device sessions spanning one polysomnography night) from the CC BY 4.0 Newcastle PSG+Accelerometer study 2015, each emitted as one interleaved x,y,z little-endian int16 sample of the stored 12-bit two's-complement accelerometer counts (+/-8 g, about 256 counts per g, 85.7 Hz), range-fetched from the deposited ZIP and decoded from the GENEActiv hexadecimal page format."
+homepage = "https://zenodo.org/records/1160410"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "van Hees, V. T., Charman, S., Anderson, K. (2018). Newcastle polysomnography and accelerometer data (Version 1.0). Zenodo. https://doi.org/10.5281/zenodo.1160410. Protocol: van Hees et al. (2015), A Novel, Open Access Method to Assess Sleep Duration Using a Wrist-Worn Accelerometer, PLoS ONE 10(11): e0142533, https://doi.org/10.1371/journal.pone.0142533."
+notes = "The Zenodo record API reports metadata.license.id = \"cc-by-4.0\" and access_right = \"open\" for the single deposited file dataset_psgnewcastle2015_v1.0.zip (962,798,652 bytes, md5 8ebadbc55cb0e76230f293fc6d53f504). download.sh re-checks license, access right, DOI, file size and md5 field on every run."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Zenodo deposit by the study authors (Netherlands eScience Center, Newcastle University, Freeman Hospital Regional Sleep Service), linked from the PLoS ONE protocol paper. Participants are identified only by study number (MECSLEEPnn). The GENEActiv file headers in the deposit carry subject fields (date of birth, sex, height, weight, free-text notes); the authors published them openly, but this recipe never stores, prints, logs or emits any header value: headers are parsed in memory only to assert device type, measurement frequency, accelerometer range and page count. participants_info.csv (diagnosis, age, sex) and the PSG sleep-score .txt files are never downloaded."
+usage_notes = "Emitted payload is raw wrist-motion accelerometer counts only, without demographic, clinical or diagnostic information. Light, button, temperature, battery and page-time fields are not emitted."
+
+[[origins]]
+id = "zenodo_1160410"
+name = "Zenodo record 1160410: Newcastle polysomnography and accelerometer data (v1.0)"
+url = "https://zenodo.org/records/1160410"
+type = "repository"
+notes = "55 GENEActiv .bin files (28 left wrist, 27 right wrist; right wrist of participant 10 missing), 28 PSG sleep-score .txt files and participants_info.csv in one ZIP."
+
+[[origins]]
+id = "zenodo_api"
+name = "Zenodo REST API"
+url = "https://zenodo.org/api/records/1160410"
+type = "api"
+notes = "Anonymous record JSON (license, DOI, file key, size and md5)."
+
+[[resources]]
+id = "record_json"
+origin = "zenodo_api"
+url = "https://zenodo.org/api/records/1160410"
+type = "api_query_result"
+version = "record 1160410 (v1.0, published 2018-01-25)"
+access = "Anonymous JSON GET."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/zenodo_newcastle_geneactiv_wrist_accel_i16/zenodo_record_1160410.json"
+notes = "Not byte-pinned (view counters change); validated field by field."
+
+[[resources]]
+id = "zip_central_directory"
+origin = "zenodo_1160410"
+url = "https://zenodo.org/api/records/1160410/files/dataset_psgnewcastle2015_v1.0.zip/content"
+type = "other"
+version = "v1.0"
+access = "HTTP range request for bytes 962788256-962798651 (central directory, 87 entries, 10,374 bytes, plus the 22-byte EOCD; no ZIP64)."
+size_bytes = 10396
+sha256 = ""
+local_path = "downloads/zenodo_newcastle_geneactiv_wrist_accel_i16/zip_central_directory.bin"
+notes = "Used to re-derive the member selection and to check the pinned offsets, CRC32 and sizes in members.tsv."
+
+[[resources]]
+id = "member_spans"
+origin = "zenodo_1160410"
+url = "https://zenodo.org/api/records/1160410/files/dataset_psgnewcastle2015_v1.0.zip/content"
+type = "other"
+version = "v1.0"
+access = "One resumable HTTP range request per pinned member: [local header offset, next local header offset), 206 + exact Content-Range checked on every chunk."
+size_bytes = 194859344
+sha256 = ""
+local_path = "downloads/zenodo_newcastle_geneactiv_wrist_accel_i16/members/"
+notes = "13 spans (30-byte local header + name + raw DEFLATE data, no data descriptor), 989,856,562 bytes of hex text after inflation. Each span is inflated in full at download, build and verify time and must match the central-directory CRC32 and size."
+
+[local_paths]
+downloads = "downloads/zenodo_newcastle_geneactiv_wrist_accel_i16/"
+filtered = "filtered/zenodo_newcastle_geneactiv_wrist_accel_i16/"
+index = "index/zenodo_newcastle_geneactiv_wrist_accel_i16/"
+samples = "samples/zenodo_newcastle_geneactiv_wrist_accel_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_newcastle_geneactiv_wrist_accel_i16/samples.jsonl"
+summary = "Range-fetch the ZIP central directory and 13 pinned left-wrist GENEActiv members, inflate each member, validate the GENEActiv page structure, decode every 48-bit sample word into its x, y and z 12-bit two's-complement counts and emit them interleaved as one little-endian int16 sample per recording."
+deterministic_notes = "Selection (re-derived from the central directory by scripts/geneactiv.py check-cd on every download, build and verify; pinned in members.tsv): of the 28 left-wrist .bin members, keep the 26 with uncompressed size <= 100,000,000 bytes (drops the multi-day MECSLEEP23 and MECSLEEP34 files, 188 and 283 MB of hex), order by participant number and take every second one starting with the first: participants 01, 10, 17, 27, 29, 32, 38, 42, 48, 50, 52, 56, 59. Right-wrist files are excluded so that one body side is collected. build.sh runs a synthetic self-test (hand-built GENEActiv pages with 12-bit extremes and random light/button bits, zipped as raw DEFLATE; both decoders must reproduce the planted values; page-count, frequency, range, sequence, hex, line-length and CRC corruption must be rejected). build uses an unhexlify + byte-lane + 16-bit lookup-table decoder; verify re-decodes every page with a per-word integer shift/mask decoder and compares bytes page by page, then recomputes sha256, min/max, distinct codes, mode share, per-axis ranges and the quasi-static page fraction, and checks them against the index. A page is quasi-static when every axis has population std <= 3.3 counts (13 mg, the GGIR non-wear std threshold), tested exactly in integers (300*sum(x^2) - sum(x)^2 <= 980100); the sensor noise floor alone gives per-page axis spans of 10-18 counts, so a span-based test is meaningless. Degeneracy rules (fatal in both): constant sample or axis, fewer than 256 distinct codes, one code holding more than 50% of values, or more than 50% of pages inside runs of >= 1,029 consecutive quasi-static pages (>= 60 min, non-wear-like). Floors: at least 10,000 primary values or 100 KB; median at least 1,000 values. Realized 2026-10-08: 13 samples, 233,424,900 values, 466,849,800 bytes; 12,336 to 24,672 pages per recording (3.70 M to 7.40 M frames, median 19,001,700 values); every page of every recording validated (page counts equal the header); per-recording distinct codes 1,080-1,437, mode share 0.9-2.6%, full-scale clipped codes 0-37; quasi-static pages 83-92% (sleep), pages in >= 60 min quasi-static runs 0-24.8% (longest run 2.87 h, MECSLEEP38); aggregate SHA-256 over per-sample SHA-256s 57f8fe9d02612a39df85c81b4e9a54d11f2eec8ed9c9e5ffd74d130746bb212d."
+
+[[series]]
+id = "geneactiv_wrist_accel_xyz_i16"
+description = "Complete left-wrist GENEActiv recordings of sleep-clinic participants, one sample per device recording, interleaved x,y,z raw accelerometer counts."
+semantic_meaning = "Raw tri-axial acceleration of the left wrist measured by a GENEActiv wrist-worn MEMS accelerometer configured for +/-8 g and 85.7 Hz: successive frames of three signed 12-bit ADC counts (x, y, z device axes; about 256 counts per g before the per-device calibration gain/offset, which is not applied). Each recording covers the device session (12 h or 24 h) around one overnight polysomnography study in the Newcastle Regional Sleep Service, so it is dominated by sleep and quiet wakefulness with bursts of movement; gravity contributes a near-constant offset whose split across axes follows wrist orientation."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The GENEActiv .bin format stores each page's 300 samples as one line of 3,600 hexadecimal characters, 12 characters (48 bits) per sample: x, y, z as 12-bit two's complement, then light (10 bits), button (1 bit) and a reserved bit. The emitted values are exactly the stored x, y, z counts, sign-extended to int16; no calibration, filtering, resampling or reordering. Light, button, temperature and battery fields are not emitted."
+source_resources = ["member_spans", "zip_central_directory", "record_json"]
+source_format = "GENEActiv .bin hexadecimal page text (header block + pages of 9 metadata lines and one 3,600-hex-character data line), stored as raw DEFLATE ZIP members"
+source_field = "per-page data line: 48-bit sample words, bits 47-36 x, 35-24 y, 23-12 z (12-bit two's-complement accelerometer counts)"
+filtered_input_path = "filtered/zenodo_newcastle_geneactiv_wrist_accel_i16/ingest_stats.json"
+filtering = "The 13 left-wrist recordings pinned in members.tsv (selection rule in processing.deterministic_notes); every page of each recording, including off-wrist or pre-/post-wear stretches inside the device session. Headers and per-page metadata lines are parsed for validation only and discarded."
+missing_value_policy = "The format has no missing-value sentinel and pages are contiguous. Every sample of every page is emitted, including clipped full-scale counts (-2048 or 2047). Any structural problem (bad header frequency/range/device type, page count different from the header's Number of Pages, sequence-number gap, page frequency other than 85.7, data line not exactly 3,600 hex characters, CRC32 or size mismatch) is fatal; no page is skipped or repaired. A degenerate recording is fatal, not silently excluded."
+conversion = "Inflate the member (zlib raw DEFLATE, wbits -15) and check CRC32 and size against the central directory; split CRLF lines; read header fields up to the first 'Recorded Data' line and assert Device Type GENEActiv, Measurement Frequency '85.7 Hz', Accelerometer Range '-8 to 8' and Number of Pages; for each page assert the 8 metadata keys in order, Sequence Number = page index and Measurement Frequency 85.7, then decode the data line: for each 48-bit word w, x = sext12((w >> 36) & 0xFFF), y = sext12((w >> 24) & 0xFFF), z = sext12((w >> 12) & 0xFFF). Write x, y, z interleaved as little-endian int16, 300 frames per page in page order, one .bin per recording named <sample_id>.bin."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw little-endian int16, frame-interleaved x,y,z"
+sample_geometry = "multichannel_time_series_frames_x_3"
+sample_rank = 2
+sample_axes = ["time_sample_85_7hz", "axis_xyz"]
+natural_record_kind = "complete_geneactiv_wrist_device_recording"
+sample_count = 13
+total_size_bytes = 466849800
+output_path = "samples/zenodo_newcastle_geneactiv_wrist_accel_i16/geneactiv_wrist_accel_xyz_i16/"

@@ -1,0 +1,78 @@
+manifest_version = 1
+dataset_id = "nasa_pds_m2020_supercam_libs_mic_audio_i16"
+name = "Mars 2020 SuperCam Microphone Raw Audio of 30-Shot LIBS Bursts on Mars (100 kHz, gain 2), Native 16-bit"
+description = "634 raw Mars 2020 SuperCam microphone recordings from the Perseverance mast (sols 86-1857, 465 distinct sols), each the complete 174,000-sample SOUND table of one PDS4 raw-audio FITS product recorded at 100 kHz during a 30-shot laser-induced breakdown (LIBS) burst: laser-spark shock transients recurring every ~6,000 samples on top of Martian wind and ambient noise, emitted as native unsigned 16-bit ADC codes."
+homepage = "https://pds-geosciences.wustl.edu/missions/mars2020/supercam.htm"
+
+[license]
+name = "NASA PDS public data (NASA SMD open scientific data policy)"
+spdx = "LicenseRef-NASA-PDS"
+url = "https://science.nasa.gov/researchers/science-data/science-information-policy/"
+citation = "Wiens, R. C.; Maurice, S. A. (2021). Mars 2020 SuperCam Raw Audio Data Collection, urn:nasa:pds:mars2020_supercam:data_raw_audio (collection version 16.0). NASA Planetary Data System Geosciences Node. Preserve mission, instrument, collection LID and product LIDVIDs."
+notes = "NASA Science Mission Directorate policy: 'It is Science Mission Directorate (SMD) policy, consistent with NASA and Federal policies, that information produced from SMD-funded scientific research activities be made publicly available.' The products are archived anonymously in the NASA PDS Geosciences Node SuperCam bundle. SuperCam is a LANL/CNES (IRAP) instrument; rights rest on the NASA PDS public archive, the same basis as the accepted nasa_pds_mastcamz_raw_i16 and nasa_pds_sharad_edr_raw_echo_i8. The bundle carries no explicit CC/PD licence text and no stated restriction."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official PDS4 archive bundle urn:nasa:pds:mars2020_supercam served by the PDS Geosciences Node (Washington University in St. Louis). No mirrors."
+usage_notes = "Robotic in-situ acoustic recordings of the Martian atmosphere (laser sparks, wind, rover/instrument noise). No people are recorded."
+
+[[origins]]
+id = "pds_geosciences_supercam"
+name = "PDS Geosciences Node: Mars 2020 SuperCam bundle, data_raw_audio collection"
+url = "https://pds-geosciences.wustl.edu/m2020/urn-nasa-pds-mars2020_supercam/data_raw_audio/"
+type = "data_portal"
+version = "Collection data_raw_audio version 16.0 (inventory 13,420 products, listing dated 2026-08-10); bundle MD5 manifest urn-nasa-pds-mars2020_supercam.md5 dated 2026-10-05 (38,624,931 bytes, sha256 b0a0f5f98d7ccbb6f3adab24f15d49dbdc400b78609ff2cca78f5399f7a9b969)"
+notes = "Anonymous HTTPS, byte ranges supported. The bundle MD5 manifest gives an MD5 for every product file; those MD5s are pinned in sources.tsv. The collection inventory (sha256 1ede27444837e0d8ec66b5ee224bf8eceb0932138d7e721ef4e7d385407e4792 at discovery) confirmed every pinned product's LID and major version."
+
+[[resources]]
+id = "supercam_raw_audio_products"
+origin = "pds_geosciences_supercam"
+url = "https://pds-geosciences.wustl.edu/m2020/urn-nasa-pds-mars2020_supercam/data_raw_audio/"
+type = "pinned_pds4_product_selection"
+version = "634 products pinned in sources.tsv (sha256 3bea302314c546f8aba21d0f6757272166ebabe9ef085ab4883691f806252661)"
+access = "Direct anonymous HTTPS GET of data_raw_audio/sol_NNNNN/<product>.fits, resumable (curl -C -), 4 in parallel."
+size_bytes = 396984960
+sha256 = "3bea302314c546f8aba21d0f6757272166ebabe9ef085ab4883691f806252661"
+local_path = "downloads/nasa_pds_m2020_supercam_libs_mic_audio_i16/"
+notes = "size_bytes is the sum of the 634 whole FITS files; the sha256 identifies sources.tsv, produced by discover.sh (metadata only). For each product sources.tsv pins the URL, file size, bundle MD5, sol, SCLK, SOUND HDU header offset (file_bytes - 351,360), and SHA-256 of the 17,280-byte primary header and of the 2,880-byte SOUND header block as range-probed at discovery. download.sh rejects size, MD5 or header-hash mismatches and any FITS structure outside the configuration. The PDS4 XML labels (~146 KB each) are not fetched: every selection keyword is in the FITS primary header."
+
+[local_paths]
+downloads = "downloads/nasa_pds_m2020_supercam_libs_mic_audio_i16/"
+filtered = "filtered/nasa_pds_m2020_supercam_libs_mic_audio_i16/"
+index = "index/nasa_pds_m2020_supercam_libs_mic_audio_i16/"
+samples = "samples/nasa_pds_m2020_supercam_libs_mic_audio_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_pds_m2020_supercam_libs_mic_audio_i16/samples.jsonl"
+summary = "Fetch 634 pinned SuperCam raw-audio FITS products, validate MD5 and FITS structure, walk the HDUs to the final SOUND binary table, and emit its 174,000 big-endian int16 stored codes plus TZERO 32768 as one little-endian uint16 sample per recording."
+deterministic_notes = "Selection (discover.sh, scripts/m2020mic.py): candidates = all 12,220 data_raw_audio FITS products under 1,000,000 bytes, sorted by file name (sol, then SCLK); split into 800 equal consecutive windows; in each window the first product (in order) is taken whose primary header has MIC_SAMP=100000, MIC_SAMC=21, MIC_DOWN=F, MIC_GAIN=2, MIC_DURA=1, HSS_NUMW=174000, LIBS_MIC=T, LASDNS00=30, SCMDTYPE=9 and whose final HDU header is EXTNAME SOUND, BINTABLE, NAXIS1=2, NAXIS2=174000, TFIELDS=1, TFORM1='I', TZERO1=32768. 634 windows resolved; 166 windows held only gain-1/gain-3 or other-length products and contribute nothing (probe rejections: 3,495 MIC_GAIN=1, 263 MIC_GAIN=3, 93 HSS_NUMW=294000, 65 too small). Build and verify re-check every keyword, require exactly one SOUND HDU, last in the file, at the pinned offset, with zero padding after the data. Quality policy (build and verify): a recording with fewer than 64 distinct values or one value above 50% of samples is dropped and logged (dead or stuck microphone); none is patched or clipped. Output order = sources.tsv ordinal. verify.sh re-derives each sample with an independent parser and byte-compares, and checks index fields and manifest totals."
+
+[[series]]
+id = "supercam_mic_libs_100khz_gain2_u16"
+description = "Raw SuperCam microphone pressure waveform, 100 kHz, gain setting 2, 174,000 samples per recording of a 30-shot LIBS burst. In the inspected products the laser-spark shock transients recur every ~6,000 samples (60 ms) although the laser fires at a few Hz, consistent with the instrument storing a short acquisition window per shot back-to-back (not confirmed against the SIS); shots that miss or are weak leave only wind/ambient noise in their window."
+semantic_meaning = "Uncalibrated microphone ADC codes (physical FITS value = stored int16 + TZERO 32768): acoustic pressure fluctuations in the ~6 hPa CO2 Martian atmosphere sensed by the SuperCam microphone on the Perseverance remote-sensing mast. The level sits near 1,880 counts with LIBS shock waves reaching hundreds of counts away from it."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "FITS stores unsigned 16-bit columns as TFORM 'I' with TZERO 32768 (the PDS4 label calls it SignedMSB2 with value_offset 32768). The emitted value is the physical uint16 ADC code (stored + 32768, identical to flipping the sign bit), the instrument's own reading; stored signed codes would be an offset artifact of the FITS convention (all near -30,900). No scaling, filtering, resampling or calibration."
+source_resources = ["supercam_raw_audio_products"]
+source_format = "PDS4 FITS 4.0 raw-audio product (LS__*_LUJnn.fits); final binary-table extension EXTNAME 'SOUND'"
+source_field = "SOUND table column 'Sound' (TFORM1 'I', TZERO1 32768, 174,000 rows)"
+filtered_input_path = "filtered/nasa_pds_m2020_supercam_libs_mic_audio_i16/build_summary.json"
+filtering = "Only the SOUND HDU column is emitted; primary header, ODL label, TIMELINE, MU_SOH, BU_SOH and LASERDATA HDUs are read for validation only. Only one recording configuration is kept: 100 kHz, not downsampled, gain 2, 174,000 words, 30-shot LIBS+MIC activity."
+missing_value_policy = "The SOUND column declares no TNULL and has no fill value; all 174,000 rows are emitted unchanged. A structurally different product (wrong keyword, SOUND not final, wrong row count or padding) is fatal in download, build and verify. Recordings failing the quality policy (fewer than 64 distinct values, or one value above 50%) are dropped and listed in build_summary.json; verify recomputes the same rule and requires the same set."
+conversion = "Walk the 2,880-byte FITS header blocks to the final HDU, check the SOUND header, read 348,000 bytes of big-endian int16 from its data start, add 32768 to each value and write uint16 little-endian. One sample file per FITS product (one natural recording); no cropping, concatenation or resampling."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 mono PCM waveform"
+sample_geometry = "audio_waveform_1d"
+sample_rank = 1
+sample_axes = ["time_sample_100khz"]
+natural_record_kind = "supercam_libs_microphone_recording_product"
+sample_count = 634
+total_size_bytes = 220632000
+output_path = "samples/nasa_pds_m2020_supercam_libs_mic_audio_i16/supercam_mic_libs_100khz_gain2_u16/"

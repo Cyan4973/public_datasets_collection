@@ -1,0 +1,142 @@
+manifest_version = 1
+dataset_id = "earthscope_4p_mt_magnetic_field_counts_i32"
+name = "NSF EarthScope MT-TA (4P) NIMS Fluxgate Magnetic-Field Counts, 1 sps, Int32"
+description = "Native int32 fluxgate magnetometer counts (LFN/LFE/LFZ, 100.9048 counts/nT, 1 sample/s) from 16 three-week USArray magnetotelluric transportable-array station deployments (2006-2018), decoded from Steim2 miniSEED and split at data gaps."
+homepage = "https://doi.org/10.7914/SN/4P_2006"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Schultz, A., Pellerin, L., Egbert, G., et al. (2006). NSF EarthScope MT-TA [Data set]. Incorporated Research Institutions for Seismology (now NSF EarthScope Consortium). https://doi.org/10.7914/SN/4P_2006"
+notes = "DataCite metadata for DOI 10.7914/SN/4P_2006 (title 'NSF EarthScope MT-TA', publisher IRIS) carries rightsList 'Creative Commons Attribution 4.0 International' (rightsIdentifier cc-by-4.0, SPDX scheme). EarthScope's data-license statement licenses data from EarthScope-operated facilities under CC BY 4.0. Cite the network DOI."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NSF EarthScope (formerly IRIS DMC) FDSN web services; geophysical instrument time series only."
+usage_notes = "Physical magnetic-field measurements intended as numeric compression training material."
+
+[[origins]]
+id = "earthscope_fdsnws"
+name = "NSF EarthScope FDSN web services"
+url = "https://service.earthscope.org/fdsnws/"
+type = "api"
+notes = "fdsnws-station (channel metadata incl. overall sensitivity) and fdsnws-dataselect (miniSEED) for network 4P."
+
+[[resources]]
+id = "station_listings"
+origin = "earthscope_fdsnws"
+url = "https://service.earthscope.org/fdsnws/station/1/query?net=4P&cha={LFN,LFE,LFZ}&level=channel&format=text&nodata=404"
+type = "api_query_result"
+version = "listing fetched at download time; pinned epochs checked against it"
+access = "Anonymous HTTPS GET."
+size_bytes = 700870
+# 2026-10-08 listings: LFN 254,996 B, LFE 254,043 B, LFZ 191,831 B (live listings, not hash-pinned)
+sha256 = ""
+local_path = "downloads/earthscope_4p_mt_magnetic_field_counts_i32/station/"
+notes = "Three pipe-delimited channel listings (about 255 KB, 254 KB, 192 KB on 2026-10-08). check-station requires every pinned epoch to still be listed with identical end time, empty location code, sensor 'NIMS', scale 100.9048 counts/nT and 1.0 sps."
+
+[[resources]]
+id = "dataselect_epochs"
+origin = "earthscope_fdsnws"
+url = "https://service.earthscope.org/fdsnws/dataselect/1/query?net=4P&sta={station}&loc=--&cha={channel}&start={epoch_start}&end={epoch_end}&nodata=404"
+type = "api_query_result"
+version = "48 pinned channel epochs in selection.tsv"
+access = "Anonymous HTTPS GET, one request per channel epoch."
+size_bytes = 60215296
+sha256 = ""
+local_path = "downloads/earthscope_4p_mt_magnetic_field_counts_i32/mseed/"
+notes = "48 files, 60,215,296 bytes total (1.07-1.40 MB each), 4096-byte miniSEED 2.4 records, blockette 1000 encoding 11 (Steim2), big-endian word order. Per-file sha256 and decoded value counts are pinned in selection.tsv and enforced by download/build/verify; a re-fetch of ALW48 LFN was byte-identical."
+
+[local_paths]
+downloads = "downloads/earthscope_4p_mt_magnetic_field_counts_i32/"
+filtered = "filtered/earthscope_4p_mt_magnetic_field_counts_i32/"
+index = "index/earthscope_4p_mt_magnetic_field_counts_i32/"
+samples = "samples/earthscope_4p_mt_magnetic_field_counts_i32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/earthscope_4p_mt_magnetic_field_counts_i32/samples.jsonl"
+summary = "Fetch the 4P magnetic-channel station listings and 48 pinned channel-epoch miniSEED payloads; decode Steim2 to int32 with a pure-Python decoder; split each epoch at time gaps; emit one little-endian int32 sample per contiguous segment."
+deterministic_notes = "selection.tsv is produced by `mt_mseed.py select` from the station listings: among 1073 4P station epochs where LFN, LFE and LFZ all exist with identical start/end, empty location, sensor NIMS, scale 100.9048 counts/nT and 1.0 sps, take per calendar year (2006-2018) the epoch whose length is closest to 21 days (ties by station code), plus the runner-up in 2012, 2015 and 2016; all three components of each. Every record must be stream 4P.<sta>..<cha>, encoding 11, word order 1, sample-rate factor/multiplier 1/1, and must pass the Steim2 reverse-integration-constant check. Decoded count per epoch must lie in [0.8*nominal, nominal+1] where nominal = epoch seconds + 1. Segments split where the next record start differs from the predicted start by more than 0.5 s, except a -1 s step across a UTC leap second (2008-12-31, 2012-06-30, 2015-06-30, 2016-12-31), which is continuous sampling. Segments shorter than 1000 values are dropped and counted in ingest_stats.json. Each channel goes to its own primary series (one per field component) because the static main-field offset differs by component: LFN ~1.4-3.0e6, LFE near 0 (-1e5..1.4e6), LFZ ~4.3-6.8e6 counts."
+
+[[series]]
+id = "mt_nims_bfield_north_lfn_counts_i32"
+description = "1 sps NIMS fluxgate magnetometer north component (LFN) counts from 16 USArray MT transportable-array deployments, 2006-2018."
+semantic_meaning = "Native digitizer counts of the geomagnetic field component along the sensor N axis (oriented to magnetic north; listed geographic azimuths of the 16 epochs lie within about +-15 deg of 0) at 100.9048 counts per nT; the series includes the static main-field offset (realized range 1.41e6-3.04e6 counts, typical ~1.6-2.3e6 per station) plus diurnal and storm-time variation of a few thousand counts."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The Steim2 payload losslessly encodes the logger's integer counts; output is those integers as little-endian int32."
+source_resources = ["station_listings", "dataselect_epochs"]
+source_format = "miniSEED 2.4, blockette 1000 encoding 11 (Steim2), 4096-byte records"
+source_field = "Steim2-decoded integer samples of channel LFN (network 4P, empty location code)"
+filtered_input_path = "filtered/earthscope_4p_mt_magnetic_field_counts_i32/ingest_stats.json"
+filtering = "Only the 16 pinned standard-gain LFN channel epochs. Electric channels LQN/LQE, non-standard-gain epochs (2611-* / LEMI listed at 1e11 counts/T), and other MT networks are excluded."
+missing_value_policy = "No sentinel or fill values exist in the source. Data gaps split a channel epoch into separate samples; no interpolation or concatenation across gaps. Segments under 1000 values are dropped and counted (6 single-value fragments, all in ORI09). Spikes, startup transients and logger resets are preserved as recorded. Malformed records, foreign streams, wrong encoding, Steim2 integrity failures, or decoded counts/sha256 differing from selection.tsv fail the build."
+conversion = "Parse each 4096-byte record fixed header and blockette 1000, decode the Steim2 frames (X0 forward constant, differences, Xn reverse-constant check), concatenate records only while time-contiguous within one channel epoch, and write the int32 values little-endian in time order. No scaling, detrending or despiking."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian int32 time series"
+sample_geometry = "contiguous_1sps_channel_segment"
+sample_rank = 1
+sample_axes = ["time"]
+natural_record_kind = "station_channel_deployment_epoch_contiguous_segment"
+sample_count = 45
+total_size_bytes = 115263592
+output_path = "samples/earthscope_4p_mt_magnetic_field_counts_i32/mt_nims_bfield_north_lfn_counts_i32/"
+
+[[series]]
+id = "mt_nims_bfield_east_lfe_counts_i32"
+description = "1 sps NIMS fluxgate magnetometer east component (LFE) counts from 16 USArray MT transportable-array deployments, 2006-2018."
+semantic_meaning = "Native digitizer counts of the geomagnetic field component along the sensor E axis (magnetic east; listed azimuths 79-105 deg) at 100.9048 counts per nT; the series is centred near zero because the sensor is aligned to magnetic north (typical segment percentiles -2.6e4..+4.3e4 counts; realized range -95,910..1,397,458 including isolated spikes) with diurnal and storm-time variation."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The Steim2 payload losslessly encodes the logger's integer counts; output is those integers as little-endian int32."
+source_resources = ["station_listings", "dataselect_epochs"]
+source_format = "miniSEED 2.4, blockette 1000 encoding 11 (Steim2), 4096-byte records"
+source_field = "Steim2-decoded integer samples of channel LFE (network 4P, empty location code)"
+filtered_input_path = "filtered/earthscope_4p_mt_magnetic_field_counts_i32/ingest_stats.json"
+filtering = "Only the 16 pinned standard-gain LFE channel epochs. Electric channels LQN/LQE, non-standard-gain epochs (2611-* / LEMI listed at 1e11 counts/T), and other MT networks are excluded."
+missing_value_policy = "No sentinel or fill values exist in the source. Data gaps split a channel epoch into separate samples; no interpolation or concatenation across gaps. Segments under 1000 values are dropped and counted (6 single-value fragments, all in ORI09). Spikes, startup transients and logger resets are preserved as recorded. Malformed records, foreign streams, wrong encoding, Steim2 integrity failures, or decoded counts/sha256 differing from selection.tsv fail the build."
+conversion = "Parse each 4096-byte record fixed header and blockette 1000, decode the Steim2 frames (X0 forward constant, differences, Xn reverse-constant check), concatenate records only while time-contiguous within one channel epoch, and write the int32 values little-endian in time order. No scaling, detrending or despiking."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian int32 time series"
+sample_geometry = "contiguous_1sps_channel_segment"
+sample_rank = 1
+sample_axes = ["time"]
+natural_record_kind = "station_channel_deployment_epoch_contiguous_segment"
+sample_count = 45
+total_size_bytes = 115263592
+output_path = "samples/earthscope_4p_mt_magnetic_field_counts_i32/mt_nims_bfield_east_lfe_counts_i32/"
+
+[[series]]
+id = "mt_nims_bfield_vertical_lfz_counts_i32"
+description = "1 sps NIMS fluxgate magnetometer vertical component (LFZ) counts from 16 USArray MT transportable-array deployments, 2006-2018."
+semantic_meaning = "Native digitizer counts of the vertical geomagnetic field component at 100.9048 counts per nT; the series includes the large static main-field offset (realized range 4.32e6-6.82e6 counts) plus diurnal and storm-time variation."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The Steim2 payload losslessly encodes the logger's integer counts; output is those integers as little-endian int32."
+source_resources = ["station_listings", "dataselect_epochs"]
+source_format = "miniSEED 2.4, blockette 1000 encoding 11 (Steim2), 4096-byte records"
+source_field = "Steim2-decoded integer samples of channel LFZ (network 4P, empty location code)"
+filtered_input_path = "filtered/earthscope_4p_mt_magnetic_field_counts_i32/ingest_stats.json"
+filtering = "Only the 16 pinned standard-gain LFZ channel epochs. Electric channels LQN/LQE, non-standard-gain epochs (2611-* / LEMI listed at 1e11 counts/T), and other MT networks are excluded."
+missing_value_policy = "No sentinel or fill values exist in the source. Data gaps split a channel epoch into separate samples; no interpolation or concatenation across gaps. Segments under 1000 values are dropped and counted (6 single-value fragments, all in ORI09). Spikes, startup transients and logger resets are preserved as recorded. Malformed records, foreign streams, wrong encoding, Steim2 integrity failures, or decoded counts/sha256 differing from selection.tsv fail the build."
+conversion = "Parse each 4096-byte record fixed header and blockette 1000, decode the Steim2 frames (X0 forward constant, differences, Xn reverse-constant check), concatenate records only while time-contiguous within one channel epoch, and write the int32 values little-endian in time order. No scaling, detrending or despiking."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian int32 time series"
+sample_geometry = "contiguous_1sps_channel_segment"
+sample_rank = 1
+sample_axes = ["time"]
+natural_record_kind = "station_channel_deployment_epoch_contiguous_segment"
+sample_count = 45
+total_size_bytes = 115263592
+output_path = "samples/earthscope_4p_mt_magnetic_field_counts_i32/mt_nims_bfield_vertical_lfz_counts_i32/"

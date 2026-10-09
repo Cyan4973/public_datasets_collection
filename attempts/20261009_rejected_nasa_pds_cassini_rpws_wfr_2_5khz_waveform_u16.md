@@ -1,0 +1,24 @@
+# nasa_pds_cassini_rpws_wfr_2_5khz_waveform_u16
+
+- Date: 2026-10-09
+- Status: rejected
+- Candidate dataset: Cassini RPWS Waveform Receiver (WFR) Full-Resolution 2.5-kHz-Band Single-Channel Plasma-Wave Waveforms, Native 12-bit DN as UInt16
+- Source: https://space.physics.uiowa.edu/pds/
+- Why it looked promising: see `pipeline/cards/nasa_pds_cassini_rpws_wfr_2_5khz_waveform_u16.md`
+- Failure class: autocollect driver limit
+- What happened: byte-level breadth: every primary series is compression- and feature-equivalent to an existing family: rpws_wfr_2_5khz_ex_waveform_u16 ~ downstream:sentinel1_grd_hh_dn_u16 (distance 0.0486, loss -0.012)
+- Evidence:
+  - 2026-10-09T01:22:04 proposed: {"log": ".data/pipeline/logs/scout_16bit/scout.20261009_010213.jsonl"}
+  - 2026-10-09T01:28:58 screened: {"decision": "approve", "reason": "New 16-bit plasma-wave waveform family. WFRFULL is a different receiver and data set from the accepted 8-bit WBR recipe, which zlsim does not compare at 16-bit. The archive is live (one-byte range GET returned 206; label matches: 1056-byte records, 512 MSB u16 samp
+  - 2026-10-09T01:44:04 builder: {"phase": "author", "status": "ready_for_download", "log": ".data/pipeline/logs/nasa_pds_cassini_rpws_wfr_2_5khz_waveform_u16/builder.20261009_013443.jsonl", "cost": 2.2148849999999998}
+  - 2026-10-09T01:54:23 download: {"rc": 0, "reason": "", "bytes": 864532506, "log": ".data/pipeline/logs/nasa_pds_cassini_rpws_wfr_2_5khz_waveform_u16/download.20261009_014405.log"}
+  - 2026-10-09T02:16:40 builder: {"phase": "build", "status": "ready_for_judge", "log": ".data/pipeline/logs/nasa_pds_cassini_rpws_wfr_2_5khz_waveform_u16/builder.20261009_015508.jsonl", "cost": 4.6051992}
+  - 2026-10-09T02:41:46 rebuild: {"ok": true}
+  - 2026-10-09T05:19:17 judge: {"decision": "repair", "summary": "The material is genuine, native 12-bit Cassini RPWS WFR 2.5-kHz Ex-dipole waveform DN. It is homogeneous, varied (all 4096 levels, no duplicate captures, mode share 0.32%), reproducible (gate PASS, verify re-derives all 245 samples byte-for-byte) and rights-clean.
+  - 2026-10-09T05:27:57 builder: {"phase": "repair", "status": "ready_for_download", "log": ".data/pipeline/logs/nasa_pds_cassini_rpws_wfr_2_5khz_waveform_u16/builder.20261009_052019.jsonl", "cost": 6.821543999999999}
+  - 2026-10-09T05:38:25 download: {"rc": 0, "reason": "", "bytes": 1515482873, "log": ".data/pipeline/logs/nasa_pds_cassini_rpws_wfr_2_5khz_waveform_u16/download.20261009_052757.log"}
+  - 2026-10-09T05:40:42 builder: {"phase": "build", "status": "ready_for_judge", "log": ".data/pipeline/logs/nasa_pds_cassini_rpws_wfr_2_5khz_waveform_u16/builder.20261009_053841.jsonl", "cost": 7.958979599999999}
+  - 2026-10-09T05:42:18 rebuild: {"ok": true}
+- Logs: `.data/pipeline/logs/nasa_pds_cassini_rpws_wfr_2_5khz_waveform_u16/`, `.data/logs/nasa_pds_cassini_rpws_wfr_2_5khz_waveform_u16/`
+- Decision: rejected
+- Retry conditions: Retry only with material whose bytes differ measurably (zlsim.py gate) from the existing families.

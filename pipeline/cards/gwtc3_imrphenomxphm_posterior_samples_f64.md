@@ -1,0 +1,26 @@
+# GWTC-3 (LIGO/Virgo/KAGRA O3b) Bayesian Parameter-Estimation Posterior Samples, C01:IMRPhenomXPHM bilby Run, Float64
+
+- Candidate id: `gwtc3_imrphenomxphm_posterior_samples_f64`
+- Width: float64
+- Quantity: Posterior draws from Bayesian parameter estimation of compact-binary coalescences: component, chirp, total and final masses (detector and source frame, Msun), luminosity and comoving distance (Mpc), spin magnitudes and tilts, chi_eff and chi_p, sky position, inclination and polarisation angles, and log-likelihood. Values are full-precision computed doubles from the bilby nested sampler. Emit one series per parameter or unit group, never interleaved.
+- Source: https://zenodo.org/records/8177023
+- Resources: https://zenodo.org/api/records/8177023, https://zenodo.org/api/records/8177023/files/IGWN-GWTC3p0-v2-GW200322_091133_PEDataRelease_mixed_cosmo.h5/content, https://zenodo.org/api/records/8177023/files/GWTC3p0PEDataReleaseExample.ipynb/content
+- License: CC BY 4.0
+- License evidence: https://zenodo.org/records/8177023
+- License quote: Zenodo record 8177023 (GWTC-3 ... v2 PE data release): "license": {"id": "cc-by-4.0"}. This is record-level, covering every IGWN-GWTC3p0-v2-*_PEDataRelease_*.h5 file.
+- Natural record: One event's posterior column for one parameter in the C01:IMRPhenomXPHM analysis group (PESummary HDF5 posterior_samples structured table): typically thousands to tens of thousands of draws per event.
+- Estimated samples: 290
+- Estimated primary values: 25,000,000
+- Estimated download bytes: 3,180,000,000
+- Estimated primary bytes: 200,000,000
+- Decode path: PESummary HDF5 files. Bounded subset: the 29 *_mixed_cosmo.h5 files of 250 MB or less (3.18 GB total, under the 5 GB cap); the 36-file cosmo set is 5.66 GB. download.sh uses curl with -C - and pins size and checksum per file from the Zenodo API. A pure-stdlib HDF5 reader (superblock, v1/v2 object headers, B-tree or fractal-heap links, chunked layout with the deflate filter via zlib) locates group C01:IMRPhenomXPHM, dataset posterior_samples. The dataset is a compound or structured table of float64 fields; the builder must confirm member types and filters. Each selected field becomes a little-endian float64 column. Earlier repo recipes (calochallenge, lodopab, dandi) already ship pure-Python HDF5 readers to adapt.
+- Novelty kind: new_modality
+- Measurement type: bayesian_posterior_samples
+- Instrument line: ligo_virgo_bilby_pe
+- Archive collection: zenodo.org/gwtc3_pe_release
+- Novelty evidence: `novelty.py --url https://zenodo.org/records/8177023 --terms GWTC posterior "parameter estimation"` found only a same-host match (Zenodo) and incidental 'posterior' term hits (tcia CR, wohns tsdate). Nothing in the registry, ledger or downstream. The vocabulary has no posterior or MCMC sample type. The existing gwosc_event_strain_f32 is detector strain and sxs_bbh is NR waveforms, both different material. Two stale staging investigations (zenodo_gwtc1_posterior_samples_f64, zenodo_gwtc1_harmonics_posterior_f64) target GWTC-1, never reached a payload, and are absent from attempts/dataset_status.tsv. This is a different release (GWTC-3 v2) with a verified record and license.
+- Homogeneity: Only one analysis group per file: C01:IMRPhenomXPHM, a single waveform model and bilby sampler. C01:Mixed is a resampled union of the XPHM and SEOBNRv4PHM runs, so including it would duplicate values; C01:SEOBNRv4PHM is a different sampler. Parameters are never interleaved. Either one series per parameter (one sample per event) or series grouped by unit (masses in Msun; distances in Mpc; angles in rad; dimensionless spins), so each series is one quantity class from one generation process.
+- Risks: (1) Extraction ratio: about 3.2 GB downloaded for roughly 0.1-0.5 GB kept, because files also hold the other analyses, priors, PSDs, calibration envelopes and skymaps. Keeping all physical parameter columns of the XPHM table raises the kept volume. (2) Per-event row counts are unverified; the median sample must reach 1,000 values (very likely). (3) HDF5 compound plus chunked plus deflate parsing is real builder work. (4) iid posterior draws give high-entropy mantissas, which is distinctive. However zlsim could still pair some columns with other high-entropy f64 tables (MAGIC, calochallenge). (5) Avoid derived columns that are deterministic functions of others if the judge objects (e.g. keep source-frame masses or detector-frame masses, not both).
+- Probe evidence: Zenodo API: record 8177023 has 76 files, 23.6 GB, cc-by-4.0. Range GET 0-0 on the smallest file returned 206 with 1 byte. A 4 MB head range shows the HDF5 signature and parameter names (mass_1_source, chirp_mass_source, luminosity_distance, chi_eff, chi_p_2spin, final_mass_source, comoving_distance, ...) plus a deflate filter string. The release example notebook lists top-level groups ['C01:IMRPhenomXPHM', 'C01:Mixed', 'C01:SEOBNRv4PHM', 'history', 'version'] and states that C01:Mixed combines both waveforms. Cosmo file sizes run from 21.4 MB to 500 MB; 29 files of 250 MB or less total 3.18 GB.
+
+Proposed by the autocollect scout on 2026-10-09 (transcript `.data/pipeline/logs/scout_64bit/scout.20261009_015508.jsonl`).

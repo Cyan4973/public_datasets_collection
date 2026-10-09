@@ -1,0 +1,108 @@
+manifest_version = 1
+dataset_id = "geoschem_gc1470_fullchem_restart_species_f64"
+name = "GEOS-Chem 14.7.0 Full-Chemistry Benchmark Restart: 3-D Species Dry Mixing Ratio Fields (SpeciesRst_*, 4x5 L72) Float64"
+description = "Native float64 dry-air mixing ratios (mol mol-1 dry) of the chemical species (gases and aerosol tracers) carried by GEOS-Chem Classic 14.7.0-rc.0 full chemistry, decoded from the official 4x5-degree, 72-level restart file GEOSChem.Restart.fullchem.20190101_0000z.nc4 (the Support Team README says the fullchem restarts were obtained from the 14.7.0-rc.0 1-year benchmark; the file itself is the 2019-01-01 00Z state at the end of a run starting 2018-12-01); one sample per constituent species variable (21 non-constituent or duplicate tracers excluded) (1 x 72 x 46 x 72 values, C order)."
+homepage = "https://geos-chem.readthedocs.io/en/stable/geos-chem-shared-docs/doc/gcid-portal-overview.html"
+
+[license]
+name = "MIT License (Expat), as declared for the GEOS-Chem Input Data bucket by the AWS Open Data Registry entry"
+spdx = "MIT"
+url = "https://geoschem.github.io/license.html"
+citation = "The International GEOS-Chem User Community, GEOS-Chem 14.7.0 (1-year full-chemistry benchmark, 14.7.0-rc.0), restart file GEOSChem.Restart.fullchem.20190101_0000z.nc4, GEOS-Chem Input Data on AWS (s3://geos-chem/GEOSCHEM_RESTARTS/GC_14.7.0/). Bey, I., et al. (2001), J. Geophys. Res., 106(D19), 23073-23095, https://doi.org/10.1029/2001JD000807."
+notes = "AWS Open Data Registry entry geoschem-input-data.yaml (fetched and checked by download.sh) lists 'Name: GEOS-Chem Input Data', describes the bucket as including '... and other smaller datasets such as model [initial conditions](...)', names the resource 'ARN: arn:aws:s3:::geos-chem', and states 'License: https://geoschem.github.io/license.html'. That page states verbatim: 'GEOS-Chem, including developments, is distributed under the MIT \"Expat\" public license.' The registry YAML was last changed in awslabs/open-data-registry commit 785566b46955a4ef794e9fa411475e3a04a973ff (2025-02-25, Bob Yantosca of the GEOS-Chem Support Team, 'Removed inversions tag in geoschem-input-data.yaml'); download.sh still re-checks the live YAML and license page on every run. The page wording is written for the model; the registry's dataset-level License field is the publisher's declaration for the bucket contents. Restart files are GEOS-Chem's own model output (the simulated model state written by GEOS-Chem itself), not redistributed third-party emission inventories or NASA meteorology. The GC_14.7.0 README advises not to use these restarts for production runs without spin-up; that is a scientific caveat, not a usage restriction."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official GEOS-Chem Support Team bucket on the AWS Open Data program (anonymous HTTPS, not requester-pays); atmospheric chemistry model state, no human subjects."
+usage_notes = "Only the SpeciesRst_* variables are emitted; Chem_*, Met_*, AREA and coordinate variables are not written to samples."
+
+[[origins]]
+id = "aws_geos_chem_bucket"
+name = "GEOS-Chem Input Data (AWS Open Data, s3://geos-chem)"
+url = "https://geos-chem.s3.amazonaws.com/GEOSCHEM_RESTARTS/GC_14.7.0/"
+type = "bucket"
+notes = "Prefix GEOSCHEM_RESTARTS/GC_14.7.0/ holds GEOS-Chem Classic 4x5 restarts (fullchem 20190101 and 20190701, carbon, TransportTracers) and GCHP cubed-sphere restarts regridded from them. Only the fullchem 20190101 GEOS-Chem Classic file is used: the 20190701 file would double the output past the 1 GB cap with the same species set, and the GCHP c24/c48/... files are regridded copies. The same object is mirrored in the gcgrid bucket (same size and ETag); the geos-chem bucket is used because it is the one the registry entry names."
+
+[[origins]]
+id = "aws_open_data_registry"
+name = "AWS Open Data Registry entry geoschem-input-data"
+url = "https://raw.githubusercontent.com/awslabs/open-data-registry/main/datasets/geoschem-input-data.yaml"
+type = "repository"
+notes = "Dataset-level License field; fetched by download.sh as license evidence."
+
+[[resources]]
+id = "gc1470_fullchem_restart_20190101"
+origin = "aws_geos_chem_bucket"
+url = "https://geos-chem.s3.amazonaws.com/GEOSCHEM_RESTARTS/GC_14.7.0/GEOSChem.Restart.fullchem.20190101_0000z.nc4"
+type = "file"
+version = "GEOS-Chem 14.7.0-rc.0 1-year fullchem benchmark restart; S3 Last-Modified 2026-02-05T17:27:30Z; ETag b0aa35c196ae37c34af5b0478b818072-71"
+access = "Anonymous HTTPS; download.sh checks HEAD length and ETag, transfers with resumable curl into a .part file, then requires the HDF5 signature and recomputes the 71 x 8 MiB multipart MD5 to match the ETag."
+size_bytes = 589309764
+sha256 = "f13333b8cdc504fca1621ce3021a71d508633fd26e5e073bb14d882dd7d2ab2e"
+local_path = "downloads/geoschem_gc1470_fullchem_restart_species_f64/GEOSChem.Restart.fullchem.20190101_0000z.nc4"
+notes = "NetCDF-4 (_NCProperties version=2, netcdf=4.9.2, hdf5=1.14.0), HDF5 superblock v2, 417 root links in dense storage: 390 SpeciesRst_*, 10 Chem_*, 3 Met_*, AREA and 13 coordinate/bounds variables. Global attributes: title 'GEOS-Chem diagnostic collection: Restart', simulation_start_date_and_time '2018-12-01 00:00:00z', simulation_end_date_and_time '2019-01-01 00:00:00z'. sha256 pinned from the first download and enforced by download.sh."
+
+[[resources]]
+id = "gc1470_restart_readme"
+origin = "aws_geos_chem_bucket"
+url = "https://geos-chem.s3.amazonaws.com/GEOSCHEM_RESTARTS/GC_14.7.0/README"
+type = "file"
+version = "06 Feb 2026 (GEOS-Chem Support Team)"
+access = "Anonymous HTTPS; must still describe the fullchem restarts as from the 1-year 14.7.0-rc.0 benchmark."
+size_bytes = 1749
+sha256 = ""
+local_path = "downloads/geoschem_gc1470_fullchem_restart_species_f64/docs/GC_14.7.0_README.txt"
+notes = "Provenance only."
+
+[[resources]]
+id = "registry_yaml_and_license_page"
+origin = "aws_open_data_registry"
+url = "https://geoschem.github.io/license.html"
+type = "file"
+version = "live documents at download time"
+access = "download.sh fetches the registry YAML and the license page and requires the License line and the MIT Expat sentence."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/geoschem_gc1470_fullchem_restart_species_f64/docs/"
+notes = "License evidence only; not decoded into samples."
+
+[local_paths]
+downloads = "downloads/geoschem_gc1470_fullchem_restart_species_f64/"
+filtered = "filtered/geoschem_gc1470_fullchem_restart_species_f64/"
+index = "index/geoschem_gc1470_fullchem_restart_species_f64/"
+samples = "samples/geoschem_gc1470_fullchem_restart_species_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/geoschem_gc1470_fullchem_restart_species_f64/samples.jsonl"
+summary = "Check license evidence, fetch the pinned restart file, walk its HDF5 metadata (pure-stdlib reader), inflate and byte-unshuffle each species' 72 level chunks, reassemble them in C order, exclude a fixed list of non-constituent tracers (clock, KPP prod/loss trackers, O2 as a constant multiple of N2), drop single-value-dominated species under a fixed rule, and emit one raw little-endian float64 sample per kept species."
+deterministic_notes = "One pinned object (size, multipart ETag). The file must carry the pinned global attributes and exactly 417 root links with 390 SpeciesRst_* variables; the name index (with lookup3 name-hash check) and the creation-order index must agree. Every species must be H5T_IEEE_F64LE, shape (1,72,46,72), chunk (1,1,46,72) x f8, filter pipeline exactly shuffle(8)+deflate (fletcher32 or any other filter is rejected), no defined fill value and no _FillValue/missing_value/scale_factor/add_offset attributes, units 'mol mol-1 dry', long_name 'Dry mixing ratio of species <name>', averaging_method 'instantaneous', 72 chunks at offsets (0,k,0,0) k=0..71 with zero filter masks and non-overlapping extents. Every Jenkins-lookup3 metadata checksum is verified. A fixed semantic exclusion list (21 species in three classes, see the series filtering) is applied before the degeneracy rule. Samples are written in codepoint order of variable name to samples/<id>/species_dry_mixing_ratio_f64/SpeciesRst_<name>.bin; per-species statistics for all 390 variables go to filtered/<id>/species_stats.tsv. build.sh and verify.sh first run scripts/selftest.py (synthetic dense-link restart, 12 rejection cases including a semantically excluded species smuggled into the index). verify.sh requires every excluded name to exist among the 390 species and to be absent from the index and sample directory, re-checks that N2/O2 is the constant 3.72696890394 off the floor, re-resolves through the creation-order index, re-decodes with its own inflate/unshuffle, byte-compares, recomputes min/max/distinct/top-fraction from the sample files, re-applies the drop rule to kept and dropped (non-excluded) species, rejects NaN/inf, netCDF fill, constant and duplicate samples, and checks manifest totals."
+
+[[series]]
+id = "species_dry_mixing_ratio_f64"
+description = "GEOS-Chem 14.7.0 full-chemistry model state: dry-air mixing ratio of one chemical constituent on the 4x5-degree, 72-level global grid at 2019-01-01 00Z."
+semantic_meaning = "Instantaneous dry-air volume mixing ratio (mol of species per mol of dry air) of one transported or chemically active species (gas-phase organics and inorganics, halogens, peroxy radicals, sulfate/nitrate/ammonium, sea salt, dust bins, carbonaceous and secondary organic aerosol tracers), as held in the GEOS-Chem Classic State_Chm species array and written to the restart file at 2019-01-01 00Z, the end of a run starting 2018-12-01 (the Support Team README says the fullchem restarts were obtained from the 14.7.0-rc.0 1-year benchmark). Axes: time (1), lev (72 hybrid sigma-pressure levels, surface first), lat (46, -89 to 89 with half-size polar boxes), lon (72, -180 to 175). All samples share one model, version, grid, meteorology (MERRA-2) and timestamp; diversity comes from the species chemistry (values from exact 0 and the ~1e-30 numerical floor up to 0.823 for N2; no value exceeds 1; very different vertical and horizontal structure)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The variables are stored as IEEE-754 float64 little-endian; after inflate and HDF5 byte-unshuffle the stored 8-byte patterns are copied unchanged. Probed fields are full-mantissa doubles (float32-exact fraction about 0.000-0.001), not widened float32. Many species carry a numerical floor of about 1e-30 (jittered mantissas) where they are chemically absent, typically the top 13 levels (lev indices 59-71) and, for short-lived biogenic intermediates, much of the free troposphere: across the 365 kept samples the fraction of values below 1e-29 is 0 for 102 species, about 0.18 (13/72) for 25, above 0.5 for 39, and at most 0.79 (EBZ); no kept species holds one exact value across the top 13 levels. This is the model state as written and is kept; species whose maximum never leaves the floor are dropped. Kept fields are 23.6-96.1% distinct values (H2 lowest, HNO3 highest) with a top-value fraction from 0.0003 to 0.342 (O1D, exact zeros); no negative values occur; positive minima reach as low as 7e-80 (XYLE); maxima range up to 0.0324 (H2O) and 0.823 (N2). CO2 is a near-constant prescribed field (2.77073674e-4 to 2.77074396e-4 mol/mol, 181,083 distinct values) and is kept."
+source_resources = ["gc1470_fullchem_restart_20190101"]
+source_format = "NetCDF-4 / HDF5 (superblock v2) GEOS-Chem Classic restart file, chunked shuffle+deflate float64 variables"
+source_field = "SpeciesRst_<species> (time, lev, lat, lon) float64, units 'mol mol-1 dry'"
+filtered_input_path = "filtered/geoschem_gc1470_fullchem_restart_species_f64/species_stats.tsv"
+filtering = "All 390 SpeciesRst_* variables are decoded. Excluded variables: Chem_* (photolysis J-values, KPP H value, PSC state, aerosol water, deposition, after-chemistry H2O2/SO2, ORVC), Met_* (BXHEIGHT, DELPDRY, TropLev), AREA, and coordinate/bounds/hybrid-coefficient variables: other quantities and units. Fixed semantic exclusions, applied before the degeneracy rule (21 species, recorded with class and reason in species_stats.tsv and ingest_stats.json): (a) clock_tracer: CLOCK (species_database.yml at 14.7.0-rc.0: 'Clock tracer for diagnosing age of air', placeholder MW_g 1.0; values 122 to 4.42e9, an elapsed-time clock, not mol/mol); (b) kpp_prod_loss_tracker: LBRO2H, LBRO2N, LCH4, LCO, LISOPNO3, LISOPOH, LOx, LTRO2H, LTRO2N, LXRO2H, LXRO2N, PCO, PH2O2, POx, PSO4, LNRO2H, LNRO2N (database FullName 'Dummy species to track ...') and PH2SO4, PSO4AQ (SO4-production trackers, KPP/fullchem/CHANGELOG_fullchem.md); reaction amounts accumulated for diagnostics, not constituent concentrations; (c) proportional_duplicate: O2, which equals N2/3.72696890394 at every non-floor cell (ratio range 3.72696890393159-3.72696890394384 over 195,408 cells; re-checked by verify.sh); N2 is kept. Among the remaining species, one is dropped as degenerate (listed in filtered/<id>/ingest_stats.json and the README) when one float64 bit pattern covers more than 50% of its values, it holds fewer than 1,000 distinct values, or its maximum is below 1e-28 (never above the ~1e-30 numerical floor anywhere); this removes fields stuck at a background or zero value. Realized: 365 kept, 21 excluded semantically, 4 dropped as degenerate (NAP and NRO2 81.9% zero; N 52.8% zero; HCFC123 max 4.4e-37)."
+missing_value_policy = "The restart variables define no fill value (fill-value message without a defined value, no _FillValue/missing_value attributes) and every chunk must be present. NaN, +-inf and the netCDF default double fill 9.969209968386869e36 are fatal in build and verify (none expected). Zeros and the ~1e-30 numerical floor are genuine model state (no negative values occur) and are kept unchanged. No value is imputed, clipped, rescaled or reordered."
+conversion = "Resolve SpeciesRst_<name> through the root group's dense link storage (fractal heap + v2 B-tree name index); read its v1 chunk B-tree; for each vertical level k zlib-inflate the stored chunk to exactly 46*72*8 bytes and undo the HDF5 byte shuffle (byte plane j of 3,312 elements -> byte j of each element); concatenate levels 0..71 so the sample is the (1,72,46,72) array in C order; write the little-endian float64 values to one file per species."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 3-D model field"
+sample_geometry = "global_3d_model_field_time_lev_lat_lon"
+sample_rank = 4
+sample_axes = ["time", "lev", "lat", "lon"]
+natural_record_kind = "one_species_variable_of_one_geoschem_restart_file"
+sample_count = 365
+total_size_bytes = 696314880
+output_path = "samples/geoschem_gc1470_fullchem_restart_species_f64/species_dry_mixing_ratio_f64/"

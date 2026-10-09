@@ -329,6 +329,7 @@ ceda_ukdale_iam_appliance_power_u16	ok	82837497	165674994	51	1842782	3685564	828
 figshare_fukuchi_forceplate_c3d_f32	ok	83857942	335431768	1966	30192	120768	0	0	0	1	none	none
 noaa_stofs2d_glo_adcirc_station_water_level_f64	ok	85075200	680601600	40	2126880	17015040	0	0	0	1	none	none
 uci_hydraulic_system_cycles_f32	ok	85182000	340728000	14197	6000	24000	0	0	0	1	none	none
+geoschem_gc1470_fullchem_restart_species_f64	ok	87039360	696314880	365	238464	1907712	0	0	0	1	none	none
 the_well_post_neutron_star_merger_density_f32	ok	87588864	350355456	54	1622016	6488064	0	0	0	1	none	none
 rgl_epfl_isotropic_spectral_brdf_f32	ok	88258560	353034240	51	1597440	6389760	0	0	0	1	none	none
 zenodo_epfl_loraiq_sf10_iq_frames_f32	ok	89624782	358499128	256	240023	960092	0	0	0	1	none	none

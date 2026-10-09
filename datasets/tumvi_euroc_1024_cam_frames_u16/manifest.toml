@@ -1,0 +1,78 @@
+manifest_version = 1
+dataset_id = "tumvi_euroc_1024_cam_frames_u16"
+name = "TUM VI Visual-Inertial Benchmark cam1 Frames (1024x1024 uint16, 12-bit MSB-aligned)"
+description = "Native 16-bit grayscale frames of the right global-shutter fisheye camera (cam1) of the TUM VI visual-inertial benchmark, EuRoC export at 1024x1024: 8 pinned frames from each of the 28 recorded sequences (room, corridor, slides, magistrale, outdoors), one raw little-endian uint16 raster per frame."
+homepage = "https://cvg.cit.tum.de/data/datasets/visual-inertial-dataset"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "D. Schubert, T. Goll, N. Demmel, V. Usenko, J. Stueckler, D. Cremers. The TUM VI Benchmark for Evaluating Visual-Inertial Odometry. IROS 2018."
+notes = "Dataset page: 'All data in the Visual Inertial Dataset is licensed under a Creative Commons 4.0 Attribution License (CC BY 4.0) and the accompanying source code is licensed under a BSD-2-Clause License.' download.sh re-checks this sentence on every run. Preserve attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official TUM Computer Vision Group benchmark files (vision.in.tum.de, redirected to the cdn*.vision.in.tum.de mirrors). Indoor rooms/corridors/halls and outdoor university campus; recorded for odometry benchmarking."
+usage_notes = "Pixel intensities only. Timestamps appear in sample file names for provenance; IMU, mocap ground truth and cam0 are not collected. Outdoor frames may incidentally show distant passers-by at low resolution through a fisheye lens; no identities, labels or annotations are attached."
+
+[[origins]]
+id = "tumvi_euroc_1024_16"
+name = "TUM VI benchmark, exported EuRoC/DSO format, 1024x1024 16-bit"
+url = "https://vision.in.tum.de/tumvi/exported/euroc/1024_16/"
+type = "bulk_download"
+version = "2018-04 release (tar Last-Modified 2018-04-17)"
+notes = "Directory of per-sequence uncompressed GNU tars (3.4-61 GB each) with whole-tar .md5 siblings. Each tar holds mav0/cam0, mav0/cam1 (16-bit PNG per frame), imu0 and mocap0. Tar member order is not chronological, so the first members of a tar are spread across the sequence."
+
+[[resources]]
+id = "tumvi_cam1_tar_prefixes"
+origin = "tumvi_euroc_1024_16"
+url = "https://vision.in.tum.de/tumvi/exported/euroc/1024_16/dataset-<sequence>_1024_16.tar"
+type = "byte_range_prefix"
+version = "28 sequences: room1-6, corridor1-5, slides1-3, magistrale1-6, outdoors1-8"
+access = "Anonymous HTTPS range GET of bytes 0..E-1 of each tar, where E is the end of the 8th cam1 PNG member (pinned in scripts/members.tsv); resumable by re-requesting only missing bytes; each response must be 206 with the pinned whole-tar size."
+size_bytes = 205860343
+sha256 = ""
+local_path = "downloads/tumvi_euroc_1024_cam_frames_u16/"
+notes = "Prefixes are 6.6-8.8 MB per tar and contain exactly 4 directory headers followed by 8 complete mav0/cam1/data/<ns>.png members (no cam0, imu or csv members). Published .md5 files cover whole tars only, so integrity is pinned per member: name, tar data offset, byte size and the CRC32 of the last IDAT chunk (all resolved with discover.py using header-only range reads), plus every PNG chunk CRC. The SHA-256 and byte length of each of the 28 prefixes are pinned in scripts/prefix_sha256.tsv (recorded from the first validated download, 2026-10-08) and enforced by download.sh."
+
+[local_paths]
+downloads = "downloads/tumvi_euroc_1024_cam_frames_u16/"
+filtered = "filtered/tumvi_euroc_1024_cam_frames_u16/"
+index = "index/tumvi_euroc_1024_cam_frames_u16/"
+samples = "samples/tumvi_euroc_1024_cam_frames_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/tumvi_euroc_1024_cam_frames_u16/samples.jsonl"
+summary = "Fetch pinned byte-range prefixes of the 28 TUM VI euroc 1024_16 sequence tars, walk the ustar headers, and decode the 224 pinned cam1 16-bit grayscale PNG frames into raw little-endian uint16 1024x1024 rasters."
+deterministic_notes = "Member table scripts/members.tsv pins sequence, tar, whole-tar size, member path, data offset, size and last-IDAT CRC for 8 cam1 frames per tar (the first 8 PNG members in tar order). Build and verify assert that every non-directory member in each prefix matches ^dataset-<seq>_1024_16/mav0/cam1/data/<19-digit ns>.png$ and equals the pinned list, that IHDR is 1024x1024 / bit depth 16 / colour type 0 / non-interlaced, that all PNG chunk CRCs validate, and that every pixel value is a multiple of 16. PNG decode is pure stdlib (zlib + all five scanline filters, self-tested in scripts/selftest.py). Frames that are constant or whose most frequent value covers more than 50% of pixels are skipped and listed in ingest_stats.json. Output order is table order; one frame is one sample (no tiling)."
+
+[[series]]
+id = "tumvi_cam1_intensity_u16"
+description = "TUM VI cam1 grayscale frame, 1024x1024 uint16 as published (12-bit sensor codes MSB-aligned)."
+semantic_meaning = "Linear-response pixel intensity of the right IDS uEye global-shutter fisheye camera (cam1) of the TUM VI rig, 20 Hz, auto-exposure, not vignette-corrected; scenes are indoor rooms, corridors, a slide hall, the magistrale hall and the outdoor campus."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source PNGs store 12-bit sensor values left-shifted into 16 bits, so every value is a multiple of 16 (low nibble always zero; realized range 0..65520, per-frame minima 0-1152, 808-1031 distinct values per frame). Values are kept exactly as published: no right shift, no rescaling, no binning (the separate 512_16 product is 2x2 binned and is not used). Downstream compressors can exploit the zero low nibble; it is part of the native representation."
+source_resources = ["tumvi_cam1_tar_prefixes"]
+source_format = "16-bit grayscale PNG (big-endian samples) inside an uncompressed GNU tar"
+source_field = "mav0/cam1/data/<timestamp_ns>.png pixel samples"
+filtered_input_path = "filtered/tumvi_euroc_1024_cam_frames_u16/ingest_stats.json"
+filtering = "cam1 only; the 8 pinned PNG members per sequence tar (28 sequences, 224 frames). cam0, IMU, mocap and calibration tars are not used. Constant frames or frames with a single value covering >50% of pixels would be skipped and recorded."
+missing_value_policy = "No missing values exist in the source rasters; saturated pixels (65520) and dark pixels are genuine sensor readings and are preserved (65520 is the most frequent value in 202 of 224 frames, covering at most 18.3% of a frame, outdoors7; no frame exceeds the 50% single-value rule, so none is skipped). Decode errors, CRC mismatches, unexpected members, IHDR deviations or nonzero low nibbles are fatal."
+conversion = "Inflate concatenated IDAT data, undo PNG scanline filters (bpp=2), read 16-bit big-endian samples and write them as raw little-endian uint16 in row-major (y, x) order, 1024x1024 = 1,048,576 values (2,097,152 bytes) per frame."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw little-endian uint16 grayscale raster"
+sample_geometry = "2d_raster"
+sample_rank = 2
+sample_axes = ["y", "x"]
+natural_record_kind = "tumvi_cam1_frame"
+sample_count = 224
+total_size_bytes = 469762048
+output_path = "samples/tumvi_euroc_1024_cam_frames_u16/tumvi_cam1_intensity_u16/"

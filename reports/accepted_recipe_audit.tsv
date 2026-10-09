@@ -367,6 +367,7 @@ pdebench_2d_cfd_turb_m1_density_f32	ok	220200960	880803840	40	5505024	22020096	0
 cartographer_backpack2d_hokuyo_ranges_f32	ok	225913467	903653868	16	13407654	53630616	0	0	0	1	none	none
 openneuro_ds000030_t1w_mri_f32	ok	230686720	922746880	20	11534336	46137344	0	0	0	1	none	none
 zenodo_newcastle_geneactiv_wrist_accel_i16	ok	233424900	466849800	13	19001700	38003400	0	0	0	1	none	none
+tumvi_euroc_1024_cam_frames_u16	ok	234881024	469762048	224	1048576	2097152	0	0	0	1	none	none
 tcia_nsclc_radiomics_ct_i16	ok	244580352	489160704	933	262144	524288	0	0	0	1	none	none
 zenodo_nordif_ebsd_kikuchi_patterns_u8	ok	244684800	244684800	4248	57600	57600	0	0	0	1	none	none
 medmnist_pathmnist_images_u8	ok	252087360	252087360	107180	2352	2352	0	0	0	1	none	none

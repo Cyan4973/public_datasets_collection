@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "mbari_mars_hydrophone_hmd_psd_f32"
+name = "MBARI MARS Hydrophone Daily Hybrid-Millidecade Sound Pressure Spectral Density Float32"
+description = "Native float32 calibrated underwater sound pressure spectral density (dB re 1 uPa^2/Hz), 1440 one-minute spectra x 2787 hybrid millidecade bands per day, from the MBARI MARS cabled-observatory hydrophone (891 m, Monterey Bay); 36 full-coverage days evenly spread over 2017-07 to 2023-07."
+homepage = "https://registry.opendata.aws/pacific-sound/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Monterey Bay Aquarium Research Institute (MBARI), Hybrid Millidecade Band Sound Pressure Levels Computed at 1 Minute Resolution from Oceanic Passive Acoustic Monitoring Recordings at the MARS Cabled Observatory (creator John Ryan; PyPAM v0.2.0); Pacific Ocean Sound Recordings, https://registry.opendata.aws/pacific-sound/."
+notes = "Every NetCDF file's global attributes state: 'As for the original recordings available online (https://registry.opendata.aws/pacific-sound/), this derived data product carries the CC-BY 4.0 license.' download.sh rejects any file lacking that sentence. The AWS Open Data registry entry for Pacific Sound (awslabs/open-data-registry datasets/pacific-sound.yaml) declares 'License: CC-BY 4.0'; its Resources list enumerates the audio and model buckets but not the pacific-sound-spectra bucket, so the per-file statement is the primary grant for these exact objects. Attribute MBARI; NSF funded MARS; SoundCoop (NOAA IOOS, BOEM, US Navy LMR, ONR)."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official MBARI-published derived product in the public anonymous S3 bucket pacific-sound-spectra (us-west-2); no mirrors. Deep-sea ambient sound spectra contain no personal data."
+usage_notes = "Public, CC-BY 4.0, appropriate for reproducible numeric dataset collection with attribution."
+
+[[origins]]
+id = "pacific_sound_spectra_s3"
+name = "MBARI Pacific Ocean Sound - hybrid millidecade spectra bucket"
+url = "https://pacific-sound-spectra.s3.amazonaws.com/"
+type = "bucket"
+notes = "Public anonymous S3 bucket; per-year prefixes YYYY/ hold MARS_YYYYMMDD.nc (NetCDF4/HDF5) plus .jpg quick-looks. Other prefixes (mb05/, MANTA_961/, MBARI/) are different sites/recorders/processing and are excluded."
+
+[[resources]]
+id = "mars_daily_hmd_netcdf"
+origin = "pacific_sound_spectra_s3"
+url = "https://pacific-sound-spectra.s3.amazonaws.com/{YYYY}/MARS_{YYYYMMDD}.nc"
+type = "file"
+version = "36 objects pinned in days.tsv by key, size 16,124,324 B and S3 multipart ETag (2 parts x 8 MiB); LastModified 2023-07..2023-08"
+access = "Direct public HTTPS GET, resumable with curl -C -."
+size_bytes = 580475664
+sha256 = ""
+local_path = "downloads/mbari_mars_hydrophone_hmd_psd_f32/"
+notes = "36 x 16,124,324 B. Integrity is pinned by the per-object S3 multipart ETag (MD5 of the MD5s of 8,388,608-byte parts; part size confirmed via HEAD ?partNumber=1, x-amz-mp-parts-count=2), recomputed locally by scripts/validate_download.py. Days chosen by scripts/discover.py: of the 2,189 MARS daily files of this exact size (2017-06-14..2023-08-01), take 36 evenly spaced positions and step to the nearest day whose effort variable is 60 s in all 1440 minutes (5 targets moved by +1 day)."
+
+[local_paths]
+downloads = "downloads/mbari_mars_hydrophone_hmd_psd_f32/"
+filtered = "filtered/mbari_mars_hydrophone_hmd_psd_f32/"
+index = "index/mbari_mars_hydrophone_hmd_psd_f32/"
+samples = "samples/mbari_mars_hydrophone_hmd_psd_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/mbari_mars_hydrophone_hmd_psd_f32/samples.jsonl"
+summary = "Fetch 36 pinned MARS daily HMD NetCDF4 files, validate size/ETag/HDF5 structure/license text, locate the root-group psd dataset by link name with a pure-stdlib HDF5 parser, and emit its contiguous 1440 x 2787 little-endian float32 matrix verbatim as one sample per day."
+deterministic_notes = "Day list pinned in days.tsv (key, size, ETag). The HDF5 superblock, root-group object header (v2, lookup3 checksums verified, including OCHK continuations) and link messages are parsed per file; psd must be H5T_IEEE_F32LE, dataspace 1440 x 2787, layout v3 contiguous of exactly 16,053,120 bytes, no filter pipeline (chunked/compact/compressed variants are rejected). The address is read from the layout message (37,004 in all 36 files at discovery) and never hardcoded. Samples are sorted by date. verify.sh re-parses each source, byte-compares the sample, recomputes statistics via a separate struct-based path, checks index rows and manifest totals, and rejects infinities, >10% NaN, constant samples, >14 repeated consecutive minute spectra, or mean per-minute distinct-value ratio below 0.5."
+
+[[series]]
+id = "mars_hmd_psd_db_f32"
+description = "Daily 1440 x 2787 matrix of calibrated hybrid-millidecade-band sound pressure spectral density from the MARS hydrophone."
+semantic_meaning = "Single-sided mean-square sound pressure spectral density in dB re 1 uPa^2/Hz (ISO 18405 3.1.3.13) for each UTC minute of one day (rows) and each hybrid millidecade band centred 10 Hz..99.9 kHz (columns), computed by MBARI with PyPAM v0.2.0 from the icListen HF digital hydrophone at the MARS cabled observatory (36.7128 N, 122.186 W, 891 m) following Martin et al. 2021."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The NetCDF4/HDF5 psd variable is stored by the publisher as contiguous little-endian IEEE float32; the sample is that span byte-for-byte, no rescaling or reordering."
+source_resources = ["mars_daily_hmd_netcdf"]
+source_format = "NetCDF4 (HDF5 superblock v0, v2 object headers) daily file MARS_YYYYMMDD.nc"
+source_field = "root-group variable psd (dims time=1440 x frequency=2787, float32, units dB re 1 uPa^2/Hz)"
+filtered_input_path = "filtered/mbari_mars_hydrophone_hmd_psd_f32/ingest_stats.json"
+filtering = "Only YYYY/MARS_YYYYMMDD.nc objects of exactly 16,124,324 B (the 1440 x 2787 MARS layout); 36 days evenly spread across the 2,189 available (2017-07-15..2023-07-02), each with full 60 s/minute input effort. All 1440 x 2787 values of each selected day are kept. The auxiliary time, frequency, effort and sensitivity variables are not emitted (frequency and sensitivity are near-constant per deployment; time is a fixed minute lattice)."
+missing_value_policy = "The psd fill value is NaN (HDF5 fill-value message 0x7fc00000); NaN minutes/bands are preserved natively and counted per sample (nan_count in the index). A sample with any +/-inf, more than 10% NaN, or no finite spread is fatal in both build and verify. Days were selected for full effort, so NaN is expected to be absent or rare."
+conversion = "Parse HDF5 metadata, take the psd layout address, copy 16,053,120 bytes (1440 rows x 2787 float32, row-major minute-major, already little-endian) to samples/.../mars_hmd_psd_db_f32/MARS_YYYYMMDD.bin; one file per day."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 matrix"
+sample_geometry = "time_by_frequency_spectrogram_2d"
+sample_rank = 2
+sample_axes = ["minute_utc", "hmd_band"]
+natural_record_kind = "mars_daily_hmd_psd_netcdf_file_psd_variable"
+sample_count = 36
+total_size_bytes = 577912320
+output_path = "samples/mbari_mars_hydrophone_hmd_psd_f32/mars_hmd_psd_db_f32/"

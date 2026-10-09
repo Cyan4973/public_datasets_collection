@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "google_hdrplus_pixel_raw_bayer_u16"
+name = "Google HDR+ Burst Dataset: Pixel/Pixel XL Raw Bayer CFA Frames (uint16)"
+description = "29 complete as-captured raw Bayer (BGGR) sensor mosaics, 4048x3036 10-bit digital numbers stored as uint16, the first input frame (payload_N000.dng) of each burst from Google Pixel and Pixel XL phones in the CC BY-SA HDR+ burst photography dataset."
+homepage = "https://hdrplusdata.org/dataset.html"
+
+[license]
+name = "Creative Commons Attribution-ShareAlike 4.0 International"
+spdx = "CC-BY-SA-4.0"
+url = "https://creativecommons.org/licenses/by-sa/4.0/"
+citation = "Samuel W. Hasinoff, Dillon Sharlet, Ryan Geiss, Andrew Adams, Jonathan T. Barron, Florian Kainz, Jiawen Chen, and Marc Levoy. Burst photography for high dynamic range and low-light imaging on mobile cameras. ACM Transactions on Graphics (Proc. SIGGRAPH Asia), 35(6), 2016."
+notes = "The bucket README (https://storage.googleapis.com/hdrplusdata/README.html) states: 'The dataset is released under a Creative Commons license (CC-BY-SA). This license is broad and largely unencumbered, however our main intention is that the dataset be used for scientific purposes.' The README links the license text to https://creativecommons.org/licenses/by-sa/4.0/. Attribution and the citation above are required; derivatives (including these decoded mosaics) inherit CC BY-SA 4.0. The 'scientific purposes' sentence is a statement of intent, not an added restriction."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Google Research release in the anonymous public GCS bucket gs://hdrplusdata (not requester-pays). GPS tags were stripped by the publisher. The README notes that subjects include the authors' friends and family and asks that usage stay in good taste."
+usage_notes = "Privacy screen: the 40 evenly spaced candidate bursts were reviewed by their dataset-provided gallery thumbnails; 11 bursts showing any real person (portraits, hikers, street/cafe scenes, background visitors) were excluded, leaving 29 people-free scenes (landscapes, architecture, objects, food, one museum photo of a 19th-century painting). The verdict for every reviewed burst is recorded in privacy_screen.tsv. Only the CFA pixel values are emitted; EXIF/DNG metadata other than the index fields is not copied."
+
+[[origins]]
+id = "hdrplusdata_gcs"
+name = "HDR+ Burst Photography Dataset (Google Research), gs://hdrplusdata"
+url = "https://storage.googleapis.com/hdrplusdata/README.html"
+type = "bucket"
+notes = "Anonymous GCS bucket. Full dataset 20171106/bursts/ (3640 bursts, 28461 frames, 765 GiB). Enumerated through the GCS JSON API with matchGlob=**/payload_N000.dng and pageToken pagination (discover.sh)."
+
+[[resources]]
+id = "pixel_n000_dng_selection"
+origin = "hdrplusdata_gcs"
+url = "https://storage.googleapis.com/hdrplusdata/20171106/bursts/"
+type = "file"
+version = "20171106 release; GCS object generations pinned in sources.tsv (listed 2026-10-08)"
+access = "Direct anonymous HTTPS download of the 29 payload_N000.dng objects listed in sources.tsv; each is validated against the GCS object size and MD5 and parsed as a Pixel CFA DNG."
+size_bytes = 219795130
+sha256 = ""
+local_path = "downloads/google_hdrplus_pixel_raw_bayer_u16/dng/"
+notes = "Per-file size and MD5 (from GCS object metadata) are pinned in sources.tsv; download.sh records per-file SHA-256 in downloads/<id>/download_plan.tsv. Selection: of 3640 bursts, 659 pass the Pixel/Pixel XL full-resolution CFA filter; 40 evenly spaced picks in burst-name order; 11 removed by the privacy screen."
+
+[local_paths]
+downloads = "downloads/google_hdrplus_pixel_raw_bayer_u16/"
+filtered = "filtered/google_hdrplus_pixel_raw_bayer_u16/"
+index = "index/google_hdrplus_pixel_raw_bayer_u16/"
+samples = "samples/google_hdrplus_pixel_raw_bayer_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/google_hdrplus_pixel_raw_bayer_u16/samples.jsonl"
+summary = "Download 29 pinned Pixel/Pixel XL HDR+ N000 DNGs, decode the 192 lossless-JPEG (SOF3) tiles of the full-resolution CFA IFD with a pure-stdlib decoder, reassemble and crop to 4048x3036, and emit one raw little-endian uint16 Bayer mosaic per burst."
+deterministic_notes = "Eligibility (scripts/hdrplus_dng.py check_pixel_cfa): Make google, Model sailfish|marlin|Pixel|Pixel XL, IFD0 NewSubFileType 0, Photometric 32803 (CFA), Compression 7, BitsPerSample 16, 4048x3036, 256x256 tiles x192, WhiteLevel 1023, 2x2 CFA BGGR, no LinearizationTable, no SubIFDs. Nexus bursts and digitally zoomed (pre-cropped) Pixel bursts fail these checks. One frame per burst (N000), never several frames of one burst. Source order is sources.tsv order (burst name). The LJ92 decoder is self-tested on synthetic streams (all 7 predictors, 1/2/4 components, precisions 10/12/16, point transform, restart intervals, SSSS 16) and on a synthetic tiled DNG with cropped edge tiles before every build and verify. verify.sh recomputes min/max/SHA-256, checks 0..1023 range, black-level sanity, non-constancy, duplicates, and re-decodes five tiles per frame (including edge/corner tiles) with its own placement arithmetic."
+
+[[series]]
+id = "pixel_raw_bayer_cfa_u16"
+description = "Raw Bayer CFA sensor mosaic of the first input frame (N000) of one HDR+ burst (Pixel/Pixel XL, Sony IMX378)."
+semantic_meaning = "Per-photosite raw digital number from the phone camera sensor, as captured through the Android Camera2 RAW path: 10-bit values (WhiteLevel 1023) with a black level of about 63-64 DN per CFA site, laid out as a 2x2 BGGR color-filter-array mosaic in sensor row-major order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The DNG stores the mosaic as 16-bit samples losslessly compressed with ITU-T T.81 lossless JPEG (each 256x256 tile is encoded as 2 interleaved components x 128 columns x 256 rows, predictor 1). Decoding is lossless; the values are emitted exactly as stored (no black subtraction, linearization, white balance, demosaicing, lens-shading correction, normalization, or orientation rotation)."
+source_resources = ["pixel_n000_dng_selection"]
+source_format = "Adobe DNG 1.4 (TIFF) with tiled lossless-JPEG (SOF3) CFA raw IFD0"
+source_field = "IFD0 CFA raw image data (TileOffsets/TileByteCounts, Photometric 32803), payload_N000.dng"
+filtered_input_path = "filtered/google_hdrplus_pixel_raw_bayer_u16/ingest_stats.json"
+filtering = "Keep the full 4048x3036 CFA image of payload_N000.dng for each of the 29 pinned bursts; tiles extending past the image edge (right column, bottom row) are cropped to ImageWidth x ImageLength as the DNG specification requires. Lens-shading maps, merged results, JPEGs, and sidecar files are not used."
+missing_value_policy = "No missing values exist in a raw mosaic. Saturated photosites keep the native WhiteLevel value 1023 and dark photosites keep their native values (below-black noise is preserved). Any value above WhiteLevel, decode error, geometry mismatch, constant frame, duplicate frame, or changed source identity is fatal."
+conversion = "Parse TIFF IFD0, decode each LJ92 tile (Huffman DC tables, predictor, point transform per T.81 H.1.2.1), interleave the two components back into 256-pixel rows, place tiles row-major, crop, and write the 12,289,728 values as raw little-endian uint16 (24,579,456 bytes) per frame, one file per burst."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian uint16 Bayer CFA mosaic (BGGR, 4048 columns x 3036 rows, row-major)"
+sample_geometry = "2d_raster"
+sample_rank = 2
+sample_axes = ["sensor_row", "sensor_column"]
+natural_record_kind = "hdrplus_burst_first_input_frame_payload_n000"
+sample_count = 29
+total_size_bytes = 712804224
+output_path = "samples/google_hdrplus_pixel_raw_bayer_u16/pixel_raw_bayer_cfa_u16/"

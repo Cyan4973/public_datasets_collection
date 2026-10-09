@@ -314,6 +314,7 @@ dandi_ibl_bwm_spike_amplitudes_f64	ok	57416236	459329888	1321	34405	275240	0	0	0
 zenodo_gridgnosis_pmu_voltage_magnitude_f32	ok	58442013	233768052	20	3240018	12960072	0	0	0	1	none	none
 mitbih_arrhythmia_u8	ok	59150000	59150000	91	650000	650000	0	0	0	1	none	none
 azure_vm2019_cpu_utilization_readings_f64	ok	59672817	477382536	264	226171.5	1809372	0	0	0	1	none	none
+nims_mdr_phonondb_displacement_forces_f64	ok	60053511	480428088	5078	7776	62208	0	0	0	1	none	none
 sentinel2_l2a_scene_classification_u8	ok	60280200	60280200	2	30140100	30140100	0	0	0	1	none	none
 earthscope_xa_apollo_pse_lunar_seismogram_i16	ok	60666177	121332354	106	572400	1144800	0	0	0	1	none	none
 mitbih_arrhythmia_physionet	ok	62400000	124800000	96	650000	1300000	0	0	0	1	none	none

@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "nims_mdr_phonondb_displacement_forces_f64"
+name = "NIMS MDR Phonon Calculation Database: Finite-Displacement Supercell Forces (float64)"
+description = "Float64 VASP atomic forces (eV/Angstrom) on every supercell atom for every symmetry-reduced finite displacement, from the phonopy_params.yaml files of a deterministic half of the MDR phonon calculation database (A. Togo, NIMS)."
+homepage = "https://mdr.nims.go.jp/collections/d7aab932-8512-4b9a-b93d-b61f6e5e7019"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Atsushi Togo (NIMS), MDR phonon calculation database, NIMS Materials Data Repository, https://mdr.nims.go.jp/collections/d7aab932-8512-4b9a-b93d-b61f6e5e7019 (originally http://phonondb.mtl.kyoto-u.ac.jp/)."
+notes = "Every pinned record was checked through https://mdr.nims.go.jp/api/v1/datasets/<id>: rights = [Creative Commons Attribution 4.0 International, https://creativecommons.org/licenses/by/4.0/], state published, visibility open_to_public, collection d7aab932-8512-4b9a-b93d-b61f6e5e7019. The OAI-PMH jpcoar record carries the same dc:rights. Credit A. Togo / NIMS MDR. Materials Project ids appear only as references (related_item relation 'refers'); the calculations and files are Togo/NIMS outputs."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NIMS Materials Data Repository downloads of first-principles (VASP + phonopy) simulation outputs for inorganic crystals; no personal data."
+usage_notes = "Only the displacement force sets are emitted. Lattice vectors, positions, masses, displacement vectors, PNG plots and VASP settings archives are not used."
+
+[[origins]]
+id = "nims_mdr"
+name = "NIMS Materials Data Repository (MDR)"
+url = "https://mdr.nims.go.jp/"
+type = "data_portal"
+notes = "Collection 'MDR phonon calculation database' (10,034 records as listed on 2026-10-09). Enumerated via OAI-PMH https://mdr.nims.go.jp/oai (jpcoar_2.0, datestamp window 2025-08-25); exact fileset sizes and md5 from https://mdr.nims.go.jp/api/v1/datasets/<id>. See scripts/discover.py."
+
+[[resources]]
+id = "phonopy_params_selection"
+origin = "nims_mdr"
+url = "https://mdr.nims.go.jp/filesets/<fileset_id>/download"
+type = "file"
+version = "MDR records published 2023-05 (phonopy 2.17.1 output); pinned 2026-10-09"
+access = "Anonymous HTTPS; each download URL 302-redirects to an ActiveStorage blob. sources.tsv pins dataset_id, Materials Project reference, fileset_id, exact size and md5 for each phonopy_params.yaml.xz."
+size_bytes = 178435928
+sha256 = ""
+local_path = "downloads/nims_mdr_phonondb_displacement_forces_f64/xz/"
+notes = "Selection: records whose dataset UUID satisfies int(sha256(uuid).hexdigest(), 16) % 2 == 0 (deterministic, content-blind half of the collection). Per-file integrity is md5 (as published by MDR) plus exact size; aggregate count and byte total are enforced by download.sh."
+
+[local_paths]
+downloads = "downloads/nims_mdr_phonondb_displacement_forces_f64/"
+filtered = "filtered/nims_mdr_phonondb_displacement_forces_f64/"
+index = "index/nims_mdr_phonondb_displacement_forces_f64/"
+samples = "samples/nims_mdr_phonondb_displacement_forces_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nims_mdr_phonondb_displacement_forces_f64/samples.jsonl"
+summary = "Fetch the pinned phonopy_params.yaml.xz files, decompress with stdlib lzma, read the forces of every entry of the top-level displacements block, and write one little-endian float64 sample per material."
+deterministic_notes = "sources.tsv is sorted by MDR dataset UUID and does not depend on listing order. No size floor and no content filter is applied: every hash-selected record is emitted. Build uses a line state machine; verify re-derives every sample with an independent block regex parser and compares bytes, checks each displacement has exactly one force row per supercell atom (atom count from the supercell block), checks every parsed double equals the double of its 8-decimal rounding (fatal otherwise), rejects constant/all-zero samples, duplicate samples, |F| > 1000 eV/A, and manifest count/byte mismatches."
+
+[[series]]
+id = "phonopy_supercell_forces_f64"
+description = "Atomic forces on all supercell atoms after each symmetry-reduced finite displacement, one material per sample."
+semantic_meaning = "Cartesian force components (eV/Angstrom) computed by VASP on every atom of a phonopy supercell in which one atom is displaced by about 0.01 Angstrom; the raw force sets from which phonopy builds harmonic force constants."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "phonopy holds these forces as float64 and writes them with 16 decimals; the VASP-derived values carry 8 decimals (digits 9-16 are zero, except 743 of 60,053,511 tokens with |F| > 0.5 printed with 1e-16 binary64 noise such as 0.6119448199999999, which parse to exactly the same double as the 8-decimal value). Magnitudes up to ~2.2 eV/A at 1e-8 resolution need ~9 significant digits and do not fit float32 exactly. Each decimal token is parsed once to the nearest IEEE-754 binary64."
+source_resources = ["phonopy_params_selection"]
+source_format = "phonopy_params.yaml (phonopy 2.17.1 YAML, xz-compressed)"
+source_field = "displacements[*].forces"
+filtered_input_path = "filtered/nims_mdr_phonondb_displacement_forces_f64/build_summary.json"
+filtering = "Keep the forces vectors of every entry in the top-level displacements: block of each hash-selected record; discard displacement vectors, lattice, positions, masses and all other YAML keys."
+missing_value_policy = "No missing values exist upstream. Malformed lines, non-finite values, a force-row count different from the supercell atom count, a non-angstrom length unit, or a constant/all-zero sample is fatal; nothing is dropped or imputed. Exact zeros (symmetry-imposed) are kept as 0.0."
+conversion = "lzma-decompress, read each '  - [ fx, fy, fz ]' line under 'forces:', parse the decimal text with float(), and write little-endian float64 in file order: displacement index, then supercell atom index, then x/y/z (shape N_displacements x N_supercell_atoms x 3, flattened)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 array"
+sample_geometry = "displacement_by_supercell_atom_by_xyz_force_tensor"
+sample_rank = 3
+sample_axes = ["displacement", "supercell_atom", "cartesian_component"]
+natural_record_kind = "one_material_phonopy_displacement_force_set"
+sample_count = 5078
+total_size_bytes = 480428088
+output_path = "samples/nims_mdr_phonondb_displacement_forces_f64/phonopy_supercell_forces_f64/"

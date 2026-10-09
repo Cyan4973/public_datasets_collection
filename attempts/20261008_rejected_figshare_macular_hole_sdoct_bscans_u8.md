@@ -1,0 +1,31 @@
+# figshare_macular_hole_sdoct_bscans_u8
+
+- Date: 2026-10-08
+- Status: rejected
+- Candidate dataset: Longitudinal SD-OCT retinal B-scans of macular-hole surgery patients. 750x500 8-bit gray plane of RGBA LZW TIFFs; figshare article 32605218 v1, file 65374524 (Dataset.zip, 1,112,567,988 bytes, md5 39511d0b2c5cec7779483a6d5fa31dc0).
+- Source: https://figshare.com/articles/dataset/Pixel-Level_Segmented_Longitudinal_Optical_Coherence_Tomography_Data_of_Macular_Hole_Surgery_Outcomes/32605218. The original images are the Kaggle release mathieugodbout/oct-postsurgery-visual-improvement.
+- Why it looked promising:
+  - No OCT or ophthalmic imaging exists in the local or downstream corpus.
+  - One study and one export pipeline.
+  - 2,591 natural records of 375,000 values each, close to the 1 GB cap.
+- Failure class: breadth / redundant (zlsim WEAK)
+- What happened:
+  - **Recipe completed.** The recipe was fully authored, downloaded, built and verified, and passed gate.py. Output: 2,525 samples, 946,875,000 bytes, 491 patients, 7 timepoints.
+    - Decoder: pure-stdlib TIFF LZW (early change; EOI accepted at the current width or one bit narrower, needed for one member) plus predictor-2 undo, R plane emitted.
+    - Exclusions: 63 big-endian ICC re-exports (a different export layout, four of them off by one pixel in size) and 3 duplicate baseline V planes.
+  - **zlsim gate WEAK.** The nearest family is downstream:cov_hillshade: percentile feature distance 0.0457 (threshold 0.05), compression loss 0.0022 (threshold 0.03). Own ratio 1.78.
+    - Further neighbours within 0.07, mostly with loss under 0.3%: noaa_rstn_sagamore_hill_srs_spectra_u8 (0.053), blender_open_movies_yuv420_u8 luma (0.056), zenodo_nordif_ebsd_kikuchi_patterns_u8 (0.062), nasa_pds_themis_ir_mosaic_u8 (0.063).
+    - Speckled 8-bit display-gray OCT B-scans compress like existing 8-bit image families.
+  - **Licence.** The descriptor and Kaggle say the OCT images are LGPL-3.0. figshare's CC BY 4.0 covers the compilation, masks and quality CSVs.
+- Evidence:
+  - zlsim JSON: /tmp/autocollect/figshare_macular_hole_sdoct_bscans_u8/zlsim.json (verdict WEAK, redundant=true).
+  - Build summary: .data/filtered/figshare_macular_hole_sdoct_bscans_u8/ingest_stats.json.
+  - Data descriptor: Scientific Data 2026, doi:10.1038/s41597-026-08154-7, Methods "Data Source and Cohort Description".
+  - Kaggle API: licenseNameNullable "GNU Lesser General Public License 3.0".
+- Logs:
+  - .data/logs/figshare_macular_hole_sdoct_bscans_u8/{download,build,verify}.latest.log
+  - .data/pipeline/logs/figshare_macular_hole_sdoct_bscans_u8/download.20261008_173800.log
+- Decision: Rejected as redundant. The R/gray plane is the only faithful representation, so no repair can change the byte statistics without a local remap, which rule 2 forbids.
+- Retry conditions:
+  - Revisit only if an anonymous source offers native-depth raw OCT reflectivity (for example vendor raw volumes or linear-scale float/uint16 A-scans rather than display-gray exports) under a clearly permissive licence, or
+  - if the zlsim library or thresholds are recalibrated so that this material's nearest family exceeds the redundancy distance.

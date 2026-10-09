@@ -1,0 +1,543 @@
+manifest_version = 1
+dataset_id = "gwtc3_imrphenomxphm_posterior_samples_f64"
+name = "GWTC-3 (O3b) Bilby IMRPhenomXPHM Posterior Samples, Per-Event Parameter Columns, Float64"
+description = "Native IEEE-754 float64 posterior draws from the LIGO/Virgo/KAGRA GWTC-3 parameter-estimation release (Zenodo 8177023, v2): for each of the 33 O3b binary-black-hole candidates, 18 physical parameter columns (source-frame component and remnant masses, spin magnitudes and angles, orientation, sky position, luminosity distance, geocentric coalescence time, log-likelihood) of the C01:IMRPhenomXPHM analysis (cosmologically reweighted file), one sample per (event, parameter)."
+homepage = "https://zenodo.org/records/8177023"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "LIGO Scientific Collaboration, Virgo Collaboration and KAGRA Collaboration, GWTC-3: Compact Binary Coalescences Observed by LIGO and Virgo During the Second Part of the Third Observing Run - Parameter estimation data release, Zenodo (2023), doi:10.5281/zenodo.8177023; paper: Phys. Rev. X 13, 041039 (2023), arXiv:2111.03606."
+notes = "Zenodo record 8177023 declares metadata.license.id = 'cc-by-4.0' at record level, covering every file; download.sh re-fetches the record JSON and refuses to continue if the license, title, or any pinned file size/MD5 changed. Attribute the LVK collaborations and cite the GWTC-3 paper."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official LVK data release on zenodo.org, fetched from the record's file-content URLs with HTTP byte ranges. Values are Bayesian posterior draws about astrophysical sources; no personal data."
+usage_notes = "Public, CC BY 4.0 scientific data; appropriate for reproducible numeric collection."
+
+[[origins]]
+id = "zenodo_gwtc3_pe"
+name = "GWTC-3 parameter-estimation data release (Zenodo record 8177023)"
+url = "https://zenodo.org/records/8177023"
+type = "repository"
+notes = "76 files, 23.6 GB: per-event *_mixed_cosmo.h5 and *_mixed_nocosmo.h5 PESummary files for 36 candidates, plus skymaps, contours and notebooks. Only the 33 *_mixed_cosmo.h5 files holding a plain C01:IMRPhenomXPHM analysis are used."
+
+[[resources]]
+id = "gwtc3_cosmo_h5_xphm_ranges"
+origin = "zenodo_gwtc3_pe"
+url = "https://zenodo.org/api/records/8177023/files/IGWN-GWTC3p0-v2-{event}_PEDataRelease_mixed_cosmo.h5/content"
+type = "shard"
+version = "GWTC-3 PE release v2 (record 8177023, published 2023-10-23); keys, sizes, MD5s, row counts, member counts and table byte spans pinned in sources.tsv"
+access = "Anonymous HTTPS byte-range GETs (206 with exact Content-Range checked): 64 KiB-aligned metadata blocks (superblock, root and C01:IMRPhenomXPHM symbol tables, posterior_samples object header) and one contiguous span per event holding the whole C01:IMRPhenomXPHM/posterior_samples table."
+size_bytes = 4645103433
+sha256 = ""
+local_path = "downloads/gwtc3_imrphenomxphm_posterior_samples_f64/blocks/ and downloads/gwtc3_imrphenomxphm_posterior_samples_f64/tables/"
+notes = "size_bytes is the sum of the 33 full file sizes; about 2.34 GB of it is fetched (2,314,275,968 table bytes plus metadata blocks). The other analyses (C01:Mixed, C01:SEOBNRv4PHM), PSDs, calibration envelopes, priors, config files and skymaps are never fetched."
+
+[[resources]]
+id = "gwtc3_control_h5"
+origin = "zenodo_gwtc3_pe"
+url = "https://zenodo.org/api/records/8177023/files/IGWN-GWTC3p0-v2-GW200322_091133_PEDataRelease_mixed_cosmo.h5/content"
+type = "file"
+version = "GWTC-3 PE release v2"
+access = "Direct public download, resumable."
+size_bytes = 21425500
+sha256 = ""
+local_path = "downloads/gwtc3_imrphenomxphm_posterior_samples_f64/control/GW200322_091133.h5"
+notes = "Zenodo MD5 8155a9526c898876ac70a5421a9a20df (smallest pinned file). verify.sh checks that every range block and the table span of this event equal the same bytes of the MD5-verified whole file, and that a whole-file decode of the table matches."
+
+[[resources]]
+id = "gwtc3_record_json"
+origin = "zenodo_gwtc3_pe"
+url = "https://zenodo.org/api/records/8177023"
+type = "api_query_result"
+version = "fetched at download time"
+access = "Public Zenodo REST API record JSON."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/gwtc3_imrphenomxphm_posterior_samples_f64/record/zenodo_8177023.json"
+notes = "License, title and file-identity check only; nothing emitted."
+
+[local_paths]
+downloads = "downloads/gwtc3_imrphenomxphm_posterior_samples_f64/"
+filtered = "filtered/gwtc3_imrphenomxphm_posterior_samples_f64/"
+index = "index/gwtc3_imrphenomxphm_posterior_samples_f64/"
+samples = "samples/gwtc3_imrphenomxphm_posterior_samples_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/gwtc3_imrphenomxphm_posterior_samples_f64/samples.jsonl"
+summary = "Range-fetch the HDF5 metadata and the contiguous C01:IMRPhenomXPHM/posterior_samples compound table of 33 GWTC-3 BBH *_mixed_cosmo.h5 files; decode the table with a pure-stdlib HDF5 reader (superblock v0, v1 object headers, symbol-table groups, compound datatype of IEEE float64 members) and write each of 18 selected members as one raw little-endian float64 sample per event, in source row order."
+deterministic_notes = "sources.tsv pins the 33 file keys, sizes and Zenodo MD5s plus each table's row count, member count and byte span; download.sh re-validates the record license and file identity, accepts range responses only as 206 with exact Content-Range, resolves every table through the HDF5 metadata and requires it to match the pinned span, MD5-checks the control file, and runs a semantic table check (finite, non-constant, inside physical bounds). build and verify use only local files; verify re-extracts every sample through an independent per-row slicing path, byte-compares it, checks index sizes/sha256/min/max, manifest totals, stray files, mass ordering, and the control-file comparison. Floor: 594 samples, median 39475 values (min 3,341, max 249,520 rows)."
+
+[[series]]
+id = "mass_1_source"
+description = "Source-frame primary (heavier) component mass (Msun): one GWTC-3 event's C01:IMRPhenomXPHM posterior draws."
+semantic_meaning = "Posterior samples of mass_1_source (source-frame primary (heavier) component mass; unit Msun) from the Bilby/IMRPhenomXPHM parameter-estimation run of one O3b binary-black-hole candidate, after the release's cosmological reweighting; each value is one posterior draw, in the table's row order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The PESummary table stores every member as IEEE binary64 little-endian (checked per event against the full datatype properties); values are copied bit-exactly."
+source_resources = ["gwtc3_cosmo_h5_xphm_ranges"]
+source_format = "HDF5 (superblock v0) PESummary file; C01:IMRPhenomXPHM/posterior_samples rank-1 compound dataset, contiguous, unfiltered"
+source_field = "C01:IMRPhenomXPHM/posterior_samples.mass_1_source"
+filtered_input_path = "filtered/gwtc3_imrphenomxphm_posterior_samples_f64/ingest_stats.json"
+filtering = "All rows of the C01:IMRPhenomXPHM table of each of the 33 BBH events. C01:Mixed (a 50/50 resampled union of the XPHM and SEOBNRv4PHM runs, duplicating XPHM draws), C01:SEOBNRv4PHM (RIFT, another code and waveform) and the three NSBH candidates (GW191219_163120, GW200105_162426, GW200115_042309; they only have XPHM:HighSpin/LowSpin runs with different spin priors) are excluded."
+missing_value_policy = "The source has no missing values. Any non-finite value, constant column, row count below 1,000, value outside the loose physical bounds in scripts/gwtc3_pe.py, or mass_2_source > mass_1_source is fatal; nothing is dropped or imputed."
+conversion = "Read the record table (rows x 8*members bytes), take the 8 bytes at the member's compound offset from every row, and write them in row order as little-endian float64, one file per (event, parameter)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64, shape [N_draws]"
+sample_geometry = "posterior_sample_column"
+sample_rank = 1
+sample_axes = ["posterior_draw"]
+natural_record_kind = "gwtc3_event_xphm_posterior_parameter_column"
+sample_count = 33
+total_size_bytes = 14797336
+output_path = "samples/gwtc3_imrphenomxphm_posterior_samples_f64/mass_1_source/"
+
+[[series]]
+id = "mass_2_source"
+description = "Source-frame secondary component mass (Msun): one GWTC-3 event's C01:IMRPhenomXPHM posterior draws."
+semantic_meaning = "Posterior samples of mass_2_source (source-frame secondary component mass; unit Msun) from the Bilby/IMRPhenomXPHM parameter-estimation run of one O3b binary-black-hole candidate, after the release's cosmological reweighting; each value is one posterior draw, in the table's row order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The PESummary table stores every member as IEEE binary64 little-endian (checked per event against the full datatype properties); values are copied bit-exactly."
+source_resources = ["gwtc3_cosmo_h5_xphm_ranges"]
+source_format = "HDF5 (superblock v0) PESummary file; C01:IMRPhenomXPHM/posterior_samples rank-1 compound dataset, contiguous, unfiltered"
+source_field = "C01:IMRPhenomXPHM/posterior_samples.mass_2_source"
+filtered_input_path = "filtered/gwtc3_imrphenomxphm_posterior_samples_f64/ingest_stats.json"
+filtering = "All rows of the C01:IMRPhenomXPHM table of each of the 33 BBH events. C01:Mixed (a 50/50 resampled union of the XPHM and SEOBNRv4PHM runs, duplicating XPHM draws), C01:SEOBNRv4PHM (RIFT, another code and waveform) and the three NSBH candidates (GW191219_163120, GW200105_162426, GW200115_042309; they only have XPHM:HighSpin/LowSpin runs with different spin priors) are excluded."
+missing_value_policy = "The source has no missing values. Any non-finite value, constant column, row count below 1,000, value outside the loose physical bounds in scripts/gwtc3_pe.py, or mass_2_source > mass_1_source is fatal; nothing is dropped or imputed."
+conversion = "Read the record table (rows x 8*members bytes), take the 8 bytes at the member's compound offset from every row, and write them in row order as little-endian float64, one file per (event, parameter)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64, shape [N_draws]"
+sample_geometry = "posterior_sample_column"
+sample_rank = 1
+sample_axes = ["posterior_draw"]
+natural_record_kind = "gwtc3_event_xphm_posterior_parameter_column"
+sample_count = 33
+total_size_bytes = 14797336
+output_path = "samples/gwtc3_imrphenomxphm_posterior_samples_f64/mass_2_source/"
+
+[[series]]
+id = "a_1"
+description = "Primary dimensionless spin magnitude (dimensionless): one GWTC-3 event's C01:IMRPhenomXPHM posterior draws."
+semantic_meaning = "Posterior samples of a_1 (primary dimensionless spin magnitude; unit dimensionless) from the Bilby/IMRPhenomXPHM parameter-estimation run of one O3b binary-black-hole candidate, after the release's cosmological reweighting; each value is one posterior draw, in the table's row order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The PESummary table stores every member as IEEE binary64 little-endian (checked per event against the full datatype properties); values are copied bit-exactly."
+source_resources = ["gwtc3_cosmo_h5_xphm_ranges"]
+source_format = "HDF5 (superblock v0) PESummary file; C01:IMRPhenomXPHM/posterior_samples rank-1 compound dataset, contiguous, unfiltered"
+source_field = "C01:IMRPhenomXPHM/posterior_samples.a_1"
+filtered_input_path = "filtered/gwtc3_imrphenomxphm_posterior_samples_f64/ingest_stats.json"
+filtering = "All rows of the C01:IMRPhenomXPHM table of each of the 33 BBH events. C01:Mixed (a 50/50 resampled union of the XPHM and SEOBNRv4PHM runs, duplicating XPHM draws), C01:SEOBNRv4PHM (RIFT, another code and waveform) and the three NSBH candidates (GW191219_163120, GW200105_162426, GW200115_042309; they only have XPHM:HighSpin/LowSpin runs with different spin priors) are excluded."
+missing_value_policy = "The source has no missing values. Any non-finite value, constant column, row count below 1,000, value outside the loose physical bounds in scripts/gwtc3_pe.py, or mass_2_source > mass_1_source is fatal; nothing is dropped or imputed."
+conversion = "Read the record table (rows x 8*members bytes), take the 8 bytes at the member's compound offset from every row, and write them in row order as little-endian float64, one file per (event, parameter)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64, shape [N_draws]"
+sample_geometry = "posterior_sample_column"
+sample_rank = 1
+sample_axes = ["posterior_draw"]
+natural_record_kind = "gwtc3_event_xphm_posterior_parameter_column"
+sample_count = 33
+total_size_bytes = 14797336
+output_path = "samples/gwtc3_imrphenomxphm_posterior_samples_f64/a_1/"
+
+[[series]]
+id = "a_2"
+description = "Secondary dimensionless spin magnitude (dimensionless): one GWTC-3 event's C01:IMRPhenomXPHM posterior draws."
+semantic_meaning = "Posterior samples of a_2 (secondary dimensionless spin magnitude; unit dimensionless) from the Bilby/IMRPhenomXPHM parameter-estimation run of one O3b binary-black-hole candidate, after the release's cosmological reweighting; each value is one posterior draw, in the table's row order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The PESummary table stores every member as IEEE binary64 little-endian (checked per event against the full datatype properties); values are copied bit-exactly."
+source_resources = ["gwtc3_cosmo_h5_xphm_ranges"]
+source_format = "HDF5 (superblock v0) PESummary file; C01:IMRPhenomXPHM/posterior_samples rank-1 compound dataset, contiguous, unfiltered"
+source_field = "C01:IMRPhenomXPHM/posterior_samples.a_2"
+filtered_input_path = "filtered/gwtc3_imrphenomxphm_posterior_samples_f64/ingest_stats.json"
+filtering = "All rows of the C01:IMRPhenomXPHM table of each of the 33 BBH events. C01:Mixed (a 50/50 resampled union of the XPHM and SEOBNRv4PHM runs, duplicating XPHM draws), C01:SEOBNRv4PHM (RIFT, another code and waveform) and the three NSBH candidates (GW191219_163120, GW200105_162426, GW200115_042309; they only have XPHM:HighSpin/LowSpin runs with different spin priors) are excluded."
+missing_value_policy = "The source has no missing values. Any non-finite value, constant column, row count below 1,000, value outside the loose physical bounds in scripts/gwtc3_pe.py, or mass_2_source > mass_1_source is fatal; nothing is dropped or imputed."
+conversion = "Read the record table (rows x 8*members bytes), take the 8 bytes at the member's compound offset from every row, and write them in row order as little-endian float64, one file per (event, parameter)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64, shape [N_draws]"
+sample_geometry = "posterior_sample_column"
+sample_rank = 1
+sample_axes = ["posterior_draw"]
+natural_record_kind = "gwtc3_event_xphm_posterior_parameter_column"
+sample_count = 33
+total_size_bytes = 14797336
+output_path = "samples/gwtc3_imrphenomxphm_posterior_samples_f64/a_2/"
+
+[[series]]
+id = "tilt_1"
+description = "Primary spin tilt w.r.t. orbital angular momentum at reference frequency (rad): one GWTC-3 event's C01:IMRPhenomXPHM posterior draws."
+semantic_meaning = "Posterior samples of tilt_1 (primary spin tilt w.r.t. orbital angular momentum at reference frequency; unit rad) from the Bilby/IMRPhenomXPHM parameter-estimation run of one O3b binary-black-hole candidate, after the release's cosmological reweighting; each value is one posterior draw, in the table's row order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The PESummary table stores every member as IEEE binary64 little-endian (checked per event against the full datatype properties); values are copied bit-exactly."
+source_resources = ["gwtc3_cosmo_h5_xphm_ranges"]
+source_format = "HDF5 (superblock v0) PESummary file; C01:IMRPhenomXPHM/posterior_samples rank-1 compound dataset, contiguous, unfiltered"
+source_field = "C01:IMRPhenomXPHM/posterior_samples.tilt_1"
+filtered_input_path = "filtered/gwtc3_imrphenomxphm_posterior_samples_f64/ingest_stats.json"
+filtering = "All rows of the C01:IMRPhenomXPHM table of each of the 33 BBH events. C01:Mixed (a 50/50 resampled union of the XPHM and SEOBNRv4PHM runs, duplicating XPHM draws), C01:SEOBNRv4PHM (RIFT, another code and waveform) and the three NSBH candidates (GW191219_163120, GW200105_162426, GW200115_042309; they only have XPHM:HighSpin/LowSpin runs with different spin priors) are excluded."
+missing_value_policy = "The source has no missing values. Any non-finite value, constant column, row count below 1,000, value outside the loose physical bounds in scripts/gwtc3_pe.py, or mass_2_source > mass_1_source is fatal; nothing is dropped or imputed."
+conversion = "Read the record table (rows x 8*members bytes), take the 8 bytes at the member's compound offset from every row, and write them in row order as little-endian float64, one file per (event, parameter)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64, shape [N_draws]"
+sample_geometry = "posterior_sample_column"
+sample_rank = 1
+sample_axes = ["posterior_draw"]
+natural_record_kind = "gwtc3_event_xphm_posterior_parameter_column"
+sample_count = 33
+total_size_bytes = 14797336
+output_path = "samples/gwtc3_imrphenomxphm_posterior_samples_f64/tilt_1/"
+
+[[series]]
+id = "tilt_2"
+description = "Secondary spin tilt at reference frequency (rad): one GWTC-3 event's C01:IMRPhenomXPHM posterior draws."
+semantic_meaning = "Posterior samples of tilt_2 (secondary spin tilt at reference frequency; unit rad) from the Bilby/IMRPhenomXPHM parameter-estimation run of one O3b binary-black-hole candidate, after the release's cosmological reweighting; each value is one posterior draw, in the table's row order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The PESummary table stores every member as IEEE binary64 little-endian (checked per event against the full datatype properties); values are copied bit-exactly."
+source_resources = ["gwtc3_cosmo_h5_xphm_ranges"]
+source_format = "HDF5 (superblock v0) PESummary file; C01:IMRPhenomXPHM/posterior_samples rank-1 compound dataset, contiguous, unfiltered"
+source_field = "C01:IMRPhenomXPHM/posterior_samples.tilt_2"
+filtered_input_path = "filtered/gwtc3_imrphenomxphm_posterior_samples_f64/ingest_stats.json"
+filtering = "All rows of the C01:IMRPhenomXPHM table of each of the 33 BBH events. C01:Mixed (a 50/50 resampled union of the XPHM and SEOBNRv4PHM runs, duplicating XPHM draws), C01:SEOBNRv4PHM (RIFT, another code and waveform) and the three NSBH candidates (GW191219_163120, GW200105_162426, GW200115_042309; they only have XPHM:HighSpin/LowSpin runs with different spin priors) are excluded."
+missing_value_policy = "The source has no missing values. Any non-finite value, constant column, row count below 1,000, value outside the loose physical bounds in scripts/gwtc3_pe.py, or mass_2_source > mass_1_source is fatal; nothing is dropped or imputed."
+conversion = "Read the record table (rows x 8*members bytes), take the 8 bytes at the member's compound offset from every row, and write them in row order as little-endian float64, one file per (event, parameter)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64, shape [N_draws]"
+sample_geometry = "posterior_sample_column"
+sample_rank = 1
+sample_axes = ["posterior_draw"]
+natural_record_kind = "gwtc3_event_xphm_posterior_parameter_column"
+sample_count = 33
+total_size_bytes = 14797336
+output_path = "samples/gwtc3_imrphenomxphm_posterior_samples_f64/tilt_2/"
+
+[[series]]
+id = "phi_12"
+description = "Azimuthal angle between the two in-plane spin projections (rad): one GWTC-3 event's C01:IMRPhenomXPHM posterior draws."
+semantic_meaning = "Posterior samples of phi_12 (azimuthal angle between the two in-plane spin projections; unit rad) from the Bilby/IMRPhenomXPHM parameter-estimation run of one O3b binary-black-hole candidate, after the release's cosmological reweighting; each value is one posterior draw, in the table's row order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The PESummary table stores every member as IEEE binary64 little-endian (checked per event against the full datatype properties); values are copied bit-exactly."
+source_resources = ["gwtc3_cosmo_h5_xphm_ranges"]
+source_format = "HDF5 (superblock v0) PESummary file; C01:IMRPhenomXPHM/posterior_samples rank-1 compound dataset, contiguous, unfiltered"
+source_field = "C01:IMRPhenomXPHM/posterior_samples.phi_12"
+filtered_input_path = "filtered/gwtc3_imrphenomxphm_posterior_samples_f64/ingest_stats.json"
+filtering = "All rows of the C01:IMRPhenomXPHM table of each of the 33 BBH events. C01:Mixed (a 50/50 resampled union of the XPHM and SEOBNRv4PHM runs, duplicating XPHM draws), C01:SEOBNRv4PHM (RIFT, another code and waveform) and the three NSBH candidates (GW191219_163120, GW200105_162426, GW200115_042309; they only have XPHM:HighSpin/LowSpin runs with different spin priors) are excluded."
+missing_value_policy = "The source has no missing values. Any non-finite value, constant column, row count below 1,000, value outside the loose physical bounds in scripts/gwtc3_pe.py, or mass_2_source > mass_1_source is fatal; nothing is dropped or imputed."
+conversion = "Read the record table (rows x 8*members bytes), take the 8 bytes at the member's compound offset from every row, and write them in row order as little-endian float64, one file per (event, parameter)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64, shape [N_draws]"
+sample_geometry = "posterior_sample_column"
+sample_rank = 1
+sample_axes = ["posterior_draw"]
+natural_record_kind = "gwtc3_event_xphm_posterior_parameter_column"
+sample_count = 33
+total_size_bytes = 14797336
+output_path = "samples/gwtc3_imrphenomxphm_posterior_samples_f64/phi_12/"
+
+[[series]]
+id = "phi_jl"
+description = "Azimuth of L around the total angular momentum J (rad): one GWTC-3 event's C01:IMRPhenomXPHM posterior draws."
+semantic_meaning = "Posterior samples of phi_jl (azimuth of L around the total angular momentum J; unit rad) from the Bilby/IMRPhenomXPHM parameter-estimation run of one O3b binary-black-hole candidate, after the release's cosmological reweighting; each value is one posterior draw, in the table's row order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The PESummary table stores every member as IEEE binary64 little-endian (checked per event against the full datatype properties); values are copied bit-exactly."
+source_resources = ["gwtc3_cosmo_h5_xphm_ranges"]
+source_format = "HDF5 (superblock v0) PESummary file; C01:IMRPhenomXPHM/posterior_samples rank-1 compound dataset, contiguous, unfiltered"
+source_field = "C01:IMRPhenomXPHM/posterior_samples.phi_jl"
+filtered_input_path = "filtered/gwtc3_imrphenomxphm_posterior_samples_f64/ingest_stats.json"
+filtering = "All rows of the C01:IMRPhenomXPHM table of each of the 33 BBH events. C01:Mixed (a 50/50 resampled union of the XPHM and SEOBNRv4PHM runs, duplicating XPHM draws), C01:SEOBNRv4PHM (RIFT, another code and waveform) and the three NSBH candidates (GW191219_163120, GW200105_162426, GW200115_042309; they only have XPHM:HighSpin/LowSpin runs with different spin priors) are excluded."
+missing_value_policy = "The source has no missing values. Any non-finite value, constant column, row count below 1,000, value outside the loose physical bounds in scripts/gwtc3_pe.py, or mass_2_source > mass_1_source is fatal; nothing is dropped or imputed."
+conversion = "Read the record table (rows x 8*members bytes), take the 8 bytes at the member's compound offset from every row, and write them in row order as little-endian float64, one file per (event, parameter)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64, shape [N_draws]"
+sample_geometry = "posterior_sample_column"
+sample_rank = 1
+sample_axes = ["posterior_draw"]
+natural_record_kind = "gwtc3_event_xphm_posterior_parameter_column"
+sample_count = 33
+total_size_bytes = 14797336
+output_path = "samples/gwtc3_imrphenomxphm_posterior_samples_f64/phi_jl/"
+
+[[series]]
+id = "theta_jn"
+description = "Inclination of J to the line of sight (rad): one GWTC-3 event's C01:IMRPhenomXPHM posterior draws."
+semantic_meaning = "Posterior samples of theta_jn (inclination of J to the line of sight; unit rad) from the Bilby/IMRPhenomXPHM parameter-estimation run of one O3b binary-black-hole candidate, after the release's cosmological reweighting; each value is one posterior draw, in the table's row order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The PESummary table stores every member as IEEE binary64 little-endian (checked per event against the full datatype properties); values are copied bit-exactly."
+source_resources = ["gwtc3_cosmo_h5_xphm_ranges"]
+source_format = "HDF5 (superblock v0) PESummary file; C01:IMRPhenomXPHM/posterior_samples rank-1 compound dataset, contiguous, unfiltered"
+source_field = "C01:IMRPhenomXPHM/posterior_samples.theta_jn"
+filtered_input_path = "filtered/gwtc3_imrphenomxphm_posterior_samples_f64/ingest_stats.json"
+filtering = "All rows of the C01:IMRPhenomXPHM table of each of the 33 BBH events. C01:Mixed (a 50/50 resampled union of the XPHM and SEOBNRv4PHM runs, duplicating XPHM draws), C01:SEOBNRv4PHM (RIFT, another code and waveform) and the three NSBH candidates (GW191219_163120, GW200105_162426, GW200115_042309; they only have XPHM:HighSpin/LowSpin runs with different spin priors) are excluded."
+missing_value_policy = "The source has no missing values. Any non-finite value, constant column, row count below 1,000, value outside the loose physical bounds in scripts/gwtc3_pe.py, or mass_2_source > mass_1_source is fatal; nothing is dropped or imputed."
+conversion = "Read the record table (rows x 8*members bytes), take the 8 bytes at the member's compound offset from every row, and write them in row order as little-endian float64, one file per (event, parameter)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64, shape [N_draws]"
+sample_geometry = "posterior_sample_column"
+sample_rank = 1
+sample_axes = ["posterior_draw"]
+natural_record_kind = "gwtc3_event_xphm_posterior_parameter_column"
+sample_count = 33
+total_size_bytes = 14797336
+output_path = "samples/gwtc3_imrphenomxphm_posterior_samples_f64/theta_jn/"
+
+[[series]]
+id = "psi"
+description = "Polarisation angle (rad): one GWTC-3 event's C01:IMRPhenomXPHM posterior draws."
+semantic_meaning = "Posterior samples of psi (polarisation angle; unit rad) from the Bilby/IMRPhenomXPHM parameter-estimation run of one O3b binary-black-hole candidate, after the release's cosmological reweighting; each value is one posterior draw, in the table's row order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The PESummary table stores every member as IEEE binary64 little-endian (checked per event against the full datatype properties); values are copied bit-exactly."
+source_resources = ["gwtc3_cosmo_h5_xphm_ranges"]
+source_format = "HDF5 (superblock v0) PESummary file; C01:IMRPhenomXPHM/posterior_samples rank-1 compound dataset, contiguous, unfiltered"
+source_field = "C01:IMRPhenomXPHM/posterior_samples.psi"
+filtered_input_path = "filtered/gwtc3_imrphenomxphm_posterior_samples_f64/ingest_stats.json"
+filtering = "All rows of the C01:IMRPhenomXPHM table of each of the 33 BBH events. C01:Mixed (a 50/50 resampled union of the XPHM and SEOBNRv4PHM runs, duplicating XPHM draws), C01:SEOBNRv4PHM (RIFT, another code and waveform) and the three NSBH candidates (GW191219_163120, GW200105_162426, GW200115_042309; they only have XPHM:HighSpin/LowSpin runs with different spin priors) are excluded."
+missing_value_policy = "The source has no missing values. Any non-finite value, constant column, row count below 1,000, value outside the loose physical bounds in scripts/gwtc3_pe.py, or mass_2_source > mass_1_source is fatal; nothing is dropped or imputed."
+conversion = "Read the record table (rows x 8*members bytes), take the 8 bytes at the member's compound offset from every row, and write them in row order as little-endian float64, one file per (event, parameter)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64, shape [N_draws]"
+sample_geometry = "posterior_sample_column"
+sample_rank = 1
+sample_axes = ["posterior_draw"]
+natural_record_kind = "gwtc3_event_xphm_posterior_parameter_column"
+sample_count = 33
+total_size_bytes = 14797336
+output_path = "samples/gwtc3_imrphenomxphm_posterior_samples_f64/psi/"
+
+[[series]]
+id = "phase"
+description = "Orbital phase at reference frequency (rad): one GWTC-3 event's C01:IMRPhenomXPHM posterior draws."
+semantic_meaning = "Posterior samples of phase (orbital phase at reference frequency; unit rad) from the Bilby/IMRPhenomXPHM parameter-estimation run of one O3b binary-black-hole candidate, after the release's cosmological reweighting; each value is one posterior draw, in the table's row order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The PESummary table stores every member as IEEE binary64 little-endian (checked per event against the full datatype properties); values are copied bit-exactly."
+source_resources = ["gwtc3_cosmo_h5_xphm_ranges"]
+source_format = "HDF5 (superblock v0) PESummary file; C01:IMRPhenomXPHM/posterior_samples rank-1 compound dataset, contiguous, unfiltered"
+source_field = "C01:IMRPhenomXPHM/posterior_samples.phase"
+filtered_input_path = "filtered/gwtc3_imrphenomxphm_posterior_samples_f64/ingest_stats.json"
+filtering = "All rows of the C01:IMRPhenomXPHM table of each of the 33 BBH events. C01:Mixed (a 50/50 resampled union of the XPHM and SEOBNRv4PHM runs, duplicating XPHM draws), C01:SEOBNRv4PHM (RIFT, another code and waveform) and the three NSBH candidates (GW191219_163120, GW200105_162426, GW200115_042309; they only have XPHM:HighSpin/LowSpin runs with different spin priors) are excluded."
+missing_value_policy = "The source has no missing values. Any non-finite value, constant column, row count below 1,000, value outside the loose physical bounds in scripts/gwtc3_pe.py, or mass_2_source > mass_1_source is fatal; nothing is dropped or imputed."
+conversion = "Read the record table (rows x 8*members bytes), take the 8 bytes at the member's compound offset from every row, and write them in row order as little-endian float64, one file per (event, parameter)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64, shape [N_draws]"
+sample_geometry = "posterior_sample_column"
+sample_rank = 1
+sample_axes = ["posterior_draw"]
+natural_record_kind = "gwtc3_event_xphm_posterior_parameter_column"
+sample_count = 33
+total_size_bytes = 14797336
+output_path = "samples/gwtc3_imrphenomxphm_posterior_samples_f64/phase/"
+
+[[series]]
+id = "luminosity_distance"
+description = "Luminosity distance (Mpc): one GWTC-3 event's C01:IMRPhenomXPHM posterior draws."
+semantic_meaning = "Posterior samples of luminosity_distance (luminosity distance; unit Mpc) from the Bilby/IMRPhenomXPHM parameter-estimation run of one O3b binary-black-hole candidate, after the release's cosmological reweighting; each value is one posterior draw, in the table's row order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The PESummary table stores every member as IEEE binary64 little-endian (checked per event against the full datatype properties); values are copied bit-exactly."
+source_resources = ["gwtc3_cosmo_h5_xphm_ranges"]
+source_format = "HDF5 (superblock v0) PESummary file; C01:IMRPhenomXPHM/posterior_samples rank-1 compound dataset, contiguous, unfiltered"
+source_field = "C01:IMRPhenomXPHM/posterior_samples.luminosity_distance"
+filtered_input_path = "filtered/gwtc3_imrphenomxphm_posterior_samples_f64/ingest_stats.json"
+filtering = "All rows of the C01:IMRPhenomXPHM table of each of the 33 BBH events. C01:Mixed (a 50/50 resampled union of the XPHM and SEOBNRv4PHM runs, duplicating XPHM draws), C01:SEOBNRv4PHM (RIFT, another code and waveform) and the three NSBH candidates (GW191219_163120, GW200105_162426, GW200115_042309; they only have XPHM:HighSpin/LowSpin runs with different spin priors) are excluded."
+missing_value_policy = "The source has no missing values. Any non-finite value, constant column, row count below 1,000, value outside the loose physical bounds in scripts/gwtc3_pe.py, or mass_2_source > mass_1_source is fatal; nothing is dropped or imputed."
+conversion = "Read the record table (rows x 8*members bytes), take the 8 bytes at the member's compound offset from every row, and write them in row order as little-endian float64, one file per (event, parameter)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64, shape [N_draws]"
+sample_geometry = "posterior_sample_column"
+sample_rank = 1
+sample_axes = ["posterior_draw"]
+natural_record_kind = "gwtc3_event_xphm_posterior_parameter_column"
+sample_count = 33
+total_size_bytes = 14797336
+output_path = "samples/gwtc3_imrphenomxphm_posterior_samples_f64/luminosity_distance/"
+
+[[series]]
+id = "ra"
+description = "Right ascension (rad): one GWTC-3 event's C01:IMRPhenomXPHM posterior draws."
+semantic_meaning = "Posterior samples of ra (right ascension; unit rad) from the Bilby/IMRPhenomXPHM parameter-estimation run of one O3b binary-black-hole candidate, after the release's cosmological reweighting; each value is one posterior draw, in the table's row order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The PESummary table stores every member as IEEE binary64 little-endian (checked per event against the full datatype properties); values are copied bit-exactly."
+source_resources = ["gwtc3_cosmo_h5_xphm_ranges"]
+source_format = "HDF5 (superblock v0) PESummary file; C01:IMRPhenomXPHM/posterior_samples rank-1 compound dataset, contiguous, unfiltered"
+source_field = "C01:IMRPhenomXPHM/posterior_samples.ra"
+filtered_input_path = "filtered/gwtc3_imrphenomxphm_posterior_samples_f64/ingest_stats.json"
+filtering = "All rows of the C01:IMRPhenomXPHM table of each of the 33 BBH events. C01:Mixed (a 50/50 resampled union of the XPHM and SEOBNRv4PHM runs, duplicating XPHM draws), C01:SEOBNRv4PHM (RIFT, another code and waveform) and the three NSBH candidates (GW191219_163120, GW200105_162426, GW200115_042309; they only have XPHM:HighSpin/LowSpin runs with different spin priors) are excluded."
+missing_value_policy = "The source has no missing values. Any non-finite value, constant column, row count below 1,000, value outside the loose physical bounds in scripts/gwtc3_pe.py, or mass_2_source > mass_1_source is fatal; nothing is dropped or imputed."
+conversion = "Read the record table (rows x 8*members bytes), take the 8 bytes at the member's compound offset from every row, and write them in row order as little-endian float64, one file per (event, parameter)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64, shape [N_draws]"
+sample_geometry = "posterior_sample_column"
+sample_rank = 1
+sample_axes = ["posterior_draw"]
+natural_record_kind = "gwtc3_event_xphm_posterior_parameter_column"
+sample_count = 33
+total_size_bytes = 14797336
+output_path = "samples/gwtc3_imrphenomxphm_posterior_samples_f64/ra/"
+
+[[series]]
+id = "dec"
+description = "Declination (rad): one GWTC-3 event's C01:IMRPhenomXPHM posterior draws."
+semantic_meaning = "Posterior samples of dec (declination; unit rad) from the Bilby/IMRPhenomXPHM parameter-estimation run of one O3b binary-black-hole candidate, after the release's cosmological reweighting; each value is one posterior draw, in the table's row order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The PESummary table stores every member as IEEE binary64 little-endian (checked per event against the full datatype properties); values are copied bit-exactly."
+source_resources = ["gwtc3_cosmo_h5_xphm_ranges"]
+source_format = "HDF5 (superblock v0) PESummary file; C01:IMRPhenomXPHM/posterior_samples rank-1 compound dataset, contiguous, unfiltered"
+source_field = "C01:IMRPhenomXPHM/posterior_samples.dec"
+filtered_input_path = "filtered/gwtc3_imrphenomxphm_posterior_samples_f64/ingest_stats.json"
+filtering = "All rows of the C01:IMRPhenomXPHM table of each of the 33 BBH events. C01:Mixed (a 50/50 resampled union of the XPHM and SEOBNRv4PHM runs, duplicating XPHM draws), C01:SEOBNRv4PHM (RIFT, another code and waveform) and the three NSBH candidates (GW191219_163120, GW200105_162426, GW200115_042309; they only have XPHM:HighSpin/LowSpin runs with different spin priors) are excluded."
+missing_value_policy = "The source has no missing values. Any non-finite value, constant column, row count below 1,000, value outside the loose physical bounds in scripts/gwtc3_pe.py, or mass_2_source > mass_1_source is fatal; nothing is dropped or imputed."
+conversion = "Read the record table (rows x 8*members bytes), take the 8 bytes at the member's compound offset from every row, and write them in row order as little-endian float64, one file per (event, parameter)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64, shape [N_draws]"
+sample_geometry = "posterior_sample_column"
+sample_rank = 1
+sample_axes = ["posterior_draw"]
+natural_record_kind = "gwtc3_event_xphm_posterior_parameter_column"
+sample_count = 33
+total_size_bytes = 14797336
+output_path = "samples/gwtc3_imrphenomxphm_posterior_samples_f64/dec/"
+
+[[series]]
+id = "geocent_time"
+description = "Coalescence time at the geocentre (s (GPS)): one GWTC-3 event's C01:IMRPhenomXPHM posterior draws."
+semantic_meaning = "Posterior samples of geocent_time (coalescence time at the geocentre; unit s (GPS)) from the Bilby/IMRPhenomXPHM parameter-estimation run of one O3b binary-black-hole candidate, after the release's cosmological reweighting; each value is one posterior draw, in the table's row order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The PESummary table stores every member as IEEE binary64 little-endian (checked per event against the full datatype properties); values are copied bit-exactly."
+source_resources = ["gwtc3_cosmo_h5_xphm_ranges"]
+source_format = "HDF5 (superblock v0) PESummary file; C01:IMRPhenomXPHM/posterior_samples rank-1 compound dataset, contiguous, unfiltered"
+source_field = "C01:IMRPhenomXPHM/posterior_samples.geocent_time"
+filtered_input_path = "filtered/gwtc3_imrphenomxphm_posterior_samples_f64/ingest_stats.json"
+filtering = "All rows of the C01:IMRPhenomXPHM table of each of the 33 BBH events. C01:Mixed (a 50/50 resampled union of the XPHM and SEOBNRv4PHM runs, duplicating XPHM draws), C01:SEOBNRv4PHM (RIFT, another code and waveform) and the three NSBH candidates (GW191219_163120, GW200105_162426, GW200115_042309; they only have XPHM:HighSpin/LowSpin runs with different spin priors) are excluded."
+missing_value_policy = "The source has no missing values. Any non-finite value, constant column, row count below 1,000, value outside the loose physical bounds in scripts/gwtc3_pe.py, or mass_2_source > mass_1_source is fatal; nothing is dropped or imputed."
+conversion = "Read the record table (rows x 8*members bytes), take the 8 bytes at the member's compound offset from every row, and write them in row order as little-endian float64, one file per (event, parameter)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64, shape [N_draws]"
+sample_geometry = "posterior_sample_column"
+sample_rank = 1
+sample_axes = ["posterior_draw"]
+natural_record_kind = "gwtc3_event_xphm_posterior_parameter_column"
+sample_count = 33
+total_size_bytes = 14797336
+output_path = "samples/gwtc3_imrphenomxphm_posterior_samples_f64/geocent_time/"
+
+[[series]]
+id = "final_mass_source"
+description = "Source-frame remnant black-hole mass (NR-fit) (Msun): one GWTC-3 event's C01:IMRPhenomXPHM posterior draws."
+semantic_meaning = "Posterior samples of final_mass_source (source-frame remnant black-hole mass (NR-fit); unit Msun) from the Bilby/IMRPhenomXPHM parameter-estimation run of one O3b binary-black-hole candidate, after the release's cosmological reweighting; each value is one posterior draw, in the table's row order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The PESummary table stores every member as IEEE binary64 little-endian (checked per event against the full datatype properties); values are copied bit-exactly."
+source_resources = ["gwtc3_cosmo_h5_xphm_ranges"]
+source_format = "HDF5 (superblock v0) PESummary file; C01:IMRPhenomXPHM/posterior_samples rank-1 compound dataset, contiguous, unfiltered"
+source_field = "C01:IMRPhenomXPHM/posterior_samples.final_mass_source"
+filtered_input_path = "filtered/gwtc3_imrphenomxphm_posterior_samples_f64/ingest_stats.json"
+filtering = "All rows of the C01:IMRPhenomXPHM table of each of the 33 BBH events. C01:Mixed (a 50/50 resampled union of the XPHM and SEOBNRv4PHM runs, duplicating XPHM draws), C01:SEOBNRv4PHM (RIFT, another code and waveform) and the three NSBH candidates (GW191219_163120, GW200105_162426, GW200115_042309; they only have XPHM:HighSpin/LowSpin runs with different spin priors) are excluded."
+missing_value_policy = "The source has no missing values. Any non-finite value, constant column, row count below 1,000, value outside the loose physical bounds in scripts/gwtc3_pe.py, or mass_2_source > mass_1_source is fatal; nothing is dropped or imputed."
+conversion = "Read the record table (rows x 8*members bytes), take the 8 bytes at the member's compound offset from every row, and write them in row order as little-endian float64, one file per (event, parameter)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64, shape [N_draws]"
+sample_geometry = "posterior_sample_column"
+sample_rank = 1
+sample_axes = ["posterior_draw"]
+natural_record_kind = "gwtc3_event_xphm_posterior_parameter_column"
+sample_count = 33
+total_size_bytes = 14797336
+output_path = "samples/gwtc3_imrphenomxphm_posterior_samples_f64/final_mass_source/"
+
+[[series]]
+id = "final_spin"
+description = "Remnant black-hole dimensionless spin (NR-fit) (dimensionless): one GWTC-3 event's C01:IMRPhenomXPHM posterior draws."
+semantic_meaning = "Posterior samples of final_spin (remnant black-hole dimensionless spin (NR-fit); unit dimensionless) from the Bilby/IMRPhenomXPHM parameter-estimation run of one O3b binary-black-hole candidate, after the release's cosmological reweighting; each value is one posterior draw, in the table's row order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The PESummary table stores every member as IEEE binary64 little-endian (checked per event against the full datatype properties); values are copied bit-exactly."
+source_resources = ["gwtc3_cosmo_h5_xphm_ranges"]
+source_format = "HDF5 (superblock v0) PESummary file; C01:IMRPhenomXPHM/posterior_samples rank-1 compound dataset, contiguous, unfiltered"
+source_field = "C01:IMRPhenomXPHM/posterior_samples.final_spin"
+filtered_input_path = "filtered/gwtc3_imrphenomxphm_posterior_samples_f64/ingest_stats.json"
+filtering = "All rows of the C01:IMRPhenomXPHM table of each of the 33 BBH events. C01:Mixed (a 50/50 resampled union of the XPHM and SEOBNRv4PHM runs, duplicating XPHM draws), C01:SEOBNRv4PHM (RIFT, another code and waveform) and the three NSBH candidates (GW191219_163120, GW200105_162426, GW200115_042309; they only have XPHM:HighSpin/LowSpin runs with different spin priors) are excluded."
+missing_value_policy = "The source has no missing values. Any non-finite value, constant column, row count below 1,000, value outside the loose physical bounds in scripts/gwtc3_pe.py, or mass_2_source > mass_1_source is fatal; nothing is dropped or imputed."
+conversion = "Read the record table (rows x 8*members bytes), take the 8 bytes at the member's compound offset from every row, and write them in row order as little-endian float64, one file per (event, parameter)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64, shape [N_draws]"
+sample_geometry = "posterior_sample_column"
+sample_rank = 1
+sample_axes = ["posterior_draw"]
+natural_record_kind = "gwtc3_event_xphm_posterior_parameter_column"
+sample_count = 33
+total_size_bytes = 14797336
+output_path = "samples/gwtc3_imrphenomxphm_posterior_samples_f64/final_spin/"
+
+[[series]]
+id = "log_likelihood"
+description = "Log likelihood of the draw (nat): one GWTC-3 event's C01:IMRPhenomXPHM posterior draws."
+semantic_meaning = "Posterior samples of log_likelihood (log likelihood of the draw; unit nat) from the Bilby/IMRPhenomXPHM parameter-estimation run of one O3b binary-black-hole candidate, after the release's cosmological reweighting; each value is one posterior draw, in the table's row order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The PESummary table stores every member as IEEE binary64 little-endian (checked per event against the full datatype properties); values are copied bit-exactly."
+source_resources = ["gwtc3_cosmo_h5_xphm_ranges"]
+source_format = "HDF5 (superblock v0) PESummary file; C01:IMRPhenomXPHM/posterior_samples rank-1 compound dataset, contiguous, unfiltered"
+source_field = "C01:IMRPhenomXPHM/posterior_samples.log_likelihood"
+filtered_input_path = "filtered/gwtc3_imrphenomxphm_posterior_samples_f64/ingest_stats.json"
+filtering = "All rows of the C01:IMRPhenomXPHM table of each of the 33 BBH events. C01:Mixed (a 50/50 resampled union of the XPHM and SEOBNRv4PHM runs, duplicating XPHM draws), C01:SEOBNRv4PHM (RIFT, another code and waveform) and the three NSBH candidates (GW191219_163120, GW200105_162426, GW200115_042309; they only have XPHM:HighSpin/LowSpin runs with different spin priors) are excluded."
+missing_value_policy = "The source has no missing values. Any non-finite value, constant column, row count below 1,000, value outside the loose physical bounds in scripts/gwtc3_pe.py, or mass_2_source > mass_1_source is fatal; nothing is dropped or imputed."
+conversion = "Read the record table (rows x 8*members bytes), take the 8 bytes at the member's compound offset from every row, and write them in row order as little-endian float64, one file per (event, parameter)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64, shape [N_draws]"
+sample_geometry = "posterior_sample_column"
+sample_rank = 1
+sample_axes = ["posterior_draw"]
+natural_record_kind = "gwtc3_event_xphm_posterior_parameter_column"
+sample_count = 33
+total_size_bytes = 14797336
+output_path = "samples/gwtc3_imrphenomxphm_posterior_samples_f64/log_likelihood/"

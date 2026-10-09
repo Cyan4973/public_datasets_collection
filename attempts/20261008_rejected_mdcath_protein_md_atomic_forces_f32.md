@@ -6,7 +6,7 @@
 - Source: https://huggingface.co/datasets/compsciencelab/mdCATH
 - Why it looked promising: see `pipeline/cards/mdcath_protein_md_atomic_forces_f32.md`
 - Failure class: autocollect driver limit
-- What happened: byte-level breadth: every primary series is compression- and feature-equivalent to an existing family: mdcath_348k_replica0_protein_atom_forces_f32 ~ downstream:gencast_transformer_attention_weight_f32 (distance 0.0256, loss +0.004)
+- What happened: byte-level breadth: every primary series is compression- and feature-equivalent to an existing family: mdcath_348k_replica0_protein_atom_forces_f32 ~ downstream:gencast_transformer_ffn_weight_f32 (distance 0.0357, loss -0.000)
 - Evidence:
   - 2026-10-06T03:00:11 proposed: {"log": ".data/pipeline/logs/scout_32bit/scout.20261006_024157.jsonl"}
   - 2026-10-06T03:09:10 screened: {"decision": "approve", "reason": "New modality at 32-bit: there is no MD force or trajectory family locally or downstream at this width (rMD17 is 64-bit small-molecule DFT). The pinned revision 5e3ed8ae has license cc-by-4.0 in cardData and tags, and the repo is not gated. The resolve URL answered
@@ -16,6 +16,10 @@
   - 2026-10-08T15:47:30 download: {"rc": 0, "reason": "", "bytes": 674344656, "log": ".data/pipeline/logs/mdcath_protein_md_atomic_forces_f32/download.20261008_154122.log"}
   - 2026-10-08T15:52:06 builder: {"phase": "build", "status": "ready_for_judge", "log": ".data/pipeline/logs/mdcath_protein_md_atomic_forces_f32/builder.20261008_155019.jsonl", "cost": 9.472819600000001}
   - 2026-10-08T16:05:56 rebuild: {"ok": true}
+  - 2026-10-08T19:02:58 reopened: {"archive": "mdcath_protein_md_atomic_forces_f32-20261008_160556"}
+  - 2026-10-08T20:06:16 download: {"rc": 0, "reason": "", "bytes": 674388297, "log": ".data/pipeline/logs/mdcath_protein_md_atomic_forces_f32/download.20261008_195753.log"}
+  - 2026-10-08T21:26:32 builder: {"phase": "build", "status": "ready_for_judge", "log": ".data/pipeline/logs/mdcath_protein_md_atomic_forces_f32/builder.20261008_212319.jsonl", "cost": 10.851441200000002}
+  - 2026-10-08T21:28:08 rebuild: {"ok": true}
 - Logs: `.data/pipeline/logs/mdcath_protein_md_atomic_forces_f32/`, `.data/logs/mdcath_protein_md_atomic_forces_f32/`
 - Decision: rejected
 - Retry conditions: Retry only with material whose bytes differ measurably (zlsim.py gate) from the existing families.

@@ -1,0 +1,155 @@
+manifest_version = 1
+dataset_id = "stereo_a_impact_mag_rtn_bfield_f32"
+name = "STEREO-A IMPACT/MAG Level-1 Interplanetary Magnetic Field (RTN, 8 Hz) Float32"
+description = "Native float32 in-situ heliospheric magnetic field components BR, BT, BN and BTotal (nT) from 50 near-complete UTC days of STEREO-Ahead IMPACT/MAG Level-1 normal-mode (8 vectors/s) RTN V06 daily CDFs, 2007-2023, one sample per component per day."
+homepage = "https://stereo-ssc.nascom.nasa.gov/data/ins_data/impact/level1/ahead/mag/RTN/"
+
+[license]
+name = "Creative Commons Zero 1.0 (NASA Science Data license for NASA-led mission data)"
+spdx = "CC0-1.0"
+url = "https://science.data.nasa.gov/about/license"
+citation = "STEREO IMPACT/MAG Level-1 data, PI J. Luhmann (UCB/SSL); magnetometer team UCLA/IGPP. STEREO Science Center, NASA GSFC. Acuña et al. (2008), Space Sci. Rev. 136, 203-226; Luhmann et al. (2008), Space Sci. Rev. 136, 117-184."
+notes = "NASA's science data license states: 'Unless the data file is marked with a restrictive notice or license, data that is provided from a NASA-led mission including observations, engineering, calibration, and auxiliary data are licensed as Creative Commons Zero. There are no restrictions on the usage of these data.' STEREO is a NASA Solar Terrestrial Probes mission. The CDF global attributes carry no Rules_of_use or license attribute; build/verify fail if any such restrictive-notice attribute is non-empty. Attribution to the IMPACT/MAG team is requested as a courtesy."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official STEREO Science Center (NASA GSFC) archive of IMPACT Level-1 magnetometer products; no mirrors."
+usage_notes = "Physical spacecraft measurements of the interplanetary magnetic field; no human data."
+
+[[origins]]
+id = "stereo_ssc"
+name = "STEREO Science Center, NASA GSFC"
+url = "https://stereo-ssc.nascom.nasa.gov/data/ins_data/impact/level1/ahead/mag/RTN/"
+type = "data_portal"
+notes = "Apache directory listings per year/month; daily files STA_L1_MAG_RTN_YYYYMMDD_Vnn.cdf (normal mode) and STA_L1_MAGB_RTN_* (burst). Versions V03-V07 coexist in some months."
+
+[[resources]]
+id = "sta_mag_rtn_v06_daily_selection"
+origin = "stereo_ssc"
+url = "https://stereo-ssc.nascom.nasa.gov/data/ins_data/impact/level1/ahead/mag/RTN/"
+type = "file"
+version = "V06 (Data_version 6); 50 daily files listed in sources.tsv, resolved 2026-10-08"
+access = "Direct anonymous HTTPS download of the 50 exact files in sources.tsv; each is validated for exact Content-Length, uncompressed CDF v2.6+/v3 magic, network encoding, and GDR eof == file size."
+size_bytes = 999050619
+sha256 = ""
+local_path = "downloads/stereo_a_impact_mag_rtn_bfield_f32/cdf/"
+notes = "Selection (discover.sh): all STA_L1_MAG_RTN_*_V06.cdf files dated 2007-01-01..2023-12-31 whose listing size is 18M or 19M (near-complete 8 Hz days; 4,914 eligible), deduplicated, then 50 at even rank spacing. Per-file SHA-256 values (computed at first download 2026-10-08; no upstream checksums are published) are pinned in sources.tsv and enforced by download.sh and build/verify."
+
+[local_paths]
+downloads = "downloads/stereo_a_impact_mag_rtn_bfield_f32/"
+filtered = "filtered/stereo_a_impact_mag_rtn_bfield_f32/"
+index = "index/stereo_a_impact_mag_rtn_bfield_f32/"
+samples = "samples/stereo_a_impact_mag_rtn_bfield_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/stereo_a_impact_mag_rtn_bfield_f32/samples.jsonl"
+summary = "Decode each pinned daily file (41 in CDF 2.7 layout through 2021-05, 9 in CDF 3.7 layout from 2021-09; same Data_version 6 product) with a pure-stdlib reader (CDR -> GDR -> zVDR chain -> full VXR linked list with child VXRs -> VVRs), take the BFIELD CDF_FLOAT [N,4] array, trim each file to its UTC day by Epoch (removing next-day spillover records in the CDF 3.7 files, including a non-physical offset step at the 2023->2024 rollover), drop fill records, and emit the four components as separate little-endian float32 samples, one per component per UTC day."
+deterministic_notes = "Sources pinned by exact URL and size (sources.tsv). The reader checks magic, CDF version 2, network encoding, single-file layout, eof, record types, VXR/VVR bounds, and that VVR segments cover records 0..MaxRec contiguously (preallocated tail clipped). Identity checks: Data_version 6, Logical_file_id (when present; CDF 3.x files omit it), Source_name Ahead, Descriptor IMPACT_MAG, BFIELD type 44 dims [4] UNITS nT FILLVAL -1e31, CART_LABL_1 = BR/BT/BN/BTotal, no restrictive-notice attribute. Physics checks: BTotal agrees with |(BR,BT,BN)| for >= 99.9% of kept records; median Epoch step 124-126 ms. verify.sh re-decodes through an independent per-record struct path and byte-compares every sample, checks index fields, stored-dtype min/max, sha256, uniqueness, nondegeneracy and manifest totals. UTC-day trim: every kept Epoch lies in [day_lo, day_hi) of the sources.tsv date (checked in build and verify); 208 next-day records are dropped, 0 from the 41 CDF 2.7 files and 31/41/4/28/3/13/36/37/15 from the 9 CDF 3.7 files. CDF 3.7 metadata anomaly: those 9 files carry BFIELD CATDESC 'Magnetic field vector in Spacecraft coordinates...', FIELDNAM 'B Field in Spacecraft Coordinates' and Time_resolution '00:00:00.032', copied from the SC-product template (the first 64 KiB of STA_L1_MAG_RTN_20230922_V06.cdf is byte-identical to STA_L1_MAG_SC_20230922_V06.cdf). The BFIELD data are nevertheless the RTN rotation: record 0 of 20230922 is RTN (-1.8627, -1.6985, -3.2848, 4.1405) against SC (1.8627, -3.3119, -1.6449, 4.1360), i.e. BR = -X_sc, and the Parker-spiral sign fraction BR*BT<0 of the output matches the CDF 2.7 days (mean 0.689 over the 9 CDF 3.7 days vs 0.688 over the 41 CDF 2.7 days; the SC-frame values are the acceptance judge's probe). Per-file CDF version and BFIELD CATDESC are recorded in ingest_stats.json."
+
+[[series]]
+id = "sta_mag_rtn_br_f32"
+description = "STEREO-A radial magnetic field component BR (nT), 8 Hz, one UTC day per sample."
+semantic_meaning = "Interplanetary magnetic field component along the Sun-spacecraft radial direction (R of RTN) measured in situ by the IMPACT/MAG fluxgate magnetometer on STEREO-Ahead."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "BFIELD is stored as big-endian IEEE-754 CDF_FLOAT; values are byte-swapped to little-endian without any arithmetic, preserving every bit pattern."
+source_resources = ["sta_mag_rtn_v06_daily_selection"]
+source_format = "NASA CDF daily Level-1 file, internal format 2.7 (32-bit offsets) or 3.7 (64-bit offsets), uncompressed, network encoding"
+source_field = "zVariable BFIELD component 0 (CART_LABL_1 'BR')"
+filtered_input_path = "filtered/stereo_a_impact_mag_rtn_bfield_f32/ingest_stats.json"
+filtering = "All records of the day's BFIELD variable in file record order whose Epoch lies inside the file's UTC day [00:00:00, 24:00:00), except fill records (see missing_value_policy). The 9 CDF 3.7 files (2021-09 on) carry 3-41 leading records of the next UTC day (208 in total) which are trimmed; in STA_L1_MAG_RTN_20231231_V06 those 15 records (2024-01-01T00:00:00.040-00:00:01.790) are a non-physical step at the year rollover (|B| 8.34 -> 46.63 nT in one 125 ms step, BR/BT/BN offset by about +22/+31/+13 nT)."
+missing_value_policy = "First, records whose Epoch falls outside the file's UTC day [day_lo, day_hi) (CDF_EPOCH ms; day_lo = (date.toordinal() - 1 + 366) * 86,400,000) are dropped from all four series and counted as dropped_outside_day (208 records, all in the CDF 3.7 files; more than 2,400 per file is fatal). This keeps the sample equal to one UTC day and removes the uncorrected-offset step at the 2023->2024 rollover. Then a record is dropped from all four component series when any component equals FILLVAL (float32 -1e31, also used by the source FILTER_VALUE spike filter) or is non-finite, or its Epoch equals the Epoch FILLVAL. Non-fill values outside VALIDMIN/VALIDMAX are fatal; more than 5% fill records in a day is fatal. Data gaps (missing telemetry) are not interpolated; consecutive kept values may span a gap."
+conversion = "Decode BFIELD [MaxRec+1, 4] big-endian float32, take component 0 of each kept record, write raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 time series"
+sample_geometry = "spacecraft_magnetometer_component_time_series_1d"
+sample_rank = 1
+sample_axes = ["record_time_8hz"]
+natural_record_kind = "stereo_a_impact_mag_l1_utc_day_field_component"
+sample_count = 50
+total_size_bytes = 137546312
+output_path = "samples/stereo_a_impact_mag_rtn_bfield_f32/sta_mag_rtn_br_f32/"
+
+[[series]]
+id = "sta_mag_rtn_bt_f32"
+description = "STEREO-A tangential magnetic field component BT (nT), 8 Hz, one UTC day per sample."
+semantic_meaning = "Interplanetary magnetic field component along the RTN tangential direction (T = Omega_sun x R, normalized) measured in situ by IMPACT/MAG on STEREO-Ahead."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "BFIELD is stored as big-endian IEEE-754 CDF_FLOAT; values are byte-swapped to little-endian without any arithmetic, preserving every bit pattern."
+source_resources = ["sta_mag_rtn_v06_daily_selection"]
+source_format = "NASA CDF daily Level-1 file, internal format 2.7 (32-bit offsets) or 3.7 (64-bit offsets), uncompressed, network encoding"
+source_field = "zVariable BFIELD component 1 (CART_LABL_1 'BT')"
+filtered_input_path = "filtered/stereo_a_impact_mag_rtn_bfield_f32/ingest_stats.json"
+filtering = "All records of the day's BFIELD variable in file record order whose Epoch lies inside the file's UTC day [00:00:00, 24:00:00), except fill records (see missing_value_policy). The 9 CDF 3.7 files (2021-09 on) carry 3-41 leading records of the next UTC day (208 in total) which are trimmed; in STA_L1_MAG_RTN_20231231_V06 those 15 records (2024-01-01T00:00:00.040-00:00:01.790) are a non-physical step at the year rollover (|B| 8.34 -> 46.63 nT in one 125 ms step, BR/BT/BN offset by about +22/+31/+13 nT)."
+missing_value_policy = "First, records whose Epoch falls outside the file's UTC day [day_lo, day_hi) (CDF_EPOCH ms; day_lo = (date.toordinal() - 1 + 366) * 86,400,000) are dropped from all four series and counted as dropped_outside_day (208 records, all in the CDF 3.7 files; more than 2,400 per file is fatal). This keeps the sample equal to one UTC day and removes the uncorrected-offset step at the 2023->2024 rollover. Then a record is dropped from all four component series when any component equals FILLVAL (float32 -1e31, also used by the source FILTER_VALUE spike filter) or is non-finite, or its Epoch equals the Epoch FILLVAL. Non-fill values outside VALIDMIN/VALIDMAX are fatal; more than 5% fill records in a day is fatal. Data gaps are not interpolated."
+conversion = "Decode BFIELD [MaxRec+1, 4] big-endian float32, take component 1 of each kept record, write raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 time series"
+sample_geometry = "spacecraft_magnetometer_component_time_series_1d"
+sample_rank = 1
+sample_axes = ["record_time_8hz"]
+natural_record_kind = "stereo_a_impact_mag_l1_utc_day_field_component"
+sample_count = 50
+total_size_bytes = 137546312
+output_path = "samples/stereo_a_impact_mag_rtn_bfield_f32/sta_mag_rtn_bt_f32/"
+
+[[series]]
+id = "sta_mag_rtn_bn_f32"
+description = "STEREO-A normal magnetic field component BN (nT), 8 Hz, one UTC day per sample."
+semantic_meaning = "Interplanetary magnetic field component along the RTN normal direction (N = R x T) measured in situ by IMPACT/MAG on STEREO-Ahead."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "BFIELD is stored as big-endian IEEE-754 CDF_FLOAT; values are byte-swapped to little-endian without any arithmetic, preserving every bit pattern."
+source_resources = ["sta_mag_rtn_v06_daily_selection"]
+source_format = "NASA CDF daily Level-1 file, internal format 2.7 (32-bit offsets) or 3.7 (64-bit offsets), uncompressed, network encoding"
+source_field = "zVariable BFIELD component 2 (CART_LABL_1 'BN')"
+filtered_input_path = "filtered/stereo_a_impact_mag_rtn_bfield_f32/ingest_stats.json"
+filtering = "All records of the day's BFIELD variable in file record order whose Epoch lies inside the file's UTC day [00:00:00, 24:00:00), except fill records (see missing_value_policy). The 9 CDF 3.7 files (2021-09 on) carry 3-41 leading records of the next UTC day (208 in total) which are trimmed; in STA_L1_MAG_RTN_20231231_V06 those 15 records (2024-01-01T00:00:00.040-00:00:01.790) are a non-physical step at the year rollover (|B| 8.34 -> 46.63 nT in one 125 ms step, BR/BT/BN offset by about +22/+31/+13 nT)."
+missing_value_policy = "First, records whose Epoch falls outside the file's UTC day [day_lo, day_hi) (CDF_EPOCH ms; day_lo = (date.toordinal() - 1 + 366) * 86,400,000) are dropped from all four series and counted as dropped_outside_day (208 records, all in the CDF 3.7 files; more than 2,400 per file is fatal). This keeps the sample equal to one UTC day and removes the uncorrected-offset step at the 2023->2024 rollover. Then a record is dropped from all four component series when any component equals FILLVAL (float32 -1e31, also used by the source FILTER_VALUE spike filter) or is non-finite, or its Epoch equals the Epoch FILLVAL. Non-fill values outside VALIDMIN/VALIDMAX are fatal; more than 5% fill records in a day is fatal. Data gaps are not interpolated."
+conversion = "Decode BFIELD [MaxRec+1, 4] big-endian float32, take component 2 of each kept record, write raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 time series"
+sample_geometry = "spacecraft_magnetometer_component_time_series_1d"
+sample_rank = 1
+sample_axes = ["record_time_8hz"]
+natural_record_kind = "stereo_a_impact_mag_l1_utc_day_field_component"
+sample_count = 50
+total_size_bytes = 137546312
+output_path = "samples/stereo_a_impact_mag_rtn_bfield_f32/sta_mag_rtn_bn_f32/"
+
+[[series]]
+id = "sta_mag_rtn_btotal_f32"
+description = "STEREO-A total magnetic field magnitude BTotal (nT), 8 Hz, one UTC day per sample."
+semantic_meaning = "Magnitude of the interplanetary magnetic field vector as published in the fourth BFIELD component by the IMPACT/MAG pipeline (equals |(BR,BT,BN)| to float32 rounding)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The magnitude is a published source component of BFIELD, not computed locally; it is byte-swapped to little-endian without arithmetic. Build/verify only check its consistency with the three components."
+source_resources = ["sta_mag_rtn_v06_daily_selection"]
+source_format = "NASA CDF daily Level-1 file, internal format 2.7 (32-bit offsets) or 3.7 (64-bit offsets), uncompressed, network encoding"
+source_field = "zVariable BFIELD component 3 (CART_LABL_1 'BTotal')"
+filtered_input_path = "filtered/stereo_a_impact_mag_rtn_bfield_f32/ingest_stats.json"
+filtering = "All records of the day's BFIELD variable in file record order whose Epoch lies inside the file's UTC day [00:00:00, 24:00:00), except fill records (see missing_value_policy). The 9 CDF 3.7 files (2021-09 on) carry 3-41 leading records of the next UTC day (208 in total) which are trimmed; in STA_L1_MAG_RTN_20231231_V06 those 15 records (2024-01-01T00:00:00.040-00:00:01.790) are a non-physical step at the year rollover (|B| 8.34 -> 46.63 nT in one 125 ms step, BR/BT/BN offset by about +22/+31/+13 nT)."
+missing_value_policy = "First, records whose Epoch falls outside the file's UTC day [day_lo, day_hi) (CDF_EPOCH ms; day_lo = (date.toordinal() - 1 + 366) * 86,400,000) are dropped from all four series and counted as dropped_outside_day (208 records, all in the CDF 3.7 files; more than 2,400 per file is fatal). This keeps the sample equal to one UTC day and removes the uncorrected-offset step at the 2023->2024 rollover. Then a record is dropped from all four component series when any component equals FILLVAL (float32 -1e31, also used by the source FILTER_VALUE spike filter) or is non-finite, or its Epoch equals the Epoch FILLVAL. Non-fill values outside VALIDMIN/VALIDMAX are fatal; more than 5% fill records in a day is fatal. Data gaps are not interpolated."
+conversion = "Decode BFIELD [MaxRec+1, 4] big-endian float32, take component 3 of each kept record, write raw little-endian float32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 time series"
+sample_geometry = "spacecraft_magnetometer_magnitude_time_series_1d"
+sample_rank = 1
+sample_axes = ["record_time_8hz"]
+natural_record_kind = "stereo_a_impact_mag_l1_utc_day_field_magnitude"
+sample_count = 50
+total_size_bytes = 137546312
+output_path = "samples/stereo_a_impact_mag_rtn_bfield_f32/sta_mag_rtn_btotal_f32/"

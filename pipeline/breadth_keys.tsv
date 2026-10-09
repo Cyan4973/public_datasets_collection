@@ -447,3 +447,4 @@ earthscope_pb_borehole_strain_counts_i32	autocollect	32	borehole_strain	gladwin_
 nasa_pds_lola_rdr_spot_radius_range_i32	autocollect	32	laser_range	lro_lola	pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1	-	OK
 comet_licsar_s1_unwrapped_phase_f32	autocollect	32	insar_unwrapped_phase	sentinel1_iw_licsar	gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products	-	OK
 geoschem_gc1470_fullchem_restart_species_f64	autocollect	64	sim_atmos_field	GEOS-Chem Classic chemical transport model 14.7.0-rc.0 benchmark (MERRA-2 4x5 L72)	aws_opendata_geoschem	-	OK
+stereo_a_impact_mag_rtn_bfield_f32	autocollect	32	interplanetary_magnetic_field	stereo_impact_mag_fluxgate	stereo-ssc.nascom.nasa.gov/impact/level1	-	OK

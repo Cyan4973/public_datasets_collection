@@ -1,0 +1,80 @@
+manifest_version = 1
+dataset_id = "comet_licsar_s1_unwrapped_phase_f32"
+name = "COMET LiCSAR Sentinel-1 Geocoded Unwrapped Interferometric Phase Float32"
+description = "Complete native float32 unwrapped differential interferometric phase rasters (geo.unw.tif, radians) of 24 consecutive 12-day Sentinel-1 IW pairs from four LiCSAR land frames (central Spain and Anatolia), summer 2023."
+homepage = "https://comet.nerc.ac.uk/comet-lics-portal/"
+
+[license]
+name = "Copernicus Sentinel data terms (derived works); CEDA catalogue record: Open Government Licence v3.0"
+spdx = "LicenseRef-Copernicus-Sentinel AND OGL-UK-3.0"
+url = "https://sentinels.copernicus.eu/documents/247904/690755/Sentinel_Data_Legal_Notice"
+citation = "LiCSAR contains modified Copernicus Sentinel data 2023 analysed by the Centre for the Observation and Modelling of Earthquakes, Volcanoes and Tectonics (COMET). LiCSAR uses JASMIN, the UK's collaborative data analysis environment (http://jasmin.ac.uk). Lazecky, M.; Maghsoudi, Y. (2022): LiCSAR interferometry products. NERC EDS Centre for Environmental Data Analysis. https://catalogue.ceda.ac.uk/uuid/52cda2e0e6c04272ae15ac836c1e8493. Lazecky et al. (2020), LiCSAR: An Automatic InSAR Tool for Measuring and Monitoring Tectonic and Volcanic Activity, Remote Sensing 12(15), 2430, doi:10.3390/rs12152430."
+notes = """COMET-LiCS portal (https://comet.nerc.ac.uk/comet-lics-portal/), verbatim: 'All Sentinel-1 results that are available for download are Derived Works of Copernicus data (2015-2016), subject to the following use conditions: "Terms and conditions for the use and distribution of sentinel data and service information".' and 'Please include the following acknowledgement and citations when using LiCSAR data: Acknowledgement: "LiCSAR contains modified Copernicus Sentinel data [Year of data used] analysed by the Centre for the Observation and Modelling of Earthquakes, Volcanoes and Tectonics (COMET). LiCSAR uses JASMIN, the UK's collaborative data analysis environment (http://jasmin.ac.uk)"'.
+EU Legal notice on the use of Copernicus Sentinel Data and Service Information (https://sentinels.copernicus.eu/documents/247904/690755/Sentinel_Data_Legal_Notice), verbatim: 'the law provides that users shall have a free, full and open access to Copernicus Sentinel Data and Service Information without any express or implied warranty' ... 'EU law grants free access to Copernicus Sentinel Data and Service Information for the purpose of the following use in so far as it is lawful: (a) reproduction; (b) distribution; (c) communication to the public; (d) adaptation, modification and combination with other data and information; (e) any combination of points (a) to (d).' ... 'Where the Copernicus Sentinel Data and Service Information have been adapted or modified, the user shall provide the following notice: (1) 'Contains modified Copernicus Sentinel data [Year]' for Sentinel data'.
+CEDA catalogue record 'LiCSAR interferometry products' (https://catalogue.ceda.ac.uk/uuid/52cda2e0e6c04272ae15ac836c1e8493/), verbatim: 'Public data: access to these data is available to both registered and non-registered users. Use of these data is covered by the following licence(s): http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/'. The CEDA archive copy (neodc/comet/data/licsar_products) is an older snapshot that does not hold these frames/pairs, so the files are fetched from the COMET public JASMIN group workspace that the portal links to; the CEDA record describes the same LiCSAR product line and its geo.unw.tif product.
+Preserve the COMET acknowledgement (with data year 2023), the 'Contains modified Copernicus Sentinel data 2023' notice and the citations with any redistribution."""
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official COMET LiCSAR products served anonymously from the public JASMIN group workspace (gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products.public/), the link target of the COMET-LiCS portal; no mirrors."
+usage_notes = "Satellite radar interferometric phase over land; no personal data. Only the geo.unw.tif unwrapped phase band is emitted."
+
+[[origins]]
+id = "comet_lics_portal"
+name = "COMET-LiCS Sentinel-1 InSAR portal (LiCSAR products, JASMIN public GWS)"
+url = "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/"
+type = "data_portal"
+notes = "Directory tree <track>/<frame>/interferograms/<date1>_<date2>/ whose entries resolve under LiCSAR_products.public/. Frame IDs OOOP_AAAAA_BBBBBB: relative orbit, pass (A/D), location code, bursts per sub-swath."
+
+[[resources]]
+id = "licsar_geo_unw_selection"
+origin = "comet_lics_portal"
+url = "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products.public/"
+type = "exact_file_selection"
+version = "24 geo.unw.tif files pinned 2026-10-08 by byte size, Last-Modified and SHA-256 (sources.tsv; hashes taken from the first successful download on 2026-10-08)"
+access = "Anonymous HTTPS GET of each URL in sources.tsv."
+size_bytes = 776518900
+sha256 = ""
+local_path = "downloads/comet_licsar_s1_unwrapped_phase_f32/rasters/"
+notes = "Frames 001A_05031_131313 (central Spain, ascending), 043A_05221_121313 (eastern Anatolia, ascending), 050D_05246_131313 (south-eastern Anatolia, descending), 094D_05100_131313 (central Anatolia, descending); six consecutive 12-day pairs each, June-September 2023."
+
+[local_paths]
+downloads = "downloads/comet_licsar_s1_unwrapped_phase_f32/"
+filtered = "filtered/comet_licsar_s1_unwrapped_phase_f32/"
+index = "index/comet_licsar_s1_unwrapped_phase_f32/"
+samples = "samples/comet_licsar_s1_unwrapped_phase_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/comet_licsar_s1_unwrapped_phase_f32/samples.jsonl"
+summary = "Download 24 pinned LiCSAR geo.unw.tif GeoTIFFs, decode each single-band float32 strip TIFF (zlib + floating-point predictor 3, or uncompressed) with a pure-stdlib decoder, and emit each complete raster as one raw little-endian float32 sample."
+deterministic_notes = "Selection: four inland frames (LiCSAR metadata avg_height 844-1382 m; realized per-raster zero fraction 0.309-0.389, overall 0.336, mostly off-swath corners); for each, the first six consecutive 12-day pairs from June 2023 whose geo.unw.tif is a strip-organised TIFF (094D_05100 lacks geo.unw.tif for 20230615_20230627 and 20230627_20230709, so its run starts at 20230709). File sizes and SHA-256 are pinned; download.sh decodes every strip and rejects wrong layout/dimensions, non-finite values, constant rasters, or zero fraction > 0.5. Samples are written in sources.tsv order; verify re-derives each sample with an independent decoder and checks hashes, duplicates, counts and totals."
+
+[[series]]
+id = "geo_unw_phase_f32"
+description = "LiCSAR geocoded unwrapped differential interferometric phase, one complete raster per Sentinel-1 12-day interferogram."
+semantic_meaning = "Unwrapped differential interferometric phase in radians (SNAPHU-unwrapped, topography removed) of a Sentinel-1 IW short-baseline pair, on a 0.001 degree WGS-84 grid; 0 marks no-data (outside the frame swath or masked for low coherence)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Upstream GeoTIFF band is IEEE-754 float32 (SampleFormat=3, BitsPerSample=32); values are copied bit-exactly, only the byte order is normalised to little-endian."
+source_resources = ["licsar_geo_unw_selection"]
+source_format = "GeoTIFF (classic little-endian TIFF, single band float32 strips; Compression 8 + Predictor 3 or Compression 1)"
+source_field = "geo.unw.tif band 1: unwrapped interferometric phase (radians)"
+filtered_input_path = "filtered/comet_licsar_s1_unwrapped_phase_f32/build_summary.json"
+filtering = "Only *.geo.unw.tif; wrapped diff_pha, unfiltered phase, coherence (cc), mag_cc, bovl/sbovl products and PNG previews are excluded. All pixels of each raster are kept."
+missing_value_policy = "Zero is the upstream no-data value (off-swath corners of the geocoded bounding box and low-coherence masked pixels); zeros are preserved as 0.0, never converted to NaN. Per-raster zero fraction is recorded in the index; rasters with zero fraction > 0.5, any non-finite value, or constant valid values are rejected by download, build and verify alike."
+conversion = "Per strip: zlib inflate (if Compression=8); for Predictor=3, per row of width*4 bytes undo the byte-wise horizontal differencing (running sum mod 256), then de-interleave the four byte planes (MSB plane first) into big-endian float32 and re-serialise little-endian; uncompressed strips are already little-endian float32. Rows are emitted north-to-south, columns west-to-east."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 2-D raster, row-major"
+sample_geometry = "geocoded_raster_2d"
+sample_rank = 2
+sample_axes = ["latitude_row_north_to_south", "longitude_column_west_to_east"]
+natural_record_kind = "licsar_frame_interferogram_unwrapped_phase_raster"
+sample_count = 24
+total_size_bytes = 897407712
+output_path = "samples/comet_licsar_s1_unwrapped_phase_f32/geo_unw_phase_f32/"

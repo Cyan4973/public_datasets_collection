@@ -382,6 +382,7 @@ luh_lumo_tower_acceleration_f32	ok	213969600	855878400	216	990600	3962400	0	0	0	
 nasa_pds_voyager_iss_saturn_raw_u8	ok	215680000	215680000	337	640000	640000	0	0	0	1	none	none
 earthbigdata_s1_global_coherence_vv_coh12_u8	ok	216000000	216000000	150	1440000	1440000	0	0	0	1	none	none
 pdebench_2d_cfd_turb_m1_density_f32	ok	220200960	880803840	40	5505024	22020096	0	0	0	1	none	none
+comet_licsar_s1_unwrapped_phase_f32	ok	224351928	897407712	24	9286356	37145424	0	0	0	1	none	none
 cartographer_backpack2d_hokuyo_ranges_f32	ok	225913467	903653868	16	13407654	53630616	0	0	0	1	none	none
 openneuro_ds000030_t1w_mri_f32	ok	230686720	922746880	20	11534336	46137344	0	0	0	1	none	none
 zenodo_newcastle_geneactiv_wrist_accel_i16	ok	233424900	466849800	13	19001700	38003400	0	0	0	1	none	none

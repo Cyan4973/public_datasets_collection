@@ -1,0 +1,406 @@
+manifest_version = 1
+dataset_id = "zenodo_janus_solar_system_integer_phase_space_i64"
+name = "JANUS Bit-wise Reversible Solar System Integrations: Native Int64 Fixed-Point Phase-Space States"
+description = "Native signed 64-bit fixed-point positions and velocities (two primary series) of the Sun and eight planets at every archived snapshot of 24 long-term JANUS (REBOUND) Solar System integrations, one sample per integration per series."
+homepage = "https://doi.org/10.5281/zenodo.546258"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Rein, H. and Tamayo, D. (2017). Bit-wise reversible integrations of the Solar System with JANUS [Data set]. Zenodo. https://doi.org/10.5281/zenodo.546258. Method: Rein & Tamayo (2018), JANUS: a bit-wise reversible integrator for N-body dynamics, MNRAS 473, 3351."
+notes = "The Zenodo record metadata (API field metadata.license.id) is 'cc-by-4.0'; download.sh re-checks it on every run. Preserve authorship and DOI."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official author deposit on Zenodo; numerical simulation output of planetary dynamics. No personal data."
+usage_notes = "Public, permissively licensed simulation output."
+
+[[origins]]
+id = "zenodo_546258"
+name = "Zenodo record 546258: Bit-wise reversible integrations of the Solar System with JANUS"
+url = "https://zenodo.org/records/546258"
+type = "repository"
+notes = "24 REBOUND SimulationArchive files restart_0000.bin .. restart_0023.bin, 634,748,768 bytes total; per-file sizes and md5 pinned in scripts/files.tsv and below."
+
+[[resources]]
+id = "restart_0000"
+origin = "zenodo_546258"
+url = "https://zenodo.org/api/records/546258/files/restart_0000.bin/content"
+type = "file"
+version = "Zenodo record 546258 (published 2017-04-14)"
+access = "Direct public anonymous download."
+size_bytes = 26417868
+md5 = "90ab9af10969eb82d7e46d255c83a05a"
+local_path = "downloads/zenodo_janus_solar_system_integer_phase_space_i64/restart_0000.bin"
+notes = "REBOUND JANUS SimulationArchive; 3340-byte header + 58961 x 448-byte snapshots."
+
+[[resources]]
+id = "restart_0001"
+origin = "zenodo_546258"
+url = "https://zenodo.org/api/records/546258/files/restart_0001.bin/content"
+type = "file"
+version = "Zenodo record 546258 (published 2017-04-14)"
+access = "Direct public anonymous download."
+size_bytes = 26418316
+md5 = "1d7860c5d74819f4ebf98cd9553acd72"
+local_path = "downloads/zenodo_janus_solar_system_integer_phase_space_i64/restart_0001.bin"
+notes = "REBOUND JANUS SimulationArchive; 3340-byte header + 58962 x 448-byte snapshots."
+
+[[resources]]
+id = "restart_0002"
+origin = "zenodo_546258"
+url = "https://zenodo.org/api/records/546258/files/restart_0002.bin/content"
+type = "file"
+version = "Zenodo record 546258 (published 2017-04-14)"
+access = "Direct public anonymous download."
+size_bytes = 26418316
+md5 = "f0b5ba817c31ed0c1d51ecd6db400e3a"
+local_path = "downloads/zenodo_janus_solar_system_integer_phase_space_i64/restart_0002.bin"
+notes = "REBOUND JANUS SimulationArchive; 3340-byte header + 58962 x 448-byte snapshots."
+
+[[resources]]
+id = "restart_0003"
+origin = "zenodo_546258"
+url = "https://zenodo.org/api/records/546258/files/restart_0003.bin/content"
+type = "file"
+version = "Zenodo record 546258 (published 2017-04-14)"
+access = "Direct public anonymous download."
+size_bytes = 26417868
+md5 = "b82d853f7ed62b0826efeac7dc649c59"
+local_path = "downloads/zenodo_janus_solar_system_integer_phase_space_i64/restart_0003.bin"
+notes = "REBOUND JANUS SimulationArchive; 3340-byte header + 58961 x 448-byte snapshots."
+
+[[resources]]
+id = "restart_0004"
+origin = "zenodo_546258"
+url = "https://zenodo.org/api/records/546258/files/restart_0004.bin/content"
+type = "file"
+version = "Zenodo record 546258 (published 2017-04-14)"
+access = "Direct public anonymous download."
+size_bytes = 26417868
+md5 = "2064a1ea384f013cc11346e24f28df55"
+local_path = "downloads/zenodo_janus_solar_system_integer_phase_space_i64/restart_0004.bin"
+notes = "REBOUND JANUS SimulationArchive; 3340-byte header + 58961 x 448-byte snapshots."
+
+[[resources]]
+id = "restart_0005"
+origin = "zenodo_546258"
+url = "https://zenodo.org/api/records/546258/files/restart_0005.bin/content"
+type = "file"
+version = "Zenodo record 546258 (published 2017-04-14)"
+access = "Direct public anonymous download."
+size_bytes = 26417868
+md5 = "c7f65e854204ab711e3bf10a5e1a0463"
+local_path = "downloads/zenodo_janus_solar_system_integer_phase_space_i64/restart_0005.bin"
+notes = "REBOUND JANUS SimulationArchive; 3340-byte header + 58961 x 448-byte snapshots."
+
+[[resources]]
+id = "restart_0006"
+origin = "zenodo_546258"
+url = "https://zenodo.org/api/records/546258/files/restart_0006.bin/content"
+type = "file"
+version = "Zenodo record 546258 (published 2017-04-14)"
+access = "Direct public anonymous download."
+size_bytes = 26417868
+md5 = "f78d60ded3cb9142167bae28cf30ef11"
+local_path = "downloads/zenodo_janus_solar_system_integer_phase_space_i64/restart_0006.bin"
+notes = "REBOUND JANUS SimulationArchive; 3340-byte header + 58961 x 448-byte snapshots."
+
+[[resources]]
+id = "restart_0007"
+origin = "zenodo_546258"
+url = "https://zenodo.org/api/records/546258/files/restart_0007.bin/content"
+type = "file"
+version = "Zenodo record 546258 (published 2017-04-14)"
+access = "Direct public anonymous download."
+size_bytes = 26391436
+md5 = "2a0a07fac67e02f86ca5833086dddced"
+local_path = "downloads/zenodo_janus_solar_system_integer_phase_space_i64/restart_0007.bin"
+notes = "REBOUND JANUS SimulationArchive; 3340-byte header + 58902 x 448-byte snapshots."
+
+[[resources]]
+id = "restart_0008"
+origin = "zenodo_546258"
+url = "https://zenodo.org/api/records/546258/files/restart_0008.bin/content"
+type = "file"
+version = "Zenodo record 546258 (published 2017-04-14)"
+access = "Direct public anonymous download."
+size_bytes = 26422348
+md5 = "7c10c33485dd0b1c896736dea12c3aa6"
+local_path = "downloads/zenodo_janus_solar_system_integer_phase_space_i64/restart_0008.bin"
+notes = "REBOUND JANUS SimulationArchive; 3340-byte header + 58971 x 448-byte snapshots."
+
+[[resources]]
+id = "restart_0009"
+origin = "zenodo_546258"
+url = "https://zenodo.org/api/records/546258/files/restart_0009.bin/content"
+type = "file"
+version = "Zenodo record 546258 (published 2017-04-14)"
+access = "Direct public anonymous download."
+size_bytes = 26391436
+md5 = "d2616bbffa776e5705e315d896633e64"
+local_path = "downloads/zenodo_janus_solar_system_integer_phase_space_i64/restart_0009.bin"
+notes = "REBOUND JANUS SimulationArchive; 3340-byte header + 58902 x 448-byte snapshots."
+
+[[resources]]
+id = "restart_0010"
+origin = "zenodo_546258"
+url = "https://zenodo.org/api/records/546258/files/restart_0010.bin/content"
+type = "file"
+version = "Zenodo record 546258 (published 2017-04-14)"
+access = "Direct public anonymous download."
+size_bytes = 26418764
+md5 = "27d9443c1aaa43c164d9c215cf4ffc47"
+local_path = "downloads/zenodo_janus_solar_system_integer_phase_space_i64/restart_0010.bin"
+notes = "REBOUND JANUS SimulationArchive; 3340-byte header + 58963 x 448-byte snapshots."
+
+[[resources]]
+id = "restart_0011"
+origin = "zenodo_546258"
+url = "https://zenodo.org/api/records/546258/files/restart_0011.bin/content"
+type = "file"
+version = "Zenodo record 546258 (published 2017-04-14)"
+access = "Direct public anonymous download."
+size_bytes = 26422348
+md5 = "c7248913eda2b1613d8634f1a22bb0c8"
+local_path = "downloads/zenodo_janus_solar_system_integer_phase_space_i64/restart_0011.bin"
+notes = "REBOUND JANUS SimulationArchive; 3340-byte header + 58971 x 448-byte snapshots."
+
+[[resources]]
+id = "restart_0012"
+origin = "zenodo_546258"
+url = "https://zenodo.org/api/records/546258/files/restart_0012.bin/content"
+type = "file"
+version = "Zenodo record 546258 (published 2017-04-14)"
+access = "Direct public anonymous download."
+size_bytes = 26418764
+md5 = "b019bbed2e360c67e1db6af5e794fb52"
+local_path = "downloads/zenodo_janus_solar_system_integer_phase_space_i64/restart_0012.bin"
+notes = "REBOUND JANUS SimulationArchive; 3340-byte header + 58963 x 448-byte snapshots."
+
+[[resources]]
+id = "restart_0013"
+origin = "zenodo_546258"
+url = "https://zenodo.org/api/records/546258/files/restart_0013.bin/content"
+type = "file"
+version = "Zenodo record 546258 (published 2017-04-14)"
+access = "Direct public anonymous download."
+size_bytes = 26421452
+md5 = "2bbfa14077da11b508db8c8b5f71d699"
+local_path = "downloads/zenodo_janus_solar_system_integer_phase_space_i64/restart_0013.bin"
+notes = "REBOUND JANUS SimulationArchive; 3340-byte header + 58969 x 448-byte snapshots."
+
+[[resources]]
+id = "restart_0014"
+origin = "zenodo_546258"
+url = "https://zenodo.org/api/records/546258/files/restart_0014.bin/content"
+type = "file"
+version = "Zenodo record 546258 (published 2017-04-14)"
+access = "Direct public anonymous download."
+size_bytes = 26419212
+md5 = "d9f132011c3c6cb83e354325c5289d67"
+local_path = "downloads/zenodo_janus_solar_system_integer_phase_space_i64/restart_0014.bin"
+notes = "REBOUND JANUS SimulationArchive; 3340-byte header + 58964 x 448-byte snapshots."
+
+[[resources]]
+id = "restart_0015"
+origin = "zenodo_546258"
+url = "https://zenodo.org/api/records/546258/files/restart_0015.bin/content"
+type = "file"
+version = "Zenodo record 546258 (published 2017-04-14)"
+access = "Direct public anonymous download."
+size_bytes = 26391884
+md5 = "e8d8c571f54a951518650c3aded18938"
+local_path = "downloads/zenodo_janus_solar_system_integer_phase_space_i64/restart_0015.bin"
+notes = "REBOUND JANUS SimulationArchive; 3340-byte header + 58903 x 448-byte snapshots."
+
+[[resources]]
+id = "restart_0016"
+origin = "zenodo_546258"
+url = "https://zenodo.org/api/records/546258/files/restart_0016.bin/content"
+type = "file"
+version = "Zenodo record 546258 (published 2017-04-14)"
+access = "Direct public anonymous download."
+size_bytes = 26417868
+md5 = "d15533a8f38dcdb4ca9b7ddad1d18980"
+local_path = "downloads/zenodo_janus_solar_system_integer_phase_space_i64/restart_0016.bin"
+notes = "REBOUND JANUS SimulationArchive; 3340-byte header + 58961 x 448-byte snapshots."
+
+[[resources]]
+id = "restart_0017"
+origin = "zenodo_546258"
+url = "https://zenodo.org/api/records/546258/files/restart_0017.bin/content"
+type = "file"
+version = "Zenodo record 546258 (published 2017-04-14)"
+access = "Direct public anonymous download."
+size_bytes = 26421900
+md5 = "46119dd370fbddc1806933785628ef03"
+local_path = "downloads/zenodo_janus_solar_system_integer_phase_space_i64/restart_0017.bin"
+notes = "REBOUND JANUS SimulationArchive; 3340-byte header + 58970 x 448-byte snapshots."
+
+[[resources]]
+id = "restart_0018"
+origin = "zenodo_546258"
+url = "https://zenodo.org/api/records/546258/files/restart_0018.bin/content"
+type = "file"
+version = "Zenodo record 546258 (published 2017-04-14)"
+access = "Direct public anonymous download."
+size_bytes = 26419212
+md5 = "7b442d003c2c7eefa3c8cd2a4dde8532"
+local_path = "downloads/zenodo_janus_solar_system_integer_phase_space_i64/restart_0018.bin"
+notes = "REBOUND JANUS SimulationArchive; 3340-byte header + 58964 x 448-byte snapshots."
+
+[[resources]]
+id = "restart_0019"
+origin = "zenodo_546258"
+url = "https://zenodo.org/api/records/546258/files/restart_0019.bin/content"
+type = "file"
+version = "Zenodo record 546258 (published 2017-04-14)"
+access = "Direct public anonymous download."
+size_bytes = 26419212
+md5 = "7b26664baced11663b9ff047c3237071"
+local_path = "downloads/zenodo_janus_solar_system_integer_phase_space_i64/restart_0019.bin"
+notes = "REBOUND JANUS SimulationArchive; 3340-byte header + 58964 x 448-byte snapshots."
+
+[[resources]]
+id = "restart_0020"
+origin = "zenodo_546258"
+url = "https://zenodo.org/api/records/546258/files/restart_0020.bin/content"
+type = "file"
+version = "Zenodo record 546258 (published 2017-04-14)"
+access = "Direct public anonymous download."
+size_bytes = 26417868
+md5 = "545ff9395f2e928e6b31036deabecddb"
+local_path = "downloads/zenodo_janus_solar_system_integer_phase_space_i64/restart_0020.bin"
+notes = "REBOUND JANUS SimulationArchive; 3340-byte header + 58961 x 448-byte snapshots."
+
+[[resources]]
+id = "restart_0021"
+origin = "zenodo_546258"
+url = "https://zenodo.org/api/records/546258/files/restart_0021.bin/content"
+type = "file"
+version = "Zenodo record 546258 (published 2017-04-14)"
+access = "Direct public anonymous download."
+size_bytes = 26417868
+md5 = "71ec43d151c35e56c0c34f0343cbbbbc"
+local_path = "downloads/zenodo_janus_solar_system_integer_phase_space_i64/restart_0021.bin"
+notes = "REBOUND JANUS SimulationArchive; 3340-byte header + 58961 x 448-byte snapshots."
+
+[[resources]]
+id = "restart_0022"
+origin = "zenodo_546258"
+url = "https://zenodo.org/api/records/546258/files/restart_0022.bin/content"
+type = "file"
+version = "Zenodo record 546258 (published 2017-04-14)"
+access = "Direct public anonymous download."
+size_bytes = 26417868
+md5 = "60919d1f8c073f70637b774c6e6e5fac"
+local_path = "downloads/zenodo_janus_solar_system_integer_phase_space_i64/restart_0022.bin"
+notes = "REBOUND JANUS SimulationArchive; 3340-byte header + 58961 x 448-byte snapshots."
+
+[[resources]]
+id = "restart_0023"
+origin = "zenodo_546258"
+url = "https://zenodo.org/api/records/546258/files/restart_0023.bin/content"
+type = "file"
+version = "Zenodo record 546258 (published 2017-04-14)"
+access = "Direct public anonymous download."
+size_bytes = 27193356
+md5 = "1ad554062f861a4e992190aaa472d112"
+local_path = "downloads/zenodo_janus_solar_system_integer_phase_space_i64/restart_0023.bin"
+notes = "REBOUND JANUS SimulationArchive; 3340-byte header + 60692 x 448-byte snapshots."
+
+[local_paths]
+downloads = "downloads/zenodo_janus_solar_system_integer_phase_space_i64/"
+filtered = "filtered/zenodo_janus_solar_system_integer_phase_space_i64/"
+index = "index/zenodo_janus_solar_system_integer_phase_space_i64/"
+samples = "samples/zenodo_janus_solar_system_integer_phase_space_i64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_janus_solar_system_integer_phase_space_i64/samples.jsonl"
+summary = "Fetch the 24 pinned SimulationArchive files, parse each REBOUND tagged header, and cut every body record of every 448-byte snapshot into its verbatim int64 position triple and velocity triple, giving one raw little-endian int64 position sample and one velocity sample per integration (shape [snapshots, 9, 3]); snapshot times go to an auxiliary float64 series."
+deterministic_notes = "Zenodo identity, CC-BY-4.0 license id and the exact 24-file list (size + md5) are re-validated on every download. Each file must carry the banner 'REBOUND Binary File. Version: 3.2.2', N=9, integrator=JANUS(8), JANUS safe_mode=0, SASIZESNAPSHOT=448, SASIZEFIRST equal to the parsed header end (3340 in all files, read per file, never hard-coded), and (size - header) % 448 == 0. Snapshot times must be strictly increasing with spacing within 2*dt of the archive interval (misalignment guard). verify.sh re-hashes each source, re-walks snapshots and body records by stride and byte-compares every position, velocity and time sample, checks that re-interleaving position and velocity reproduces each file's native int block, rejects constant samples/columns and duplicate integrations per series, and checks manifest totals for all three series. Samples are ordered by file name."
+
+[source_format_notes]
+janus_scale_field = "Binary field 108 (REB_BINARY_FIELD_TYPE_JANUS_SCALE in the writing build, git b0f792d) = 1.0e16 in every file. In this pre-3.4.0 build a single scale multiplies both positions and velocities: int = (int64)(double * 1e16). Later releases split it into scale_pos/scale_vel (fields 113/114, divisors); those fields do not exist in these files."
+units = "Simulation units G = 1 (field 1), lengths in AU, masses in solar masses (Sun m = 1), time in yr/(2*pi). Integer unit = 1e-16 AU for positions and 1e-16 AU/(yr/2pi) for velocities."
+other_header_fields = "dt (field 3) = 0.01032145430337509; archive interval (field 47) = 32317.289318010637 (~5,143 yr); first snapshot t ~ 32317.3, last ~1.9e9 (~3.0e8 yr)."
+frame = "JANUS integrates in the simulation's inertial frame; the Sun starts 0.0037 AU from the origin (barycentric-style setup), so coordinates are not heliocentric. The frame is not re-centred: in restart_0000 the Sun drifts linearly with the barycentre to ~(-0.42, 0.57, 0.15) AU by ~3e8 yr, while its velocity stays |v| < 6e-4."
+
+[[series]]
+id = "janus_solar_system_position_i64"
+description = "JANUS integer position (x, y, z) of Sun, Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune at every SimulationArchive snapshot of one integration."
+semantic_meaning = "Fixed-point Cartesian positions on the JANUS integer lattice, 1 unit = 1e-16 AU. These integers are the integrator's authoritative state: JANUS advances them with exact integer arithmetic, which is what makes it bit-wise reversible; the doubles are derived from them."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Bytes are verbatim 24-byte slices (x, y, z) of each body's native 48-byte little-endian int64 reb_particle_int record; no rescaling or reordering within a triple. The complementary velocity triples form the other primary series; re-interleaving the two reproduces the archive block byte-for-byte (checked by verify.sh)."
+source_resources = ["restart_0000", "restart_0001", "restart_0002", "restart_0003", "restart_0004", "restart_0005", "restart_0006", "restart_0007", "restart_0008", "restart_0009", "restart_0010", "restart_0011", "restart_0012", "restart_0013", "restart_0014", "restart_0015", "restart_0016", "restart_0017", "restart_0018", "restart_0019", "restart_0020", "restart_0021", "restart_0022", "restart_0023"]
+source_format = "REBOUND 3.2.2-dev binary SimulationArchive (tagged header + fixed 448-byte JANUS snapshots)"
+source_field = "reb_particle_int[9].{x,y,z}"
+filtered_input_path = "filtered/zenodo_janus_solar_system_integer_phase_space_i64/ingest_stats.json"
+filtering = "All 24 integrations and every snapshot in each are kept. The per-snapshot float64 t and walltime and the header's initial double particle structs are excluded from the primary series."
+missing_value_policy = "No missing values exist in the format. Any header/format violation, truncated or partial snapshot, md5 mismatch, non-increasing time, constant column, or implausible magnitude (positions beyond 100 AU, speeds beyond 10 in simulation units) is fatal; nothing is dropped or imputed."
+conversion = "For snapshot k at offset SASIZEFIRST + 448*k, skip the 16 bytes of (t, walltime); for body b in 0..8 take bytes [b*48, b*48+24) of the following 432-byte int block (x, y, z, 3 little-endian int64). Concatenate in (snapshot, body) order; sample shape = [snapshots, 9 bodies, 3 components], C order."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian int64 array"
+sample_geometry = "nbody_snapshot_by_body_by_position_component"
+sample_rank = 3
+sample_axes = ["snapshot", "body", "position_component"]
+natural_record_kind = "one_janus_solar_system_integration_simulationarchive_file"
+sample_count = 24
+total_size_bytes = 306000936
+output_path = "samples/zenodo_janus_solar_system_integer_phase_space_i64/janus_solar_system_position_i64/"
+
+[[series]]
+id = "janus_solar_system_velocity_i64"
+description = "JANUS integer velocity (vx, vy, vz) of Sun, Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune at every SimulationArchive snapshot of one integration."
+semantic_meaning = "Fixed-point Cartesian velocitys on the JANUS integer lattice, 1 unit = 1e-16 AU per yr/2pi (simulation velocity unit with G = 1). These integers are the integrator's authoritative state: JANUS advances them with exact integer arithmetic, which is what makes it bit-wise reversible; the doubles are derived from them."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Bytes are verbatim 24-byte slices (vx, vy, vz) of each body's native 48-byte little-endian int64 reb_particle_int record; no rescaling or reordering within a triple. The complementary position triples form the other primary series; re-interleaving the two reproduces the archive block byte-for-byte (checked by verify.sh)."
+source_resources = ["restart_0000", "restart_0001", "restart_0002", "restart_0003", "restart_0004", "restart_0005", "restart_0006", "restart_0007", "restart_0008", "restart_0009", "restart_0010", "restart_0011", "restart_0012", "restart_0013", "restart_0014", "restart_0015", "restart_0016", "restart_0017", "restart_0018", "restart_0019", "restart_0020", "restart_0021", "restart_0022", "restart_0023"]
+source_format = "REBOUND 3.2.2-dev binary SimulationArchive (tagged header + fixed 448-byte JANUS snapshots)"
+source_field = "reb_particle_int[9].{vx,vy,vz}"
+filtered_input_path = "filtered/zenodo_janus_solar_system_integer_phase_space_i64/ingest_stats.json"
+filtering = "All 24 integrations and every snapshot in each are kept. The per-snapshot float64 t and walltime and the header's initial double particle structs are excluded from the primary series."
+missing_value_policy = "No missing values exist in the format. Any header/format violation, truncated or partial snapshot, md5 mismatch, non-increasing time, constant column, or implausible magnitude (positions beyond 100 AU, speeds beyond 10 in simulation units) is fatal; nothing is dropped or imputed."
+conversion = "For snapshot k at offset SASIZEFIRST + 448*k, skip the 16 bytes of (t, walltime); for body b in 0..8 take bytes [b*48+24, b*48+48) of the following 432-byte int block (vx, vy, vz, 3 little-endian int64). Concatenate in (snapshot, body) order; sample shape = [snapshots, 9 bodies, 3 components], C order."
+numeric_kind = "int"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian int64 array"
+sample_geometry = "nbody_snapshot_by_body_by_velocity_component"
+sample_rank = 3
+sample_axes = ["snapshot", "body", "velocity_component"]
+natural_record_kind = "one_janus_solar_system_integration_simulationarchive_file"
+sample_count = 24
+total_size_bytes = 306000936
+output_path = "samples/zenodo_janus_solar_system_integer_phase_space_i64/janus_solar_system_velocity_i64/"
+
+[[series]]
+id = "janus_snapshot_time_f64"
+description = "Simulation time of each archived snapshot (alignment helper)."
+semantic_meaning = "Simulation time t (yr/2pi units) at each snapshot of the matching position and velocity samples."
+role = "auxiliary"
+representation_class = "native_numeric"
+representation_notes = "Verbatim little-endian float64 t from each snapshot header; auxiliary only, not counted toward acceptance."
+source_resources = ["restart_0000", "restart_0001", "restart_0002", "restart_0003", "restart_0004", "restart_0005", "restart_0006", "restart_0007", "restart_0008", "restart_0009", "restart_0010", "restart_0011", "restart_0012", "restart_0013", "restart_0014", "restart_0015", "restart_0016", "restart_0017", "restart_0018", "restart_0019", "restart_0020", "restart_0021", "restart_0022", "restart_0023"]
+source_format = "REBOUND 3.2.2-dev binary SimulationArchive"
+source_field = "per-snapshot double t"
+missing_value_policy = "Same as primary: strictly increasing finite times required; violations are fatal."
+conversion = "First 8 bytes of each 448-byte snapshot, in file order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 array"
+natural_record_kind = "one_janus_solar_system_integration_simulationarchive_file"
+sample_count = 24
+total_size_bytes = 11333368
+output_path = "samples/zenodo_janus_solar_system_integer_phase_space_i64/janus_snapshot_time_f64/"

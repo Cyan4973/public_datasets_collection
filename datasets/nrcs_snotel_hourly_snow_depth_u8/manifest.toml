@@ -1,0 +1,115 @@
+manifest_version = 1
+dataset_id = "nrcs_snotel_hourly_snow_depth_u8"
+name = "NRCS SNOTEL Hourly Ultrasonic Snow Depth per Station-Water-Year (UInt8 inches)"
+description = "Hourly start-of-period snow depth (element SNWD, whole inches) from the USDA NRCS SNOTEL (SNTL) network, one uint8 sample per station and water year, WY2022-WY2024."
+homepage = "https://www.nrcs.usda.gov/resources/data-and-reports/snow-and-climate-monitoring-network"
+
+[license]
+name = "U.S. Government Public Domain"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://catalog.data.gov/dataset/snowpack-telemetry-network-snotel"
+citation = "USDA Natural Resources Conservation Service, National Water and Climate Center, SNOwpack TELemetry Network (SNOTEL), Report Generator (wcc.sc.egov.usda.gov/reportGenerator)."
+notes = "The data.gov catalog entry 'SNOwpack TELemetry Network (SNOTEL)', publisher Natural Resources Conservation Service (Department of Agriculture), declares License https://www.usa.gov/publicdomain/label/1.0/ and Access Level public. Work of the U.S. federal government (17 U.S.C. 105). The CSV banner states data are subject to revision and are released without liability."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NRCS National Water and Climate Center Report Generator CSV exports; anonymous public HTTPS, no credentials."
+usage_notes = "Environmental sensor measurements at fixed automated sites; no personal data."
+
+[[origins]]
+id = "nrcs_wcc_report_generator"
+name = "NRCS National Water and Climate Center Report Generator"
+url = "https://wcc.sc.egov.usda.gov/reportGenerator/"
+type = "api"
+notes = "Public CSV report endpoint (view_csv). The AWDB REST API returned 403 during scouting; the Report Generator CSV endpoint is used instead."
+
+[[resources]]
+id = "sntl_station_list"
+origin = "nrcs_wcc_report_generator"
+url = "https://wcc.sc.egov.usda.gov/reportGenerator/view_csv/customMultipleStationReport/daily/start_of_period/network=%22SNTL%22%7Cname/0,0/stationId,state.code,elevation"
+type = "table_export"
+version = "captured 2026-10-09"
+access = "Pinned in the recipe as sntl_stations_20261009.csv (934 SNTL stations, non-comment rows of the live export). download.sh re-fetches the live list for provenance and logs differences but uses the pinned list."
+size_bytes = 11582
+sha256 = "c6af534ef2168d7900ce038b4b059d479e6e33cc35a521d5c2092f979517c6b4"
+local_path = "downloads/nrcs_snotel_hourly_snow_depth_u8/sntl_stations_live.csv"
+notes = "Pinned file sha256 is checked by download.sh."
+
+[[resources]]
+id = "sntl_hourly_snwd_csv"
+origin = "nrcs_wcc_report_generator"
+url = "https://wcc.sc.egov.usda.gov/reportGenerator/view_csv/customSingleStationReport/hourly/start_of_period/{station}:{state}:SNTL%7Cid=%22%22%7Cname/2021-10-01,2024-09-30/SNWD::value"
+type = "api_query_result"
+version = "WY2022-WY2024 (2021-10-01 00:00 to 2024-09-30 23:00 local standard time), fetched at download time"
+access = "One anonymous GET per pinned station, 1 s sleep between requests, curl retries. Responses are live and provisional (each carries an 'As of' timestamp), so no upstream checksum exists; download.sh records size and sha256 of every response in download_plan.tsv and verify.sh re-checks them."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/nrcs_snotel_hourly_snow_depth_u8/hourly/"
+notes = "About 420 KB per station with data (~390 MB total expected). Validation: NRCS banner, 'Reporting Frequency: Hourly', exact header 'Date,Snow Depth (in)', site line naming the station, confirmed date range, and every row matching 'YYYY-MM-DD HH:MM,<number or empty>'. Comment-only replies ('Stations do not exist ...') and header-only replies are recorded as status nodata and skipped."
+
+[local_paths]
+downloads = "downloads/nrcs_snotel_hourly_snow_depth_u8/"
+filtered = "filtered/nrcs_snotel_hourly_snow_depth_u8/"
+index = "index/nrcs_snotel_hourly_snow_depth_u8/"
+samples = "samples/nrcs_snotel_hourly_snow_depth_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nrcs_snotel_hourly_snow_depth_u8/samples.jsonl"
+summary = "Fetch one hourly SNWD CSV per pinned SNTL station for WY2022-WY2024, drop missing hours, split rows by water year (Oct 1 - Sep 30), apply fixed inclusion rules, and emit one uint8 sample per included station-water-year plus an auxiliary uint16 hour-offset sample."
+deterministic_notes = "Fixed station list (sha256 pinned), fixed element SNWD start_of_period value, fixed date range. Inclusion rules fixed up front, applied per station-water-year: at least 1,000 valid hours; every value integral and within 0..255 (any violation excludes the whole station-year, never clamps); at least two distinct values; most frequent value at most 80% of hours (excludes snow-free or stuck-sensor years). Samples sorted by state then station id; file name <STATE>_<station:04d>_wy<YYYY>.bin. verify.sh re-parses every source CSV with an independent code path, re-derives inclusion and bytes, compares byte-exact, checks manifest counts, rejects constant/duplicate samples and reports per-sample mode and zero share (filtered/.../verify_mode_share.tsv)."
+
+[[series]]
+id = "snotel_snwd_hourly_u8"
+description = "Hourly SNOTEL ultrasonic snow depth, whole inches, one station-water-year per sample."
+semantic_meaning = "Snow depth above the ground (Total snow depth, element SNWD, instantaneous start-of-period hourly value, inches) measured by the ultrasonic depth sensor at one SNOTEL site, in time order over one water year with missing hours removed."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The Report Generator publishes SNWD as whole inches; values are stored unchanged as unsigned bytes."
+source_resources = ["sntl_hourly_snwd_csv"]
+source_format = "NRCS Report Generator customSingleStationReport hourly CSV ('#' comment block, header 'Date,Snow Depth (in)')"
+source_field = "Snow Depth (in) column (element SNWD, value, start_of_period)"
+filtered_input_path = "filtered/nrcs_snotel_hourly_snow_depth_u8/station_year_stats.tsv"
+filtering = "SNTL network only (no SCAN, SNOLITE or snow courses). WY2022, WY2023 and WY2024 for each pinned station with hourly SNWD. Station-years kept only if they have >= 1,000 valid hours, all values integral in 0..255, >= 2 distinct values and mode share <= 0.80. Every station-year decision and reason is listed in station_year_stats.tsv."
+missing_value_policy = "Hours absent from the CSV or with an empty value are dropped (alignment is kept by the auxiliary hour-offset series). Negative, non-integral or >255 values exclude the whole station-year; nothing is clamped or imputed. Provisional sensor spikes inside 0..255 are kept as published."
+conversion = "Skip '#' lines, require header 'Date,Snow Depth (in)', parse each 'YYYY-MM-DD HH:MM,value' row, assign water year (Oct-Dec -> next calendar year), keep non-empty values, and write them as uint8 in source time order."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 array"
+sample_geometry = "station_time_series"
+sample_rank = 1
+sample_axes = ["valid_hour"]
+natural_record_kind = "snotel_station_water_year_hourly_snow_depth_record"
+sample_count = 2625
+total_size_bytes = 19342654
+output_path = "samples/nrcs_snotel_hourly_snow_depth_u8/snotel_snwd_hourly_u8/"
+
+[[series]]
+id = "snotel_snwd_hour_offset_u16"
+description = "Hour offset of each retained snow-depth value from the start of its water year."
+semantic_meaning = "Hours since Oct 1 00:00 local standard time of the water year, one per value in the matching primary sample; preserves alignment after missing hours are dropped."
+role = "auxiliary"
+representation_class = "derived_operational_numeric"
+representation_notes = "Alignment helper only; does not count toward acceptance."
+source_resources = ["sntl_hourly_snwd_csv"]
+source_format = "NRCS Report Generator customSingleStationReport hourly CSV"
+source_field = "Date column"
+filtered_input_path = "filtered/nrcs_snotel_hourly_snow_depth_u8/station_year_stats.tsv"
+filtering = "Same station-years and rows as snotel_snwd_hourly_u8."
+missing_value_policy = "Same as the primary series; one offset per retained value."
+conversion = "(timestamp - water-year start) in whole hours, 0..8783, little-endian uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 array"
+sample_geometry = "station_time_series"
+sample_rank = 1
+sample_axes = ["valid_hour"]
+natural_record_kind = "snotel_station_water_year_hour_offset_record"
+sample_count = 2625
+total_size_bytes = 38685308
+output_path = "samples/nrcs_snotel_hourly_snow_depth_u8/snotel_snwd_hour_offset_u16/"

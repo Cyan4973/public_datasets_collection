@@ -247,6 +247,7 @@ megascenes_colmap_sfm_point_xyz_f64	ok	17482056	139856448	696	6950	55600	0	0	0	1
 tcia_lung_pet_ct_dx_u16	ok	18080000	36160000	3	5800000	11600000	0	0	0	1	none	none
 ncbi_taxdump	ok	18084993	57095412	5	2840433	11361732	0	0	0	1	none	none
 leap_climsim_lowres_e3sm_mmf_state_fields_f64	ok	19008000	152064000	825	23040	184320	0	0	0	1	none	none
+nrcs_snotel_hourly_snow_depth_u8	ok	19342654	19342654	2625	7770	7770	19342654	38685308	2625	1	none	none
 google_clusterdata2011_task_usage_f32	ok	20950657	83802628	166	125555.5	502222	0	0	0	1	none	none
 google_open_buildings_v3_s2_073_geometry_f32	ok	21297542	85190168	4	2173642.5	8694570	0	0	0	1	none	none
 osm_daily_way_references_i64	ok	21307666	170461328	3	6908370	55266960	0	0	0	1	none	none

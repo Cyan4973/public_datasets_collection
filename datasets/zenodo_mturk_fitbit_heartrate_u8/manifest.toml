@@ -1,0 +1,91 @@
+manifest_version = 1
+dataset_id = "zenodo_mturk_fitbit_heartrate_u8"
+name = "Crowd-Sourced Fitbit Intraday Heart Rate (Furberg et al., Zenodo 53894) UInt8"
+description = "Native integer Fitbit wrist optical heart-rate readings (beats per minute, ~5 s intraday resolution) from the consented Amazon Mechanical Turk Fitbit exports, one uint8 sample per participant per export period."
+homepage = "https://zenodo.org/records/53894"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Furberg, R., Brinton, J., Keating, M., Ortiz, A. (2016). Crowd-sourced Fitbit datasets 03.12.2016-05.12.2016 [Data set]. Zenodo. https://doi.org/10.5281/zenodo.53894"
+notes = "The Zenodo record API (https://zenodo.org/api/records/53894) declares \"license\": {\"id\": \"cc-by-4.0\"} for the record and both files. Preserve the citation above."
+
+[safety]
+contains_sensitive_data = true
+contains_personal_data = true
+provenance_notes = "Official Zenodo deposit by the study authors. Thirty eligible Fitbit users consented to the submission of their tracker data; upstream rows are keyed by a pseudonymous numeric export Id only (no names, demographics or locations)."
+usage_notes = "Heart rate is health-related data, hence the conservative flags. The recipe emits only the bpm Value column; Ids are replaced by an ordinal (p01, p02, ...) in file names and index rows and are never emitted as data. Steps, calories, METs, intensities, sleep and weight logs are not read."
+
+[[origins]]
+id = "zenodo"
+name = "Zenodo record 53894"
+url = "https://zenodo.org/records/53894"
+type = "repository"
+notes = "DOI 10.5281/zenodo.53894, published 2016-05-31. File sizes and MD5s from https://zenodo.org/api/records/53894."
+
+[[resources]]
+id = "export_2016_03_12_to_04_11"
+origin = "zenodo"
+url = "https://zenodo.org/records/53894/files/mturkfitbit_export_3.12.16-4.11.16.zip?download=1"
+type = "archive"
+version = "Zenodo record 53894 (2016-05-31)"
+access = "Direct public download, no login."
+size_bytes = 20410739
+sha256 = "cca5d7b1cae2370b3e1024349aa86732394129afcc84ce7b6067693ac0f4c2c6"
+md5 = "88a4396c5ff706b7eaed030de4c53588"
+local_path = "downloads/zenodo_mturk_fitbit_heartrate_u8/mturkfitbit_export_3.12.16-4.11.16.zip"
+notes = "MD5 pinned from Zenodo; SHA-256 recorded from the 2026-10-08 driver download. Only member 'Fitabase Data 3.12.16-4.11.16/heartrate_seconds_merged.csv' (41,069,585 bytes, CRC32 b5464ae1) is read."
+
+[[resources]]
+id = "export_2016_04_12_to_05_12"
+origin = "zenodo"
+url = "https://zenodo.org/records/53894/files/mturkfitbit_export_4.12.16-5.12.16.zip?download=1"
+type = "archive"
+version = "Zenodo record 53894 (2016-05-31)"
+access = "Direct public download, no login."
+size_bytes = 25291915
+sha256 = "4741dfabd18453de19b6dd0a7204e8fea6e45e70bc9ddbe396956c8e4fde02f8"
+md5 = "7afbecdce29814e1be2e9a7c94f8f165"
+local_path = "downloads/zenodo_mturk_fitbit_heartrate_u8/mturkfitbit_export_4.12.16-5.12.16.zip"
+notes = "MD5 pinned from Zenodo; SHA-256 recorded from the 2026-10-08 driver download. Only member 'Fitabase Data 4.12.16-5.12.16/heartrate_seconds_merged.csv' (89,588,303 bytes, CRC32 8070fbe2) is read."
+
+[local_paths]
+downloads = "downloads/zenodo_mturk_fitbit_heartrate_u8/"
+filtered = "filtered/zenodo_mturk_fitbit_heartrate_u8/"
+index = "index/zenodo_mturk_fitbit_heartrate_u8/"
+samples = "samples/zenodo_mturk_fitbit_heartrate_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_mturk_fitbit_heartrate_u8/samples.jsonl"
+summary = "Download the two pinned Zenodo zips, read only heartrate_seconds_merged.csv from each, group rows by participant Id within each export, sort by parsed local timestamp, and emit the bpm Value column as one uint8 sample per (participant, export)."
+deterministic_notes = "Zip sizes and MD5s are pinned; member uncompressed sizes and CRC32s are pinned and checked on read. Exact duplicate rows are removed (first occurrence kept). Timestamps (M/D/YYYY h:mm:ss AM/PM, naive local time) are parsed and each Id's rows are stably sorted by (time, source row order); rows sharing a timestamp with different values are kept in source order and counted in the index. Rows outside the export's nominal date window are dropped (removes the 23,424 export-1 rows on 2016-04-12 that duplicate export 2 exactly). The two exports are never merged. (Id, export) series with fewer than 1,000 values are dropped. Participant ordinals are ranks of the numeric Id over the union of heart-rate Ids in both exports. verify.sh re-derives every sample with a separate parser and compares bytes, index fields, hashes and manifest totals, and rejects samples with fewer than 10 distinct values or duplicate payloads."
+
+[[series]]
+id = "fitbit_heartrate_bpm_u8"
+description = "Fitbit intraday wrist optical heart rate in beats per minute."
+semantic_meaning = "Successive heart-rate readings (integer bpm) reported by one participant's Fitbit tracker during one export period, in time order. Sampling is irregular: about 5 s while the tracker reports continuously, with longer gaps when it is not worn or not syncing; the gaps are not encoded."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Upstream values are integer bpm; they are stored unchanged as uint8."
+source_resources = ["export_2016_03_12_to_04_11", "export_2016_04_12_to_05_12"]
+source_format = "Fitabase CSV export (Id,Time,Value) inside the Zenodo zip"
+source_field = "heartrate_seconds_merged.csv Value column (heart rate, bpm)"
+filtered_input_path = "filtered/zenodo_mturk_fitbit_heartrate_u8/ingest_stats.json"
+filtering = "Keep every heart-rate row of every Id in both exports whose local date lies inside that export's nominal window (2016-03-12..2016-04-11, 2016-04-12..2016-05-12), minus exact duplicate rows. This removes 23,424 export-1 rows dated 2016-04-12, all exact (Id, Time, Value) copies of export-2 rows. Drop any (Id, export) series with fewer than 1,000 values. No other files or columns are read."
+missing_value_policy = "There is no fill value upstream. Values outside 1..255, malformed rows or unparseable timestamps fail the build. Exact duplicate rows are removed. Time gaps are not filled or interpolated."
+conversion = "Decode the ASCII CSV, parse Value as an integer, assert 1 <= v <= 255, stably sort each Id's rows by parsed timestamp, and write one byte per reading. Sample = one participant within one export period."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 heart-rate array"
+sample_geometry = "irregular_time_series_1d"
+sample_rank = 1
+sample_axes = ["reading_time_order"]
+natural_record_kind = "participant_export_period_heart_rate_series"
+sample_count = 27
+total_size_bytes = 3614476
+output_path = "samples/zenodo_mturk_fitbit_heartrate_u8/fitbit_heartrate_bpm_u8/"

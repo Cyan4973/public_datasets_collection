@@ -483,3 +483,4 @@ gazebase_eyelink1000_gaze_position_f64	autocollect	64	eye_gaze_position	sr_resea
 nasa_heliocloud_trace_171_euv_frames_i16	autocollect	16	raw_space_frame	TRACE EUV telescope CCD (171 Å)	gov-nasa-hdrl-data1.s3.amazonaws.com/sdac	-	OK
 cellpainting_cdrp_cellprofiler_well_profiles_f64	autocollect	64	cell_morphology_profile	broad_cellpainting_cellprofiler_cytominer	aws_cellpainting_gallery	-	OK
 spdf_isis2_topside_ionogram_amplitude_u8	autocollect	8	topside_sounder_ionogram	isis2_sfs_topside_sounder	spdf_cdaweb	-	OK
+nasa_pds_juno_junocam_perijove_rgb_framelets_u8	autocollect	8	raw_space_frame	juno_junocam_pushframe	nasa_pds_imaging_node	-	OK

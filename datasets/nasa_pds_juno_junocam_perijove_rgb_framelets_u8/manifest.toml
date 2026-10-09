@@ -1,0 +1,113 @@
+manifest_version = 1
+dataset_id = "nasa_pds_juno_junocam_perijove_rgb_framelets_u8"
+name = "Juno JunoCam Perijove Lossless Colour EDRs: 8-bit BLUE/GREEN/RED Pushframe Framelet Rasters"
+description = "The 8-bit square-root-companded JunoCam detector DN raster of 22 Jupiter colour (C-type, BLUE/GREEN/RED framelet) Experiment Data Records that were Huffman (lossless) compressed on board. There is one product per third perijove (PJ03 to PJ72, 2016-12 to 2025-05), the one closest in time to closest approach, with the highest product version across the JNOJNC_0001-0035 volumes. Source: the NASA PDS Imaging Node."
+homepage = "https://planetarydata.jpl.nasa.gov/img/data/juno/"
+
+[license]
+name = "NASA SMD Open Scientific Data Policy (public NASA PDS mission data)"
+spdx = "LicenseRef-NASA-SMD-Open-Data"
+url = "https://science.nasa.gov/researchers/science-data/science-information-policy/"
+citation = "Caplinger, M., JUNO J JUNOCAM 2 EDR L0 V1.0 (JUNO-J-JUNOCAM-2-EDR-L0-V1.0), NASA Planetary Data System, Imaging Node. Acknowledge NASA / JPL-Caltech / SwRI / MSSS."
+notes = "Juno is a NASA New Frontiers mission. JunoCam EDRs are archived by the NASA Planetary Data System (data set JUNO-J-JUNOCAM-2-EDR-L0-V1.0) and served anonymously from the PDS Imaging Node at planetarydata.jpl.nasa.gov. NASA SMD policy says information produced from SMD-funded scientific research is to be made publicly available and openly shared; mission data are released as soon as possible. This is the same rights basis as the accepted nasa_pds_voyager_iss_saturn_raw_u8, nasa_pds_cassini_vims_qube_i16 and nasa_pds_mastcamz_raw_i16 recipes. The volume AAREADME.TXT (fetched and pinned by download.sh) states the archive is compiled for NASA by Malin Space Science Systems under PDS standards. It imposes no use restriction. The science.nasa.gov policy page is not fetched by download.sh because it is unreachable through the collection proxy."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NASA PDS archive objects over anonymous HTTPS from the PDS Imaging Node (planetarydata.jpl.nasa.gov/img/data/juno/). Robotic spacecraft camera images of Jupiter's cloud tops."
+usage_notes = "Only image DN values are emitted. PDS label text and index tables are selection evidence only and are never written to samples."
+
+[[origins]]
+id = "pds_img_juno"
+name = "NASA PDS Imaging Node, Juno JunoCam archive (JNOJNC_0001-0035)"
+url = "https://planetarydata.jpl.nasa.gov/img/data/juno/"
+type = "data_portal"
+notes = "Apache directory listing of the 35 JunoCam archive volumes (EDR, RDR and map products, plus per-volume md5 lists). Later volumes re-release earlier orbits as product versions V02/V03 (JNOJNC_0004 and JNOJNC_0012 for orbits up to 22). The recipe keeps only the highest version of each product id."
+
+[[resources]]
+id = "junocam_volume_indexes"
+origin = "pds_img_juno"
+url = "https://planetarydata.jpl.nasa.gov/img/data/juno/JNOJNC_0001/INDEX/INDEX.TAB"
+type = "table_export"
+version = "INDEX.TAB of JNOJNC_0001 ... JNOJNC_0035 as served on 2026-10-09 (35 files, per-file size and MD5 in volumes.tsv)"
+access = "Anonymous HTTPS GET of <volume>/INDEX/INDEX.TAB for every volume; each is pinned by size and MD5."
+size_bytes = 39612793
+sha256 = ""
+local_path = "downloads/nasa_pds_juno_junocam_perijove_rgb_framelets_u8/index/"
+notes = "Selection evidence, not a sample source. The tables give PRODUCT_ID (with version), TARGET_NAME, RATIONALE_DESC (which carries the time relative to perijove), the label path and the label MD5. The candidate list is derived from them by download.sh (check_payload.py), build.py and verify.py (an independent parser), and must equal candidates.tsv."
+
+[[resources]]
+id = "junocam_candidate_labels"
+origin = "pds_img_juno"
+url = "https://planetarydata.jpl.nasa.gov/img/data/juno/JNOJNC_0012/DATA/EDR/JUPITER/"
+type = "file"
+version = "531 detached PDS3 EDR labels (candidates.tsv), each MD5-pinned by the PRODUCT_LABEL_MD5CHECKSUM column of its volume INDEX.TAB"
+access = "Anonymous HTTPS GET of each candidate .LBL."
+size_bytes = 1357856
+sha256 = ""
+local_path = "downloads/nasa_pds_juno_junocam_perijove_rgb_framelets_u8/labels/"
+notes = "About 2.6 KB each (size_bytes = total measured at discovery; MD5 is the pin). They give COMPRESSION_TYPE, LINES and the IMAGE MD5_CHECKSUM. The per-perijove selection is re-derived from them and must equal sources.tsv."
+
+[[resources]]
+id = "junocam_selected_edr_images"
+origin = "pds_img_juno"
+url = "https://planetarydata.jpl.nasa.gov/img/data/juno/"
+type = "file"
+version = "22 EDR IMG files listed in sources.tsv (versions V01-V03, volumes JNOJNC_0010-0033)"
+access = "Anonymous HTTPS GET, resumable (curl -C -). Each file is pinned by size (= LINES x 1648) and by MD5 (from the label IMAGE MD5_CHECKSUM, which equals the volume md5 list entry for all 22)."
+size_bytes = 549298176
+sha256 = ""
+local_path = "downloads/nasa_pds_juno_junocam_perijove_rgb_framelets_u8/img/"
+notes = "download_plan.tsv records the SHA-256 of every fetched image."
+
+[[resources]]
+id = "junocam_evidence"
+origin = "pds_img_juno"
+url = "https://planetarydata.jpl.nasa.gov/img/data/juno/JNOJNC_0033/DOCUMENT/JUNO_JNC_EDR_RDR_DPSIS.HTM"
+type = "file"
+version = "JNOJNC_0033 AAREADME.TXT (9,911 bytes, MD5 78a1c7371648ae57ddd7943dbaf83923) and JUNO_JNC_EDR_RDR_DPSIS.HTM (52,771 bytes, MD5 d93d404258be3431006c8a1dd367ee91)"
+access = "Anonymous HTTPS GET; size and MD5 pinned."
+size_bytes = 62682
+sha256 = ""
+local_path = "downloads/nasa_pds_juno_junocam_perijove_rgb_framelets_u8/evidence/"
+notes = "Rights and citation context (AAREADME). The EDR SIS defines the 1648 x 128 framelet layout, the frame/band line order, 'Huffman (lossless)' vs 'Integer Cosine Transform (lossy)' compression, SQROOT companding, and zero-filling of lines lost in telemetry. check_payload.py requires those phrases."
+
+[local_paths]
+downloads = "downloads/nasa_pds_juno_junocam_perijove_rgb_framelets_u8/"
+filtered = "filtered/nasa_pds_juno_junocam_perijove_rgb_framelets_u8/"
+index = "index/nasa_pds_juno_junocam_perijove_rgb_framelets_u8/"
+samples = "samples/nasa_pds_juno_junocam_perijove_rgb_framelets_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_pds_juno_junocam_perijove_rgb_framelets_u8/samples.jsonl"
+summary = "Fetch the 35 pinned JunoCam volume indexes, re-derive and fetch 531 candidate labels, then re-derive and fetch the 22 selected lossless colour EDR images. Emit each image's 8-bit DN raster (LINES x 1648, already headerless) as one raw uint8 sample. Products failing the zero-fill/degeneracy rule would be dropped."
+deterministic_notes = "Candidate rule (scripts/junocam.py, re-implemented in verify.py). Take every JUNOCAM-EDR row of all 35 INDEX.TAB files and keep the highest PRODUCT_VERSION per product id (later volume on ties). Keep it if: product type C (colour), TARGET_NAME JUPITER, path DATA/EDR/JUPITER/, orbit a positive multiple of 3, RATIONALE_DESC relative time to its own perijove within 60 minutes, and no 'invalid' or 'partial' in RATIONALE_DESC. That gives 531 candidates over 25 perijoves. Selection rule: per perijove, the candidate whose label says COMPRESSION_TYPE = HUFFMAN (lossless) with the smallest |relative time|, ties broken by lowest product id. That gives 22 products (PJ03-PJ72): PJ48, PJ60 and PJ75 have candidates but none that is both lossless and not flagged invalid/partial. As of JNOJNC_0035, no perijove after PJ75 has a qualifying candidate. Label checks: SAMPLE_BIT_MODE_ID SQROOT, SAMPLING_FACTOR 1, FILTER_NAME (BLUE, GREEN, RED), RECORD_BYTES = LINE_SAMPLES = 1648, SAMPLE_BITS 8 UNSIGNED_INTEGER, no line prefix/suffix, LINES = FILE_RECORDS and a multiple of 384, ^IMAGE = the IMG file. Exclusion rule (build and verify, identical): a product is not emitted if more than 2% of its lines are entirely zero (telemetry-loss fill), if one DN value holds more than 50% of its pixels, or if it has fewer than 32 distinct DN. Duplicate payloads fail. verify.sh re-derives candidates and selection with independent parsers, re-checks MD5s, byte-compares every sample with its IMG, and checks index rows, counts, totals and the aggregate DN histogram (at least 200 levels, no DN above half of all pixels)."
+
+[[series]]
+id = "junocam_perijove_rgb_lossless_dn_u8"
+description = "8-bit JunoCam DN rasters (LINES x 1648) of perijove Jupiter colour pushframe images: 128-line BLUE, GREEN and RED framelets per exposure, in acquisition order, from lossless (Huffman) EDRs."
+semantic_meaning = "JunoCam detector data numbers (0-255) after on-board 12-to-8-bit square-root (SQROOT) companding of the Kodak KAI-2020 CCD signal. Pixels lie behind the BLUE, GREEN and RED filter strips of the colour filter array. Each spacecraft-spin exposure reads one 128 x 1648 framelet per filter, and successive exposures follow in time order (SIS 4.3.1.1). Content: Jupiter cloud tops within 45 minutes of closest approach (3,400-62,000 km altitude), belts, zones, jets and polar cyclones. Limb, dark sky and terminator pixels are included where the strip sees them. No decompanding, flat field or geometric correction is applied."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "PDS label: SAMPLE_TYPE UNSIGNED_INTEGER, SAMPLE_BITS 8, SAMPLE_BIT_MODE_ID SQROOT, COMPRESSION_TYPE HUFFMAN. The products were losslessly encoded on board and decoded by the ground system, so the archived 8-bit DN equal the camera's companded output. The 8-bit DN is the native quantization; values are copied unchanged."
+source_resources = ["junocam_selected_edr_images"]
+source_format = "PDS3 detached-label EDR image (JNCE_yyyyddd_ooCnnnnn_Vvv.IMG): fixed-length 1648-byte records, one per image line, IMAGE object at record 1, no header, line prefix or suffix"
+source_field = "IMAGE object: LINES x 1648 unsigned 8-bit SQROOT-companded detector DN (BLUE/GREEN/RED framelets)"
+filtered_input_path = "filtered/nasa_pds_juno_junocam_perijove_rgb_framelets_u8/ingest_stats.json"
+filtering = "Only C-type (colour) Jupiter EDRs within 60 minutes of perijove, from every third perijove, highest product version. Only lossless (HUFFMAN) products are taken: lossy ICT and uncompressed (NONE) products are excluded as different compression regimes. Excluded: methane (M), cruise, Earth-flyby, approach/departure movies and moon targets; 'invalid' or 'partial' products; products failing the zero-fill/degeneracy rule. One product per perijove: the one closest to closest approach."
+missing_value_policy = "Every pixel of every emitted image is kept: zero-filled partial lines from telemetry loss (at most 2% fully zero lines per emitted image), DN 0 dark sky, saturated pixels and the zero border columns of each line. Nothing is masked, filled, interpolated or rescaled. Products over the exclusion thresholds are dropped whole by the shared rule. Any size/MD5 mismatch, label deviation, duplicate or constant image fails the recipe."
+conversion = "For each pinned IMG, check the label (LINES = FILE_RECORDS, RECORD_BYTES = LINE_SAMPLES = 1648, SAMPLE_BITS 8, no prefix/suffix, ^IMAGE at record 1), the file size (LINES x 1648) and the MD5. The file holds nothing but the IMAGE object, so its LINES x 1648 unsigned bytes, in line order (frame 1 BLUE, GREEN, RED; frame 2 ...), are written to samples/nasa_pds_juno_junocam_perijove_rgb_framelets_u8/junocam_perijove_rgb_lossless_dn_u8/<PRODUCT_ID>.u8. Byte order is irrelevant for 8-bit values. Large records are not split or tiled."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 detector data numbers"
+sample_geometry = "variable_lines_x_1648_junocam_pushframe_framelet_raster"
+sample_rank = 2
+sample_axes = ["framelet_line", "detector_sample"]
+natural_record_kind = "junocam_edr_colour_pushframe_image"
+sample_count = 22
+total_size_bytes = 549298176
+output_path = "samples/nasa_pds_juno_junocam_perijove_rgb_framelets_u8/junocam_perijove_rgb_lossless_dn_u8/"

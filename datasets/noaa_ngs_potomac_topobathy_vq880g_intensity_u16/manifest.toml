@@ -1,0 +1,89 @@
+manifest_version = 1
+dataset_id = "noaa_ngs_potomac_topobathy_vq880g_intensity_u16"
+name = "NOAA NGS 2018 Topobathy Lidar, Potomac River / Chesapeake Bay (Riegl VQ-880-G): Per-Point Return Intensity UInt16"
+description = "Native LAS uint16 laser-return Intensity of every point in 48 complete 500 m COPC tiles from one NOAA NGS Coastal Mapping Program topobathymetric lidar project (Digital Coast ID 8727, Riegl VQ-880-G green+NIR, QSI, Feb-Apr 2018), one little-endian uint16 array per tile in stored point order."
+homepage = "https://www.fisheries.noaa.gov/inport/item/56114"
+
+[license]
+name = "NOAA Open Data Dissemination (NODD) open data; US Government work"
+spdx = "LicenseRef-NOAA-NODD-Open-Data"
+url = "https://raw.githubusercontent.com/awslabs/open-data-registry/main/datasets/noaa-coastal-lidar.yaml"
+citation = "National Geodetic Survey, [Date of Access]: 2018 NOAA National Geodetic Survey Topobathy Lidar: Potomac River, Chesapeake Bay [Data Date Range], https://www.fisheries.noaa.gov/inport/item/56114"
+notes = "AWS Open Data Registry entry for the noaa-nos-coastal-lidar-pds bucket: 'NOAA data disseminated through NODD are open to the public and can be used as desired. ... NOAA requests attribution for the use or dissemination of unaltered NOAA data. However, it is not permissible to state or imply endorsement by or affiliation with NOAA. If you modify NOAA data, you may not state or imply that it is original, unaltered NOAA data.' Project metadata XML (pinned): 'Access Constraints: None'; use constraints are accuracy/liability disclaimers only. The emitted arrays are one extracted field, not the unaltered NOAA files."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NOAA Office for Coastal Management distribution in the public NODD S3 bucket noaa-nos-coastal-lidar-pds (anonymous HTTPS, not requester-pays); data acquired by Quantum Spatial (QSI) for the NOAA National Geodetic Survey Remote Sensing Division."
+usage_notes = "Airborne coastal/bathymetric lidar return intensities over the Potomac River mouth and Chesapeake Bay shoreline; no personal data. Only the per-point Intensity field is emitted."
+
+[[origins]]
+id = "noaa_nodd_coastal_lidar"
+name = "NOAA Coastal Lidar Data (NODD), project 8727 geoid18 COPC tiles"
+url = "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/laz/geoid18/8727/index.html"
+type = "bucket"
+notes = "5,968 COPC .copc.laz tiles (322.6 GB) in delivery01 (3,899) and delivery02 (2,069), plus metadata XML, per-tile minmax CSV, tile index, URL list and STAC items. Objects LastModified 2026-02-24/25."
+
+[[resources]]
+id = "potomac_topobathy_copc_tiles"
+origin = "noaa_nodd_coastal_lidar"
+url = "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/laz/geoid18/8727/"
+type = "file"
+version = "S3 objects LastModified 2026-02-24/25 (NOAA compile 2026-02-24); pinned per tile in sources.tsv"
+access = "Direct anonymous HTTPS GET of the 48 exact keys listed in sources.tsv; resumable curl."
+size_bytes = 868443284
+sha256 = ""
+local_path = "downloads/noaa_ngs_potomac_topobathy_vq880g_intensity_u16/tiles/"
+notes = "Per-tile byte size, S3 ETag (multipart MD5 over 8 MiB parts, scheme confirmed on a probe tile) and header point count are pinned in sources.tsv and checked by download.sh (scripts/check_payload.py); SHA-256 of every tile is recorded in downloads/<id>/download_plan.tsv. Selection: scripts/select_tiles.py (24 tiles per delivery among 10-25 MB tiles, evenly spaced in name order, i.e. across flight dates); vetting: scripts/probe_decode.py (range-request decode of 5 chunks per tile, 48/48 OK, no replacements)."
+
+[[resources]]
+id = "project_metadata_xml"
+origin = "noaa_nodd_coastal_lidar"
+url = "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/laz/geoid18/8727/metadata_2018_ngs_topobathy_potomac_river_chesapeake.xml"
+type = "file"
+version = "2026-02-24 dynamic compile"
+access = "Direct anonymous HTTPS GET."
+size_bytes = 71682
+sha256 = "7cbc2f77381f20f7fabea88a2db669085e5f2575f678aaec37222bea74849000"
+local_path = "downloads/noaa_ngs_potomac_topobathy_vq880g_intensity_u16/metadata_2018_ngs_topobathy_potomac_river_chesapeake.xml"
+notes = "ISO 19115-2 lineage: Riegl VQ-880-G green and NIR channels, QSI RiProcess/RiHydro processing, original LAS 1.2 PDRF 3 delivery, OCM reprojection/COPC conversion; access and use constraints."
+
+[local_paths]
+downloads = "downloads/noaa_ngs_potomac_topobathy_vq880g_intensity_u16/"
+filtered = "filtered/noaa_ngs_potomac_topobathy_vq880g_intensity_u16/"
+index = "index/noaa_ngs_potomac_topobathy_vq880g_intensity_u16/"
+samples = "samples/noaa_ngs_potomac_topobathy_vq880g_intensity_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_ngs_potomac_topobathy_vq880g_intensity_u16/samples.jsonl"
+summary = "Download 48 pinned COPC tiles of NOAA project 8727, decode every LASzip chunk with tools/laz/laszip.py, and copy each PDRF-7 record's Intensity (bytes 12-13) unchanged into one little-endian uint16 array per tile."
+deterministic_notes = "Tile list pinned in sources.tsv (delivery, key, size, ETag, LastModified, URL, header point count), resolved by discover.sh from the 2026-10-08 S3 listing. download.sh validates size, ETag, LAS 1.4 / PDRF 7 / 36-byte records and point count, and records SHA-256. build.sh is local-only and multiprocess (JOBS env, default min(16, cpus)); it checks decoded point count, the 15 points-by-return counts and X/Y/Z bounds against each header, rejects samples with < 64 distinct values or one value > 50 %, preserves stored point order and values, and writes ingest_stats.json (per-tile histograms summary, shares of 0 and 65535, scanner-channel and flight-line counts). verify.sh re-decodes every tile, re-extracts Intensity with a different code path (struct per record), byte-compares every sample, and checks index fields, sha256/min/max, stray files, floors, cap and manifest totals."
+
+[[series]]
+id = "potomac_topobathy_intensity_u16"
+description = "LAS Intensity of every point of one 500 m x 500 m topobathy tile, in stored COPC order."
+semantic_meaning = "Return-pulse intensity (uint16 counts as recorded by the Riegl VQ-880-G and written by QSI RiProcess) of each lidar point; green (532 nm) bathymetric returns and NIR water-surface/topographic returns of the same instrument are interleaved as delivered."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "LAS 1.4 point data record format 7 stores Intensity as an unsigned 16-bit little-endian integer at record offset 12; values span the full 0..65535 range (65535 = saturation). The bytes are copied unchanged. The scanner-channel bits (byte 15, bits 4-5) are 0 for every probed point, so green and NIR returns cannot be separated from stored fields; the interleaved stream is the native file content."
+source_resources = ["potomac_topobathy_copc_tiles"]
+source_format = "COPC LAZ (LAS 1.4 point data record format 7, LASzip compressor 3)"
+source_field = "Intensity"
+filtered_input_path = "filtered/noaa_ngs_potomac_topobathy_vq880g_intensity_u16/ingest_stats.json"
+filtering = "All point records of the 48 pinned tiles; no class, return, flag or value filtering. RGB (all zero in this project) and every other field are not emitted."
+missing_value_policy = "Intensity is a required PDRF-7 field; no sentinel exists. Values 0 and 65535 are native readings and are kept. A decode error, point-count, points-by-return or bounds mismatch fails the build; no tile is skipped."
+conversion = "laszip.iter_chunks decodes each tile's chunks into 36-byte LAS records; bytes 12 and 13 of every record are concatenated in stored order into a raw little-endian uint16 array, one .bin per tile named <delivery>__<tile>.bin."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 LAS intensity array"
+sample_geometry = "las_point_attribute_stream"
+sample_rank = 1
+sample_axes = ["point"]
+natural_record_kind = "copc_lidar_tile"
+sample_count = 48
+total_size_bytes = 306796952
+output_path = "samples/noaa_ngs_potomac_topobathy_vq880g_intensity_u16/potomac_topobathy_intensity_u16/"

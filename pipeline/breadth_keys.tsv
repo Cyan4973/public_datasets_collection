@@ -453,3 +453,4 @@ noaa_coastal_maine_topobathy_classification_u8	autocollect	8	laser_range	Leica C
 swisstopo_swisssurface3d_alps_las_z_i32	autocollect	32	laser_range	swisstopo_swisssurface3d_airborne_lidar	data.geo.admin.ch (swisstopo STAC)	-	OK
 earthscope_4p_mt_magnetic_field_counts_i32	autocollect	32	ground_magnetometer	nims_mt_fluxgate	service.iris.edu/fdsnws/dataselect:4P	-	OK
 nasa_pds_insight_apss_pressure_10hz_f32	autocollect	32	met_station_obs	insight_apss_pressure_sensor	atmos.nmsu.edu/PDS/data/PDS4/InSight/ps_bundle	-	OK
+noaa_ngs_potomac_topobathy_vq880g_intensity_u16	autocollect	16	laser_range	Riegl VQ-880-G topobathymetric airborne lidar (NOAA NGS Coastal Mapping Program)	NOAA NODD noaa-nos-coastal-lidar-pds (Digital Coast)	-	OK

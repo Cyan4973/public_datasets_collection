@@ -43,6 +43,7 @@ import subprocess
 import sys
 import threading
 import time
+import traceback
 import tomllib
 import uuid
 from pathlib import Path
@@ -1575,30 +1576,43 @@ class Driver:
         signal.signal(signal.SIGINT, on_signal)
         signal.signal(signal.SIGTERM, on_signal)
         log(f"driver start: {dataclasses.asdict(self.cfg)}")
-        while True:
-            self.process_control()
-            done = [future for future in self.futures if future.done()]
-            for future in done:
-                meta = self.futures.pop(future)
+        try:
+            while True:
+                self.process_control()
+                done = [future for future in self.futures if future.done()]
+                for future in done:
+                    meta = self.futures.pop(future)
+                    try:
+                        result = future.result()
+                    except Exception as exc:  # noqa: BLE001
+                        log(f"task {meta} crashed: {exc!r}")
+                        continue
+                    if SHUTTING_DOWN.is_set() and not task_succeeded(result):
+                        # Killed by the second interrupt, not a real failure: keep the
+                        # pre-launch status so the task simply runs again on restart.
+                        log(f"shutdown: dropped interrupted {meta}; it reruns on restart")
+                        continue
+                    self.apply(meta, result)
+                if SHUTTING_DOWN.is_set() and not self.futures:
+                    break
+                self.schedule()
+                self.heartbeat()
+                if not self.futures:
+                    log("nothing left to launch and nothing in flight; stopping")
+                    break
+                time.sleep(self.cfg.poll_s)
+        except Exception:
+            # A driver bug must not leave agents spending with nobody to apply
+            # their results: kill in-flight work and pause for inspection.
+            self.pause_globally(f"driver crashed: {one_line(traceback.format_exc(limit=4), 800)}")
+            SHUTTING_DOWN.set()
+            for pgid in list(LIVE_GROUPS):
                 try:
-                    result = future.result()
-                except Exception as exc:  # noqa: BLE001
-                    log(f"task {meta} crashed: {exc!r}")
-                    continue
-                if SHUTTING_DOWN.is_set() and not task_succeeded(result):
-                    # Killed by the second interrupt, not a real failure: keep the
-                    # pre-launch status so the task simply runs again on restart.
-                    log(f"shutdown: dropped interrupted {meta}; it reruns on restart")
-                    continue
-                self.apply(meta, result)
-            if SHUTTING_DOWN.is_set() and not self.futures:
-                break
-            self.schedule()
-            self.heartbeat()
-            if not self.futures:
-                log("nothing left to launch and nothing in flight; stopping")
-                break
-            time.sleep(self.cfg.poll_s)
+                    os.killpg(pgid, signal.SIGTERM)
+                except ProcessLookupError:
+                    pass
+            self.executor.shutdown(wait=False, cancel_futures=True)
+            raise
         self.heartbeat()
         for width, focus in self.focus_scouts:
             queue_control({"action": "scout", "width": width, "focus": focus})

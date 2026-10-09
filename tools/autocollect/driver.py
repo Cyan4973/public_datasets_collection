@@ -1217,7 +1217,6 @@ class Driver:
             add_event(state, "proposed", log=agent["log"])
             save_state(cid, state)
             known.add(cid)
-            seen_urls.add(url)
             added += 1
         save_ledger(self.ledger)
         log(f"scout {width}-bit proposed {added} candidates (cost ${agent['cost']:.2f})")

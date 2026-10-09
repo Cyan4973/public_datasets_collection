@@ -821,6 +821,8 @@ def judge_prompt(row: dict, state: dict, cfg: Config, gate_warnings: list[str]) 
 
 
 def task_succeeded(result: dict) -> bool:
+    if result.get("kind") == "rebuild":
+        return bool(result["ok"]) and (result.get("similarity") or {}).get("verdict") not in (None, "ERROR")
     if "ok" in result:
         return bool(result["ok"])
     return result.get("rc") == 0 and not result.get("reason")

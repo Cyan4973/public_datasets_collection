@@ -1,0 +1,89 @@
+manifest_version = 1
+dataset_id = "noaa_shoals1000t_bluehillbay_topobathy_gps_time_f64"
+name = "NOAA/MCP 2017 Blue Hill Bay ME Topobathy Lidar (SHOALS-1000T, Digital Coast 8526): Per-Point GPS Time Float64"
+description = "Native IEEE-754 float64 per-point GPS time (adjusted standard GPS seconds) of every point in all 92 published COPC tiles of the SHOALS-1000T airborne bathymetric lidar project 8526, one sample per tile, in stored (COPC octree-node) record order."
+homepage = "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/laz/geoid18/8526/index.html"
+
+[license]
+name = "NOAA Open Data Dissemination (NODD) open data terms; U.S. Government-funded data"
+spdx = "LicenseRef-NOAA-NODD-open-data"
+url = "https://registry.opendata.aws/noaa-coastal-lidar/"
+citation = "NOAA Office for Coastal Management; Maine Department of Marine Resources, Maine Coastal Program; Fugro (2017): 2017 MCP Topobathy Lidar: Blue Hill Bay, ME (SHOALS-1000T), Digital Coast dataset 8526. NOAA Coastal Lidar Data, AWS Open Data bucket noaa-nos-coastal-lidar-pds, laz/geoid18/8526/."
+notes = "AWS Open Data registry entry (awslabs/open-data-registry datasets/noaa-coastal-lidar.yaml, fetched 2026-10-08): 'NOAA data disseminated through NODD are open to the public and can be used as desired. NOAA makes data openly available to ensure maximum use of our data ... NOAA requests attribution for the use or dissemination of unaltered NOAA data. However, it is not permissible to state or imply endorsement by or affiliation with NOAA. If you modify NOAA data, you may not state or imply that it is original, unaltered NOAA data.' The project ISO metadata (metadata_me2017_blue_hill_bay_shoals.xml) states 'Access Constraints: None' and only no-warranty / distribution-liability disclaimers. Discrepancy: the per-tile STAC items carry a 'license: CC-BY-1.0' property; that identifier is not an SPDX license and conflicts with nothing more restrictive than attribution, so the NODD terms above are cited as authoritative. Keep the NOAA attribution and do not imply NOAA endorsement; extracted GPS-time arrays are a derived product, not unaltered NOAA data."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Exact public objects from NOAA's NODD S3 bucket noaa-nos-coastal-lidar-pds (anonymous access), pinned by key, size and single-part MD5 ETag in sources.tsv."
+usage_notes = "Airborne bathymetric lidar acquisition times over Blue Hill Bay, Maine; no personal data."
+
+[[origins]]
+id = "noaa_nodd_coastal_lidar"
+name = "NOAA Coastal Lidar Data (NODD, AWS Open Data)"
+url = "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/laz/geoid18/8526/index.html"
+type = "bucket"
+notes = "Project 8526 prefix laz/geoid18/8526/. The concurrent Riegl VQ-820-G acquisition is a separate dataset (8525) under a different prefix and is excluded."
+
+[[resources]]
+id = "copc_tiles_8526"
+origin = "noaa_nodd_coastal_lidar"
+url = "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/?list-type=2&prefix=laz/geoid18/8526/"
+type = "file"
+version = "S3 objects last modified 2025-07-07; listing resolved 2026-10-08"
+access = "92 exact public objects laz/geoid18/8526/*.copc.laz listed in sources.tsv; downloader checks each size, MD5 (single-part S3 ETag) and pinned SHA-256, and validates every LAS header."
+size_bytes = 113122575
+sha256 = ""
+local_path = "downloads/noaa_shoals1000t_bluehillbay_topobathy_gps_time_f64/copc/"
+notes = "Aggregate resource with no single checksum: per-file pins (key, size, MD5, SHA-256 pinned from the first verified download on 2026-10-08, STAC pc:count and GpsTime statistics) live in sources.tsv."
+
+[[resources]]
+id = "project_metadata_xml"
+origin = "noaa_nodd_coastal_lidar"
+url = "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/laz/geoid18/8526/metadata_me2017_blue_hill_bay_shoals.xml"
+type = "file"
+version = "2025-07-07"
+access = "Direct public download; size, MD5 (S3 ETag 65e8667753e6b5755af71e5118c35b27) and SHA-256 checked."
+size_bytes = 70290
+sha256 = "da905610f5edfeb3f0f562fb4899edb16394ade5c88193e396e1a3eb9d1beedc"
+local_path = "downloads/noaa_shoals1000t_bluehillbay_topobathy_gps_time_f64/metadata_me2017_blue_hill_bay_shoals.xml"
+notes = "Provenance only (sensor, 2.5 kHz pulse rate, processing chain, constraints); not used by build."
+
+[local_paths]
+downloads = "downloads/noaa_shoals1000t_bluehillbay_topobathy_gps_time_f64/"
+filtered = "filtered/noaa_shoals1000t_bluehillbay_topobathy_gps_time_f64/"
+index = "index/noaa_shoals1000t_bluehillbay_topobathy_gps_time_f64/"
+samples = "samples/noaa_shoals1000t_bluehillbay_topobathy_gps_time_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_shoals1000t_bluehillbay_topobathy_gps_time_f64/samples.jsonl"
+summary = "Download all 92 pinned SHOALS-1000T COPC tiles of project 8526, decode them with the repository LAZ decoder (tools/laz/laszip.py, layered POINT14 v3), and copy each point record's native eight-byte GPS time into one float64 sample per tile."
+deterministic_notes = "Tiles are processed in sources.tsv (key) order. download.sh pins size and MD5 per object and validates LAS 1.4, compressed PDRF 6, 30-byte records, global_encoding bit 0 (adjusted standard GPS time), LASzip compressor 3 with items [(POINT14,30,3)] and variable chunks, the COPC info VLR, and header point count = STAC pc:count. build.sh preserves stored record order and source bytes; per tile it requires decoded count = header count, all values finite, decoded min/max bit-identical to the COPC info VLR gpstime extent, min/max/mean within publisher STAC rounding, and at least two distinct values; it enforces floors and the 1 GB cap. verify.sh re-decodes every tile, re-extracts via struct.iter_unpack, byte-compares every sample, and checks index fields, sha256, min/max from stored float64, and the manifest totals."
+
+[[series]]
+id = "shoals_gps_time_f64"
+description = "Per-point GPS time of the SHOALS-1000T bathymetric lidar, one sample per COPC tile, in stored record order."
+semantic_meaning = "Acquisition time of each lidar return in adjusted standard GPS seconds (GPS seconds minus 1e9), about 1.8246e8 to 1.8332e8 s (2017-06-25 to 2017-07-05), from a 2.5 kHz pulse-rate airborne bathymetric lidar (single return per pulse record)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "LAS 1.4 point data record format 6 stores GPS time as a little-endian IEEE-754 double at record offset 22; COPC/LAZ compression is lossless, so the decoded bytes are the source values. Stored order is COPC octree-node order (points stored node after node, roughly time-ordered within a node, with backward jumps between nodes), not global acquisition order."
+source_resources = ["copc_tiles_8526"]
+source_format = "LAS 1.4 point data record format 6 in COPC LAZ (LASzip compressor 3, POINT14 v3)"
+source_field = "GPS Time"
+filtered_input_path = "filtered/noaa_shoals1000t_bluehillbay_topobathy_gps_time_f64/ingest_stats.json"
+filtering = "Keep every point record of all 92 tiles, including the smallest tile 20170705_tile_538000_4903000 (468 points), which is part of the published population; no class, return, or flag filtering."
+missing_value_policy = "GPS time is mandatory in PDRF 6; no sentinel exists. Truncated tiles, decoder desynchronisation (count or COPC extent mismatch), non-finite values, or constant tiles fail build and verify. Nothing is dropped or imputed."
+conversion = "Decode each tile's point records with tools/laz/laszip.py iter_chunks and copy bytes 22..29 of every 30-byte record unchanged into a raw little-endian float64 array; one file per tile under samples/<id>/shoals_gps_time_f64/."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous float64 LAS GPS-time array"
+sample_geometry = "las_point_attribute_stream"
+sample_rank = 1
+sample_axes = ["point"]
+natural_record_kind = "copc_laz_tile"
+sample_count = 92
+total_size_bytes = 202389024
+output_path = "samples/noaa_shoals1000t_bluehillbay_topobathy_gps_time_f64/shoals_gps_time_f64/"

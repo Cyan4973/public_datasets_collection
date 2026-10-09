@@ -454,3 +454,4 @@ swisstopo_swisssurface3d_alps_las_z_i32	autocollect	32	laser_range	swisstopo_swi
 earthscope_4p_mt_magnetic_field_counts_i32	autocollect	32	ground_magnetometer	nims_mt_fluxgate	service.iris.edu/fdsnws/dataselect:4P	-	OK
 nasa_pds_insight_apss_pressure_10hz_f32	autocollect	32	met_station_obs	insight_apss_pressure_sensor	atmos.nmsu.edu/PDS/data/PDS4/InSight/ps_bundle	-	OK
 noaa_ngs_potomac_topobathy_vq880g_intensity_u16	autocollect	16	laser_range	Riegl VQ-880-G topobathymetric airborne lidar (NOAA NGS Coastal Mapping Program)	NOAA NODD noaa-nos-coastal-lidar-pds (Digital Coast)	-	OK
+noaa_shoals1000t_bluehillbay_topobathy_gps_time_f64	autocollect	64	laser_range	Fugro SHOALS-1000T airborne bathymetric lidar (NOAA/MCP), 2.5 kHz, LAS 1.4 PDRF 6 COPC	NOAA NODD noaa-nos-coastal-lidar-pds (Digital Coast), laz/geoid18/8526	-	OK

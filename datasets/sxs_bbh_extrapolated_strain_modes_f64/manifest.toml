@@ -1,0 +1,127 @@
+manifest_version = 1
+dataset_id = "sxs_bbh_extrapolated_strain_modes_f64"
+name = "SXS:BBH Extrapolated Asymptotic Strain Modes rh/M (N2, CoM, l<=4) Float64"
+description = "Native float64 spin-weight -2 spherical-harmonic modes r*h_lm/M (real and imaginary parts) of the asymptotic gravitational-wave strain from 51 SpEC binary-black-hole merger simulations of the SXS catalog (2019 Zenodo deposits, highest available resolution), extrapolation order N=2, center-of-mass corrected, all 21 modes with 2 <= l <= 4."
+homepage = "https://zenodo.org/communities/sxs"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "SXS Collaboration, Binary black-hole simulation SXS:BBH:NNNN, Zenodo (2019), one DOI per record listed in sims.tsv; Boyle et al., The SXS Collaboration catalog of binary black hole simulations, Class. Quantum Grav. 36, 195006 (2019), arXiv:1904.04831."
+notes = "Each of the 51 pinned Zenodo records declares metadata.license.id = 'cc-by-4.0'; download.sh re-fetches every record JSON and refuses to continue if any license, title, file size or MD5 changed. Attribute the SXS Collaboration and cite the catalog paper."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official SXS Collaboration deposits in the Zenodo 'sxs' community, fetched from zenodo.org file-content URLs. Output values are numerical-relativity simulation results; no personal data. metadata.json is read only for consistency checks (it contains a point-of-contact e-mail that is not emitted)."
+usage_notes = "Public, CC BY 4.0, simulation output; appropriate for reproducible numeric collection."
+
+[[origins]]
+id = "zenodo_sxs_community"
+name = "SXS Collaboration catalog on Zenodo (community 'sxs')"
+url = "https://zenodo.org/communities/sxs"
+type = "repository"
+notes = "2,165 records match 'SXS:BBH'; 2,019 of them are 2019-07..09 deposits with cc-by-4.0 and a rhOverM_Asymptotic_GeometricUnits_CoM.h5 file. Newer catalog versions (CaltechDATA, RPDMB-compressed) are deliberately not used."
+
+[[resources]]
+id = "sxs_bbh_com_h5_n2_l4_ranges"
+origin = "zenodo_sxs_community"
+url = "https://zenodo.org/api/records/{record_id}/files/{h5_key}/content"
+type = "shard"
+version = "2019 Zenodo deposits; record ids, keys, sizes and MD5s pinned in sims.tsv"
+access = "Anonymous HTTPS byte-range GETs (206 with exact Content-Range checked) of 64 KiB-aligned blocks of 51 HDF5 files; only the blocks holding the superblock, root/N2 symbol tables, the 21 l<=4 Extrapolated_N2 dataset headers, their chunk B-trees and their chunks are fetched."
+size_bytes = 4746019385
+sha256 = ""
+local_path = "downloads/sxs_bbh_extrapolated_strain_modes_f64/blocks/"
+notes = "size_bytes is the sum of the 51 full file sizes; roughly 8-9% of it is fetched. Selection: every 40th eligible record by SXS:BBH number (scripts/select_sims.py, discover.sh), highest Lev with both CoM rhOverM file and metadata.json. Each chunk's zlib Adler-32 and exact decoded size are checked; the control file cross-checks range assembly against a whole-file MD5."
+
+[[resources]]
+id = "sxs_bbh_1180_control_h5"
+origin = "zenodo_sxs_community"
+url = "https://zenodo.org/api/records/3326358/files/Lev5/rhOverM_Asymptotic_GeometricUnits_CoM.h5/content"
+type = "file"
+version = "SXS:BBH:1180 Lev5 (2019 deposit)"
+access = "Direct public download, resumable."
+size_bytes = 77635939
+sha256 = ""
+local_path = "downloads/sxs_bbh_extrapolated_strain_modes_f64/control/SXS_BBH_1180.h5"
+notes = "Zenodo MD5 02342ddb5d9a74e70e4f74f31f464881. Used only by verify.sh to prove every range block of this simulation equals the same bytes of the MD5-verified whole file."
+
+[[resources]]
+id = "sxs_bbh_record_metadata"
+origin = "zenodo_sxs_community"
+url = "https://zenodo.org/api/records/{record_id} and .../files/{meta_key}/content"
+type = "api_query_result"
+version = "2019 Zenodo deposits"
+access = "Record JSON (license/file checks) and per-Lev metadata.json (MD5-pinned in sims.tsv)."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/sxs_bbh_extrapolated_strain_modes_f64/records/ and metadata/"
+notes = "metadata.json supplies common_horizon_time and com_parameters for the physics and CoM cross-checks; none of it is emitted."
+
+[local_paths]
+downloads = "downloads/sxs_bbh_extrapolated_strain_modes_f64/"
+filtered = "filtered/sxs_bbh_extrapolated_strain_modes_f64/"
+index = "index/sxs_bbh_extrapolated_strain_modes_f64/"
+samples = "samples/sxs_bbh_extrapolated_strain_modes_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/sxs_bbh_extrapolated_strain_modes_f64/samples.jsonl"
+summary = "Range-fetch and decode (pure-stdlib HDF5: superblock v0, v1 object headers, symbol-table groups, v1 chunk B-tree, shuffle+deflate) the Extrapolated_N2.dir/Y_l{l}_m{m}.dat [N,3] float64 datasets for 2<=l<=4 of 51 SXS:BBH CoM strain files; emit columns 1-2 (Re, Im) interleaved per mode, and column 0 (retarded time) once per simulation."
+deterministic_notes = "sims.tsv pins record ids, file keys, sizes and MD5s; download.sh re-validates license and file identity per record, MD5-checks metadata.json and the control file, and accepts range responses only as 206 with exact Content-Range. Build checks float64 IEEE datatype, [N,3] shape with N>=1000, identical row counts and bit-identical time columns across the 21 modes, strictly increasing time, all values finite, no constant mode, N2 group space_translation/boost_velocity attributes equal metadata.json com_parameters, and |h22| peak within -150..+250 M of metadata common_horizon_time with amplitude 0.02..0.6. Verify re-decodes every dataset through a separate row-wise extraction path, byte-compares every sample, checks index sizes/sha256/min/max, rejects constant or non-finite samples and stray files, compares manifest counts, and byte-compares the control simulation's range blocks to the MD5-verified whole file."
+
+[[series]]
+id = "sxs_bbh_rhoverm_n2_mode_reim_f64"
+description = "Complex asymptotic strain mode r*h_lm/M, real and imaginary parts interleaved, for one (simulation, l, m) with 2 <= l <= 4, -l <= m <= l."
+semantic_meaning = "Dimensionless gravitational-wave strain (scaled by extraction radius r and total mass M) of one spin-weight -2 spherical-harmonic mode, extrapolated to future null infinity with polynomial order N=2 and corrected to the center-of-mass frame, sampled on the simulation's non-uniform retarded-time grid from early (junk-radiation) times through inspiral, merger and ringdown."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The HDF5 datasets are IEEE binary64 little-endian; columns 1 and 2 are copied bit-exactly. Interleaving Re/Im row by row reproduces the source row order minus the time column."
+source_resources = ["sxs_bbh_com_h5_n2_l4_ranges"]
+source_format = "HDF5 (superblock v0) rhOverM_Asymptotic_GeometricUnits_CoM.h5, chunked float64 datasets with shuffle+deflate filters"
+source_field = "Extrapolated_N2.dir/Y_l{l}_m{m}.dat columns 1-2 (Re, Im of r*h_lm/M), 2<=l<=4"
+filtered_input_path = "filtered/sxs_bbh_extrapolated_strain_modes_f64/ingest_stats.json"
+filtering = "Only the Extrapolated_N2.dir group (N3, N4 and OutermostExtraction are near-duplicate extrapolations and are never read) and only modes with l<=4 (21 per simulation; l=5..8 are progressively weaker, down to ~1e-6 at l=8, and increasingly dominated by numerical noise, so they are excluded to keep the amplitude regime narrower). All m including m=0 are kept. Every row of each dataset is kept."
+missing_value_policy = "No missing values exist in the source; any non-finite value, constant mode, missing chunk, duplicate chunk, row-count mismatch or time-column mismatch is fatal. Nothing is dropped or imputed."
+conversion = "Inflate each chunk (zlib, Adler-32 checked), undo the 8-byte shuffle, place the (C,1) column chunks into the logical [N,3] row-major array, drop edge padding, then write [Re_0, Im_0, Re_1, Im_1, ...] as little-endian float64; one file per (simulation, mode)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64, shape [N, 2] row-major (Re, Im)"
+sample_geometry = "complex_mode_time_series_interleaved_re_im"
+sample_rank = 2
+sample_axes = ["retarded_time_step", "re_im"]
+natural_record_kind = "sxs_simulation_extrapolated_n2_strain_mode_dataset"
+sample_count = 1071
+total_size_bytes = 286700400
+output_path = "samples/sxs_bbh_extrapolated_strain_modes_f64/sxs_bbh_rhoverm_n2_mode_reim_f64/"
+
+[[series]]
+id = "sxs_bbh_rhoverm_n2_retarded_time_f64"
+description = "Retarded time t/M of the N2 waveform rows, one array per simulation."
+semantic_meaning = "Non-uniform retarded-time coordinate (geometric units of total mass M) shared bit-identically by all modes of one simulation's Extrapolated_N2 group."
+role = "auxiliary"
+representation_class = "native_numeric"
+representation_notes = "Column 0 of Y_l2_m-2.dat, verified identical to column 0 of all 21 emitted modes."
+source_resources = ["sxs_bbh_com_h5_n2_l4_ranges"]
+source_format = "HDF5 (superblock v0) chunked float64 dataset"
+source_field = "Extrapolated_N2.dir/Y_l2_m-2.dat column 0 (t/M)"
+filtered_input_path = "filtered/sxs_bbh_extrapolated_strain_modes_f64/ingest_stats.json"
+filtering = "One array per simulation."
+missing_value_policy = "Must be finite and strictly increasing; otherwise fatal."
+conversion = "Column 0 of the decoded [N,3] array written as little-endian float64."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw little-endian float64, shape [N]"
+sample_geometry = "time_axis"
+sample_rank = 1
+sample_axes = ["retarded_time_step"]
+natural_record_kind = "sxs_simulation_extrapolated_n2_time_axis"
+sample_count = 51
+total_size_bytes = 6826200
+output_path = "samples/sxs_bbh_extrapolated_strain_modes_f64/sxs_bbh_rhoverm_n2_retarded_time_f64/"

@@ -1,0 +1,40 @@
+sample_id	ia_name	size_bytes	ia_md5	sample_rate_hz	channels	bits_per_sample	total_samples	streaminfo_md5	artist_tag
+etude_op25_no01	Etude Op. 25 no. 1 in A flat major - 'Aeolian Harp _ Shepherd Boy'.flac	8169554	573386476247a6ff65a4bf763290715e	44100	2	16	7036294	b34d57b1d22700002e47f52f117833a9	Edward Neeman
+etude_op25_no02	Etude Op. 25 no. 2 in F minor - 'The Bees'.flac	5506098	1898be17f770f219808a0d765fc5eda2	44100	2	16	4757095	f16a28cb0465614735d9d8c5326d2686	Edward Neeman
+etude_op25_no03	Etude Op. 25 no. 3 in F major - 'The Horseman'.flac	5611873	11230b82fc6cd56d6b5fa774ac83f8b1	44100	2	16	4518656	ef07cfd37246f21a872edbbbdaa572f6	Edward Neeman
+etude_op25_no04	Etude Op. 25 no. 4 in A minor - 'Paganini'.flac	5755970	43ba8f199fbd4080f8309a58baa4d93f	44100	2	16	4892679	8bc972ea3064d1b71842cb55f0e18ce0	Edward Neeman
+etude_op25_no05	Etude Op. 25 no. 5 in E minor - 'Wrong Note'.flac	11750827	ef0c4379deaabcf4b71e8dcb44a0ae82	44100	2	16	9925615	2cb2a2412a9914c47f16d0fffa1aa648	Edward Neeman
+etude_op25_no06	Etude Op. 25 no. 6 in G sharp minor - 'Thirds'.flac	6918227	12440cc0748191ace5209a34eab0e277	44100	2	16	5741242	db2ae3c8736187a1c9fcfbf7e717bab8	Edward Neeman
+etude_op25_no07	Etude Op. 25 no. 7 in C sharp minor- 'Cello'.flac	16869122	57da7e6ccb7dc7c598ed51e188deed12	44100	2	16	16183475	011060b5b71cbb51f810dda43ddd6faf	Edward Neeman
+etude_op25_no08	Etude Op. 25 no. 8 in D flat major - 'Sixths'.flac	4250701	5d179e05642abe2099d14b439ef2611d	44100	2	16	3424641	9e0e23c7eef633e80f951c550302a84f	Edward Neeman
+etude_op25_no09	Etude Op. 25 no. 9 in G flat major - 'Butterfly'.flac	3816780	364921fd9361bcc66290e93a56e4bac5	44100	2	16	3043606	b34acec9e8e78dbfe0a61f0839c5877a	Edward Neeman
+etude_op25_no10	Etude Op. 25 no. 10 in B minor - 'Octave'.flac	15005494	1fae205bdc89c39b28941c623f5b025b	44100	2	16	11667157	766d6567b7bb44f131f6fa61e868ba9c	Edward Neeman
+etude_op25_no11	Etude Op. 25 no. 11 in A minor - 'Winter Wind'.flac	14044123	e80e2d234096094dea41d0d12121bf52	44100	2	16	9974706	72136175b0d3a8c14f10f532795ac406	Edward Neeman
+etude_op25_no12	Etude Op. 25 no. 12 in C minor - 'Ocean'.flac	10736701	5f3a6fcae824ab89a411b27c4ef3083c	44100	2	16	7627716	0800a4907154ea43e8933ff92762d373	Edward Neeman
+prelude_b86	Prelude in A flat major, B. 86.flac	3293429	ddfac86914d5c924f201b8cfad3a4625	44100	2	16	2165978	2c36ae6f1c4a8540d92c97b1b409e79f	Jeannette Fang
+prelude_no27_devils_trill	Prelude no. 27 'The Devil's Trill'.flac	4549902	2c8079e64a973bfd7f84c28cef2d141c	44100	2	16	2679233	4cd810ff69e05c024f2f5397c1db2c2a	Jeannette Fang
+prelude_op28_no01	Preludes, Op. 28 - No. 1 'Reunion'.flac	2384837	1bf7abf1e55a73117e9127d63d4b1b95	44100	2	16	1448691	ac0139e1acaabc6e153a8de1288a5ab4	Jeannette Fang
+prelude_op28_no02	Preludes, Op. 28 - No. 2 'Presentiment of death'.flac	7433231	3c796b85032e09cbdf7b51298d0e82e7	44100	2	16	6235788	34266094891362fa8de63a78d98782e2	Jeannette Fang
+prelude_op28_no03	Preludes, Op. 28 - No. 3 'Thou Art So Like a Flower''.flac	3399568	4f4bae3c65fe535a50deb073cbf17045	44100	2	16	2382649	0140453e7e6ee71d36441f4904280bc1	Jeannette Fang
+prelude_op28_no04	Preludes, Op. 28 - No. 4 'Suffocation'.flac	6450191	c4b1fb35b619692447a170ade16fce89	44100	2	16	5030572	16ba6c87c827ec2189a6796ac7b4c6f7	Jeannette Fang
+prelude_op28_no05	Preludes, Op. 28 - No. 5 'Uncertainty'.flac	2515958	5129322a1df73d0c5b52969eb790eb89	44100	2	16	1586996	234ef690f844008612e589db3c04f283	Jeannette Fang
+prelude_op28_no06	Preludes, Op. 28 - No. 6 'Tolling bells'.flac	6165777	53387a2be68d4b63867d095401906004	44100	2	16	5337098	e55440536de951212dfbfc6063cc66c3	Jeannette Fang
+prelude_op28_no07	Preludes, Op. 28 - No. 7 'The Polish dancer'.flac	1985158	1497aeca3c3b54320a83521919cbb233	44100	2	16	1491032	0499ee0ab30b71e58cc128502d75db61	Jeannette Fang
+prelude_op28_no08	Preludes, Op. 28 - No. 8 'Desperation'.flac	8828106	b35b2da3ce727eebd12e62bbfddc3415	44100	2	16	5377722	09e35227e3b1e0a06dd0eacb970c3e85	Jeannette Fang
+prelude_op28_no09	Preludes, Op. 28 - No. 9 'Vision'.flac	5162783	8981b2c7eeed5e18ddd77100f9262f8c	44100	2	16	3374163	607f7c3b801237a5d41c64027c70b1de	Jeannette Fang
+prelude_op28_no10	Preludes, Op. 28 - No. 10 'The night moth'.flac	2049384	b0156d27f1b6a4b80774fb7e7303eb77	44100	2	16	1412213	817daa5b17c05adc32063642539cae58	Jeannette Fang
+prelude_op28_no11	Preludes, Op. 28 - No. 11 ' The dragonfly'.flac	2409521	8e601802f0e1ad03554d37132808844d	44100	2	16	1842311	556872b81e88f03a5833aff24ec34757	Jeannette Fang
+prelude_op28_no12	Preludes, Op. 28 - No. 12 'The duel'.flac	6001497	1d5d4f676071512ffb04a21ba1662df5	44100	2	16	3338184	7858f9660b4507e5552f3e363b4c219b	Jeannette Fang
+prelude_op28_no13	Preludes, Op. 28 - No. 13 'Loss'.flac	8860652	60dad7aa0d86e3a1bb22bf53c96584d6	44100	2	16	7032798	bf3e257240e97a02df69cd8985c9413d	Jeannette Fang
+prelude_op28_no14	Preludes, Op. 28 - No. 14 'Stormy sea'.flac	3013933	353ec119978ef2cb3058149e521fa19b	44100	2	16	1770927	f1f7c50802ebb094addfe52ebb2c795a	Jeannette Fang
+prelude_op28_no15	Preludes, Op. 28 - No. 15 'Raindrop'.flac	17919568	9f98338eddd4995cc084d0f3944e892d	44100	2	16	13951801	b6c4933c599f38c90dc9c75143151792	Jeannette Fang
+prelude_op28_no16	Preludes, Op. 28 - No. 16 'Hades'.flac	5968296	bd3b230a35c95e052d487536ee4f3a88	44100	2	16	3271730	d1187caa4437e267c1164f4908a64c91	Jeannette Fang
+prelude_op28_no17	Preludes, Op. 28 - No. 17 'Scene on the Place de Notre-Dame'.flac	10430419	1f38412b8e2ae13daccf63e62e0f3e4a	44100	2	16	7118989	36f1714bb5c68a1ec112bb214fcc97ed	Jeannette Fang
+prelude_op28_no18	Preludes, Op. 28 - No. 18 'Suicide'.flac	5631759	5285cdd257784ef37978ebe530e7fca0	44100	2	16	3139865	7bf1e70557561b4bb432ee960b609c17	Jeannette Fang
+prelude_op28_no19	Preludes, Op. 28 - No. 19 'Heartfelt happiness'.flac	5478508	d20068adaa577e06050a60a652536824	44100	2	16	3571296	151819204f1b26ab28ccc54d6ec75dd3	Jeannette Fang
+prelude_op28_no20	Preludes, Op. 28 - No. 20 'Funeral march'.flac	6117522	d5fe7363a576278728af5ccfc11ac9be	44100	2	16	4646244	611722d1aad0f9d6d49479db1276d0da	Jeannette Fang
+prelude_op28_no21	Preludes, Op. 28 - No. 21 'Sunday'.flac	7273315	f72622f1a1a06edecb8e4f7ca149b995	44100	2	16	5218522	50c8a9e42b50fe5b9442ce3b711d17fe	Jeannette Fang
+prelude_op28_no22	Preludes, Op. 28 - No. 22 'Impatience'.flac	4688524	eaa786182f85a31f943d6cad49899201	44100	2	16	2476740	7357aa404004da5dc3bc89f13b76b474	Jeannette Fang
+prelude_op28_no23	Preludes, Op. 28 - No. 23 'A pleasure boat'.flac	3175561	162ae59fd1e9748084b2c7940c3ea9c0	44100	2	16	2273538	3d2a2622663a5fee1d0c63846b76c56b	Jeannette Fang
+prelude_op28_no24	Preludes, Op. 28 - No. 24 'The storm'.flac	11473218	449fdf5e0f3c52bf646167b3c677f28b	44100	2	16	6304088	c602b33a5e2fbdcce39810d6a9a2dadf	Jeannette Fang
+prelude_op45	Prelude in C sharp minor, Op. 45.flac	16082947	afbf4d20bbdca0ed5bbc8f4d461fbbcf	44100	2	16	12176238	eebdb0476ddba7e90961379ab3e23e8a	Jeannette Fang

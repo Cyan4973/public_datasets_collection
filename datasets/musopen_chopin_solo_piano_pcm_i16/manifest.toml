@@ -1,0 +1,142 @@
+manifest_version = 1
+dataset_id = "musopen_chopin_solo_piano_pcm_i16"
+name = "Musopen 'Set Chopin Free' Solo-Piano Preludes and Etudes, 16-bit 44.1 kHz Stereo PCM"
+description = "The Prelude and Etude tracks of Musopen's CC0 'Set Chopin Free' Chopin recordings whose FLAC STREAMINFO is 44.1 kHz / stereo / 16-bit: 39 complete solo-piano pieces (the complete 24 Preludes Op. 28 plus Preludes B. 86, Op. 45 and 'no. 27' by Jeannette Fang; the complete 12 Etudes Op. 25 by Edward Neeman), about 77.6 minutes, one bit-exact decoded int16 interleaved-stereo sample per piece."
+homepage = "https://archive.org/details/musopen-chopin-complete-works-flac"
+
+[license]
+name = "Creative Commons CC0 1.0 Universal Public Domain Dedication"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "Musopen (musopen.org), 'The Complete Works of Frederic Chopin' / 'Set Chopin Free' Kickstarter project (2013-2015). Performers (from the FLAC tags): Jeannette Fang (Preludes), Edward Neeman (Etudes Op. 25)."
+notes = "Evidence chain, all checked by download.sh: (1) the 2013 Kickstarter campaign page (pinned Wayback snapshot 20130908225009, sha256 365d9aec...) FAQ: 'What license will the music recordings be released under? Like all the previous music we released, we will be using Creative Common's CC0 dedication, a public domain dedication: http://creativecommons.org/publicdomain/zero/1.0/'; (2) Musopen's own first-party Internet Archive item musopen-chopin (uploader aaron@musopen.org, 2015) carries licenseurl CC0 1.0 and is the 'download for free' link of MusicBrainz release ab46c4ff-af73-4ed4-bbfb-665d6358b7ec, whose release group 45aa5c1a-a439-4104-9794-bcd87d5f7963 is the one written into the FLAC tags (LABEL=Musopen); (3) the bulk item musopen-chopin-complete-works-flac (third-party upload 2026, publisher Musopen) declares licenseurl CC0 1.0 and ships the Musopen booklet whose title page reads 'SET FREE BY MUSOPEN.ORG'; (4) Wikimedia Commons hosts the same Edward Neeman Op. 25 Etude recordings in Category:Set Chopin Free as public domain (PD-author Musopen). Caveat: the first-party item holds ALAC/MP3 encodings of an earlier, smaller edition (no Etudes; Preludes 7+8 and 19+20 combined, different edits), so the exact Jeannette Fang Prelude files are covered by the project-wide CC0 statement rather than by a per-file first-party page. The compositions are public domain (Chopin d. 1849)."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Studio/concert recordings commissioned by the non-profit Musopen for its crowd-funded Set Chopin Free project; Internet Archive copy (malware-checked by IA curation) with per-file md5 published in the item metadata."
+usage_notes = "Public-domain classical piano audio; no voices or personal data. Keep the Musopen and performer credit as a courtesy."
+
+[[origins]]
+id = "ia_flac_item"
+name = "Internet Archive: Musopen - The Complete Works of Frederic Chopin (FLAC)"
+url = "https://archive.org/details/musopen-chopin-complete-works-flac"
+type = "mirrorless_archive"
+notes = "Bulk source: 152 16-bit FLAC + 62 24-bit FLAC tracks transcoded losslessly (XLD, libFLAC 1.3.3) from Musopen's ALAC release, plus the project booklet PDF. Per-file md5 in https://archive.org/metadata/musopen-chopin-complete-works-flac."
+
+[[origins]]
+id = "ia_musopen_first_party"
+name = "Internet Archive: Musopen - The Complete Chopin Collection (first-party, aaron@musopen.org)"
+url = "https://archive.org/details/musopen-chopin"
+type = "mirrorless_archive"
+notes = "Musopen's own CC0 upload (2015). Used as rights evidence only; its audio is an earlier ALAC/MP3 edition and is not downloaded."
+
+[[origins]]
+id = "kickstarter_wayback"
+name = "Wayback Machine snapshot of the Set Chopin Free Kickstarter page"
+url = "https://web.archive.org/web/20130908225009/http://www.kickstarter.com/projects/Musopen/set-chopin-free"
+type = "website"
+notes = "Campaign page with the CC0 licence FAQ; kickstarter.com itself answers 403 to scripted clients."
+
+[[resources]]
+id = "ia_flac_item_metadata"
+origin = "ia_flac_item"
+url = "https://archive.org/metadata/musopen-chopin-complete-works-flac"
+type = "api_query_result"
+version = "fetched at download time"
+access = "Public JSON API."
+size_bytes = 339639
+sha256 = ""
+local_path = "downloads/musopen_chopin_solo_piano_pcm_i16/meta/musopen-chopin-complete-works-flac.metadata.json"
+notes = "Volatile (view counters, derivatives), so not hash-pinned; download.sh requires licenseurl CC0, publisher Musopen, and the exact pinned name/format/size/md5 for all 39 selected files."
+
+[[resources]]
+id = "ia_first_party_metadata"
+origin = "ia_musopen_first_party"
+url = "https://archive.org/metadata/musopen-chopin"
+type = "api_query_result"
+version = "fetched at download time"
+access = "Public JSON API."
+size_bytes = 234805
+sha256 = ""
+local_path = "downloads/musopen_chopin_solo_piano_pcm_i16/meta/musopen-chopin.metadata.json"
+notes = "Rights evidence; download.sh requires uploader aaron@musopen.org and licenseurl CC0 1.0."
+
+[[resources]]
+id = "kickstarter_snapshot"
+origin = "kickstarter_wayback"
+url = "https://web.archive.org/web/20130908225009id_/http://www.kickstarter.com:80/projects/Musopen/set-chopin-free"
+type = "file"
+version = "20130908225009"
+access = "Public Wayback Machine raw snapshot."
+size_bytes = 79353
+sha256 = "365d9aecc2579a3637488b738b8a6d988bbb86dadd4d730836838073b292f4e6"
+local_path = "downloads/musopen_chopin_solo_piano_pcm_i16/evidence/kickstarter_set_chopin_free_20130908.html"
+notes = "Rights evidence: CC0 licence FAQ."
+
+[[resources]]
+id = "booklet_ocr_text"
+origin = "ia_flac_item"
+url = "https://archive.org/download/musopen-chopin-complete-works-flac/Chopin%20Project%20-%20Musopen_djvu.txt"
+type = "file"
+version = "IA derivative md5 4e6005a2954d809c549ffe7deb3dfe0b"
+access = "Direct public download."
+size_bytes = 45551
+sha256 = "2b16cf6b0d9a75a135cf4e480c3e55451d85891cd9a9bb554deedf93f00c1a8c"
+local_path = "downloads/musopen_chopin_solo_piano_pcm_i16/evidence/chopin_project_musopen_booklet_djvu.txt"
+notes = "OCR text of the item's Musopen booklet ('THE MUSIC OF FREDERIC CHOPIN / SET FREE BY MUSOPEN.ORG'); provenance evidence only."
+
+[[resources]]
+id = "flac_tracks"
+origin = "ia_flac_item"
+url = "https://archive.org/download/musopen-chopin-complete-works-flac/"
+type = "file"
+version = "IA item files as of 2026-10-08 (per-file md5 pinned)"
+access = "Direct public download, one resumable curl GET per file (archive.org/download redirects to the serving node)."
+size_bytes = 277179034
+sha256 = ""
+local_path = "downloads/musopen_chopin_solo_piano_pcm_i16/flac/"
+notes = "The 39 files listed in scripts/pinned_files.tsv (1,985,158 to 17,919,568 B), each pinned by IA md5, size, and STREAMINFO (44100 Hz, 2 ch, 16 bps, total_samples, MD5 signature). Saved as <sample_id>.flac."
+
+[local_paths]
+downloads = "downloads/musopen_chopin_solo_piano_pcm_i16/"
+extracted = "extracted/musopen_chopin_solo_piano_pcm_i16/"
+filtered = "filtered/musopen_chopin_solo_piano_pcm_i16/"
+index = "index/musopen_chopin_solo_piano_pcm_i16/"
+samples = "samples/musopen_chopin_solo_piano_pcm_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/musopen_chopin_solo_piano_pcm_i16/samples.jsonl"
+summary = "Fetch the 39 pinned 16-bit/44.1 kHz/stereo Prelude and Etude FLAC tracks plus rights evidence, decode each track with ffmpeg to raw signed 16-bit little-endian interleaved stereo PCM without resampling or channel changes, and emit one sample per complete piece with a sample index."
+deterministic_notes = "Selection was resolved by scripts/discover.sh: from the IA metadata, every *.flac whose name contains 'Prelude' or 'tude' (52 files, no cello-sonata tracks), keep those whose STREAMINFO (read from an 8 KiB range request) is 44100 Hz / 2 ch / 16 bps: 40 files. Excluded at 16 bps: the 12 Op. 10 Etudes at 48 kHz; no Prelude/Etude file is 24-bit or 96 kHz. One further exclusion after a spectral audit (EXCLUDED in scripts/musopen_chopin.py): Etude B. 130 (sole Donald Betts track) has a brick-wall cutoff (-116 dB above 15 kHz, digital zero above 18 kHz), the signature of a lossy or low-passed master, unlike the smooth -80..-100 dB high-band noise floor of the other 39; 39 files kept. The pinned table fixes IA name, size, md5, total_samples and STREAMINFO MD5. Build asserts decoded bytes == total_samples*2*2 and MD5(decoded PCM) == STREAMINFO MD5 (bit-exact lossless decode), sorts by sample_id, and never concatenates pieces. Pieces that are constant, >50% zero values, >50% leading+trailing digital silence, dual-mono, lacking odd values, or with <1024 distinct values are fatal."
+
+[[series]]
+id = "chopin_solo_piano_pcm_s16_stereo"
+description = "Decoded 16-bit stereo PCM of one complete solo-piano Prelude or Etude recording."
+semantic_meaning = "Signed 16-bit linear PCM amplitude of a professionally recorded acoustic solo-piano performance, interleaved left/right at 44.1 kHz, exactly as stored (losslessly) in the Musopen FLAC track."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "FLAC is lossless; the emitted values are the native 16-bit PCM samples, verified bit-exact against the FLAC STREAMINFO MD5 signature."
+source_resources = ["flac_tracks"]
+source_format = "FLAC (STREAMINFO 44100 Hz, 2 channels, 16 bits per sample)"
+source_field = "decoded interleaved PCM audio samples (left, right)"
+filtered_input_path = "filtered/musopen_chopin_solo_piano_pcm_i16/ingest_stats.json"
+filtering = "Keep only the 39 pinned Prelude/Etude tracks at 44.1 kHz/stereo/16-bit; exclude 48 kHz and 96 kHz tracks, all 24-bit tracks, the spectrally band-limited Etude B. 130, the Cello Sonata and all other genres. Each complete track is kept whole, including any leading/trailing room tone or silence (recorded per sample in the index)."
+missing_value_policy = "No missing values exist in PCM. Missing files, md5/size/STREAMINFO mismatches, decoder errors, decoded length != total_samples*2 values, MD5-signature mismatch, and degenerate pieces (see deterministic_notes) are fatal; nothing is trimmed or imputed."
+conversion = "ffmpeg -i <track>.flac -map 0:a:0 -vn -f s16le -acodec pcm_s16le <sample>.bin (no -ar/-ac, so no resampling, remixing or dithering); output is raw little-endian int16, frames interleaved L,R; one .bin per piece named by sample_id."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw interleaved little-endian int16 stereo PCM (L,R,L,R,...)"
+sample_geometry = "interleaved_stereo_waveform"
+sample_rank = 2
+sample_shape = [-1, 2]
+sample_axes = ["time_frame_44100hz", "channel_left_right"]
+sample_rate_hz = 44100
+natural_record_kind = "complete_recorded_piece_flac_track"
+sample_count = 39
+total_size_bytes = 821793152
+output_path = "samples/musopen_chopin_solo_piano_pcm_i16/chopin_solo_piano_pcm_s16_stereo/"

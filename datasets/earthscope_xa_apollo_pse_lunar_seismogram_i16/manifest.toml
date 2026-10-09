@@ -1,0 +1,127 @@
+manifest_version = 1
+dataset_id = "earthscope_xa_apollo_pse_lunar_seismogram_i16"
+name = "Apollo Passive Seismic Experiment (FDSN XA 1969-1977) Long-Period Vertical MHZ Lunar Seismograms, Peaked Mode, Native 10-bit Digital Units as Int16"
+description = "Complete UTC days of the long-period vertical (MHZ, 6.625 sps, location 00 = peaked response mode) channel of the Apollo 12, 14, 15 and 16 ALSEP Passive Seismic Experiment seismometers on the Moon, 1971-1977, from the Nunn et al. (2022) restored archive served by EarthScope as FDSN network XA (1969-1977). Steim2 miniSEED decoded losslessly to the native 10-bit digital units (0..1023) with the archive's inline -1 missing-sample marker, written as little-endian int16, one sample per station-day."
+homepage = "https://www.fdsn.org/networks/detail/XA_1969/"
+
+[license]
+name = "NASA SMD Open Scientific Data Policy"
+spdx = "LicenseRef-NASA-SMD-Open-Data"
+url = "https://science.nasa.gov/researchers/science-data/science-information-policy/"
+citation = "Latham, G. V., et al. 1970, Passive Seismic Experiment, Science 167 (3918): 455-457, https://doi.org/10.1126/science.167.3918.455; Nunn, C., Nakamura, Y., Kedar, S., Panning, M.P., 2022, A New Archive of Apollo's Lunar Seismic Data, Planet. Sci. J. 3, 219, https://doi.org/10.3847/PSJ/ac87af; network DOI https://doi.org/10.7914/SN/XA_1969 (Apollo Passive Seismic Experiments, FDSN XA 1969-1977); data retrieved from the EarthScope FDSN web services, https://service.earthscope.org/fdsnws/."
+notes = "Apollo ALSEP Passive Seismic Experiment data are NASA mission data. NASA SMD Scientific Information Policy (re-fetched and validated by download.sh): 'NASA holds this information, including publications, data, and software, as a public trust to increase knowledge and serve the public good. It is Science Mission Directorate (SMD) policy, consistent with NASA and Federal policies, that information produced from SMD-funded scientific research activities be made publicly available.' The FDSN station service lists network XA (1969-1977) with restrictedStatus=open, and the archive authors' getting-started notebook states 'The archive is public at IRIS and the Planetary Data System.' No CC tag exists: the DataCite record for 10.7914/SN/XA_1969 has an empty rightsList. This is the same NASA SMD open-data basis as the accepted nasa_pds_lola_rdr_spot_radius_range_i32, grail_lgrs_kbr1c_ka_band_ranging_f64 and nasa_pds_mola_megdr_i16 recipes. Cite Latham et al. 1970 and Nunn et al. 2022 as requested on the FDSN network page."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official EarthScope (formerly IRIS DMC) FDSN dataselect and station web-service responses only; the FDSN network page and NASA policy page are fetched as license evidence."
+usage_notes = "Lunar seismometer telemetry (instrument digital units); no people or personal information."
+
+[[origins]]
+id = "earthscope_fdsnws"
+name = "EarthScope FDSN web services (formerly IRIS DMC)"
+url = "https://service.earthscope.org/fdsnws/"
+type = "api"
+notes = "fdsnws-dataselect 1 (miniSEED, records trimmed to the requested window) and fdsnws-station 1 (text). Network XA is reused by later temporary networks, so every request is pinned to station S12/S14/S15/S16, location 00, channel MHZ and a UTC day inside 1971-1977, and every record's network/station/location/channel is checked."
+
+[[origins]]
+id = "fdsn_network_page"
+name = "FDSN network page XA (1969-1977): Apollo Passive Seismic Experiments"
+url = "https://www.fdsn.org/networks/detail/XA_1969/"
+type = "website"
+notes = "Network description, DOI 10.7914/SN/XA_1969 and citation requests (Latham et al. 1970; Nunn et al. 2022)."
+
+[[origins]]
+id = "nasa_smd_policy"
+name = "NASA Science Mission Directorate Scientific Information Policy"
+url = "https://science.nasa.gov/researchers/science-data/science-information-policy/"
+type = "website"
+notes = "Open-data policy statement for NASA SMD mission data."
+
+[[resources]]
+id = "xa_mhz_station_days"
+origin = "earthscope_fdsnws"
+url = "https://service.earthscope.org/fdsnws/dataselect/1/query?net=XA&sta={station}&loc=00&cha=MHZ&start={day}T00:00:00&end={day+1}T00:00:00&nodata=404"
+type = "api_query_result"
+version = "plan.tsv pinned 2026-10-09 (119 station-days: S12 36, S14 17, S15 36, S16 30; 1971-1977)"
+access = "Anonymous HTTPS GET, one request per plan row; HTTP 404 = no data."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/earthscope_xa_apollo_pse_lunar_seismogram_i16/mseed/XA.{station}.00.MHZ.{day}.mseed"
+notes = "Dynamic service responses (records may be repacked/trimmed by the server), so no upstream checksum exists; download.sh rejects non-miniSEED or wrong-stream payloads on arrival, then runs the Steim2 self-test, decodes every record with X0/Xn checks, writes mseed.sha256 and download_outcome.tsv, and fails if fewer than 70 station-days pass the full-day policy or fewer than 4 stations / 6 years remain. Probed days were 356-360 KB each (87-88 4096-byte Steim2 records); expected ~43 MB total."
+
+[[resources]]
+id = "xa_channel_inventory"
+origin = "earthscope_fdsnws"
+url = "https://service.earthscope.org/fdsnws/station/1/query?net=XA&starttime=1969-07-01&endtime=1977-12-31&level=channel&format=text"
+type = "api_query_result"
+version = "fetched at download time"
+access = "Anonymous HTTPS GET."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/earthscope_xa_apollo_pse_lunar_seismogram_i16/xa_channels.txt"
+notes = "Build/verify require each plan station to list XA.<sta>.00.MHZ at 6.625 sps with sensor 'Apollo PSE Alsep Seismometer' and an epoch inside 1969-1977."
+
+[[resources]]
+id = "fdsn_xa_1969_page"
+origin = "fdsn_network_page"
+url = "https://www.fdsn.org/networks/detail/XA_1969/"
+type = "file"
+version = "fetched at download time"
+access = "Anonymous HTTPS GET."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/earthscope_xa_apollo_pse_lunar_seismogram_i16/fdsn_xa_1969.html"
+notes = "download.sh fails unless the page names 'Apollo Passive Seismic Experiments' and DOI 10.7914/SN/XA_1969."
+
+[[resources]]
+id = "nasa_smd_policy_page"
+origin = "nasa_smd_policy"
+url = "https://science.nasa.gov/researchers/science-data/science-information-policy/"
+type = "file"
+version = "fetched at download time"
+access = "Anonymous HTTPS GET."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/earthscope_xa_apollo_pse_lunar_seismogram_i16/nasa_smd_science_information_policy.html"
+notes = "download.sh fails unless the page contains the SMD open-data policy sentence."
+
+[local_paths]
+downloads = "downloads/earthscope_xa_apollo_pse_lunar_seismogram_i16/"
+filtered = "filtered/earthscope_xa_apollo_pse_lunar_seismogram_i16/"
+index = "index/earthscope_xa_apollo_pse_lunar_seismogram_i16/"
+samples = "samples/earthscope_xa_apollo_pse_lunar_seismogram_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/earthscope_xa_apollo_pse_lunar_seismogram_i16/samples.jsonl"
+summary = "Fetch 119 pinned XA station-days of MHZ location-00 Steim2 miniSEED, decode with a self-tested pure-Python Steim2 reader, and emit one little-endian int16 sample (~572,400 values) per station-day that is contiguous, nearly complete and has at most 20% -1 missing-sample markers."
+deterministic_notes = "plan.tsv (station, UTC day) was resolved once by discover.sh / scripts/discover.py: 8 crc32-derived candidate days per station-year (S12, S14, S15, S16 x 1971-1977, inside the location-00 MHZ epoch, <= 1977-09-29), a POST presence probe of three 10-minute windows (03:00, 12:00, 21:00 UTC) per candidate, present = >= 95% of window samples and <= 20% -1; then up to 36 days per station round-robin over years. Realized (download 2026-10-09): 106 of 119 plan station-days emitted (S12 30, S14 16, S15 31, S16 29; every year 1971-1977; 60,666,177 values, 121,332,354 bytes); skipped: 5 degenerate (<16 distinct valid levels), 4 short (<99% of a day), 2 inter-record gaps, 2 with >20% -1. 126 of 216 candidates were present (S14 location 00 has little data 1972-1975; location 00 is absent for S12/S15/S16 during the 1975-06-28..1977-03-27 flat-mode period). Build and verify use only local files, process plan rows in order, and name samples XA.<sta>.00.MHZ.<YYYYMMDD>.i16. Each record is decoded with blockette-1000 record length/encoding/word order, header byte order from BTIME, BTIME + time correction + blockette 1001, Steim2 X0/Xn integration constants checked; scripts/selftest_steim2.py (synthetic Steim2 encoder covering every sub-format, Xn corruption and short-frame rejection, chain assembly) runs before every download validation, build and verify. Index rows carry min/max, -1 count, valid min/max, distinct values, mode value and fraction, count of 1023, max |step| between valid values, source record count, max chain timing deviation and sha256; ingest_stats.json lists every skipped station-day with its reason and an aggregate hash."
+
+[[series]]
+id = "apollo_pse_mhz_peaked_du_i16"
+description = "Raw long-period vertical (MHZ) output of the Apollo ALSEP Passive Seismic Experiment seismometers at stations S12, S14, S15 and S16, peaked response mode (location 00), one complete UTC day per sample, native 10-bit digital units."
+semantic_meaning = "Each value is one 10-bit telemetry word (digital units 0..1023) of the long-period vertical seismometer sampled at a nominal 6.625 sps on a constant sampling interval (the archive's ATT channel records the true timing; the stream itself is uniform). The signal is a DC level (realized day modes ~440-520 DU) with thermal/tidal drift, moonquakes and impacts, and telemetry glitches including occasional full-scale 1023 words; -1 marks a missing sample (an absent or invalid telemetry frame) stored inline by the archive."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Steim2 miniSEED stores the integer digital units; decoding is lossless and values are written unchanged as int16 (range -1..1023 checked). The source quantity is 10-bit, so int16 is the narrowest native signed width that also holds the -1 marker."
+source_resources = ["xa_mhz_station_days", "xa_channel_inventory"]
+source_format = "miniSEED 2 data records (Steim2, encoding 11, 4096-byte) from fdsnws-dataselect"
+source_field = "decoded integer samples of channel XA.<station>.00.MHZ (Apollo PSE long-period vertical, peaked mode)"
+filtered_input_path = "filtered/earthscope_xa_apollo_pse_lunar_seismogram_i16/ingest_stats.json"
+filtering = "Keep only network XA, stations S12/S14/S15/S16, location 00, channel MHZ at 6.625 sps for the plan days (1971-01-01..1977-09-30). Excluded: S11 (Apollo 11, 1969 only), location 01 (flat response mode), the blank-location metadata epochs, the short-period SHZ channel (53 sps), the horizontals MH1/MH2/MHE/MHN and the ATT timing channel. A station-day is emitted only if its records form one contiguous chain (each record starts within 1 sample period of the previous record's nominal end; exact duplicate records dropped; conflicting duplicates, gaps or overlaps reject the day), it holds 566,676..572,401 samples (>= 99% of 86,400 s x 6.625), all values lie in -1..1023, at most 20% of the values are -1, and the valid values take at least 16 distinct levels; otherwise the whole day is skipped and logged (never split, spliced or concatenated across days)."
+missing_value_policy = "The archive stores missing samples inline as -1 on its constant-interval stream (Nunn et al. 2022 getting-started notes: 'we use -1 to store a missing sample'). They are source data and are preserved verbatim; the per-sample count is recorded in the index (gap_marker_count) and days with more than 20% -1 are skipped. Full-scale 1023 words and other telemetry glitches are real archive content and are not filtered (count_1023 recorded). Time gaps between records, conflicting overlaps, short days or no data skip the whole station-day (logged in ingest_stats.json). Structurally invalid miniSEED (bad header, missing blockette 1000, non-Steim2 encoding, Steim2 X0/Xn mismatch, wrong stream identity, wrong sample rate) is fatal."
+conversion = "Decode each miniSEED record (header byte order from BTIME plausibility, record length and word order from blockette 1000, BTIME + time correction + blockette 1001), integrate Steim2 differences from X0 and check the last sample equals Xn, sort the day's records by start time, drop exact duplicates, require a contiguous chain, concatenate the samples in time order and write them as little-endian int16 (2 bytes per value, ~1,144,800 bytes per day)."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian int16 array"
+sample_geometry = "variable_length_6p625hz_station_day_time_series"
+sample_rank = 1
+sample_axes = ["sample_index_within_utc_day"]
+natural_record_kind = "seismometer_channel_utc_day"
+sample_count = 106
+total_size_bytes = 121332354
+output_path = "samples/earthscope_xa_apollo_pse_lunar_seismogram_i16/apollo_pse_mhz_peaked_du_i16/"

@@ -433,3 +433,4 @@ noaa_goes16_xrs_1s_flux_f32	autocollect	32	solar_xray_irradiance	goes_r_exis_xrs
 figshare_dfl_bundesliga_position_tracking_f32	autocollect	32	trajectory_positions	dfl_optical_tracking_25hz	springernature.figshare.com/28196177	-	OK
 protomaps_osm_z15_building_coords_i16	autocollect	16	gis_vector_geometry	openstreetmap_protomaps_mvt	build.protomaps.com	-	OK
 google_hdrplus_pixel_raw_bayer_u16	autocollect	16	raw_bayer_cfa_image	google_pixel_imx378_camera2_raw	storage.googleapis.com/hdrplusdata	-	OK
+irsa_spherex_qr3_l2_spectral_image_f32	autocollect	32	calibrated_sky_image	spherex_lvf_hgcdte	nasa-irsa-spherex.s3/qr3/level2	-	OK

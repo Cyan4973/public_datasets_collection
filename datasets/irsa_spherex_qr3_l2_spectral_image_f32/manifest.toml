@@ -1,0 +1,102 @@
+manifest_version = 1
+dataset_id = "irsa_spherex_qr3_l2_spectral_image_f32"
+name = "SPHEREx Quick Release 3 Level-2 Calibrated Spectral Images, Detector 1 IMAGE Extension (float32 MJy/sr)"
+description = "30 whole IMAGE extensions (2040 x 2040 native float32, MJy/sr) of SPHEREx Level-2 calibrated spectral images from detector 1 (SWIR band 1, ~0.75-1.1 um linear variable filter), Quick Release 3 pipeline run l2b-v27, three all-sky survey exposures from each of the ten QR3 week groups (2026-07-20 to 2026-08-23), fetched from the IRSA AWS Open Data bucket by HTTP range requests that stop at the end of the IMAGE data unit."
+homepage = "https://irsa.ipac.caltech.edu/Missions/spherex.html"
+
+[license]
+name = "Creative Commons Zero 1.0 (NASA science data from a NASA-led mission)"
+spdx = "CC0-1.0"
+url = "https://science.data.nasa.gov/about/license"
+citation = "This publication makes use of data products from the Spectro-Photometer for the History of the Universe, Epoch of Reionization and Ices Explorer (SPHEREx), which is a joint project of the Jet Propulsion Laboratory and the California Institute of Technology, and is funded by the National Aeronautics and Space Administration. Data from the NASA/IPAC Infrared Science Archive (IRSA). Bock et al. (2025), Akeson et al. (2025)."
+notes = "NASA Science Data Licenses page: 'Unless the data file is marked with a restrictive notice or license, data that is provided from a NASA-led mission including observations, engineering, calibration, and auxiliary data are licensed as Creative Commons Zero. There are no restrictions on the usage of these data.' SPHEREx is a NASA MIDEX mission (JPL/Caltech); the pinned FITS headers carry no license or restrictive-notice card. IRSA's SPHEREx page asks for the acknowledgement quoted in the citation. download.sh re-fetches both pages as evidence (transport failure only warns; a fetched page that no longer carries the CC0 sentence or the acknowledgement is fatal). At authoring (2026-10-08) the license page was 71,255 bytes (sha256 807e6f45...eeb8) and the IRSA page 9,212 bytes (sha256 68a52b2e...f450)."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official IRSA SPHEREx bucket on AWS Open Data (s3://nasa-irsa-spherex, us-east-1), anonymous HTTPS, not requester-pays; calibrated near-infrared sky images."
+usage_notes = "Only the IMAGE data unit (calibrated surface brightness) is emitted. Index rows carry only file name, week group, pipeline run, OBSID/EXPIDN, detector, unit, observation time, exposure time, pointing (CRVAL1/2) and value statistics."
+
+[[origins]]
+id = "irsa_spherex_s3"
+name = "NASA/IPAC Infrared Science Archive SPHEREx bucket (AWS Open Data)"
+url = "https://nasa-irsa-spherex.s3.us-east-1.amazonaws.com/"
+type = "bucket"
+notes = "Anonymous S3 ListObjectsV2 of qr3/level2/<week group>/l2b-v27-<yyyy>-<ddd>/1/ (discover.sh). The bucket is not versioned; objects are pinned by key, size and ETag and fetched with If-Match."
+
+[[resources]]
+id = "spherex_qr3_l2_d1_image_prefixes"
+origin = "irsa_spherex_s3"
+url = "https://nasa-irsa-spherex.s3.us-east-1.amazonaws.com/qr3/level2/"
+type = "file"
+version = "QR3, primary pipeline runs l2b-v27-2026-222/223/224/240/241/243 (SSDC pipeline VERSION 7.0.5); S3 Last-Modified 2026-09-17..; 30 objects pinned in sources.tsv (resolved 2026-10-08)"
+access = "Anonymous HTTPS Range GET bytes=0-16675199 of each pinned object with If-Match on its pinned ETag (HTTP 412 if the object was reprocessed). Resumable: the missing tail is re-requested and appended."
+size_bytes = 500256000
+sha256 = ""
+local_path = "downloads/irsa_spherex_qr3_l2_spectral_image_f32/image_prefix/"
+notes = "Each local file <stem>.primary_image.fits is a valid two-HDU FITS file: the PRIMARY header (2,880 bytes), the IMAGE header (25,920 bytes for all 30 pins) and the 16,646,400-byte IMAGE data unit. The full objects are 59-70 MB; FLAGS (RICE-compressed), VARIANCE, ZODI, PSF and WCS-WAVE extensions are never fetched. sources.tsv pins key, ETag, object size, Last-Modified, data offset, prefix length, the SHA-256 of the header bytes (from discovery), OBSID, EXPIDN, DATE-OBS, pointing and XPOSURE. The SHA-256 of each whole prefix is recorded in download_plan.tsv at download time and enforced by build and verify."
+
+[[resources]]
+id = "nasa_science_data_license"
+origin = "irsa_spherex_s3"
+url = "https://science.data.nasa.gov/about/license"
+type = "file"
+version = "fetched at download time (best effort)"
+access = "Anonymous HTTPS; semantically checked for the CC0 sentence when reachable."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/irsa_spherex_qr3_l2_spectral_image_f32/evidence/nasa_science_data_license.html"
+notes = "Rights evidence only; not a sample source."
+
+[[resources]]
+id = "irsa_spherex_page"
+origin = "irsa_spherex_s3"
+url = "https://irsa.ipac.caltech.edu/Missions/spherex.html"
+type = "file"
+version = "fetched at download time (best effort)"
+access = "Anonymous HTTPS; semantically checked for the SPHEREx acknowledgement when reachable."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/irsa_spherex_qr3_l2_spectral_image_f32/evidence/irsa_spherex.html"
+notes = "Acknowledgement and release-history evidence only; not a sample source."
+
+[local_paths]
+downloads = "downloads/irsa_spherex_qr3_l2_spectral_image_f32/"
+filtered = "filtered/irsa_spherex_qr3_l2_spectral_image_f32/"
+index = "index/irsa_spherex_qr3_l2_spectral_image_f32/"
+samples = "samples/irsa_spherex_qr3_l2_spectral_image_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/irsa_spherex_qr3_l2_spectral_image_f32/samples.jsonl"
+summary = "Range-fetch the PRIMARY + IMAGE prefix of 30 pinned SPHEREx QR3 L2 detector-1 spectral-image FITS files, validate the header regime and data sanity, and emit each IMAGE data unit (BITPIX -32, 2040 x 2040, MJy/sr) as one little-endian float32 sample, bit-exact."
+deterministic_notes = "discover.sh listed the ten QR3 week groups (2026W30_1B .. 2026W34_2A) and, in each, the detector-1 directory of the single primary l2b-v27 run (the small l2b_retry side runs are excluded): 1,757-1,845 detector-1 exposures per group, 18,209 in total, from 609-758 observations per group. In each group the observations are sorted and three are picked at positions floor((k+0.5)*n/3), k=0..2, preferring exposure k+1 of the observation; a pick that fails the header regime advances to the next observation (no pick failed on 2026-10-08; a re-run reproduced sources.tsv byte-for-byte). Header regime (IMAGE HDU): XTENSION=IMAGE, BITPIX=-32, NAXIS=2, NAXIS1=NAXIS2=2040, PCOUNT=0, GCOUNT=1, EXTNAME=IMAGE, BUNIT='MJy / sr', DETECTOR=1, DETCOORD=sky, JACTIVE=KACTIVE=2040, L1DQAFLG=L2DQAFLG=Pass, NON_SURVEY=False, OBSID equal to the file name, 100 s < XPOSURE < 130 s, no BSCALE/BZERO other than identity, no BLANK/ZIMAGE; PRIMARY: SIMPLE=T, NAXIS=0, EXTEND=T, VERSION='7.0.5'. Header offsets are parsed, not hard-coded (observed data offset 28,800 for every pin). Each image must have non-finite fraction <= 2%, >= 100,000 distinct float32 bit patterns, finite min != max, finite mean within (-10, 1000) MJy/sr, and no duplicate image. verify.sh re-walks every prefix with a separately written card parser, byte-swaps with a different method (slice interleave vs array.byteswap), byte-compares each sample, recomputes NaN/Inf counts, finite min/max/mean and distinct bit patterns from the stored float32, and checks index fields, totals, the 10 x 3 week-group coverage and these manifest counts. scripts/selftest.py (run by build.sh) checks both header walkers and both decoders on a synthetic multi-block SPHEREx-shaped FITS file with signed zeros, infinities, payload NaNs, subnormals and float32 extremes."
+
+[[series]]
+id = "spherex_qr3_d1_l2_image_mjysr_f32"
+description = "Whole IMAGE extensions of SPHEREx Level-2 calibrated spectral images from detector 1: 2040 x 2040 native float32 surface brightness in MJy/sr per exposure."
+semantic_meaning = "Calibrated near-infrared sky surface brightness (MJy/sr) of every light-sensitive pixel of SPHEREx detector 1 (a 2040 x 2040 active-area HgCdTe H2RG in the SWIR focal plane) for one ~113.6 s all-sky-survey exposure. A linear variable filter makes the central wavelength vary along the array (about 0.75-1.1 um for band 1), so each image is a spectral image: zodiacal-light and diffuse background with a wavelength gradient, stars and galaxies (PSF FWHM ~7.5 arcsec on 6.2 arcsec pixels), He-I airglow, cosmic-ray and artifact residue. Values come from the SSDC L2 pipeline (non-linearity, dark, flat-field and photometric calibration); a zodiacal-light model is stored separately (ZODI extension, not emitted) and IMAGE is not zodi-subtracted (typical values ~0.2-0.6 MJy/sr). Outlier/artifact pixels flagged in FLAGS keep their IMAGE values (observed extremes of several thousand MJy/sr of either sign)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "FITS stores the IMAGE array as BITPIX = -32 (IEEE-754 big-endian float32) with no scaling. The recipe only reverses byte order; every 32-bit pattern, including NaN payloads, is preserved. Values are not rescaled, clipped, masked or re-quantized."
+source_resources = ["spherex_qr3_l2_d1_image_prefixes"]
+source_format = "FITS (SPHEREx QR3 Level-2 spectral image *_spx_l2b-v27-*.fits): empty PRIMARY HDU, IMAGE float32 extension, then FLAGS, VARIANCE, ZODI, PSF and WCS-WAVE extensions (not fetched)"
+source_field = "IMAGE extension data unit: calibrated surface brightness, BUNIT 'MJy / sr', NAXIS1 = 2040 columns x NAXIS2 = 2040 rows"
+filtered_input_path = "filtered/irsa_spherex_qr3_l2_spectral_image_f32/ingest_stats.json"
+filtering = "Detector 1 only (directory 1/, D1 in the file name, header DETECTOR = 1); QR3 primary l2b-v27 runs only; three survey exposures (NON_SURVEY = False, L1/L2 DQA Pass) per each of the ten QR3 week groups, picked by the deterministic observation-position rule in deterministic_notes. Other detectors (2-6: other wavelength bands), retry runs, QR2 and other extensions are excluded."
+missing_value_policy = "Every pixel is preserved bit-exact, including the NaN values the pipeline writes for unusable pixels (observed ~150-200 per image in probes, ~0.004%) and any +/-Inf; pixels flagged in FLAGS (which is not fetched or decoded) keep their native IMAGE values. NaN/Inf are counted in the index (nan_count, inf_count) and excluded only from finite_min/finite_max/finite_mean. An image whose non-finite fraction exceeds 2%, with fewer than 100,000 distinct values, constant, implausible mean, duplicated, or failing any size, ETag, SHA-256 or header-regime check fails the recipe rather than being skipped."
+conversion = "Walk the 2,880-byte FITS header blocks of the PRIMARY and IMAGE HDUs to the END card, take the NAXIS1*NAXIS2*4 = 16,646,400 data bytes that follow (an exact multiple of 2,880, so no padding), byte-swap each 4-byte big-endian float32 to little-endian, and write the whole image in FITS axis order (column fastest, then row) to samples/irsa_spherex_qr3_l2_spectral_image_f32/spherex_qr3_d1_l2_image_mjysr_f32/<file stem>.f32; one sample per exposure, no cropping or tiling."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 calibrated sky image"
+sample_geometry = "fixed_2040x2040_spherex_detector_image"
+sample_rank = 2
+sample_shape = [2040, 2040]
+sample_axes = ["detector_row_y", "detector_column_x"]
+natural_record_kind = "spherex_l2_spectral_image_exposure_image_extension"
+sample_count = 30
+total_size_bytes = 499392000
+output_path = "samples/irsa_spherex_qr3_l2_spectral_image_f32/spherex_qr3_d1_l2_image_mjysr_f32/"

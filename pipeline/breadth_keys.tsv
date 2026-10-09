@@ -435,3 +435,4 @@ protomaps_osm_z15_building_coords_i16	autocollect	16	gis_vector_geometry	openstr
 google_hdrplus_pixel_raw_bayer_u16	autocollect	16	raw_bayer_cfa_image	google_pixel_imx378_camera2_raw	storage.googleapis.com/hdrplusdata	-	OK
 irsa_spherex_qr3_l2_spectral_image_f32	autocollect	32	calibrated_sky_image	spherex_lvf_hgcdte	nasa-irsa-spherex.s3/qr3/level2	-	OK
 desi_dr1_coadd_dark_flux_f32	autocollect	32	spectrum_1d	desi_mayall_spectrograph	data.desi.lbl.gov/public/dr1	-	OK
+nihcc_chestxray14_frontal_radiograph_png_u8	autocollect	8	projection_radiograph	nihcc_pacs_chestxray14_png	nihcc_box	-	OK

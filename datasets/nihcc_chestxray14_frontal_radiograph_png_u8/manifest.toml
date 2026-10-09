@@ -1,0 +1,90 @@
+manifest_version = 1
+dataset_id = "nihcc_chestxray14_frontal_radiograph_png_u8"
+name = "NIH Clinical Center ChestX-ray14 Frontal Chest Radiographs (1024x1024 8-bit grayscale) UInt8"
+description = "Frontal-view (PA/AP) chest X-ray images from the NIH Clinical Center ChestX-ray14 release, decoded from the official 1024x1024 8-bit grayscale PNGs: every whole PNG member inside a pinned 14 MiB prefix of each of the 12 official images_NNN.tar.gz tarballs, one raw uint8 image per sample."
+homepage = "https://nihcc.app.box.com/v/ChestXray-NIHCC"
+
+[license]
+name = "NIH Clinical Center unrestricted use with attribution (ChestX-ray14 FAQ Q04)"
+spdx = "LicenseRef-NIHCC-ChestXray14-unrestricted-attribution"
+url = "https://nihcc.app.box.com/v/ChestXray-NIHCC"
+citation = "Xiaosong Wang, Yifan Peng, Le Lu, Zhiyong Lu, Mohammadhadi Bagheri, Ronald M. Summers. ChestX-ray8: Hospital-scale Chest X-ray Database and Benchmarks on Weakly-Supervised Classification and Localization of Common Thorax Diseases. IEEE CVPR 2017, pp. 3462-3471. Data: NIH Clinical Center, https://nihcc.app.box.com/v/ChestXray-NIHCC"
+notes = "FAQ_CHESTXRAY.pdf in the official NIH CC Box folder (72,223 bytes, SHA-256 674665256e6a14c8ebaa93648f438c2b4ca21205167839559bab3ecc89b6b83a) answers 'Q 04: Are there any restrictions in using this dataset?' with: 'The usage of the data set is unrestricted. But you should provide the link to our original download site, acknowledge the NIH Clinical Center and provide a citation to our CVPR 2017 paper.' download.sh fetches the PDF anonymously on every run and fails unless the size, SHA-256 and the extracted Q04 sentence still match. Released by a US federal agency (NIH Clinical Center). This is an explicit unrestricted-use grant with an attribution request, not a named SPDX licence; hence the LicenseRef identifier."
+
+[safety]
+contains_sensitive_data = true
+contains_personal_data = false
+provenance_notes = "Official NIH Clinical Center release on its Box share; no mirrors. De-identified clinical chest radiographs extracted by NIH from the hospital PACS and published as PNGs (the CVPR 2017 paper and the dataset README describe the de-identification). Tar member names (images/<8-digit patient index>_<3-digit follow-up>.png) carry NIH's public pseudonymous patient index only."
+usage_notes = "Samples contain only pixel values. The index keeps the tar member name for provenance; the disease labels (Data_Entry_2017.csv), bounding boxes, patient age/sex and view position are not downloaded or emitted. Do not attempt re-identification or linkage. Provide the link to the original download site, acknowledge the NIH Clinical Center and cite the CVPR 2017 paper."
+
+[[origins]]
+id = "nihcc_box"
+name = "NIH Clinical Center ChestX-ray (ChestX-ray14 / ChestX-ray8) Box share"
+url = "https://nihcc.app.box.com/v/ChestXray-NIHCC"
+type = "data_portal"
+notes = "Public anonymous Box folder. The 12 images_NNN.tar.gz tarballs are served by the static links listed in NIH's batch_download_zips.py; they redirect (301, 301, 302) to short-lived signed public.boxcloud.com URLs that honour byte Range. HEAD on the static links returns 404, so download.sh issues a ranged GET with -L from the static link on every request."
+
+[[resources]]
+id = "faq_chestxray_pdf"
+origin = "nihcc_box"
+url = "https://nihcc.app.box.com/index.php?rm=box_download_shared_file&vanity_name=ChestXray-NIHCC&file_id=f_249502714403"
+type = "file"
+version = "FAQ_CHESTXRAY.pdf as of 2026-10-08"
+access = "Anonymous Box shared-file download."
+size_bytes = 72223
+sha256 = "674665256e6a14c8ebaa93648f438c2b4ca21205167839559bab3ecc89b6b83a"
+local_path = "downloads/nihcc_chestxray14_frontal_radiograph_png_u8/FAQ_CHESTXRAY.pdf"
+notes = "Licence evidence (Q04) and the full-tarball MD5 list (Q07). Text is extracted by scripts/faq_check.py from the PDF's Flate content streams."
+
+[[resources]]
+id = "images_tarball_prefixes"
+origin = "nihcc_box"
+url = "https://nihcc.box.com/shared/static/<hash>.gz  (12 pinned hashes in download.sh / scripts/nih_pins.py)"
+type = "shard"
+version = "images_001..images_012.tar.gz, full sizes 2,008,470,987 / 3,952,623,504 / 3,929,234,850 / 3,838,903,983 / 3,935,496,531 / 3,986,301,172 / 4,016,328,426 / 4,018,347,353 / 4,111,327,929 / 4,181,556,296 / 4,187,084,020 / 2,914,187,733 bytes (Content-Range totals, checked on every request)"
+access = "HTTP Range 0-14,680,063 of each tarball (14 MiB), resumable by continuing the range; HTTP 206, Content-Disposition filename and Content-Range total enforced."
+size_bytes = 176160768
+sha256 = ""
+local_path = "downloads/nihcc_chestxray14_frontal_radiograph_png_u8/images_NNN.prefix14680064.tar.gz"
+notes = "12 x 14,680,064 bytes. Per-prefix SHA-256 values from the verified 2026-10-08 download are pinned in scripts/nih_pins.py PREFIX_SHA256 and enforced by download, build and verify (images_001 02c6040f..., images_012 97cde53f...). Full-tarball MD5s from FAQ Q07 are recorded for reference only (prefixes cannot be checked against them)."
+
+[local_paths]
+downloads = "downloads/nihcc_chestxray14_frontal_radiograph_png_u8/"
+filtered = "filtered/nihcc_chestxray14_frontal_radiograph_png_u8/"
+index = "index/nihcc_chestxray14_frontal_radiograph_png_u8/"
+samples = "samples/nihcc_chestxray14_frontal_radiograph_png_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nihcc_chestxray14_frontal_radiograph_png_u8/samples.jsonl"
+summary = "Fetch FAQ_CHESTXRAY.pdf (licence evidence) and a 14 MiB prefix of each of the 12 official ChestX-ray14 tarballs, inflate each gzip prefix, walk the ustar headers, keep only the PNG members whose data lies wholly inside the prefix, decode every 1024x1024 8-bit grayscale PNG with a strict pure-stdlib decoder, and emit each image as one raw uint8 sample."
+deterministic_notes = "Selection: tarballs images_001..images_012 in order; within each, every regular tar member (name matching images/\\d{8}_\\d{3}\\.png) whose header and data end inside the inflated 14,680,064-byte gzip prefix, in tar order. The trailing member cut by the prefix boundary is dropped. Members whose IHDR is not exactly 1024x1024, bit depth 8, colour type 0, compression 0, filter 0, interlace 0 (ChestX-ray14 is known to contain a few RGBA / grey+alpha PNGs) are skipped and listed in ingest_stats.json, never converted. Build: zlib.decompressobj(31) inflate, ustar header checksum and magic checked, unsupported tar member types fatal; PNG chunk CRCs checked, PLTE/tRNS/unknown critical chunks and non-consecutive IDAT rejected, IDAT inflated with exact stream end and length 1024*(1024+1), filters 0-4 undone. Fatal in build and verify alike: a prefix of the wrong size or pinned SHA-256, a malformed gzip/tar/PNG, a constant image, fewer than 64 distinct values, a modal value above 90 % of the image, or a duplicate pixel payload. download.sh additionally requires HTTP 206, the pinned Content-Disposition filename and Content-Range total, the gzip magic and at least 20 whole qualifying members per prefix. scripts/selftest.py round-trips 141 synthetic PNGs (filter types 0-4 fixed and mixed per row, split IDAT, ancillary chunks, one full 1024x1024 image) through both decoders, checks 15 malformed-PNG rejections, and checks both tar-prefix walkers on a synthetic ustar .tar.gz cut at 32 offsets; build.sh and verify.sh run it first. verify.sh re-derives every sample with independent code (manual RFC 1952 header parse plus raw inflate, tarfile member walk, separate PNG chunk walker and flat-buffer unfilter), byte-compares every sample, re-derives the skip list, recomputes every index field and statistic, checks the sample directory against the index and the manifest counts, and enforces the pinned total of 430 samples and the aggregate SHA-256 over '<sample name>\\t<sample sha256>' lines (31787da346e9612163e226e9b736af2f24bc8818c71806200874f34604ef65cd)."
+
+[[series]]
+id = "chestxray14_frontal_radiograph_u8"
+description = "Frontal-view (PA or AP) chest radiographs from the NIH Clinical Center ChestX-ray14 release, one 1024x1024 8-bit grayscale image per sample."
+semantic_meaning = "Each value is the 8-bit display intensity of one pixel of a frontal chest X-ray as published by NIH: the clinical DICOM image from the NIH CC PACS, windowed by NIH and resized to 1024x1024, then stored as 8-bit grayscale PNG. Higher value = brighter (more attenuating, e.g. bone); 0-255 range. Many images carry NIH black (0) padding where a smaller or rotated radiograph was placed on the 1024x1024 canvas (median zero fraction ~1 %, mean 2.6 %, three images 48-52 %), plus burned-in L/R markers."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The published PNGs store one 8-bit grayscale sample per pixel (colour type 0, bit depth 8, no palette, no transparency). Decoding inflates and unfilters the scanlines and writes those stored 8-bit values unchanged: no rescaling, windowing, cropping, padding or resampling by this recipe. The NIH windowing/downsampling from DICOM is the publisher's own, and the PNG is the only form NIH distributes (FAQ Q06)."
+source_resources = ["images_tarball_prefixes"]
+source_format = "PNG (1024x1024, 8-bit grayscale, non-interlaced) members of the ustar tarballs images_NNN.tar.gz"
+source_field = "PNG IDAT image data of each images/<patient>_<followup>.png member, decoded to its 1024 x 1024 uint8 grayscale pixel raster"
+filtered_input_path = "filtered/nihcc_chestxray14_frontal_radiograph_png_u8/ingest_stats.json"
+filtering = "Only the tar members wholly contained in each pinned 14 MiB prefix are considered; the cut trailing member is dropped. Non-1024x1024-8-bit-grayscale PNGs are skipped and logged: 2 of 432 whole members (images_003 images/00004882_001.png and images_004 images/00006757_000.png, both 1024x1024 8-bit RGBA, colour type 6). 430 images from 429 distinct patient indices are emitted (34-38 per tarball). Labels, bounding boxes, split lists and patient metadata are not used. Every pixel of every kept image is emitted; nothing is cropped."
+missing_value_policy = "No missing-value sentinels: every pixel is a stored image value, and zeros (borders, collimation) are kept as data. Malformed gzip/tar/PNG data, wrong prefix sizes, constant or near-constant images (fewer than 64 distinct values or a modal value above 90 %) and duplicate pixel payloads are fatal in both build and verify; no values are dropped or imputed."
+conversion = "Inflate the gzip prefix, walk ustar headers to each whole PNG member, validate the PNG chunk stream, zlib-inflate the concatenated IDAT data, undo the per-scanline filter (0 none, 1 sub, 2 up, 3 average, 4 Paeth; 1 byte per pixel), and write the 1024 rows top row first as one raw uint8 sample per image (sample_shape [1024, 1024]). 8-bit values need no byte-order change."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 chest radiograph image"
+sample_geometry = "fixed_1024x1024_chest_radiograph"
+sample_rank = 2
+sample_axes = ["image_row_y", "image_column_x"]
+sample_shape = [1024, 1024]
+natural_record_kind = "chestxray14_frontal_radiograph_png_image"
+sample_count = 430
+total_size_bytes = 450887680
+output_path = "samples/nihcc_chestxray14_frontal_radiograph_png_u8/chestxray14_frontal_radiograph_u8/"

@@ -263,6 +263,7 @@ aalto_arni_room_impulse_response_f32	ok	28047600	112190400	265	105840	423360	0	0
 aloft_uva_vpts_animal_reflectivity_f32	ok	28369050	113476200	465	71200	284800	0	0	0	1	none	none
 covertype_uci	ok	28469588	34279708	49	581012	581012	0	0	0	1	none	none
 nrel_resstock2021_state_enduse_load_profiles_f64	ok	29188320	233506560	833	35040	280320	0	0	0	1	none	none
+nasa_pds_lola_rdr_spot_radius_range_i32	ok	29782498	119129992	56	553988	2215952	0	0	0	1	none	none
 binance_usdm_futures_aggtrades_btc_eth_2024_w01	ok	30405852	243246816	28	882679	7061432	76014630	501696558	70	1	none	none
 naif_mro_sc_bus_attitude_ck_f64	ok	30800000	246400000	88	350000	2800000	4400000	35200000	44	1	none	none
 exomol_state_energy_levels_f64	ok	31168077	249344616	43	65869	526952	0	0	0	1	none	none

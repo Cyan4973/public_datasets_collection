@@ -1,0 +1,127 @@
+manifest_version = 1
+dataset_id = "nasa_pds_lola_rdr_spot_radius_range_i32"
+name = "LRO LOLA Level-3 RDR Per-Spot Lunar Radius and Two-Way Laser Range (mm), Mapping Orbit, Native LSB Int32"
+description = "Per-laser-spot lunar surface radius from the Moon's centre (RADIUS_k, LSB_INTEGER mm, ~1.73e9) and per-spot two-way laser range from LRO to the surface (RANGE_k, mm, 2.9e7-7.4e7) from the Lunar Orbiter Laser Altimeter (LOLA) Reduced Data Record, PDS collection LRO-L-LOLA-3-RDR-V1.0. One orbit product per phase directory of LRO's quasi-circular ~50 km polar mapping orbit (lro_no_01..13, lro_sm_01..15; 28 orbits, 2009-10-04 .. 2011-10-17). One sample per orbit and quantity: all valid spots in shot order (28 Hz), spots 1..5 within a shot, as native little-endian int32."
+homepage = "https://pds-geosciences.wustl.edu/missions/lro/lola.htm"
+
+[license]
+name = "NASA SMD Open Scientific Data Policy"
+spdx = "LicenseRef-NASA-SMD-Open-Data"
+url = "https://science.nasa.gov/researchers/science-data/science-information-policy/"
+citation = "Smith, D.E., et al., LRO LOLA Reduced Data Record (RDR), LRO-L-LOLA-3-RDR-V1.0, NASA Planetary Data System, 2010 (product version V1.04, release 2014-09-15)."
+notes = "NASA SMD policy: 'NASA holds this information, including publications, data, and software, as a public trust to increase knowledge and serve the public good. It is Science Mission Directorate (SMD) policy, consistent with NASA and Federal policies, that information produced from SMD-funded scientific research activities be made publicly available.' LRO/LOLA is a NASA mission; the RDR collection is archived by the NASA PDS Geosciences Node and served anonymously over HTTPS. Neither the product labels, lolardr.fmt nor the volume aareadme.txt state any use restriction. Same basis as the accepted grail_lgrs_kbr1c_ka_band_ranging_f64 and nasa_pds_mola_megdr_i16 recipes (same host)."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NASA PDS Geosciences Node archive (pds-geosciences.wustl.edu), collection lro-l-lola-3-rdr-v1/lrolol_1xxx. Size and the MD5 published in the collection's MD5 list (lrolol_1xxx_260915.md5) are pinned per product in sources.tsv; lolardr.fmt is SHA-256 pinned; no mirrors."
+usage_notes = "Planetary laser-altimeter range and geolocated surface radius of the Moon; no people, imagery or personal information."
+
+[[origins]]
+id = "pds_geosciences_lola_rdr"
+name = "NASA PDS Geosciences Node - LRO LOLA RDR collection (LRO-L-LOLA-3-RDR-V1.0)"
+url = "https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/"
+type = "mirrorless_archive"
+notes = "data/lola_rdr/<phase>/lolardr_<YYDDDHHMM>.{dat,lbl}, one fixed-record binary table per ~113 min orbit. Only 28 orbits of the 28 mapping-orbit phase directories lro_no_01..13 and lro_sm_01..15 are fetched (one per phase, chosen by discover.sh). The 166 extended-science (lro_es_*) phases and lro_sm_16..26 (orbit change toward 30 x 180 km elliptical) are not touched."
+
+[[resources]]
+id = "lolardr_fmt"
+origin = "pds_geosciences_lola_rdr"
+url = "https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/label/lolardr.fmt"
+type = "file"
+version = "LOLARDR.FMT v2.42 with 2010-01-26 and 2011-01-11 edits (Last-Modified 2011-02-27)"
+access = "Direct anonymous HTTPS download."
+size_bytes = 26916
+sha256 = "62855a2463d09e53a198cf06ccb22726d20ca5999a872da02bb93e290688505f"
+local_path = "downloads/nasa_pds_lola_rdr_spot_radius_range_i32/lolardr.fmt"
+notes = "PDS3 structure file for the 66-column, 256-byte RDR record. MD5 891c56808f8f44e4dfecac33163f91df matches the volume MD5 list. download/build check that RADIUS_k, RANGE_k, SHOT_FLAG_k sit at START_BYTE 49/53/77 + 40(k-1) (1-based) with unit MILLIMETERS; verify re-derives its word offsets from this file."
+
+[[resources]]
+id = "lola_rdr_labels"
+origin = "pds_geosciences_lola_rdr"
+url = "https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_rdr/<phase>/lolardr_<YYDDDHHMM>.lbl"
+type = "file"
+version = "28 PDS3 labels, MD5 pinned in sources.tsv (from lrolol_1xxx_260915.md5)"
+access = "Direct anonymous HTTPS download, one request per label."
+size_bytes = 168206
+sha256 = ""
+local_path = "downloads/nasa_pds_lola_rdr_spot_radius_range_i32/<phase>/lolardr_<YYDDDHHMM>.lbl"
+notes = "About 6 KB each; FILE_RECORDS/ROWS, RECORD_BYTES=256, COLUMNS=66, DATA_SET_ID, MISSION_PHASE_NAME and ^STRUCTURE=LOLARDR.FMT are checked."
+
+[[resources]]
+id = "lola_rdr_orbits"
+origin = "pds_geosciences_lola_rdr"
+url = "https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_rdr/<phase>/lolardr_<YYDDDHHMM>.dat"
+type = "file"
+version = "28 RDR orbit products, PRODUCT_VERSION_ID V1.04 (released 2014-09-15)"
+access = "Direct anonymous HTTPS download, resumable (curl -C -)."
+size_bytes = 1362084864
+sha256 = ""
+local_path = "downloads/nasa_pds_lola_rdr_spot_radius_range_i32/<phase>/lolardr_<YYDDDHHMM>.dat"
+notes = "Served size, record count, published MD5, label MD5, label mission phase, the discovery candidate rank and the discovery probe kept-spot fraction of each product are pinned in sources.tsv."
+
+[local_paths]
+downloads = "downloads/nasa_pds_lola_rdr_spot_radius_range_i32/"
+filtered = "filtered/nasa_pds_lola_rdr_spot_radius_range_i32/"
+index = "index/nasa_pds_lola_rdr_spot_radius_range_i32/"
+samples = "samples/nasa_pds_lola_rdr_spot_radius_range_i32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_pds_lola_rdr_spot_radius_range_i32/samples.jsonl"
+summary = "Fetch 28 pinned LOLA RDR orbit products (one per mapping-orbit phase) plus labels and lolardr.fmt; decode the fixed 256-byte little-endian records; keep every laser spot that is not MISSING and whose SHOT_FLAG low byte is 0; emit per orbit one int32 radius sample and one int32 range sample (same kept spots, same order)."
+deterministic_notes = "Scope rule (discover.sh): the 28 phase directories of LRO's quasi-circular ~50 km polar mapping orbit, lro_no_01..13 (NOMINAL MISSION) and lro_sm_01..15 (SCIENCE MISSION to 2011-10-31); within each phase the orbit products are sorted by name and tried in bisection order (n/2, n/4, 3n/4, n/8, ...); the first whose 24 x 64-record range-read probe keeps >= 40% of spots is pinned (24 phases at rank 1, lro_sm_04/lro_sm_10 at rank 2, lro_no_04/lro_sm_11 at rank 3; the rejected candidates kept 0-29%). sources.tsv pins phase, file, size, published MD5, record count, label MD5, label MISSION_PHASE_NAME, rank and probe fraction; 5,320,644 records, 1,362,084,864 bytes. Spot policy: keep spot k iff RADIUS_k != -1 and RANGE_k != 4294967295 and (SHOT_FLAG_k & 0xFF) == 0 (lolardr.fmt); order shot-major, spots 1..5. Fatal: size/MD5 mismatch, label field mismatch, fmt START_BYTE/type/unit mismatch, an orbit keeping < 30% of spots, a kept radius outside 1.72e9..1.76e9 mm, a kept range outside 1e7..2.5e8 mm or >= 2^31. Index rows carry phase, source_file, source_md5, orbit_number, start/stop time, product_version, laser (LASER_1 for 18 orbits, LASER_2 for 10), records, spots_total/kept/missing/flagged, kept_fraction, kept_per_spot, min/max (from stored int32), distinct_values and sample_sha256. verify.sh re-derives offsets from lolardr.fmt with its own parser, re-applies the policy on a uint32 word view, compares every sample byte for byte, checks |SC_RADIUS - RADIUS_k - RANGE_k| < 1 km for >= 99% of kept spots per orbit, and rejects constant, < 1000-distinct, non-positive or < 2^24 samples. The geometry check corrects for spacecraft off-nadir pointing, RADIUS ~ SC_RADIUS - RANGE cos(OFFNADIR_ANGLE). 12 of the 28 orbits contain off-nadir slews of 2.3-27.4 deg (max OFFNADIR_ANGLE per orbit is printed by verify), during which RANGE rises by 1/cos(theta). Realized: 28 orbits, 2009-10-04T15:04 .. 2011-10-17T20:17, 5,320,644 records, 26,603,220 spots; kept 14,891,249 (55.98%), missing 11,475,005 (43.13%), flagged 236,966 (0.89%); per-orbit kept fraction 0.4125 (lro_sm_11) .. 0.6255 (lro_sm_02); kept per spot 1..5 = 2,228,748 / 2,175,567 / 4,216,751 / 4,094,920 / 2,175,263. 56 primary samples, 29,782,498 values, 119,129,992 bytes (59,564,996 per series); 391,860 .. 594,067 values per sample, median 557,979. Radius 1,729,991,331 .. 1,744,627,311 mm; range 29,227,370 .. 73,655,275 mm; every sample has >= 93% distinct values. verify.sh SHA-256 of all samples concatenated in index order b0afc376b5ee1b4263279e74e1ac649eb5988f877df0684b44a8379075325a8a."
+
+[[series]]
+id = "spot_radius_mm_i32"
+description = "Distance from the Moon's centre to each valid LOLA laser-spot centroid, one array per RDR orbit product."
+semantic_meaning = "lolardr.fmt RADIUS_k (k = 1..5), 'The distance from the Moon center to the Spot k centroid', LSB_INTEGER, MILLIMETERS, in the MEAN EARTH/POLAR AXIS frame of DE421. Realized values 1,729,991,331 .. 1,744,627,311 mm (lunar topography of about +-10 km about the 1737.4 km reference), so every value uses all four bytes; consecutive values are the five spots of one shot (a ~50 m cross pattern) and then the next 28 Hz shot ~57 m further along track."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Stored exactly as published: the 4-byte LSB_INTEGER field copied unchanged (int32, little-endian). Only the selection of spots is applied; no scaling or re-quantisation."
+source_resources = ["lola_rdr_orbits", "lola_rdr_labels", "lolardr_fmt"]
+source_format = "PDS3 FIXED_LENGTH BINARY table, 256-byte LSB records (one per 28 Hz LOLA shot, 5 spots), structure LOLARDR.FMT"
+source_field = "RADIUS_1..RADIUS_5 (START_BYTE 49 + 40 (k-1), LSB_INTEGER, mm)"
+filtered_input_path = "filtered/nasa_pds_lola_rdr_spot_radius_range_i32/build_stats.json"
+filtering = "All records of the 28 pinned orbit products, in source (time) order; within a record spots 1..5. A spot is kept iff RADIUS_k != -1, RANGE_k != 4294967295 and (SHOT_FLAG_k & 0xFF) == 0."
+missing_value_policy = "Spots with RADIUS_k = -1 (MISSING_CONSTANT) or RANGE_k = 4294967295 (MISSING_CONSTANT; -1 for the LSB_INTEGER-declared RANGE_3) are dropped. Spots whose SHOT_FLAG_k low byte is nonzero are dropped as documented in lolardr.fmt ('Any values other than 0 should be regarded as an invalid measurement'; bits 0-7: not ground, transmit/receive edge missing, transmit energy invalid, autoedit, no pointing). SHOT_FLAG bits 8-9 (RMU phase status) and 16-31 (relative range uncertainty) are not invalidity flags and are not used. No thresholds on the values themselves are used for selection; as fatal sanity checks, every kept radius must lie in 1.72e9 .. 1.76e9 mm and every kept range in 1e7 .. 2.5e8 mm, every orbit must keep >= 30% of its spots, and verify requires |SC_RADIUS - RADIUS_k - RANGE_k cos(OFFNADIR_ANGLE)| < 1 km for >= 99% of kept spots (realized: 100% in every orbit). Dropped counts per orbit (missing, flagged) are in the index."
+conversion = "struct '<i' at byte offset 48 + 40 (k-1) of each 256-byte record (PDS3 START_BYTE - 1); kept values appended in shot-major, spot 1..5 order and written as raw little-endian int32, one file <stem>.i32 per orbit product."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw little-endian int32 1-D array"
+sample_geometry = "time_series"
+sample_rank = 1
+sample_axes = ["laser_spot"]
+natural_record_kind = "published_lola_rdr_orbit_product"
+sample_count = 28
+total_size_bytes = 59564996
+output_path = "samples/nasa_pds_lola_rdr_spot_radius_range_i32/spot_radius_mm_i32/"
+
+[[series]]
+id = "spot_range_mm_i32"
+description = "LOLA two-way laser range (c/2 times time of flight) to each valid laser-spot centroid, one array per RDR orbit product."
+semantic_meaning = "lolardr.fmt RANGE_k (k = 1..5), 'LOLA 2-way range (c/2 times time-of-flight) to the spot k centroid', MILLIMETERS (LSB_UNSIGNED_INTEGER; RANGE_3 declared LSB_INTEGER). In the quasi-circular mapping orbit the values are 29,227,370 .. 73,655,275 mm (realized) and follow spacecraft altitude (slowly varying over the orbit), topography and, during off-nadir slews (12 of 28 orbits, up to 27.4 deg), 1/cos of the off-nadir angle; same kept spots and order as spot_radius_mm_i32."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The published 4-byte unsigned value stored unchanged as int32; every kept value is checked to be < 2^31 (realized maximum 73,655,275), so the int32 bit pattern is identical to the source uint32."
+source_resources = ["lola_rdr_orbits", "lola_rdr_labels", "lolardr_fmt"]
+source_format = "PDS3 FIXED_LENGTH BINARY table, 256-byte LSB records (one per 28 Hz LOLA shot, 5 spots), structure LOLARDR.FMT"
+source_field = "RANGE_1..RANGE_5 (START_BYTE 53 + 40 (k-1), 4-byte LSB integer, mm)"
+filtered_input_path = "filtered/nasa_pds_lola_rdr_spot_radius_range_i32/build_stats.json"
+filtering = "Same kept spots as spot_radius_mm_i32."
+missing_value_policy = "Same spot policy and fatal checks as spot_radius_mm_i32; additionally any kept range >= 2^31 is fatal."
+conversion = "struct '<I' at byte offset 52 + 40 (k-1) of each record, written as raw little-endian int32 (identical bytes); kept values in shot-major, spot 1..5 order, one file <stem>.i32 per orbit product."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw little-endian int32 1-D array"
+sample_geometry = "time_series"
+sample_rank = 1
+sample_axes = ["laser_spot"]
+natural_record_kind = "published_lola_rdr_orbit_product"
+sample_count = 28
+total_size_bytes = 59564996
+output_path = "samples/nasa_pds_lola_rdr_spot_radius_range_i32/spot_range_mm_i32/"

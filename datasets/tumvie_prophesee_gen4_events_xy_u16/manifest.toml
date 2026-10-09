@@ -1,0 +1,122 @@
+manifest_version = 1
+dataset_id = "tumvie_prophesee_gen4_events_xy_u16"
+name = "TUM-VIE Prophesee Gen4 HD Event-Camera Pixel Address Streams (x, y) UInt16, Left Camera"
+description = "Native uint16 per-event pixel coordinates (x column 0-1279, y row 0-719) from the left Prophesee Gen4 HD event camera of the TUM-VIE stereo visual-inertial dataset: for each of the 21 non-calibration sequences, one contiguous window of 4,194,304 consecutive events (128 whole HDF5 chunks, centred on the middle of the stream), emitted as one x sample and one y sample."
+homepage = "https://cvg.cit.tum.de/data/datasets/visual-inertial-event-dataset"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Klenk, S., Chui, J., Demmel, N., and Cremers, D. (2021). TUM-VIE: The TUM Stereo Visual-Inertial Event Dataset. IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS). https://cvg.cit.tum.de/data/datasets/visual-inertial-event-dataset"
+notes = "The official dataset page states verbatim: 'All data in the TUM-VIE Dataset is licensed under a Creative Commons 4.0 Attribution License (CC BY 4.0) and the accompanying source code is licensed under a BSD-2-Clause License.' download.sh re-fetches the page and fails unless that sentence (tags and whitespace normalised) is present and the page still links all 21 pinned <seq>-events_left.h5 URLs. Attribute TUM Computer Vision Group and cite Klenk et al. 2021."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official TUM-VIE file server (tumevent-vi.vision.in.tum.de), linked from the TUM CVG dataset page; exact HTTP byte ranges of ETag-pinned HDF5 files; no mirrors."
+usage_notes = "Event streams are per-pixel brightness-change addresses only (no intensity images). Scenes are a motion-capture room, offices, corridors and outdoor campus paths recorded by the dataset authors; pixel coordinates carry no personal information."
+
+[[origins]]
+id = "tumvie_server"
+name = "TUM-VIE file server"
+url = "https://tumevent-vi.vision.in.tum.de/"
+type = "website"
+notes = "Apache/2.4.58; anonymous HTTPS; Accept-Ranges: bytes; strong ETags; If-Match honoured (wrong ETag -> 412). Files last modified 2021-07-30."
+
+[[origins]]
+id = "tum_cvg_page"
+name = "TUM CVG TUM-VIE dataset page"
+url = "https://cvg.cit.tum.de/data/datasets/visual-inertial-event-dataset"
+type = "website"
+notes = "Official dataset page: sequence list, download links, format note (h5 'events' group with x, y, t, p and 'ms_to_idx' as in DSEC) and the license statement."
+
+[[resources]]
+id = "tumvie_dataset_page"
+origin = "tum_cvg_page"
+url = "https://cvg.cit.tum.de/data/datasets/visual-inertial-event-dataset"
+type = "file"
+version = "live page at download time"
+access = "Direct public download; content-checked (license sentence and the 21 pinned left-event URLs) rather than hashed, because the page is edited cosmetically."
+size_bytes = 229532
+sha256 = ""
+local_path = "downloads/tumvie_prophesee_gen4_events_xy_u16/tumvie_dataset_page.html"
+notes = "License and provenance evidence only; size recorded at authoring time (2026-10-08). Not used by build.sh."
+
+[[resources]]
+id = "tumvie_left_event_files"
+origin = "tumvie_server"
+url = "https://tumevent-vi.vision.in.tum.de/<seq>/<seq>-events_left.h5"
+type = "other"
+version = "21 files pinned by size, ETag and Last-Modified (2021-07-30) in sequences.tsv"
+access = "HTTP Range requests only, each with If-Match on the pinned ETag and checked for 206 + exact Content-Range: 4 KiB metadata ranges chosen by the planner (superblock, symbol-table groups, events/x and events/y object headers, v1 chunk B-tree nodes), then 2-4 coalesced spans per file covering the 128 window chunks of events/x and events/y. Whole files (1,215,913,150 to 17,868,884,571 bytes; 168.7 GB in total) are never fetched."
+size_bytes = 166766558
+sha256 = ""
+local_path = "downloads/tumvie_prophesee_gen4_events_xy_u16/"
+notes = "size_bytes is the fetched total measured by discover.sh at authoring time: 1,060,864 bytes of metadata ranges (259 x 4 KiB) + 165,705,694 bytes of chunk spans (59 spans; 165,500,286 bytes of Blosc chunks plus a few interleaved B-tree nodes). There is no single checksum for this multi-range resource; integrity rests on the pinned ETag (If-Match), the pinned per-window chunk address/size table SHA-256 for x and y in sequences.tsv, Blosc cbytes/nbytes checks, zstd frame checks, and sample SHA-256 values recorded in the index."
+
+[local_paths]
+downloads = "downloads/tumvie_prophesee_gen4_events_xy_u16/"
+filtered = "filtered/tumvie_prophesee_gen4_events_xy_u16/"
+index = "index/tumvie_prophesee_gen4_events_xy_u16/"
+samples = "samples/tumvie_prophesee_gen4_events_xy_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/tumvie_prophesee_gen4_events_xy_u16/samples.jsonl"
+summary = "Walk each pinned TUM-VIE left-camera event HDF5 file's metadata with small byte ranges, resolve the chunk B-tree entries of a fixed 128-chunk window of events/x and events/y, fetch only those Blosc/ZSTD chunks, decode them (zstd CLI + byte unshuffle), and emit each window's x and y streams as raw little-endian uint16 samples."
+deterministic_notes = "Window rule (scripts/tumvie_h5.py window_start): n_chunks = ceil(n_events / 32768); start_chunk = n_chunks // 2 - 64; window = chunks [start_chunk, start_chunk + 128) = events [32768*start_chunk, 32768*(start_chunk+128)), identical for x and y. The window is a fixed, documented position (the middle of the stream), not a tiling: exactly one window per sequence and per camera stream. HDF5 checks: superblock v0 (offset/length size 8, EOF == pinned file size); root links exactly {events, ms_to_idx}; events links exactly {p, t, x, y}; x and y are 1-D little-endian unsigned 16-bit, identical shapes, data layout v3 chunked with chunk dims (32768, 2), exactly one filter (Blosc 32001, cd_values typesize 2, 65,536 chunk bytes, byte shuffle 1, compressor 5 = zstd); every window chunk has filter mask 0. Blosc checks per chunk: format version 1-2, cbytes == stored chunk size, typesize 2, nbytes 65,536, no bit-shuffle; memcpyed and uncompressed-block cases are handled; each zstd frame's content size must equal its block size. Value checks: every x <= 1279 and every y <= 719 in every chunk; per sample >= 256 (x) / 128 (y) distinct values and no value above 25% of the window. sequences.tsv pins per sequence the file size, ETag, Last-Modified, n_events, start chunk, stored x/y bytes and SHA-256 of the x/y chunk address/size tables; download/build/verify all re-derive the plan from cached metadata and require equality. Self-tests (scripts/selftest.py) run synthetic Blosc buffers (5 variants) and a synthetic two-level type-1 B-tree before any decode. Realized: 42 samples (21 x, 21 y) x 4,194,304 values = 8,388,608 bytes each."
+
+[[series]]
+id = "tumvie_left_event_x_u16"
+description = "Event x coordinate (pixel column) of 4,194,304 consecutive events of the left Prophesee Gen4 HD event camera, one window per TUM-VIE sequence."
+semantic_meaning = "Pixel column address (0 = left, 1279 = right) of each contrast-detection event emitted by the left 1280 x 720 Prophesee Gen4 CD sensor, in the camera's native stream order (time-ordered event readout)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Values are the source's own stored uint16 entries of HDF5 dataset events/x; Blosc/ZSTD compression and byte shuffle are undone losslessly; no rescaling, sorting, undistortion or filtering."
+source_resources = ["tumvie_left_event_files"]
+source_format = "HDF5 (superblock v0) TUM-VIE events file; dataset events/x uint16, chunked 32768, Blosc(ZSTD, byte-shuffle) filter 32001"
+source_field = "events/x (event pixel column), elements [32768*start_chunk, 32768*(start_chunk+128))"
+filtered_input_path = "filtered/tumvie_prophesee_gen4_events_xy_u16/ingest_stats.json"
+filtering = "Left camera only (right camera omitted); the 21 non-calibration sequences (calibration, IMU-calibration and vignette sequences excluded); one 128-chunk window per sequence at the middle of the stream (rule in deterministic_notes). Timestamps (int64 events/t), polarity (uint8 events/p) and ms_to_idx are not emitted."
+missing_value_policy = "Event streams have no missing-value sentinel; every event is a real pixel address. Any value above 1279, any undecodable or mis-sized chunk, a filter-mask bypass or a window shorter than 128 full chunks is fatal in download, build and verify. Degenerate windows (fewer than 256 distinct columns or one column holding more than 25% of events) are rejected."
+conversion = "Range-fetched Blosc chunk -> parse 16-byte Blosc1 header and bstarts table -> per block: int32 csize + one zstd frame (DONT_SPLIT) decompressed with the zstd CLI (or copied when stored raw) -> byte unshuffle with typesize 2 -> 32,768 little-endian uint16 values; 128 consecutive chunks concatenated in chunk-index order = one sample of 4,194,304 values written as raw little-endian uint16."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 event x-coordinate stream"
+sample_geometry = "event_sequence_window"
+sample_rank = 1
+sample_axes = ["event"]
+natural_record_kind = "tumvie_sequence_left_event_stream_window"
+sample_count = 21
+total_size_bytes = 176160768
+output_path = "samples/tumvie_prophesee_gen4_events_xy_u16/tumvie_left_event_x_u16/"
+
+[[series]]
+id = "tumvie_left_event_y_u16"
+description = "Event y coordinate (pixel row) of the same 4,194,304 consecutive events of the left Prophesee Gen4 HD event camera, one window per TUM-VIE sequence."
+semantic_meaning = "Pixel row address (0 = top, 719 = bottom) of each contrast-detection event emitted by the left 1280 x 720 Prophesee Gen4 CD sensor, in the camera's native stream order; aligned element-for-element with tumvie_left_event_x_u16 (same event indices)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Values are the source's own stored uint16 entries of HDF5 dataset events/y; Blosc/ZSTD compression and byte shuffle are undone losslessly; no rescaling, sorting, undistortion or filtering."
+source_resources = ["tumvie_left_event_files"]
+source_format = "HDF5 (superblock v0) TUM-VIE events file; dataset events/y uint16, chunked 32768, Blosc(ZSTD, byte-shuffle) filter 32001"
+source_field = "events/y (event pixel row), elements [32768*start_chunk, 32768*(start_chunk+128))"
+filtered_input_path = "filtered/tumvie_prophesee_gen4_events_xy_u16/ingest_stats.json"
+filtering = "Same sequences, camera and event window as tumvie_left_event_x_u16."
+missing_value_policy = "Event streams have no missing-value sentinel; every event is a real pixel address. Any value above 719, any undecodable or mis-sized chunk, a filter-mask bypass or a window shorter than 128 full chunks is fatal in download, build and verify. Degenerate windows (fewer than 128 distinct rows or one row holding more than 25% of events) are rejected."
+conversion = "Same Blosc1/zstd/unshuffle decode as tumvie_left_event_x_u16 applied to events/y chunks with the same chunk indices; one sample of 4,194,304 raw little-endian uint16 values per sequence."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 event y-coordinate stream"
+sample_geometry = "event_sequence_window"
+sample_rank = 1
+sample_axes = ["event"]
+natural_record_kind = "tumvie_sequence_left_event_stream_window"
+sample_count = 21
+total_size_bytes = 176160768
+output_path = "samples/tumvie_prophesee_gen4_events_xy_u16/tumvie_left_event_y_u16/"

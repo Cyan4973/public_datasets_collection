@@ -1542,6 +1542,12 @@ class Driver:
                 self.set_status(cid, restore, "breadth sign-off approved by the user")
             elif command["action"] == "reject":
                 self.terminal(cid, "rejected", command["reason"], command.get("retry", ""), None)
+            elif command["action"] == "reopen":
+                if not self.shared_files_clean():
+                    continue
+                summary = reopen_candidate(cid)
+                self.set_status(cid, "ready_for_download", f"reopened for re-measurement ({summary})")
+                commit(["attempts/dataset_status.tsv", "pipeline"], f"Reopen {cid} for re-measurement")
             elif command["action"] == "requeue":
                 state = load_state(cid)
                 state["agent_failures"] = 0
@@ -1763,6 +1769,28 @@ def cmd_follow(args) -> int:
         return 0
 
 
+def reopen_candidate(cid: str) -> str:
+    """Restore an archived, non-accepted candidate to staging for re-measurement:
+    drop its registry row (the attempt record stays as history) and send it back
+    to the download step. Returns a summary; the caller commits."""
+    archives = sorted(ARCHIVE_DIR.glob(f"{cid}-*"))
+    if not archives:
+        raise SystemExit(f"no archived recipe for {cid}")
+    if (STAGING_DIR / cid).exists():
+        raise SystemExit(f"staging/{cid} already exists")
+    shutil.move(str(archives[-1]), str(STAGING_DIR / cid))
+    lines = REGISTRY_PATH.read_text(encoding="utf-8").splitlines()
+    kept = [line for line in lines if line.split("\t", 1)[0] != cid]
+    REGISTRY_PATH.write_text("\n".join(kept) + "\n", encoding="utf-8")
+    state = load_state(cid)
+    for key in ("download_cycles", "build_cycles", "repair_cycles", "agent_failures", "download_sha", "last_download",
+                "last_rebuild", "similarity", "bytes"):
+        state.pop(key, None)
+    add_event(state, "reopened", archive=archives[-1].name)
+    save_state(cid, state)
+    return f"restored {archives[-1].name}, registry row removed"
+
+
 def driver_running() -> bool:
     if not LOCK_PATH.exists():
         return False
@@ -1815,6 +1843,20 @@ def cmd_reject(args) -> int:
         return 1
     Driver(Config()).terminal(args.candidate_id, "rejected", args.reason, args.retry, None)
     print(f"{args.candidate_id}: recorded as rejected")
+    return 0
+
+
+def cmd_reopen(args) -> int:
+    if driver_running():
+        return queue_control({"action": "reopen", "candidate_id": args.candidate_id})
+    summary = reopen_candidate(args.candidate_id)
+    rows = load_ledger()
+    for row in rows:
+        if row["candidate_id"] == args.candidate_id:
+            row["status"], row["updated"], row["reason"] = "ready_for_download", now_iso(), f"reopened for re-measurement ({summary})"
+    save_ledger(rows)
+    commit(["attempts/dataset_status.tsv", "pipeline"], f"Reopen {args.candidate_id} for re-measurement")
+    print(f"{args.candidate_id}: {summary}")
     return 0
 
 
@@ -1941,6 +1983,8 @@ def main() -> int:
     requeue.add_argument("candidate_id")
     requeue.add_argument("--status", default="queued", choices=ACTIVE_STATUSES)
     sub.add_parser("unpause", help="clear a global pause after inspecting its cause")
+    reopen = sub.add_parser("reopen", help="restore an archived rejected candidate for re-measurement")
+    reopen.add_argument("candidate_id")
     approve = sub.add_parser("approve-breadth", help="approve a pending breadth override or archive-cap sign-off")
     approve.add_argument("candidate_id")
     approve.add_argument("--note", default="", help="why the override is justified")
@@ -1950,7 +1994,7 @@ def main() -> int:
     reject.add_argument("--retry", default="Retry only with the user's explicit approval.")
     args = parser.parse_args()
     return {"init": cmd_init, "status": cmd_status, "activity": cmd_activity, "follow": cmd_follow, "run": cmd_run, "requeue": cmd_requeue, "unpause": cmd_unpause,
-            "approve-breadth": cmd_approve_breadth, "reject": cmd_reject}[args.command](args)
+            "approve-breadth": cmd_approve_breadth, "reject": cmd_reject, "reopen": cmd_reopen}[args.command](args)
 
 
 if __name__ == "__main__":

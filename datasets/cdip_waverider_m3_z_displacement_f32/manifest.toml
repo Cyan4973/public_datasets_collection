@@ -1,0 +1,89 @@
+manifest_version = 1
+dataset_id = "cdip_waverider_m3_z_displacement_f32"
+name = "CDIP Datawell DWR-M3 Waverider Raw Heave Displacement Float32"
+description = "Raw 1.28 Hz vertical (heave) sea-surface displacement from Datawell DWR-M3 directional Waverider buoys in the CDIP archive: one contiguous 3-day window from one DWR-M3 deployment at each of 128 CDIP stations, native archive float32 metres."
+homepage = "https://cdip.ucsd.edu/"
+
+[license]
+name = "CDIP data license: redistribution and use without restriction"
+spdx = "LicenseRef-CDIP-Unrestricted"
+url = "https://thredds.cdip.ucsd.edu/thredds/dodsC/cdip/archive/100p1/100p1_d10.nc.das"
+citation = "Coastal Data Information Program (CDIP), Scripps Institution of Oceanography, University of California San Diego. Station partner and funding per each file's acknowledgment attribute (primarily U.S. Army Corps of Engineers). http://cdip.ucsd.edu"
+notes = "Every CDIP archive NetCDF carries the global attribute license = \"These data may be redistributed and used without restriction.\" download.sh fetches each selected deployment's .das and requires that exact string (and the DWR-M3 instrument title) before accepting the window."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official CDIP THREDDS OPeNDAP server operated by Scripps Institution of Oceanography; ocean wave buoy telemetry, no personal content."
+usage_notes = "Physical ocean-surface displacement measurements. Preserve CDIP attribution."
+
+[[origins]]
+id = "cdip_thredds_archive"
+name = "CDIP THREDDS archive (OPeNDAP)"
+url = "https://thredds.cdip.ucsd.edu/thredds/catalog/cdip/archive/catalog.html"
+type = "data_portal"
+notes = "Per-station directories NNNp1 with per-deployment NetCDF files NNNp1_dMM.nc, served via OPeNDAP DAP2 at /thredds/dodsC/."
+
+[[resources]]
+id = "dwr_m3_deployment_das"
+origin = "cdip_thredds_archive"
+url = "https://thredds.cdip.ucsd.edu/thredds/dodsC/cdip/archive/<station>/<deployment>.nc.das"
+type = "api_query_result"
+version = "archive state resolved 2026-10-08"
+access = "Anonymous HTTPS GET, one per pinned deployment in windows.tsv (128). Validated for the DWR-M3 title phrase, the exact license string, cdip_station_id, xyzZDisplacement units meter and _FillValue -999.99."
+size_bytes = 3700257
+sha256 = ""
+local_path = "downloads/cdip_waverider_m3_z_displacement_f32/das/"
+notes = "Size is the 2026-10-08 total; DAS text is not size-pinned because CDIP updates history/date_modified attributes when reprocessing."
+
+[[resources]]
+id = "dwr_m3_heave_windows"
+origin = "cdip_thredds_archive"
+url = "https://thredds.cdip.ucsd.edu/thredds/dodsC/cdip/archive/<station>/<deployment>.nc.dods?xyzStartTime,xyzSampleRate,xyzFilterDelay,xyzFlagPrimary[a:1:b],xyzFlagSecondary[a:1:b],xyzZDisplacement[a:1:b]"
+type = "api_query_result"
+version = "128 windows pinned in windows.tsv (station, deployment, start index a, count 331776), resolved 2026-10-08 by scripts/discover.py"
+access = "Anonymous OPeNDAP DAP2 binary hyperslab projection with curl -g. Each response must be exactly 1,990,962 bytes, decode to 331,776 values per array, report xyzSampleRate 1.28, and satisfy the missing-value policy."
+size_bytes = 254843136
+sha256 = ""
+local_path = "downloads/cdip_waverider_m3_z_displacement_f32/dods/"
+notes = "Server-side projection: downloaded bytes are the Z values plus the two QC flag arrays (25% overhead) used for validation. Per-sample SHA-256 of the emitted little-endian bytes is recorded in the index at build time; upstream reprocessing would be detected by verify comparisons on re-download."
+
+[local_paths]
+downloads = "downloads/cdip_waverider_m3_z_displacement_f32/"
+filtered = "filtered/cdip_waverider_m3_z_displacement_f32/"
+index = "index/cdip_waverider_m3_z_displacement_f32/"
+samples = "samples/cdip_waverider_m3_z_displacement_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/cdip_waverider_m3_z_displacement_f32/samples.jsonl"
+summary = "For each of 128 pinned DWR-M3 deployment windows, fetch the OPeNDAP binary projection of xyzZDisplacement plus QC flags, validate, byte-swap the big-endian float32 heave values to little-endian, and write one sample per window."
+deterministic_notes = "windows.tsv was produced by scripts/discover.py: all 1,423 CDIP archive deployment files were screened by .das title; 974 are DWR-M3 at 136 stations. Per station the DWR-M3 deployments are tried longest-first (at most 4); the first 3-day window starting >= 2 days after the first wave record whose 145 covering half-hour wave records are consecutive with waveFlagPrimary == 1, and whose full xyz flag hyperslab has xyzFlagPrimary in {1,2} and xyzFlagSecondary == 0, is pinned. 128 stations yielded a window (8 had none within the search limits). One window per station and per deployment; deployments are never split. Floors: 128 samples x 331,776 values."
+
+[[series]]
+id = "cdip_dwr_m3_heave_z_displacement_f32"
+description = "Raw vertical sea-surface displacement (heave) time series from Datawell DWR-M3 directional Waverider buoys, 1.28 Hz."
+semantic_meaning = "xyzZDisplacement: buoy-measured sea surface vertical displacement in metres (positive up), as decoded by CDIP from the DWR-M3 telemetry at 1.28 samples per second with 0.01 m resolution. Sample k of a window was measured at xyzStartTime + (start_index + k)/1.28 - xyzFilterDelay (UTC seconds)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Values are the archive's stored Float32 values, delivered big-endian by OPeNDAP and only byte-swapped to little-endian; no rescaling, rounding or interpolation."
+source_resources = ["dwr_m3_heave_windows", "dwr_m3_deployment_das"]
+source_format = "CDIP archive NetCDF served as OPeNDAP DAP2 binary (DDS + XDR) hyperslab"
+source_field = "xyzZDisplacement (Float32, dimension xyzCount)"
+filtered_input_path = "filtered/cdip_waverider_m3_z_displacement_f32/ingest_stats.json"
+filtering = "Only deployments whose NC_GLOBAL title states Datawell DWR-M3 (excluding DWR-M1/M2/M4/GPS/Mark buoys) with xyzSampleRate 1.28; one 331,776-value (exactly 3 days) contiguous window per station."
+missing_value_policy = "Windows were chosen to contain no gaps: every value must have xyzFlagPrimary 1 (good) or 2 (not_evaluated, the archive default for xyz data) and xyzFlagSecondary 0; any flag 3/4/9, any _FillValue -999.99, NaN, or |z| > 20.47 m (the DAS valid range) makes download/build/verify fail. Nothing is dropped, interpolated or imputed."
+conversion = "Parse the DAP2 DDS, check the XDR array counts (two big-endian int32 = 331776), take the 4-byte big-endian IEEE float32 elements of xyzZDisplacement and reverse each to little-endian. One sample file per window: samples/<id>/<series>/<deployment>.bin."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 heave displacement time series"
+sample_geometry = "regular_time_series_1d"
+sample_rank = 1
+sample_axes = ["time_1p28hz"]
+natural_record_kind = "cdip_dwr_m3_deployment_3day_heave_window"
+sample_count = 128
+total_size_bytes = 169869312
+output_path = "samples/cdip_waverider_m3_z_displacement_f32/cdip_dwr_m3_heave_z_displacement_f32/"

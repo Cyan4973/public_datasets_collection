@@ -281,6 +281,7 @@ sxs_bbh_extrapolated_strain_modes_f64	ok	35837550	286700400	1071	31850	254800	85
 zenodo_spica_urban_das_f32	ok	38880000	155520000	9	4320000	17280000	0	0	0	1	none	none
 pglib_opf_matpower_cases_numeric	ok	39285570	314284560	639	14406	115248	0	0	0	1	none	none
 figshare_rmd17_trajectories_f64	ok	39600000	316800000	10	3600000	28800000	0	0	0	1	none	none
+cdip_waverider_m3_z_displacement_f32	ok	42467328	169869312	128	331776	1327104	0	0	0	1	none	none
 physionet_wearable_exam_stress_e4_acc_i8	ok	42555834	42555834	30	1205433	1205433	0	0	0	1	none	none
 zenodo_adcp_pd0_backscatter_quality_u8	ok	43130088	43130088	9	4311744	4311744	0	0	0	1	none	none
 hsl_gtfs_static_schedule_numeric	ok	44453630	226392932	8	5809272	25274372	0	0	0	1	none	none

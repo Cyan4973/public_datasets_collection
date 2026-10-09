@@ -1,0 +1,78 @@
+manifest_version = 1
+dataset_id = "umbra_spotlight_sicd_complex_slc_f32"
+name = "Umbra Open Data X-band Spotlight SAR SICD Complex Single-Look Images (RE32F_IM32F I/Q), Native Float32"
+description = "Ten complete Umbra-04/05/06 X-band VV spotlight SAR complex single-look images (SICD 1.2.1, polar-format algorithm, Umbra Image Formation processor 0.6.x, 2023) from ten distinct scenes in the CC BY 4.0 Umbra Open Data Program bucket, each emitted as its whole rows x cols x (I,Q) float32 pixel array converted from big-endian to little-endian."
+homepage = "https://registry.opendata.aws/umbra-open-data/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Umbra Space, Umbra Synthetic Aperture Radar (SAR) Open Data, https://registry.opendata.aws/umbra-open-data/ (s3://umbra-open-data-catalog). Preserve collect identifiers (e.g. 2023-09-11-10-37-05_UMBRA-05) when redistributing."
+notes = "AWS Open Data registry entry (https://github.com/awslabs/open-data-registry/blob/main/datasets/umbra-open-data.yaml, fetched 2026-10-08), License field: 'All data is provided with a Creative Commons License ([CC by 4.0](https://umbra.space/open-license)), which gives you the right to do just about anything you want with it.' The same entry lists the resource arn:aws:s3:::umbra-open-data-catalog with 'Umbra Spotlight collects including GEC, SICD, SIDD, CPHD data and metadata' and RequesterPays: False. umbra.space/open-data also states 'All data is provided with a Creative Commons License'. The umbra.space/open-license link now redirects to generic website terms, so the registry text is the operative evidence."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Umbra Open Data Program objects served anonymously from the AWS Open Data bucket umbra-open-data-catalog (us-west-2, not requester-pays). No mirrors."
+usage_notes = "Spaceborne radar imagery of farmland, a volcanic island, rainforest/riverine areas and harbours/sea lanes at ~1.1-1.6 m resolution. No personal data. Only complex pixel values are emitted; NITF headers and SICD XML stay in downloads."
+
+[[origins]]
+id = "umbra_open_data_s3"
+name = "Umbra Open Data Program (AWS Open Data bucket umbra-open-data-catalog)"
+url = "https://umbra-open-data-catalog.s3.amazonaws.com/?list-type=2&prefix=sar-data/tasks/"
+type = "bucket"
+version = "Listing of 2026-10-08: 40,178 keys under sar-data/tasks/, 7,867 *_SICD.nitf"
+notes = "Anonymous S3 ListObjectsV2. Object ETags are multipart (8 MiB or 16 MiB parts, confirmed per object with HEAD ?partNumber=1) and are pinned with part size in sources.tsv; download.sh recomputes them."
+
+[[resources]]
+id = "umbra_sicd_spotlight_pfa_0_6"
+origin = "umbra_open_data_s3"
+url = "https://umbra-open-data-catalog.s3.amazonaws.com/sar-data/tasks/"
+type = "file"
+version = "10 SICD NITF objects pinned in sources.tsv (S3 LastModified 2023-09-10 .. 2024-05-30)"
+access = "Direct anonymous HTTPS GET of each object, resumable (curl -C -, speed-limit stall detection)."
+size_bytes = 978017309
+sha256 = "e02652108f7fcb144a62b9c3e00cd516d72a9179eb99df8ea8fb5e261eacb291"
+local_path = "downloads/umbra_spotlight_sicd_complex_slc_f32/"
+notes = "The SHA-256 identifies the tracked source plan sources.tsv, produced by discover.sh (metadata-only: listing, 4 KB head + 64 KB tail range probes, METADATA.json). Per product it pins key/URL, size, multipart ETag and part size, NITF HL, image subheader length, image data offset/length, DES offset/length, rows, cols, collector, processor version, polarization (from METADATA.json), SCP lat/lon, row/col sample spacing and impulse-response width, grazing angle, ValidData polygon area fraction."
+
+[local_paths]
+downloads = "downloads/umbra_spotlight_sicd_complex_slc_f32/"
+filtered = "filtered/umbra_spotlight_sicd_complex_slc_f32/"
+index = "index/umbra_spotlight_sicd_complex_slc_f32/"
+samples = "samples/umbra_spotlight_sicd_complex_slc_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/umbra_spotlight_sicd_complex_slc_f32/samples.jsonl"
+summary = "Fetch 10 pinned Umbra spotlight SICD NITFs, parse the NITF 2.1 header, image subheader and SICD XML DES, assert the pinned regime, and emit the single uncompressed image segment as little-endian float32 interleaved I/Q, one whole image per product."
+deterministic_notes = "Selection rule (discover.py): sort every *_SICD.nitf in the 2026-10-08 listing by size ascending; keep a product only if it is NITF 2.1 with NUMI 1 and NUMDES 1, image subheader IID1 SICD000, PVTYPE R, IREP NODISPLY, ICAT SAR, ABPP/NBPP 32, IC NC, NBANDS 2 with ISUBCAT I,Q, no LUTs, IMODE P, NBPR=NBPC=1, and SICD 1.2.1 XML with PixelType RE32F_IM32F, ModeType SPOTLIGHT, CollectType MONOSTATIC, ImageFormAlgo PFA, Grid/Type RGAZIM, full image, X-band TxFrequency, and ImageCreation/Application 'Umbra Image Formation processor 0.6.x'; skip a product whose SCP is within 0.05 deg (lat and lon) of an already selected one; stop when the next conforming product would push image bytes over 1e9. Of the 24 smallest SICDs probed, 6 were excluded as processor 0.3.x (all early ship_detection_testdata), 3 as processor 0.7.1.1, 4 as repeat scenes, 10 were selected, and the 24th (Centerfield UT, 110 MB, conforming) would have exceeded the cap. download.sh rejects size or multipart-ETag mismatches and any structural, regime, pinned-metadata, finiteness or degeneracy failure. verify.sh re-derives every sample with an independent parser and byte reversal and byte-compares. Output order: sources.tsv ordinal (ascending source size)."
+
+[[series]]
+id = "umbra_sicd_complex_iq_f32"
+description = "Umbra X-band (9.6 GHz) VV spotlight SAR complex single-look image pixels (SICD RE32F_IM32F), interleaved I,Q float32, whole image per collect."
+semantic_meaning = "Per-pixel complex radar reflectivity (in-phase and quadrature components) on the SICD slant-plane range/azimuth grid (row = range, col = azimuth, row sample spacing 1.11-1.30 m, col 1.29-1.42 m; impulse-response widths 1.24-1.46 m x 1.47-1.61 m), as formed by Umbra's polar-format image formation processor. Phase-preserving and uncalibrated (radiometric calibration polynomials stay in the SICD XML); magnitude is not detected or log-scaled. Outside the ValidData polygon the grid also carries a native low-level row-coherent processor-leakage wedge (see missing_value_policy). The Taparal sample (2023-09-10-14-53-10_UMBRA-04) is dominated throughout by a row-coherent component consistent with narrowband interference (central-block adjacent-row coherence 0.929 vs 0.21-0.26 elsewhere)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "SICD stores each pixel as two IEEE-754 big-endian float32 values (I then Q, NITF IMODE P). The recipe only reverses byte order; no scaling, calibration, detection or reordering."
+source_resources = ["umbra_sicd_spotlight_pfa_0_6"]
+source_format = "NITF 2.1 SICD 1.2.1 product (single uncompressed image segment + SICD XML DES)"
+source_field = "NITF image segment pixel array: NROWS x NCOLS pixels x 2 bands (ISUBCAT I, Q), PVTYPE R, NBPP 32 (SICD PixelType RE32F_IM32F)"
+filtered_input_path = "filtered/umbra_spotlight_sicd_complex_slc_f32/build_summary.json"
+filtering = "Keep the 10 products of sources.tsv; skip the NITF file header (417 B), image subheader (512 B), DES subheader and SICD XML; keep every pixel of the image segment."
+missing_value_policy = "SICD has no missing-value sentinel and the products contain no fill: no value is exactly 0.0 and zero_pixel_fraction is 0 in all 10 samples. Every pixel is preserved unchanged. The area outside the SICD ImageData/ValidData polygon (32-53% of each grid) holds (a) full-strength scene content beside the polygon (median power -0.3 to -3.2 dB relative to the interior median, index outside_nonresidue_median_db) and (b) a low-level native Umbra 0.6.x processor-leakage wedge (median -42.9 to -46.8 dB, index residue_median_db), which is row-coherent (median adjacent-row block coherence 0.71-0.83, Taparal 0.996) with reduced effective mantissa precision (median 15-16 vs 22 significant mantissa bits). The wedge is 18.5-28.8% of sampled pixels in 9 samples and 2.7% in 2023-10-01-14-30-15_UMBRA-04 (index residue_fraction; residue_outside_valid_fraction 0.43-0.54, Chesapeake 0.085). Residue = P=I^2+Q^2 below 1e-3 x the upper-median interior P on the every-7th-row, every-5th-column grid; verify.py recomputes it independently. Interior residue is 0.066-0.156% and build/verify fail above 1% (hidden fill guard). Also fatal: NaN/Inf, a constant sample, more than 5% exact-zero pixels inside the polygon, fewer than 30% nonzero pixels, or (verify) fewer than 100,000 distinct values."
+conversion = "Read image_data_length = rows*cols*8 bytes at the pinned image data offset, interpret as big-endian float32, byteswap to little-endian, write unchanged in row-major order with I/Q interleaved per pixel. One sample per product; no cropping, tiling, resampling, or concatenation."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 array, row-major [row][col][I,Q]"
+sample_geometry = "complex_sar_slant_plane_image_2d"
+sample_rank = 3
+sample_axes = ["sicd_row_range", "sicd_col_azimuth", "iq"]
+natural_record_kind = "umbra_spotlight_collect_sicd_complex_image"
+sample_count = 10
+total_size_bytes = 977705000
+output_path = "samples/umbra_spotlight_sicd_complex_slc_f32/umbra_sicd_complex_iq_f32/"

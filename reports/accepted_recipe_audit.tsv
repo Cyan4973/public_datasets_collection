@@ -422,6 +422,7 @@ noaa_rstn_sagamore_hill_srs_spectra_u8	ok	404523186	404523186	72	5547634.5	55476
 musopen_chopin_solo_piano_pcm_i16	ok	410896576	821793152	39	9292488	18584976	0	0	0	1	none	none
 pfam_seed_alignments_u8	ok	411242401	411242401	22719	6150	6150	0	0	0	1	none	none
 zenodo_esrf_mxene_aerogel_microct_slices_u8	ok	419575420	419575420	220	1907161	1907161	0	0	0	1	none	none
+zenodo_offaxis_dhm_holograms_u8	ok	427819008	427819008	102	4194304	4194304	0	0	0	1	none	none
 sevir_vil_storm_events_u8	ok	433520640	433520640	60	7225344	7225344	0	0	0	1	none	none
 csiro_parkes_uwl_search_mode_u8	ok	436207616	436207616	32	13631488	13631488	0	0	0	1	none	none
 zenodo_v16_nb_iot_sigmf_ci16	ok	438824272	877648544	2	219412136	438824272	0	0	0	1	none	none

@@ -442,3 +442,4 @@ zenodo_mturk_fitbit_heartrate_u8	autocollect	8	wearable_heart_rate	fitbit_wrist_
 musopen_chopin_solo_piano_pcm_i16	autocollect	16	pcm_audio	studio_stereo_piano_recording	internet_archive_musopen	-	OK
 zenodo_flir_vue_iceberg_thermal_u16	autocollect	16	thermal_camera_image	flir_vue_pro_r_640_microbolometer	zenodo.org	-	OK
 physionet_wearable_exam_stress_e4_acc_i8	autocollect	8	inertial_vibration	empatica_e4_wrist_accelerometer	physionet.org/content/wearable-exam-stress	-	OK
+zenodo_offaxis_dhm_holograms_u8	autocollect	8	digital_hologram	custom_offaxis_common_path_dhm_prosilica_gt2450	zenodo.org/records/10632465	-	OK

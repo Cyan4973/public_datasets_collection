@@ -1,0 +1,294 @@
+manifest_version = 1
+dataset_id = "zenodo_offaxis_dhm_holograms_u8"
+name = "Off-Axis Digital Holographic Microscopy Raw Holograms UInt8 (custom common-path DHM, Prosilica GT2450 camera, 405 nm, Zenodo 10632465)"
+description = "Raw 8-bit 2048x2048 off-axis interference holograms (carrier-fringe modulated camera frames) from a custom off-axis common-path digital holographic microscope (Wallace et al. 2015 design; Allied Vision Prosilica GT2450 camera) at 405 nm imaging unresolved nanoparticles, beads and lipid vesicles: 6 evenly spaced frames from each of the 17 405 nm videos of Zenodo record 10632465 (Dryad doi:10.5061/dryad.9cnp5hqr7)."
+homepage = "https://zenodo.org/records/10632465"
+
+[license]
+name = "Creative Commons Zero v1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "Detectability of unresolved particles in off-axis digital holographic microscopy. Zenodo record 10632465 (2024), also Dryad doi:10.5061/dryad.9cnp5hqr7. Associated article (record isCitedBy): Johnston, Dubay, Serabyn and Nadeau, Applied Optics 63(7):B114 (2024), doi:10.1364/AO.507375."
+notes = "The Zenodo record metadata declares license id cc-zero for the whole deposit (Dryad publishes all data under CC0). download.sh re-checks the live record id, title, license and the size and MD5 of every used zip before fetching anything."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official author deposit (Dryad mirror on Zenodo, depositor Jay Nadeau, Portland State University) of laboratory recordings from a custom off-axis common-path DHM (Johnston et al. 2024, Appl. Opt. 63:B114, Methods 2.A) of synthetic particles (alumina, gold, polystyrene beads) and lipid vesicles; no people or biological specimens from humans involved."
+usage_notes = "Public CC0 scientific instrument data; only raw hologram camera intensities are emitted. timestamps.txt, macOS AppleDouble entries and the 520 nm video are not used."
+
+[[origins]]
+id = "zenodo_10632465"
+name = "Zenodo record 10632465: Detectability of unresolved particles in off-axis digital holographic microscopy"
+url = "https://zenodo.org/records/10632465"
+type = "repository"
+version = "published 2024-02-07; 18 zips + README.md"
+notes = "Each zip holds one DHM video as <date time>/Holograms/NNNNN_holo.tif (~7 fps) plus timestamps.txt. Deposit README: 2048x2048 raw holograms from a common-mode off-axis DHM, illumination 405 nm unless specified 520 nm, acquired with the software KOALA (LynceeTec). Instrument per the associated article (Johnston, Dubay, Serabyn and Nadeau 2024, Appl. Opt. 63(7):B114, doi:10.1364/AO.507375, Methods 2.A): a custom off-axis common-path DHM described in Wallace et al. 2015, Opt. Express 23:17367; Thorlabs MCLS-1 fibre-coupled diode laser at 405 or 520 nm; Allied Vision Prosilica GT2450 camera (3.45 um pixels, well depth 6500); all frames 2048x2048; acquisition software DHMx. The two sources name different acquisition software (KOALA in the README, DHMx in the paper); both are recorded here as sourced statements. The microscope is not a Lyncee Tec instrument."
+
+[[resources]]
+id = "record_metadata"
+origin = "zenodo_10632465"
+url = "https://zenodo.org/api/records/10632465"
+type = "api_query_result"
+version = "record 10632465"
+access = "Public Zenodo REST API; re-fetched on every run to re-check id, title, license (cc-zero) and size/MD5 of the 17 used zips, and that the excluded 520 nm zip is still listed."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/zenodo_offaxis_dhm_holograms_u8/record.json"
+notes = "Live JSON (statistics change), validated semantically rather than hashed."
+
+[[resources]]
+id = "record_readme"
+origin = "zenodo_10632465"
+url = "https://zenodo.org/api/records/10632465/files/README.md/content"
+type = "file"
+version = "README.md md5:56361931b6db1ccede5acabe4dd622c0"
+access = "Direct public download; MD5 checked; must state the 405 nm default and the 520 nm exception (2022.08.02 14-37)."
+size_bytes = 1723
+sha256 = ""
+local_path = "downloads/zenodo_offaxis_dhm_holograms_u8/README.md"
+notes = "Wavelength and frame-size evidence: 'Illumination wavelength was 405 nm unless specified to be 520 nm'; '2048x2048 pixel tiff files'."
+
+[[resources]]
+id = "zip_20220609_12_52_unextrudedvesicles"
+origin = "zenodo_10632465"
+url = "https://zenodo.org/api/records/10632465/files/2022.06.09_12-52_UnextrudedVesicles.zip/content"
+type = "range_extracted_zip_members"
+version = "2022.06.09_12-52_UnextrudedVesicles.zip md5:9154da02fcbf4c6c45344d2b66237755, 1,638,034,041 bytes"
+access = "HTTP Range only: central directory bytes 1637990892-1638034040, then for each pinned frame exactly [local header offset, next entry offset). Responses must be 206 with the exact Content-Range."
+size_bytes = 34135276
+sha256 = ""
+local_path = "downloads/zenodo_offaxis_dhm_holograms_u8/tif/2022.06.09_12-52_UnextrudedVesicles/"
+notes = "unextruded lipid vesicles, no dye; 308 hologram frames, kept frames 25, 77, 128, 179, 231, 282 (31,910,268 range bytes, 34,135,276 inflated TIFF bytes). Each member is pinned by central-directory CRC32, sizes and offsets in selected_frames.tsv."
+
+[[resources]]
+id = "zip_20220609_12_56_unextrudedcorrole"
+origin = "zenodo_10632465"
+url = "https://zenodo.org/api/records/10632465/files/2022.06.09_12-56_UnextrudedCorrole.zip/content"
+type = "range_extracted_zip_members"
+version = "2022.06.09_12-56_UnextrudedCorrole.zip md5:d7889e2393080a2a19af1e258832bd5c, 561,401,218 bytes"
+access = "HTTP Range only: central directory bytes 561386056-561401217, then for each pinned frame exactly [local header offset, next entry offset). Responses must be 206 with the exact Content-Range."
+size_bytes = 33945100
+sha256 = ""
+local_path = "downloads/zenodo_offaxis_dhm_holograms_u8/tif/2022.06.09_12-56_UnextrudedCorrole/"
+notes = "unextruded lipid vesicles with corrole dye; 106 hologram frames, kept frames 8, 26, 44, 61, 79, 97 (31,772,731 range bytes, 33,945,100 inflated TIFF bytes). Each member is pinned by central-directory CRC32, sizes and offsets in selected_frames.tsv."
+
+[[resources]]
+id = "zip_20220609_13_00"
+origin = "zenodo_10632465"
+url = "https://zenodo.org/api/records/10632465/files/2022.06.09_13-00.zip/content"
+type = "range_extracted_zip_members"
+version = "2022.06.09_13-00.zip md5:ce1f53551121e4a2b16da418fe01ea34, 1,548,687,324 bytes"
+access = "HTTP Range only: central directory bytes 1548651792-1548687323, then for each pinned frame exactly [local header offset, next entry offset). Responses must be 206 with the exact Content-Range."
+size_bytes = 33856494
+sha256 = ""
+local_path = "downloads/zenodo_offaxis_dhm_holograms_u8/tif/2022.06.09_13-00/"
+notes = "100 nm lipid vesicles, no dye; 293 hologram frames, kept frames 24, 73, 122, 170, 219, 268 (31,704,429 range bytes, 33,856,494 inflated TIFF bytes). Each member is pinned by central-directory CRC32, sizes and offsets in selected_frames.tsv."
+
+[[resources]]
+id = "zip_20220609_13_04"
+origin = "zenodo_10632465"
+url = "https://zenodo.org/api/records/10632465/files/2022.06.09_13-04.zip/content"
+type = "range_extracted_zip_members"
+version = "2022.06.09_13-04.zip md5:56b1aa6eca20fa6374f8929cec569c75, 1,366,940,728 bytes"
+access = "HTTP Range only: central directory bytes 1366909595-1366940727, then for each pinned frame exactly [local header offset, next entry offset). Responses must be 206 with the exact Content-Range."
+size_bytes = 34134852
+sha256 = ""
+local_path = "downloads/zenodo_offaxis_dhm_holograms_u8/tif/2022.06.09_13-04/"
+notes = "100 nm lipid vesicles with corrole dye; 257 hologram frames, kept frames 21, 64, 107, 149, 192, 235 (31,906,984 range bytes, 34,134,852 inflated TIFF bytes). Each member is pinned by central-directory CRC32, sizes and offsets in selected_frames.tsv."
+
+[[resources]]
+id = "zip_20220727_10_44_300nmaluminaflat"
+origin = "zenodo_10632465"
+url = "https://zenodo.org/api/records/10632465/files/2022.07.27_10-44_300nmAluminaFlat.zip/content"
+type = "range_extracted_zip_members"
+version = "2022.07.27_10-44_300nmAluminaFlat.zip md5:a5032abe3c38647a10ef706c8ef94b1b, 1,144,323,506 bytes"
+access = "HTTP Range only: central directory bytes 1144260473-1144323505, then for each pinned frame exactly [local header offset, next entry offset). Responses must be 206 with the exact Content-Range."
+size_bytes = 33572498
+sha256 = ""
+local_path = "downloads/zenodo_offaxis_dhm_holograms_u8/tif/2022.07.27_10-44_300nmAluminaFlat/"
+notes = "300 nm alumina, flat slide; 220 hologram frames, kept frames 18, 55, 91, 128, 165, 201 (31,204,008 range bytes, 33,572,498 inflated TIFF bytes). Each member is pinned by central-directory CRC32, sizes and offsets in selected_frames.tsv."
+
+[[resources]]
+id = "zip_20220727_10_46_100nmalo3_flat"
+origin = "zenodo_10632465"
+url = "https://zenodo.org/api/records/10632465/files/2022.07.27_10-46_100nmAlO3_Flat.zip/content"
+type = "range_extracted_zip_members"
+version = "2022.07.27_10-46_100nmAlO3_Flat.zip md5:986ef0fe518155ca34881efbff479797, 1,636,649,940 bytes"
+access = "HTTP Range only: central directory bytes 1636607354-1636649939, then for each pinned frame exactly [local header offset, next entry offset). Responses must be 206 with the exact Content-Range."
+size_bytes = 33553314
+sha256 = ""
+local_path = "downloads/zenodo_offaxis_dhm_holograms_u8/tif/2022.07.27_10-46_100nmAlO3_Flat/"
+notes = "100 nm alumina, flat slide; 315 hologram frames, kept frames 26, 78, 131, 183, 236, 288 (31,173,660 range bytes, 33,553,314 inflated TIFF bytes). Each member is pinned by central-directory CRC32, sizes and offsets in selected_frames.tsv."
+
+[[resources]]
+id = "zip_20220727_10_57_30nmalo3_flat"
+origin = "zenodo_10632465"
+url = "https://zenodo.org/api/records/10632465/files/2022.07.27_10-57_30nmAlO3_Flat.zip/content"
+type = "range_extracted_zip_members"
+version = "2022.07.27_10-57_30nmAlO3_Flat.zip md5:5692e4d9baaf719b7cc1dc63fa4b0cba, 1,585,714,401 bytes"
+access = "HTTP Range only: central directory bytes 1585673463-1585714400, then for each pinned frame exactly [local header offset, next entry offset). Responses must be 206 with the exact Content-Range."
+size_bytes = 33565078
+sha256 = ""
+local_path = "downloads/zenodo_offaxis_dhm_holograms_u8/tif/2022.07.27_10-57_30nmAlO3_Flat/"
+notes = "30 nm alumina, flat slide; 305 hologram frames, kept frames 25, 76, 127, 177, 228, 279 (31,193,969 range bytes, 33,565,078 inflated TIFF bytes). Each member is pinned by central-directory CRC32, sizes and offsets in selected_frames.tsv."
+
+[[resources]]
+id = "zip_20220727_11_02_300nmaluminathick"
+origin = "zenodo_10632465"
+url = "https://zenodo.org/api/records/10632465/files/2022.07.27_11-02_300nmAluminaThick.zip/content"
+type = "range_extracted_zip_members"
+version = "2022.07.27_11-02_300nmAluminaThick.zip md5:13180fbcb0c5375c4bd084949053f7f3, 1,641,447,497 bytes"
+access = "HTTP Range only: central directory bytes 1641356688-1641447496, then for each pinned frame exactly [local header offset, next entry offset). Responses must be 206 with the exact Content-Range."
+size_bytes = 33678420
+sha256 = ""
+local_path = "downloads/zenodo_offaxis_dhm_holograms_u8/tif/2022.07.27_11-02_300nmAluminaThick/"
+notes = "300 nm alumina, 0.8 mm thick chamber; 315 hologram frames, kept frames 26, 78, 131, 183, 236, 288 (31,263,123 range bytes, 33,678,420 inflated TIFF bytes). Each member is pinned by central-directory CRC32, sizes and offsets in selected_frames.tsv."
+
+[[resources]]
+id = "zip_20220727_11_14_30nmaluminathick"
+origin = "zenodo_10632465"
+url = "https://zenodo.org/api/records/10632465/files/2022.07.27_11-14_30nmAluminaThick.zip/content"
+type = "range_extracted_zip_members"
+version = "2022.07.27_11-14_30nmAluminaThick.zip md5:8f2dff8944a42ae5a12b8f8686a73b53, 1,595,481,260 bytes"
+access = "HTTP Range only: central directory bytes 1595393889-1595481259, then for each pinned frame exactly [local header offset, next entry offset). Responses must be 206 with the exact Content-Range."
+size_bytes = 33664682
+sha256 = ""
+local_path = "downloads/zenodo_offaxis_dhm_holograms_u8/tif/2022.07.27_11-14_30nmAluminaThick/"
+notes = "30 nm alumina, 0.8 mm thick chamber; 306 hologram frames, kept frames 25, 76, 127, 178, 229, 280 (31,280,649 range bytes, 33,664,682 inflated TIFF bytes). Each member is pinned by central-directory CRC32, sizes and offsets in selected_frames.tsv."
+
+[[resources]]
+id = "zip_20220802_13_17_200nmvesiclesflat"
+origin = "zenodo_10632465"
+url = "https://zenodo.org/api/records/10632465/files/2022.08.02_13-17_200nmVesiclesFlat.zip/content"
+type = "range_extracted_zip_members"
+version = "2022.08.02_13-17_200nmVesiclesFlat.zip md5:dda86c21c87c94ab3948d9a285d30407, 1,053,460,219 bytes"
+access = "HTTP Range only: central directory bytes 1053432297-1053460218, then for each pinned frame exactly [local header offset, next entry offset). Responses must be 206 with the exact Content-Range."
+size_bytes = 33752898
+sha256 = ""
+local_path = "downloads/zenodo_offaxis_dhm_holograms_u8/tif/2022.08.02_13-17_200nmVesiclesFlat/"
+notes = "200 nm lipid vesicles, flat slide; 201 hologram frames, kept frames 16, 50, 83, 117, 150, 184 (31,444,593 range bytes, 33,752,898 inflated TIFF bytes). Each member is pinned by central-directory CRC32, sizes and offsets in selected_frames.tsv."
+
+[[resources]]
+id = "zip_20220802_13_21_100nmvesiclesflat"
+origin = "zenodo_10632465"
+url = "https://zenodo.org/api/records/10632465/files/2022.08.02_13-21_100nmVesiclesFlat.zip/content"
+type = "range_extracted_zip_members"
+version = "2022.08.02_13-21_100nmVesiclesFlat.zip md5:0b0205cef52ab97f8ed083169e8229b8, 990,447,938 bytes"
+access = "HTTP Range only: central directory bytes 990421660-990447937, then for each pinned frame exactly [local header offset, next entry offset). Responses must be 206 with the exact Content-Range."
+size_bytes = 33747872
+sha256 = ""
+local_path = "downloads/zenodo_offaxis_dhm_holograms_u8/tif/2022.08.02_13-21_100nmVesiclesFlat/"
+notes = "100 nm lipid vesicles, flat slide; 189 hologram frames, kept frames 15, 47, 78, 110, 141, 173 (31,441,895 range bytes, 33,747,872 inflated TIFF bytes). Each member is pinned by central-directory CRC32, sizes and offsets in selected_frames.tsv."
+
+[[resources]]
+id = "zip_20220802_13_40_200nmvesiclesthick"
+origin = "zenodo_10632465"
+url = "https://zenodo.org/api/records/10632465/files/2022.08.02_13-40_200nmVesiclesThick.zip/content"
+type = "range_extracted_zip_members"
+version = "2022.08.02_13-40_200nmVesiclesThick.zip md5:8b767513c7e1f94fd5ee0d15fb996fd9, 862,582,530 bytes"
+access = "HTTP Range only: central directory bytes 862559103-862582529, then for each pinned frame exactly [local header offset, next entry offset). Responses must be 206 with the exact Content-Range."
+size_bytes = 33707540
+sha256 = ""
+local_path = "downloads/zenodo_offaxis_dhm_holograms_u8/tif/2022.08.02_13-40_200nmVesiclesThick/"
+notes = "200 nm lipid vesicles, thick chamber; 165 hologram frames, kept frames 13, 41, 68, 96, 123, 151 (31,366,245 range bytes, 33,707,540 inflated TIFF bytes). Each member is pinned by central-directory CRC32, sizes and offsets in selected_frames.tsv."
+
+[[resources]]
+id = "zip_20220802_13_47_100nmvesiclesthick"
+origin = "zenodo_10632465"
+url = "https://zenodo.org/api/records/10632465/files/2022.08.02_13-47_100nmVesiclesThick.zip/content"
+type = "range_extracted_zip_members"
+version = "2022.08.02_13-47_100nmVesiclesThick.zip md5:e717fdbbed01cdb01903d3e289705fe5, 1,651,274,463 bytes"
+access = "HTTP Range only: central directory bytes 1651230605-1651274462, then for each pinned frame exactly [local header offset, next entry offset). Responses must be 206 with the exact Content-Range."
+size_bytes = 33765012
+sha256 = ""
+local_path = "downloads/zenodo_offaxis_dhm_holograms_u8/tif/2022.08.02_13-47_100nmVesiclesThick/"
+notes = "100 nm lipid vesicles, thick chamber; 315 hologram frames, kept frames 26, 78, 131, 183, 236, 288 (31,453,056 range bytes, 33,765,012 inflated TIFF bytes). Each member is pinned by central-directory CRC32, sizes and offsets in selected_frames.tsv."
+
+[[resources]]
+id = "zip_20220802_13_56_auflat405"
+origin = "zenodo_10632465"
+url = "https://zenodo.org/api/records/10632465/files/2022.08.02_13-56_AuFlat405.zip/content"
+type = "range_extracted_zip_members"
+version = "2022.08.02_13-56_AuFlat405.zip md5:4ce3b1f126ea0d1a628ac348e15d7764, 1,341,467,585 bytes"
+access = "HTTP Range only: central directory bytes 1341397990-1341467584, then for each pinned frame exactly [local header offset, next entry offset). Responses must be 206 with the exact Content-Range."
+size_bytes = 33744560
+sha256 = ""
+local_path = "downloads/zenodo_offaxis_dhm_holograms_u8/tif/2022.08.02_13-56_AuFlat405/"
+notes = "50 nm gold, flat slide, 405 nm; 256 hologram frames, kept frames 21, 64, 106, 149, 192, 234 (31,437,982 range bytes, 33,744,560 inflated TIFF bytes). Each member is pinned by central-directory CRC32, sizes and offsets in selected_frames.tsv."
+
+[[resources]]
+id = "zip_20221005_16_02_polystyreneflat"
+origin = "zenodo_10632465"
+url = "https://zenodo.org/api/records/10632465/files/2022.10.05_16-02_PolystyreneFlat.zip/content"
+type = "range_extracted_zip_members"
+version = "2022.10.05_16-02_PolystyreneFlat.zip md5:da7c0a41d2d44a7df1b62052476028a3, 899,875,090 bytes"
+access = "HTTP Range only: central directory bytes 899820933-899875089, then for each pinned frame exactly [local header offset, next entry offset). Responses must be 206 with the exact Content-Range."
+size_bytes = 30589938
+sha256 = ""
+local_path = "downloads/zenodo_offaxis_dhm_holograms_u8/tif/2022.10.05_16-02_PolystyreneFlat/"
+notes = "1 um polystyrene beads in water, flat slide; 190 hologram frames, kept frames 15, 47, 79, 110, 142, 174 (28,414,500 range bytes, 30,589,938 inflated TIFF bytes). Each member is pinned by central-directory CRC32, sizes and offsets in selected_frames.tsv."
+
+[[resources]]
+id = "zip_20221005_16_11_polystyrenethick"
+origin = "zenodo_10632465"
+url = "https://zenodo.org/api/records/10632465/files/2022.10.05_16-11_PolystyreneThick.zip/content"
+type = "range_extracted_zip_members"
+version = "2022.10.05_16-11_PolystyreneThick.zip md5:5f4fbc5e41902a29ade0b35d37a269fe, 1,283,567,862 bytes"
+access = "HTTP Range only: central directory bytes 1283498067-1283567861, then for each pinned frame exactly [local header offset, next entry offset). Responses must be 206 with the exact Content-Range."
+size_bytes = 33949360
+sha256 = ""
+local_path = "downloads/zenodo_offaxis_dhm_holograms_u8/tif/2022.10.05_16-11_PolystyreneThick/"
+notes = "1 um polystyrene beads in water, thick chamber; 243 hologram frames, kept frames 20, 60, 101, 141, 182, 222 (31,687,150 range bytes, 33,949,360 inflated TIFF bytes). Each member is pinned by central-directory CRC32, sizes and offsets in selected_frames.tsv."
+
+[[resources]]
+id = "zip_20221017_12_45"
+origin = "zenodo_10632465"
+url = "https://zenodo.org/api/records/10632465/files/2022.10.17_12-45.zip/content"
+type = "range_extracted_zip_members"
+version = "2022.10.17_12-45.zip md5:4c3cdcac72aa5769153e4cf0104d8227, 723,454,950 bytes"
+access = "HTTP Range only: central directory bytes 723420166-723454949, then for each pinned frame exactly [local header offset, next entry offset). Responses must be 206 with the exact Content-Range."
+size_bytes = 33946718
+sha256 = ""
+local_path = "downloads/zenodo_offaxis_dhm_holograms_u8/tif/2022.10.17_12-45/"
+notes = "1 um polystyrene beads in immersion oil, flat slide; 137 hologram frames, kept frames 11, 34, 57, 79, 102, 125 (31,680,969 range bytes, 33,946,718 inflated TIFF bytes). Each member is pinned by central-directory CRC32, sizes and offsets in selected_frames.tsv."
+
+[local_paths]
+downloads = "downloads/zenodo_offaxis_dhm_holograms_u8/"
+filtered = "filtered/zenodo_offaxis_dhm_holograms_u8/"
+index = "index/zenodo_offaxis_dhm_holograms_u8/"
+samples = "samples/zenodo_offaxis_dhm_holograms_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_offaxis_dhm_holograms_u8/samples.jsonl"
+summary = "Range-fetch 102 pinned Holograms/*.tif members (6 evenly spaced frames from each 405 nm video) out of 17 Zenodo zips via their central directories, validate CRC32 and TIFF layout, decode each LZW + horizontal-predictor TIFF with a pure-Python decoder and write each 2048x2048 uint8 hologram unchanged as one sample."
+deterministic_notes = "Pinned: record 10632465, 17 zip keys with size, MD5 and central-directory offset/size (videos.tsv), and per selected member name, CRC32, compressed/uncompressed size, local header offset and next-entry offset (selected_frames.tsv, produced by discover.sh on 2026-10-08). Selection rule per video with N frames: floor((2k+1)*N/12), k=0..5 (evenly spaced, never contiguous; spacing 17-52 frames, about 2.5-7.5 s at ~7 fps). download.sh rejects ZIP64, multi-disk archives, encrypted or non deflate/stored members, non-206 or mismatched Content-Range, local-header mismatches, CRC32/size mismatches and any TIFF that is not 2048x2048, 8 bps, spp 1, compression 5, predictor 2, photometric 1, single IFD. build.sh first runs a synthetic-TIFF self-test of the LZW/predictor decoder (including the legacy end-of-strip EOI width case seen in the 2022.06.09 and 2022.10 source files), then decodes; it rejects frames with fewer than 64 distinct values, a mode above 5%, mean absolute horizontal neighbour difference below 8 (no carrier fringes) or byte-identical duplicates. verify.sh re-decodes every TIFF with an independently written decoder and byte-compares each sample, and checks index fields, sha256s, stats and manifest totals. Samples are ordered by zip key, then frame number. Realized build (2026-10-08): 102 samples, 427,819,008 bytes, 155 legacy-EOI strips of 52,224, aggregate SHA-256 over per-sample SHA-256s ec62329ea22c922568a991f9ca9beaa50bae016fe84f3fef303988d90abb4dc7; verify independently re-decoded all 102."
+
+[[series]]
+id = "dhm_offaxis_hologram_u8"
+description = "Raw 8-bit 2048x2048 off-axis digital holograms from one custom off-axis common-path DHM (Wallace et al. 2015 design, Allied Vision Prosilica GT2450 camera per Johnston et al. 2024) at 405 nm."
+semantic_meaning = "Camera intensity (8-bit digital number) at each pixel of the interference pattern between the object wave scattered by a sample of unresolved particles (30-300 nm alumina, 50 nm gold, 1 um polystyrene beads, 100-200 nm and unextruded lipid vesicles) and the tilted reference wave, recorded in a flat slide or 0.8 mm chamber. The off-axis carrier fringes are amplitude-modulated by the object field; the carrier geometry differs by acquisition session (same instrument and camera, realigned between sessions): 2022.06.09 (4 videos, 24 samples) near-vertical fringes, neighbour correlation rho(dy=1,dx=0)=0.98, horizontal period about 2.8 px, mean |delta| about 8-10 DN vertically vs 83-101 DN horizontally; 2022.07.27 and 2022.08.02 (10 videos, 60 samples) diagonal fringes with about 4 px period on both axes, rho(1,1)=0.98-0.99, mean |delta| 55-66 DN on both axes; 2022.10.05 and 2022.10.17 (3 videos, 18 samples) a different diagonal carrier, rho(3,-1)=0.95-0.98, mean |delta| about 60-67 DN (about 26-29 for PolystyreneFlat). Exposure outlier: 2022.10.05_16-02_PolystyreneFlat was recorded at lower exposure (frame mean 42.7 DN, max 148-163, order-0 entropy 6.32 bits vs 7.33-7.77 bits for the other videos); it is kept as the same quantity on the same instrument."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The hologram TIFFs store the camera frame as 8-bit BlackIsZero grayscale, LZW-compressed with horizontal differencing (predictor 2) in 512 strips of 4 rows. LZW and the predictor are undone losslessly; pixel values are emitted exactly as stored, with no reconstruction, filtering, rescaling or cropping. Phase/amplitude reconstructions and timestamps are not emitted."
+source_resources = ["zip_20220609_12_52_unextrudedvesicles", "zip_20220609_12_56_unextrudedcorrole", "zip_20220609_13_00", "zip_20220609_13_04", "zip_20220727_10_44_300nmaluminaflat", "zip_20220727_10_46_100nmalo3_flat", "zip_20220727_10_57_30nmalo3_flat", "zip_20220727_11_02_300nmaluminathick", "zip_20220727_11_14_30nmaluminathick", "zip_20220802_13_17_200nmvesiclesflat", "zip_20220802_13_21_100nmvesiclesflat", "zip_20220802_13_40_200nmvesiclesthick", "zip_20220802_13_47_100nmvesiclesthick", "zip_20220802_13_56_auflat405", "zip_20221005_16_02_polystyreneflat", "zip_20221005_16_11_polystyrenethick", "zip_20221017_12_45"]
+source_format = "Baseline TIFF (little-endian, single IFD, 2048x2048, 8-bit grayscale, LZW compression with horizontal predictor) inside deflate ZIP archives"
+source_field = "hologram image raster (uint8 camera DN per pixel) of Holograms/NNNNN_holo.tif"
+filtered_input_path = "filtered/zenodo_offaxis_dhm_holograms_u8/ingest_stats.json"
+filtering = "All 17 405 nm videos of the record; the 520 nm gold video (2022.08.02_14-37_AuFlat520.zip) is excluded as a different laser line: the 520 nm channel of the Thorlabs MCLS-1 (the paper reports a different coherence envelope at 520 nm); the family is restricted to 405 nm illumination. The 405 nm videos do not share a single fringe period (see semantic_meaning). The lower-exposure 2022.10.05_16-02_PolystyreneFlat video is kept. From each video of N frames, frames floor((2k+1)*N/12) for k=0..5 (102 of 4,121 frames). __MACOSX AppleDouble entries, .DS_Store and timestamps.txt are ignored."
+missing_value_policy = "uint8 camera frames have no missing-value sentinel; every pixel is kept as stored, including 255 (rare saturation). A frame that fails CRC32, TIFF layout, LZW termination or strip-length checks, a frame with fewer than 64 distinct values, a mode above 5% of pixels, no carrier fringes, or a byte-identical duplicate fails the recipe; nothing is dropped or imputed."
+conversion = "Inflate the ZIP member (raw deflate), parse the TIFF IFD, LZW-decode each 4-row strip (MSB-first codes, clear 256, EOI 257, early change), undo horizontal differencing as a running sum modulo 256 within each row, and write the 4,194,304 row-major pixel values unchanged as one sample <zip stem>_fNNNNN.bin; byte order is irrelevant for 8-bit values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 2048x2048 hologram, row-major"
+sample_geometry = "camera_image_frame_2d"
+sample_rank = 2
+sample_axes = ["camera_row", "camera_col"]
+natural_record_kind = "dhm_video_hologram_frame"
+sample_count = 102
+total_size_bytes = 427819008
+output_path = "samples/zenodo_offaxis_dhm_holograms_u8/dhm_offaxis_hologram_u8/"

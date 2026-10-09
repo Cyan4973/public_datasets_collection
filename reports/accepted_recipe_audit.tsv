@@ -415,6 +415,7 @@ zenodo_tem_tilt_series_i16	ok	264241152	528482304	63	4194304	8388608	0	0	0	1	non
 nasa_pds_mola_megdr_i16	ok	265420800	530841600	4	66355200	132710400	0	0	0	1	none	none
 zenodo_open_ephys_continuous_i16	ok	266375168	532750336	4	66593792	133187584	0	0	0	1	none	none
 mpc_modis_mod13a1_ndvi_i16	ok	276480000	552960000	48	5760000	11520000	0	0	0	1	none	none
+nasa_pds_cassini_rpws_wbr_10khz_waveform_u8	ok	284050336	284050336	88	2472960	2472960	0	0	0	1	none	none
 physionet_circor_pcg_i16	ok	289355051	578710102	3163	85824	171648	0	0	0	1	none	none
 fmi_radar_ppi_vrad_u8	ok	300900675	300900675	75	4012009	4012009	0	0	0	1	none	none
 zenodo_astar_niti_sped_patterns_u8	ok	306498816	306498816	14781	20736	20736	0	0	0	1	none	none

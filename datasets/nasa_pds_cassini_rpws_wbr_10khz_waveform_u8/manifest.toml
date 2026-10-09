@@ -1,0 +1,89 @@
+manifest_version = 1
+dataset_id = "nasa_pds_cassini_rpws_wbr_10khz_waveform_u8"
+name = "Cassini RPWS Wideband Receiver 10-kHz-Mode Ex-Dipole Plasma-Wave Waveforms (native 8-bit DN, 36 us sampling)"
+description = "Uncalibrated unsigned 8-bit waveform data numbers from the Cassini Radio and Plasma Wave Science (RPWS) Wideband Receiver in its 10-kHz baseband mode (0.06-10.5 kHz, 36 microsecond sampling) on the Ex electric dipole, one sample per archived hourly WBR full-resolution product, for 88 pinned products from 11 Saturn-tour PDS volumes (CORPWS_0040 to CORPWS_0238, 2004-11 to 2017-02)."
+homepage = "https://space.physics.uiowa.edu/pds/"
+
+[license]
+name = "NASA SMD Open Scientific Data Policy (public NASA PDS mission data)"
+spdx = "LicenseRef-NASA-SMD-Open-Data"
+url = "https://science.nasa.gov/researchers/science-data/science-information-policy/"
+citation = "Kurth, W.S., et al., CASSINI RPWS WIDEBAND FULL RESOLUTION V1.0, CO-V/E/J/S/SS-RPWS-2-REFDR-WBRFULL-V1.0, NASA Planetary Data System (PPI Node), volumes CORPWS_0040-CORPWS_0238. Acknowledge the PDS and the RPWS principal investigator (D.A. Gurnett / W.S. Kurth, University of Iowa)."
+notes = "Cassini-Huygens is a NASA mission; these products are the NASA Planetary Data System archive (Planetary Plasma Interactions Node, University of Iowa subnode) for data set CO-V/E/J/S/SS-RPWS-2-REFDR-WBRFULL-V1.0, served anonymously over HTTPS. NASA SMD policy: 'It is Science Mission Directorate (SMD) policy, consistent with NASA and Federal policies, that information produced from SMD-funded scientific research activities be made publicly available.' Same rights basis as the accepted nasa_pds_cassini_vims_qube_i16, nasa_pds_cassini_radar_bidr_sigma0_u8 and nasa_pds_voyager_iss_saturn_raw_u8 recipes. The volume AAREADME.TXT imposes no use restriction; it only encourages users to acknowledge the PDS and the instrument PIs. download.sh fetches that AAREADME (size/MD5 pinned) and fails unless the acknowledgement sentence is present. The NASA policy page itself is not fetched by download.sh."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NASA PDS archive objects from the PPI Node UIowa subnode (space.physics.uiowa.edu/pds); robotic spacecraft radio and plasma wave receiver data from Saturn orbit."
+usage_notes = "Only waveform DN bytes of selected records are emitted; row prefixes, fill/spare bytes and label text are never written to samples."
+
+[[origins]]
+id = "pds_ppi_uiowa"
+name = "NASA PDS Planetary Plasma Interactions Node, University of Iowa subnode"
+url = "https://space.physics.uiowa.edu/pds/"
+type = "website"
+notes = "Apache directory tree of the CORPWS_0001-CORPWS_0248 Cassini RPWS archive volumes (1997-10 to 2017-09). Each volume has INDEX/INDEX.TAB listing every product label; WBR full-resolution products live under DATA/RPWS_WIDEBAND_FULL/T<yyyyd>XX/T<yyyyddd>/."
+
+[[resources]]
+id = "rpws_wbr_10khz_products"
+origin = "pds_ppi_uiowa"
+url = "https://space.physics.uiowa.edu/pds/"
+type = "file"
+version = "CORPWS volumes 0040, 0058, 0076, 0094, 0112, 0130, 0148, 0166, 0184, 0202, 0220, 0238 (V1, PDS3); 88 products resolved 2026-10-08 by discover.py"
+access = "Anonymous HTTPS GET. download.sh fetches exactly the 88 T<yyyyddd>_<hh>_10KHZ<n>_WBRFR.DAT files and their detached .LBL labels listed in sources.tsv, each pinned by exact byte size (the server publishes no checksums; Apache ETags are inode/size/mtime), validates every label and walks every record of every DAT before accepting it; download_plan.tsv records the SHA-256 of each DAT, which build.py and verify.py re-check."
+size_bytes = 297858284
+sha256 = ""
+local_path = "downloads/nasa_pds_cassini_rpws_wbr_10khz_waveform_u8/"
+notes = "size_bytes = 297,335,488 DAT bytes + 522,796 label bytes. Per-product URL, size, Last-Modified, RECORD_BYTES and FILE_RECORDS live in sources.tsv."
+
+[[resources]]
+id = "rpws_evidence"
+origin = "pds_ppi_uiowa"
+url = "https://space.physics.uiowa.edu/pds/CORPWS_0130/"
+type = "file"
+version = "CORPWS_0130 CATALOG/WBFULLDS.CAT, LABEL/RPWS_WBR_WFR_ROW_PREFIX.FMT, AAREADME.TXT"
+access = "Anonymous HTTPS GET; sizes 20,907 / 17,684 / 18,788 bytes and MD5 f83e8e2f931a0881239486b560bc4ffe / 26016b3d90af745aa5182d2b37385a53 / b20fda952f7df68b049bd8fd019230eb pinned."
+size_bytes = 57379
+sha256 = ""
+local_path = "downloads/nasa_pds_cassini_rpws_wbr_10khz_waveform_u8/evidence/"
+notes = "Data-set description (10-kHz mode definition, Ex antenna), row-prefix byte layout (FREQUENCY_BAND, ANTENNA, status bits) and volume README (acknowledgement request). Not a sample source."
+
+[local_paths]
+downloads = "downloads/nasa_pds_cassini_rpws_wbr_10khz_waveform_u8/"
+filtered = "filtered/nasa_pds_cassini_rpws_wbr_10khz_waveform_u8/"
+index = "index/nasa_pds_cassini_rpws_wbr_10khz_waveform_u8/"
+samples = "samples/nasa_pds_cassini_rpws_wbr_10khz_waveform_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_pds_cassini_rpws_wbr_10khz_waveform_u8/samples.jsonl"
+summary = "Fetch 88 pinned hourly Cassini RPWS WBR 10-kHz-mode products plus labels, validate labels and every record prefix, and emit for each product the valid 8-bit waveform samples of its Ex-antenna, 10-kHz-band, non-suspect records, unchanged and in file order, as one raw uint8 sample."
+deterministic_notes = "Selection (discover.py, resolved 2026-10-08; re-checked by download.sh label and record walks): volumes CORPWS_0040 + 18k for k = 0..11. In each volume, INDEX/INDEX.TAB rows with STANDARD_DATA_PRODUCT_ID RPWS_WIDEBAND_FULL and PRODUCT_ID matching T<yyyyddd>_<hh>_10KHZ<n>_WBRFR_V1; exact DAT size (HTTP Content-Length) within 1,000,000-8,000,000 bytes; sorted by product id; 8 picks at ranks floor((i + 0.5) * n / 8); a pick whose label fails the checks or whose first 32 KB has a non-10-kHz record or no Ex record is replaced by the next unused rank (3 such skips: two Langmuir-probe-only products in CORPWS_0112, one Ew-only product in CORPWS_0238). CORPWS_0202 (2014-135 to 2014-161) has only 3 10-kHz products and none in the size window, so 11 volumes contribute 8 products each: 88 products, 2004-314 to 2017-045. The filename digit after KHZ is the capture-length class (RECORD_BYTES 2080 x71, 4128 x10, 6176 x4, 8224 x3 in this selection), not the antenna. Label checks (every product): DATA_SET_ID CO-V/E/J/S/SS-RPWS-2-REFDR-WBRFULL-V1.0, INSTRUMENT_ID RPWS, SECTION_ID WBR, SAMPLING_PARAMETER_INTERVAL 0.000036, DATA_TYPE UNSIGNED_INTEGER, ITEM_BYTES 1, OFFSET -127.5, VALID 0-255, ROW_PREFIX_BYTES 32, RECORD_TYPE FIXED_LENGTH, PRODUCT_ID matches, RECORD_BYTES * FILE_RECORDS = DAT size. Record checks: every prefix RECORD_BYTES equals the label, SAMPLES <= RECORD_BYTES - 32, record count = FILE_RECORDS. Record rule (build; re-implemented independently in verify): FREQUENCY_BAND (byte 20) == 2, ANTENNA (byte 22) == 0, VALIDITY_FLAG (byte 18) bit 0x40 set, STATUS_FLAG (byte 19) bits 0x20 TIMEOUT and 0x10 SUSPECT clear, SAMPLES > 0. Product rule: emitted only if the kept payload has >= 100,000 values and >= 16 distinct DN. verify.py re-derives each sample from the local DAT, byte-compares it, checks the DAT SHA-256 against download_plan.tsv, index fields (size, sha256, min/max, kept/source record counts), no duplicates, no DN above 50% of any sample, >= 200 DN levels overall, floors, 1 GB cap, and manifest sample_count/total_size_bytes."
+
+[[series]]
+id = "rpws_wbr_10khz_ex_waveform_u8"
+description = "Cassini RPWS WBR 10-kHz baseband Ex-dipole waveform data numbers, one sample per hourly archived product."
+semantic_meaning = "Uncalibrated 8-bit data numbers of the potential difference at the RPWS preamp input from the Ex electric dipole, sampled every 36 microseconds through the 10-kHz filter (0.06-10.5 kHz): Saturn-magnetosphere plasma waves and radio emissions (whistler-mode chorus and hiss, electron cyclotron harmonics, upper-hybrid and plasma-frequency tones, Saturn kilometric radiation low-frequency extension, lightning whistlers, dust-impact spikes) plus receiver noise. Zero amplitude is nominally DN 127.5. Each source record is one automatic-gain-controlled capture (analog gain 0-70 dB in 10 dB steps chosen per capture); the per-record GAIN is part of the instrument's native regime and is not applied."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "PDS label: WBR_SAMPLE DATA_TYPE UNSIGNED_INTEGER, ITEM_BYTES 1, OFFSET -127.5, VALID_MINIMUM 0, VALID_MAXIMUM 255, SAMPLING_PARAMETER_INTERVAL 0.000036 s. The 8-bit DN is the native WBR ADC quantization after ground decompression; bytes are copied unchanged."
+source_resources = ["rpws_wbr_10khz_products"]
+source_format = "PDS3 detached-label fixed-length binary table (T<yyyyddd>_<hh>_10KHZ<n>_WBRFR.DAT): each record = 32-byte big-endian WBR_ROW_PREFIX_TABLE row + TIME_SERIES of RECORD_BYTES-32 bytes, first SAMPLES bytes valid"
+source_field = "TIME_SERIES WBR_SAMPLE column (unsigned 8-bit waveform DN), first SAMPLES bytes of each selected record"
+filtered_input_path = "filtered/nasa_pds_cassini_rpws_wbr_10khz_waveform_u8/ingest_stats.json"
+filtering = "Products: only 10-kHz baseband products (filename band token exactly 10KHZ; 75KHZ, 5KHZ, 325KHZ and all <nnnn>KHZ frequency-translated HF products excluded) with DAT size 1,000,000-8,000,000 bytes, 8 per volume at evenly spaced ranks from 11 contributing volumes (CORPWS_0202 has none in the window). Records: FREQUENCY_BAND == 2 (10 kHz, 36 us), ANTENNA == 0 (Ex), VALIDITY_FLAG WBR bit set, STATUS_FLAG TIMEOUT and SUSPECT bits clear, SAMPLES > 0. Records on Ew, Bx, LP or HF antennas, other bands, or flagged corrupt are dropped. A product whose kept payload is under 100,000 values or has fewer than 16 distinct DN is not emitted (rule shared by build and verify)."
+missing_value_policy = "Fill/spare bytes beyond SAMPLES in each record are never emitted. Flagged (TIMEOUT/SUSPECT) and zero-length records are dropped whole. No value inside a kept record is masked, clipped, interpolated or rescaled; DN 0 and 255 (clipped captures) are preserved. Any size/SHA-256 mismatch, label deviation, inconsistent RECORD_BYTES or SAMPLES beyond capacity fails the recipe."
+conversion = "For each pinned product: check the detached label (DATA_SET_ID WBRFULL, SAMPLING_PARAMETER_INTERVAL 0.000036, OFFSET -127.5, UNSIGNED_INTEGER, ITEM_BYTES 1, RECORD_BYTES * FILE_RECORDS = file size), walk the RECORD_BYTES-long records (1056, 2080, 4128, 6176 or 8224 bytes depending on the product's capture length class), read RECORD_BYTES and SAMPLES as big-endian u16 at prefix offset 12, FREQUENCY_BAND at 20, ANTENNA at 22, flags at 18-19, and append bytes [32, 32+SAMPLES) of every kept record in file order. Write the concatenation as samples/nasa_pds_cassini_rpws_wbr_10khz_waveform_u8/rpws_wbr_10khz_ex_waveform_u8/<product>.u8. Byte order is irrelevant for 8-bit values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 waveform data numbers"
+sample_geometry = "hourly_product_sequence_of_agc_waveform_captures_1d"
+sample_rank = 1
+sample_axes = ["capture_then_sample_time"]
+natural_record_kind = "cassini_rpws_wbr_hourly_full_resolution_product"
+sample_count = 88
+total_size_bytes = 284050336
+output_path = "samples/nasa_pds_cassini_rpws_wbr_10khz_waveform_u8/rpws_wbr_10khz_ex_waveform_u8/"

@@ -1,0 +1,26 @@
+# OpenNeuro ds007738 Whole-Head Cocktail-Party fNIRS (BU Boas/Yücel/Sen labs): Resting-State High-Density CW-fNIRS Raw Intensity (SNIRF dataTimeSeries) Float64
+
+- Candidate id: `openneuro_ds007738_wholehead_cw_fnirs_intensity_f64`
+- Width: float64
+- Quantity: Raw continuous-wave near-infrared optical intensity per measurement channel (SNIRF measurementList dataType=1, CW amplitude). 1134 source-detector-wavelength channels (56 sources, 144 detectors) sampled at ~8.99 Hz. Native float64 at full precision, spanning ~1e-6 to 0.91 across about six decades.
+- Source: https://openneuro.org/datasets/ds007738/versions/1.0.0
+- Resources: https://s3.amazonaws.com/openneuro.org/ds007738/dataset_description.json, https://s3.amazonaws.com/openneuro.org/ds007738/README.txt, https://s3.amazonaws.com/openneuro.org?list-type=2&prefix=ds007738/&max-keys=1000, https://s3.amazonaws.com/openneuro.org/ds007738/sub-01/nirs/sub-01_task-resting_run-01_nirs.snirf
+- License: CC0-1.0
+- License evidence: https://s3.amazonaws.com/openneuro.org/ds007738/dataset_description.json
+- License quote: "DatasetDOI": "doi:10.18112/openneuro.ds007738.v1.0.0", "License": "CC0". The README says: 'This dataset contains only fNIRS optical measurements and eye-tracking time series; no anatomical scans ... Data were acquired and shared under approved IRB consent.'
+- Natural record: One sample is the complete /nirs/data1/dataTimeSeries matrix of one resting-state run (one per subject; ~2,950 time points x 1134 channels ≈ 3.35M values ≈ 26.9 MB), kept in stored (time-major) order. There are 24 resting runs from 24 subjects, so all 24 can be taken. Do not emit aux channels (eye tracking), stim, probe geometry or metaDataTags (SubjectID, MeasurementDate).
+- Estimated samples: 24
+- Estimated primary values: 80,500,000
+- Estimated download bytes: 650,000,000
+- Estimated primary bytes: 644,000,000
+- Decode path: SNIRF is HDF5 with superblock v0. In the probed files /nirs/data1/dataTimeSeries is a contiguous, unfiltered H5T_IEEE_F64LE dataset at a fixed address (13056) with contiguous_size = T x 1134 x 8. The IBL pure-stdlib nwb_hdf5.py H5File parsed both local and range-backed SNIRF files unchanged. download.sh: curl the first ~64-256 KB (header and object headers), resolve the dataset address and size with the reader, then curl that exact byte range (resumable, -C -). Pin the expected sizes and SHA-256. build.sh emits the bytes as '<f8' bit-exact. The parser should also check that measurementList*/dataType == 1.
+- Novelty kind: new_modality
+- Measurement type: fnirs_optical_intensity
+- Instrument line: bu_highdensity_cw_fnirs_56x144
+- Archive collection: openneuro.org
+- Novelty evidence: novelty.py --url https://openneuro.org/datasets/ds007738 --terms fNIRS SNIRF near-infrared: host-only match against 7 OpenNeuro recipes (fMRI BOLD, T1w, cortical thickness, DTI, MEG x2, EEG), none fNIRS. The only near-infrared hits are astronomy and Landsat. No fnirs or snirf entries in the registry, ledger or downstream. --type fnirs_optical_intensity returns 0 at any width. Diffuse-optical neuroimaging is absent from the corpus at every width.
+- Homogeneity: One device configuration (whole-head HD CW-fNIRS, 56x144 optodes, 1134 channels, 8.99 Hz), one quantity (raw CW intensity, dataType 1), one lab pipeline, one task (5-minute resting fixation), one sample per subject. Channels mix two wavelengths and short to long separations within each matrix, which is intrinsic to an fNIRS measurement frame and the same in every sample. Do not mix in other OpenNeuro fNIRS datasets: their devices and export precision differ (for example, NIRx-derived ds008192 and ds006377 hold 8-10-decimal rounded values).
+- Risks: (1) Only 24 samples, but each is large (26.9 MB). The whole natural resting population is taken. Task runs (overt/covert/visualorient, 175 more runs) could be added only as separate families. (2) About 1% of values sit at a 1e-6 floor and ~0.02% are exactly 0 (saturated or dark long-separation channels), so distinct values are 75-95%. That is not one-value dominance, but verify should report it. (3) Files also hold eye-tracking aux and IRB-consented, de-identified metadata, which must not be emitted. (4) Breadth is unmeasured, but the time-major interleaving of 1134 channels with six-decade magnitudes is unlike existing f64 series.
+- Probe evidence: I remote-parsed sub-01 resting (71.96 MB file) and sub-10 resting (101.9 MB file) through HTTP range blocks with the repo HDF5 reader, about 7 MB fetched each. Result: dataTimeSeries '<f8' contiguous, shapes (2945,1134) and (2963,1134), dataType=1, no filters. Values: 0.8-0.95 distinct, float32-exact ≤3e-4, 17-21 repr digits (full precision). A mid-run slice of 300k values gave percentiles 0, 1e-6, 2.2e-5, 0.0416, 0.483, 0.901, 0.912. The S3 listing shows 223 SNIRF runs (38.8 GB), 24 of them resting (2.39 GB of files, ~645 MB of dataTimeSeries). Range GETs on s3.amazonaws.com/openneuro.org work anonymously. Two small SNIRFs from other CC0 fNIRS datasets (ds008192, ds006377; 3.4 MB and 2.1 MB) were decimal-rounded, which is why ds007738 was chosen.
+
+Proposed by the autocollect scout on 2026-10-09 (transcript `.data/pipeline/logs/scout_64bit/scout.20261009_004435.jsonl`).

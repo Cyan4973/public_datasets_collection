@@ -1,0 +1,108 @@
+manifest_version = 1
+dataset_id = "earthscope_pb_borehole_strain_counts_i32"
+name = "EarthScope PBO Gladwin Tensor Borehole Strainmeter Raw Gauge Counts (PB LS1-LS4, 1 sps) Int32"
+description = "Complete UTC days of raw 1-sps gauge counts from the four horizontal extensometer gauges (LS1-LS4) of Plate Boundary Observatory Gladwin tensor borehole strainmeters (FDSN network PB), decoded from Steim2 miniSEED to native little-endian int32."
+homepage = "https://www.fdsn.org/networks/detail/PB/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Plate Boundary Observatory borehole strainmeter network (FDSN code PB), operated by UNAVCO/EarthScope Consortium for the NSF GAGE facility; data retrieved from the EarthScope (formerly IRIS DMC) FDSN web services, https://service.earthscope.org/fdsnws/. Licensed under CC BY 4.0."
+notes = "The GAGE Facility Data License page (https://www.unavco.org/data/policies_forms/data-policy/data-license.html, re-read 2026-10-08 and re-fetched/validated by download.sh) states: 'Effective immediately, all data originating from EarthScope operated facilities will be licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0).' PB borehole strainmeters were installed and operated by UNAVCO (now EarthScope Consortium) for the NSF EarthScope/GAGE facility, so the data originate from an EarthScope-operated facility rather than a third-party contributor. The fdsn.org PB page registers no DOI."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official EarthScope FDSN dataselect and station web-service responses only (service.iris.edu now 307-redirects to service.earthscope.org, which the recipe calls directly)."
+usage_notes = "Geophysical instrument time series; no personal data. Attribute PBO/EarthScope and CC BY 4.0 when redistributing derived samples."
+
+[[origins]]
+id = "earthscope_fdsnws"
+name = "EarthScope FDSN web services (formerly IRIS DMC)"
+url = "https://service.earthscope.org/fdsnws/"
+type = "api"
+notes = "fdsnws-dataselect 1 (miniSEED) and fdsnws-station 1 (text). The FDSN availability service is retired (HTTP 410), so gap-freeness is determined from the downloaded records."
+
+[[origins]]
+id = "gage_license"
+name = "GAGE Facility Data License page"
+url = "https://www.unavco.org/data/policies_forms/data-policy/data-license.html"
+type = "website"
+notes = "CC BY 4.0 statement for data originating from EarthScope-operated facilities."
+
+[[resources]]
+id = "pb_ls_station_days"
+origin = "earthscope_fdsnws"
+url = "https://service.earthscope.org/fdsnws/dataselect/1/query?net=PB&sta={station}&loc=T0&cha=LS1,LS2,LS3,LS4&start={day}T00:00:00&end={day+1}T00:00:00&nodata=404"
+type = "api_query_result"
+version = "plan.tsv pinned 2026-10-08 (154 station-days, 77 stations, 2008-2024)"
+access = "Anonymous HTTPS GET, one request per plan row; HTTP 404 = no data."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/earthscope_pb_borehole_strain_counts_i32/mseed/PB.{station}.T0.LS_.{day}.mseed"
+notes = "Dynamic service responses (records may be repacked by the server), so no upstream checksum exists; download.sh writes mseed.sha256 and download_outcome.tsv, decodes every record with Steim2 X0/Xn checks, and fails on any non-miniSEED payload, unexpected stream identity, non-Steim2 encoding, or fewer than 300 complete gauge-days. Expected ~300 KB per station-day, ~46 MB total."
+
+[[resources]]
+id = "pb_ls_channel_inventory"
+origin = "earthscope_fdsnws"
+url = "https://service.earthscope.org/fdsnws/station/1/query?net=PB&cha=LS?&level=channel&format=text"
+type = "api_query_result"
+version = "fetched at download time"
+access = "Anonymous HTTPS GET."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/earthscope_pb_borehole_strain_counts_i32/pb_ls_channels.txt"
+notes = "Used by build/verify to confirm every emitted channel is a 1-sps location-T0 'GLADWIN TENSOR STRAINMETER' channel (excludes the LM laser strainmeters that share LS? codes)."
+
+[[resources]]
+id = "gage_license_page"
+origin = "gage_license"
+url = "https://www.unavco.org/data/policies_forms/data-policy/data-license.html"
+type = "file"
+version = "fetched at download time"
+access = "Anonymous HTTPS GET."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/earthscope_pb_borehole_strain_counts_i32/gage_data_license.html"
+notes = "download.sh fails unless the page contains the CC BY 4.0 / EarthScope-operated-facilities statement."
+
+[local_paths]
+downloads = "downloads/earthscope_pb_borehole_strain_counts_i32/"
+filtered = "filtered/earthscope_pb_borehole_strain_counts_i32/"
+index = "index/earthscope_pb_borehole_strain_counts_i32/"
+samples = "samples/earthscope_pb_borehole_strain_counts_i32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/earthscope_pb_borehole_strain_counts_i32/samples.jsonl"
+summary = "Fetch 154 pinned PB station-days of LS1-LS4 Steim2 miniSEED, decode with a pure-Python Steim2 reader, and emit one 86,400-value little-endian int32 sample per gauge-channel UTC day that is complete (no gaps, no conflicting overlaps)."
+deterministic_notes = "plan.tsv (station, UTC day) was resolved once by discover.sh/scripts/discover.py from the PB LS? station inventory and a 2-minute LS1 presence probe at both ends of each candidate day (77 Gladwin T0 stations x 2008-2024, crc32-derived month/day per station-year, 90-day post-install exclusion; two present years per station, half the list apart, rotated by station index). Build and verify use only local files; channels in LS1..LS4 order per plan row; samples named PB.<sta>.T0.<cha>.<YYYYMMDD>.i32. Each record is decoded with blockette-1000 record length/encoding/word order, header byte order detected from BTIME, Steim2 X0/Xn integration constants checked. Index rows carry min/max, 999999-fill count, max |step| between non-fill values, distinct-value count and sha256; ingest_stats.json lists every skipped gauge-day with its reason and an aggregate hash."
+
+[[series]]
+id = "pb_gtsm_ls_gauge_counts_i32"
+description = "Raw 1-sps gauge displacement counts of the four horizontal extensometer gauges of PBO Gladwin tensor borehole strainmeters, one complete UTC day per sample."
+semantic_meaning = "Each value is the datalogger count of one capacitive displacement gauge (LS1..LS4, 60 degrees apart plus one redundant, at 100-250 m depth) sampled at 1 Hz; ~1e-11 strain per count scale with a large per-gauge DC offset (realized per-sample non-fill minima 1.4e7..9.7e7 counts, median 5.0e7) and smooth Earth-tide, barometric and long-term borehole-relaxation signal."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Steim2 miniSEED stores 32-bit integer counts; decoding is lossless and values are written unchanged as int32."
+source_resources = ["pb_ls_station_days", "pb_ls_channel_inventory"]
+source_format = "miniSEED 2 data records (Steim2, encoding 11) from fdsnws-dataselect"
+source_field = "decoded integer sample counts of channels PB.<station>.T0.LS1..LS4"
+filtered_input_path = "filtered/earthscope_pb_borehole_strain_counts_i32/ingest_stats.json"
+filtering = "Keep only PB location T0 channels LS1, LS2, LS3, LS4 at 1 sps whose inventory sensor description is GLADWIN TENSOR STRAINMETER, for the 154 plan station-days. Excluded: 20-sps BS? channels, RS* channels, pore pressure, temperature, barometer and other auxiliary channels, and the LM-location laser strainmeters. A gauge-day is emitted only if all 86,400 one-second samples of the UTC day are present exactly once (identical duplicate records/samples tolerated), on the 1-s lattice within 5% of a period, with at most 864 (1%) 999999 fill values and at least 16 distinct non-fill values; otherwise the whole gauge-day is skipped and logged (never split, spliced or concatenated)."
+missing_value_policy = "Gaps, conflicting overlaps, off-lattice records, other sample rates, or no data skip the whole gauge-day (logged in ingest_stats.json). The PBO in-stream fill value 999999 (typically one value per hour, e.g. 24 per day at hh:30:21 for B004, plus contiguous runs of up to ~10 minutes during logger/telemetry outages) is source data and is preserved verbatim; its count is recorded per sample; days with more than 1% fill are skipped. Gauge resets/re-zeroing steps and large offsets are real instrument behaviour and are not filtered or corrected; max_abs_step in the index documents them. Structurally invalid miniSEED (bad header, missing blockette 1000, unsupported encoding, Steim2 X0/Xn mismatch, unexpected stream) is fatal."
+conversion = "Decode each miniSEED record (header byte order from BTIME plausibility, record length and word order from blockette 1000, BTIME + time correction + blockette 1001), integrate Steim2 differences from X0 and check the last sample equals Xn, place samples by round((t - 00:00 UTC) / 1 s) into an 86,400-slot day, and write the day as 86,400 little-endian int32 values (345,600 bytes)."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian int32 array"
+sample_geometry = "fixed_length_1hz_gauge_day_time_series"
+sample_rank = 1
+sample_axes = ["utc_second_of_day"]
+natural_record_kind = "strainmeter_gauge_channel_utc_day"
+sample_count = 608
+total_size_bytes = 210124800
+output_path = "samples/earthscope_pb_borehole_strain_counts_i32/pb_gtsm_ls_gauge_counts_i32/"

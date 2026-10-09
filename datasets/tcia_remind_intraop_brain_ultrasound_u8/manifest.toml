@@ -1,0 +1,90 @@
+manifest_version = 1
+dataset_id = "tcia_remind_intraop_brain_ultrasound_u8"
+name = "TCIA ReMIND Intraoperative 3D Brain Ultrasound Volumes (US_pre_dura) UInt8"
+description = "14 complete native-uint8 reconstructed 3D B-mode ultrasound volumes of the brain and tumour, acquired before dural opening during image-guided neurosurgical resection in the AMIGO suite (Brigham and Women's Hospital), one volume per patient (ReMIND-001 to ReMIND-018), from TCIA's ReMIND collection."
+homepage = "https://doi.org/10.7937/3RAG-D070"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Juvekar, P., Dorent, R., Kögl, F., Torio, E., Barr, C., Rigolo, L., Galvin, C., Jowkar, N., Kazi, A., Haouchine, N., Cheema, H., Navab, N., Pieper, S., Wells, W. M., Bi, W. L., Golby, A., Frisken, S., & Kapur, T. (2023). The Brain Resection Multimodal Imaging Database (ReMIND) (Version 1) [Data set]. The Cancer Imaging Archive. https://doi.org/10.7937/3RAG-D070"
+notes = "DataCite metadata for DOI 10.7937/3RAG-D070 lists rightsList 'Creative Commons Attribution 4.0 International' (SPDX cc-by-4.0). All 320 live NBIA ReMIND US series rows report LicenseName 'Creative Commons Attribution 4.0 International License' and LicenseURI https://creativecommons.org/licenses/by/4.0/; download.sh re-checks this for every pinned series. Cite the DOI. TCIA's data usage policy (no re-identification) applies."
+
+[safety]
+contains_sensitive_data = true
+contains_personal_data = false
+provenance_notes = "Public de-identified human clinical intraoperative ultrasound released by TCIA (PatientIdentityRemoved YES, DICOM PS3.15 Annex E profile via CTP/Posda; BurnedInAnnotation NO is asserted for every object). The volumes are reconstructions of tracked 2D sweeps (NRRD) converted to DICOM by PixelMed NRRDToDicom, so they carry no scanner screen overlays. Source DICOM headers carry pseudonymous IDs (ReMIND-NNN) and shifted dates; none of that is emitted."
+usage_notes = "Samples contain only Pixel Data voxel values. The committed pin file lists TCIA's public pseudonymous PatientID and UIDs for provenance only. Do not attempt re-identification or linkage; follow the TCIA data usage policy."
+
+[[origins]]
+id = "tcia_remind"
+name = "The Cancer Imaging Archive: The Brain Resection Multimodal Imaging Database (ReMIND)"
+url = "https://www.cancerimagingarchive.net/collection/remind/"
+type = "data_portal"
+version = "Version 1, DateReleased 2023-09-26"
+notes = "Accessed through the public anonymous NBIA REST API v1 at https://services.cancerimagingarchive.net/nbia-api/services/v1."
+
+[[resources]]
+id = "nbia_remind_us_series_listing"
+origin = "tcia_remind"
+url = "https://services.cancerimagingarchive.net/nbia-api/services/v1/getSeries?Collection=ReMIND&Modality=US"
+type = "api_query_result"
+version = "Live listing, 320 US series (114 US_pre_imri, 104 US_pre_dura, 102 US_post_dura) as of 2026-10-08"
+access = "Public anonymous JSON API."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/tcia_remind_intraop_brain_ultrasound_u8/metadata/series_us.json"
+notes = "About 270 KB. Used only to re-validate license, collection, series description, converter, patient, study, ImageCount and FileSize of each pinned series before fetching. Size is not pinned because rows carry a server TimeStamp field."
+
+[[resources]]
+id = "pinned_us_pre_dura_dicom_volumes"
+origin = "tcia_remind"
+url = "https://services.cancerimagingarchive.net/nbia-api/services/v1/getSingleImage?SeriesInstanceUID=<pinned series_instance_uid>&SOPInstanceUID=<pinned sop_instance_uid>"
+type = "file"
+version = "14 pinned SeriesInstanceUID/SOPInstanceUID pairs (pinned_series.tsv, SHA-256 d976c3ba4dda69561eaea386e6eb160d5a28244f5631af3a8bbcdf78a5741fed)"
+access = "Public anonymous API; the server ignores Range (returns 200 with the full body), so each object is fetched whole into a .part file and size-checked."
+size_bytes = 972784450
+sha256 = ""
+local_path = "downloads/tcia_remind_intraop_brain_ultrasound_u8/images/"
+notes = "14 single-file multi-frame DICOM objects, 34,506,990 to 101,376,600 bytes each. Per object the pin file fixes FileSize, header length (Pixel Data value offset), the SHA-256 of all header bytes before Pixel Data, frames/rows/columns and the nested pixel and slice spacing. download.sh records full-object SHA-256 values in download_inventory.json on first fetch, and build/verify enforce them."
+
+[local_paths]
+downloads = "downloads/tcia_remind_intraop_brain_ultrasound_u8/"
+filtered = "filtered/tcia_remind_intraop_brain_ultrasound_u8/"
+index = "index/tcia_remind_intraop_brain_ultrasound_u8/"
+samples = "samples/tcia_remind_intraop_brain_ultrasound_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/tcia_remind_intraop_brain_ultrasound_u8/samples.jsonl"
+summary = "Fetch 14 pinned uncompressed Explicit VR Little Endian multi-frame 8-bit ultrasound DICOM volumes (one US_pre_dura sweep per patient), walk each header with a stdlib parser, assert the fixed conversion and pixel schema, and emit each complete native Pixel Data volume (minus the OB even-length pad byte) byte-for-byte as one uint8 sample."
+deterministic_notes = "Selection (discover.py, reproducible from the NBIA ReMIND US listing via discover.sh): SeriesDescription US_pre_dura only (US_pre_imri and US_post_dura sweeps excluded), ImageCount 1, CC BY 4.0, PixelMed NRRDToDicom, ThirdPartyAnalysis NO; each of the 104 eligible patients has exactly one such series; patients in ascending PatientID order; the longest prefix with cumulative DICOM FileSize <= 1,000,000,000 bytes is pinned (14 patients, ReMIND-001..ReMIND-018; the 15th, ReMIND-019, would bring the total to 1,044,876,310). Every object is checked for exact size, header SHA-256, transfer syntax, SOP class, identity UIDs, converter, series description, pixel schema, identity rescale, lossless status, Pixel Data being the final element with length frames*rows*columns rounded up to even, and a zero pad byte. Every single sample exceeds the floor (10,000 values / 100 KB, median 1,000 values) by orders of magnitude; verify.sh rejects constant, low-cardinality (<64 values), >90%-zero, mostly blank or repeated-frame, and duplicate volumes."
+
+[[series]]
+id = "remind_us_pre_dura_volume_u8"
+description = "Complete reconstructed intraoperative 3D B-mode brain ultrasound volumes (pre-durotomy sweep), one per distinct patient."
+semantic_meaning = "8-bit B-mode echo intensity (0-255, MONOCHROME2, higher = brighter echo, identity rescale) of a 3D volume reconstructed from a tracked freehand 2D ultrasound sweep over the brain and tumour after craniotomy and before dural opening, at about 0.125-0.147 mm in-plane and 0.47-0.50 mm slice spacing. Zero voxels are the region outside the swept acquisition cone/fan inside the reconstruction bounding box."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Each DICOM object declares BitsAllocated=8, BitsStored=8, HighBit=7, PixelRepresentation=0, SamplesPerPixel=1, PhotometricInterpretation MONOCHROME2, RescaleIntercept 0, RescaleSlope 1, LossyImageCompression 00 and native (unencapsulated) OB Pixel Data in Explicit VR Little Endian, so each emitted uint8 equals the stored voxel value of the published volume."
+source_resources = ["pinned_us_pre_dura_dicom_volumes", "nbia_remind_us_series_listing"]
+source_format = "DICOM Multi-frame Grayscale Byte Secondary Capture Image Storage (1.2.840.10008.5.1.4.1.1.7.2), Explicit VR Little Endian (1.2.840.10008.1.2.1)"
+source_field = "Pixel Data (7FE0,0010)"
+filtered_input_path = "filtered/tcia_remind_intraop_brain_ultrasound_u8/ingest_stats.json"
+filtering = "Keep the 14 pinned objects and only their Pixel Data element. DICOM metadata, functional-group sequences and the trailing OB pad byte of odd-length volumes are excluded. US_pre_imri and US_post_dura sweeps, MRI and segmentations are not collected."
+missing_value_policy = "No voxels are dropped, masked, cropped, filled or imputed. Zero-valued voxels outside the acquisition cone are kept as stored (about half of each volume; per-sample zero fraction is recorded in the index). Missing, truncated, resized, compressed, rescaled, non-8-bit, MONOCHROME1, duplicate, constant, low-cardinality, more-than-90%-zero or mostly blank/repeated-frame volumes fail the recipe."
+conversion = "Walk the explicit-VR header (skipping defined- and undefined-length sequences) to Pixel Data, assert it is the final OB element of length frames*rows*columns rounded up to even, and copy the first frames*rows*columns bytes in source order (frame-major, then row, then column) as uint8. No windowing, inversion, rescaling, resampling, reorientation or cropping."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous unsigned-int8 3D B-mode ultrasound volume (frame-major, then row, then column)"
+sample_geometry = "variable_frames_x_rows_x_columns_ultrasound_volume"
+sample_rank = 3
+sample_axes = ["frame", "image_row", "image_column"]
+natural_record_kind = "complete_dicom_3d_ultrasound_sweep_volume"
+sample_count = 14
+total_size_bytes = 972270283
+output_path = "samples/tcia_remind_intraop_brain_ultrasound_u8/remind_us_pre_dura_volume_u8/"

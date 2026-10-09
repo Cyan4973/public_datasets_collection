@@ -3,3 +3,4 @@
 staging/*
 !staging/README.md
 __pycache__
+.claude/worktrees/

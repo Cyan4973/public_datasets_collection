@@ -494,3 +494,4 @@ noaa_asos_1min_pg1_wind_speed_u8	autocollect	8	met_station_obs	asos_wind_sensor_
 noaa_asos_1min_pg2_temperature_dewpoint_i8	autocollect	8	met_station_obs	asos_hygrothermometer_1min	www.ncei.noaa.gov/data/automated-surface-observing-system-one-minute-pg2	-	OK
 rqcd_qcdml_quenched_su3_gauge_links_f64	autocollect	64	lattice_gauge_configuration	rqcd_qcdml_quenched_wilson_beta6_heatbath	zenodo	-	OK
 earthsearch_s2c1_l2a_snow_probability_u8	autocollect	8	geo_product_raster	sentinel2_msi	e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a	-	OK
+hyburn_argon_decompression_near_vent_pressure_f64	autocollect	64	sim_fluid_field	hyburn_amrex_compressible_multiphase	zenodo	-	STRONG

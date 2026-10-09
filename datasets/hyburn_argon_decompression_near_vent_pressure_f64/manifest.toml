@@ -1,0 +1,78 @@
+manifest_version = 1
+dataset_id = "hyburn_argon_decompression_near_vent_pressure_f64"
+name = "Hyburn/AMReX Argon Decompression Near-Vent Pressure Slices Float64"
+description = "Native float64 gas-pressure fields (Pa) on the published 500 x 500 near-vent cross-section of one 3-D compressible Hyburn/AMReX simulation of a 1000 psi argon shock-tube decompression into an expansion chamber; one sample per kept output snapshot."
+homepage = "https://doi.org/10.5281/zenodo.4127362"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "von der Linden, J., Kimblin, C., McKenna, I., Bagley, S., Li, H.-C., Houim, R., Kueny, C. S., Kuhl, A., Grote, D., Converse, M., Vossen, C. E. J., Stern, S., Cimarelli, C., Sears, J. (2020). Compressible Hydrodynamics Simulation Data for \"Standing Shock Prevents Propagation of Sparks in Supersonic Explosive Flows\" (1.0.0). Zenodo. https://doi.org/10.5281/zenodo.4127362"
+notes = "Zenodo API metadata.license.id = 'cc-by-4.0' for record 4127362; download.sh re-validates it on every run. Attribute the authors and DOI."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official author deposit on Zenodo (record 4127362, version 1.0.0); fetched by exact HTTP byte ranges from the Zenodo files API, no mirrors."
+usage_notes = "Simulated physical field data only; no personal or sensitive content."
+
+[[origins]]
+id = "zenodo_4127362"
+name = "Zenodo record 4127362 (Hyburn argon decompression simulation slices)"
+url = "https://zenodo.org/records/4127362"
+type = "repository"
+version = "1.0.0"
+notes = "785 numpy.savez archives: 394 tube_NNNNNN.npz and 391 near_vent_NNNNNN.npz (snapshots 0-393; 46, 100 and 319 absent upstream). Published 2020-12-23."
+
+[[resources]]
+id = "near_vent_pressure_members"
+origin = "zenodo_4127362"
+url = "https://zenodo.org/api/records/4127362/files/near_vent_NNNNNN.npz/content"
+type = "range_extracted_zip_member_npy"
+version = "1.0.0"
+access = "Public anonymous HTTP range requests. Per selected archive: the archive tail (ZIP central directory + time.npy) and exactly the pressure.npy local header plus DEFLATE data, at offsets pinned in scripts/near_vent_members.tsv."
+size_bytes = 244965509
+sha256 = ""
+local_path = "downloads/hyburn_argon_decompression_near_vent_pressure_f64/"
+notes = "Pinned per archive in scripts/near_vent_members.tsv: archive size and Zenodo MD5, pressure.npy offset, local-header length, compressed size, uncompressed size (2,000,080), CRC32, and the time.npy value. size_bytes = 243,490,949 member-range bytes + 1,474,560 tail bytes (180 x 8,192) for the 180 selected snapshots; no single-file sha256 applies (per-member CRC32 and per-archive MD5 are pinned instead); the full archives (about 23 MB each, 8.38 GB for all near_vent files) are never downloaded."
+
+[local_paths]
+downloads = "downloads/hyburn_argon_decompression_near_vent_pressure_f64/"
+filtered = "filtered/hyburn_argon_decompression_near_vent_pressure_f64/"
+index = "index/hyburn_argon_decompression_near_vent_pressure_f64/"
+samples = "samples/hyburn_argon_decompression_near_vent_pressure_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/hyburn_argon_decompression_near_vent_pressure_f64/samples.jsonl"
+summary = "Range-fetch only the pressure.npy member of every selected near_vent npz, CRC-validate and inflate it, check the NPY header ('<f8', C order, (1,500,500)), and write the 250,000 float64 values verbatim as one raw little-endian sample per snapshot."
+deterministic_notes = "Selection pinned in scripts/near_vent_members.tsv: even snapshot numbers only (stride 2; consecutive outputs ~15 us apart), excluding snapshots whose ambient fraction (cells with |p - 101325 Pa| <= 1 Pa) exceeds 0.5 or whose most frequent float64 value covers more than 0.5 of the cells. Probed values: snapshots 0-9 are 100% ambient (101325 Pa +/- 1e-8 Pa round-off, ~400 distinct values); the jet enters at snapshot 11; ambient fraction drops to 0.503 at 29 and 0.465 at 30, reaching ~0 by 45. Kept: even snapshots 30-392 (46 and 100 absent upstream). build.sh and verify.sh recompute both fractions on every kept snapshot and fail if any violates the rule. Samples are sorted by snapshot number. The index records source_key, snapshot, time_s (from time.npy), sha256, min, max, distinct_values, dominant_fraction, ambient_fraction and uniform_2x2_block_fraction."
+
+[[series]]
+id = "near_vent_pressure_pa_f64"
+description = "Gas pressure on the near-vent 500 x 500 cross-section of the Hyburn/AMReX argon decompression simulation, one field per output snapshot."
+semantic_meaning = "Static gas pressure in pascals (SI) of the argon jet and surrounding chamber air above the shock-tube nozzle, sampled on the authors' uniform 500 x 500 2-D slice through the 3-D AMR solution at one simulation time. It covers the underexpanded jet, Mach disk / standing shock, expansion regions (down to ~1.3 kPa) and compressed regions (up to ~0.87 MPa in the probed snapshots 30-80)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The upstream pressure.npy arrays are '<f8' (little-endian IEEE-754 float64) with shape (1, 500, 500), C order. The 2,000,000-byte NPY payload is copied bit-exactly; no rescaling, casting or reordering. Where the published slice crosses coarser AMR levels, neighbouring cells repeat one value: about 15-26% of the cells in a developed snapshot are such repeats (e.g. snapshot 202: 212,862 distinct of 250,000; 2.4% horizontal and 12.4% vertical equal pairs; 0.3% fully uniform 2x2 blocks). This is native to the published product and is not de-duplicated."
+source_resources = ["near_vent_pressure_members"]
+source_format = "numpy.savez ZIP archive (DEFLATE) member in NPY v1 format"
+source_field = "pressure.npy member of near_vent_NNNNNN.npz: float64 array of shape (1, 500, 500)"
+filtered_input_path = "filtered/hyburn_argon_decompression_near_vent_pressure_f64/build_stats.json"
+filtering = "Only the near_vent window and only the pressure field; tube_* archives and the other 32 members (density, velocities, temperature, vorticity, schlieren, Mach number, all-zero particle fields, mesh, time, load-balance cost) are excluded. Snapshot selection: even snapshot numbers whose ambient fraction and dominant-value fraction are both <= 0.5 (see processing.deterministic_notes)."
+missing_value_policy = "No missing values exist upstream. Every value must be finite and strictly positive; any NaN, infinity or non-positive pressure is fatal in download.sh, build.sh and verify.sh. Nothing is dropped or imputed inside a sample. Pre-jet ambient snapshots are excluded whole by the documented selection rule, not cleaned."
+conversion = "Inflate the raw DEFLATE member (zlib wbits=-15), require CRC32 and size to match the ZIP local header and the pinned table, parse the NPY v1 header (descr '<f8', fortran_order False, shape (1,500,500)), and write the 250,000 float64 values that follow the 80-byte header verbatim (already little-endian) as one 2,000,000-byte sample per snapshot, row-major (slice_row, slice_col)."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 500 x 500 pressure slice"
+sample_geometry = "uniform_2d_cross_section_of_3d_amr_simulation"
+sample_rank = 2
+sample_axes = ["slice_row", "slice_col"]
+natural_record_kind = "simulation_output_snapshot_near_vent_pressure_slice"
+sample_count = 180
+total_size_bytes = 360000000
+output_path = "samples/hyburn_argon_decompression_near_vent_pressure_f64/near_vent_pressure_pa_f64/"

@@ -1,0 +1,108 @@
+manifest_version = 1
+dataset_id = "apple_hypersim_normal_cam_f16"
+name = "Apple Hypersim Camera-Space Surface-Normal G-Buffers (normal_cam) Float16"
+description = "Per-pixel camera-space geometric surface normals (V-Ray normals render element, bump mapping ignored) of photorealistic synthetic indoor scenes from Apple's Hypersim dataset, one native IEEE binary16 768x1024x3 frame per scene for 198 of the 457 public scenes (200 selected, 2 degenerate frames dropped), cut by byte range out of the official stored scene zips."
+homepage = "https://github.com/apple/ml-hypersim"
+
+[license]
+name = "Creative Commons Attribution-ShareAlike 3.0 Unported"
+spdx = "CC-BY-SA-3.0"
+url = "http://creativecommons.org/licenses/by-sa/3.0/"
+citation = "Mike Roberts, Jason Ramapuram, Anurag Ranjan, Atulit Kumar, Miguel Angel Bautista, Nathan Paczan, Russ Webb, Joshua M. Susskind. Hypersim: A Photorealistic Synthetic Dataset for Holistic Indoor Scene Understanding. ICCV 2021. arXiv:2011.02523."
+notes = "README.md of apple/ml-hypersim at commit 3463c5c4a75f3cbfc65ed31cfd6e87204b3a2254 states: 'The Hypersim Dataset is licensed under the [Creative Commons Attribution-ShareAlike 3.0 Unported License](http://creativecommons.org/licenses/by-sa/3.0/).' download.sh re-fetches that README (sha256-pinned) and fails if the sentence is missing. The repository LICENSE.txt is Apple's sample-code license and covers code only; no Hypersim code is used. Share-alike: redistributed or adapted samples must carry the same CC BY-SA 3.0 license and credit Apple / the Hypersim authors (citation above). Only published renders are used; the purchasable Evermotion source assets are not touched."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Apple ML Research CDN (docs-assets.developer.apple.com, the URLs listed by the upstream repository) and raw.githubusercontent.com at a pinned commit, anonymous. Content is synthetic geometry of artist-made virtual interiors; the upstream README states images containing people and prominent logos were manually excluded from the public release."
+usage_notes = "Synthetic computer-graphics ground truth published for research; emitted unchanged as binary16 words for numeric compression research. CC BY-SA 3.0 attribution and share-alike apply to the samples."
+
+[[origins]]
+id = "apple_ml_hypersim_cdn"
+name = "Apple ML Research Hypersim scene archives"
+url = "https://docs-assets.developer.apple.com/ml-research/datasets/hypersim/v1/scenes/"
+type = "bucket"
+notes = "One stored (method 0) zip per scene, 1.0-15.8 GB; 68 of the 200 selected zips exceed 4 GiB and use zip64 records. Accept-Ranges: bytes; Last-Modified Dec 2020 (pinned per zip in sources.tsv)."
+
+[[origins]]
+id = "apple_ml_hypersim_repo"
+name = "apple/ml-hypersim GitHub repository"
+url = "https://github.com/apple/ml-hypersim"
+type = "repository"
+notes = "HEAD == 3463c5c4a75f3cbfc65ed31cfd6e87204b3a2254 (git ls-remote, 2026-10-08). Holds the license statement, the image-format documentation and the v1 split / public-release CSV."
+
+[[resources]]
+id = "hypersim_scene_zip_normal_cam_members"
+origin = "apple_ml_hypersim_cdn"
+url = "https://docs-assets.developer.apple.com/ml-research/datasets/hypersim/v1/scenes/{scene}.zip"
+type = "exact_file_selection"
+version = "v1 scene zips (Last-Modified 2020-12-29); zip sizes pinned in sources.tsv"
+access = "Anonymous HTTP range GETs only: zip tail (128 KiB), central directory (0.4-3 MB), then the local header plus one member. Whole zips are never fetched."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/apple_hypersim_normal_cam_f16/members/"
+notes = "One member per selected scene: <scene>/images/scene_<cam>_geometry_hdf5/frame.NNNN.normal_cam.hdf5 (about 0.5-2.2 MB each). Validated by local-header name, the central-directory CRC-32 and a full HDF5 decode; the per-member offset, size, CRC-32 and sha256 are recorded in a JSON sidecar. size_bytes is 0 because member sizes are resolved from each zip's central directory at download time (the zip sizes themselves are pinned)."
+
+[[resources]]
+id = "hypersim_split_csv"
+origin = "apple_ml_hypersim_repo"
+url = "https://raw.githubusercontent.com/apple/ml-hypersim/3463c5c4a75f3cbfc65ed31cfd6e87204b3a2254/evermotion_dataset/analysis/metadata_images_split_scene_v1.csv"
+type = "file"
+version = "commit 3463c5c4a75f3cbfc65ed31cfd6e87204b3a2254"
+access = "Anonymous raw GET."
+size_bytes = 2962706
+sha256 = "47b7cce12f4659ffa31cf05e8fbf2aee3d69e1929d07b5ea25506603b69d5ce6"
+local_path = "downloads/apple_hypersim_normal_cam_f16/upstream/metadata_images_split_scene_v1.csv"
+notes = "82,900 rows (scene, camera, frame, included_in_public_release, exclude_reason, split). Drives the frame selection; download.sh and verify.sh re-derive sources.tsv from it."
+
+[[resources]]
+id = "hypersim_readme"
+origin = "apple_ml_hypersim_repo"
+url = "https://raw.githubusercontent.com/apple/ml-hypersim/3463c5c4a75f3cbfc65ed31cfd6e87204b3a2254/README.md"
+type = "file"
+version = "commit 3463c5c4a75f3cbfc65ed31cfd6e87204b3a2254"
+access = "Anonymous raw GET; license evidence."
+size_bytes = 36035
+sha256 = "1141b4943d26a33e0c3b5efc0660db5088b0a972d51e2e52c7ef60044e7b851d"
+local_path = "downloads/apple_hypersim_normal_cam_f16/upstream/README.md"
+notes = "States the CC BY-SA 3.0 Unported dataset license and documents frame.IIII.normal_cam.hdf5 as 'surface normals in camera-space (ignores bump mapping)'."
+
+[local_paths]
+downloads = "downloads/apple_hypersim_normal_cam_f16/"
+filtered = "filtered/apple_hypersim_normal_cam_f16/"
+index = "index/apple_hypersim_normal_cam_f16/"
+samples = "samples/apple_hypersim_normal_cam_f16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/apple_hypersim_normal_cam_f16/samples.jsonl"
+summary = "Select one mid-trajectory frame for each of 200 evenly spaced public Hypersim scenes, range-GET only that frame's normal_cam.hdf5 member out of the stored scene zip, decode the float16[768, 1024, 3] HDF5 dataset with a pure-stdlib reader, and emit its binary16 words unchanged as one sample per frame."
+deterministic_notes = "Selection (scripts/selection.py, pinned split CSV): public scenes = scenes with included_in_public_release rows (457), sorted; take index k*457//200 for k = 0..199 (covers all 51 Evermotion volumes); camera = cam_00, else the lowest-numbered camera with public frames (3 of the 200: ai_011_003, ai_044_003, ai_054_002 use cam_01); frame = the median (element len//2) of that camera's sorted public frame ids. The 200-scene cap exists only because one frame is 4,718,592 bytes and output is capped at 1 GB. sources.tsv pins the selection plus each zip's Content-Length and Last-Modified (discover.sh). download.sh re-derives the selection, parses EOCD/zip64 EOCD and the central directory, checks the local-header name, CRC-32 and a full HDF5 decode. build.sh runs a synthetic HDF5+zip self-test, then decodes each member (superblock v0, symbol-table root group, v1 object header, chunked layout v3 with 96x128x1 deflate chunks in a v1 B-tree, complete chunk grid required). verify.sh re-derives the selection, re-decodes every member and requires byte identity, recomputes statistics through an independent bit-level binary16 conversion, and enforces the same policy plus floors, cap and manifest scope."
+
+[[series]]
+id = "normal_cam_f16"
+description = "Camera-space geometric surface normal of every pixel of one rendered Hypersim frame, 768 rows x 1024 columns x 3 components, IEEE binary16."
+semantic_meaning = "For each pixel, the (x, y, z) components of the surface normal of the first visible surface, expressed in the camera coordinate frame and ignoring bump/normal mapping, as written by the Hypersim V-Ray rendering pipeline (README: 'surface normals in camera-space (ignores bump mapping)'). Mostly unit vectors (components in [-1, 1]) that are piecewise constant over planar walls, floors and furniture faces and vary smoothly over curved geometry. Pixels straddling geometric edges hold filtered (non-unit) values, and in some scenes the image reconstruction filter overshoots: realized range -5.64..4.64, minimum per-frame unit-norm pixel fraction 0.745 (NaN pixels count as non-unit), 38 of 198 frames below 0.99. No-hit pixels are NaN (see missing_value_policy)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The upstream HDF5 datatype is IEEE binary16 (class 1, size 2, exponent 5 bits at 10, mantissa 10 bits, bias 15, little-endian), so the words are emitted exactly as stored, without widening or rescaling."
+source_resources = ["hypersim_scene_zip_normal_cam_members", "hypersim_split_csv", "hypersim_readme"]
+source_format = "HDF5 file per frame (superblock v0, chunked 96x128x1, deflate level 9) stored uncompressed inside the per-scene zip"
+source_field = "dataset[768, 1024, 3] float16 camera-space surface normal (normal_cam)"
+filtered_input_path = "filtered/apple_hypersim_normal_cam_f16/build_stats.json"
+filtering = "One frame per selected scene (see deterministic_notes): 200 of the 457 public scenes selected, 198 emitted after the degenerate-frame drop, normal_cam only (no normal_world, normal_bump_*, depth, position or colour from the same zips). Frames excluded from the public release (outside viewing area, content flagged for removal) are never selected. Every pixel and component of a selected frame is kept."
+missing_value_policy = "No value is filtered, renormalized, clipped, rounded or imputed. Pixels with no geometry hit (e.g. views through windows into empty space) are stored upstream as the canonical quiet NaN 0x7e00 in all three components (never a partial pixel). They are kept bit-exact and counted per sample (nan_value_count, finite_pixel_fraction in the index): realized 65 of 198 frames contain NaN, 4,104,339 NaN words in total (0.88% of all values), worst frame ai_004_010 at 19.5%; no Inf. Fatal (build and verify fail, no silent drops): a member that does not match its sidecar or does not decode to float16[768, 1024, 3]; any finite component with magnitude > 8 (genuine reconstruction-filter overshoot reaches -5.64 in ai_054_005); fewer than 50% finite pixel triplets; fewer than 50% of pixels with | |n| - 1 | <= 0.01. Dropped and recorded in build_stats.json (degenerate content, re-derived by verify): a single pixel triplet covering more than 90% of the frame, or fewer than 256 distinct words. Realized drops: ai_003_001 (14 distinct words: a few flat planes) and ai_039_003 (one triplet covers 97%: a wall filling the view). Frames whose most common triplet exceeds 50% are listed in build_stats.json (dominant-value flag, 30 of 198) but kept."
+conversion = "Range-GET the stored zip member, check the CRC-32, then do a pure-stdlib HDF5 decode: superblock v0, the root group's symbol table to the link 'dataset', the v1 object header (dataspace, IEEE binary16 datatype, deflate-only filter pipeline, layout v3 chunked), the v1 chunk B-tree, then zlib-inflate each 96x128x1 chunk and scatter it into C order. Write the 2,359,296 little-endian binary16 words unchanged in (row, column, component) order. One sample per frame."
+numeric_kind = "float"
+bit_width = 16
+endianness = "little"
+sample_format = "raw little-endian IEEE binary16 array, C order [768, 1024, 3]"
+sample_geometry = "image_rows_by_columns_by_vector_component"
+sample_rank = 3
+sample_axes = ["image_row", "image_column", "normal_component_xyz"]
+natural_record_kind = "rendered_frame_camera_space_normal_gbuffer"
+sample_count = 198
+total_size_bytes = 934281216
+output_path = "samples/apple_hypersim_normal_cam_f16/normal_cam_f16/"

@@ -67,6 +67,9 @@ Useful flags: `--agents` (concurrent agent sessions, default 3),
 `--downloads` (concurrent downloads/rebuilds, default 2), `--widths 8,16`,
 `--max-cost-usd`, `--stop-after`, `--model`, `--effort`, `--download-cap-gb`
 (default 5), `--disk-budget-gb` (default 500), `--keep-rejected-data`.
+At `--max-cost-usd` the driver launches nothing more and exits once in-flight
+work ends; agents already running finish, so spend can exceed the cap by
+their cost (about $40 with 8 agents).
 
 Agents run at per-role effort: scouts and screener `medium`, builders `high`
 with a 300k-token compaction window, the judge `xhigh`. Override with

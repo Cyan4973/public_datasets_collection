@@ -997,7 +997,9 @@ class Driver:
 
     # scheduling
     def schedule(self) -> None:
-        if self.paused() or self.stopping:
+        # The cost cap stops every launch, including judges and builders for
+        # candidates already in flight; in-flight agents still finish.
+        if self.paused() or self.stopping or self.budget_exhausted():
             return
         deficits = self.deficits()
         by_status = lambda status: [row for row in self.ledger if row["status"] == status and not self.busy(row["candidate_id"])]  # noqa: E731

@@ -775,7 +775,7 @@ def screen_prompt(rows: list[dict]) -> str:
     return f"Screen these candidates and return exactly one decision per candidate id:\n{listing}\n"
 
 
-def builder_prompt(cfg: Config, row: dict, state: dict, phase: str, detail: str) -> str:
+def builder_prompt(cfg: Config, row: dict, state: dict, phase: str, detail: str, fresh: bool = True) -> str:
     cid = row["candidate_id"]
     header = [
         f"Phase: {phase}",
@@ -787,6 +787,15 @@ def builder_prompt(cfg: Config, row: dict, state: dict, phase: str, detail: str)
     ]
     if state.get("screener_notes"):
         header.append(f"Screener notes: {state['screener_notes']}")
+    if fresh and phase != "author":
+        history = [f"{event['phase']} -> {event.get('status')}" for event in state.get("events", []) if event.get("kind") == "builder"]
+        header += [
+            "",
+            "This is a fresh session; earlier phases ran in other sessions. The recipe in the recipe directory is the state: "
+            "start from its README.md, manifest.toml and the scripts you need, and do not redo source research it records.",
+            f"Earlier builder phases: {', '.join(history) or 'none recorded'}",
+            f"Last builder summary: {state.get('builder_summary') or '(none)'}",
+        ]
     return "\n".join(header) + "\n\n" + detail.strip() + "\n"
 
 
@@ -1080,7 +1089,6 @@ class Driver:
             detail = "Write the recipe and return ready_for_download, or abandon."
             if (STAGING_DIR / cid).exists():
                 detail = f"staging/{cid}/ already exists from an interrupted run; inspect it and continue. " + detail
-            session_id, resume = state.get("builder_session"), bool(state.get("builder_session"))
         elif phase == "build":
             info = state.get("last_download") or {}
             rebuild = state.get("last_rebuild")
@@ -1096,15 +1104,21 @@ class Driver:
                     f"download.sh failed: rc={info.get('rc')} {info.get('reason', '')}; {info.get('bytes', 0):,} bytes present; "
                     f"log {info.get('log')}. Tail:\n```\n{info.get('tail', '')}\n```\nFix download.sh and return ready_for_download, or abandon."
                 )
-            session_id, resume = state.get("builder_session"), bool(state.get("builder_session"))
         else:
             detail = (
                 f"Repair cycle {state.get('repair_cycles', 0)} of {self.cfg.max_repair_cycles}. The acceptance judge returned the recipe.\n"
                 f"Judge summary: {state.get('judge_summary', '')}\nInstructions:\n{state.get('repair_instructions', '')}\n"
                 "Fix the recipe, rebuild, verify, gate, and return ready_for_judge (or ready_for_download if download.sh changed)."
             )
-            session_id, resume = state.get("builder_session"), bool(state.get("builder_session"))
-        prompt = builder_prompt(self.cfg, row, state, phase, detail)
+        # Each phase starts a fresh session: the recipe on disk carries the state,
+        # while resuming the author conversation re-reads its whole context every
+        # turn (and re-writes it after any tool call longer than the cache TTL).
+        # Only a failed session of the same phase is resumed.
+        session_id = state.get("builder_session")
+        resume = bool(session_id) and state.get("builder_session_phase") == phase and int(state.get("agent_failures", 0)) > 0
+        if not resume:
+            session_id = None
+        prompt = builder_prompt(self.cfg, row, state, phase, detail, fresh=not resume)
         self.submit({"kind": "builder", "cid": cid, "phase": phase}, task_agent, self.cfg, "builder", "builder", cid, prompt,
                     BUILDER_SCHEMA, {"cid": cid, "phase": phase}, session_id=session_id, resume=resume)
 
@@ -1234,6 +1248,7 @@ class Driver:
     def apply_builder(self, cid: str, phase: str, agent: dict) -> None:
         state = load_state(cid)
         state["builder_session"] = agent["session_id"]
+        state["builder_session_phase"] = phase
         if not agent["ok"]:
             state["agent_failures"] = int(state.get("agent_failures", 0)) + 1
             add_event(state, "builder_error", phase=phase, error=agent["error"], log=agent["log"])

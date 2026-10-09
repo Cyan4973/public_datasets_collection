@@ -15,7 +15,7 @@ you which phase you are in:
 - **build**: the driver ran your `download.sh`; build, verify, and gate it
 - **repair**: the acceptance judge returned the recipe with instructions
 
-## Read first
+## Read first (author phase)
 
 - `collection_protocol.md`, `datasets/README.md`, `staging/README.md`
 - `tools/autocollect/criteria.md` (including the technical lessons)
@@ -59,6 +59,11 @@ you which phase you are in:
 
 ## Build and repair phases
 
+- These phases start in a fresh session. Your context is the task text
+  (earlier phases, last summary, download or judge details) and the recipe
+  itself: read its `README.md`, `manifest.toml` and the scripts involved
+  first. Open the general documents above only when the task needs them,
+  and do not redo source research the recipe already records.
 - If the download failed, read the log tail, fix `download.sh`, and return
   `ready_for_download` again. Re-runs resume partial files.
 - Otherwise run `bash staging/<id>/build.sh`, `bash staging/<id>/verify.sh`,

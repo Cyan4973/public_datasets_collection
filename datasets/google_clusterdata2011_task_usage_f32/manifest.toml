@@ -1,0 +1,229 @@
+# Staging draft. Realized by build.sh on 2026-10-08 (repair 1): 83 complete
+# windows x 2 series = 166 samples, 83,802,628 primary bytes (12,210,234 rows
+# read). The CPU-rate series was removed as a widened half-precision code.
+manifest_version = 1
+dataset_id = "google_clusterdata2011_task_usage_f32"
+name = "Google Borg Cluster Trace 2011 (clusterdata-2011-2) Task Usage 5-Minute Cluster Windows: Cycles and Memory Accesses per Instruction, Float32"
+description = "Per-task resource-usage measurements from the Google Borg cell trace clusterdata-2011-2 (May 2011, ~12.5k machines): the first 83 complete 5-minute measurement windows of the trace (window starts 600..25,200 s, from task_usage parts 0-4 of 500). Each window holds every task_usage row whose measurement period starts in it; the hardware-counter measures cycles per instruction (CPI) and memory accesses per instruction (MAI) are emitted as two float32 series, one sample per window, values in source row order, empty fields dropped and counted. CPU rate is deliberately not emitted (a widened half-precision source code)."
+homepage = "https://github.com/google/cluster-data/blob/master/ClusterData2011_2.md"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+evidence_url = "https://github.com/google/cluster-data/blob/master/ClusterData2011_2.md"
+evidence_quote = "The data and trace documentation are made available under the [CC-BY](https://creativecommons.org/licenses/by/4.0/) license. By downloading it or using them, you agree to the terms of this license. (ClusterData2011_2.md, the official page for the clusterdata-2011-2 trace, which also states: 'The trace is stored in Google Storage for Developers in the bucket called clusterdata-2011-2.')"
+citation = "Charles Reiss, John Wilkes, Joseph L. Hellerstein. Google cluster-usage traces: format + schema. Google Inc., version 2.1, 2011/2014. Data: Google clusterdata-2011-2, https://github.com/google/cluster-data."
+notes = "download.sh re-fetches ClusterData2011_2.md on every run and fails unless it still states the CC-BY 4.0 grant for the clusterdata-2011-2 bucket. The page asks users to join a mailing list; that is a request, not an access condition: the bucket is public and anonymous."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Google bucket gs://clusterdata-2011-2 over anonymous HTTPS (storage.googleapis.com/clusterdata-2011-2/...). This is its own bucket, distinct from the other Google buckets on the shared storage.googleapis.com host used by unrelated accepted recipes. Part sizes/md5 pinned from the GCS JSON object listing; sha256 pinned from the bucket's own SHA256SUM file."
+usage_notes = "Only two numeric measurement columns are emitted. Job IDs, task indices and machine IDs (already obfuscated by the publisher), timestamps, flags, CPU rate and the memory/disk/page-cache columns are dropped and stored nowhere in the output."
+
+[[origins]]
+id = "clusterdata_2011_2_bucket"
+name = "Google cluster trace clusterdata-2011-2 (GCS bucket)"
+url = "https://storage.googleapis.com/clusterdata-2011-2/README"
+type = "bucket"
+version = "trace version 2.1, generated 2014-11-18 09:58Z (bucket README); object generations 1416267097567000-1416268248230000"
+notes = "29 days of one Borg cell from May 2011. task_usage is 500 gzip CSV parts (42,120,256,604 bytes), one row stream sorted by start time and cut by trace time (~5,011 s per part), so part boundaries fall inside 5-minute windows. Only task_usage parts 0-4 and a head range of part 5 are fetched."
+
+[[resources]]
+id = "license_page"
+origin = "clusterdata_2011_2_bucket"
+url = "https://raw.githubusercontent.com/google/cluster-data/master/ClusterData2011_2.md"
+type = "file"
+version = "master (sha256 e189e6d6716603855707238eab489f54163620310f46683ff521a5c1922050a1, 4,146 bytes at probe time)"
+access = "Direct public download; content-checked for the CC-BY statement and bucket name."
+size_bytes = 4146
+sha256 = ""
+local_path = "downloads/google_clusterdata2011_task_usage_f32/ClusterData2011_2.md"
+notes = "Content-checked rather than hash-pinned so an unrelated edit does not break the recipe."
+
+[[resources]]
+id = "schema_csv"
+origin = "clusterdata_2011_2_bucket"
+url = "https://storage.googleapis.com/clusterdata-2011-2/schema.csv"
+type = "file"
+version = "2.1"
+access = "Direct public download."
+size_bytes = 3963
+sha256 = "b3490ab5ad8806ef30eb5bdf432b662bc4e280abdec549bb3c3edb4b1ab6baeb"
+local_path = "downloads/google_clusterdata2011_task_usage_f32/schema.csv"
+notes = "task_usage fields 1 start time INTEGER, 2 end time INTEGER, 6 CPU rate FLOAT (optional), 16 cycles per instruction FLOAT (optional), 17 memory accesses per instruction FLOAT (optional); 20 fields total."
+
+[[resources]]
+id = "bucket_readme"
+origin = "clusterdata_2011_2_bucket"
+url = "https://storage.googleapis.com/clusterdata-2011-2/README"
+type = "file"
+version = "2.1"
+access = "Direct public download."
+size_bytes = 407
+sha256 = "34ed43fef528d8c972b0559790d9c149755c8acc683b764cc5e2fdf5e77d4008"
+local_path = "downloads/google_clusterdata2011_task_usage_f32/README"
+notes = "Generation timestamp of the trace and pointer to MD5SUM/SHA1SUM/SHA256SUM."
+
+[[resources]]
+id = "sha256sum"
+origin = "clusterdata_2011_2_bucket"
+url = "https://storage.googleapis.com/clusterdata-2011-2/SHA256SUM"
+type = "file"
+version = "2.1"
+access = "Direct public download; must list the pinned sha256 of every fetched part."
+size_bytes = 211870
+sha256 = "b68993eefffd34d42f2fc6613187048112602d185ffe61992292bacf2c2e9940"
+local_path = "downloads/google_clusterdata2011_task_usage_f32/SHA256SUM"
+notes = "Publisher checksum list for all objects in the bucket."
+
+[[resources]]
+id = "task_usage_listing"
+origin = "clusterdata_2011_2_bucket"
+url = "https://storage.googleapis.com/storage/v1/b/clusterdata-2011-2/o?prefix=task_usage/&maxResults=1000&fields=items(name,size,md5Hash),nextPageToken"
+type = "api_query_result"
+version = "live"
+access = "Anonymous GCS JSON API, best effort; checks 500 parts and the pinned size/md5 of every fetched part."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/google_clusterdata2011_task_usage_f32/task_usage_listing.json"
+notes = "Not hash-pinned; the sha256 pins on the parts are authoritative."
+
+[[resources]]
+id = "task_usage_part_00000"
+origin = "clusterdata_2011_2_bucket"
+url = "https://storage.googleapis.com/clusterdata-2011-2/task_usage/part-00000-of-00500.csv.gz"
+type = "shard"
+version = "generation 1416267986030000, md5 oS3MledPC4Vjdy5+WElnhA=="
+access = "curl -C - into .part with stall detection; sha256 checked; first row must start at 600,000,000 us (trace start)."
+size_bytes = 91723415
+sha256 = "841254d3bc4199c26c82890dcd6bc87fcfb1ff23d75be8e39f0337f0ed1c6e28"
+local_path = "downloads/google_clusterdata2011_task_usage_f32/part-00000-of-00500.csv.gz"
+notes = "Start times 600 s .. ~5,611 s."
+
+[[resources]]
+id = "task_usage_part_00001"
+origin = "clusterdata_2011_2_bucket"
+url = "https://storage.googleapis.com/clusterdata-2011-2/task_usage/part-00001-of-00500.csv.gz"
+type = "shard"
+version = "generation 1416267184343000, md5 gV5es57eCrvoJ4qp0bmpVg=="
+access = "Same as part 0; first row must start at 5,612,000,000 us."
+size_bytes = 87188987
+sha256 = "1fa83e39536baac92a1646dbe750541c6504e4c26a85b7f45d9259fd16d3919c"
+local_path = "downloads/google_clusterdata2011_task_usage_f32/part-00001-of-00500.csv.gz"
+notes = "Begins inside window 5,400 s, which straddles parts 0/1 and is joined."
+
+[[resources]]
+id = "task_usage_part_00002"
+origin = "clusterdata_2011_2_bucket"
+url = "https://storage.googleapis.com/clusterdata-2011-2/task_usage/part-00002-of-00500.csv.gz"
+type = "shard"
+version = "generation 1416267536346000, md5 qjQxTFfX9rne+Gt8FZhhvQ=="
+access = "Same as part 0; first row must start at 10,623,000,000 us."
+size_bytes = 90861131
+sha256 = "7d217e976b9d380635f7330e1c75719858daa636efb2f35b8507823476c7b235"
+local_path = "downloads/google_clusterdata2011_task_usage_f32/part-00002-of-00500.csv.gz"
+notes = "Begins inside window 10,500 s (joined across parts 1/2)."
+
+[[resources]]
+id = "task_usage_part_00003"
+origin = "clusterdata_2011_2_bucket"
+url = "https://storage.googleapis.com/clusterdata-2011-2/task_usage/part-00003-of-00500.csv.gz"
+type = "shard"
+version = "generation 1416267826920000, md5 NtEfxJyM19refjZ5mIA4Gg=="
+access = "Same as part 0; first row must start at 15,634,000,000 us."
+size_bytes = 85937819
+sha256 = "4145a0bbd4cce2effc376f6e1204019bfeca49e635dfd358c2ead4be9e7c6416"
+local_path = "downloads/google_clusterdata2011_task_usage_f32/part-00003-of-00500.csv.gz"
+notes = "Begins inside window 15,600 s (joined across parts 2/3)."
+
+[[resources]]
+id = "task_usage_part_00004"
+origin = "clusterdata_2011_2_bucket"
+url = "https://storage.googleapis.com/clusterdata-2011-2/task_usage/part-00004-of-00500.csv.gz"
+type = "shard"
+version = "generation 1416268248230000, md5 v6r38p/Y+t44haYwldhzBA=="
+access = "Same as part 0; first row must start at 20,645,000,000 us."
+size_bytes = 91924797
+sha256 = "7b05867afe28b7b829a1fe17b8ed052ac67f4d9242c2714e41fe7046b73fbffd"
+local_path = "downloads/google_clusterdata2011_task_usage_f32/part-00004-of-00500.csv.gz"
+notes = "Begins inside window 20,400 s (joined across parts 3/4). Its trailing rows in window 25,500 s are a partial window (continued in part 5) and are dropped."
+
+[[resources]]
+id = "task_usage_part_00005_head"
+origin = "clusterdata_2011_2_bucket"
+url = "https://storage.googleapis.com/clusterdata-2011-2/task_usage/part-00005-of-00500.csv.gz"
+type = "other"
+version = "bytes 0-262143 of 94,523,727 (full-part sha256 dfd03c13513847e6ba81f91fb25950f1922d17da72b386b15b020b0ba5e14e43, md5 gH4/eL+cXE8jkEMqByt4MQ==)"
+access = "One HTTP range request (Content-Range checked); only its first row is read."
+size_bytes = 262144
+sha256 = "fd0faf8889ac93caf308e3627f036de4d15801ab9c41d8f4e60510625f05ba59"
+local_path = "downloads/google_clusterdata2011_task_usage_f32/part-00005-of-00500.head-0-262143.gz"
+notes = "Boundary proof only, never emitted: part 5 starts at 25,656 s, inside window 25,500 s, so that window is incomplete in parts 0-4 and window 25,200 s is the last complete one."
+
+[local_paths]
+downloads = "downloads/google_clusterdata2011_task_usage_f32/"
+filtered = "filtered/google_clusterdata2011_task_usage_f32/"
+index = "index/google_clusterdata2011_task_usage_f32/"
+samples = "samples/google_clusterdata2011_task_usage_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/google_clusterdata2011_task_usage_f32/samples.jsonl"
+summary = "Fetch the sha256-pinned task_usage parts 0-4 of clusterdata-2011-2 (plus a 256 KiB head range of part 5), read them as one start-time-sorted row stream, group rows into 5-minute windows by floor(start time / 300 s) (joining windows that straddle a part cut, dropping the trailing window that continues into part 5), and emit CPI and MAI of every complete window as two raw little-endian float32 samples in source row order, each guarded against widened half-precision content (f16_recoverable_fraction <= 0.90)."
+deterministic_notes = "Inputs are sha256-pinned (bucket SHA256SUM) and size/md5-checked against the GCS listing. scripts/build_windows.py (gzip module, byte splitting, array('f')) requires 20 fields per row and decimal start/end times; start times must never decrease across the whole part stream (asserted, so window order is monotonic across parts); window = start - start mod 300,000,000 us; consecutive windows must be exactly 300 s apart; the stream must start exactly at 600 s, the trace start (ClusterData2011_2.md), so the first window is not truncated. Both lattice-aligned rows (start == window start, normally full 300 s periods) and mid-window rows (measurement periods starting inside the window, e.g. tasks that started or were rescheduled mid-window) belong to their window; per-window counts of each are recorded. The final window is dropped only because part 5's pinned head starts inside it (25,656 s in window 25,500 s); had it abutted, it would be kept. Exactly 83 complete windows 600..25,200 s are required. Rows keep source order inside a window. Empty fields of a series are dropped from that series' sample and counted (empty_fields_dropped in the index, per series and window); non-numeric or non-finite tokens are fatal; constant samples, a median below 1,000 values, or more than 1e9 primary bytes are fatal. Width-honesty guard: per sample, f16_recoverable_fraction = share of stored float32 values v with abs(v) < 65504 and float('%.4g' % h) == float('%.4g' % v), h = binary16 round trip of v; the build fails if any sample exceeds 0.90 and verify recomputes it from the stored bytes, requires equality with the index and applies the same limit (realized per-sample range: CPI 0.5624-0.6064, MAI 0.4969-0.5498). Field 6 CPU rate is excluded because it is a source code of 16 bits or fewer: a fixed 2^-20 grid below about 5e-4 and a 9-bit mantissa above, 100% float16-recoverable (1,289,426 of 1,289,426 values checked by the judge), ~5.3k distinct values per window. Negative values, end <= start and end beyond the window are counted, not altered. Index rows carry window_start_s, window_index, window_rows, empty_fields_dropped, f16_recoverable_fraction, source_files, min/max (from the stored float32), distinct and zero counts and sha256; filtered/<id>/ingest_stats.json records per-window row counts by part, lattice vs mid-window rows, straddling windows, the dropped partial window and row accounting. scripts/verify_windows.py re-derives every sample with a separate parser (raw zlib streaming, integer-division windowing, struct '<f'), requires byte equality, and re-checks index stats, stats counters, stray files and manifest totals."
+
+[[series]]
+id = "task_cycles_per_instruction_f32"
+description = "Cycles per instruction of each task over its measurement period, for every task_usage row in one 5-minute window that reports it."
+semantic_meaning = "Cycles per instruction (CPI) of one Borg task over its measurement period, from hardware performance counters, one value per task_usage row whose period starts in the window and whose CPI field is present."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "schema.csv types the column FLOAT; cast to float32 without rescaling. Float32 is the honest width: about 42% of values do not survive a float16 round trip at 4 significant digits (per-sample f16_recoverable_fraction ~0.58, guarded <= 0.90 in build and verify). The publisher notes some CPI values are implausible (counter read skew); they are kept as published, not filtered."
+source_resources = ["task_usage_part_00000", "task_usage_part_00001", "task_usage_part_00002", "task_usage_part_00003", "task_usage_part_00004", "task_usage_part_00005_head", "schema_csv"]
+source_format = "gzip-compressed headerless CSV, 20 fields per task_usage row, rows sorted by start time"
+source_field = "task_usage field 16 'cycles per instruction' (FLOAT)"
+filtered_input_path = "filtered/google_clusterdata2011_task_usage_f32/ingest_stats.json"
+filtering = "Every row of the 83 complete windows is used; rows whose field 16 is empty (no counter data, ~11% of rows) are skipped for this series only."
+missing_value_policy = "Empty field 16 is dropped from the sample (never filled) and counted per sample as empty_fields_dropped; non-numeric or non-finite tokens are fatal; implausible-but-finite values are kept."
+conversion = "float(token) cast to IEEE-754 binary32, raw little-endian float32 in source row order; samples/<id>/task_cycles_per_instruction_f32/w<window_start_s>.f32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 array"
+sample_geometry = "one_value_per_task_usage_row_in_one_5min_window"
+sample_rank = 1
+sample_axes = ["task_usage_row_in_source_order"]
+natural_record_kind = "borg_task_usage_5min_cluster_measurement_window"
+sample_count = 83
+total_size_bytes = 43224720
+output_path = "samples/google_clusterdata2011_task_usage_f32/task_cycles_per_instruction_f32/"
+
+[[series]]
+id = "task_memory_accesses_per_instruction_f32"
+description = "Memory accesses per instruction of each task over its measurement period, for every task_usage row in one 5-minute window that reports it."
+semantic_meaning = "Memory accesses per instruction (MAI) of one Borg task over its measurement period, from hardware performance counters, one value per task_usage row whose period starts in the window and whose MAI field is present."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "schema.csv types the column FLOAT; cast to float32 without rescaling. Float32 is the honest width: about 49% of values do not survive a float16 round trip at 4 significant digits (per-sample f16_recoverable_fraction ~0.51, guarded <= 0.90 in build and verify); values span 1e-7..2. Implausible values noted by the publisher are kept as published."
+source_resources = ["task_usage_part_00000", "task_usage_part_00001", "task_usage_part_00002", "task_usage_part_00003", "task_usage_part_00004", "task_usage_part_00005_head", "schema_csv"]
+source_format = "gzip-compressed headerless CSV, 20 fields per task_usage row, rows sorted by start time"
+source_field = "task_usage field 17 'memory accesses per instruction' (FLOAT)"
+filtered_input_path = "filtered/google_clusterdata2011_task_usage_f32/ingest_stats.json"
+filtering = "Same rows and windows as task_cycles_per_instruction_f32; rows whose field 17 is empty (~17% of rows) are skipped for this series only."
+missing_value_policy = "Empty field 17 is dropped from the sample (never filled) and counted per sample as empty_fields_dropped; non-numeric or non-finite tokens are fatal; implausible-but-finite values are kept."
+conversion = "float(token) cast to IEEE-754 binary32, raw little-endian float32 in source row order; samples/<id>/task_memory_accesses_per_instruction_f32/w<window_start_s>.f32."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 array"
+sample_geometry = "one_value_per_task_usage_row_in_one_5min_window"
+sample_rank = 1
+sample_axes = ["task_usage_row_in_source_order"]
+natural_record_kind = "borg_task_usage_5min_cluster_measurement_window"
+sample_count = 83
+total_size_bytes = 40577908
+output_path = "samples/google_clusterdata2011_task_usage_f32/task_memory_accesses_per_instruction_f32/"

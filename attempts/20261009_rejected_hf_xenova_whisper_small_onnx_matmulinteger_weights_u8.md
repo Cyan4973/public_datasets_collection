@@ -1,0 +1,23 @@
+# hf_xenova_whisper_small_onnx_matmulinteger_weights_u8
+
+- Date: 2026-10-09
+- Status: rejected
+- Candidate dataset: Whisper-small ONNX dynamic-quantized MatMulInteger weight tensors (QUInt8, per-tensor, asymmetric), UInt8
+- Source: https://huggingface.co/Xenova/whisper-small at revision 2d67713f236afa48a18992566e7647f6ca848e13, files onnx/encoder_model_uint8.onnx (92,188,755 B, sha256 85437f8a…) and onnx/decoder_model_uint8.onnx (315,082,971 B, sha256 5cc8eb1f…). License Apache-2.0 (model card front matter; base model openai/whisper-small also Apache-2.0).
+- Why it looked promising: an open license and a small (407 MB) pinned download; a new architecture and toolchain (audio encoder-decoder, onnxruntime) inside the nn_weights modality; asymmetric per-tensor uint8 codes expected to differ from the symmetric per-block GGUF Q8_0 int8 family.
+- Failure class: not novel by bytes (zlsim WEAK).
+- What happened: the recipe was fully built.
+  - A pure-stdlib ONNX protobuf walker selects UINT8 initializers by graph: input B of MatMulInteger, input A from DynamicQuantizeLinear, scalar zero point and scale.
+  - It produced 192 samples (72 encoder + 120 decoder tensors), 198,180,864 bytes; verify.sh matched every sample byte-for-byte with its ONNX source tensor, and gate.py passed.
+  - Excluded: the decoder's Gather-quantized uint8 token-embedding table, the encoder's ConvInteger frontend kernels, and float tensors (lm_head table, norms, biases, positional embeddings).
+  - zlsim gate marked the only series redundant.
+- Evidence:
+  - zlsim match: local:csiro_parkes_uwl_search_mode_u8:parkes_uwl_search_bb_u8, distance 0.020, loss 0.0101. Further neighbours: parkes aa (0.021, -0.004), magellan_fmidr_sar_backscatter_u8 (0.024), parkes cr/ci (0.036/0.037).
+  - Own compression ratio 1.4845.
+  - Per-tensor MinMax maps every tensor to the full 0..255 range.
+  - Aggregate order-0 entropy 6.34 bits; per-sample entropy 2.96–6.36 (median 5.37).
+  - Zero points 75–163 (54 distinct, median 127); largest single-code share 0.507.
+  - These are near-independent bell-shaped bytes, statistically equivalent to 8-bit radio-voltage and SAR noise families.
+- Logs: .data/logs/hf_xenova_whisper_small_onnx_matmulinteger_weights_u8/{download,build,verify}.latest.log; zlsim JSON at /tmp/autocollect/hf_xenova_whisper_small_onnx_matmulinteger_weights_u8/zlsim.json
+- Decision: reject. Per-tensor uint8 quantized transformer weights compress like the existing 8-bit noise-like families. Subsetting tensors to dodge the gate would be cherry-picking.
+- Retry conditions: only if the zlsim library or thresholds change so that near-independent bell-shaped uint8 codes are no longer matched by the Parkes/Magellan families, or if a quantized-weight source with materially different byte statistics is found (e.g. per-channel or 4-bit packed codes with structure, or sparse/pruned weights). Other per-tensor QUInt8 ONNX exports (Xenova/*) should be expected to fail the same way.

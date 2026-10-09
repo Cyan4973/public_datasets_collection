@@ -1,0 +1,155 @@
+manifest_version = 1
+dataset_id = "cfpb_hmda2023_lar_closing_costs_f64"
+name = "HMDA 2023 Snapshot Public LAR Per-Loan Closing-Cost Amounts Float64"
+description = "Per-loan mortgage closing-cost dollar amounts (total loan costs, origination charges, discount points, lender credits) from the FFIEC/CFPB HMDA 2023 snapshot national loan-level public LAR, one float64 column per cost field per state."
+homepage = "https://ffiec.cfpb.gov/data-publication/snapshot-national-loan-level-dataset/2023"
+
+[license]
+name = "Public domain (U.S. federal government statutory data release, CFPB/FFIEC)"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://www.consumerfinance.gov/privacy/website-privacy-policy/"
+citation = "Consumer Financial Protection Bureau / Federal Financial Institutions Examination Council, HMDA 2023 Snapshot National Loan-Level Dataset, https://ffiec.cfpb.gov/data-publication/snapshot-national-loan-level-dataset/2023"
+notes = "CFPB legal notice: 'Information created by the CFPB is in the public domain ... you may reproduce, publish, or otherwise use it without the Bureau's permission. Please consider appropriate citation to the Bureau as the source.' The public LAR is compiled and released by CFPB on behalf of the FFIEC under the Home Mortgage Disclosure Act (12 U.S.C. 2801 et seq.) and Regulation C (12 CFR 1003.5(c)), which require public disclosure. The extracted values are factual dollar amounts. There is no per-file license document, so the grant rests on the CFPB site notice and the statutory public-release status."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official FFIEC/CFPB static-data host. The file is the privacy-modified public LAR (Regulation C public-disclosure modifications already applied by CFPB): no names, addresses, application dates, or loan identifiers. Only four closing-cost dollar columns plus the state code used for partitioning are read. No LEI, census tract, demographic, or other quasi-identifier fields are emitted."
+usage_notes = "Cite CFPB/FFIEC HMDA as the source. Only numeric cost amounts are emitted."
+
+[[origins]]
+id = "ffiec_hmda_snapshot"
+name = "FFIEC HMDA Platform: Snapshot National Loan-Level Dataset"
+url = "https://ffiec.cfpb.gov/data-publication/snapshot-national-loan-level-dataset/2023"
+type = "data_portal"
+notes = "Official HMDA data-publication page. The static file host is files.ffiec.cfpb.gov."
+
+[[resources]]
+id = "hmda2023_public_lar_zip"
+origin = "ffiec_hmda_snapshot"
+url = "https://files.ffiec.cfpb.gov/static-data/snapshot/2023/2023_public_lar_csv.zip"
+type = "archive"
+version = "2023 snapshot (object Last-Modified 2025-11-21T18:27:50Z, ETag 776683c701f1fb15ecbbcbef93776912-24)"
+access = "Direct anonymous HTTPS download. download.sh checks the exact zip size, the single member's name, uncompressed size and CRC-32 (verified by streaming the full member), and the SHA-256 of the pinned 99-column CSV header."
+size_bytes = 624535331
+sha256 = "addc78ab14d89ba5ea3169386c514421459f2d59978885c6dbdf54d2a567b19a"
+local_path = "downloads/cfpb_hmda2023_lar_closing_costs_f64/2023_public_lar_csv.zip"
+notes = "Single Deflate member 2023_public_lar_csv.csv, 4,339,556,230 bytes uncompressed (zip64 extra field), CRC-32 1354180223. The zip SHA-256 was pinned from the first full download (2026-10-09)."
+
+[local_paths]
+downloads = "downloads/cfpb_hmda2023_lar_closing_costs_f64/"
+filtered = "filtered/cfpb_hmda2023_lar_closing_costs_f64/"
+index = "index/cfpb_hmda2023_lar_closing_costs_f64/"
+samples = "samples/cfpb_hmda2023_lar_closing_costs_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/cfpb_hmda2023_lar_closing_costs_f64/samples.jsonl"
+summary = "Stream the pinned national public LAR CSV out of the zip once. For each of four closing-cost columns, collect the reported non-negative decimal dollar amounts of every LAR row by two-letter state_code in file order, and write one little-endian float64 sample per (cost field, state) having at least 1,000 values."
+deterministic_notes = "Pinned zip size, member CRC-32, uncompressed size and header hash. File order is preserved within each state, and states are emitted in sorted order. Missing-value policy (identical in build and verify): tokens '', 'NA' and 'Exempt' are missing. A token must match ^[0-9]+(\\.[0-9]+)?$ to be kept. Negative tokens and other malformed tokens are skipped and counted, and more than 0.1% malformed tokens per field is fatal. Rows whose state_code is 'NA' are excluded. (field, state) groups with fewer than 1,000 kept values are not emitted and are listed in filtered/.../ingest_stats.json. verify.sh re-parses the CSV with an independent byte-split parser, re-derives every sample's SHA-256, value count, min/max and zero fraction, and rejects constant samples, samples with fewer than 50 distinct values, and samples where zeros exceed 90%."
+
+[[series]]
+id = "hmda2023_total_loan_costs_f64"
+description = "HMDA total_loan_costs: total loan costs in US dollars per reported loan."
+semantic_meaning = "Total Loan Costs (Closing Disclosure section D) in USD for one closed-end loan reported under Regulation C, for loans in one state."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source publishes decimal dollar text with up to two decimals, such as 30278.0 or 9919.16. Each token is parsed once into IEEE-754 binary64. Most cent values are not exactly representable in float32, so float64 is the faithful width."
+source_resources = ["hmda2023_public_lar_zip"]
+source_format = "HMDA public LAR CSV (99 columns) inside a zip64 archive"
+source_field = "total_loan_costs"
+filtered_input_path = "filtered/cfpb_hmda2023_lar_closing_costs_f64/ingest_stats.json"
+filtering = "All LAR rows with a valid two-letter state_code (not 'NA') and a kept total_loan_costs token. States with fewer than 1,000 kept values are excluded."
+missing_value_policy = "'', 'NA', 'Exempt' skipped. Negative or malformed tokens are skipped and counted, and more than 0.1% malformed tokens is fatal. No imputation."
+conversion = "float(token) to binary64, packed '<d', in source row order within each state, one file per state."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 array"
+sample_geometry = "per_state_loan_record_column"
+sample_rank = 1
+sample_axes = ["loan_record"]
+natural_record_kind = "hmda_lar_state_cost_field_column"
+sample_count = 52
+total_size_bytes = 40420440
+output_path = "samples/cfpb_hmda2023_lar_closing_costs_f64/hmda2023_total_loan_costs_f64/"
+
+[[series]]
+id = "hmda2023_origination_charges_f64"
+description = "HMDA origination_charges: borrower-paid origination charges in US dollars per reported loan."
+semantic_meaning = "Total of all itemized amounts designated borrower-paid at or before closing (Closing Disclosure origination charges) in USD, for loans in one state."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Decimal dollar text with up to two decimals, parsed once into IEEE-754 binary64."
+source_resources = ["hmda2023_public_lar_zip"]
+source_format = "HMDA public LAR CSV (99 columns) inside a zip64 archive"
+source_field = "origination_charges"
+filtered_input_path = "filtered/cfpb_hmda2023_lar_closing_costs_f64/ingest_stats.json"
+filtering = "All LAR rows with a valid two-letter state_code (not 'NA') and a kept origination_charges token. States with fewer than 1,000 kept values are excluded."
+missing_value_policy = "'', 'NA', 'Exempt' skipped. Negative or malformed tokens are skipped and counted, and more than 0.1% malformed tokens is fatal. No imputation. Exact zeros are genuine reported values and are kept."
+conversion = "float(token) to binary64, packed '<d', in source row order within each state, one file per state."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 array"
+sample_geometry = "per_state_loan_record_column"
+sample_rank = 1
+sample_axes = ["loan_record"]
+natural_record_kind = "hmda_lar_state_cost_field_column"
+sample_count = 52
+total_size_bytes = 40888344
+output_path = "samples/cfpb_hmda2023_lar_closing_costs_f64/hmda2023_origination_charges_f64/"
+
+[[series]]
+id = "hmda2023_discount_points_f64"
+description = "HMDA discount_points: points paid to the creditor to reduce the interest rate, in US dollars per reported loan."
+semantic_meaning = "Dollar amount of discount points paid to the creditor to reduce the interest rate for one reported loan, for loans in one state."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Decimal dollar text with up to two decimals, parsed once into IEEE-754 binary64."
+source_resources = ["hmda2023_public_lar_zip"]
+source_format = "HMDA public LAR CSV (99 columns) inside a zip64 archive"
+source_field = "discount_points"
+filtered_input_path = "filtered/cfpb_hmda2023_lar_closing_costs_f64/ingest_stats.json"
+filtering = "All LAR rows with a valid two-letter state_code (not 'NA') and a kept discount_points token. This field is sparse (empty when no points were paid). States with fewer than 1,000 kept values are excluded."
+missing_value_policy = "'', 'NA', 'Exempt' skipped. Negative or malformed tokens are skipped and counted, and more than 0.1% malformed tokens is fatal. No imputation."
+conversion = "float(token) to binary64, packed '<d', in source row order within each state, one file per state."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 array"
+sample_geometry = "per_state_loan_record_column"
+sample_rank = 1
+sample_axes = ["loan_record"]
+natural_record_kind = "hmda_lar_state_cost_field_column"
+sample_count = 52
+total_size_bytes = 22925912
+output_path = "samples/cfpb_hmda2023_lar_closing_costs_f64/hmda2023_discount_points_f64/"
+
+[[series]]
+id = "hmda2023_lender_credits_f64"
+description = "HMDA lender_credits: lender credits in US dollars per reported loan."
+semantic_meaning = "Dollar amount of lender credits for one reported loan, for loans in one state."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Decimal dollar text with up to two decimals, parsed once into IEEE-754 binary64."
+source_resources = ["hmda2023_public_lar_zip"]
+source_format = "HMDA public LAR CSV (99 columns) inside a zip64 archive"
+source_field = "lender_credits"
+filtered_input_path = "filtered/cfpb_hmda2023_lar_closing_costs_f64/ingest_stats.json"
+filtering = "All LAR rows with a valid two-letter state_code (not 'NA') and a kept lender_credits token. This field is sparse (empty when no credits were given). States with fewer than 1,000 kept values are excluded."
+missing_value_policy = "'', 'NA', 'Exempt' skipped. Negative or malformed tokens are skipped and counted, and more than 0.1% malformed tokens is fatal. No imputation."
+conversion = "float(token) to binary64, packed '<d', in source row order within each state, one file per state."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 array"
+sample_geometry = "per_state_loan_record_column"
+sample_rank = 1
+sample_axes = ["loan_record"]
+natural_record_kind = "hmda_lar_state_cost_field_column"
+sample_count = 52
+total_size_bytes = 12560576
+output_path = "samples/cfpb_hmda2023_lar_closing_costs_f64/hmda2023_lender_credits_f64/"

@@ -234,6 +234,7 @@ binance_spot_1m_klines_2024_q1	ok	14152320	106928640	324	44640	357120	3144960	25
 household_power_uci	ok	14344960	71724800	7	2049280	16394240	0	0	0	1	none	none
 zenodo_adcp_pd0_i16	ok	14376696	28753392	3	4311744	8623488	0	0	0	1	none	none
 zenodo_xsens_cymbal_landmarks_i16	ok	14564160	29128320	71	185280	370560	0	0	0	1	none	none
+cfpb_hmda2023_lar_closing_costs_f64	ok	14599409	116795272	208	39869	318952	0	0	0	1	none	none
 zenodo_lecroy_oscilloscope_i16	ok	15000034	30000068	21	500002	1000004	0	0	0	1	none	none
 orex_ola_l2_lidar_point_xyz_f64	ok	15261174	122089392	44	293746.5	2349972	0	0	0	1	none	none
 noaa_uscrn_subhourly_relative_humidity_u8	ok	15864315	15864315	157	105324	105324	0	0	0	1	none	none

@@ -808,6 +808,12 @@ def judge_prompt(row: dict, state: dict, cfg: Config, gate_warnings: list[str]) 
 # ---------------------------------------------------------------- tasks (worker threads)
 
 
+def task_succeeded(result: dict) -> bool:
+    if "ok" in result:
+        return bool(result["ok"])
+    return result.get("rc") == 0 and not result.get("reason")
+
+
 def task_download(cfg: Config, cid: str) -> dict:
     stamp = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
     log_path = LOGS_DIR / cid / f"download.{stamp}.log"
@@ -1542,6 +1548,11 @@ class Driver:
                     result = future.result()
                 except Exception as exc:  # noqa: BLE001
                     log(f"task {meta} crashed: {exc!r}")
+                    continue
+                if SHUTTING_DOWN.is_set() and not task_succeeded(result):
+                    # Killed by the second interrupt, not a real failure: keep the
+                    # pre-launch status so the task simply runs again on restart.
+                    log(f"shutdown: dropped interrupted {meta}; it reruns on restart")
                     continue
                 self.apply(meta, result)
             if SHUTTING_DOWN.is_set() and not self.futures:

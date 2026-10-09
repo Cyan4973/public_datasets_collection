@@ -462,3 +462,4 @@ metabolights_mtbls12824_maxis_centroid_mz_f64	autocollect	64	mass_spectrum_peak_
 cmip6_cesm2_historical_daily_precip_f32	autocollect	32	sim_atmos_field	ncar_cesm2_climate_model	esgf-world.s3.amazonaws.com	-	OK
 ign_lidarhd_terrainmapper_intensity_u16	autocollect	16	laser_range	Leica TerrainMapper airborne lidar (IGN LiDAR HD, serial 90560), LAS 1.4 PDRF 6 COPC	IGN Géoplateforme data.geopf.fr LiDARHD-NUALID (NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22)	-	OK
 cdip_waverider_m3_z_displacement_f32	autocollect	32	wave_buoy_displacement	datawell_dwr_mk3_waverider	thredds.cdip.ucsd.edu	-	OK
+noaa_nos_sfbofs_fvcom_salinity_f32	autocollect	32	sim_ocean_field	noaa_nos_fvcom_ofs	noaa-nos-ofs-pds.s3.amazonaws.com	-	OK

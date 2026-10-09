@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "noaa_nos_sfbofs_fvcom_salinity_f32"
+name = "NOAA NOS SFBOFS (FVCOM) Nowcast 3-D Salinity Fields on the Unstructured Mesh, Native Float32"
+description = "Native float32 sea-water salinity from NOAA's operational San Francisco Bay Operational Forecast System (SFBOFS, FVCOM 4.4.7): the complete (20 sigma layers x 54,120 mesh nodes) salinity field of the t03z-cycle nowcast hour-3 output (valid 00:00 UTC) on 52 dates spaced 7 days apart through 2025 (2025-01-01 .. 2025-12-24), range-read from the NetCDF4/HDF5 fields.n003 files in the NOAA NODD bucket noaa-nos-ofs-pds and decoded with a pure-stdlib HDF5 reader."
+homepage = "https://registry.opendata.aws/noaa-ofs/"
+
+[license]
+name = "NOAA open data (NODD; open to the public, attribution requested)"
+spdx = "LicenseRef-NOAA-NODD-Open-Data"
+url = "https://registry.opendata.aws/noaa-ofs/"
+citation = "NOAA National Ocean Service, Center for Operational Oceanographic Products and Services (CO-OPS): San Francisco Bay Operational Forecast System (SFBOFS), distributed through the NOAA Open Data Dissemination (NODD) program, s3://noaa-nos-ofs-pds."
+notes = "AWS Registry of Open Data entry (awslabs/open-data-registry datasets/noaa-ofs.yaml, checked 2026-10-08), License field: 'NOAA data disseminated through NODD are open to the public and can be used as desired. NOAA makes data openly available to ensure maximum use of our data, and to spur and encourage exploration and innovation throughout the industry. NOAA requests attribution for the use or dissemination of unaltered NOAA data. However, it is not permissible to state or imply endorsement by or affiliation with NOAA. If you modify NOAA data, you may not state or imply that it is original, unaltered NOAA data.' U.S. Government work. Samples are byte-exact copies of the stored NOAA float32 salinity values (no modification); keep attribution and do not imply NOAA endorsement. NOAA notes OFS guidance is not intended for legal use."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NOAA operational hydrodynamic model output from the NODD bucket noaa-nos-ofs-pds (us-east-1, anonymous HTTPS, not requester-pays). Simulated estuarine salinity; no personal content."
+usage_notes = "Public U.S. Government environmental model output suitable for model training with NOAA attribution retained."
+
+[[origins]]
+id = "noaa_nodd_nos_ofs_s3"
+name = "NOAA NODD bucket noaa-nos-ofs-pds (CO-OPS operational OFS, historical retention)"
+url = "https://noaa-nos-ofs-pds.s3.amazonaws.com/"
+type = "bucket"
+notes = "Listed on the AWS Registry of Open Data as noaa-ofs (resource 'CO-OPS Operational OFS Data (Historical Retention)'). Layout sfbofs/netcdf/YYYY/MM/DD/sfbofs.tHHz.YYYYMMDD.fields.nNNN.nc."
+
+[[resources]]
+id = "sfbofs_t03z_fields_n003_weekly_2025"
+origin = "noaa_nodd_nos_ofs_s3"
+url = "https://noaa-nos-ofs-pds.s3.amazonaws.com/sfbofs/netcdf/{YYYY}/{MM}/{DD}/sfbofs.t03z.{YYYYMMDD}.fields.n003.nc"
+type = "file"
+version = "SFBOFS FVCOM_4.4.7 fields output (netcdf 4.7.4 / HDF5 1.10.6 writer); 52 objects, t03z cycle nowcast hour 003, dates 2025-01-01 + 7k days (k = 0..51); each 56,605,561 bytes, S3 ETag pinned per object in sources.tsv (itself pinned by SHA-256 in scripts/sfbofs_salinity.py)"
+access = "Anonymous HTTPS byte-range GETs with If-Match on the pinned ETag. Per object only nine ranges are fetched (5,036,992 bytes): head [0, 262144), 4096-byte windows at the salinity and time chunk B-tree nodes, the contiguous x/y node coordinates (432,960 bytes), the four raw salinity chunks (4 x 1,082,400 bytes) and the 4096-byte time chunk. Every response must be HTTP 206 with the exact Content-Range, Content-Length and ETag."
+size_bytes = 261923584
+sha256 = ""
+local_path = "downloads/noaa_nos_sfbofs_fvcom_salinity_f32/"
+notes = "size_bytes is the total of fetched ranges (52 x 5,036,992), not the 2,943,489,172 bytes of the complete objects. Range offsets are not pinned: they are derived for each object by parsing the fetched head and chunk B-trees (build and verify re-derive them). download_plan.tsv records the SHA-256 of every fetched range. discover.sh documents how sources.tsv was resolved (ListObjectsV2 per exact key). Excluded: other cycles (t09z/t15z/t21z), other nowcast hours and all forecast files, the stations files, and every variable other than salinity (temp, u, v, zeta, fluxes)."
+
+[local_paths]
+downloads = "downloads/noaa_nos_sfbofs_fvcom_salinity_f32/"
+filtered = "filtered/noaa_nos_sfbofs_fvcom_salinity_f32/"
+index = "index/noaa_nos_sfbofs_fvcom_salinity_f32/"
+samples = "samples/noaa_nos_sfbofs_fvcom_salinity_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_nos_sfbofs_fvcom_salinity_f32/samples.jsonl"
+summary = "Range-read 52 pinned weekly SFBOFS t03z fields.n003 NetCDF4/HDF5 objects (metadata head, chunk B-tree windows, x/y, four raw salinity chunks, time chunk), validate layout, mesh, valid time and values, and emit one raw little-endian float32 (siglay=20, node=54120) salinity field per file in stored order."
+deterministic_notes = "sources.tsv (date, key, size, ETag) is pinned by SHA-256 and must be the 52-date weekly lattice from 2025-01-01 with size 56,605,561. Each object must have superblock v0, exactly the pinned set of 56 root links (dense link storage; SHA-256 of sorted names 5341a0e0...), globals title SFBOFS / source FVCOM_4.4.7 / institution SMAST, a Surface_Heat_Forcing attribute naming sfbofs.t03z.<date>, salinity attributes long_name salinity / standard_name sea_water_salinity / units 1e-3 / location node and no _FillValue/scale/offset attributes, salinity IEEE float32 LE of shape (1, 20, 54120) with no filter pipeline, layout v3 chunked (1, 10, 27060) and exactly four chunks at offsets (0,0,0), (0,0,27060), (0,10,0), (0,10,27060), each 1,082,400 bytes with filter mask 0; siglay (20, 54120); x and y contiguous float32 whose concatenated bytes hash to 05d1047e... (one mesh); time float64 equal to <date> 00:00 UTC in seconds since 2013-01-01. fvcom_h5 verifies the lookup3 checksum of every object header chunk, fractal heap header/direct block and v2 B-tree node it reads, and refuses any read outside the fetched ranges; overlapping fetched ranges must agree byte-for-byte. A synthetic HDF5 self-test (scripts/selftest_sfbofs.py) runs before build and verify. Build assembles chunks into the output (chunk route); verify re-decodes from the downloads through a layer-walk route and compares bytes, recomputes stored-float32 statistics and checks the manifest totals. Samples sorted by date. Floors: 52 samples of 1,082,400 values (median 1,082,400); 56,284,800 values total."
+
+[[series]]
+id = "sfbofs_fields_n003_salinity_f32"
+description = "SFBOFS FVCOM nowcast sea-water salinity, one complete (20 sigma layers x 54,120 nodes) field per weekly t03z fields.n003 file."
+semantic_meaning = "Simulated sea-water salinity (PSU, CF units '1e-3', standard_name sea_water_salinity) from NOAA's operational FVCOM-based San Francisco Bay OFS at every node of its 54,120-node unstructured triangular mesh (San Francisco Bay, Sacramento-San Joaquin Delta and the adjacent coastal ocean) and each of 20 terrain-following sigma layers, at hour 3 of the t03z-cycle nowcast (valid 00:00 UTC of the file date), sampled weekly across 2025 so that tide, river-flow and seasonal states differ between samples. Realized values span 0.004995 (fresh Delta/river water) to 34.0143 (coastal ocean); per-sample minima vary from 0.005 (wet season) to 8.56 (late December), per-sample distinct counts from 611,934 to 1,023,006 of 1,082,400."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The NetCDF4 variable salinity is stored as little-endian IEEE float32 in raw (unfiltered, uncompressed) HDF5 chunks; the recipe copies the stored floats unchanged into row-major (siglay, node) order. No scaling, rounding, masking, interpolation or reordering beyond undoing the chunk tiling."
+source_resources = ["sfbofs_t03z_fields_n003_weekly_2025"]
+source_format = "NetCDF4/HDF5 (FVCOM fields output), variable chunked (1, 10, 27060) without filters, indexed by a version-1 chunk B-tree"
+source_field = "salinity (float32, dims time=1 x siglay=20 x node=54120)"
+filtered_input_path = "filtered/noaa_nos_sfbofs_fvcom_salinity_f32/ingest_stats.json"
+filtering = "Keep only the salinity variable of the t03z-cycle fields.n003 nowcast file on 52 dates spaced 7 days apart (2025-01-01 .. 2025-12-24): one model system, one mesh, one output type, one cycle and one nowcast hour. All 20 layers and all 54,120 nodes of each field are kept; no node, layer or date is dropped."
+missing_value_policy = "FVCOM's unstructured mesh has no land nodes and the variable declares no _FillValue attribute; the HDF5 fill value is the netCDF default 9.96921e36 (bits 0x7CF00000). Any stored value with those bits, any NaN/Inf and any value outside the sanity bounds (-1, 45) is fatal (no clipping, nothing dropped). Wet/dry: dry nodes keep their model salinity (no fill or zero substitution occurs in any of the 52 realized samples). Per sample the index records distinct_count, modal value and modal_fraction (realized: the modal value is one of the river/Delta freshwater floor values 0.005, 0.05 or 0.1, or an ocean value, covering at most 1.364% of any sample; zero_count is 0 in all 52 samples), zero_count and identical adjacent layers; a sample is rejected if it has fewer than 100,000 distinct values, a modal value covering more than half of the field, or all 20 layers identical. Build and verify apply the same rules; no two samples may be identical."
+conversion = "Resolve root link salinity through the dense link storage (fractal heap + v2 name B-tree), check Dataspace (1, 20, 54120), Datatype float32 LE, no Filter Pipeline and Layout v3 chunked (1, 10, 27060, 4); read the four chunk addresses from the version-1 B-tree and copy chunk (l0, n0) row li (27,060 floats) to output row l0 + li, columns n0 .. n0 + 27059. Each sample is one raw little-endian float32 file of 20 x 54,120 values (row = sigma layer from surface to bottom as stored, column = mesh node in file order), 4,329,600 bytes. Index min/max are computed from the stored float32 values."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous float32 sigma-layer x mesh-node matrix"
+sample_geometry = "20_sigma_layers_x_54120_unstructured_mesh_nodes"
+sample_rank = 2
+sample_axes = ["siglay", "node"]
+natural_record_kind = "sfbofs_fields_nowcast_output_time_step_salinity_field"
+sample_count = 52
+total_size_bytes = 225139200
+output_path = "samples/noaa_nos_sfbofs_fvcom_salinity_f32/sfbofs_fields_n003_salinity_f32/"

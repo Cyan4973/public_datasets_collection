@@ -85,6 +85,7 @@ HEARTBEAT_PATH = RUNTIME_DIR / "driver_status.json"
 PAUSE_PATH = RUNTIME_DIR / "global_pause.json"
 LOCK_PATH = RUNTIME_DIR / "driver.lock"
 ROTATION_PATH = RUNTIME_DIR / "focus_rotation.json"
+CONTROL_PATH = RUNTIME_DIR / "control.jsonl"
 QUARANTINE_DIR = RUNTIME_DIR / "quarantine"
 # Untracked files outside these top-level areas are agent scratch (e.g. a
 # self-test run from the repo root) and get quarantined instead of pausing.
@@ -1516,6 +1517,38 @@ class Driver:
             ),
         )
 
+    def process_control(self) -> None:
+        """Apply commands queued by approve-breadth / reject / requeue while running."""
+        if not CONTROL_PATH.exists():
+            return
+        claimed = CONTROL_PATH.with_suffix(".processing")
+        CONTROL_PATH.replace(claimed)
+        for line in claimed.read_text(encoding="utf-8").splitlines():
+            if not line.strip():
+                continue
+            command = json.loads(line)
+            cid = command.get("candidate_id", "")
+            if not any(row["candidate_id"] == cid for row in self.ledger) or self.busy(cid):
+                log(f"control: ignored {command}")
+                continue
+            log(f"control: {command}")
+            if command["action"] == "approve-breadth":
+                state = load_state(cid)
+                state["breadth_approved"] = True
+                state["breadth_approval_note"] = command.get("note") or state.get("breadth_signoff", "")
+                restore = state.pop("paused_from", "") or "queued"
+                add_event(state, "breadth_approved", note=state["breadth_approval_note"])
+                save_state(cid, state)
+                self.set_status(cid, restore, "breadth sign-off approved by the user")
+            elif command["action"] == "reject":
+                self.terminal(cid, "rejected", command["reason"], command.get("retry", ""), None)
+            elif command["action"] == "requeue":
+                state = load_state(cid)
+                state["agent_failures"] = 0
+                save_state(cid, state)
+                self.set_status(cid, command.get("status", "queued"), "requeued by the user")
+        claimed.unlink()
+
     def goal_reached(self) -> bool:
         return all(deficit <= 0 for deficit in self.deficits().values())
 
@@ -1536,6 +1569,7 @@ class Driver:
         signal.signal(signal.SIGTERM, on_signal)
         log(f"driver start: {dataclasses.asdict(self.cfg)}")
         while True:
+            self.process_control()
             done = [future for future in self.futures if future.done()]
             for future in done:
                 meta = self.futures.pop(future)
@@ -1729,7 +1763,29 @@ def cmd_follow(args) -> int:
         return 0
 
 
+def driver_running() -> bool:
+    if not LOCK_PATH.exists():
+        return False
+    with LOCK_PATH.open("a") as handle:
+        try:
+            fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            return True
+        fcntl.flock(handle, fcntl.LOCK_UN)
+    return False
+
+
+def queue_control(command: dict) -> int:
+    RUNTIME_DIR.mkdir(parents=True, exist_ok=True)
+    with CONTROL_PATH.open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps(command) + "\n")
+    print(f"queued for the running driver: {command}")
+    return 0
+
+
 def cmd_approve_breadth(args) -> int:
+    if driver_running():
+        return queue_control({"action": "approve-breadth", "candidate_id": args.candidate_id, "note": args.note})
     rows = load_ledger()
     row = next((item for item in rows if item["candidate_id"] == args.candidate_id), None)
     if row is None:
@@ -1751,6 +1807,8 @@ def cmd_approve_breadth(args) -> int:
 
 
 def cmd_reject(args) -> int:
+    if driver_running():
+        return queue_control({"action": "reject", "candidate_id": args.candidate_id, "reason": args.reason, "retry": args.retry})
     rows = load_ledger()
     if not any(item["candidate_id"] == args.candidate_id for item in rows):
         print(f"unknown candidate {args.candidate_id}")
@@ -1761,6 +1819,8 @@ def cmd_reject(args) -> int:
 
 
 def cmd_requeue(args) -> int:
+    if driver_running():
+        return queue_control({"action": "requeue", "candidate_id": args.candidate_id, "status": args.status})
     rows = load_ledger()
     for row in rows:
         if row["candidate_id"] == args.candidate_id:

@@ -472,3 +472,4 @@ nasa_pds_sharad_edr_raw_echo_i8	autocollect	8	radar_sounder_raw_echo	mro_sharad	
 usgs_3dep_cameronpeak_vq1560ii_scan_angle_i16	autocollect	16	laser_range	Riegl VQ-1560 II airborne lidar (USGS 3DEP LAS 1.4 PDRF 6)	USGS 3DEP LPC rockyweb Staged Projects	-	OK
 gavo_hdap_walz_photographic_plate_scans_u16	autocollect	16	photographic_plate_scan	HDAP 2011 flatbed transmission scans of Königstuhl 72 cm Walz reflector glass plates	dc.g-vo.org/lswscans (GAVO HDAP)	-	STRONG
 earthscope_xa_apollo_pse_lunar_seismogram_i16	autocollect	16	inertial_vibration	Apollo ALSEP Passive Seismic Experiment long-period seismometer	EarthScope FDSN dataselect, network XA (1969)	-	OK
+openneuro_ds007738_wholehead_cw_fnirs_intensity_f64	autocollect	64	fnirs_optical_intensity	bu_highdensity_cw_fnirs_56x144	openneuro.org	-	OK

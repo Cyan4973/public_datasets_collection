@@ -1,0 +1,102 @@
+manifest_version = 1
+dataset_id = "openneuro_ds007738_wholehead_cw_fnirs_intensity_f64"
+name = "OpenNeuro ds007738 Whole-Head Cocktail-Party fNIRS: Resting-State High-Density CW-fNIRS Raw Intensity (Float64)"
+description = "Complete stored raw continuous-wave near-infrared intensity matrices (SNIRF /nirs/data1/dataTimeSeries, measurementList dataType 1; time x 1134 source-detector-wavelength channels at ~8.99 Hz) of all 24 published resting-state runs of OpenNeuro ds007738 1.0.0, range-extracted from the SNIRF (HDF5) files and kept bit for bit as little-endian float64."
+homepage = "https://openneuro.org/datasets/ds007738/versions/1.0.0"
+
+[license]
+name = "Creative Commons Zero v1.0 Universal (public-domain dedication)"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "Duwadi S., Rogers D., Boyd A. D., Carlton L. B., Zhang Y., Kawai Gaona A., Pathiyaparambath A. D., Chaudhury R., Zimmermann B. B., O'Brien W. J., von Lühmann A., Boas D. A., Yücel M. A., Sen K. (2026). Whole-Head Cocktail Party fNIRS. OpenNeuro, ds007738 version 1.0.0. doi:10.18112/openneuro.ds007738.v1.0.0"
+notes = "The snapshot's dataset_description.json declares \"License\": \"CC0\" and \"DatasetDOI\": \"doi:10.18112/openneuro.ds007738.v1.0.0\"; download.sh re-checks both, the dataset name, and CHANGES ('1.0.0 2026-05-01') on every run. OpenNeuro publishes all datasets under CC0. Citation is courteous, not required."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official OpenNeuro S3 bucket (s3.amazonaws.com/openneuro.org, anonymous). The README states the dataset holds only fNIRS optical measurements and eye-tracking time series, shared under approved IRB consent, with no anatomical scans."
+usage_notes = "Only the optical intensity matrix is emitted. Aux channels (eye tracking), stim, probe geometry (positions, labels, landmarks) and metaDataTags (SubjectID, MeasurementDate, ...) are never fetched as payload; the only bytes read near them are HDF5 object headers inside the fetched 1 MiB metadata blocks. The BIDS subject label (sub-NN) appears only as index bookkeeping."
+
+[[origins]]
+id = "openneuro_ds007738"
+name = "OpenNeuro ds007738 'Whole-Head Cocktail Party fNIRS' (snapshot 1.0.0)"
+url = "https://openneuro.org/datasets/ds007738/versions/1.0.0"
+type = "bucket"
+version = "1.0.0 (created 2026-05-01; the only snapshot per the OpenNeuro GraphQL API on 2026-10-09)"
+notes = "38 participants; 223 SNIRF runs (38.8 GB) over the tasks overt, covert, visualorient, longvisualorient/videoattend and resting. Only the 24 resting-state runs are collected (sub-12 has a resting events.tsv but no resting SNIRF; the other 13 participants have no resting run)."
+
+[[resources]]
+id = "dataset_metadata"
+origin = "openneuro_ds007738"
+url = "https://s3.amazonaws.com/openneuro.org/ds007738/{dataset_description.json,README.txt,CHANGES,participants.tsv}"
+type = "file"
+version = "1.0.0"
+access = "Anonymous HTTPS; refreshed on every download run."
+size_bytes = 2878
+sha256 = ""
+local_path = "downloads/openneuro_ds007738_wholehead_cw_fnirs_intensity_f64/metadata/"
+notes = "License evidence (dataset_description.json: License CC0, DatasetDOI, Name), snapshot evidence (CHANGES), device description (README.txt: '56 sources, 144 detectors, 1134 measurement channels at ~8.99 Hz') and the participant list."
+
+[[resources]]
+id = "s3_listing"
+origin = "openneuro_ds007738"
+url = "https://s3.amazonaws.com/openneuro.org?list-type=2&prefix=ds007738/&max-keys=1000"
+type = "api_query_result"
+version = "1.0.0 bucket state"
+access = "Anonymous S3 ListObjectsV2, paginated with continuation-token (1,023 keys = 2 pages on 2026-10-09)."
+size_bytes = 360637
+sha256 = ""
+local_path = "downloads/openneuro_ds007738_wholehead_cw_fnirs_intensity_f64/metadata/"
+notes = "check-metadata requires the set of *_task-resting_run-01_nirs.snirf keys to equal runs.tsv exactly, with the pinned size and ETag of every file."
+
+[[resources]]
+id = "resting_snirf_ranges"
+origin = "openneuro_ds007738"
+url = "https://s3.amazonaws.com/openneuro.org/ds007738/sub-{NN}/nirs/sub-{NN}_task-resting_run-01_nirs.snirf"
+type = "http_ranges_from_hdf5"
+version = "24 objects pinned by size and S3 ETag in runs.tsv"
+access = "Anonymous HTTPS byte ranges; every 206 response must carry Content-Range */<pinned size> and the pinned ETag."
+size_bytes = 2392745456
+sha256 = ""
+local_path = "downloads/openneuro_ds007738_wholehead_cw_fnirs_intensity_f64/runs/"
+notes = "size_bytes is the sum of the 24 whole SNIRF files (71.96-109.84 MB each); the recipe fetches only ~8-10 aligned 1 MiB metadata blocks per file plus the exact contiguous dataTimeSeries range (~26.7-29.2 MB per file, ~646 MB in total). The SHA-256 of every fetched range is written to range_sha256.tsv."
+
+[local_paths]
+downloads = "downloads/openneuro_ds007738_wholehead_cw_fnirs_intensity_f64/"
+filtered = "filtered/openneuro_ds007738_wholehead_cw_fnirs_intensity_f64/"
+index = "index/openneuro_ds007738_wholehead_cw_fnirs_intensity_f64/"
+samples = "samples/openneuro_ds007738_wholehead_cw_fnirs_intensity_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/openneuro_ds007738_wholehead_cw_fnirs_intensity_f64/samples.jsonl"
+summary = "Validate license/snapshot and the paginated S3 listing against runs.tsv, walk each resting-state SNIRF file's HDF5 metadata over cached 1 MiB byte ranges, fetch only the contiguous /nirs/data1/dataTimeSeries range, and emit that matrix unchanged as one little-endian float64 sample per run."
+deterministic_notes = "Scope: every *_task-resting_run-01_nirs.snirf in ds007738 1.0.0 (24 runs, one per subject); task runs and other OpenNeuro fNIRS datasets are excluded. runs.tsv pins key, size and ETag (plus data offset/bytes/time points/SHA-256 once realized). The dataset address and size are resolved at download time from the HDF5 metadata (no hard-coded offset). The reader requires superblock v0, v1 object headers, symbol-table groups, SNIRF formatVersion '1.0', exactly /nirs/data1 with links dataTimeSeries, time and measurementList1..1134, a contiguous unfiltered H5T_IEEE_F64LE (T x 1134) dataset whose size is T*1134*8, a time vector of length T, every measurementList dataType = 1, wavelengths (760, 850) and a channel table (sourceIndex, detectorIndex, wavelengthIndex, dataType, dataTypeIndex per channel) whose SHA-256 equals d8099a28416f150446e432cbe1363c73b9cca2abfdafe9e15f9fb1a8d3eaf987 in every run, so channel order is identical across samples. build.sh and verify.sh run a synthetic SNIRF self-test first; verify.sh re-walks the metadata by path resolution, byte-compares every sample and recomputes every statistic."
+
+[[series]]
+id = "cw_fnirs_raw_intensity_f64"
+description = "Raw continuous-wave fNIRS optical intensity of a whole-head high-density array (56 sources, 144 detectors, 1134 channels at 760/850 nm), one complete 5-minute resting-state recording per sample."
+semantic_meaning = "Detected CW near-infrared light intensity (SNIRF measurementList dataType 1, 'CW amplitude', arbitrary instrument units, range 0 to 0.94) per source-detector-wavelength channel and time frame, sampled at ~8.99 Hz during 5+ minutes of central fixation without a task. Channels mix two wavelengths and short to long source-detector separations within each frame, identically ordered in every sample."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The SNIRF dataset is declared H5T_IEEE_F64LE and every stored bit pattern is copied unchanged. Width disclosure: within a channel the values behave like integer-like mantissas of at most 24 bits times one float64 per-channel scale (ratio/LCM test, realized: 57-99% of testable channels per run pass LCM <= 24 bits at <= 1e-15 error, per-run median LCM 11-21 bits), so they are not 53-bit-entropy measurements; but only the exact zeros (0.037%) are float32-exact, so the matrix cannot be narrowed to float32 without storing per-channel scales. build records the test per sample in the index."
+source_resources = ["resting_snirf_ranges"]
+source_format = "SNIRF 1.0 (HDF5, superblock v0) contiguous unfiltered H5T_IEEE_F64LE 2-D dataset"
+source_field = "/nirs/data1/dataTimeSeries (all 1134 measurementList channels have dataType 1 = raw CW amplitude)"
+filtered_input_path = "filtered/openneuro_ds007738_wholehead_cw_fnirs_intensity_f64/ingest_stats.json"
+filtering = "All 24 resting-state runs (sub-01..05, 10, 11, 13, 14, 15, 18, 20, 22, 23, 24, 25, 28, 29, 32, 33, 35, 41, 44, 46), the whole matrix of each: every time frame and every channel, no channel selection, trimming or quality filtering. Excluded: task runs (overt, covert, visualorient, longvisualorient/videoattend), the time vector, aux eye-tracking channels, stim, probe geometry, metaDataTags and every other OpenNeuro fNIRS dataset."
+missing_value_policy = "Values are preserved bit for bit, including the instrument's 1e-6 floor (dark or saturated long-separation channels: 3.02% of all values, 0.18-15.4% per run) and exact zeros (0.037% overall). Runs sub-20 onward store the quiet NaN 0xFFF8000000000000 (sign bit set, numpy default; no other NaN pattern is accepted) in most channels of the first frame (realized: 908-1,063 of 1,134 values, frame 0 only, in the 13 runs sub-20..sub-46; none in the 11 runs sub-01..18; 0.016% of all values); these NaNs are kept as stored and counted. Fatal: any other NaN payload, +-Inf, NaN above 0.5% of a sample, a constant matrix, fewer than 20% distinct values, more than a quarter of channels constant, a changed shape, dtype, filter, channel layout, wavelength, pin or range checksum."
+conversion = "Resolve the dataset's contiguous address and size from the HDF5 object header, fetch exactly that byte range, check the size equals T*1134*8, and write the bytes unchanged (native little-endian float64) to <subject>_task-resting_run-01_dataTimeSeries.bin. Order is the stored row-major order: time-major, i.e. all 1134 channels of frame 0, then frame 1, and so on; the index records sample_shape [T, 1134]."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 matrix, row-major (time, channel)"
+sample_geometry = "fnirs_time_by_channel_matrix_2d"
+sample_rank = 2
+sample_axes = ["time_frame", "measurement_channel"]
+natural_record_kind = "one_complete_resting_state_fnirs_run_intensity_matrix_time_major"
+sample_count = 24
+total_size_bytes = 646624944
+output_path = "samples/openneuro_ds007738_wholehead_cw_fnirs_intensity_f64/cw_fnirs_raw_intensity_f64/"

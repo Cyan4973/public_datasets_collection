@@ -1,0 +1,142 @@
+manifest_version = 1
+dataset_id = "desi_dr1_coadd_dark_flux_f32"
+name = "DESI DR1 Main-Survey Dark-Program HEALPix Coadded Flux (B/R/Z Arms) Float32"
+description = "Native big-endian float32 calibrated coadded spectral flux density images (NTARGET x NWAVE) of the B, R and Z arms of 36 DESI DR1 iron main/dark healpix coadd files, converted to raw little-endian float32, one sample per FLUX image HDU."
+homepage = "https://data.desi.lbl.gov/doc/releases/dr1/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://data.desi.lbl.gov/doc/acknowledgments/"
+citation = "DESI Collaboration et al. (2026), Data Release 1 of the Dark Energy Spectroscopic Instrument. Include the DESI acknowledgment text from https://data.desi.lbl.gov/doc/acknowledgments/."
+notes = "DESI license page: 'The Dark Energy Spectroscopic Instrument (DESI) data are licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0)'. DR1 page: 'The DR1 data are released under the Creative Commons Attribution 4.0 International License (CC BY 4.0).' Redistribution must cite the DR1 paper, include the acknowledgment text and indicate changes (here: FITS big-endian to raw little-endian, values unchanged). download.sh re-checks the license statement."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official DESI public data release served by NERSC (data.desi.lbl.gov), anonymous HTTPS; byte ranges of the pinned coadd FITS files only."
+usage_notes = "Astronomical spectra of galaxies and quasars; no personal data."
+
+[[origins]]
+id = "desi_dr1_iron"
+name = "DESI Data Release 1, spectroscopic production iron"
+url = "https://data.desi.lbl.gov/public/dr1/spectro/redux/iron/healpix/main/dark/"
+type = "data_portal"
+version = "dr1/iron"
+notes = "Main survey, dark program, healpix (nside 64, nested) coadds. 223 healpix groups (group = healpix // 100) at discovery on 2026-10-08."
+
+[[resources]]
+id = "desi_dr1_iron_main_dark_coadd_flux_ranges"
+origin = "desi_dr1_iron"
+url = "https://data.desi.lbl.gov/public/dr1/spectro/redux/iron/healpix/main/dark/<group>/<healpix>/coadd-main-dark-<healpix>.fits"
+type = "shard"
+version = "dr1/iron, files last modified 2023-01-30/31"
+access = "Anonymous HTTPS byte-range GETs (HTTP 206). For each of 36 pinned files: the primary header plus three ranges, each = one <ARM>_FLUX extension header (2880 bytes) + the unpadded float32 data unit. Offsets, shapes, header SHA-256, file size, Last-Modified and FITS DATASUM are pinned per HDU in pinned_hdus.tsv."
+size_bytes = 459879928
+sha256 = ""
+local_path = "downloads/desi_dr1_coadd_dark_flux_f32/"
+notes = "Whole-file sha256sum files exist per healpix directory but cannot check byte ranges; instead every range is checked against its pinned header SHA-256 and the FITS 32-bit ones'-complement DATASUM of its data unit (zero padding does not alter it). Range bytes = 459,303,928 data + 311,040 FLUX headers + 264,960 primary headers. Selection: 36 evenly spaced groups, lowest-numbered healpix with a 100-250 MB coadd file (see discover.sh)."
+
+[[resources]]
+id = "desi_license_page"
+origin = "desi_dr1_iron"
+url = "https://data.desi.lbl.gov/doc/acknowledgments/"
+type = "file"
+version = "fetched at download time"
+access = "Direct public download; must contain the CC BY 4.0 statement."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/desi_dr1_coadd_dark_flux_f32/acknowledgments.html"
+notes = "License evidence only; content not pinned because the page is a live HTML document."
+
+[local_paths]
+downloads = "downloads/desi_dr1_coadd_dark_flux_f32/"
+filtered = "filtered/desi_dr1_coadd_dark_flux_f32/"
+index = "index/desi_dr1_coadd_dark_flux_f32/"
+samples = "samples/desi_dr1_coadd_dark_flux_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/desi_dr1_coadd_dark_flux_f32/samples.jsonl"
+summary = "Fetch the pinned B/R/Z_FLUX image HDU byte ranges of 36 DESI DR1 iron main/dark healpix coadd files, validate headers and FITS DATASUM, and emit each FLUX image (NTARGET x NWAVE) as one raw little-endian float32 sample."
+deterministic_notes = "pinned_hdus.tsv fixes the 36 files, per-HDU offsets, shapes (NAXIS2 250-544 targets; NAXIS1 2751/2326/2881), header SHA-256 and DATASUM. build.sh and verify.sh read only local ranges. Samples are written in pinned order with row order identical to the source FIBERMAP order; no rows are dropped. verify.sh re-decodes with an independent struct-based big-endian reader and byte-compares, recomputes DATASUM, checks index fields, stored-float32 min/max, all-zero row counts (<= 35% per HDU), nonconstancy, >= 50% nonzero values, >= 1000 distinct values per sample, equal healpix coverage across arms, and manifest totals. Realized: 108 samples, 114,825,982 values, 459,303,928 bytes, median sample 1,081,590 values."
+
+[[series]]
+id = "desi_coadd_b_flux_f32"
+description = "DESI B-arm (blue, 3600-5800 Angstrom, 2751 pixels of 0.8 Angstrom) coadded calibrated flux density of main-survey dark-program targets, one image per healpix coadd file."
+semantic_meaning = "Sky-subtracted, flux-calibrated spectral flux density in 1e-17 erg/s/cm^2/Angstrom of each target (LRG, ELG, QSO and other dark-time targets), coadded over all exposures, on the fixed B-arm wavelength grid; rows are targets in FIBERMAP order, columns are wavelength pixels."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Source HDU is IEEE-754 float32 (BITPIX = -32, no BSCALE/BZERO). Only the byte order changes from FITS big-endian to little-endian; every bit pattern is preserved."
+source_resources = ["desi_dr1_iron_main_dark_coadd_flux_ranges"]
+source_format = "FITS IMAGE extension, BITPIX -32, big-endian, in a DESI healpix coadd file"
+source_field = "B_FLUX image HDU (BUNIT '10**-17 erg/(s cm2 Angstrom)', NAXIS1 = 2751, NAXIS2 = NTARGET)"
+filtered_input_path = "filtered/desi_dr1_coadd_dark_flux_f32/ingest_stats.json"
+filtering = "All rows and columns of the B_FLUX HDU of each of the 36 pinned coadd files are kept. IVAR, MASK, RESOLUTION, WAVELENGTH, FIBERMAP, EXP_FIBERMAP and SCORES HDUs are not fetched."
+missing_value_policy = "DESI writes flux 0 (with IVAR 0) for fully masked coadd pixels; these source zeros are kept as is. Targets whose whole row is zero are kept in place and counted per sample in the index (all_zero_rows); an HDU with more than 35% all-zero rows, any NaN or infinity, or a constant value is fatal in both build and verify."
+conversion = "Read the downloaded range (one 2880-byte FITS header + NAXIS1*NAXIS2*4 data bytes), validate the header cards and FITS DATASUM, interpret the data unit as big-endian float32, byte-swap to little-endian, and write the NTARGET x NWAVE image row-major (target-major) as one file without FITS padding."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 row-major NTARGET x 2751 flux image"
+sample_geometry = "spectrograph_arm_flux_image_target_by_wavelength_2d"
+sample_rank = 2
+sample_axes = ["target", "wavelength_pixel"]
+natural_record_kind = "desi_healpix_coadd_b_flux_image_hdu"
+sample_count = 36
+total_size_bytes = 158776716
+output_path = "samples/desi_dr1_coadd_dark_flux_f32/desi_coadd_b_flux_f32/"
+
+[[series]]
+id = "desi_coadd_r_flux_f32"
+description = "DESI R-arm (red, 5760-7620 Angstrom, 2326 pixels of 0.8 Angstrom) coadded calibrated flux density of main-survey dark-program targets, one image per healpix coadd file."
+semantic_meaning = "Sky-subtracted, flux-calibrated spectral flux density in 1e-17 erg/s/cm^2/Angstrom of each target (LRG, ELG, QSO and other dark-time targets), coadded over all exposures, on the fixed R-arm wavelength grid; rows are targets in FIBERMAP order, columns are wavelength pixels."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Source HDU is IEEE-754 float32 (BITPIX = -32, no BSCALE/BZERO). Only the byte order changes from FITS big-endian to little-endian; every bit pattern is preserved."
+source_resources = ["desi_dr1_iron_main_dark_coadd_flux_ranges"]
+source_format = "FITS IMAGE extension, BITPIX -32, big-endian, in a DESI healpix coadd file"
+source_field = "R_FLUX image HDU (BUNIT '10**-17 erg/(s cm2 Angstrom)', NAXIS1 = 2326, NAXIS2 = NTARGET)"
+filtered_input_path = "filtered/desi_dr1_coadd_dark_flux_f32/ingest_stats.json"
+filtering = "All rows and columns of the R_FLUX HDU of each of the 36 pinned coadd files are kept. IVAR, MASK, RESOLUTION, WAVELENGTH, FIBERMAP, EXP_FIBERMAP and SCORES HDUs are not fetched."
+missing_value_policy = "DESI writes flux 0 (with IVAR 0) for fully masked coadd pixels; these source zeros are kept as is. Targets whose whole row is zero are kept in place and counted per sample in the index (all_zero_rows); an HDU with more than 35% all-zero rows, any NaN or infinity, or a constant value is fatal in both build and verify."
+conversion = "Read the downloaded range (one 2880-byte FITS header + NAXIS1*NAXIS2*4 data bytes), validate the header cards and FITS DATASUM, interpret the data unit as big-endian float32, byte-swap to little-endian, and write the NTARGET x NWAVE image row-major (target-major) as one file without FITS padding."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 row-major NTARGET x 2326 flux image"
+sample_geometry = "spectrograph_arm_flux_image_target_by_wavelength_2d"
+sample_rank = 2
+sample_axes = ["target", "wavelength_pixel"]
+natural_record_kind = "desi_healpix_coadd_r_flux_image_hdu"
+sample_count = 36
+total_size_bytes = 134247416
+output_path = "samples/desi_dr1_coadd_dark_flux_f32/desi_coadd_r_flux_f32/"
+
+[[series]]
+id = "desi_coadd_z_flux_f32"
+description = "DESI Z-arm (near-infrared, 7520-9824 Angstrom, 2881 pixels of 0.8 Angstrom) coadded calibrated flux density of main-survey dark-program targets, one image per healpix coadd file."
+semantic_meaning = "Sky-subtracted, flux-calibrated spectral flux density in 1e-17 erg/s/cm^2/Angstrom of each target (LRG, ELG, QSO and other dark-time targets), coadded over all exposures, on the fixed Z-arm wavelength grid; rows are targets in FIBERMAP order, columns are wavelength pixels."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Source HDU is IEEE-754 float32 (BITPIX = -32, no BSCALE/BZERO). Only the byte order changes from FITS big-endian to little-endian; every bit pattern is preserved."
+source_resources = ["desi_dr1_iron_main_dark_coadd_flux_ranges"]
+source_format = "FITS IMAGE extension, BITPIX -32, big-endian, in a DESI healpix coadd file"
+source_field = "Z_FLUX image HDU (BUNIT '10**-17 erg/(s cm2 Angstrom)', NAXIS1 = 2881, NAXIS2 = NTARGET)"
+filtered_input_path = "filtered/desi_dr1_coadd_dark_flux_f32/ingest_stats.json"
+filtering = "All rows and columns of the Z_FLUX HDU of each of the 36 pinned coadd files are kept. IVAR, MASK, RESOLUTION, WAVELENGTH, FIBERMAP, EXP_FIBERMAP and SCORES HDUs are not fetched."
+missing_value_policy = "DESI writes flux 0 (with IVAR 0) for fully masked coadd pixels; these source zeros are kept as is. Targets whose whole row is zero are kept in place and counted per sample in the index (all_zero_rows); an HDU with more than 35% all-zero rows, any NaN or infinity, or a constant value is fatal in both build and verify."
+conversion = "Read the downloaded range (one 2880-byte FITS header + NAXIS1*NAXIS2*4 data bytes), validate the header cards and FITS DATASUM, interpret the data unit as big-endian float32, byte-swap to little-endian, and write the NTARGET x NWAVE image row-major (target-major) as one file without FITS padding."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 row-major NTARGET x 2881 flux image"
+sample_geometry = "spectrograph_arm_flux_image_target_by_wavelength_2d"
+sample_rank = 2
+sample_axes = ["target", "wavelength_pixel"]
+natural_record_kind = "desi_healpix_coadd_z_flux_image_hdu"
+sample_count = 36
+total_size_bytes = 166279796
+output_path = "samples/desi_dr1_coadd_dark_flux_f32/desi_coadd_z_flux_f32/"

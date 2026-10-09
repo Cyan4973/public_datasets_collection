@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "swisstopo_swisssurface3d_alps_las_z_i32"
+name = "swisstopo swissSURFACE3D 2021 High-Alpine Lidar Tiles: LAS Int32 Z Record Codes"
+description = "Native little-endian int32 Z codes (0.01 m, offset 0, LN02 heights) of every point record in 15 complete 1 km2 swissSURFACE3D 2021 classified-lidar tiles from the high Alps around the Aletsch glacier and Bernese Oberland. One sample per tile, in point-record order."
+homepage = "https://www.swisstopo.admin.ch/en/height-model-swisssurface3d"
+
+[license]
+name = "swisstopo Open Government Data terms (Opendata BY: open use, source attribution mandatory)"
+spdx = "LicenseRef-swisstopo-OGD-BY"
+url = "https://www.swisstopo.admin.ch/en/terms-of-use-free-geodata-and-geoservices"
+citation = "©swisstopo (Federal Office of Topography swisstopo), swissSURFACE3D classified point cloud, 2021 acquisition, data.geo.admin.ch."
+notes = "The geocat.ch ISO metadata record for 'swissSURFACE3D, die klassifizierte Punktwolke der Schweiz' (uuid 5cb73a88-887c-432d-b3a4-f4ea2b508a51) states the legal constraint 'Opendata BY: Open use. Must provide the source.' and links https://www.swisstopo.admin.ch/ogd-conditions. The swisstopo terms page says: 'The free geodata and geoservices of swisstopo may be used, distributed and made accessible. Furthermore, they may be enriched and processed and also used commercially. A reference to the source is mandatory.' Accepted source references include '©swisstopo'. The STAC collection field license='proprietary' is the generic STAC placeholder for a non-SPDX licence. These are the terms above, not a restriction."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official swisstopo federal geodata infrastructure (data.geo.admin.ch STAC asset hrefs), anonymous HTTPS. The selected tiles are uninhabited high-alpine terrain (glaciers, rock, scree, high pasture)."
+usage_notes = "Only the Z field is emitted. X/Y, intensity, return bits, classification, scan angle, point source and GPS time are not collected."
+
+[[origins]]
+id = "swisstopo_stac"
+name = "swisstopo STAC API (data.geo.admin.ch)"
+url = "https://data.geo.admin.ch/api/stac/v0.9/collections/ch.swisstopo.swisssurface3d"
+type = "api"
+notes = "STAC 0.9 collection ch.swisstopo.swisssurface3d. Each item is one 1 km2 LV95 tile with one .las.zip asset that carries checksum:multihash (sha2-256)."
+
+[[resources]]
+id = "swisssurface3d_2021_tile_zips"
+origin = "swisstopo_stac"
+url = "https://data.geo.admin.ch/ch.swisstopo.swisssurface3d/"
+type = "archive"
+version = "swissSURFACE3D 2021 acquisition; asset metadata as of 2026-10-08 (STAC item updated 2025-01-18)"
+access = "Anonymous direct HTTPS download of the 15 pinned <item>/<item>_2056_5728.las.zip assets listed in sources.tsv."
+size_bytes = 2761286143
+sha256 = "per-file in sources.tsv (from STAC checksum:multihash)"
+local_path = "downloads/swisstopo_swisssurface3d_alps_las_z_i32/zip/"
+notes = "Each zip holds a single deflated LAS 1.2 member <E>_<N>.las of 357-616 MB. The member is streamed, never extracted to disk. sources.tsv pins zip size, zip SHA-256, member name, member size, member CRC-32, point count, and header Z bounds. scripts/discover.py documents and re-derives the selection."
+
+[local_paths]
+downloads = "downloads/swisstopo_swisssurface3d_alps_las_z_i32/"
+filtered = "filtered/swisstopo_swisssurface3d_alps_las_z_i32/"
+index = "index/swisstopo_swisssurface3d_alps_las_z_i32/"
+samples = "samples/swisstopo_swisssurface3d_alps_las_z_i32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/swisstopo_swisssurface3d_alps_las_z_i32/samples.jsonl"
+summary = "Download 15 pinned swissSURFACE3D 2021 tile zips. Stream each single LAS 1.2 point-format-1 member through zipfile, with its CRC-32 enforced. Copy the int32 Z at offset 8 of every 28-byte record into one raw little-endian int32 sample per tile."
+deterministic_notes = "Selection, documented in scripts/discover.py: STAC bbox 7.85,46.40,8.15,46.60 returns 647 items. Of these, 327 are 2021 tiles with no other-year item for the same tile, and 325 of those have the uniform las2las LAS 1.2 pf1/28 B/scale 0.01/Z offset 0 header. Sorted by id, the tiles at index floor(j*325/15 + 325/30), j=0..14, are kept. download.sh enforces the zip size and SHA-256, a single member with pinned size/CRC, a header that matches the pinned profile, and a full inflate. build.sh requires data Z min/max to equal the header bounds, codes within 100,000-500,000 (1,000-5,000 m), at least 10,000 distinct values, and no single value above 5% of a tile. verify.sh re-derives each sample with whole-record struct decoding, compares bytes and SHA-256, and checks index fields, manifest totals, and duplicates."
+
+[[series]]
+id = "swisssurface3d_z_i32"
+description = "Per-return LAS Z elevation codes of complete swissSURFACE3D 2021 high-alpine lidar tiles."
+semantic_meaning = "Stored LAS point-record Z integer of each lidar return. Height above LN02 datum = Z * 0.01 m (offset 0). The selected tiles span about 1,612-3,883 m, so codes are 161,267-388,304 (about 19 bits, beyond the uint16 range)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Byte-for-byte copy of the source LAS int32 Z field; no rescaling, reordering, or width change."
+source_resources = ["swisssurface3d_2021_tile_zips"]
+source_format = "LAS 1.2 point data record format 1 (28-byte records) inside a single-member deflate zip"
+source_field = "Z (int32 at record offset 8; scale 0.01, offset 0)"
+filtered_input_path = "filtered/swisstopo_swisssurface3d_alps_las_z_i32/ingest_stats.json"
+filtering = "Every point record of each of the 15 pinned tiles is kept, including all classes (ground, vegetation, buildings, noise if any). No records are filtered."
+missing_value_policy = "LAS Z has no missing-value sentinel, and every record is kept. A truncated member, CRC-32 mismatch, header/profile mismatch, point-count mismatch, data min/max that differ from the header bounds, implausible codes, or a constant/dominated tile is fatal. Nothing is dropped or imputed."
+conversion = "Inflate the zip member in streaming blocks of 262,144 records. For each record, copy bytes 8-11 (little-endian int32 Z) into the output in record order. The output is the raw little-endian int32 array of the tile, written as samples/<id>/swisssurface3d_z_i32/<E>_<N>.i32.bin."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian int32 array"
+sample_geometry = "lidar_point_record_attribute_1d"
+sample_rank = 1
+sample_axes = ["las_point_record_order"]
+natural_record_kind = "complete_swisssurface3d_1km_tile_las_z_field"
+sample_count = 15
+total_size_bytes = 955570404
+output_path = "samples/swisstopo_swisssurface3d_alps_las_z_i32/swisssurface3d_z_i32/"

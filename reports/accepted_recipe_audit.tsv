@@ -390,6 +390,7 @@ cartographer_backpack2d_hokuyo_ranges_f32	ok	225913467	903653868	16	13407654	536
 openneuro_ds000030_t1w_mri_f32	ok	230686720	922746880	20	11534336	46137344	0	0	0	1	none	none
 zenodo_newcastle_geneactiv_wrist_accel_i16	ok	233424900	466849800	13	19001700	38003400	0	0	0	1	none	none
 tumvi_euroc_1024_cam_frames_u16	ok	234881024	469762048	224	1048576	2097152	0	0	0	1	none	none
+swisstopo_swisssurface3d_alps_las_z_i32	ok	238892601	955570404	15	15627117	62508468	0	0	0	1	none	none
 umbra_spotlight_sicd_complex_slc_f32	ok	244426250	977705000	10	24983780	99935120	0	0	0	1	none	none
 tcia_nsclc_radiomics_ct_i16	ok	244580352	489160704	933	262144	524288	0	0	0	1	none	none
 zenodo_nordif_ebsd_kikuchi_patterns_u8	ok	244684800	244684800	4248	57600	57600	0	0	0	1	none	none

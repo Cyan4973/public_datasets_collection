@@ -63,11 +63,16 @@ BREADTH_COLUMNS = ["dataset_id", "origin", "widths", "measurement_type", "instru
 COUNTED_VERDICTS = {"STRONG", "OK"}
 ZLSIM = [sys.executable, "tools/autocollect/zlsim.py"]
 ZLSIM_ENV = {"ZLSIM_PARETO_TIMEOUT_S": "600"}
-# Bare multi-tenant hosts are not one archive collection; the per-archive cap skips them.
-MULTI_TENANT_HOSTS = {
-    "zenodo.org", "figshare.com", "github.com", "raw.githubusercontent.com", "huggingface.co", "s3.amazonaws.com",
-    "osf.io", "dataverse.harvard.edu", "datadryad.org", "storage.googleapis.com",
-}
+# Hosts serving many unrelated collections are not one archive: these match
+# with their subdomains (ndownloader.figshare.com, raw.githubusercontent.com),
+# path-style object stores only exactly (per-bucket hosts stay one archive).
+MULTI_TENANT_SUFFIXES = {"zenodo.org", "figshare.com", "github.com", "githubusercontent.com", "huggingface.co", "hf.co",
+                         "osf.io", "dataverse.harvard.edu", "datadryad.org", "mendeley.com"}
+MULTI_TENANT_EXACT = {"s3.amazonaws.com", "storage.googleapis.com"}
+
+
+def is_multi_tenant(host: str) -> bool:
+    return host in MULTI_TENANT_EXACT or any(host == suffix or host.endswith("." + suffix) for suffix in MULTI_TENANT_SUFFIXES)
 STAGING_DIR = REPO_ROOT / "staging"
 DATASETS_DIR = REPO_ROOT / "datasets"
 RUNTIME_DIR = DATA_ROOT / "pipeline"
@@ -464,7 +469,7 @@ def recipe_archives(recipe_dir: Path) -> set[str]:
     except (OSError, tomllib.TOMLDecodeError):
         return set()
     hosts = {url_archive(item.get("url", "")) for item in manifest.get("resources", []) if isinstance(item, dict)}
-    return {host for host in hosts if host and host not in MULTI_TENANT_HOSTS}
+    return {host for host in hosts if host and not is_multi_tenant(host)}
 
 
 def progress(counted_only: bool = True) -> dict[int, list[str]]:
@@ -1239,7 +1244,7 @@ class Driver:
                 state["preexisting_data"] = any((DATA_ROOT / sub / cid).exists() for sub in DATA_SUBDIRS_PRUNABLE)
                 state["breadth_keys"] = {key: decision.get(key, "") for key in ("measurement_type", "instrument_line", "archive_collection")}
                 save_state(cid, state)
-                archives = {url_archive(url) for url in state.get("resource_urls", [])} - MULTI_TENANT_HOSTS - {""}
+                archives = {host for host in (url_archive(url) for url in state.get("resource_urls", [])) if host and not is_multi_tenant(host)}
                 verdict, why = self.archive_gate(cid, archives)
                 self.set_status(cid, "queued", decision["reason"], priority=decision["priority"])
                 if verdict == "signoff":

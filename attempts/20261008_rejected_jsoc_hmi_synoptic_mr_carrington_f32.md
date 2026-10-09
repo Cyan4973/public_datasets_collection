@@ -1,0 +1,23 @@
+# jsoc_hmi_synoptic_mr_carrington_f32
+
+- Date: 2026-10-08
+- Status: rejected
+- Candidate dataset: SDO/HMI Carrington-rotation synoptic charts of radial photospheric magnetic flux density (JSOC series `hmi.Synoptic_Mr_720s`, 3600x1440), native float32.
+- Source: https://jsoc1.stanford.edu/data/hmi/synoptic/hmi.Synoptic_Mr.CCCC.fits (the http://jsoc.stanford.edu/data/hmi/synoptic/ URL redirects here). Rights evidence: https://science.data.nasa.gov/about/license and https://sdo.gsfc.nasa.gov/data/rules.php.
+- Why it looked promising: No solar magnetogram exists locally, downstream or in the registry. The source is a clean native-float32 FITS product under NASA CC0, with large natural records (one chart = 5,184,000 values). The driver's first zlsim gate measured it as OK.
+- Failure class: not novel on bytes (byte-level breadth redundancy, measured WEAK).
+- What happened:
+  - The recipe itself is sound. Gate PASS, and verify.sh passes when re-run (30 samples, 155,520,000 values, 622,080,000 bytes, 29.6 s). Samples are bit-exact byte swaps of the FITS primary image, re-derived independently and checked against DATASUM and CHECKSUM. NaN count equals MISSVALS for every chart. Per-chart RMS runs from 10.7 to 51.3 G, and min/max match DATAMIN/DATAMAX. CC0 rights are confirmed on the NASA page and in the series-level FITS mark.
+  - The driver's OK verdict came from zlsim's old fingerprint. That fingerprint used only the first 262,144 values (rows 0-72) of a single 16 MB eval chunk (CR2104): the south-polar band, where the unobserved NaN cap sits. The reported mode share of 0.164 is that NaN cap (zero under the new sampling).
+  - The user patched zlsim at 18:10, after this gate ran at 18:03; the change is uncommitted. Fingerprints now come from windows spread through each file, and spread-window v2 features were recomputed for every library and candidate entry (963 of 966 at 32 bits, this candidate included).
+  - Replicating the gate with the current code (same `percentile_distance` and rank tables, cross-compression of the centred eval split) gives this candidate as redundant against five families. Each is within 0.05 on features and within 3% on compression.
+- Evidence (zlsim functions run from /tmp/autocollect/jsoc_hmi_synoptic_mr_carrington_f32/judge/scripts/):
+  - `local:nasa_wmap_healpix_sky_maps_f32:wmap_temperature_f32`: distance 0.0329, loss +0.007
+  - `downstream:wmap_temperature_f32`: distance 0.0329, loss +0.014
+  - `local:weatherbench2_era5_pressure_level_fields_f32:era5_v_wind_pressure_levels_f32` and its downstream copy: distance 0.0383, loss +0.002
+  - `local:openneuro_ds004584_pd_rest_eeg_f32:ds004584_rest_eeg_63ch_f32`: distance 0.0477, loss +0.013
+  - The candidate's trained `winner.zc` is byte-identical (sha256 892679b3...) to the local ERA5 vertical-velocity compressor. That compressor reproduces the candidate's own ratio exactly on the prefix eval (1.2243), on a mid-latitude eval and on a whole-chart eval.
+  - Single-window distances to local ERA5 vertical velocity over six charts and 13 row offsets: windows containing the polar NaN cap are 0.20-0.27; NaN-free windows (about 95% of each chart) are 0.03-0.09. The old prefix fingerprint therefore described the polar fill, not the chart content.
+- Logs: `.data/logs/jsoc_hmi_synoptic_mr_carrington_f32/verify.latest.log`, `/tmp/autocollect/jsoc_hmi_synoptic_mr_carrington_f32/zlsim.json` (old prefix-based gate), and judge scripts and output under `/tmp/autocollect/jsoc_hmi_synoptic_mr_carrington_f32/judge/`.
+- Decision: rejected. Breadth is judged on the bytes, and modality labels don't override it (calibration report, Finding 3). The material compresses and fingerprints like existing float32 sky and atmospheric fields. No change inside the recipe can alter that without inventing a representation.
+- Retry conditions: Retry only if zlsim thresholds or the library are recalibrated so that this material measures OK or STRONG under spread-window fingerprints against `wmap_temperature_f32` and `era5_v_wind_pressure_levels_f32`. The recipe (download.sh, build.sh, verify.sh, selection.tsv, rights checks) can be reused unchanged.

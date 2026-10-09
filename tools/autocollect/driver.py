@@ -776,8 +776,14 @@ def card_markdown(candidate: dict, scout_log: str) -> str:
     return clean_markdown("\n".join(lines))
 
 
+PRIORITIES_PATH = PIPELINE_DIR / "priorities.md"
+
+
 def scout_prompt(width: int, count: int, domains: list[str], have: int, target: int, avoid: list[str], lessons: list[str]) -> str:
-    parts = [
+    parts = []
+    if PRIORITIES_PATH.exists():
+        parts.append("User priorities (favor these whenever they fit your width; they come first):\n" + PRIORITIES_PATH.read_text(encoding="utf-8").strip())
+    parts += [
         f"Target width: {width}-bit. Return up to {count} candidates; fewer is fine if quality is lacking.",
         f"Focus domains this round: {'; '.join(domains)}. Other domains are welcome if clearly more promising.",
         f"Progress: {have} of {target} new {width}-bit families accepted since the baseline.",
@@ -1312,6 +1318,12 @@ class Driver:
         add_event(state, "download", rc=result["rc"], reason=result["reason"], bytes=result["bytes"], log=result["log"])
         save_state(cid, state)
         log(f"download {cid}: rc={result['rc']} {result['reason']} bytes={result['bytes']:,} in {result['seconds']} s")
+        if ok and state.pop("reopened", False):
+            # A reopened recipe already built and verified: go straight to the
+            # driver's deterministic rebuild + gate, no builder agent needed.
+            save_state(cid, state)
+            self.set_status(cid, "built", "reopened: download ok, re-measuring")
+            return
         self.set_status(cid, "downloaded", "download ok" if ok else f"download failed: {result['reason'] or 'rc=' + str(result['rc'])}")
 
     def apply_rebuild(self, cid: str, result: dict) -> None:
@@ -1795,6 +1807,7 @@ def reopen_candidate(cid: str) -> str:
     for key in ("download_cycles", "build_cycles", "repair_cycles", "agent_failures", "download_sha", "last_download",
                 "last_rebuild", "similarity", "bytes"):
         state.pop(key, None)
+    state["reopened"] = True
     add_event(state, "reopened", archive=archives[-1].name)
     save_state(cid, state)
     return f"restored {archives[-1].name}, registry row removed"

@@ -50,6 +50,8 @@ you which phase you are in:
      `sample_count` and `total_size_bytes` must match the realized output
 3. Self-test any binary parser on a small synthetic input before relying on
    it.
+   For `.laz` point clouds use the repository decoder `tools/laz/laszip.py`
+   (`decode_points` / `iter_chunks`); do not reimplement LASzip.
 4. **Do not run `download.sh` yourself.** Return `ready_for_download` with the
    expected download bytes. The driver runs it under a byte cap that counts
    every `.data/*/<id>` directory, and a time limit; both are stated in your

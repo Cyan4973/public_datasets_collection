@@ -145,6 +145,9 @@ than many mixed ones.
   before writing the whole recipe. Self-test binary parsers on small synthetic
   inputs.
 - Compute index min/max from the stored dtype, not the float64 source value.
+- LAZ point clouds: decode with `tools/laz/laszip.py` (pure stdlib, LAS point
+  formats 0-3 and 6-8, byte-exact against reference LAS); import it from the
+  repository instead of copying it.
 - Pure standard-library Python; numpy is not available. If decoding needs a
   dependency that is not available, record `needs_tooling` instead of
   shipping container bytes.

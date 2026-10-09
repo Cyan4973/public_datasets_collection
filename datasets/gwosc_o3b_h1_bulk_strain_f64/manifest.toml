@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "gwosc_o3b_h1_bulk_strain_f64"
+name = "GWOSC O3b LIGO Hanford (H1) Bulk Calibrated Strain, 4 kHz, Native Float64"
+description = "Seven complete 4096-s GWOSC O3b bulk-archive strain records of the LIGO Hanford detector (channel H1:DCS-CALIB_STRAIN_CLEAN_SUB60HZ_C01, 4096 Hz), one per three-week bin of the run, each fully inside H1 science-mode data, emitted as native little-endian float64."
+homepage = "https://gwosc.org/data/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "R. Abbott et al. (LIGO Scientific Collaboration, Virgo Collaboration and KAGRA Collaboration), Open data from the third observing run of LIGO, Virgo, KAGRA and GEO, ApJS 267, 29 (2023). O3b data release DOI 10.7935/pr1e-j706. This research has made use of data obtained from the Gravitational Wave Open Science Center (gwosc.org), a service of the LIGO Scientific Collaboration, the Virgo Collaboration, and KAGRA."
+notes = "https://gwosc.org/acknowledgement/ (fetched 2026-10-09): 'Data from this web site are licensed under a Creative Commons Attribution 4.0 International License.' Every gwosc.org page footer, including /data/: 'Data released under a CC BY 4.0 License', linking creativecommons.org/licenses/by/4.0/. Keep the citation and the GWOSC acknowledgment."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official GWOSC bulk strain archive (gwosc.org/archive/data/O3b_4KHZ_R1), fetched anonymously over HTTPS; no mirrors."
+usage_notes = "Instrument time series of a gravitational-wave detector; no personal content."
+
+[[origins]]
+id = "gwosc"
+name = "Gravitational Wave Open Science Center"
+url = "https://gwosc.org/"
+type = "data_portal"
+notes = "GWOSC API v2: /api/v2/runs/O3b (GPS 1256655618-1269363618), /api/v2/datasets O3b_4KHZ_R1 (frame type %s_HOFT_CLEAN_SUB60HZ_C01, npoints 16777216, duration 4096), per-file detail /api/v2/strain-files/H1-<gps>-4kHz, H1_DATA segments /timeline/segments/json/O3b_4KHZ_R1/H1_DATA/."
+
+[[resources]]
+id = "o3b_h1_4khz_bulk_files"
+origin = "gwosc"
+url = "https://gwosc.org/archive/data/O3b_4KHZ_R1/"
+type = "file"
+version = "O3b_4KHZ_R1 (C01, CLEAN_SUB60HZ)"
+access = "Seven direct public HTTPS files listed with GPS start, URL and exact byte size in files.tsv; resumable curl download."
+size_bytes = 906496481
+sha256 = ""
+local_path = "downloads/gwosc_o3b_h1_bulk_strain_f64/"
+notes = "Files (GPS start, bytes): 1257562112 130442356; 1259376640 129721100; 1261191168 129775341; 1263005696 129634903; 1264824320 129023362; 1266638848 128967559; 1268449280 128931860. GWOSC publishes no file checksums. Integrity comes from the exact size, the Fletcher-32 checksum HDF5 stores on every strain chunk, and GWOSC's published per-file min/max/stdev. The sha256 of each file, observed on the first full download (2026-10-09), is pinned in the files.tsv sha256 column and enforced by download, build and verify (download.sh also writes downloads/<id>/SHA256SUMS)."
+
+[local_paths]
+downloads = "downloads/gwosc_o3b_h1_bulk_strain_f64/"
+filtered = "filtered/gwosc_o3b_h1_bulk_strain_f64/"
+index = "index/gwosc_o3b_h1_bulk_strain_f64/"
+samples = "samples/gwosc_o3b_h1_bulk_strain_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/gwosc_o3b_h1_bulk_strain_f64/samples.jsonl"
+summary = "Download seven pinned GWOSC O3b H1 4 kHz bulk HDF5 files, decode /strain/Strain (deflate + Fletcher-32 chunks) with a pure-stdlib HDF5 reader, and emit each file's complete 16,777,216-value strain record as one raw little-endian float64 sample."
+deterministic_notes = "File selection (discover.sh, author time): over the O3b GPS span 1256655618-1269363618, split into 7 equal bins, take the 4096-s archive slot nearest each bin centre that lies wholly inside one H1_DATA segment and whose GWOSC detail reports dutycycle 100 and nans_fraction 0. Every file is validated in download, build and verify with identical checks: exact size; HDF5 superblock v0, v1 object headers, v1 chunk B-tree; meta StrainChannel/Detector/FrameType/GPSstart/Duration; strain shape, dtype and filters [deflate, fletcher32]; Npoints/Xspacing/Xstart attributes; per-chunk Fletcher-32; finite values, no all-zero or repeated chunk; DQ DATA bit in all 4096 seconds; min/max equal to GWOSC's published values. verify also byte-compares every sample against a fresh decode and recomputes index fields. Floors: 7 samples x 16,777,216 values, 939,524,096 bytes."
+
+[[series]]
+id = "h1_o3b_strain_4khz_f64"
+description = "LIGO Hanford calibrated, 60-Hz-subtracted strain h(t) at 4096 Hz, one complete 4096-s GWOSC archive record per sample."
+semantic_meaning = "Dimensionless calibrated gravitational-wave strain of the LIGO Hanford 4-km interferometer during O3b science-mode operation (channel H1:DCS-CALIB_STRAIN_CLEAN_SUB60HZ_C01, downsampled by GWOSC to 4096 Hz). Values are about 1e-20 to 1e-18: colored detector noise dominated by low frequencies, with spectral lines."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The HDF5 dataset is IEEE binary64 little-endian. Values are written exactly as stored, with no rescaling, narrowing or reordering."
+source_resources = ["o3b_h1_4khz_bulk_files"]
+source_format = "GWOSC bulk strain HDF5 (superblock v0, chunked 8192-value deflate+fletcher32 float64 dataset)"
+source_field = "/strain/Strain (Npoints 16777216, Xspacing 1/4096 s, Xstart = file GPS start)"
+filtered_input_path = "filtered/gwosc_o3b_h1_bulk_strain_f64/ingest_stats.json"
+filtering = "H1 only, O3b_4KHZ_R1 only (no L1/V1, no 16 kHz release). Seven files spread evenly over O3b, each wholly inside an H1_DATA segment. Within a file nothing is dropped: all 16,777,216 values in time order."
+missing_value_policy = "No missing values are allowed. Every second must carry the DQ DATA bit and every value must be finite. A NaN or inf value, an all-zero chunk, a repeated chunk, a Fletcher-32 mismatch or any metadata mismatch is fatal in download, build and verify alike. Nothing is imputed or dropped."
+conversion = "Walk the v1 chunk B-tree of /strain/Strain. For each 8192-value chunk in element order: verify the trailing little-endian Fletcher-32 over the stored bytes, inflate (zlib) to exactly 65,536 bytes, and append. Output = the 134,217,728 logical bytes of the dataset (float64 LE), one file per source HDF5 file."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 strain time series"
+sample_geometry = "uniformly_sampled_time_series"
+sample_rank = 1
+sample_axes = ["time"]
+natural_record_kind = "gwosc_bulk_archive_4096s_strain_file"
+sample_count = 7
+total_size_bytes = 939524096
+output_path = "samples/gwosc_o3b_h1_bulk_strain_f64/h1_o3b_strain_4khz_f64/"

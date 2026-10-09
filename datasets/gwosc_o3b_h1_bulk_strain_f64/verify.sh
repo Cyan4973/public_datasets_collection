@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Independently re-check the samples and re-derive them from the local sources.
+set -euo pipefail
+
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+RECIPE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DATA_DIR="${DATA_DIR:-.data}"
+case "$DATA_DIR" in /*) DATA_ROOT="$DATA_DIR" ;; *) DATA_ROOT="$REPO_ROOT/$DATA_DIR" ;; esac
+DATASET_ID="gwosc_o3b_h1_bulk_strain_f64"
+LOG_DIR="$DATA_ROOT/logs/$DATASET_ID"
+mkdir -p "$LOG_DIR"
+RUN_TS="$(date +%Y%m%d_%H%M%S)"
+exec > >(tee "$LOG_DIR/verify.$RUN_TS.log" "$LOG_DIR/verify.latest.log") 2>&1
+echo "[$(date -Is)] verify start dataset=$DATASET_ID"
+export PYTHONDONTWRITEBYTECODE=1
+
+python3 -I "$RECIPE_DIR/scripts/gwosc_strain.py" verify \
+  --files "$RECIPE_DIR/files.tsv" \
+  --downloads "$DATA_ROOT/downloads/$DATASET_ID" \
+  --data-root "$DATA_ROOT" \
+  --index "$DATA_ROOT/index/$DATASET_ID/samples.jsonl" \
+  --manifest "$RECIPE_DIR/manifest.toml"
+
+echo "[$(date -Is)] verify done dataset=$DATASET_ID"

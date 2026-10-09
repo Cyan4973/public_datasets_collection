@@ -1,0 +1,134 @@
+manifest_version = 1
+dataset_id = "physionet_mimic3wdb_abp_i8"
+name = "MIMIC-III Waveform Database Invasive Arterial Blood Pressure (ABP) Channel, WFDB Format-80 Int8"
+description = "The 125 Hz invasive arterial blood pressure (ABP) channel of 51 adult ICU waveform segments from the PhysioNet MIMIC-III Waveform Database 1.0 (one segment per record, first qualifying segment in each of 60 pinned records; 9 excluded whole by the content rule), as the stored 8-bit WFDB format-80 digits converted to signed int8 (stored byte - 128). Only segments whose ABP signal carries the single calibration 1.25(-100)/mmHg with 8-bit ADC resolution, all signals in format 80, and at least 500,000 frames are selected; ECG, PLETH, RESP and other channels are never emitted."
+homepage = "https://physionet.org/content/mimic3wdb/1.0/"
+
+[license]
+name = "Open Data Commons Open Database License v1.0"
+spdx = "ODbL-1.0"
+url = "https://opendatacommons.org/licenses/odbl/1-0/"
+citation = "Moody B, Moody G, Villarroel M, Clifford GD, Silva I. MIMIC-III Waveform Database (version 1.0). PhysioNet (2020). RRID:SCR_007345. https://doi.org/10.13026/c2607m. Original publication: Johnson AEW, Pollard TJ, Shen L, Lehman LH, Feng M, Ghassemi M, Moody B, Szolovits P, Celi LA, Mark RG. MIMIC-III, a freely accessible critical care database. Scientific Data 3, 160035 (2016). Standard PhysioNet citation: Pollard T, et al. PhysioNet as a global platform for biomedical research. Nature Health (2026), doi:10.1038/s44360-026-00096-z."
+notes = "The PhysioNet project page states 'Access Policy: Anyone can access the files, as long as they conform to the terms of the specified license. License: Open Data Commons Open Database License v1.0'. The release ships LICENSE.txt with the ODbL 1.0 text (pinned by size and SHA-256); download.sh saves the landing page and requires the access-policy sentence, the license name and the DOI. mimic3wdb is an open-access PhysioNet project (no credentialing or data use agreement, unlike the MIMIC-III Clinical Database). ODbL is share-alike: the derived sample files are an adapted database that must be credited and, if publicly used or redistributed, offered under ODbL 1.0 and kept open. Same open-access class as the accepted PhysioNet recipes (CHARIS, BIDMC, CirCor, TPEHG); ODbL precedent: the accepted OSM, taginfo, OpenFlights and NCLT recipes."
+
+[safety]
+contains_sensitive_data = true
+contains_personal_data = true
+provenance_notes = "De-identified bedside-monitor waveforms of adult ICU patients at Beth Israel Deaconess Medical Center, collected under IRB approval with consent waived because all protected health information was deidentified, and published by PhysioNet as an open-access database. Record names are anonymous numeric IDs; segment headers carry only signal geometry, calibration and a time-of-day base time (no date); master headers carry an ICU location comment."
+usage_notes = "Treat as sensitive human clinical material. Emitted samples contain only ABP-channel stored values. Base times, master-header ICU location comments and layout headers are never fetched into or written to samples, index rows, ingest stats or logs (master and layout headers are read only by the author-time discovery script, not by download/build/verify); verify.sh fails if location or time-of-day text appears in the index or stats. The other signals in each .dat are read only to validate their WFDB checksums and are discarded."
+
+[[origins]]
+id = "physionet_mimic3wdb_1_0"
+name = "PhysioNet file server: mimic3wdb 1.0"
+url = "https://physionet.org/files/mimic3wdb/1.0/"
+type = "repository"
+version = "1.0"
+notes = "Official anonymous PhysioNet file tree of the MIMIC-III Waveform Database 1.0 (published 2020-04-07; the numbered records are identical to MIMIC-II Waveform Database 3.2). Versioned path; every fetched file is pinned by size and by the SHA-256 listed in the release SHA256SUMS.txt (639 MB, not downloaded; the needed lines were range-searched at author time)."
+
+[[origins]]
+id = "physionet_mimic3wdb_project_page"
+name = "PhysioNet project page: MIMIC-III Waveform Database 1.0"
+url = "https://physionet.org/content/mimic3wdb/1.0/"
+type = "website"
+version = "1.0"
+notes = "Source of the access policy, license statement, DOI and data description."
+
+[[resources]]
+id = "mimic3wdb_records_adults"
+origin = "physionet_mimic3wdb_1_0"
+url = "https://physionet.org/files/mimic3wdb/1.0/RECORDS-adults"
+type = "file"
+version = "1.0"
+access = "Direct public download."
+size_bytes = 712128
+sha256 = "bc30f5e5605a30747c3889ed3e1ec7589a25ddc26d069b8aed72f69a262fee47"
+local_path = "downloads/physionet_mimic3wdb_abp_i8/RECORDS-adults"
+notes = "Official list of adult record directories; the walk order of the selection. download_check requires every pinned record to be listed and the pins to be in its order."
+
+[[resources]]
+id = "mimic3wdb_license_txt"
+origin = "physionet_mimic3wdb_1_0"
+url = "https://physionet.org/files/mimic3wdb/1.0/LICENSE.txt"
+type = "file"
+version = "1.0"
+access = "Direct public download."
+size_bytes = 25815
+sha256 = "bcdfcd4f31c790e30fb645dc36414907172405897adff329ad379eed85d12017"
+local_path = "downloads/physionet_mimic3wdb_abp_i8/LICENSE.txt"
+notes = "ODbL 1.0 text shipped with the release."
+
+[[resources]]
+id = "mimic3wdb_segment_headers"
+origin = "physionet_mimic3wdb_1_0"
+url = "https://physionet.org/files/mimic3wdb/1.0/"
+type = "file"
+version = "1.0"
+access = "Direct public download, one GET per file (3x/3xxxxxx/<segment>.hea)."
+size_bytes = 11508
+sha256 = ""
+local_path = "downloads/physionet_mimic3wdb_abp_i8/"
+notes = "The 60 pinned WFDB segment headers, each pinned by size and SHA-256 (scripts/mimic_pins.py). Each declares nsig (2 to 4), 125 Hz, the frame count, and per signal format 80, gain(baseline)/units, ADC resolution, ADC zero, initial value and 16-bit checksum."
+
+[[resources]]
+id = "mimic3wdb_segment_data"
+origin = "physionet_mimic3wdb_1_0"
+url = "https://physionet.org/files/mimic3wdb/1.0/"
+type = "file"
+version = "1.0"
+access = "Direct public download, one resumable GET per file (curl -C - into .part, stall-bounded, no --max-time)."
+size_bytes = 687268057
+sha256 = ""
+local_path = "downloads/physionet_mimic3wdb_abp_i8/"
+notes = "The 60 pinned interleaved format-80 .dat files (1,580,664 to 58,725,000 B), each pinned by size and SHA-256; size must equal frames x nsig. The whole multi-signal file must be fetched to keep one channel (687,268,057 / 195,628,953, about 3.5x the kept bytes)."
+
+[[resources]]
+id = "mimic3wdb_license_evidence"
+origin = "physionet_mimic3wdb_project_page"
+url = "https://physionet.org/content/mimic3wdb/1.0/"
+type = "file"
+version = "fetched at download time"
+access = "Direct public download of the HTML landing page."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/physionet_mimic3wdb_abp_i8/license/"
+notes = "License evidence only (about 60 KB). Site-rendered, not hash-pinned; download.sh requires the access-policy sentence, the ODbL v1.0 license name and the DOI 10.13026/c2607m."
+
+[local_paths]
+downloads = "downloads/physionet_mimic3wdb_abp_i8/"
+filtered = "filtered/physionet_mimic3wdb_abp_i8/"
+index = "index/physionet_mimic3wdb_abp_i8/"
+samples = "samples/physionet_mimic3wdb_abp_i8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/physionet_mimic3wdb_abp_i8/samples.jsonl"
+summary = "Fetch the pinned segment headers and format-80 .dat files, validate each header and the WFDB 16-bit checksum of every interleaved signal plus the ABP initial value, de-interleave the frames (stride nsig) keeping the ABP column, and emit it as signed int8 (stored byte - 128), one sample per segment; segments failing the pinned content keep rule are excluded whole."
+deterministic_notes = "Pinned release mimic3wdb 1.0: RECORDS-adults and LICENSE.txt by size and SHA-256; 60 segment .hea and .dat files by size and SHA-256 taken from the release SHA256SUMS.txt (scripts/mimic_pins.py), plus each segment's nsig, frame count, ABP column index, ABP initial value and ABP WFDB checksum. Selection (author-time, scripts/mimic_discover.py, documented and re-runnable, not executed by download/build/verify): walk RECORDS-adults in file order; skip records with no waveform record (numerics only, 56), records whose layout header ABP line is absent or not at gain 1.25/mmHg (2,624; cheap prefilter), and records with no qualifying segment (22); in each remaining record keep the first segment in master-header (chronological) order with at least 500,000 frames, 125 Hz, every signal format 80 in <segment>.dat, and exactly one signal named ABP with gain string 1.25(-100)/mmHg, ADC resolution 8 and ADC zero 0; one segment per record; stop at 60 kept records (2,762 records walked, last 30/3045953/). Content keep rule (pinned in mimic_pins.py, re-implemented in mimic_verify.py with a drift check): exclude a segment whole if invalid (-128) values exceed 10%, one code exceeds 25% of values, pulsatile 60 s windows are under 50%, it has fewer than 32 distinct codes, or any ABP value lies outside the monitor range -125..125 (MONITOR_MIN_CODE/MONITOR_MAX_CODE); at least 40 segments must survive. Window classes (7,500 frames, last partial; first match wins; nearest-rank percentiles over non-invalid codes): invalid (under half valid), flat (max-min <= 2 codes), low (median < -75, i.e. < 20 mmHg), pulsatile (p95-p5 >= 13 codes, about 10.4 mmHg), damped (otherwise). Canonical order: RECORDS-adults order. build.sh and verify.sh each self-test their decoder on a synthetic 4-signal format-80 segment (pulsatile, flat, invalid-dominated, low and partial windows; -128 and rail codes; multi-chunk) and reject corrupted, truncated and wrong-gain variants. verify.sh re-derives every sample with a regex header tokenizer and a whole-file array('b') strided decode, re-hashes the .dat, re-checks all WFDB checksums and initial values, recomputes window classes with sorted lists, and compares sample bytes, every index field, ingest stats, the keep/exclude lists, manifest totals, stray files, payload uniqueness and absence of location/time text. Monitor-range evidence: 4 of the 60 pinned segments use the full 8-bit range with -128 invalid markers: 3013004_0158, 3013395_0001, 3018045_0013 and 3038577_0007. In all four the ABP column shows no beat-synchronous pulse: no autocorrelation peak at 0.34-1.5 s in any of 20 evenly spaced 8 s excerpts, while the ECG lead in the same frames has a beat period of about 0.6 s. Every other kept segment saturates at +/-125 and its ABP period matches the ECG period. 3013004_0158 (median 34 mmHg, 2-3 s slow wave) and 3018045_0013 (swings -22..182 mmHg, both rails pegged) previously passed only because a slow, large-amplitude wave satisfies the p95-p5 'pulsatile' test (evidence from the acceptance review; the keep rule itself is the monitor range, not an autocorrelation threshold, because genuine irregular-rhythm segments such as 3001557_0005, 3034353_0008 and 3038595_0004 score low on autocorrelation although their ABP tracks the ECG). Floors: at least 10,000 primary values or 100 KB, median at least 1,000 values per sample. Discovery totals: 60 segments, 237,094,260 ABP frames (526,888 to 19,575,000; median about 2.1 M), 687,268,057 .dat bytes. Realized 2026-10-09: 51 of 60 pinned segments kept, 195,628,953 values and bytes, median 2,068,767 values (range 526,888 to 19,575,000), aggregate sample SHA-256 bbdcf5e3a1cd4da00e63d2424707efbfca57648e29d5e2515ef5213815d3cb85; all WFDB checksums and initial values match. Excluded whole (9): 3012395_0001, 3031663_0003, 3033264_0007, 3043821_0010 (single flat code > 25% of values: pegged at 180 or -20 mmHg), 3013395_0001 (flat ~28 mmHg, 24% pulsatile, outside monitor range), 3038577_0007 (16.6% invalid, outside monitor range), 3042059_0028 (43% pulsatile windows), 3013004_0158 and 3018045_0013 (outside monitor range: no beat-synchronous pulse). Kept content: 25,940 of 26,101 windows pulsatile (99.4%), 104 flat, 41 low, 16 damped, 0 invalid; no value outside -125..125; code 125 holds 0.82% of values (max 9.07% in 3001920_0037; mode code in 8 samples), code -125 0.025%; largest single-code share 12.5% (3042934_0005, code -119)."
+
+[[series]]
+id = "mimic3wdb_abp_fmt80_i8"
+description = "125 Hz invasive arterial blood pressure channel of MIMIC-III adult ICU waveform segments, as the stored 8-bit WFDB format-80 digits in signed int8."
+semantic_meaning = "Successive WFDB stored values of the bedside monitor's ABP signal (invasive arterial line pressure, Philips bedside monitors in the BIDMC adult ICUs, per the release acknowledgements), sampled uniformly at 125 Hz and, per the database description, not scaled before capture. Physical pressure is (value + 100) / 1.25 mmHg (header gain 1.25 adu/mmHg, baseline -100), so the 8-bit codes step 0.8 mmHg; the monitor output itself saturates at codes -125..125 (-20..180 mmHg), which every kept segment respects; the calibration is identical for every sample and kept as index metadata. -128 is the WFDB invalid-sample code; no kept sample contains it or any other code outside -125..125."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Format 80 stores each sample as one offset-binary byte (value + 128); the emitted int8 is exactly byte - 128, i.e. the WFDB digital value that every WFDB reader returns. No rescaling, filtering, resampling, clipping, gap filling or segment cutting. 8 bits is the source's own ADC resolution field for these signals."
+source_resources = ["mimic3wdb_segment_data", "mimic3wdb_segment_headers", "mimic3wdb_records_adults"]
+source_format = "WFDB multi-signal segment: interleaved format-80 .dat (nsig bytes per frame) with .hea header"
+source_field = "ABP (signal named 'ABP', gain 1.25(-100)/mmHg, 8-bit ADC resolution; column index read from each header)"
+filtered_input_path = "filtered/physionet_mimic3wdb_abp_i8/ingest_stats.json"
+filtering = "Adult records only (RECORDS-adults). One segment per record: the first, in chronological order, of at least 500,000 frames (about 67 min) whose ABP signal is format 80 at exactly 1.25(-100)/mmHg with 8-bit ADC resolution, all signals format 80 in one .dat, 125 Hz; 60 records. ABP at any other calibration (1.28(-109), 1.06667(-109), 1.6(-109), format-16 20.4733(307) and others, which together are more common in the database) is a different tick lattice and is not collected. From each kept segment only the ABP column is emitted; ECG leads (I, II, III, V, AVF, AVL, AVR, MCL1), PAP and CVP columns are read only for checksum validation. Whole segments failing the content keep rule are excluded (see missing_value_policy); no time span inside a kept segment is removed."
+missing_value_policy = "Nothing is dropped, imputed or clipped inside a kept segment. The monitor output saturates at codes +125/-125 (180/-20 mmHg); saturated values, including pegged runs at 180 mmHg of up to 88,847 consecutive frames (line flush, blood sampling or stopcock events), are kept in place and counted (saturation_high_count, saturation_low_count). A segment containing any value outside -125..125 (-128 WFDB invalid, -127, -126, +126, +127) is excluded whole; consequently every kept sample has invalid_sample_count = 0 and outside_monitor_range_count = 0. Flat, damped, low (< 20 mmHg: zeroing, flushing, disconnected transducer) and invalid stretches inside a kept segment stay in the sample and are quantified by 60 s window classes, never cut. A segment is excluded whole when more than 10% of its values are -128, when one code holds more than 25% of its values, when fewer than 50% of its 60 s windows are pulsatile, when it has fewer than 32 distinct codes, or when any value lies outside the monitor range -125..125. Header geometry, calibration, size, SHA-256, WFDB checksum or initial-value mismatches are fatal. verify.sh applies the same policy with its own implementation."
+conversion = "Per pinned segment: read nsig and the ABP column index from the .hea; read the .dat in whole-frame chunks; take every nsig-th byte starting at the ABP index; XOR each byte with 0x80 (equivalently byte - 128 as two's complement) and write it as int8. One <segment>.bin per kept segment, length equal to the header frame count; the 16-bit sum of every signal must equal its header checksum and the first ABP value must equal the header initial value."
+numeric_kind = "int"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous signed-int8 WFDB stored-value sequence"
+sample_geometry = "variable_length_clinical_waveform_1d"
+sample_rank = 1
+sample_axes = ["time_sample_125hz"]
+natural_record_kind = "mimic3wdb_waveform_segment_abp_channel"
+sample_count = 51
+total_size_bytes = 195628953
+output_path = "samples/physionet_mimic3wdb_abp_i8/mimic3wdb_abp_fmt80_i8/"

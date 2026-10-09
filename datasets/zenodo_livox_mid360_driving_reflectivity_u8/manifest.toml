@@ -1,0 +1,90 @@
+manifest_version = 1
+dataset_id = "zenodo_livox_mid360_driving_reflectivity_u8"
+name = "Livox MID-360 Driving SLAM Test: Per-Point Laser Reflectivity of Non-Repetitive-Scan Frames, UInt8"
+description = "Per-point calibrated laser return reflectivity (Livox native 8-bit scale) of every /livox/lidar frame (2,772 PointCloud2 messages, about 10 Hz, 277 s) in K. Koide's 'Driving SLAM Test with Livox MID360' rosbag2 recording (Zenodo 14841855, 2024-04-16). The recipe emits one uint8 sample per frame with one byte per emitted point slot, in native scan order."
+homepage = "https://zenodo.org/records/14841855"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Koide, Kenji (AIST). Driving SLAM Test with Livox MID360. Zenodo, 2025. https://doi.org/10.5281/zenodo.14841855"
+notes = "The Zenodo record metadata (https://zenodo.org/api/records/14841855) declares \"license\": {\"id\": \"cc-by-4.0\"}, open access, and no added restrictions. download.sh re-fetches the record JSON and aborts unless the license id is still cc-by-4.0 and the file entry still has the pinned size and MD5. Attribution to Kenji Koide (AIST) and the Zenodo DOI is required."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Single file from the official Zenodo record of the author, served anonymously. The recipe uses no mirrors."
+usage_notes = "Only the per-point reflectivity byte is emitted. Geometry, IMU, timestamps and the remaining topics are not emitted, and reflectivity values cannot identify people."
+
+[[origins]]
+id = "zenodo"
+name = "Zenodo record 14841855 (Driving SLAM Test with Livox MID360)"
+url = "https://zenodo.org/records/14841855"
+type = "repository"
+notes = "Creator Kenji Koide (AIST), published 2025-02-10, DOI 10.5281/zenodo.14841855. Description: 'Dataset for testing LiDAR-IMU SLAM algorithms in a basic driving situation with a Livox MID-360.' The record holds one file."
+
+[[resources]]
+id = "rosbag2_zip"
+origin = "zenodo"
+url = "https://zenodo.org/records/14841855/files/rosbag2_2024_04_16-14_17_01.zip?download=1"
+type = "archive"
+version = "Zenodo record 14841855 (single version), file rosbag2_2024_04_16-14_17_01.zip"
+access = "Anonymous HTTPS GET, resumable (curl -C -)."
+size_bytes = 517088133
+sha256 = ""
+local_path = "downloads/zenodo_livox_mid360_driving_reflectivity_u8/rosbag2_2024_04_16-14_17_01.zip"
+notes = "Pinned by Zenodo MD5 0836c50859bb1af591966b69da166186 (files[].checksum in the record API); Zenodo publishes no SHA-256. The zip has two deflated members: rosbag2_2024_04_16-14_17_01/metadata.yaml (687 B compressed) and rosbag2_2024_04_16-14_17_01/rosbag2_2024_04_16-14_17_01_0.db3 (rosbag2 SQLite storage, 1,468,932,096 bytes uncompressed). metadata.yaml: storage sqlite3, no bag compression, 58,217 messages, of which 2,772 are /livox/lidar sensor_msgs/msg/PointCloud2 and 55,435 are /livox/imu."
+
+[[resources]]
+id = "zenodo_record_json"
+origin = "zenodo"
+url = "https://zenodo.org/api/records/14841855"
+type = "api_query_result"
+version = "fetched at download time"
+access = "Anonymous HTTPS GET."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/zenodo_livox_mid360_driving_reflectivity_u8/meta/zenodo_record_14841855.json"
+notes = "License and checksum evidence only. It is validated by content (license id, file size, MD5), not by checksum."
+
+[local_paths]
+downloads = "downloads/zenodo_livox_mid360_driving_reflectivity_u8/"
+extracted = "extracted/zenodo_livox_mid360_driving_reflectivity_u8/"
+filtered = "filtered/zenodo_livox_mid360_driving_reflectivity_u8/"
+index = "index/zenodo_livox_mid360_driving_reflectivity_u8/"
+samples = "samples/zenodo_livox_mid360_driving_reflectivity_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_livox_mid360_driving_reflectivity_u8/samples.jsonl"
+summary = "Fetch the one pinned rosbag2 zip and extract its SQLite db3 with zipfile (the extract is temporary). Query every /livox/lidar PointCloud2 message in timestamp order, parse the CDR message honouring the fields array, and emit the float32 'intensity' field of every point as one uint8 sample per frame, in native scan order."
+deterministic_notes = "Pinned single file (size 517,088,133, Zenodo MD5). Messages are ordered by bag timestamp, then row id. Samples are named <frame_index:04d>_<bag_timestamp_ns>.u8. Index rows carry the message id, bag and header timestamps, no-return point count, SHA-256, min/max, zero fraction and distinct count. build_stats.json adds per-frame no-return fraction, mode, retroreflective fraction and the overall histogram. verify.sh re-extracts the db3 and re-decodes every point independently with struct.iter_unpack('<3ffBBd'). It re-applies the policy and compares bytes exactly. It rejects constant frames and frames whose most common value exceeds 80%, and checks inventory (2,772), index fields and manifest totals. The extracted db3 (1.47 GB) is deleted by both build and verify."
+
+[[series]]
+id = "mid360_frame_reflectivity_u8"
+description = "Per-point laser return reflectivity of one /livox/lidar frame from a Livox MID-360 non-repetitive-scan lidar on a driving platform."
+semantic_meaning = "Calibrated reflectivity of each point slot of one MID-360 frame (about 0.1 s of rosette-pattern scanning: 4 laser lines fired together, so consecutive groups of 4 points are one firing), on the Livox 8-bit scale where 0-150 is diffuse reflection and 151-255 is retro-reflective. Point slots without a return carry x=y=z=0 and reflectivity 0. They are part of the native fixed-cadence frame and are kept in place."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The MID-360 reports reflectivity as one byte per point. livox_ros_driver2 stores it in the float32 PointCloud2 field 'intensity'. Build and verify assert that every value is exactly one of the float32 patterns of the integers 0..255 (finite, integral, in range, not -0.0), so the uint8 cast is lossless and restores the native width. Nothing is clamped, rescaled or filtered."
+source_resources = ["rosbag2_zip"]
+source_format = "rosbag2 SQLite storage (.db3), table messages, topic /livox/lidar: CDR-serialized sensor_msgs/msg/PointCloud2 (livox_ros_driver2 layout x,y,z,intensity float32, tag uint8, line uint8, timestamp float64; point_step 26)"
+source_field = "PointCloud2 point field 'intensity' (FLOAT32, offset 12 within each 26-byte point)"
+filtered_input_path = "filtered/zenodo_livox_mid360_driving_reflectivity_u8/build_stats.json"
+filtering = "All 2,772 /livox/lidar messages of the recording are taken; the other topics (IMU, rosout) are ignored. Every point slot of every frame is kept in source order, and neither points nor frames are filtered by content."
+missing_value_policy = "No-return point slots (x=y=z=0) carry reflectivity 0 and are kept as 0, the value the sensor driver emits. The no-return count per frame is recorded in the index and build_stats.json. Any intensity that is non-finite, non-integral, negative zero or outside 0..255 is fatal in build and verify. So are any deviation of the CDR layout (encapsulation, frame_id, height 1, point_step 26, intensity FLOAT32 at offset 12, data length) and a lidar message count other than 2,772."
+conversion = "Extract the db3 member with zipfile (CRC-checked). Select messages JOIN topics WHERE name='/livox/lidar' ORDER BY timestamp, id. Parse the CDR-LE PointCloud2 with 4-byte alignment relative to the encapsulation header and read the fields array. Take the float32 at offset 12 + 26*i for i in 0..width-1 and write it as one unsigned byte, in point order. The result is one sample file per message."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw uint8 per-point reflectivity vector"
+sample_geometry = "lidar_point_cloud_points"
+sample_rank = 1
+sample_axes = ["point"]
+natural_record_kind = "livox_mid360_pointcloud2_frame_message"
+sample_count = 2772
+total_size_bytes = 55440864
+output_path = "samples/zenodo_livox_mid360_driving_reflectivity_u8/mid360_frame_reflectivity_u8/"

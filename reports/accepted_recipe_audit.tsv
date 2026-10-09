@@ -364,6 +364,7 @@ openneuro_ds003097_aomic_dti_tensor_f32	ok	144506880	578027520	32	4515840	180633
 weatherbench2_era5_pressure_level_fields_f32	ok	144967680	579870720	384	377520	1510080	0	0	0	1	none	none
 noaa_cdr_seaice_conc_nh_daily_u8	ok	149266432	149266432	1096	136192	136192	0	0	0	1	none	none
 mast_iue_swp_raw_image_u8	ok	150994944	150994944	256	589824	589824	0	0	0	1	none	none
+srsp_scotland_phase1_lidar_scan_angle_i8	ok	151122545	151122545	88	1759592.5	1759592.5	0	0	0	1	none	none
 openneuro_ds004584_pd_rest_eeg_f32	ok	151477200	605908800	30	4817925	19271700	0	0	0	1	none	none
 dwd_radolan_rw_precip_i16	ok	155520000	311040000	192	810000	1620000	0	0	0	1	none	none
 google_books_1gram_counts_2020_eng_u64	ok	158333331	949999986	3	52777777	422222216	0	0	0	1	none	none

@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "srsp_scotland_phase1_lidar_scan_angle_i8"
+name = "LiDAR for Scotland Phase I Per-Point Scan Angle Rank (int8)"
+description = "Native signed int8 LAS scan angle rank of every point, in file point order, from 88 pinned 1 km LAZ tiles of the Scottish Public Sector LiDAR Phase I survey (Blom, 2011-2012, about 2 points per square metre)."
+homepage = "https://remotesensingdata.gov.scot/data#/list"
+
+[license]
+name = "Open Government Licence v3.0"
+spdx = "OGL-UK-3.0"
+url = "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+citation = "Crown copyright Scottish Government, SEPA and Scottish Water (2012). Open Government Licence v3"
+notes = "Portal collection scotland-gov/lidar/phase-1/laz (API https://api.remotesensing.data.gov.scot/search/collection/scotland-gov/*) declares useConstraints: 'The following attribution statement must be used to acknowledge the source of the information: Crown copyright Scottish Government, SEPA and Scottish Water (2012). Open Government Licence v3', limitationsOnPublicAccess 'No limitations on public access'. Only the lidar/phase-1/ prefix is used: the Phase II collection on the same portal is under the Non-Commercial Government Licence and is never fetched (download.sh refuses keys outside lidar/phase-1/laz/)."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Scottish Government Remote Sensing Portal open-data bucket (srsp-open-data, eu-west-2), anonymous public S3 access."
+usage_notes = "Airborne topographic LiDAR attribute field only; no coordinates, imagery, or personal data are emitted."
+
+[[origins]]
+id = "srsp_open_data_s3"
+name = "Scottish Remote Sensing Portal open-data bucket"
+url = "https://srsp-open-data.s3.eu-west-2.amazonaws.com/?list-type=2&prefix=lidar/phase-1/laz/"
+type = "bucket"
+notes = "Public ListObjectsV2 listing: 12,464 Phase I tiles lidar/phase-1/laz/27700/gridded/<OSGB 1 km ref>_2PPM_LAS_PHASE1.laz, 68,542,095,337 bytes, listed 2026-10-08."
+
+[[resources]]
+id = "phase1_laz_tile_selection"
+origin = "srsp_open_data_s3"
+url = "https://srsp-open-data.s3.eu-west-2.amazonaws.com/lidar/phase-1/laz/27700/gridded/"
+type = "file"
+version = "88 tiles pinned in scripts/tiles.tsv (key, size, S3 ETag, sha256, point count), selected 2026-10-08 by scripts/discover.py; sha256 pinned from the first verified download"
+access = "Anonymous HTTPS GET of each pinned key; resumable curl."
+size_bytes = 433958092
+sha256 = ""
+local_path = "downloads/srsp_scotland_phase1_lidar_scan_angle_i8/laz/"
+notes = "Selection: 128 candidates evenly spaced over the sorted key list; a candidate is kept when a range-read decode of its first 50,000-point chunk shows a non-constant scan angle. 40 candidates (all of HY, NH, NJ, NK and western NN, plus NR8188 and four northern NO tiles) were dropped because those collection areas were delivered with the scan angle byte zeroed in every point. Per-tile sha256 is pinned in scripts/tiles.tsv and enforced by download.sh; a single aggregate sha256 does not apply to an 88-file selection. Realized: 88 tiles, scan angle range -29..+29 degrees, per-tile span 15..58 (median 50), overall zero share 2.0%, largest single-value share in any tile 15.5%."
+
+[local_paths]
+downloads = "downloads/srsp_scotland_phase1_lidar_scan_angle_i8/"
+filtered = "filtered/srsp_scotland_phase1_lidar_scan_angle_i8/"
+index = "index/srsp_scotland_phase1_lidar_scan_angle_i8/"
+samples = "samples/srsp_scotland_phase1_lidar_scan_angle_i8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/srsp_scotland_phase1_lidar_scan_angle_i8/samples.jsonl"
+summary = "Download 88 pinned Phase I LAZ tiles, decode every point with tools/laz/laszip.py, and emit each tile's complete scan-angle-rank field as one raw int8 sample in file point order."
+deterministic_notes = "Pinned keys, sizes and S3 ETags (MD5 or 8 MiB multipart MD5) are checked on download, plus LAS 1.2 / PDRF 1 / record length 28 / LASzip compressor 2 with POINT10 v2 + GPSTIME11 v2 / pinned point count. Build and verify reject a tile with fewer than 5 distinct values, any value above half of its points, a span under 10 degrees, or values outside -90..+90. Verify re-decodes every tile and requires byte-identical samples."
+
+[[series]]
+id = "srsp_phase1_scan_angle_rank_i8"
+description = "Per-point LAS scan angle rank of Scottish Phase I airborne LiDAR tiles."
+semantic_meaning = "Angle of the laser pulse off nadir, in whole degrees (negative to the left of the flight direction, positive to the right), for every point of one 1 km tile, in the tile's stored point order (flight-line sweeps, reversing at swath edges; overlap zones interleave lines)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "LAS 1.2 point data record format 1 stores Scan Angle Rank as a signed char; the byte is copied unchanged."
+source_resources = ["phase1_laz_tile_selection"]
+source_format = "LAZ (LAS 1.2 point data record format 1, LASzip compressor 2)"
+source_field = "Scan Angle Rank (PDRF 1 record byte offset 16, signed char, degrees)"
+filtered_input_path = "filtered/srsp_scotland_phase1_lidar_scan_angle_i8/ingest_stats.json"
+filtering = "All points of each of the 88 pinned tiles; no points dropped. Tiles from collection areas delivered with an all-zero scan angle field were excluded at selection time (see resource notes)."
+missing_value_policy = "LAS scan angle rank has no sentinel; 0 is a valid nadir value and is kept. A tile whose field is constant or near-constant (fewer than 5 distinct values, a value holding more than half of the points, or a span under 10 degrees) or outside -90..+90 is a fatal build and verify error, as is any header, count, size, or checksum mismatch."
+conversion = "Decode all LASzip chunks to 28-byte PDRF-1 records with tools/laz/laszip.py iter_chunks, take byte 16 of each record as int8, and write the values in point order as a raw int8 array (endianness is moot at 8 bits), one file per tile."
+numeric_kind = "int"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous int8 array"
+sample_geometry = "las_point_attribute_1d"
+sample_rank = 1
+sample_axes = ["las_point_order"]
+natural_record_kind = "srsp_phase1_1km_laz_tile_scan_angle_field"
+sample_count = 88
+total_size_bytes = 151122545
+output_path = "samples/srsp_scotland_phase1_lidar_scan_angle_i8/srsp_phase1_scan_angle_rank_i8/"

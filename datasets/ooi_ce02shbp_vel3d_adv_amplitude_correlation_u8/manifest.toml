@@ -1,0 +1,103 @@
+manifest_version = 1
+dataset_id = "ooi_ce02shbp_vel3d_adv_amplitude_correlation_u8"
+name = "OOI Oregon Shelf Seafloor Nortek Vector ADV (VEL3D-C) Beam Amplitude and Correlation UInt8"
+description = "Native uint8 per-beam acoustic return amplitude (counts) and Doppler beam correlation (%) at 8 Hz from the Nortek Vector ADV on the OOI Cabled Endurance Array Oregon Shelf benthic package (CE02SHBP-LJ01D, ~80 m), one beam-planar sample per complete UTC day across a single instrument deployment."
+homepage = "https://rawdata.oceanobservatories.org/files/CE02SHBP/LJ01D/VEL3DC108/"
+
+[license]
+name = "OOI Data Use Policy 1102-00010 v2-00 with User Terms and Conditions 1102-00020"
+spdx = "LicenseRef-OOI-Data-Use-Policy"
+url = "https://oceanobservatories.org/wp-content/uploads/2024/01/1102-00010_Data_Use_Policy_OOI.pdf"
+citation = "Ocean Observatories Initiative (OOI), funded by the U.S. National Science Foundation. Cabled Endurance Array, Oregon Shelf Seafloor (CE02SHBP-LJ01D) 3-D Single Point Velocity Meter VEL3D-C (VEL3DC108) raw data, https://rawdata.oceanobservatories.org/files/CE02SHBP/LJ01D/VEL3DC108/, accessed 2026-10-09."
+notes = "Data Use Policy section 4.1: 'all OOI data will be made publicly available, free of charge ... The User is granted the right to use OOI data and web sites for any legal and non-prohibited purpose whatsoever ... -- to access, link to and use, create derivative works, publish, distribute, disseminate, transfer, or copy.' The User Terms and Conditions (1102-00020) add the NSF/OOI acknowledgement requirement. Not an SPDX license; a broad written grant plus mandatory attribution. Policy PDF sha256 52dc5db1709f3a264eec678fa8e71a107d3209b83f5ee7999ea1bf11d8b990d2 (2026-10-09)."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official OOI raw-data archive (Oregon State University / OOI Cabled Array), anonymous HTTPS. Seafloor oceanographic instrument telemetry; no human subjects."
+usage_notes = "Only the per-beam amplitude and correlation bytes of checksum-valid Nortek Vector Velocity Data packets are emitted; port-agent framing, velocities, pressure and system packets are not emitted."
+
+[[origins]]
+id = "ooi_rawdata"
+name = "OOI Raw Data Archive"
+url = "https://rawdata.oceanobservatories.org/files/"
+type = "data_portal"
+notes = "Apache-style directory listings of raw instrument port-agent streams, one file per UTC day per instrument port."
+
+[[resources]]
+id = "vel3dc108_day_files"
+origin = "ooi_rawdata"
+url = "https://rawdata.oceanobservatories.org/files/CE02SHBP/LJ01D/VEL3DC108/"
+type = "file"
+version = "57 daily port-agent files, every 6th UTC day 2025-09-01 .. 2026-08-03 (2026-02-10 replaced by 2026-02-11), listed 2026-10-09"
+access = "Direct anonymous HTTPS; exact URLs, byte sizes, ETags and Last-Modified in sources.tsv."
+size_bytes = 1792629992
+sha256 = ""
+local_path = "downloads/ooi_ce02shbp_vel3d_adv_amplitude_correlation_u8/"
+notes = "OOI publishes no checksums. Each file is pinned by size and nginx ETag (hex mtime-size) checked by HEAD before fetching; download.sh self-hashes each file (SHA-256) into download_plan.tsv, and build/verify re-check those hashes."
+
+[local_paths]
+downloads = "downloads/ooi_ce02shbp_vel3d_adv_amplitude_correlation_u8/"
+filtered = "filtered/ooi_ce02shbp_vel3d_adv_amplitude_correlation_u8/"
+index = "index/ooi_ce02shbp_vel3d_adv_amplitude_correlation_u8/"
+samples = "samples/ooi_ce02shbp_vel3d_adv_amplitude_correlation_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/ooi_ce02shbp_vel3d_adv_amplitude_correlation_u8/samples.jsonl"
+summary = "Strip OOI port-agent framing (type-1 frames, XOR-checksummed), reassemble the Nortek Vector byte stream, keep checksum-valid Velocity Data packets (0xA5 0x10), and emit per-day beam-planar uint8 amplitude and correlation arrays."
+deterministic_notes = "Deployment window 2025-08-28 16:55 UTC (post-turnaround restart) to 2026-08-08 (an instrument swap on 2026-08-09 moves heading 134.8->265 deg, battery 11.5->11.7 V, and pins beam-2 amplitude at 71). Day selection: 2025-09-01 + 6k days, k=0..56, except 2026-02-10 is replaced by 2026-02-11 (that file switches from binary port-agent framing to text <OOI-TS> delimiters at 20:17:31 UTC and fails the strict deframer); all selected files are complete ~31.45 MB days. Nortek configuration packets (0xA5 0x00/0x04/0x05) never appear in the archived streams, so deployment identity is enforced per day from Vector System Data: status byte 0x63 (orientation/scaling/power-level bits) for >=99.9% of packets and median heading 128-140 deg, pitch -3..7 deg, roll -3..6 deg. Per day: every port-agent frame XOR-valid and contiguous to EOF, timestamps inside the UTC day, 690,000-692,000 velocity records (8 Hz nominal 691,200), checksum-failed velocity candidates <=0.01%, unparsed stream bytes <=0.1%, count-byte gaps <=20, every beam >=8 distinct values and no value above 75% share (clear-water noise-floor days reach 53.6%). Sample order is sources.tsv order."
+
+[[series]]
+id = "vel3d_beam_amplitude_u8"
+description = "Nortek Vector per-beam acoustic return-signal amplitude, beam-planar per UTC day."
+semantic_meaning = "Received acoustic signal strength of each of the three receive beams for every 8 Hz ping of the VEL3D-C point velocimeter at the Oregon-shelf seafloor (instrument counts on a roughly logarithmic intensity scale)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Vector Velocity Data packet bytes 16-18 (AmpB1..AmpB3) are unsigned 8-bit counts; copied unchanged."
+source_resources = ["vel3dc108_day_files"]
+source_format = "OOI port-agent framed Nortek Vector binary stream"
+source_field = "Vector Velocity Data (0xA5 0x10) AmpB1, AmpB2, AmpB3"
+filtered_input_path = "filtered/ooi_ce02shbp_vel3d_adv_amplitude_correlation_u8/ingest_stats.json"
+filtering = "All checksum-valid Velocity Data packets of each selected complete UTC day; system, header and non-instrument frames are dropped."
+missing_value_policy = "No values are imputed or substituted. Velocity packets failing the Nortek checksum are skipped (bounded at 0.01% per day); framing errors, out-of-window timestamps, record-count shortfalls, deployment-guard failures or degenerate beams fail the recipe."
+conversion = "Deframe port-agent type-1 payloads, scan the reassembled stream for checksum-valid 24-byte Velocity Data packets, and write [beam1 all records][beam2 all records][beam3 all records] as raw uint8 in packet order."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 beam-planar amplitude array"
+sample_geometry = "beam_by_time_2d"
+sample_rank = 2
+sample_axes = ["beam", "velocity_record"]
+natural_record_kind = "complete_utc_day_vel3d_port_agent_file"
+sample_count = 57
+total_size_bytes = 118195383
+output_path = "samples/ooi_ce02shbp_vel3d_adv_amplitude_correlation_u8/vel3d_beam_amplitude_u8/"
+
+[[series]]
+id = "vel3d_beam_correlation_u8"
+description = "Nortek Vector per-beam Doppler correlation, beam-planar per UTC day."
+semantic_meaning = "Pulse-to-pulse correlation of each of the three receive beams for every 8 Hz ping (percent, 0-100), the instrument's velocity-quality measure."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Vector Velocity Data packet bytes 19-21 (CorrB1..CorrB3) are unsigned 8-bit percentages; copied unchanged."
+source_resources = ["vel3dc108_day_files"]
+source_format = "OOI port-agent framed Nortek Vector binary stream"
+source_field = "Vector Velocity Data (0xA5 0x10) CorrB1, CorrB2, CorrB3"
+filtered_input_path = "filtered/ooi_ce02shbp_vel3d_adv_amplitude_correlation_u8/ingest_stats.json"
+filtering = "All checksum-valid Velocity Data packets of each selected complete UTC day; system, header and non-instrument frames are dropped."
+missing_value_policy = "No values are imputed or substituted. Velocity packets failing the Nortek checksum are skipped (bounded at 0.01% per day); framing errors, out-of-window timestamps, record-count shortfalls, deployment-guard failures or degenerate beams fail the recipe."
+conversion = "Deframe port-agent type-1 payloads, scan the reassembled stream for checksum-valid 24-byte Velocity Data packets, and write [beam1 all records][beam2 all records][beam3 all records] as raw uint8 in packet order."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 beam-planar correlation array"
+sample_geometry = "beam_by_time_2d"
+sample_rank = 2
+sample_axes = ["beam", "velocity_record"]
+natural_record_kind = "complete_utc_day_vel3d_port_agent_file"
+sample_count = 57
+total_size_bytes = 118195383
+output_path = "samples/ooi_ce02shbp_vel3d_adv_amplitude_correlation_u8/vel3d_beam_correlation_u8/"

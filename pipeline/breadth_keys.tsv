@@ -489,3 +489,4 @@ nasa_pds_cassini_iss_nac_lut8_raw_u8	autocollect	8	raw_space_frame	cassini_iss_n
 tern_ozflux_l3_eddy_covariance_fluxes_f64	autocollect	64	eddy_covariance_flux	csat3_li7500_ozflux_pyfluxpro_l3	tern_ozflux_thredds	-	OK
 noaa_uscrn_subhourly_relative_humidity_u8	autocollect	8	met_station_obs	uscrn_station_rh_sensor	www.ncei.noaa.gov/pub/data/uscrn/products/subhourly01	-	OK
 gwtc3_imrphenomxphm_posterior_samples_f64	autocollect	64	bayesian_posterior_samples	ligo_virgo_bilby_pe	zenodo.org/gwtc3_pe_release	-	OK
+ooi_ce02shbp_vel3d_adv_amplitude_correlation_u8	autocollect	8	water_column_backscatter	nortek_vector_adv_ooi_vel3d_c	rawdata.oceanobservatories.org/files (OOI raw data archive, Cabled Endurance Array)	-	OK

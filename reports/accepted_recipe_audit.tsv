@@ -432,6 +432,7 @@ zenodo_open_ephys_continuous_i16	ok	266375168	532750336	4	66593792	133187584	0	0
 mpc_modis_mod13a1_ndvi_i16	ok	276480000	552960000	48	5760000	11520000	0	0	0	1	none	none
 nasa_pds_cassini_rpws_wbr_10khz_waveform_u8	ok	284050336	284050336	88	2472960	2472960	0	0	0	1	none	none
 physionet_circor_pcg_i16	ok	289355051	578710102	3163	85824	171648	0	0	0	1	none	none
+nasa_pds_cassini_iss_nac_lut8_raw_u8	ok	293601280	293601280	280	1048576	1048576	0	0	0	1	none	none
 fmi_radar_ppi_vrad_u8	ok	300900675	300900675	75	4012009	4012009	0	0	0	1	none	none
 zenodo_astar_niti_sped_patterns_u8	ok	306498816	306498816	14781	20736	20736	0	0	0	1	none	none
 sentinel2_l2a_reflectance_cogs_u16	ok	308098800	616197600	6	30140100	60280200	0	0	0	1	none	none

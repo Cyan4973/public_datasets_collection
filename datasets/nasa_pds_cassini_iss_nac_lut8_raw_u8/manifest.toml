@@ -1,0 +1,109 @@
+manifest_version = 1
+dataset_id = "nasa_pds_cassini_iss_nac_lut8_raw_u8"
+name = "Cassini ISS Narrow-Angle Camera Raw EDR Frames, On-Board 12-to-8-bit TABLE Conversion (1024x1024 uint8 DN, Saturn system 2008-2009)"
+description = "Full-resolution 1024x1024 unsigned-byte raw CCD frames from the Cassini Imaging Science Subsystem narrow-angle camera, as converted on board from 12-bit ADC counts to 8 bits by the camera's fixed square-root-like look-up table (DATA_CONVERSION_TYPE = TABLE) and downlinked losslessly. Decoded from the PDS Imaging Node COISS_2050-2052 EDR volumes (2008-312 to 2009-041, Saturn rings, F ring movies and Saturnian moons), with the VICAR label, binary telemetry header record and 24-byte per-line binary prefix removed."
+homepage = "https://planetarydata.jpl.nasa.gov/img/data/cassini/cassini_orbiter/"
+
+[license]
+name = "NASA SMD Open Scientific Data Policy (public NASA PDS mission data)"
+spdx = "LicenseRef-NASA-SMD-Open-Data"
+url = "https://science.nasa.gov/researchers/science-data/science-information-policy/"
+citation = "Cassini ISS EDR data set CO-S-ISSNA/ISSWA-2-EDR-V1.0 (volumes COISS_2050-COISS_2052), NASA Planetary Data System, Imaging Node. Acknowledge the Cassini Imaging Science team (C. C. Porco, Team Leader)."
+notes = "Cassini-Huygens is a NASA/ESA/ASI mission; the ISS EDRs are NASA PDS archive products served anonymously by the PDS Imaging Node (planetarydata.jpl.nasa.gov). NASA SMD policy: information produced from SMD-funded scientific research is held as a public trust, made publicly available, and openly shared; mission data are released as soon as possible. Same rights basis as the accepted nasa_pds_cassini_vims_qube_i16, nasa_pds_cassini_radar_bidr_sigma0_u8 and nasa_pds_voyager_iss_saturn_raw_u8 recipes. The COISS_2050 aareadme.txt carries no copyright or use restriction (only acknowledgments); download.sh fetches it pinned by size and MD5 and fails if it gains copyright text. The NASA policy page itself is not fetched by download.sh."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NASA PDS Imaging Node archive objects over anonymous HTTPS; 2008-2009 robotic spacecraft CCD frames of Saturn's rings and moons. MD5 pins come from the PDS Rings Node checksum manifests of the same volumes."
+usage_notes = "Only image DN values are emitted. VICAR labels (which contain archivist user names in the history section), the binary telemetry header record and the 24-byte line prefixes are never written to samples. Index rows carry only observation metadata (volume, image number, observation id, target, filter, exposure, time)."
+
+[[origins]]
+id = "pds_imaging_node"
+name = "NASA PDS Imaging Node, Cassini orbiter ISS EDR volumes"
+url = "https://planetarydata.jpl.nasa.gov/img/data/cassini/cassini_orbiter/"
+type = "data_portal"
+notes = "COISS_2001-COISS_2116 EDR volumes, each with data/<sclk range>/<N|W><sclk>_<n>.IMG frames and an index/index.tab + index.lbl volume index. HTTP directory listings give rounded sizes only; discover.py pins exact sizes from HEAD Content-Length."
+
+[[origins]]
+id = "pds_rings_node_checksums"
+name = "NASA PDS Rings Node checksum manifests for the same COISS volumes"
+url = "https://pds-rings.seti.org/holdings/checksums-volumes/COISS_2xxx/"
+type = "website"
+notes = "COISS_20NN_md5.txt lists the MD5 of every file in the volume. Used only by discover.py to pin MD5s; not fetched by download.sh."
+
+[[resources]]
+id = "coiss_nac_table_frames"
+origin = "pds_imaging_node"
+url = "https://planetarydata.jpl.nasa.gov/img/data/cassini/cassini_orbiter/coiss_2050/data/"
+type = "file"
+version = "CO-S-ISSNA/ISSWA-2-EDR-V1.0, volumes COISS_2050 (PUBLICATION_DATE 2009-09-14), COISS_2051, COISS_2052; 314 frames resolved 2026-10-09 by discover.py"
+access = "Anonymous HTTPS GET. download.sh fetches exactly the 314 IMG files listed in sources.tsv (169 from coiss_2050, 10 from coiss_2051, 135 from coiss_2052; every file 1,077,344 bytes), each pinned by size and Rings Node MD5, and rejects any frame whose VICAR label or layout fails the checks."
+size_bytes = 338286016
+sha256 = ""
+local_path = "downloads/nasa_pds_cassini_iss_nac_lut8_raw_u8/raw/"
+notes = "Per-file URL, size and MD5 live in sources.tsv; download_plan.tsv records the SHA-256 of every fetched frame."
+
+[[resources]]
+id = "coiss_volume_indexes"
+origin = "pds_imaging_node"
+url = "https://planetarydata.jpl.nasa.gov/img/data/cassini/cassini_orbiter/coiss_2050/index/index.tab"
+type = "table_export"
+version = "index.tab + index.lbl of COISS_2050 (4,461 rows), COISS_2051 (960 rows), COISS_2052 (5,460 rows); 3,057-byte fixed-width rows"
+access = "Anonymous HTTPS GET of coiss_20NN/index/index.tab and index.lbl for NN = 50, 51, 52; each pinned by size and Rings Node MD5 in download.sh."
+size_bytes = 33407546
+sha256 = ""
+local_path = "downloads/nasa_pds_cassini_iss_nac_lut8_raw_u8/index/"
+notes = "Selection evidence, not a sample source. download.sh and build.py (fixed-width parse from the label's START_BYTE/BYTES) and verify.py (independent CSV parse) re-derive the 314-frame selection and fail if it differs from sources.tsv."
+
+[[resources]]
+id = "coiss_2050_aareadme"
+origin = "pds_imaging_node"
+url = "https://planetarydata.jpl.nasa.gov/img/data/cassini/cassini_orbiter/coiss_2050/aareadme.txt"
+type = "file"
+version = "PUBLICATION_DATE 2009-09-14"
+access = "Anonymous HTTPS GET; pinned size 34,646 bytes, MD5 2b965e25c8b0eb3ffb9b39cc6f8c7e23."
+size_bytes = 34646
+sha256 = ""
+local_path = "downloads/nasa_pds_cassini_iss_nac_lut8_raw_u8/evidence/aareadme.txt"
+notes = "Volume description and acknowledgment evidence. Not a sample source."
+
+[local_paths]
+downloads = "downloads/nasa_pds_cassini_iss_nac_lut8_raw_u8/"
+filtered = "filtered/nasa_pds_cassini_iss_nac_lut8_raw_u8/"
+index = "index/nasa_pds_cassini_iss_nac_lut8_raw_u8/"
+samples = "samples/nasa_pds_cassini_iss_nac_lut8_raw_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_pds_cassini_iss_nac_lut8_raw_u8/samples.jsonl"
+summary = "Fetch 314 pinned Cassini ISS NAC EDR frames (TABLE conversion, FULL 1024x1024, lossless, no missing lines) from COISS_2050-2052 plus the volume indexes, validate VICAR structure, and emit the 1024 x 1024 uint8 DN of each frame unchanged (VICAR label, binary header record and 24-byte line prefixes dropped) as one raw sample per frame, after a deterministic mode-share exclusion rule."
+deterministic_notes = "Selection rule (scripts/coiss.py select(); re-applied by download, build and an independent CSV re-implementation in verify) over the concatenated index rows of COISS_2050, 2051, 2052 in volume then row order: INSTRUMENT_ID = ISSNA, DATA_CONVERSION_TYPE = TABLE, INSTRUMENT_MODE_ID = FULL, INST_CMPRS_TYPE = LOSSLESS, MISSING_LINES = 0, MISSING_PACKET_FLAG = NO, GAIN_MODE_ID = 29 ELECTRONS PER DN, IMAGE_OBSERVATION_TYPE = SCIENCE, PRODUCT_TYPE = EDR, TARGET_NAME != SKY, OBSERVATION_ID not containing SATELLORB (satellite-orbit astrometry of point-like moons on dark sky) -> 2,932 eligible frames in 37 observations; then at most 10 frames per OBSERVATION_ID at positions floor((2j+1)n/(2m)), j < m = min(n, 10), within each observation's eligible frames -> 314 pinned frames, 2008-312T03:52:25 to 2009-041T17:00:16. VICAR checks per frame (LBLSIZE, RECSIZE, NBB, NLB parsed, never hardcoded): FORMAT BYTE, ORG BSQ, NB 1, EOL 0, NL = NS = 1024, RECSIZE = NBB + NS, file size = LBLSIZE + (NLB + NL) * RECSIZE, BINTFMT HIGH, INSTRUMENT_ID ISSNA, INSTRUMENT_MODE_ID FULL, DATA_CONVERSION_TYPE TABLE, INST_CMPRS_TYPE LOSSLESS, MISSING_LINES 0, GAIN 29 e/DN, IMAGE_NUMBER, OBSERVATION_ID and TARGET_NAME equal the index row, and every line prefix starts with its 1-based big-endian line number. Exclusion rule (build and verify, identical): a frame is not emitted if one DN value holds more than 50% of its pixels or it has fewer than 16 distinct DN values (dark-sky frames with a small target, or saturated frames). Duplicate frames fail. verify.sh byte-compares every sample against its own re-derivation and checks index rows, counts, totals, manifest agreement and the aggregate DN histogram (>= 200 levels, no DN above half of all pixels)."
+
+[[series]]
+id = "cassini_issna_table8_full_dn_u8"
+description = "Full-frame raw Cassini ISS narrow-angle camera frames (1024 lines x 1024 samples of 8-bit data numbers after the on-board 12-to-8-bit look-up table) of Saturn's rings and moons, 2008-2009."
+semantic_meaning = "Uncalibrated 8-bit data numbers from the Cassini ISS narrow-angle CCD (12-bit ADC, gain 29 electrons/DN) after the camera's fixed ROM look-up table compressed each 12-bit count to 8 bits roughly as its square root (to match quantization to photon shot noise). Content: F-ring and main-ring movies, ring azimuthal scans and shadow observations, Prometheus/F-ring streamer-channel sequences, and resolved moons (Titan, Enceladus, Mimas, Tethys, Rhea, Helene), with bias/dark background, cosmic-ray hits, saturated pixels and antiblooming effects exactly as downlinked losslessly. No bias subtraction, inverse LUT, flat field or geometric correction."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "PDS label: IMAGE SAMPLE_BITS 8, LINE_PREFIX_BYTES 24; VICAR FORMAT BYTE, DATA_CONVERSION_TYPE TABLE. The 8-bit values are the camera's own transmitted quantization (the LUT is applied in flight; the inverse table lives on the calibration volumes), so they are copied unchanged. 12BIT (16-bit) and LSB-conversion products, SUM2/SUM4 summed modes, lossy-compressed frames and the 12 e/DN gain state are excluded."
+source_resources = ["coiss_nac_table_frames"]
+source_format = "PDS3 / VICAR2 Cassini ISS EDR image (N<sclk>_<n>.IMG): VICAR label of LBLSIZE bytes, NLB = 1 binary telemetry header record, 1024 image records of RECSIZE = 1048 bytes (24-byte binary line prefix + 1024 unsigned 8-bit samples)"
+source_field = "IMAGE object: 1024 x 1024 unsigned 8-bit data numbers (the last NS bytes of each image record)"
+filtered_input_path = "filtered/nasa_pds_cassini_iss_nac_lut8_raw_u8/ingest_stats.json"
+filtering = "314 pinned frames from the selection rule above (Saturn-system targets only; SKY targets, SATELLORB astrometry observations, non-TABLE conversions, summed modes, lossy compression, missing lines/packets, 12 e/DN gain and non-science frames excluded; at most 10 evenly spaced frames per observation so long ring movies do not dominate with near-identical consecutive frames). Frames where one DN holds more than 50% of pixels or with fewer than 16 distinct DN are dropped by the deterministic exclusion rule and listed in ingest_stats.json (realized: 34 of 314 dropped, all for mode share > 50% at DN 8-9; 280 frames emitted from 36 observations; the whole ISS_094HE_HELENCLOS001 observation and 9 of 10 ISS_101MI_086W151PH001 frames are dropped)."
+missing_value_policy = "Every pixel of every emitted frame is preserved, including dark background, DN 255 saturated pixels and cosmic-ray hits; nothing is masked, filled or rescaled. Only frames with MISSING_LINES = 0 and MISSING_PACKET_FLAG = NO are selected. Frames failing the mode-share/distinct-value rule are dropped whole. Any size/MD5 mismatch, VICAR deviation, prefix line-number mismatch, duplicate or constant frame fails the recipe."
+conversion = "For each pinned IMG (1,077,344 bytes): read LBLSIZE from the VICAR label start (3,144 in the probed files) and RECSIZE, NL, NS, NBB, NLB from the label; skip LBLSIZE + NLB * RECSIZE bytes (VICAR label + binary telemetry header record), then for each of the NL = 1024 records of RECSIZE = 1048 bytes drop the first NBB = 24 bytes (binary line prefix: line number, valid-pixel ranges, overclocked pixel sums) and keep the remaining 1024 bytes. Concatenate the rows in file order and write the 1,048,576 bytes as samples/nasa_pds_cassini_iss_nac_lut8_raw_u8/cassini_issna_table8_full_dn_u8/<product>.u8. Byte order is irrelevant for 8-bit values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 CCD data numbers"
+sample_geometry = "fixed_1024x1024_cassini_iss_nac_frame"
+sample_rank = 2
+sample_shape = [1024, 1024]
+sample_axes = ["ccd_line", "ccd_sample"]
+natural_record_kind = "cassini_iss_nac_edr_table8_full_frame"
+sample_count = 280
+total_size_bytes = 293601280
+output_path = "samples/nasa_pds_cassini_iss_nac_lut8_raw_u8/cassini_issna_table8_full_dn_u8/"

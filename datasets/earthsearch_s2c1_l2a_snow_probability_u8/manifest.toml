@@ -1,0 +1,78 @@
+manifest_version = 1
+dataset_id = "earthsearch_s2c1_l2a_snow_probability_u8"
+name = "Sentinel-2 Collection-1 L2A Sen2Cor Snow Probability (SNW_20m) UInt8"
+description = "Thirty complete 5490x5490 Sen2Cor snow-probability grids (0-100 %, 20 m) from Sentinel-2 Collection-1 Level-2A products over distinct snow-covered MGRS tiles, March-April 2024, decoded from the Element84 Earth Search COGs into raw uint8."
+homepage = "https://earth-search.aws.element84.com/v1/collections/sentinel-2-c1-l2a"
+
+[license]
+name = "Copernicus Sentinel Data Terms and Conditions (legal notice on the use of Copernicus Sentinel Data and Service Information)"
+spdx = "LicenseRef-Copernicus-Sentinel"
+url = "https://sentinels.copernicus.eu/documents/247904/690755/Sentinel_Data_Legal_Notice"
+citation = "Contains modified Copernicus Sentinel data 2024."
+notes = "Free, full and open access; EU law (Delegated Regulation (EU) No 1159/2013) grants reproduction, distribution, communication to the public, adaptation, modification and combination with other data, subject to the attribution 'Contains modified Copernicus Sentinel data [Year]'. The Earth Search collection links this legal notice as rel=license (STAC license field 'proprietary' is the STAC convention for a non-SPDX license), and the AWS Registry of Open Data entry links the same notice. Collection-1 reprocessing distributed by Element84 Earth Search on the AWS Registry of Open Data (e84-earth-search-sentinel-data, not requester-pays)."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official ESA Sen2Cor Level-2A snow-probability layer of Sentinel-2 Collection-1 products, redistributed as Cloud Optimized GeoTIFFs by Element84 in a public anonymous S3 bucket."
+usage_notes = "20 m snow-probability rasters over mountains, taiga and steppe; no imagery of people, no personal data."
+
+[[origins]]
+id = "element84_earth_search_c1"
+name = "Element84 Earth Search, collection sentinel-2-c1-l2a"
+url = "https://earth-search.aws.element84.com/v1/collections/sentinel-2-c1-l2a"
+type = "bucket"
+notes = "STAC API used only at authoring time (scripts/discover.py); assets live in s3://e84-earth-search-sentinel-data/sentinel-2-c1-l2a/ (us-west-2), anonymous HTTPS, storage:requester_pays=false."
+
+[[resources]]
+id = "s2c1_l2a_snw_20m_cogs"
+origin = "element84_earth_search_c1"
+url = "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/"
+type = "file"
+version = "sentinel-2-c1-l2a, processing baseline 05.10, acquisitions 2024-03-02..2024-04-28"
+access = "download.sh fetches the 30 exact SNW_20m.tif objects pinned in sources.tsv (item ID, URL, byte size, SHA-256 from the STAC file:checksum multihash) with resumable curl; no live STAC dependency."
+size_bytes = 274844184
+sha256 = "per-file SHA-256 in sources.tsv"
+local_path = "downloads/earthsearch_s2c1_l2a_snow_probability_u8/snw_20m/"
+notes = "One COG per Sentinel-2 L2A product (asset key 'snow', title 'Snow Probabilities'); IFD0 is the full 5490x5490 grid, overview IFDs are ignored."
+
+[local_paths]
+downloads = "downloads/earthsearch_s2c1_l2a_snow_probability_u8/"
+filtered = "filtered/earthsearch_s2c1_l2a_snow_probability_u8/"
+index = "index/earthsearch_s2c1_l2a_snow_probability_u8/"
+samples = "samples/earthsearch_s2c1_l2a_snow_probability_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/earthsearch_s2c1_l2a_snow_probability_u8/samples.jsonl"
+summary = "Download 30 pinned SNW_20m COGs, decode IFD0 (Deflate + horizontal predictor 2, 512x512 tiles) with a pure-stdlib reader, crop to 5490x5490, and write one raw uint8 grid per product."
+deterministic_notes = "Selection (scripts/discover.py + scripts/select_plan.py, run 2026-10-09): Earth Search query on collection sentinel-2-c1-l2a, datetime 2024-03-01..2024-04-30, eo:cloud_cover < 15, s2:nodata_pixel_percentage == 0, 25 <= s2:snow_ice_percentage <= 75 (1,785 items, 1,184 MGRS tiles); |centroid lat| <= 72; one scene per MGRS tile (snow % closest to 50, then lower cloud); tiles grouped into 10 deg lat x 20 deg lon cells with >= 3 tiles; per cell the 4 tiles closest to 50 % snow had their COG header GDAL statistics probed and the one with nonzero share closest to 0.5 (within 0.30..0.75) kept; the 30 most populated cells were taken. Every scene is from processing baseline 05.10, one MGRS tile and one cell each. Downloads are checked for exact size, SHA-256 and the exact TIFF layout; build and verify cross-check each decoded grid against the producer's own GDAL statistics (nonzero percent and nonzero mean). Samples are in sources.tsv order (sorted by item ID)."
+
+[[series]]
+id = "s2c1_l2a_snw_20m_snow_probability_u8"
+description = "Sen2Cor Level-2A snow probability per 20 m pixel, one full MGRS tile grid per Sentinel-2 acquisition."
+semantic_meaning = "Snow/ice probability in percent (0 = no snow detected, 100 = certain snow) produced by the Sen2Cor scene-classification snow detection for each 20 m pixel of a 109.8 km MGRS tile (ESA product file MSK_SNWPRB_20m, Earth Search asset 'snow'). Values are bimodal: large 0 and 100 populations with a continuous 1-99 band along snow edges, patchy melt and thin snow."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source raster is a native uint8 band (raster:bands data_type uint8, values 0..100). The recipe only removes the TIFF tiling, Deflate compression and horizontal predictor; values are written unchanged."
+source_resources = ["s2c1_l2a_snw_20m_cogs"]
+source_format = "cloud_optimized_geotiff"
+source_field = "SNW_20m.band_1.snow_probability_percent"
+filtered_input_path = "filtered/earthsearch_s2c1_l2a_snow_probability_u8/ingest_stats.json"
+filtering = "All 30,140,100 pixels of each of the 30 pinned full-footprint acquisitions are kept. Build and verify require values within 0..100, at least 20 distinct values, mode share <= 0.80, decoded nonzero percent within 0.005 of the header STATISTICS_VALID_PERCENT and nonzero mean within 1e-6 of STATISTICS_MEAN, and no duplicate grids."
+missing_value_policy = "The COG declares GDAL nodata = 0, which is the same code as 0 % snow probability. Only acquisitions with s2:nodata_pixel_percentage == 0 (full MGRS footprint, no swath-edge fill) were selected, so every 0 is a measured 0 % snow probability and is kept as stored. Values above 100, missing or truncated files, size/SHA-256 mismatches, unexpected TIFF layout, corrupt Deflate tiles, statistics disagreement, duplicate grids, and degenerate grids are fatal."
+conversion = "Parse the classic little-endian TIFF IFD0 (5490x5490, BitsPerSample 8, SampleFormat 1, Compression 8, Predictor 2, 512x512 tiles, 121 tiles). zlib-inflate each tile (exactly 512x512 values), undo horizontal predictor 2 as a running byte-wise sum modulo 256 along each tile row, crop the padded last tile row and column (5490 = 10x512 + 370), and write the uint8 grid row-major (y, x). No rescaling, resampling, remapping, or concatenation."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 snow probability grid (percent 0..100)"
+sample_geometry = "5490x5490_mgrs_tile_20m"
+sample_rank = 2
+sample_shape = [5490, 5490]
+sample_axes = ["y", "x"]
+natural_record_kind = "sentinel2_c1_l2a_mgrs_tile_snw_20m_grid"
+sample_count = 30
+total_size_bytes = 904203000
+output_path = "samples/earthsearch_s2c1_l2a_snow_probability_u8/s2c1_l2a_snw_20m_snow_probability_u8/"

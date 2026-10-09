@@ -1,0 +1,89 @@
+manifest_version = 1
+dataset_id = "noaa_coastal_maine_topobathy_classification_u8"
+name = "NOAA NGS 2022-23 Coastal Maine Topobathy Lidar Per-Point Classification UInt8"
+description = "Native LAS 1.4 PDRF-6 classification bytes (ASPRS topobathy domain profile: unclassified, ground, noise, bathymetric bottom 40, water surface 41, derived water surface 42, water column 45, submerged vegetation 64, ...) of 50 complete shoreline-straddling 500 m COPC tiles from one NOAA NGS Leica Chiroptera HawkEye 4X topobathymetric lidar project (Digital Coast ID 10423), one uint8 array per tile in stored point order."
+homepage = "https://coast.noaa.gov/dataviewer/#/lidar/search/where:ID=10423"
+
+[license]
+name = "NOAA Open Data Dissemination (NODD) open data; US Government work"
+spdx = "LicenseRef-NOAA-NODD-Open-Data"
+url = "https://raw.githubusercontent.com/awslabs/open-data-registry/main/datasets/noaa-coastal-lidar.yaml"
+citation = "National Geodetic Survey, [Date of Access]: 2022-2023 NOAA NGS Topobathy Lidar: Coastal Maine, https://www.fisheries.noaa.gov/inport/item/77189"
+notes = "AWS Open Data Registry entry for the noaa-nos-coastal-lidar-pds bucket: 'NOAA data disseminated through NODD are open to the public and can be used as desired. ... NOAA requests attribution for the use or dissemination of unaltered NOAA data. However, it is not permissible to state or imply endorsement by or affiliation with NOAA. If you modify NOAA data, you may not state or imply that it is original, unaltered NOAA data.' Project metadata XML: 'Access Constraints: None'; use constraints are accuracy/liability disclaimers only. The emitted arrays are an extracted field, not the unaltered NOAA files."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NOAA Office for Coastal Management distribution in the public NODD S3 bucket noaa-nos-coastal-lidar-pds (anonymous HTTPS, not requester-pays); data acquired by NV5 for the National Geodetic Survey."
+usage_notes = "Airborne coastal elevation point classification codes; no personal data. Only the per-point classification byte is emitted."
+
+[[origins]]
+id = "noaa_nodd_coastal_lidar"
+name = "NOAA Coastal Lidar Data (NODD), project 10423 geoid18 COPC tiles"
+url = "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/laz/geoid18/10423/index.html"
+type = "bucket"
+notes = "44,316 COPC .copc.laz tiles (1.79 TB) in 10 acquisition blocks block01_01..block04_03, plus metadata XML, per-tile minmax CSV, tile index and URL list."
+
+[[resources]]
+id = "maine_topobathy_copc_tiles"
+origin = "noaa_nodd_coastal_lidar"
+url = "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/laz/geoid18/10423/"
+type = "file"
+version = "S3 objects LastModified 2025-09-15 (NOAA compile 2025-09-12); pinned per tile in sources.tsv"
+access = "Direct anonymous HTTPS GET of the 50 exact keys listed in sources.tsv; resumable curl."
+size_bytes = 2076786177
+sha256 = ""
+local_path = "downloads/noaa_coastal_maine_topobathy_classification_u8/tiles/"
+notes = "50 tiles; sources.tsv pins key, byte size, S3 multipart ETag (8 MiB parts, verified locally as MD5 of part MD5s), LAS header point count (312,002,256 points total), published min/max z. Per-tile SHA-256 (from the first driver download, 2026-10-08) is pinned in sources.tsv column 11 and enforced by download.sh."
+
+[[resources]]
+id = "project_metadata_xml"
+origin = "noaa_nodd_coastal_lidar"
+url = "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/laz/geoid18/10423/metadata_2022_ngs_coastalMaine.xml"
+type = "file"
+version = "2025-09-15"
+access = "Direct anonymous HTTPS GET."
+size_bytes = 99264
+sha256 = "6ffc7e3f8c285e98837e42e98de87caf2031ef70def0c8030d2ed0f5dcd14906"
+local_path = "downloads/noaa_coastal_maine_topobathy_classification_u8/metadata_2022_ngs_coastalMaine.xml"
+notes = "ISO 19115-2 metadata: sensor lineage (NV5, Leica Chiroptera HawkEye 4X, LAS 1.4 PDRF 6), classification schemes, access/use constraints."
+
+[local_paths]
+downloads = "downloads/noaa_coastal_maine_topobathy_classification_u8/"
+filtered = "filtered/noaa_coastal_maine_topobathy_classification_u8/"
+index = "index/noaa_coastal_maine_topobathy_classification_u8/"
+samples = "samples/noaa_coastal_maine_topobathy_classification_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_coastal_maine_topobathy_classification_u8/samples.jsonl"
+summary = "Download 50 pinned COPC tiles, decode every LASzip chunk with the repository decoder tools/laz/laszip.py, and emit byte 16 (classification) of every 30-byte PDRF-6 point record as one raw uint8 array per tile."
+deterministic_notes = "Tile selection (scripts/select_tiles.py, reproduced by discover.sh from NOAA's own listing and per-tile minmax CSV; never uses decoded classes): full 500 m footprint (x and y extents >= 499 m), published z-extent straddling the shoreline (min_z <= -3.0 m and max_z >= +3.0 m NAVD88), then in each of the 10 blocks the 5 qualifying tiles at evenly spaced ranks floor((2i+1)m/10) of the key-sorted list. download.sh validates size, multipart ETag, LAS 1.4/PDRF 6/record length 30 header and pinned point count. build.sh checks decoded point count, the 15 extended points-by-return counts and XYZ bounds against each header, and rejects constant tiles or tiles with >1% codes outside the documented scheme. verify.sh re-decodes each tile through the whole-file decode path and compares bytes, hashes, histograms, index fields and manifest totals."
+
+[[series]]
+id = "maine_topobathy_classification_u8"
+description = "Per-point LAS 1.4 classification codes of NOAA NGS Coastal Maine topobathymetric lidar tiles."
+semantic_meaning = "One uint8 ASPRS classification code per lidar point (topobathy domain profile as delivered: 1 unclassified, 2 ground, 7 low noise, 18 high noise, 22 temporal exclusion, 40 bathymetric bottom / submerged topography, 41 water surface, 42 derived (synthetic) water surface, 43 submerged object, 45 water column, 64 submerged aquatic vegetation, 65 submerged temporal exclusion, and the contractor's 71/72/81/82/85 overlap-area codes where present), for every point of one 500 m x 500 m tile, in the tile's stored COPC (octree-node chunk) order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "LAS 1.4 point data record format 6 stores classification as a full byte at record offset 16; classification flags (synthetic/keypoint/withheld/overlap), scanner channel, scan direction and edge bits live in byte 15 and are not mixed in. The byte is copied unchanged."
+source_resources = ["maine_topobathy_copc_tiles"]
+source_format = "COPC LAS 1.4 point data record format 6, LASzip compressor 3 (layered chunked, POINT14 v3), variable-size chunks"
+source_field = "classification (PDRF-6 record byte 16)"
+filtered_input_path = "filtered/noaa_coastal_maine_topobathy_classification_u8/ingest_stats.json"
+filtering = "All points of the 50 selected tiles; no point is dropped (withheld, overlap and synthetic points keep their codes)."
+missing_value_policy = "None: the classification byte has no missing sentinel and every point record is emitted. Missing or invalid downloads, decoder layer-consumption errors, point-count, points-by-return or XYZ-bounds mismatches against the LAS header, constant tiles, and >1% undocumented codes per tile are fatal in build.sh; verify.sh applies the same no-drop policy and requires exact byte equality with a fresh decode."
+conversion = "tools/laz/laszip.py decodes each LASzip chunk to 30-byte PDRF-6 records; the build takes records[16::30] for every chunk in file order and writes the bytes unchanged as a raw uint8 array (endianness irrelevant for one-byte values, declared little)."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 array"
+sample_geometry = "per_point_attribute_in_stored_point_order"
+sample_rank = 1
+sample_axes = ["point"]
+natural_record_kind = "complete_500m_copc_lidar_tile"
+sample_count = 50
+total_size_bytes = 312002256
+output_path = "samples/noaa_coastal_maine_topobathy_classification_u8/maine_topobathy_classification_u8/"

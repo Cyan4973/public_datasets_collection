@@ -1,0 +1,26 @@
+# MDR Phonon Calculation Database (Togo, NIMS): VASP Finite-Displacement Supercell Atomic Forces from phonopy_params.yaml, Float64
+
+- Candidate id: `nims_mdr_phonondb_displacement_forces_f64`
+- Width: float64
+- Quantity: Atomic forces (eV/Angstrom, Cartesian x/y/z) on every atom of a DFT (VASP) supercell after each symmetry-reduced finite atomic displacement. These are the raw force sets phonopy uses to build harmonic force constants. Values are written with 8 decimals (e.g. -0.47763465), so they need about 9-10 significant digits, which is more than float32 holds.
+- Source: https://mdr.nims.go.jp/collections/d7aab932-8512-4b9a-b93d-b61f6e5e7019
+- Resources: https://mdr.nims.go.jp/datasets?collection=d7aab932-8512-4b9a-b93d-b61f6e5e7019&locale=en&page=1, https://mdr.nims.go.jp/datasets/6284f5b8-6390-4496-8eee-39835e917ddc, https://mdr.nims.go.jp/datasets/6284f5b8-6390-4496-8eee-39835e917ddc.md, https://mdrs-external.nims.go.jp/filesets/8d3a5d30-2d00-491b-8a5d-ea634fb83194/download
+- License: CC-BY-4.0 (per dataset record)
+- License evidence: https://mdr.nims.go.jp/datasets/6284f5b8-6390-4496-8eee-39835e917ddc
+- License quote: Dataset page: 'Creative Commons BY Attribution 4.0 International'; JSON-LD on every sampled record: "license":[{"@id":"cc-by-4.0"}]; site footer: 'Datasets are available under licenses specified on their pages.' 12 of 12 records sampled across listing pages 1/200/400 carry cc-by-4.0.
+- Natural record: One material's phonon calculation, i.e. one MDR dataset (one Materials Project mp-id), with its phonopy_params.yaml.xz. One sample = every force vector in its 'displacements:' block, flattened (N_displacements x N_supercell_atoms x 3).
+- Estimated samples: 3,000
+- Estimated primary values: 15,000,000
+- Estimated download bytes: 200,000,000
+- Estimated primary bytes: 120,000,000
+- Decode path: Discovery: paginate the collection listing (/datasets?collection=d7aab932-...&page=N, 20 records/page, 10,034 records). For each dataset id, fetch /datasets/<id>.md (or the HTML JSON-LD) to get the phonopy_params.yaml.xz fileset URL, and pin the id list plus sizes in the recipe. Fetch https://mdrs-external.nims.go.jp/filesets/<fileset>/download with curl. Decode with stdlib lzma, then line-parse the YAML: after 'displacements:', each '- atom: k' entry has 'displacement: [..]' and then 'forces:' lines '- [ fx, fy, fz ]'. Regex out the three floats and emit them as little-endian float64. Probe of mp-558244: 33 displacements, 14,256 force values, 288 exact zeros (2%), max |F| 0.4776. Optionally store the displacements as an auxiliary series.
+- Novelty kind: new_source
+- Measurement type: dft_supercell_forces
+- Instrument line: vasp_pbesol_phonopy_finite_displacement
+- Archive collection: nims_mdr
+- Novelty evidence: novelty.py --url https://mdr.nims.go.jp/collections/d7aab932-... --terms phonopy phonon 'force sets' returned no URL, recipe, registry, ledger or downstream matches. novelty.py --type dft_supercell_forces --archive nims_mdr: 0 and 0. The nearest existing material is figshare_rmd17_trajectories_f64 (MD forces on small organic molecules, full-precision kcal/mol/A). This is a different generator (periodic inorganic crystals, PBEsol VASP finite-displacement supercells), unit and value distribution: 8-decimal eV/A values, heavy mass near zero, and exact symmetry zeros.
+- Homogeneity: One code (VASP via phonopy), one database release by one author (A. Togo, phonopy 2.17 era), one unit (eV/A), one generation process (finite displacements of about 0.01 A in supercells). Materials differ in chemistry and size but not in regime. Keep forces only as primary. Displacement vectors (mostly 0.01 A) should be auxiliary or dropped, and supercell/lattice coordinates should not be mixed in.
+- Risks: Discovery takes about 2 HTTP requests per material (listing page plus record page), so a few thousand requests at a polite rate. The listing UI shows at most 10,000 records, which still covers the population. The listing sort order may drift, so the builder must pin the dataset-id and fileset list with sizes and sha256. Some high-symmetry materials have only a few hundred force values (the smallest xz is about 2.3 KB). The median sample is expected to be several thousand values, but the builder should check the median and may exclude records under 1,000 values only if that is documented as a floor rule rather than cherry-picking. Byte-gate similarity to rmd17 forces is possible but unlikely given the decimal-rounded eV/A distribution and the symmetry zeros. The materials originate from Materials Project structures, but the calculations and files are Togo/NIMS outputs under CC BY 4.0, not MP data objects.
+- Probe evidence: GET https://mdrs-external.nims.go.jp/filesets/8d3a5d30-.../download returned 200, 39,864 bytes, XZ data that decompresses to a 5,711-line phonopy_params.yaml (phonopy 2.17.1, physical_unit length angstrom, 33 displacements, 14,256 force floats). The collection listing shows 'MDR phonon calculation database(10034)' with 20 records/page and page=N pagination. JSON-LD on 12 sampled records gave phonopy_params.yaml.xz sizes from 2,324 to 61,616 bytes, all cc-by-4.0.
+
+Proposed by the autocollect scout on 2026-10-08 (transcript `.data/pipeline/logs/scout_64bit/scout.20261008_225019.jsonl`).

@@ -246,6 +246,7 @@ leap_climsim_lowres_e3sm_mmf_state_fields_f64	ok	19008000	152064000	825	23040	18
 google_clusterdata2011_task_usage_f32	ok	20950657	83802628	166	125555.5	502222	0	0	0	1	none	none
 google_open_buildings_v3_s2_073_geometry_f32	ok	21297542	85190168	4	2173642.5	8694570	0	0	0	1	none	none
 osm_daily_way_references_i64	ok	21307666	170461328	3	6908370	55266960	0	0	0	1	none	none
+hutubs_measured_hrir_f64	ok	21626880	173015040	96	225280	1802240	0	0	0	1	none	none
 dc_lidar_2015_classification_u8	ok	21697532	21697532	3	7454412	7454412	0	0	0	1	none	none
 dc_lidar_2015_intensity_u16	ok	21697532	43395064	3	7454412	14908824	0	0	0	1	none	none
 dc_lidar_2015_gps_time_f64	ok	21697532	173580256	3	7454412	59635296	0	0	0	1	none	none

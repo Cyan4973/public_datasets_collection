@@ -1,0 +1,108 @@
+manifest_version = 1
+dataset_id = "hutubs_measured_hrir_f64"
+name = "HUTUBS (TU Berlin) Measured Head-Related Impulse Responses: SOFA Data.IR, 96 Subjects x 440 Directions x 2 Ears x 256 Taps, Float64"
+description = "Native float64 measured binaural head-related impulse responses (HRIRs) of the HUTUBS HRTF database (Audio Communication Group, TU Berlin, with Huawei and Sennheiser): for each of the 96 database subjects, the SOFA SimpleFreeFieldHRIR variable Data.IR, shape [M=440 source directions, R=2 ears, N=256 taps] at 44.1 kHz, decoded from the subject's ppN_HRIRs_measured.sofa file (netCDF-4/HDF5, shuffle+deflate) and emitted in native C order as little-endian float64, one sample per subject. The numerically simulated (BEM) HRIRs are excluded."
+homepage = "https://depositonce.tu-berlin.de/items/dc2a3076-a291-417e-97f0-7697e332c960"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Fabian Brinkmann, Manoj Dinakaran, Robert Pelzer, Jan Joschka Wohlgemuth, Fabian Seipel, Daniel Voss, Peter Grosche, Stefan Weinzierl (2019). The HUTUBS head-related transfer function (HRTF) database. DepositOnce, TU Berlin. https://doi.org/10.14279/depositonce-8487. Related article (DepositOnce 'Is Supplement To'): Brinkmann et al. (2019), J. Audio Eng. Soc., https://doi.org/10.17743/jaes.2019.0024."
+notes = "Three independent statements of the grant, all checked: (1) the DepositOnce item page (DOI 10.14279/depositonce-8487 resolves to handle 11303/9429 = item dc2a3076-...) carries dc.rights.uri = https://creativecommons.org/licenses/by/4.0/ and is displayed as 'Creative Commons Attribution (CC BY)'; download.sh fetches the page and requires that field in the HUTUBS item's embedded metadata block; (2) every downloaded ppN_HRIRs_measured.sofa carries the global attribute License = 'cc-by 4.0 (https://creativecommons.org/licenses/by/4.0/)' plus DatabaseName = 'HUTUBS'; download.sh and build.sh require both exactly, so the grant is attached to the exact objects decoded; (3) the database Documentation.pdf states 'The data is provided under the free culture CC BY license that grants unlimited access for everyone' with the CC BY 4.0 URL. The files are fetched from the sofacoustics.org SOFA database mirror (the SOFA/AES69 community data server) rather than from the DepositOnce HRIRs.zip (1.27 GB, mixes measured and simulated data); the per-file DatabaseName/License attributes identify them as the HUTUBS release. Attribution: cite the DOI and article above."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Published research database. Subjects are identified only by pseudonymous IDs pp1..pp96 (SOFA ListenerShortName); the DepositOnce deposit includes the depositor's privacy/consent statement and the documentation marks which data parts each subject consented to publish (HRIRs are published for all 96). Only acoustic impulse responses are collected; head meshes, anthropometric measures and headphone responses are not downloaded."
+usage_notes = "Subjects 1 and 96 are two measurements of the FABIAN head-and-torso simulator (a dummy head), and subjects 22 and 88 are two measurements of one human subject (Documentation.pdf, 'Database' section). All four are kept: each is a separate acoustic measurement with its own noise and positioning; they are flagged per sample in the index (subject_note)."
+
+[[origins]]
+id = "sofacoustics_hutubs"
+name = "SOFA database mirror (sofacoustics.org), HUTUBS directory"
+url = "https://sofacoustics.org/data/database/hutubs/"
+type = "website"
+notes = "Apache directory listing with 96 ppN_HRIRs_measured.sofa (1.65-1.66 MB each), 96 ppN_HRIRs_simulated.sofa (~5.8 MB, BEM, 1730 directions; excluded), 58 head meshes (.ply), anthropometric CSV/PDF and Documentation.pdf. All SOFA files Last-Modified 2018-10-23. No ETags; anonymous HTTPS with range support."
+
+[[origins]]
+id = "depositonce"
+name = "DepositOnce (TU Berlin institutional repository) item 'The HUTUBS head-related transfer function (HRTF) database'"
+url = "https://depositonce.tu-berlin.de/items/dc2a3076-a291-417e-97f0-7697e332c960"
+type = "repository"
+notes = "Canonical deposit (DOI 10.14279/depositonce-8487, issued 2019, in DepositOnce since 2019-05-14): Documentation.pdf, HRIRs.zip (1.27 GB), HpIRs.zip, anthropometric measures, 3D head meshes. Used as license evidence only."
+
+[[resources]]
+id = "measured_hrir_sofa"
+origin = "sofacoustics_hutubs"
+url = "https://sofacoustics.org/data/database/hutubs/pp{N}_HRIRs_measured.sofa"
+type = "file"
+version = "HUTUBS 2019 release; files dated 2018-10-23 (SOFA DateModified), APIVersion 1.0.3, SOFAConventions SimpleFreeFieldHRIR 1.0"
+access = "Anonymous HTTPS, 96 files N=1..96 listed with exact size, Last-Modified and sha256 in files.tsv; resumable curl into .part, size check, sha256 check, semantic validation, then rename."
+size_bytes = 159182969
+sha256 = ""
+local_path = "downloads/hutubs_measured_hrir_f64/"
+notes = "Per-file sha256 values for all 96 files are pinned in files.tsv (pp1 and pp2 from author-phase probes, the other 94 from the first full download of 2026-10-09, cross-checked against the SHA256SUMS that download.sh writes); download.sh and build.sh enforce them. netCDF-4/HDF5 superblock v2, dense root links and attributes, 16 SOFA variables; Data.IR is H5T_IEEE_F64LE [440,2,256] stored as one chunk with shuffle(8)+deflate(level 1)."
+
+[[resources]]
+id = "documentation_pdf"
+origin = "sofacoustics_hutubs"
+url = "https://sofacoustics.org/data/database/hutubs/Documentation.pdf"
+type = "file"
+version = "Last-Modified 2020-01-31 (same 1.63 MB file as on DepositOnce)"
+access = "Anonymous HTTPS; size and sha256 pinned in download.sh."
+size_bytes = 1707195
+sha256 = "cb52311e463236bd37890d19dbbbf2dda222b135425d569684dfed07ce2571a4"
+local_path = "downloads/hutubs_measured_hrir_f64/docs/Documentation.pdf"
+notes = "Provenance only: subject table, FABIAN and repeated-subject statement, measurement and simulation grids (440 vs 1730 points), license statement."
+
+[[resources]]
+id = "depositonce_item_page"
+origin = "depositonce"
+url = "https://depositonce.tu-berlin.de/items/dc2a3076-a291-417e-97f0-7697e332c960"
+type = "other"
+version = "live page at download time"
+access = "Anonymous HTTPS; download.sh requires dc.rights.uri = CC BY 4.0 and the HUTUBS dc.title in the metadata block of handle 11303/9429."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/hutubs_measured_hrir_f64/docs/depositonce_item.html"
+notes = "License evidence only; not decoded into samples."
+
+[local_paths]
+downloads = "downloads/hutubs_measured_hrir_f64/"
+filtered = "filtered/hutubs_measured_hrir_f64/"
+index = "index/hutubs_measured_hrir_f64/"
+samples = "samples/hutubs_measured_hrir_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/hutubs_measured_hrir_f64/samples.jsonl"
+summary = "Check the DepositOnce CC BY 4.0 record, fetch the 96 pinned measured-HRIR SOFA files and the documentation, walk each file's HDF5 metadata with a pure-stdlib reader (lookup3 checksums verified), require the HUTUBS/CC BY 4.0/SimpleFreeFieldHRIR attributes and an f64 LE Data.IR of shape [440,2,256] at 44.1 kHz on one shared 440-direction grid, inflate and byte-unshuffle the single Data.IR chunk, and emit it unchanged as one raw little-endian float64 sample per subject."
+deterministic_notes = "files.tsv pins the 96 file names (subjects 1..96), sizes, Last-Modified and sha256 (discover.sh documents how the list was resolved from the Apache listing: exactly the *_HRIRs_measured.sofa entries). Every file must have: global attributes DatabaseName='HUTUBS', License='cc-by 4.0 (https://creativecommons.org/licenses/by/4.0/)', Conventions='SOFA', SOFAConventions='SimpleFreeFieldHRIR' 1.0, DataType='FIR', RoomType='free field', Title='head-related impulse responses', ListenerShortName='pp<N>'; exactly the 16 SOFA FIR root variables, with name and creation-order link indexes agreeing; Data.IR datatype bytes 11203f000800000000004000340b0034ff030000 (IEEE f64 LE), shape (440,2,256), one chunk (440,2,256)x8 at offset 0 with zero filter mask, pipeline exactly shuffle(8)+deflate, no _FillValue/missing_value/scale_factor/add_offset/valid_* attributes; Data.SamplingRate=44100; SourcePosition (440,3) spherical 'degree, degree, metre' byte-identical across all 96 files. Samples are written in subject order to samples/<id>/measured_hrir_f64/pp<NNN>.bin; index rows carry subject, subject_note (FABIAN / repeated-subject flags), source sha256, Data.Delay, grid sha256, min/max (from the stored f64), distinct and zero counts, float32-exact count and sample sha256; filtered/<id>/build_summary.json holds totals. build.sh and verify.sh first run scripts/selftest.py (synthetic dense-link, dense-attribute SOFA file; 15 build rejection cases and 3 verify tamper cases). verify.sh re-resolves Data.IR through the creation-order index, re-inflates with zlib.decompress and unshuffles with an independent per-element routine, byte-compares every sample, recomputes statistics with array('d'), and rejects NaN/inf/fill, all-zero or constant (direction, ear) rows, fewer than 100,000 distinct values per sample, duplicate samples, orphan sample files, and manifest count/size mismatches."
+
+[[series]]
+id = "measured_hrir_f64"
+description = "One HUTUBS subject's measured binaural head-related impulse responses: 440 loudspeaker directions x 2 blocked-ear-canal microphones x 256 taps at 44.1 kHz."
+semantic_meaning = "Measured free-field head-related impulse response amplitude (dimensionless, deconvolved and processed linear impulse-response values, realized range -3.357 to 2.688 over all 96 subjects): the acoustic transfer from a loudspeaker at one of 440 directions on a full-sphere grid (SourcePosition, spherical azimuth/elevation in degrees, elevations -90..90 in 10-degree rings, radius 1.47 m) to the left and right blocked ear-canal entrances of one subject, recorded in the anechoic chamber of TU Berlin with one rig and one processing chain for all subjects. Axes: M = measurement direction (440, SOFA order), R = receiver/ear (2: index 0 left, ReceiverPosition y > 0; index 1 right), N = tap (256 samples at 44.1 kHz, about 5.8 ms). Taps 0 and 255 are exactly zero (stored as +0.0 or -0.0) in every row of every subject (window edges) and no other tap is ever exactly zero; the direct-path peak falls inside the window and the tails decay (|x| <= 0.043 over taps 200-255 across all subjects)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Data.IR is stored by the producer as IEEE-754 float64 little-endian; after inflate and HDF5 byte-unshuffle the stored 8-byte patterns are copied unchanged. Not widened float32: in every one of the 96 subjects only the 1,760 exact zeros (taps 0 and 255 of every row) are float32-representable (0.78% of values), and 223,522 of 225,280 values are distinct bit patterns (all nonzero values plus +0.0 and -0.0). The f64 width is the producer's own (the SOFA API for Matlab writes double)."
+source_resources = ["measured_hrir_sofa"]
+source_format = "SOFA (AES69) SimpleFreeFieldHRIR file: netCDF-4 / HDF5 superblock v2, Data.IR chunked shuffle(8)+deflate float64"
+source_field = "Data.IR (M=440, R=2, N=256) float64"
+filtered_input_path = "filtered/hutubs_measured_hrir_f64/build_summary.json"
+filtering = "All 96 ppN_HRIRs_measured.sofa files of the HUTUBS release (subjects 1..96, the full measured population). Excluded upstream objects: ppN_HRIRs_simulated.sofa (numerically simulated BEM HRIRs on a 1730-point grid, a different generation process), spherical-harmonics .mat files, headphone impulse responses, head meshes and anthropometry. From each file only Data.IR is emitted; Data.Delay (all zero in probed files; recorded in the index), Data.SamplingRate, SourcePosition, ListenerPosition/View/Up, ReceiverPosition and EmitterPosition are metadata and are not written as samples. No directions, ears or taps are dropped."
+missing_value_policy = "Data.IR defines the netCDF default double fill (9.969209968386869e36) in its HDF5 fill-value message but has no _FillValue attribute; the single chunk must be present. Fatal in download validation, build and verify: any NaN or infinity, any |x| >= 1000 (netCDF fill or corruption; realized values stay within -3.36..2.69), any (direction, ear) row that is all zero (an unmeasured direction) or constant, and fewer than 100,000 distinct values in a subject. Exact zeros at taps 0 and 255 (both signed-zero bit patterns occur) are genuine window values and are kept unchanged. No value is imputed, clipped, normalized, resampled or reordered."
+conversion = "Resolve Data.IR through the root group's dense link storage (fractal heap + v2 B-tree name index, lookup3 name hashes checked); read its version-1 chunk B-tree (exactly one chunk); zlib-inflate the stored chunk to exactly 440*2*256*8 = 1,802,240 bytes and undo the HDF5 byte shuffle (byte plane j of 225,280 elements -> byte j of each element). The result is the [440,2,256] array in C order (direction-major, then ear, then tap), written as little-endian float64 to one file per subject."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 3-D array [440, 2, 256] in C order"
+sample_geometry = "hrir_set_direction_ear_tap"
+sample_rank = 3
+sample_axes = ["measurement_direction", "receiver_ear", "tap"]
+natural_record_kind = "one_subject_measured_hrir_sofa_file"
+sample_count = 96
+total_size_bytes = 173015040
+output_path = "samples/hutubs_measured_hrir_f64/measured_hrir_f64/"

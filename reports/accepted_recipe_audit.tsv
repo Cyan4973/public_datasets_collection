@@ -234,6 +234,7 @@ orex_ola_l2_lidar_point_xyz_f64	ok	15261174	122089392	44	293746.5	2349972	0	0	0	
 noaa_nexrad_level3_nids_radials_u8	ok	15897600	15897600	96	165600	165600	0	0	0	1	none	none
 msd_hippocampus_segmentation_labels_u8	ok	16221128	16221128	258	62829	62829	0	0	0	1	none	none
 igs_final_satellite_clock_bias_f64	ok	16369771	130958168	5688	2880	23040	0	0	0	1	none	none
+zenodo_starlink_irtt_rtt_i32	ok	16563890	66255560	1432	11655.5	46622	0	0	0	1	none	none
 gfz_gracefo_fgm_acal_bnec_f64	ok	16588788	132710304	64	259200	2073600	0	0	0	1	none	none
 modis_active_fire_mask_u8	ok	17280000	17280000	12	1440000	1440000	0	0	0	1	none	none
 tcia_lung_pet_ct_dx_u16	ok	18080000	36160000	3	5800000	11600000	0	0	0	1	none	none

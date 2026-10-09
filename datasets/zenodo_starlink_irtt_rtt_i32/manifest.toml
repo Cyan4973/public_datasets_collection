@@ -1,0 +1,117 @@
+manifest_version = 1
+dataset_id = "zenodo_starlink_irtt_rtt_i32"
+name = "Starlink IRTT 10 ms UDP Probe RTT and Receive Delay, Nanosecond Int32 per 2-Minute Session"
+description = "Per-probe round-trip time and NTP-synchronized one-way receive (downstream) delay, in integer nanoseconds, measured by IRTT every 10 ms over a residential Starlink link (Victoria BC dish, Seattle PoP) to a GCP us-west1-a server; one sample per 2-minute IRTT session per delay field (two fields), every session from 2023-09-13 to 2023-09-17. The one-way send delay is omitted as a near-duplicate view (send ~= rtt - receive)."
+homepage = "https://doi.org/10.5281/zenodo.10020034"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Zhao, Jinwei and Pan, Jianping. Starlink Latency and Downlink Throughput Measurement Dataset (v20230917). Zenodo, DOI 10.5281/zenodo.10020034. Related paper: Pan, Zhao, Cai, Measuring a Low-Earth-Orbit Satellite Network, IEEE PIMRC 2023 (arXiv:2307.06863)."
+notes = "Zenodo record 10020034 metadata declares license id cc-by-4.0 (open access); download.sh re-checks it on every run. The upstream README asks users to cite the Zenodo DOI and the PIMRC'23 paper."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Zenodo deposit by the measuring researchers (University of Victoria). The authors redacted server IPs and domain names before publication. The only remaining address is a private RFC1918 client address in the IRTT config block, and the recipe does not emit it."
+usage_notes = "Only integer delay measurements are emitted. Timestamps, addresses, system info and the iPerf3 throughput files are not emitted."
+
+[[origins]]
+id = "zenodo_10020034"
+name = "Starlink Latency and Downlink Throughput Measurement Dataset (Zenodo record 10020034, version v20230917)"
+url = "https://zenodo.org/records/10020034"
+type = "repository"
+notes = "Record API https://zenodo.org/api/records/10020034 supplies license, file sizes and MD5 checksums."
+
+[[resources]]
+id = "data_archive"
+origin = "zenodo_10020034"
+url = "https://zenodo.org/api/records/10020034/files/data-20230913-20230917.tar.zst/content"
+type = "archive"
+version = "v20230917"
+access = "Direct public anonymous download (resumable curl, stall-based abort)."
+size_bytes = 1169608066
+md5 = "7c1fecd817616b49eecd414ecda31c6d"
+sha256 = ""
+local_path = "downloads/zenodo_starlink_irtt_rtt_i32/data-20230913-20230917.tar.zst"
+notes = "Single zstd-compressed POSIX tar (~9.7 GB decompressed) holding data/<YYYY-MM-DD>/irtt-10ms-2m-<ts>.json and iperf3-2m-<ts>.json per 10-minute slot. The pinned identity is the Zenodo MD5 from the record API. The archive is streamed through `zstd -dc` at build and verify time and is never extracted to disk."
+
+[[resources]]
+id = "readme"
+origin = "zenodo_10020034"
+url = "https://zenodo.org/api/records/10020034/files/README.txt/content"
+type = "file"
+version = "v20230917"
+access = "Direct public anonymous download."
+size_bytes = 3649
+md5 = "4c3cd21a6757c266b301997dfaebc340"
+sha256 = ""
+local_path = "downloads/zenodo_starlink_irtt_rtt_i32/README.txt"
+notes = "Upstream description of the measurement setup (IRTT 10 ms interval, 2-minute sessions every 10 minutes, NTP via Google Public NTP)."
+
+[local_paths]
+downloads = "downloads/zenodo_starlink_irtt_rtt_i32/"
+filtered = "filtered/zenodo_starlink_irtt_rtt_i32/"
+index = "index/zenodo_starlink_irtt_rtt_i32/"
+samples = "samples/zenodo_starlink_irtt_rtt_i32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_starlink_irtt_rtt_i32/samples.jsonl"
+summary = "Validate the Zenodo record (identity, CC-BY-4.0, pinned size and MD5), fetch the tar.zst, then stream it through zstd into a sequential tar reader. Parse every IRTT session JSON and emit delay.rtt and delay.receive as two separate little-endian int32 nanosecond series, one sample per session per field. delay.send is not emitted: it is ~= rtt - receive and the breadth gate measured it redundant."
+deterministic_notes = "Pinned record 10020034 v20230917, archive size 1,169,608,066 bytes, MD5 7c1fecd817616b49eecd414ecda31c6d. Only members matching data/2023-09-1[3-7]/irtt-10ms-2m-<ts>.json are parsed, and each session must have config.params interval=10 ms and duration=120 s. Values stay in round_trips array (seqno) order. Every value must be a JSON integer within int32 range, else the build fails. All five dates must be realized for both series. verify.sh re-streams the archive and checks every sample byte-for-byte against a fresh decode. It also checks each sample's count, sum, min and max against IRTT's own per-session stats block (n/total/min/max), and rejects constant samples, stray files, any directory under samples/<id>/ other than the two series directories, and manifest/index drift. The ingest_stats.json file under filtered/ records per-session lost-state counts and member SHA-256 values."
+
+[[series]]
+id = "irtt_rtt_ns_i32"
+description = "IRTT per-probe round-trip time over Starlink, nanoseconds."
+semantic_meaning = "Round-trip delay of each 60-byte UDP probe (client send to client receive, minus server processing time as computed by IRTT), sent every 10 ms. Values span roughly 20 ms to hundreds of ms."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Upstream JSON stores Go int64 nanoseconds. Each value is range-checked and stored unchanged as int32 (a narrowing cast, not a remap). Values use about 25-30 bits. Identity: IRTT computes rtt from monotonic clocks minus server processing time, while the one-way delays use NTP-synced wall clocks, so rtt ~= send + receive within about 1 us (true for 89.5-98% of probes in every session). The one-way send delay is therefore omitted from this recipe as a near-duplicate view (~= rtt - receive) that the zlsim breadth gate also measured redundant (vs downstream gas_feat, distance 0.0303, loss 1.88%)."
+source_resources = ["data_archive"]
+source_format = "IRTT client JSON output (irtt client -o), one file per session inside a zstd-compressed tar"
+source_field = "round_trips[].delay.rtt"
+filtered_input_path = "filtered/zenodo_starlink_irtt_rtt_i32/ingest_stats.json"
+filtering = "Every IRTT session in the archive (all five day folders, 2023-09-13 to 2023-09-17). iPerf3 JSON members are skipped."
+missing_value_policy = "A value is emitted for every round_trip whose delay object contains `rtt`. In practice that means lost == 'false'. Probes lost upstream or downstream (lost in {'true', 'true_up', 'true_down'}) carry no rtt and are dropped, never filled. Per-sample probes_total, probes_dropped and lost_counts are recorded in the index. A session with no rtt values would emit no sample and be counted in ingest_stats. Non-integer or out-of-int32 values are fatal."
+conversion = "json.loads each session member, take delay.rtt in round_trips array order, struct.pack('<i') per value. One file per session: samples/<id>/irtt_rtt_ns_i32/irtt-10ms-2m-<UTC timestamp>.bin."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian int32 nanosecond delays"
+sample_geometry = "per_probe_time_series"
+sample_rank = 1
+sample_axes = ["probe_seqno"]
+natural_record_kind = "irtt_two_minute_measurement_session"
+sample_count = 716
+total_size_bytes = 33127780
+output_path = "samples/zenodo_starlink_irtt_rtt_i32/irtt_rtt_ns_i32/"
+
+[[series]]
+id = "irtt_receive_delay_ns_i32"
+description = "IRTT per-probe one-way receive (downstream) delay over Starlink, nanoseconds."
+semantic_meaning = "Client receive wall time minus server send wall time for each probe. It depends on NTP sync (clock offset between hosts) and could in principle be negative; none were observed. Together with rtt it determines the omitted send delay (send ~= rtt - receive)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Upstream Go int64 nanoseconds, range-checked into signed int32 unchanged. Signed storage allows for clock-offset negatives."
+source_resources = ["data_archive"]
+source_format = "IRTT client JSON output (irtt client -o), one file per session inside a zstd-compressed tar"
+source_field = "round_trips[].delay.receive"
+filtered_input_path = "filtered/zenodo_starlink_irtt_rtt_i32/ingest_stats.json"
+filtering = "Every IRTT session in the archive (all five day folders). iPerf3 JSON members are skipped."
+missing_value_policy = "A value is emitted for every round_trip whose delay object contains `receive`, whatever its lost state. Probes without it are dropped and counted, never filled. Non-integer or out-of-int32 values are fatal."
+conversion = "json.loads each session member, take delay.receive in round_trips array order, struct.pack('<i') per value. One file per session."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian int32 nanosecond delays"
+sample_geometry = "per_probe_time_series"
+sample_rank = 1
+sample_axes = ["probe_seqno"]
+natural_record_kind = "irtt_two_minute_measurement_session"
+sample_count = 716
+total_size_bytes = 33127780
+output_path = "samples/zenodo_starlink_irtt_rtt_i32/irtt_receive_delay_ns_i32/"

@@ -1,0 +1,22 @@
+# dtu_deepdft_qm9_vasp_chgcar_density_f64
+
+- Date: 2026-10-09
+- Status: rejected
+- Candidate dataset: DTU DeepDFT QM9 VASP (PBE) Molecular Charge-Density Volumes: CHGCAR Real-Space Grid rho*V Float64
+- Source: https://data.dtu.dk/articles/dataset/QM9_Charge_Densities_and_Energies_Calculated_with_VASP/16794500
+- Why it looked promising: see `pipeline/cards/dtu_deepdft_qm9_vasp_chgcar_density_f64.md`
+- Failure class: autocollect driver limit
+- What happened: byte-level breadth: every primary series is compression- and feature-equivalent to an existing family: qm9_vasp_chgcar_total_density_rhov_f64 ~ local:gfz_gracefo_fgm_acal_bnec_f64:gracefo_fgm_acal_corr_b_nec_f64 (distance 0.05, loss +0.025)
+- Evidence:
+  - 2026-10-09T10:10:18 proposed: {"log": ".data/pipeline/logs/scout_64bit/scout.20261009_095410.jsonl"}
+  - 2026-10-09T10:13:23 screened: {"decision": "approve", "reason": "New modality: 3-D DFT electron-density volumes. novelty.py finds no recipe, registry or downstream match; the only ledger hit is the Materials Project CHGCAR card, rejected on rights. This source has explicit CC BY 4.0 in the figshare API metadata for article 16794
+  - 2026-10-09T10:21:05 builder: {"phase": "author", "status": "ready_for_download", "log": ".data/pipeline/logs/dtu_deepdft_qm9_vasp_chgcar_density_f64/builder.20261009_101323.jsonl", "cost": 1.5092510000000003}
+  - 2026-10-09T10:31:05 download: {"rc": 0, "reason": "", "bytes": 500140540, "log": ".data/pipeline/logs/dtu_deepdft_qm9_vasp_chgcar_density_f64/download.20261009_102511.log"}
+  - 2026-10-09T10:38:31 builder: {"phase": "build", "status": "ready_for_judge", "log": ".data/pipeline/logs/dtu_deepdft_qm9_vasp_chgcar_density_f64/builder.20261009_103542.jsonl", "cost": 0.2599056}
+  - 2026-10-09T11:08:50 rebuild: {"ok": true}
+  - 2026-10-09T11:11:31 download: {"rc": 0, "reason": "", "bytes": 812134279, "log": ".data/pipeline/logs/dtu_deepdft_qm9_vasp_chgcar_density_f64/download.20261009_111116.log"}
+  - 2026-10-09T11:13:34 builder: {"phase": "build", "status": "ready_for_judge", "log": ".data/pipeline/logs/dtu_deepdft_qm9_vasp_chgcar_density_f64/builder.20261009_111131.jsonl", "cost": 0.248056}
+  - 2026-10-09T11:15:56 rebuild: {"ok": true}
+- Logs: `.data/pipeline/logs/dtu_deepdft_qm9_vasp_chgcar_density_f64/`, `.data/logs/dtu_deepdft_qm9_vasp_chgcar_density_f64/`
+- Decision: rejected
+- Retry conditions: Retry only with material whose bytes differ measurably (zlsim.py gate) from the existing families.

@@ -347,6 +347,7 @@ earthscope_4p_mt_magnetic_field_counts_i32	ok	86447694	345790776	135	777026	3108
 geoschem_gc1470_fullchem_restart_species_f64	ok	87039360	696314880	365	238464	1907712	0	0	0	1	none	none
 the_well_post_neutron_star_merger_density_f32	ok	87588864	350355456	54	1622016	6488064	0	0	0	1	none	none
 rgl_epfl_isotropic_spectral_brdf_f32	ok	88258560	353034240	51	1597440	6389760	0	0	0	1	none	none
+cellpainting_cdrp_cellprofiler_well_profiles_f64	ok	88274000	706192000	50	1766400	14131200	0	0	0	1	none	none
 zenodo_epfl_loraiq_sf10_iq_frames_f32	ok	89624782	358499128	256	240023	960092	0	0	0	1	none	none
 nasa_pds_cassini_vims_qube_i16	ok	89698752	179397504	120	563200	1126400	0	0	0	1	none	none
 pfam_profile_hmm_match_emissions_f32	ok	93130540	372522160	27496	2580	10320	0	0	0	1	none	none

@@ -1,0 +1,96 @@
+manifest_version = 1
+dataset_id = "cellpainting_cdrp_cellprofiler_well_profiles_f64"
+name = "Cell Painting Gallery cpg0012 CDRP CellProfiler Per-Well Morphological Profiles Float64"
+description = "Per-well aggregated CellProfiler morphology, intensity, texture, granularity, radial-distribution, correlation and image-quality features (4,600 columns) from the CDRP bioactive-compound Cell Painting screen (U2OS cells, 5 stains), one well-by-feature float64 matrix per 384-well plate for the first 50 CDRP plates."
+homepage = "https://registry.opendata.aws/cellpainting-gallery/"
+
+[license]
+name = "Creative Commons Zero 1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "Bray M-A et al. (2017) A dataset of images and morphological profiles of 30 000 small-molecule treatments using the Cell Painting assay. GigaScience 6(12):giw014, https://doi.org/10.1093/gigascience/giw014; Wawer MJ et al. (2014) PNAS 111(30):10911-10916, https://doi.org/10.1073/pnas.1410933111; Cell Painting Gallery, Weisbart E et al. (2024) Nature Methods."
+notes = "The AWS Open Data Registry entry for the Cell Painting Gallery (awslabs/open-data-registry datasets/cellpainting-gallery.yaml) states: 'License: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication, but please do cite the corresponding publication for each dataset'. download.sh re-fetches that entry and fails if the CC0 statement disappears."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official Broad Institute Cell Painting Gallery bucket (s3://cellpainting-gallery, anonymous public access, AWS Open Data sponsorship). Cultured U2OS cell line treated with small molecules; no human-subject or personal data."
+usage_notes = "Cite Bray et al. 2017 and the Cell Painting Gallery. Only the numeric CellProfiler feature columns are emitted; plate/well identifiers and object bookkeeping columns are excluded."
+
+[[origins]]
+id = "cellpainting_gallery"
+name = "Cell Painting Gallery (cpg0012-wawer-bioactivecompoundprofiling)"
+url = "https://cellpainting-gallery.s3.amazonaws.com/?list-type=2&prefix=cpg0012-wawer-bioactivecompoundprofiling/broad/workspace/backend/CDRP/"
+type = "bucket"
+notes = "Anonymous S3 ListObjectsV2 shows 405 CDRP plate CSVs (13,715,790,396 bytes) next to 7.8-8.9 GB per-plate .sqlite files that are never fetched. The backend CSVs are the 2023 re-profiling of the original CDRP images (LastModified 2023-02-04/05)."
+
+[[origins]]
+id = "aws_open_data_registry"
+name = "AWS Open Data Registry entry"
+url = "https://raw.githubusercontent.com/awslabs/open-data-registry/main/datasets/cellpainting-gallery.yaml"
+type = "repository"
+notes = "License evidence (CC0 1.0); fetched and grep-checked by download.sh."
+
+[[resources]]
+id = "cdrp_backend_plate_csvs"
+origin = "cellpainting_gallery"
+url = "https://cellpainting-gallery.s3.amazonaws.com/cpg0012-wawer-bioactivecompoundprofiling/broad/workspace/backend/CDRP/<plate>/<plate>.csv"
+type = "file"
+version = "S3 objects as listed 2026-10-09 (LastModified 2023-02-04..05); exact plate ids, sizes and multipart ETags pinned in plates.tsv"
+access = "Direct anonymous HTTPS GET; download.sh checks each object's live ETag and Content-Length against plates.tsv before a resumable curl transfer."
+size_bytes = 1723183926
+sha256 = ""
+local_path = "downloads/cellpainting_cdrp_cellprofiler_well_profiles_f64/plates/"
+notes = "50 plates: the first 50 CDRP plate ids (24277..24588) among objects larger than 30,000,000 bytes; none in that id range is smaller. S3 ETags are multipart (-4/-5 suffix), so no content MD5 is published; identity is size + ETag + pinned header SHA-256 + per-row structural validation."
+
+[[resources]]
+id = "registry_license_yaml"
+origin = "aws_open_data_registry"
+url = "https://raw.githubusercontent.com/awslabs/open-data-registry/main/datasets/cellpainting-gallery.yaml"
+type = "file"
+version = "live"
+access = "Direct public download (small)."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/cellpainting_cdrp_cellprofiler_well_profiles_f64/license/cellpainting-gallery.yaml"
+notes = "Not pinned by hash because the registry YAML is edited over time; download.sh requires the exact CC0 license line and the bucket ARN."
+
+[local_paths]
+downloads = "downloads/cellpainting_cdrp_cellprofiler_well_profiles_f64/"
+filtered = "filtered/cellpainting_cdrp_cellprofiler_well_profiles_f64/"
+index = "index/cellpainting_cdrp_cellprofiler_well_profiles_f64/"
+samples = "samples/cellpainting_cdrp_cellprofiler_well_profiles_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/cellpainting_cdrp_cellprofiler_well_profiles_f64/samples.jsonl"
+summary = "Fetch 50 pinned CDRP per-plate CellProfiler profile CSVs, drop identifier/bookkeeping/location columns by fixed name patterns, and emit one row-major (well x 4,600 feature) little-endian float64 matrix per plate."
+deterministic_notes = "plates.tsv pins plate ids, sizes, ETags and keys (reproducible with discover.sh). Every CSV header must equal the pinned 4,725-column header (SHA-256 4d3886b4...e343) and the kept 4,600-column list must hash to 0f6b7a99...4eb4, so column order is fixed and identical across plates. Exclusion is by name pattern only, never per plate or data-dependent. Rows keep source order (a01..p24). verify.sh re-parses each CSV with an independent str.split parser and requires byte-identical samples, matching index fields, no duplicate well rows, mode fraction <= 0.5 per sample, and <= 5% of columns constant across the whole output."
+
+[[series]]
+id = "cdrp_well_profile_features_f64"
+description = "Per-well aggregated CellProfiler image-based morphological profile features, one well-by-feature matrix per CDRP assay plate."
+semantic_meaning = "Each row is one well of a 384-well plate (U2OS cells treated with a compound or DMSO, imaged at 6 sites in 5 channels: DNA, ER, RNA, AGP, Mito). Each of the 4,600 columns is a CellProfiler measurement aggregated over the well's cells (Cells_*, Cytoplasm_*, Nuclei_* compartments: AreaShape, Intensity, Texture, Granularity, RadialDistribution, Correlation, Neighbors distances/angles/counts, ObjectSkeleton) or over its 6 site images (Image_*: Granularity, Texture, ImageQuality, Threshold). Units are mixed per column (pixels, pixel^2, normalized intensity in [0,1], dimensionless ratios), fixed by the column position."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Source cells are decimal renderings of IEEE-754 doubles written by the Broad profiling pipeline (up to 17 significant digits, e.g. 0.9714556719755841); Python float() recovers the exact double, so the stored float64 is the source value without rounding."
+source_resources = ["cdrp_backend_plate_csvs"]
+source_format = "Cell Painting Gallery backend per-plate aggregated profile CSV (CellProfiler + pycytominer/cytominer per-well aggregation)"
+source_field = "the 4,600 Cells_*/Cytoplasm_*/Nuclei_*/Image_* feature columns of each well row, after the fixed name-pattern exclusions"
+filtered_input_path = "filtered/cellpainting_cdrp_cellprofiler_well_profiles_f64/ingest_stats.json"
+filtering = "Keep plates listed in plates.tsv. Exclude 125 of 4,725 columns by fixed name patterns: ^Metadata_ (9: plate, well, site and object counts), _Number_Object_Number$ (2), _Parent_ (1), _Children_.*_Count$ (2), _Neighbors_(First|Second)ClosestObjectNumber_ (6: object IDs), _Location_ (95: pixel centroids near the field centre and always-zero Z), ^Image_ImageQuality_Scaling_ (5: constant bit-depth scale), ^Image_ImageQuality_TotalArea_ (5: constant field pixel area). All other columns are kept even when constant on a plate, so the schema is identical across samples."
+missing_value_policy = "A well row with any empty, unparsable, NaN or infinite value in a kept column is dropped whole (listed under dropped_wells in the index); NaN is never emitted. A plate with more than 10% of its rows dropped, or fewer than 300 remaining wells, fails the build. verify.sh applies the same rule independently. Realized: 7 of 19,197 source wells dropped (near-empty wells with undefined neighbour statistics, one empty FormFactor); 19,190 wells emitted."
+conversion = "Parse each kept cell with Python float() (exact double), write wells in source row order and kept columns in source column order as a row-major little-endian float64 matrix, one file per plate: samples/<id>/cdrp_well_profile_features_f64/cdrp_plate_<plate>.f64le.bin."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 well-by-feature matrix"
+sample_geometry = "assay_plate_well_by_cellprofiler_feature_matrix"
+sample_rank = 2
+sample_axes = ["well", "cellprofiler_feature"]
+natural_record_kind = "cell_painting_assay_plate_per_well_profile_table"
+sample_count = 50
+total_size_bytes = 706192000
+output_path = "samples/cellpainting_cdrp_cellprofiler_well_profiles_f64/cdrp_well_profile_features_f64/"

@@ -1,0 +1,142 @@
+manifest_version = 1
+dataset_id = "figshare_dfl_bundesliga_position_tracking_f32"
+name = "DFL Bundesliga Official Optical Position Tracking, Person X/Y/Speed Float32"
+description = "25 Hz official DFL optical tracking of every player and referee in seven complete German Bundesliga / 2. Bundesliga matches (Bassek et al. 2025): pitch-centred X and Y coordinates (m) and speed (km/h), one float32 sample per person FrameSet (person x half x match)."
+homepage = "https://doi.org/10.6084/m9.figshare.28196177.v1"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Bassek, M., Rein, R., Weber, H., Memmert, D. (2025). An integrated dataset of spatiotemporal and event data in elite soccer. figshare. Dataset. https://doi.org/10.6084/m9.figshare.28196177.v1 (described in Scientific Data, 2025)."
+notes = "The figshare article 28196177 v1 API record declares license {'value': 52, 'name': 'CC BY', 'url': 'https://creativecommons.org/licenses/by/4.0/'}; download.sh re-checks the live license before fetching. Preserve authorship and DOI attribution."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official DFL (Deutsche Fussball Liga) match data published by the authors on Springer Nature figshare for research reuse under CC BY 4.0. Tracked persons are professional athletes and match officials during public competitive matches."
+usage_notes = "Only kinematic values are emitted. Samples are named by opaque DFL ids (DFL-MAT-*, DFL-OBJ-*); the matchinformation files that map ids to names are not downloaded, and no names, birth dates or other person attributes appear in samples or index. Do not attempt identity linkage."
+
+[[origins]]
+id = "figshare_28196177_v1"
+name = "An integrated dataset of spatiotemporal and event data in elite soccer (figshare article 28196177, version 1)"
+url = "https://springernature.figshare.com/articles/dataset/An_integrated_dataset_of_spatiotemporal_and_event_data_in_elite_soccer/28196177"
+type = "repository"
+version = "1"
+notes = "Metadata API: https://api.figshare.com/v2/articles/28196177 (published 2025-02-02). Files are served via https://ndownloader.figshare.com/files/<id>, which 302-redirects to short-lived (10 s) presigned S3 URLs."
+
+[[resources]]
+id = "article_metadata"
+origin = "figshare_28196177_v1"
+url = "https://api.figshare.com/v2/articles/28196177"
+type = "api_query_result"
+version = "1"
+access = "Public anonymous JSON API."
+size_bytes = 11171
+sha256 = ""
+local_path = "downloads/figshare_dfl_bundesliga_position_tracking_f32/article_28196177.json"
+notes = "Re-fetched on every download.sh run; title, version 1, CC BY 4.0 license, and every pinned file id/name/size/computed_md5 must match sources.tsv. Size is informational (live JSON may change in non-pinned fields)."
+
+[[resources]]
+id = "positions_raw_observed_xml"
+origin = "figshare_28196177_v1"
+url = "https://ndownloader.figshare.com/files/{51643514,51643517,51643520,51643523,51643526,51643529,51643532}"
+type = "file"
+version = "1"
+access = "Direct public download; resumable with curl -L -C - (every attempt re-requests the ndownloader URL for a fresh signed S3 URL)."
+size_bytes = 2622603272
+sha256 = ""
+local_path = "downloads/figshare_dfl_bundesliga_position_tracking_f32/DFL_04_03_positions_raw_observed_*.xml"
+notes = "Seven DFL_04_03_positions_raw_observed_<competition>_<match>.xml files, 348,945,715-418,524,833 bytes each; per-file id, name, size and figshare MD5 pinned in sources.tsv. download.sh validates size, MD5, XML prolog/PutDataRequest/Positions/MatchId header and the closing </FrameSet></Positions></PutDataRequest> tail. Matchinformation and event XMLs from the same article are not downloaded."
+
+[local_paths]
+downloads = "downloads/figshare_dfl_bundesliga_position_tracking_f32/"
+filtered = "filtered/figshare_dfl_bundesliga_position_tracking_f32/"
+index = "index/figshare_dfl_bundesliga_position_tracking_f32/"
+samples = "samples/figshare_dfl_bundesliga_position_tracking_f32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/figshare_dfl_bundesliga_position_tracking_f32/samples.jsonl"
+summary = "Stream-parse the seven pinned DFL position XMLs line by line; for every non-ball <FrameSet> (one player or referee for one GameSection of one match) emit the Frame@X, Frame@Y and Frame@S attribute sequences as three little-endian float32 samples."
+deterministic_notes = "Inputs pinned by figshare file id, size and MD5 (sources.tsv). Sample file name = <MatchId>__<GameSection>__<PersonId>.bin, using only opaque DFL ids. Frames are kept in file order; frame numbers N must be strictly increasing within a FrameSet (gaps are counted in the index as frame_gaps, not filled). Index rows are sorted by series_id then sample_path and carry stored-f32 min/max. verify.sh re-derives every sample with xml.etree iterparse and struct '<f', byte-compares, rejects non-finite, constant or out-of-envelope samples (|X|<=75 m, |Y|<=55 m, 0<=S<=60 km/h), and checks manifest counts and floors."
+
+[[series]]
+id = "person_x_f32"
+description = "Pitch-plane X coordinate of one player or referee over one half, 25 Hz."
+semantic_meaning = "DFL official optical tracking position along the pitch length axis in metres, origin at the centre spot (pitch 105 x 68 m), 0.01 m resolution, one value per 40 ms frame while the person is tracked in that GameSection."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Source values are two-decimal ASCII decimals in the XML attribute X; each is parsed and rounded to the nearest IEEE-754 float32. No rescaling, smoothing or resampling."
+source_resources = ["positions_raw_observed_xml"]
+source_format = "DFL PutDataRequest/Positions XML (positions_raw_observed)"
+source_field = "Frame@X within each non-ball FrameSet"
+filtered_input_path = "filtered/figshare_dfl_bundesliga_position_tracking_f32/build_stats.json"
+filtering = "All FrameSets whose TeamId is a DFL-CLU-* club id or 'referee' (realized: 368 player + 12 referee FrameSets; referee sets exist only in the two 1. Bundesliga files). The TeamId='BALL' FrameSets (which carry Z, BallPossession and BallStatus and follow different dynamics) are excluded."
+missing_value_policy = "No missing values are tolerated: a person Frame lacking X, Y or S, a value that is not a plain decimal with exactly two fraction digits, non-increasing frame numbers, duplicate (match, section, person) FrameSets, unknown TeamId kinds, or a constant sample are fatal. Frame-number gaps are preserved (not filled) and counted in the index."
+conversion = "float(text) -> float32 little-endian; one sample per FrameSet in frame order; sample boundaries = FrameSet boundaries."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 vector"
+sample_geometry = "per_person_half_time_series"
+sample_rank = 1
+sample_axes = ["frame_25hz"]
+natural_record_kind = "dfl_position_frameset_person_game_section"
+sample_count = 380
+total_size_bytes = 90947272
+output_path = "samples/figshare_dfl_bundesliga_position_tracking_f32/person_x_f32/"
+
+[[series]]
+id = "person_y_f32"
+description = "Pitch-plane Y coordinate of one player or referee over one half, 25 Hz."
+semantic_meaning = "DFL official optical tracking position along the pitch width axis in metres, origin at the centre spot, 0.01 m resolution, one value per 40 ms frame."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Two-decimal ASCII attribute Y parsed and rounded to the nearest float32."
+source_resources = ["positions_raw_observed_xml"]
+source_format = "DFL PutDataRequest/Positions XML (positions_raw_observed)"
+source_field = "Frame@Y within each non-ball FrameSet"
+filtered_input_path = "filtered/figshare_dfl_bundesliga_position_tracking_f32/build_stats.json"
+filtering = "Same FrameSets as person_x_f32 (players and referees; BALL excluded)."
+missing_value_policy = "Same as person_x_f32: any missing or malformed value is fatal; gaps preserved and counted."
+conversion = "float(text) -> float32 little-endian; one sample per FrameSet in frame order."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 vector"
+sample_geometry = "per_person_half_time_series"
+sample_rank = 1
+sample_axes = ["frame_25hz"]
+natural_record_kind = "dfl_position_frameset_person_game_section"
+sample_count = 380
+total_size_bytes = 90947272
+output_path = "samples/figshare_dfl_bundesliga_position_tracking_f32/person_y_f32/"
+
+[[series]]
+id = "person_speed_f32"
+description = "Instantaneous speed of one player or referee over one half, 25 Hz."
+semantic_meaning = "DFL tracking-system speed attribute S in km/h (checked against frame-to-frame displacement: e.g. 0.232 m per 40 ms = 20.9 km/h vs S=20.53), 0.01 resolution. Computed by the DFL provider pipeline and published as a first-class per-frame channel alongside X/Y; it is not recomputed locally."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Two-decimal ASCII attribute S parsed and rounded to the nearest float32. S is a provider-filtered kinematic channel, not a local finite difference of X/Y; the D (provider distance-rate) and A (acceleration) attributes are not emitted."
+source_resources = ["positions_raw_observed_xml"]
+source_format = "DFL PutDataRequest/Positions XML (positions_raw_observed)"
+source_field = "Frame@S within each non-ball FrameSet"
+filtered_input_path = "filtered/figshare_dfl_bundesliga_position_tracking_f32/build_stats.json"
+filtering = "Same FrameSets as person_x_f32 (players and referees; BALL excluded)."
+missing_value_policy = "Same as person_x_f32: any missing or malformed value is fatal; gaps preserved and counted."
+conversion = "float(text) -> float32 little-endian; one sample per FrameSet in frame order."
+numeric_kind = "float"
+bit_width = 32
+endianness = "little"
+sample_format = "raw homogeneous little-endian float32 vector"
+sample_geometry = "per_person_half_time_series"
+sample_rank = 1
+sample_axes = ["frame_25hz"]
+natural_record_kind = "dfl_position_frameset_person_game_section"
+sample_count = 380
+total_size_bytes = 90947272
+output_path = "samples/figshare_dfl_bundesliga_position_tracking_f32/person_speed_f32/"

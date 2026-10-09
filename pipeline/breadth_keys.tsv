@@ -430,3 +430,4 @@ apple_hypersim_normal_cam_f16	autocollect	16	rendered_gbuffer	vray_hypersim_rend
 google_clusterdata2011_task_usage_f32	autocollect	32	vm_telemetry	google_borg_task_usage_monitor	storage.googleapis.com/clusterdata-2011-2	-	OK
 grail_lgrs_kbr1c_ka_band_ranging_f64	autocollect	64	intersatellite_ranging	grail_lgrs_ka_band_dowr	pds-geosciences.wustl.edu/grail	-	OK
 noaa_goes16_xrs_1s_flux_f32	autocollect	32	solar_xray_irradiance	goes_r_exis_xrs	data.ngdc.noaa.gov/goes16/l2/xrsf-l2-flx1s_science	-	STRONG
+figshare_dfl_bundesliga_position_tracking_f32	autocollect	32	trajectory_positions	dfl_optical_tracking_25hz	springernature.figshare.com/28196177	-	OK

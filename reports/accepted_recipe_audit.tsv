@@ -286,6 +286,7 @@ yearpredictionmsd_uci	ok	46896395	186554890	91	515345	2061380	0	0	0	1	none	none
 nasa_pds_sharad_radargram_f32	ok	47106000	188424000	10	4658400	18633600	0	0	0	1	none	none
 binance_usdm_futures_bookticker_2024_w01	ok	48000000	384000000	24	2000000	16000000	0	0	0	1	none	none
 zenodo_imat_neutron_projections_f32	ok	48758784	195035136	186	262144	1048576	0	0	0	1	none	none
+protomaps_osm_z15_building_coords_i16	ok	50182766	100365532	3700	8500	17000	0	0	0	1	none	none
 isric_soilgrids_clay_i16	ok	51840000	103680000	256	202500	405000	0	0	0	1	none	none
 electricity_load_diagrams_uci	ok	51894720	207578880	370	140256	561024	0	0	0	1	none	none
 ahmedml_cfd_surface_mean_pressure_f32	ok	53282167	213128668	50	1082412	4329648	0	0	0	1	none	none

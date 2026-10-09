@@ -294,23 +294,32 @@ def train_family(family: dict, base_dir: Path | None = None) -> dict:
                                      "--pareto-frontier", "--threads", str(TRAIN_THREADS)],
                                     capture_output=True, text=True, timeout=PARETO_TIMEOUT_S)
         except subprocess.TimeoutExpired:
-            # Hard, high-entropy families: one greedy compressor on a smaller train half.
-            mode = "greedy_fallback"
-            shutil.rmtree(pareto, ignore_errors=True)
-            small = work / "train_small"
-            small.mkdir()
-            budget = 4 * 1024 * 1024
-            for path in sorted(train.iterdir()):
-                if budget <= 0:
+            # Hard families: one greedy compressor on a smaller train half,
+            # shrinking again if training is still too slow.
+            result = None
+            for budget_bytes, timeout_s in ((4 * 1024 * 1024, TRAIN_TIMEOUT_S), (1024 * 1024, 20 * 60)):
+                mode = f"greedy_fallback_{budget_bytes // (1024 * 1024)}mb"
+                shutil.rmtree(pareto, ignore_errors=True)
+                small = work / f"train_{budget_bytes}"
+                small.mkdir()
+                budget = budget_bytes
+                for path in sorted(train.iterdir()):
+                    if budget <= 0:
+                        break
+                    chunk = path.read_bytes()[:budget]
+                    chunk = chunk[: len(chunk) // element_bytes(family["width"]) * element_bytes(family["width"])]
+                    (small / path.name).write_bytes(chunk)
+                    budget -= len(chunk)
+                pareto.mkdir()
+                try:
+                    result = subprocess.run([str(ZLI), "train", "--profile", PROFILES[family["width"]], str(small), "--output", str(pareto / "0.zc"),
+                                             "--threads", str(max(TRAIN_THREADS, 4))],
+                                            capture_output=True, text=True, timeout=timeout_s)
                     break
-                chunk = path.read_bytes()[:budget]
-                chunk = chunk[: len(chunk) // element_bytes(family["width"]) * element_bytes(family["width"])]
-                (small / path.name).write_bytes(chunk)
-                budget -= len(chunk)
-            pareto.mkdir()
-            result = subprocess.run([str(ZLI), "train", "--profile", PROFILES[family["width"]], str(small), "--output", str(pareto / "0.zc"),
-                                     "--threads", str(max(TRAIN_THREADS, 4))],
-                                    capture_output=True, text=True, timeout=TRAIN_TIMEOUT_S)
+                except subprocess.TimeoutExpired:
+                    continue
+            if result is None:
+                raise RuntimeError("zli train timed out at every fallback tier")
         candidates = sorted(pareto.glob("*.zc")) if pareto.is_dir() else []
         if result.returncode != 0 or not candidates:
             raise RuntimeError(f"zli train failed rc={result.returncode} mode={mode}: {result.stderr[-300:]}")

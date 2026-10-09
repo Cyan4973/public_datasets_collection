@@ -1,0 +1,134 @@
+manifest_version = 1
+dataset_id = "noaa_asos_1min_pg1_wind_speed_u8"
+name = "NOAA ASOS One-Minute Page-1 (DSI 6405) Wind Speed UInt8"
+description = "1-minute ASOS 2-minute-average wind speed and 5-second peak wind speed in whole knots, one uint8 sample per station-month, for 30 open U.S. airport ASOS stations over the 12 months of 2024."
+homepage = "https://www.ncei.noaa.gov/data/automated-surface-observing-system-one-minute-pg1/"
+
+[license]
+name = "U.S. Government Public Domain"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ncdc:C00386/xml"
+citation = "NOAA National Weather Service, U.S. Federal Aviation Administration, U.S. Department of Defense, NOAA National Centers for Environmental Information (2005): 1-Minute Page 1 Surface Weather Observations from the Automated Surface Observing Systems (ASOS) Network. NOAA National Centers for Environmental Information. NCEI DSI 6405_02."
+notes = "Federal work of NWS/FAA/DoD/NCEI (17 U.S.C. 105). The NCEI ISO record gov.noaa.ncdc:C00386 carries only a 'Cite as' request and distribution/use-liability disclaimers; no use or access restriction. Same public-domain basis as the accepted noaa_isd_lite recipe."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NOAA NCEI distribution (www.ncei.noaa.gov/data/...); no mirrors."
+usage_notes = "Automated airport weather-sensor observations; no personal data."
+
+[[origins]]
+id = "ncei_asos_1min_pg1"
+name = "NOAA NCEI ASOS One-Minute Page 1 (DSI 6405) access tree"
+url = "https://www.ncei.noaa.gov/data/automated-surface-observing-system-one-minute-pg1/access/2024/"
+type = "data_portal"
+notes = "Monthly directories 01..12 holding asos-1min-pg1-<ICAO>-YYYYMM.dat station-month files (881 stations in 2024-01)."
+
+[[origins]]
+id = "ncei_metadata"
+name = "NCEI ISO metadata record gov.noaa.ncdc:C00386"
+url = "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ncdc:C00386/xml"
+type = "website"
+notes = "Citation request and liability disclaimers; validated by content in download.sh."
+
+[[resources]]
+id = "asos_pg1_2024_station_months"
+origin = "ncei_asos_1min_pg1"
+url = "https://www.ncei.noaa.gov/data/automated-surface-observing-system-one-minute-pg1/access/2024/"
+type = "shard"
+version = "2024 files as listed on 2026-10-09 (per-file last-modified pinned in sources.tsv)"
+access = "Direct public HTTPS download of the 360 files enumerated in sources.tsv (30 stations x 12 months); exact per-file Content-Length pinned, resumable curl."
+size_bytes = 1580854971
+sha256 = ""
+local_path = "downloads/noaa_asos_1min_pg1_wind_speed_u8/<YYYY-MM>/asos-1min-pg1-<ICAO>-<YYYYMM>.dat"
+notes = "NCEI publishes no checksums for these files; download.sh pins exact byte sizes and validates that >=99% of lines (and the first line) carry the expected WBAN+ICAO+year-month prefix and the file ends with LF."
+
+[[resources]]
+id = "dsi6405_documentation"
+origin = "ncei_asos_1min_pg1"
+url = "https://www.ncei.noaa.gov/data/automated-surface-observing-system-one-minute-pg1/doc/asos-1min-pg1_documentation.pdf"
+type = "file"
+version = "2022-11-08"
+access = "Direct public download."
+size_bytes = 152627
+sha256 = "ccd48036c89729f01b77253ae82f46e63aab5012036c04b6a62ee3bd5e8afdab"
+local_path = "downloads/noaa_asos_1min_pg1_wind_speed_u8/docs/asos-1min-pg1_documentation.pdf"
+notes = "DSI 6405 field definitions (2-minute average and 5-second peak wind direction/speed in knots)."
+
+[[resources]]
+id = "c00386_iso_metadata"
+origin = "ncei_metadata"
+url = "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ncdc:C00386/xml"
+type = "file"
+version = "fetched at download time"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/noaa_asos_1min_pg1_wind_speed_u8/docs/gov.noaa.ncdc_C00386.xml"
+notes = "License/citation evidence; content-checked (not hash-pinned) because the geoportal regenerates the XML."
+
+[local_paths]
+downloads = "downloads/noaa_asos_1min_pg1_wind_speed_u8/"
+filtered = "filtered/noaa_asos_1min_pg1_wind_speed_u8/"
+index = "index/noaa_asos_1min_pg1_wind_speed_u8/"
+samples = "samples/noaa_asos_1min_pg1_wind_speed_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_asos_1min_pg1_wind_speed_u8/samples.jsonl"
+summary = "Download 360 pinned DSI 6405 station-month text files, take the 2-minute-average and 5-second-peak wind-speed fields from fixed columns, drop missing/malformed values, and emit one uint8 sample per station-month per series in file (time) order."
+deterministic_notes = "Fixed station list (30 ICAO ids) and months (2024-01..2024-12) pinned in sources.tsv with exact byte sizes and listing timestamps (regenerable with discover.sh). Rows are processed in file order. A row is structural when it is printable ASCII, at least 89 characters, carries digits WBAN + the expected ICAO + 16 timestamp digits with the file's LST year-month, all four wind fields (cols 69-88) are right-justified 1-3 digits, '   M ' or blank (so bracket-wrapped wind groups are rejected), the visibility region (cols 29-68, brackets ignored) is 0-3 pairs of extinction value (-?d+.ddd or M) and one-letter flag, and the tail (cols 89+) is blank, M, or one runway group (ddL/R/C/space + dd[+] or FFF); otherwise it is dropped and counted. These rules reject garbled transmissions (e.g. KRAP 2024-01, KPHL 2024-12) whose shifted columns would otherwise yield false speeds. Then every row whose LST minute occurs more than once in the file is dropped (19,220 rows; some files repeat day-long blocks with different wind). verify.sh re-derives every sample with an independent regex parser and compares bytes, sha256, index fields, ingest counts and manifest totals; it rejects samples with <1000 values, <3 distinct values, or a single value covering >=80% of the sample."
+
+[[series]]
+id = "wind_speed_2min_avg_kt_u8"
+description = "ASOS 2-minute average wind speed, whole knots, reported every minute."
+semantic_meaning = "Scalar wind speed (knots) averaged over the 2 minutes ending at each 1-minute observation time, from the ASOS ultrasonic/cup wind sensor at an airport station; one value per reported minute of the station-month."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source field is an integer number of knots written as right-justified ASCII digits; stored unchanged as uint8."
+source_resources = ["asos_pg1_2024_station_months"]
+source_format = "NCEI DSI 6405 fixed-width ASCII station-month file (112-character records)"
+source_field = "Speed of 2-minute average wind (knots), columns 74-78 (0-based slice [74:79])"
+filtered_input_path = "filtered/noaa_asos_1min_pg1_wind_speed_u8/ingest_stats.json"
+filtering = "All 360 pinned station-month files; every structural row whose 2-minute speed field holds digits in 0..255."
+missing_value_policy = "'M' or blank speed fields are dropped (not imputed); values >255 are dropped and counted (none expected). Non-structural rows (malformed or garbled layout, bracket-wrapped wind group, other month, other station, non-printable) and all rows of a duplicated LST minute are dropped for both series and counted; build fails if non-structural rows exceed 5% of a file. Dropped minutes are not represented, so a sample is the sequence of valid reported minutes in time order, not a gap-filled lattice."
+conversion = "ASCII decimal integer -> uint8, written in source row order; one raw file samples/<id>/wind_speed_2min_avg_kt_u8/<ICAO>_<YYYY-MM>.u8.bin per station-month."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 array"
+sample_geometry = "station_month_minute_series"
+sample_rank = 1
+sample_axes = ["minute"]
+natural_record_kind = "asos_station_month_file"
+sample_count = 360
+total_size_bytes = 13834055
+output_path = "samples/noaa_asos_1min_pg1_wind_speed_u8/wind_speed_2min_avg_kt_u8/"
+
+[[series]]
+id = "wind_speed_5s_peak_kt_u8"
+description = "ASOS maximum 5-second wind speed (peak gust within the minute), whole knots, reported every minute."
+semantic_meaning = "Highest 5-second average wind speed (knots) observed during each 1-minute period by the ASOS wind sensor; one value per reported minute of the station-month."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source field is an integer number of knots written as right-justified ASCII digits; stored unchanged as uint8."
+source_resources = ["asos_pg1_2024_station_months"]
+source_format = "NCEI DSI 6405 fixed-width ASCII station-month file (112-character records)"
+source_field = "Speed of maximum 5-second wind (knots), columns 84-88 (0-based slice [84:89])"
+filtered_input_path = "filtered/noaa_asos_1min_pg1_wind_speed_u8/ingest_stats.json"
+filtering = "All 360 pinned station-month files; every structural row whose 5-second peak speed field holds digits in 0..255."
+missing_value_policy = "'M' or blank peak-speed fields are dropped (not imputed) independently of the 2-minute series; values >255 are dropped and counted (none expected). Non-structural rows and all rows of a duplicated LST minute are dropped for both series and counted; build fails if non-structural rows exceed 5% of a file. Dropped minutes are not represented."
+conversion = "ASCII decimal integer -> uint8, written in source row order; one raw file samples/<id>/wind_speed_5s_peak_kt_u8/<ICAO>_<YYYY-MM>.u8.bin per station-month."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 array"
+sample_geometry = "station_month_minute_series"
+sample_rank = 1
+sample_axes = ["minute"]
+natural_record_kind = "asos_station_month_file"
+sample_count = 360
+total_size_bytes = 13863221
+output_path = "samples/noaa_asos_1min_pg1_wind_speed_u8/wind_speed_5s_peak_kt_u8/"

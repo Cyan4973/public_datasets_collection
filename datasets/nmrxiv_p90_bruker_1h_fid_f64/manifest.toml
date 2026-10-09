@@ -1,0 +1,89 @@
+manifest_version = 1
+dataset_id = "nmrxiv_p90_bruker_1h_fid_f64"
+name = "nmrXiv P90 Bruker 600 MHz 1H zg30 Free-Induction Decays (float64)"
+description = "Raw complex time-domain 1H NMR free-induction decays, native Bruker TopSpin DTYPA=2 IEEE float64, one fid file per experiment, from the nmrXiv project P90 (Swertia chirayita ethanolic extract and its chromatographic fractions in DMSO-d6, Bruker Avance NEO 600, TopSpin 4.0.5, pulse program zg30)."
+homepage = "https://nmrxiv.org/project/P90"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/legalcode"
+citation = "Rutz, A. et al. NMR data of ethanolic extract and fractions of Swertia chirayita. nmrXiv project P90, DOI 10.57992/nmrxiv.p90. Related articles: https://doi.org/10.1021/acs.jafc.3c03099 and https://doi.org/10.1101/2025.01.11.628830."
+notes = "The nmrXiv public API project record for NMRXIV:P90 declares license spdx_id CC-BY-4.0 (title 'Creative Commons Attribution 4.0 International (CC BY 4.0)'); download.sh re-checks this, is_public/is_published, the DOI and the archive download_url on every run. Attribute nmrXiv, the project DOI and the authors."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official nmrXiv archive object on s3.uni-jena.de linked as download_url from the nmrXiv API. Plant-extract NMR measurements; no human or personal data. Only receiver time-domain samples are emitted; the acqus parameter files are kept locally for selection and verification only."
+usage_notes = "Public, permissively licensed spectroscopy raw data appropriate for reproducible numeric collection."
+
+[[origins]]
+id = "nmrxiv"
+name = "nmrXiv open NMR data repository"
+url = "https://nmrxiv.org/project/P90"
+type = "data_portal"
+notes = "Project NMRXIV:P90, released 2025-01-17, owner Adriano Rutz. Listed by the public API https://nmrxiv.org/api/v1/list/projects (paginated, per_page=100)."
+
+[[resources]]
+id = "nmrxiv_project_list"
+origin = "nmrxiv"
+url = "https://nmrxiv.org/api/v1/list/projects?page=1&per_page=100"
+type = "api_query_result"
+version = "fetched per run; all pages"
+access = "Public anonymous JSON API."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/nmrxiv_p90_bruker_1h_fid_f64/api/"
+notes = "Used only for identity and license validation; the P90 record is saved as api/P90_project.json. Content varies with project statistics, so it is validated semantically, not by hash."
+
+[[resources]]
+id = "p90_project_zip"
+origin = "nmrxiv"
+url = "https://s3.uni-jena.de/nmrxiv/production/archive/2d828808-0317-48fe-8679-813f91101b2e/nmr-data-of-ethanolic-extract-and-fractions-of-swertia-chirayita.zip"
+type = "archive"
+version = "Last-Modified 2025-09-11T04:34:40Z, ETag e2c751208172e1ebe3b85782bb7ec2ec"
+access = "Public anonymous HTTPS with byte-range support. Never fetched whole: download.sh reads the last 65,536 bytes (EOCD), the 1,211,969-byte central directory at offset 1,518,333,203 (SHA-256 pinned), every 1D acqus member (255) and the 152 selected fid members, each by its exact local-record byte range."
+size_bytes = 1519545194
+sha256 = ""
+local_path = "downloads/nmrxiv_p90_bruker_1h_fid_f64/members/"
+notes = "Classic (non-ZIP64) archive with 10,901 DEFLATE members, all flagged 0x808 (UTF-8 names, data descriptor). Central directory SHA-256 e89a52ac4a961e505f5d0f21f627abde725378d28776f515d5d10d6f41c44059 pins every member CRC32/size/offset; every fetched member is inflated with raw DEFLATE and checked against the CD CRC32, size and its data descriptor. Selected-member list SHA-256 dbb65ac9ba12f46968c59584e5f91c585144bcf67b8830ddf407628dd8627362. About 48.6 MB of byte ranges are transferred; about 82 MB are stored inflated."
+
+[local_paths]
+downloads = "downloads/nmrxiv_p90_bruker_1h_fid_f64/"
+filtered = "filtered/nmrxiv_p90_bruker_1h_fid_f64/"
+index = "index/nmrxiv_p90_bruker_1h_fid_f64/"
+samples = "samples/nmrxiv_p90_bruker_1h_fid_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nmrxiv_p90_bruker_1h_fid_f64/samples.jsonl"
+summary = "Validate the P90 license via the nmrXiv API, range-read the pinned project ZIP's central directory, fetch every 1D experiment's acqus, select by parsed acquisition parameters, range-fetch and CRC-check the selected Bruker fid files, and emit each fid's 65,536 float64 values unchanged as one little-endian sample."
+deterministic_notes = "Pinned archive URL, size, EOCD position, central-directory SHA-256 and selected-list SHA-256. Selection (from acqus, re-derived in build and independently in verify): DTYPA=2, NUC1=<1H>, PULPROG=<zg30>, TD=65536, PARMODE=0 (1D), SOLVENT=<DMSO>, INSTRUM=<Avance Neo 600>, TopSpin 4.0.5 in ##TITLE, BF1 600 MHz; BYTORDA honored (all 0). Excluded by the rule: 81 noesyigld1d 1H, 7 deptqgpsp 13C, 15 zg30 1H written by TopSpin 4.0.3 in 2018 (14 in MeOD, 1 in DMSO; different solvent/receiver regime, DE 23.70 vs 24.64 us). 2D ser experiments have no fid member and are never considered. Samples sorted by fraction/experiment; named <fraction>__<experiment>.f64. Floors: 152 samples x 65,536 values (median 65,536)."
+
+[[series]]
+id = "bruker_1h_zg30_fid_f64"
+description = "Complex 1H free-induction decays (32,768 complex points, interleaved real/imaginary) from a Bruker Avance NEO 600 with TopSpin 4.0.5, 16 scans of zg30, DMSO-d6 solutions of a plant extract and its fractions."
+semantic_meaning = "Digitized quadrature receiver signal (arbitrary units, summed over NS=16 scans) of the 1H nuclear magnetization after a 30-degree pulse: a sum of exponentially decaying complex oscillations (solvent, water and metabolite resonances) plus noise, sampled at SW_h 9615.38 Hz. The first ~76 complex points are the Bruker digital-filter group delay (GRPDLY=76), kept as native content."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "TopSpin writes DTYPA=2 fid files as IEEE-754 float64 (BYTORDA=0, little-endian). The values are copied bit-for-bit; no phase correction, group-delay removal, apodization, Fourier transform or scaling (scaledByRG=no in acqus). Values lie on a 1/128 lattice with magnitudes up to ~2.6e9 (about 38 significant bits), so they are not representable as int32 or float32."
+source_resources = ["p90_project_zip"]
+source_format = "Bruker TopSpin 1D experiment directory (acqus JCAMP-style parameters + fid binary, DTYPA=2) inside a ZIP archive"
+source_field = "fid: interleaved real/imaginary float64 time-domain samples, TD=65536 values"
+filtered_input_path = "filtered/nmrxiv_p90_bruker_1h_fid_f64/build_stats.json"
+filtering = "Keep every 1D experiment whose acqus satisfies the selection rule in processing.deterministic_notes: 152 FIDs = 76 fractions/extracts x 2 independent zg30 acquisitions (experiment 20 or 21, and proton_NN, recorded about two weeks apart in October 2019)."
+missing_value_policy = "No missing values exist in fid files. Any non-finite value, wrong size (must be 524,288 bytes), CRC32 mismatch against the ZIP central directory, fewer than half distinct values, or a selection that differs from the pinned list is fatal; nothing is dropped, imputed or clipped."
+conversion = "Inflate the ZIP member with raw DEFLATE, check CRC32, unpack 65,536 float64 values with the byte order from BYTORDA (0 -> little-endian), and repack them as little-endian float64 in source order. One fid file (one acquisition) = one sample."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 interleaved complex FID"
+sample_geometry = "nmr_time_domain_complex_interleaved"
+sample_rank = 1
+sample_axes = ["time_point_x_quadrature_channel"]
+natural_record_kind = "bruker_1d_experiment_fid_file"
+sample_count = 152
+total_size_bytes = 79691776
+output_path = "samples/nmrxiv_p90_bruker_1h_fid_f64/bruker_1h_zg30_fid_f64/"

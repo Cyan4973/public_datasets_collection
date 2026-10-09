@@ -1,0 +1,120 @@
+manifest_version = 1
+dataset_id = "usgs_3dep_cameronpeak_vq1560ii_scan_angle_i16"
+name = "USGS 3DEP CO Cameron Peak Wildfire 2021 Lidar (Riegl VQ-1560 II, LAS 1.4 PDRF 6) Per-Point Scan Angle Int16"
+description = "Native LAS 1.4 point-format-6 scan angles (signed int16, 0.006 degree units, record bytes 18-19) of every point in 24 complete 5,000 ft LAZ tiles from the USGS 3DEP CO_CameronPkFire_1_2021 work unit (Riegl VQ-1560 II, collected 2021-09-07..2021-09-22 over the 2020 Cameron Peak burn area, Colorado Front Range), one int16 array per tile in file point order."
+homepage = "https://prd-tnm.s3.amazonaws.com/index.html?prefix=StagedProducts/Elevation/LPC/Projects/CO_CameronPeakWildfire_2021_D21/CO_CameronPkFire_1_2021/"
+
+[license]
+name = "U.S. Government Public Domain"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits"
+citation = "U.S. Geological Survey, 2022, USGS Lidar Point Cloud CO_CameronPeakWildfire_2021_D21 (3D Elevation Program), accessed via https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CameronPeakWildfire_2021_D21/."
+notes = "USGS Copyrights and Credits: 'USGS-authored or produced data and information are considered to be in the U.S. public domain.' AWS Open Data Registry entry for USGS 3DEP lidar lists 'License: US Government Public Domain'. Per-tile FGDC metadata (e.g. https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/CO_CameronPeakWildfire_2021_D21/CO_CameronPkFire_1_2021/metadata/USGS_LPC_CO_CameronPeakWildfire_2021_D21_w3060n1355.xml): origin 'U.S. Geological Survey', pubdate 20221101, accconst 'None. Any downloading and use of these data signifies a user's agreement to comprehension and compliance of the USGS Standard Disclaimer...', useconst is an accuracy disclaimer plus 'Acknowledgement of the originating agencies would be appreciated in products derived from these data. Any user who modifies the data is obligated to describe the types of modifications they perform.' Modification performed here: only the scan-angle field of each point record is kept."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official USGS 3DEP staged LPC delivery. LAZ tiles come only from rockyweb.usgs.gov; the work-unit VPC, link list and the USGS LazQC LPC report come from the public prd-tnm S3 bucket (anonymous, not requester-pays). No mirrors."
+usage_notes = "Airborne lidar scanner geometry over burned and unburned mountain forest in Larimer County, Colorado. Per-point scan angles carry no identity or imagery."
+
+[[origins]]
+id = "usgs_prd_tnm_s3"
+name = "USGS The National Map staged products (prd-tnm S3 bucket)"
+url = "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/CO_CameronPeakWildfire_2021_D21/CO_CameronPkFire_1_2021/"
+type = "bucket"
+notes = "Public anonymous bucket with the work-unit VPC (STAC FeatureCollection, pc:count, proj:bbox and datetime per tile), 0_file_download_links.txt, per-tile FGDC metadata, and the work-unit QC reports under StagedProducts/Elevation/metadata/CO_CameronPeakWildfire_2021_D21/CO_CameronPkFire_1_2021/reports/."
+
+[[origins]]
+id = "usgs_rockyweb"
+name = "USGS rockyweb staged elevation delivery"
+url = "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CameronPeakWildfire_2021_D21/CO_CameronPkFire_1_2021/LAZ/"
+type = "website"
+notes = "Anonymous HTTPS host for the LAZ tiles (nginx, byte ranges, ETag = mtime-size). About 0.5 MB/s per stream from the build host, so download.sh fetches 4 tiles at a time with resumable curl and an outer retry loop."
+
+[[resources]]
+id = "project_vpc"
+origin = "usgs_prd_tnm_s3"
+url = "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/CO_CameronPeakWildfire_2021_D21/CO_CameronPkFire_1_2021/CO_CameronPkFire_1_2021.vpc"
+type = "file"
+version = "Last-Modified 2026-09-13T02:06:56Z, ETag 0df8f984574e4c677d65bff0e268c17b"
+access = "Direct public download."
+size_bytes = 3768776
+sha256 = "7f11f71d2d0b77d3f0ee655b8ba1ad3e754b5282d2275373100d8c6b2e0f4897"
+local_path = "downloads/usgs_3dep_cameronpeak_vq1560ii_scan_angle_i16/meta/CO_CameronPkFire_1_2021.vpc"
+notes = "1,167 tile features with pc:count, proj:bbox, datetime and asset href. Used to re-derive the selection; a changed digest is a warning (USGS regenerates VPCs), a changed selection is fatal."
+
+[[resources]]
+id = "download_links"
+origin = "usgs_prd_tnm_s3"
+url = "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/CO_CameronPeakWildfire_2021_D21/CO_CameronPkFire_1_2021/0_file_download_links.txt"
+type = "file"
+version = "Last-Modified 2022-11-03T03:14:48Z, ETag fe05f27280cf719182218e5fc6689eda"
+access = "Direct public download."
+size_bytes = 222897
+sha256 = "ca0f5b38d92a8b10ae405089439f5e23a4fea94f9945f70aece26dc70eb71ba3"
+local_path = "downloads/usgs_3dep_cameronpeak_vq1560ii_scan_angle_i16/meta/0_file_download_links.txt"
+notes = "1,167 official rockyweb LAZ URLs; every VPC tile and every selected tile must appear in it."
+
+[[resources]]
+id = "lpc_qc_report"
+origin = "usgs_prd_tnm_s3"
+url = "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/metadata/CO_CameronPeakWildfire_2021_D21/CO_CameronPkFire_1_2021/reports/USGS_CO_CameronPkFire_1_2021_FINAL_LPC_Report.txt"
+type = "file"
+version = "USGS LazQC 2.0.0.0 report over all 1,167 tiles"
+access = "Direct public download."
+size_bytes = 171978
+sha256 = "22c8523e656d2f8982192e36cb0886b8cdbe048ec806aeda85556b91b59b8c23"
+local_path = "downloads/usgs_3dep_cameronpeak_vq1560ii_scan_angle_i16/meta/USGS_CO_CameronPkFire_1_2021_FINAL_LPC_Report.txt"
+notes = "Work-unit lineage: LAS 1.4 / PDRF 6 in all 1,167 tiles; generating software 'GeoCue LAS Updater' (1,167); system id 'Riegl VQ-1560 II' (1,158) and 'Riegl VQ-1560II' (9); NAD83(2011) / Colorado North (ftUS) + NAVD88 Geoid18 (ftUS); scan angle rank -33..35 degrees; GPS time 2021-09-07..2021-09-22; class 7 and 18 points flagged withheld."
+
+[[resources]]
+id = "laz_tiles"
+origin = "usgs_rockyweb"
+url = "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CO_CameronPeakWildfire_2021_D21/CO_CameronPkFire_1_2021/LAZ/"
+type = "file"
+version = "24 LAZ files USGS_LPC_CO_CameronPeakWildfire_2021_D21_<tile>.laz, Last-Modified 2022-11-01, pinned in sources.tsv"
+access = "Direct public download, one file per tile."
+size_bytes = 1985279750
+sha256 = ""
+local_path = "downloads/usgs_3dep_cameronpeak_vq1560ii_scan_angle_i16/laz/"
+notes = "sources.tsv pins tile id, VPC pc:count, URL, size, ETag, Last-Modified, header creation day and the 15 extended points-by-return counts read from 8 KiB header range GETs (2026-10-09); the per-file sha256 column is filled from the first driver download and is then enforced by download.sh and build.sh (the manifest sha256 is empty because the resource is 24 files). Every tile is validated before it is kept: LAS 1.4, system identifier 'Riegl VQ-1560 II', generating software 'GeoCue LAS Updater', creation year 2022, compressed PDRF 6 with 30-byte records, scale 0.001, WKT global-encoding bit, no EVLRs, header point count == VPC pc:count, points-by-return == pinned, LASzip compressor 3 (POINT14 v3, chunk 50000), contractor VLR NIIRS10, OGC WKT VLR for Colorado North (ftUS), legacy 0xDDCC pad before the point data, and a version-0 chunk table with ceil(points/50000) chunks."
+
+[local_paths]
+downloads = "downloads/usgs_3dep_cameronpeak_vq1560ii_scan_angle_i16/"
+filtered = "filtered/usgs_3dep_cameronpeak_vq1560ii_scan_angle_i16/"
+index = "index/usgs_3dep_cameronpeak_vq1560ii_scan_angle_i16/"
+samples = "samples/usgs_3dep_cameronpeak_vq1560ii_scan_angle_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/usgs_3dep_cameronpeak_vq1560ii_scan_angle_i16/samples.jsonl"
+summary = "Fetch 24 pinned LAZ tiles, decode them with the repository's pure-stdlib LASzip decoder (tools/laz/laszip.py), keep bytes 18-19 (signed int16 scan angle) of every 30-byte LAS 1.4 PDRF-6 record unchanged, and emit one little-endian int16 sample per tile in file point order."
+deterministic_notes = "Selection rule (scripts/cpk_tiles.py select, documented by discover.sh; never looks at scan angles): VPC features of the work unit from the main delivery batch (datetime 2022-03-11T00:00:00Z; skips the 11 tiles re-delivered on 2022-03-17 / 2022-06-27, 9 of which carry the variant system id 'Riegl VQ-1560II'), with a full 5,000 ft footprint (x and y extents >= 4,999 ft), and pc:count in [6,000,000, 14,000,000) (the project median is 14.2 M points; the bound keeps pure-Python decode time and the primary output moderate); sorted by tile id, the 24 tiles at ranks floor((2i+1)*380/48) of the 380 qualifying tiles. download.sh re-derives the selection from the live VPC and link list and refuses to proceed if it differs from sources.tsv. build.sh re-validates every tile, decodes all chunks in file order, checks the decoded per-return histogram against the header's 15 extended points-by-return counts (decode integrity), and fails on a point-count mismatch, on any value outside the LAS 1.4 limit -30,000..30,000, on fewer than 100 distinct values or one value above 50% of a tile. verify.sh re-decodes each tile through the whole-file decode path, re-extracts scan angles with struct.iter_unpack and compares bytes, hashes, min/max, distinct counts, index fields and manifest totals, requires a per-tile span (max - min) of at least 2,000 units (12 degrees; some tiles see only one side of the swath, e.g. w3140n1375 spans 576..4912) and a family range of at least -3,000..+3,000 (+-18 degrees). Expected realization (header counts pinned): 24 samples, 245,581,947 values, 491,163,894 bytes; median 10,820,823 values per sample (6,060,150 to 13,616,373)."
+
+[[series]]
+id = "cpk_2021_scan_angle_i16"
+description = "LAS 1.4 extended scan angle of every lidar point in one published USGS 3DEP Cameron Peak Wildfire 2021 LAZ tile, as the native signed 16-bit field."
+semantic_meaning = "Angle of the outgoing laser pulse relative to nadir in the scanner frame, in 0.006 degree units (value 5000 = 30 degrees; negative = left of track), recorded by the Riegl VQ-1560 II dual-channel oblique scanner and carried through the contractor's processing (header software GeoCue LAS Updater), for every point of a 5,000 ft x 5,000 ft tile over the 2020 Cameron Peak burn area (collected 2021-09-07..2021-09-22). The work-unit QC report gives a scan-angle-rank range of -33..35 degrees (about -5,500..5,833 units). In a probed chunk the values sit on a lattice of about 16 units (0.096 degrees), not every 0.006 degree step, so roughly 700 distinct levels appear across the full swath; this is the delivered field, not a recipe transform. Values follow the file's delivered point order (stored in LASzip 50,000-point chunks; GPS time is not monotonic within a chunk, so the delivery is not in pure acquisition order); the build does not reorder."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "LAS 1.4 PDRF 6 stores the scan angle as a signed little-endian int16 at record bytes 18-19. The sample keeps those two bytes unchanged; coordinates, intensity, return/flag bytes, classification, user data, point source id and GPS time are not emitted."
+source_resources = ["laz_tiles"]
+source_format = "LAZ (LASzip 3.4r3 layered-chunked compressor, POINT14 v3 item, 50,000-point chunks) encoding LAS 1.4 point data record format 6, 30-byte records"
+source_field = "scan angle (signed int16, 0.006 degree increments, bytes 18-19 of each LAS 1.4 PDRF-6 point record)"
+filtered_input_path = "filtered/usgs_3dep_cameronpeak_vq1560ii_scan_angle_i16/build_stats.json"
+filtering = "24 tiles chosen by the selection rule. All points of each selected tile are kept regardless of classification, withheld (class 7/18 noise), overlap, synthetic or scanner-channel flags; every other field is dropped."
+missing_value_policy = "The LAS scan angle has no missing sentinel (0 means nadir and is a valid angle). Every record is kept. The decoded record count must equal the header point count (== VPC pc:count), the decoded per-return histogram must equal the header's extended points-by-return counts, and every value must lie within -30,000..30,000; any violation is fatal in build.sh and verify.sh. Nothing is dropped, reordered, clipped or imputed."
+conversion = "Decode each tile chunk by chunk with tools/laz/laszip.py iter_chunks; interleave records[18::30] and records[19::30] into little-endian int16 bytes; one sample file <tile file stem>.scan_angle_i16.bin per tile, value i = point i in file order."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw int16 1-D array"
+sample_geometry = "per_point_attribute_in_file_point_order"
+sample_rank = 1
+sample_axes = ["point"]
+natural_record_kind = "complete_published_usgs_3dep_laz_tile"
+sample_count = 24
+total_size_bytes = 491163894
+output_path = "samples/usgs_3dep_cameronpeak_vq1560ii_scan_angle_i16/cpk_2021_scan_angle_i16/"

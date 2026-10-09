@@ -1,0 +1,13 @@
+# zenodo_vulcano_humminbird_sidescan_u8
+
+- Date: 2026-10-08
+- Status: rejected
+- Candidate dataset: Vulcano Summer School 2018 Humminbird side-imaging sonar, native uint8 .SON port/starboard ping amplitudes (Zenodo 1401000, CC-BY-4.0)
+- Source: https://zenodo.org/records/1401000, Data-19-2006.zip (1,176,823,667 B, md5 23b59c84c15e3e9282b7f40f9a6b1b04). The member byte ranges of R000NN/B002.SON, B003.SON and .IDX were range-fetched. Data-1406/1506/1606.zip are byte-identical copies of R00021–R00025.
+- Why it looked promising: native 8-bit sidescan pings from a new instrument line and source. The only local sidescan family is the 16-bit Klein XTF one (usgs_grandbay_klein3900_sidescan_xtf_u16). The license is explicit CC-BY-4.0, and the members can be range-fetched within a bounded download.
+- Failure class: not novel (byte-level breadth redundancy, zlsim WEAK)
+- What happened: the recipe was written, the driver downloaded it (844.8 MB), and build, verify and gate.py all passed: 16 samples, 795,674,650 uint8 bytes, 262,604 pings, recordings R00021–R00025 and R00028–R00030 at 420 kHz. R00026 (790 kHz throughout) and R00027 (58 pings at 790 kHz mid-file) were excluded. Ping length (tag 0xA0) varies with the range setting within every file, so samples were ragged waterfalls with an auxiliary per-ping length series. Then `zlsim.py gate` returned WEAK (redundant).
+- Evidence: zlsim own_ratio 1.3474. Match: local noaa_rstn_sagamore_hill_srs_spectra_u8:srs_band_b_75_180mhz_u8, distance 0.0394, loss 0.0047. Also inside both thresholds: downstream:cov_hillshade, distance 0.0434, loss 0.0001. Other neighbors: adcp_correlation_magnitude_u8 (0.0448), met_painting_rgb_plane_u8 (0.0517), magellan_fmidr_sar_backscatter_u8 (0.0588). Thresholds: loss 0.03, distance 0.05.
+- Logs: .data/logs/zenodo_vulcano_humminbird_sidescan_u8/{download,build,verify}.latest.log; .data/pipeline/logs/zenodo_vulcano_humminbird_sidescan_u8/download.20261008_211543.log; full zlsim report at /tmp/autocollect/zenodo_vulcano_humminbird_sidescan_u8/zlsim_gate.json (scratch)
+- Decision: reject. Speckle-dominated 8-bit sonar amplitudes are compression-equivalent to existing noisy 8-bit spectrogram and raster families. Reordering or interleaving channels to dodge the gate would be gaming it.
+- Retry conditions: only if the zlsim library changes so that the nearest 8-bit families (RSTN SRS spectra, cov_hillshade) no longer match, or for a different sidescan product whose byte statistics differ materially (e.g. native 16-bit Humminbird/Lowrance sidescan, which would be a different width). The parser and range-fetch recipe are reusable for other Humminbird .SON sources.

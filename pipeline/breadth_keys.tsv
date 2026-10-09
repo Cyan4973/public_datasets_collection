@@ -425,3 +425,4 @@ tumvie_prophesee_gen4_events_xy_u16	autocollect	16	event_camera_addresses	prophe
 zenodo_starlink_irtt_rtt_i32	autocollect	32	network_packet_latency	irtt_udp_probe_starlink_dish	zenodo.org/records/10020034	-	OK
 gracefo_l1b_ach1b_transplant_accelerometer_f64	autocollect	64	inertial_vibration	gracefo_superstar_accelerometer_hybrid_transplant	isdc-data.gfz.de/grace-fo/Level-1B	-	OK
 sxs_bbh_extrapolated_strain_modes_f64	autocollect	64	sim_gravitational_waveform	spec_numerical_relativity_bbh	zenodo.org/communities/sxs	-	OK
+ambientcg_photogrammetry_normalgl_u16	autocollect	16	pbr_texture_map	ambientcg_heightfield_photogrammetry	ambientcg.com	-	OK

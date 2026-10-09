@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "ambientcg_photogrammetry_normalgl_u16"
+name = "ambientCG Photogrammetry Material Normal Maps (NormalGL, RGB UInt16)"
+description = "119 native 16-bit OpenGL tangent-space normal maps (1K) of real-world surfaces captured by ambientCG height-field photogrammetry, emitted as interleaved RGB uint16."
+homepage = "https://ambientcg.com/list?type=Material"
+
+[license]
+name = "CC0 1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://docs.ambientcg.com/license/"
+citation = "Created using assets from ambientCG.com, licensed under the Creative Commons CC0 1.0 Universal License."
+notes = "docs.ambientcg.com/license (fetched 2026-10-08): 'All ambientCG assets are provided under the Creative Commons CC0 1.0 Universal License. This applies to the downloadable asset files and the material preview renders shown for each asset on the site.' Credit is optional."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official ambientCG download links (ambientcg.com/get?file=...) which 302-redirect to the ambientCG Backblaze CDN (acg-download.struffelproductions.com). Anonymous public access."
+usage_notes = "Material-surface texture maps (ground, paving, brick, rock, bark, ...). No people, identities, or personal fields."
+
+[[origins]]
+id = "ambientcg"
+name = "ambientCG public material library"
+url = "https://ambientcg.com/"
+type = "website"
+notes = "Asset metadata from the public v2 API (https://ambientcg.com/api/v2/full_json); downloads via the official get?file= links."
+
+[[resources]]
+id = "normalgl_members"
+origin = "ambientcg"
+url = "https://ambientcg.com/get?file=<asset_id>_1K-PNG.zip"
+type = "file"
+version = "asset table pinned 2026-10-08 (scripts/assets.tsv): zip size, member offset, member size, member CRC32, IHDR geometry per asset"
+access = "Direct public download; HTTP byte-range GET of only the STORED <asset_id>_1K-PNG_NormalGL.png member (local file header + PNG bytes) of each of 119 zips. download.sh requires HTTP 206 with an exact Content-Range whose total equals the pinned zip size, checks the local header (signature, method 0 STORED, no data descriptor, member name, sizes), the member CRC32 against the pinned central-directory value, and the PNG IHDR against the pin."
+size_bytes = 614262802
+sha256 = ""
+local_path = "downloads/ambientcg_photogrammetry_normalgl_u16/"
+notes = "614,262,802 bytes are transferred (member ranges incl. local headers); the stored PNGs total 614,251,266 bytes. Integrity is pinned by CRC32 + size per member (from each zip's central directory), not SHA-256, because the pin was made from metadata range requests only."
+
+[local_paths]
+downloads = "downloads/ambientcg_photogrammetry_normalgl_u16/"
+filtered = "filtered/ambientcg_photogrammetry_normalgl_u16/"
+index = "index/ambientcg_photogrammetry_normalgl_u16/"
+samples = "samples/ambientcg_photogrammetry_normalgl_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/ambientcg_photogrammetry_normalgl_u16/samples.jsonl"
+summary = "Range-download the NormalGL PNG member of 119 pinned ambientCG photogrammetry 1K-PNG zips, strictly decode each 16-bit RGB/RGBA PNG with a pure-stdlib decoder, verify any alpha plane is constant 65535 and drop it, and emit one interleaved RGB uint16 little-endian sample per material."
+deterministic_notes = "Population: all 356 ambientCG Material assets with creationMethod == 'PBRPhotogrammetry' in the v2 API on 2026-10-08 (all 2014 materials paged with sort=Alphabet; the API's 'method' filter is ignored server-side and creationMethodName is mislabelled, so filtering is client-side on creationMethod). All 356 NormalGL members are 16-bit (RGB 327, RGBA 29), longest side 1024. The full population would decode to 2.05 GB (> 1 GB cap), so the bounded subset is every third asset in assetId order (indices 0,3,6,...), 119 assets, pinned in scripts/assets.tsv; discover.sh re-derives the table. PNG chunk CRCs, IHDR, contiguous IDAT, complete zlib stream, scanline sizes and all five filter types are enforced. Semantic gates per map: every RGB channel has >= 256 distinct values; at most 50% of values are multiples of 257 (rejects x257-upscaled 8-bit maps; real maps are ~1%); >= 99% of blue (Z) values are >= 32768 (outward-facing tangent-space normals); alpha (if present) is exactly 65535 everywhere. verify.sh re-decodes every source, compares bytes, recomputes statistics from the stored files, and checks hashes, uniqueness, totals, and directory contents."
+
+[[series]]
+id = "normalgl_rgb_u16"
+description = "Tangent-space surface normal maps (OpenGL Y-up convention) for real-world material surfaces captured by height-field photogrammetry."
+semantic_meaning = "Per texel, the unit surface normal (X, Y, Z) in tangent space, mapped linearly from [-1, 1] to [0, 65535] per channel as R, G, B (OpenGL convention: +Y up). Z (blue) is concentrated near the top of the range."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Each PNG natively stores 16-bit unsigned samples per channel; decoding reverses only zlib, PNG row filters, and big-endian byte order. A constant 65535 alpha plane present in 29 of the 356 source maps (12 of the 119 selected) carries no information and is dropped after verification so all samples are RGB."
+source_resources = ["normalgl_members"]
+source_format = "PNG, bit depth 16, colour type 2 (RGB) or 6 (RGBA, alpha constant 65535), non-interlaced, STORED member <asset_id>_1K-PNG_NormalGL.png inside <asset_id>_1K-PNG.zip"
+source_field = "Decoded R, G, B sample planes of the NormalGL texture (interleaved per texel)"
+filtered_input_path = "filtered/ambientcg_photogrammetry_normalgl_u16/ingest_stats.json"
+filtering = "Every third PBRPhotogrammetry asset in assetId order (119 of 356). All texels of each selected map are kept; only the constant alpha plane is dropped. NormalDX (G-inverted duplicate), Displacement, Roughness, Color and other maps, and 2K/4K/8K resolutions, are not taken."
+missing_value_policy = "PNG maps have no missing texels. Any size/CRC mismatch, malformed PNG, unsupported layout, non-constant alpha, 8-bit-upscaled content, low channel cardinality, or non-normal-map Z distribution is fatal in build.sh and verify.sh; nothing is dropped or imputed."
+conversion = "Inflate concatenated IDAT, reverse per-row PNG filters (None/Sub/Up/Average/Paeth, bpp 6 or 8), read 16-bit big-endian samples, drop alpha if present, and write interleaved R,G,B uint16 little-endian in row-major texel order; one file per material named <asset_id>_NormalGL_h<H>_w<W>_c3_u16le.bin."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 interleaved RGB normal map"
+sample_geometry = "2d_tangent_space_normal_map_rgb"
+sample_rank = 3
+sample_axes = ["texture_y", "texture_x", "normal_xyz"]
+natural_record_kind = "material_normal_map"
+sample_count = 119
+total_size_bytes = 675287040
+output_path = "samples/ambientcg_photogrammetry_normalgl_u16/normalgl_rgb_u16/"

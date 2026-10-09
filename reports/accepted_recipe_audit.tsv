@@ -376,6 +376,7 @@ stereo_a_impact_mag_rtn_bfield_f32	ok	137546312	550185248	200	691170.5	2764682	0
 umich_nclt_velodyne_hdl32e_xyz_u16	ok	138658614	277317228	1024	135510	271020	0	0	0	1	none	none
 zenodo_pacbio_sequel_subread_ipd_codecv1_u8	ok	139127891	139127891	14550	9561.5	9561.5	0	0	0	1	none	none
 modelnet10_off_mesh_vertices_f32	ok	139741776	558967104	4899	8472	33888	0	0	0	1	none	none
+spdf_isis2_topside_ionogram_amplitude_u8	ok	143655485	143655485	1007	142720	142720	644195	5153560	1007	1	none	none
 figshare_fukuchi_marker_trajectories_f32	ok	144088704	576354816	5898	9768	39072	0	0	0	1	none	none
 mbari_mars_hydrophone_hmd_psd_f32	ok	144478080	577912320	36	4013280	16053120	0	0	0	1	none	none
 openneuro_ds003097_aomic_dti_tensor_f32	ok	144506880	578027520	32	4515840	18063360	0	0	0	1	none	none

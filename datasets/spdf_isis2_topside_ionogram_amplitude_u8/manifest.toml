@@ -1,0 +1,110 @@
+manifest_version = 1
+dataset_id = "spdf_isis2_topside_ionogram_amplitude_u8"
+name = "ISIS-2 Topside Sounder Average Ionograms, Fairbanks (ULA) 1974, UInt8 Amplitude"
+description = "Native 8-bit sounder-receiver video amplitude rasters (frequency step x 223 apparent-range bins) of complete 0.1-10 MHz ISIS-2 SFS topside ionograms received at Fairbanks in 1974, one sample per digitized ionogram CDF."
+homepage = "https://spdf.gsfc.nasa.gov/isis/isis-status.html"
+
+[license]
+name = "Creative Commons Zero v1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://spdx.org/licenses/CC0-1.0.html"
+citation = "Users please acknowledge the Coordinated Data Analysis Web (CDAWeb) at the NASA Goddard Space Flight Center, ISIS-2 SFS instrument Principal Investigator J. H. Whitteker and ISIS Data-Restoration project lead Robert F. Benson. SPASE: spase://NASA/NumericalData/ISIS2/SFS/AverageIonogram/Fairbanks/PT22S."
+notes = "The dataset-level SPASE record (hpde/NASA NumericalData/ISIS2/SFS/AverageIonogram/Fairbanks/PT22S.xml, commit 05bd62ab61858558d70006b4035588994386265a, 2026-07-23) declares, inside the AccessInformation of the CDF product itself (not only the metadata block): AccessRights Open; RightsIdentifier CC0-1.0; Note 'CC0 1.0 Universal is the Creative Commons license applicable to all publicly available NASA Heliophysics data products'. The digitized product was produced by NASA GSFC (Data Evaluation Laboratory, ISIS data-restoration project, PI_affiliation NASA GSFC in the CDF global attributes). ISIS-2 itself was a joint Canada-NASA mission; the CC0 statement is NASA's own for this NASA-made digitization. Keep the CDAWeb/PI acknowledgement."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NASA SPDF/CDAWeb CDF files, fetched from NASA's anonymous public HDRL S3 mirror of the SPDF archive (gov-nasa-hdrl-data1); geophysical radio-sounding data only."
+usage_notes = "Only the 'ampl' amplitude raster (primary) and the per-step 'freq' calibration (auxiliary) are emitted; header scalars, ephemeris and text attributes are not."
+
+[[origins]]
+id = "nasa_hdrl_spdf_s3"
+name = "NASA HDRL public S3 mirror of SPDF/CDAWeb"
+url = "https://gov-nasa-hdrl-data1.s3.amazonaws.com/?list-type=2&prefix=spdf/cdaweb/data/isis/ionogram_cdf/isis2/ULA_65N_212E/1974/"
+type = "bucket"
+notes = "Anonymous ListObjectsV2 and GET. Mirrors https://spdf.gsfc.nasa.gov/pub/data/isis/topside_sounder/ionogram_cdf/isis2/ULA_65N_212E/ (SPASE AccessURL), which timed out through the collection proxy."
+
+[[origins]]
+id = "spase_hpde"
+name = "SPASE metadata record (hpde/NASA on GitHub)"
+url = "https://raw.githubusercontent.com/hpde/NASA/master/NumericalData/ISIS2/SFS/AverageIonogram/Fairbanks/PT22S.xml"
+type = "repository"
+notes = "License and acknowledgement evidence; not downloaded by download.sh."
+
+[[resources]]
+id = "isis2_ula_1974_cdfs"
+origin = "nasa_hdrl_spdf_s3"
+url = "https://gov-nasa-hdrl-data1.s3.amazonaws.com/spdf/cdaweb/data/isis/ionogram_cdf/isis2/ULA_65N_212E/1974/"
+type = "file"
+version = "I2_AV_ULA v01 CDFs (S3 LastModified 2025-03-23), listed 2026-10-09"
+access = "Direct anonymous GET of the 1,604 keys pinned in sources.tsv (key, size, single-part S3 ETag = MD5, LastModified); discover.sh re-derives the listing."
+size_bytes = 304729594
+sha256 = ""
+local_path = "downloads/spdf_isis2_topside_ionogram_amplitude_u8/cdf/"
+notes = "Every object listed under the ULA_65N_212E/1974/ prefix (31 day directories, 1,604 files, 68,578-294,387 bytes). Per-file size and MD5 are enforced at download; build records per-file SHA-256 in filtered/.../selection.tsv and the index."
+
+[local_paths]
+downloads = "downloads/spdf_isis2_topside_ionogram_amplitude_u8/"
+filtered = "filtered/spdf_isis2_topside_ionogram_amplitude_u8/"
+index = "index/spdf_isis2_topside_ionogram_amplitude_u8/"
+samples = "samples/spdf_isis2_topside_ionogram_amplitude_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/spdf_isis2_topside_ionogram_amplitude_u8/samples.jsonl"
+summary = "Fetch the 1,604 pinned ULA-1974 ISIS-2 average-ionogram CDFs, decode each with a pure-stdlib CDF v2.6 walker (CDR -> GDR -> zVDR -> VXR -> GZIP CVVR), keep complete calibrated 0.1-10 MHz ionograms under a declared rule, and write each kept ionogram's 'ampl' raster as raw uint8 plus its 'freq' axis as auxiliary little-endian float64."
+deterministic_notes = "Sources are processed in sources.tsv (key) order. Keep rule: MaxRec+1 equals vh_num, or exceeds it by 1-4 trailing records that are all-zero ampl rows with freq 0.0 and Epoch reset to the first record (a writer artifact, trimmed); 500 <= rows <= 1100; freq has no fill (< -1e30) and lies in (0, 10.6] MHz; min freq <= 0.11 MHz (sweep start present) and max freq >= 9.5 MHz (sweep reached the 10 MHz end); Epoch strictly increasing; at most 5% of the kept rows are all-zero amplitude rows (heavier dropout, e.g. the day-079 1.95 MHz runs with every other fixed-frequency row empty, is dropped as too_many_zero_rows). Every file must also pass structural checks (ampl CDF_UINT1, dims [223], record-variant, no pad value, GZIP CPR, FILLVAL -128, VALIDMIN/MAX 0/255, f_num 223, year 74). Per-file decisions are written to filtered/.../selection.tsv. verify.sh re-decodes all sources, re-applies the rule, byte-compares every sample, checks index rows, sha256, min/max, duplicate content, <= 5% all-zero rows, >= 32 distinct codes and <= 50% modal share per sample, the repository floors and the manifest totals. The parser is self-tested on synthetic CDF v2.6 files (nested VXR, multiple GZIP CVVRs, VVR inside a compressed variable, truncation, record gaps, corrupt gzip, length mismatch) at the start of build.sh."
+
+[[series]]
+id = "isis2_ula1974_ampl_u8"
+description = "ISIS-2 SFS sounder-receiver video amplitude raster of one complete topside ionogram."
+semantic_meaning = "8-bit relative amplitude of the ISIS-2 swept-frequency sounder receiver video output after each sounder pulse, averaged over four 25 us samples (100 us = 15 km apparent-range bins), for 223 delay bins per frequency step; rows cover the fixed-frequency portion followed by the 0.1-10 MHz swept portion. 255 is a valid code (the receiver/A-D saturation level produced by the archive's 16-to-8-bit reduction), not fill."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Stored upstream as CDF_UINT1; bytes are copied unchanged after GZIP decompression (single-byte elements, so no byte-order change)."
+source_resources = ["isis2_ula_1974_cdfs"]
+source_format = "NASA CDF v2.6 (big-endian network encoding), GZIP-compressed zVariable records"
+source_field = "zVariable 'ampl' (CDF_UINT1, dims [223], DEPEND_0 Epoch, DEPEND_1 v_height)"
+filtered_input_path = "filtered/spdf_isis2_topside_ionogram_amplitude_u8/selection.tsv"
+filtering = "All 1,604 ULA 1974 files are decoded; only complete calibrated 0.1-10 MHz ionograms pass the declared keep rule (processing.deterministic_notes). Short or truncated sweeps, files with uncalibrated (fill) frequency axes, MaxRec/vh_num mismatches other than the zero-row trailer, and non-monotonic Epochs and ionograms with more than 5% all-zero rows are dropped with the reason recorded."
+missing_value_policy = "ampl declares no pad value and its FILLVAL (-128, INT4) lies outside the UINT1 domain, so no in-band sentinel exists; all 0-255 codes are kept as measured. Records not covered by the VXR tree, corrupt gzip streams or length mismatches are fatal. Trailing all-zero writer-artifact records beyond vh_num are removed (only when exactly matching the artifact signature). Interior all-zero rows (telemetry dropouts, mostly in the fixed-frequency portion) are source content and kept up to 5% of the rows; ionograms with more are dropped by the keep rule (42 files), and verify re-checks the bound."
+conversion = "Walk CDR -> GDR -> zVDR 'ampl' -> VXR tree; gunzip each CVVR (wbits 31), require exactly (last-first+1)*223 bytes per block and full 0..MaxRec coverage; keep the first vh_num records; write the uint8 bytes in stored record order (frequency-step-major, delay-bin-minor) to one .u8 file per ionogram."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 2-D raster, row-major [frequency_step][223]"
+sample_geometry = "ionogram_frequency_step_by_apparent_range"
+sample_rank = 2
+sample_axes = ["frequency_step", "apparent_range_bin"]
+natural_record_kind = "one_digitized_isis2_topside_ionogram"
+sample_count = 1007
+total_size_bytes = 143655485
+output_path = "samples/spdf_isis2_topside_ionogram_amplitude_u8/isis2_ula1974_ampl_u8/"
+
+[[series]]
+id = "isis2_ula1974_freq_f64"
+description = "Sounder frequency of each amplitude row (auxiliary axis)."
+semantic_meaning = "Interpolated sounder frequency in MHz for each frequency step (row) of the matching amplitude raster: the fixed frequency for the fixed-frequency portion, then the swept 0.1-10 MHz frequencies."
+role = "auxiliary"
+representation_class = "native_numeric"
+representation_notes = "Upstream CDF_DOUBLE; converted from big-endian to little-endian float64 without rounding."
+source_resources = ["isis2_ula_1974_cdfs"]
+source_format = "NASA CDF v2.6 (big-endian network encoding), GZIP-compressed zVariable records"
+source_field = "zVariable 'freq' (CDF_DOUBLE, MHz)"
+filtered_input_path = "filtered/spdf_isis2_topside_ionogram_amplitude_u8/selection.tsv"
+filtering = "Same kept ionograms and the same first vh_num records as the primary series."
+missing_value_policy = "Kept ionograms contain no freq fill by construction (fill or out-of-range frequency drops the whole ionogram)."
+conversion = "Decode the 'freq' records, keep the first vh_num, and write them as little-endian float64, one file per ionogram aligned row-for-row with the amplitude raster."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 array"
+sample_geometry = "ionogram_row_frequency_axis"
+sample_rank = 1
+sample_axes = ["frequency_step"]
+natural_record_kind = "one_digitized_isis2_topside_ionogram_frequency_axis"
+sample_count = 1007
+total_size_bytes = 5153560
+output_path = "samples/spdf_isis2_topside_ionogram_amplitude_u8/isis2_ula1974_freq_f64/"

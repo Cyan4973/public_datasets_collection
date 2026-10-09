@@ -460,3 +460,4 @@ cloudnet_lindenberg_chm15k_beta_raw_f32	autocollect	32	atmospheric_lidar_backsca
 ascad_atmega8515_raw_power_traces_i8	autocollect	8	oscilloscope_trace	lecroy_oscilloscope_side_channel_em_probe_atmega8515	static.data.gouv.fr/resources/ascad	-	OK
 metabolights_mtbls12824_maxis_centroid_mz_f64	autocollect	64	mass_spectrum_peak_mz	bruker_maxis_uhr_qtof_lcms	ebi_metabolights	-	OK
 cmip6_cesm2_historical_daily_precip_f32	autocollect	32	sim_atmos_field	ncar_cesm2_climate_model	esgf-world.s3.amazonaws.com	-	OK
+ign_lidarhd_terrainmapper_intensity_u16	autocollect	16	laser_range	Leica TerrainMapper airborne lidar (IGN LiDAR HD, serial 90560), LAS 1.4 PDRF 6 COPC	IGN Géoplateforme data.geopf.fr LiDARHD-NUALID (NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22)	-	OK

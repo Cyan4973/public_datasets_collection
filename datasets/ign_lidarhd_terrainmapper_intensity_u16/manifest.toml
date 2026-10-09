@@ -1,0 +1,228 @@
+manifest_version = 1
+dataset_id = "ign_lidarhd_terrainmapper_intensity_u16"
+name = "IGN LiDAR HD Block 21LHD2GO (Leica TerrainMapper:90560) COPC Per-Point Return Intensity UInt16"
+description = "Native LAS 1.4 point-format-6 uint16 laser-return intensity of every point in 12 interior 1 km x 1 km classified COPC tiles of one IGN LiDAR HD acquisition block (mission 21LHD2GO, south-west France, flown 2023-08-09/17 by one Leica TerrainMapper, serial 90560), one raw uint16 array per tile in stored COPC order."
+homepage = "https://www.data.gouv.fr/datasets/nuages-de-points-lidar-hd"
+
+[license]
+name = "Licence Ouverte / Open Licence version 2.0 (Etalab)"
+spdx = "etalab-2.0"
+url = "https://www.etalab.gouv.fr/licence-ouverte-open-licence"
+citation = "Institut national de l'information geographique et forestiere (IGN), Nuages de points LiDAR HD, delivery NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22, https://www.data.gouv.fr/datasets/nuages-de-points-lidar-hd"
+notes = "data.gouv.fr API (https://www.data.gouv.fr/api/1/datasets/nuages-de-points-lidar-hd/) lists the IGN dataset 'Nuages de points LiDAR HD' (organization Institut national de l'information geographique et forestiere) with license id 'lov2' = 'Licence Ouverte / Open Licence version 2.0' (flags okd_compliant, domain_data). The dataset's resources point at the WFS layer IGNF_LIDAR-HD_METADONNEE:metadata whose url_npl links are the pinned tiles. Etalab 2.0 permits reuse, redistribution and commercial use with attribution (source and date)."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official IGN Geoplateforme download service (data.geopf.fr); tiles resolved from the official WFS metadata layer and Atom download feed; no mirrors."
+usage_notes = "Airborne lidar return intensities over forest/agricultural terrain; no personal data. Intensity is a per-point radiometric magnitude, not an image of people."
+
+[[origins]]
+id = "ign_wfs_metadata"
+name = "IGN Geoplateforme WFS layer IGNF_LIDAR-HD_METADONNEE:metadata"
+url = "https://data.geopf.fr/wfs/ows?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&TYPENAMES=IGNF_LIDAR-HD_METADONNEE:metadata&OUTPUTFORMAT=application/json&CQL_FILTER=code_mission='21LHD2GO'"
+type = "api"
+notes = "Per-tile metadata: capteur, code_mission, nombre_points, acquisition dates, classification process, url_npl. Used by discover.sh only."
+
+[[origins]]
+id = "ign_geoplateforme_download"
+name = "IGN Geoplateforme download service, LiDARHD-NUALID / NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22"
+url = "https://data.geopf.fr/telechargement/resource/LiDARHD-NUALID/NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22"
+type = "data_portal"
+notes = "Atom feed (2,501 entries: 2,500 COPC tiles + index.vpc) publishing per-file byte length and MD5; files under /telechargement/download/. Rate limit 1 request/s."
+
+[[resources]]
+id = "tile_0441_6373"
+origin = "ign_geoplateforme_download"
+url = "https://data.geopf.fr/telechargement/download/LiDARHD-NUALID/NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22/LHD_FXX_0441_6373_PTS_LAMB93_IGN69.copc.laz"
+type = "copc_laz_point_cloud"
+version = "NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22"
+access = "Direct public anonymous download; downloader validates size, Atom-feed MD5 and LAS/COPC header."
+size_bytes = 160681592
+md5 = "f4cb4c37dc62ac05743d59483acd34ec"
+sha256 = "a50ecf1755b64d7eb196e33808ff76c9145cd7ed68e773d8939b5ad5fcab1581"
+local_path = "downloads/ign_lidarhd_terrainmapper_intensity_u16/tiles/LHD_FXX_0441_6373_PTS_LAMB93_IGN69.copc.laz"
+notes = "1 km tile NW corner 0441-6373 km (Lambert-93); LAS header point count 23608241; acquisition 2023-08-09..2023-08-09. SHA-256 pinned from the first download (download_inventory.tsv)."
+
+[[resources]]
+id = "tile_0442_6342"
+origin = "ign_geoplateforme_download"
+url = "https://data.geopf.fr/telechargement/download/LiDARHD-NUALID/NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22/LHD_FXX_0442_6342_PTS_LAMB93_IGN69.copc.laz"
+type = "copc_laz_point_cloud"
+version = "NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22"
+access = "Direct public anonymous download; downloader validates size, Atom-feed MD5 and LAS/COPC header."
+size_bytes = 186286687
+md5 = "4541aa435e5c3afbc632a137f61e5ba6"
+sha256 = "bdaecef41d6b1300bfecb1a49e217637a7549187bc7832cabff865d8b0814f4e"
+local_path = "downloads/ign_lidarhd_terrainmapper_intensity_u16/tiles/LHD_FXX_0442_6342_PTS_LAMB93_IGN69.copc.laz"
+notes = "1 km tile NW corner 0442-6342 km (Lambert-93); LAS header point count 27313381; acquisition 2023-08-09..2023-08-17. SHA-256 pinned from the first download (download_inventory.tsv)."
+
+[[resources]]
+id = "tile_0442_6358"
+origin = "ign_geoplateforme_download"
+url = "https://data.geopf.fr/telechargement/download/LiDARHD-NUALID/NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22/LHD_FXX_0442_6358_PTS_LAMB93_IGN69.copc.laz"
+type = "copc_laz_point_cloud"
+version = "NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22"
+access = "Direct public anonymous download; downloader validates size, Atom-feed MD5 and LAS/COPC header."
+size_bytes = 191873767
+md5 = "137c34f01cabed3ecc8c656e14897a75"
+sha256 = "bcd83956184d968dcdc93fa23b25598f8ee31c4f7bcc0280ecd3ba085d205684"
+local_path = "downloads/ign_lidarhd_terrainmapper_intensity_u16/tiles/LHD_FXX_0442_6358_PTS_LAMB93_IGN69.copc.laz"
+notes = "1 km tile NW corner 0442-6358 km (Lambert-93); LAS header point count 27980567; acquisition 2023-08-17..2023-08-17. SHA-256 pinned from the first download (download_inventory.tsv)."
+
+[[resources]]
+id = "tile_0454_6342"
+origin = "ign_geoplateforme_download"
+url = "https://data.geopf.fr/telechargement/download/LiDARHD-NUALID/NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22/LHD_FXX_0454_6342_PTS_LAMB93_IGN69.copc.laz"
+type = "copc_laz_point_cloud"
+version = "NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22"
+access = "Direct public anonymous download; downloader validates size, Atom-feed MD5 and LAS/COPC header."
+size_bytes = 147378626
+md5 = "913f2001297b0e1b244a1686e081f94a"
+sha256 = "55e47db86b200059307639de1a63c20050da7f49da492239c14ca3adfdd2b745"
+local_path = "downloads/ign_lidarhd_terrainmapper_intensity_u16/tiles/LHD_FXX_0454_6342_PTS_LAMB93_IGN69.copc.laz"
+notes = "1 km tile NW corner 0454-6342 km (Lambert-93); LAS header point count 22769214; acquisition 2023-08-09..2023-08-17. SHA-256 pinned from the first download (download_inventory.tsv)."
+
+[[resources]]
+id = "tile_0454_6358"
+origin = "ign_geoplateforme_download"
+url = "https://data.geopf.fr/telechargement/download/LiDARHD-NUALID/NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22/LHD_FXX_0454_6358_PTS_LAMB93_IGN69.copc.laz"
+type = "copc_laz_point_cloud"
+version = "NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22"
+access = "Direct public anonymous download; downloader validates size, Atom-feed MD5 and LAS/COPC header."
+size_bytes = 172767048
+md5 = "ddb2f54347044dde54d8bac662508a99"
+sha256 = "d96f398fa7ee76c1a9d7a9e44b9d4a7a623e1289d9b71c944a366d335fd5584f"
+local_path = "downloads/ign_lidarhd_terrainmapper_intensity_u16/tiles/LHD_FXX_0454_6358_PTS_LAMB93_IGN69.copc.laz"
+notes = "1 km tile NW corner 0454-6358 km (Lambert-93); LAS header point count 25560762; acquisition 2023-08-17..2023-08-17. SHA-256 pinned from the first download (download_inventory.tsv)."
+
+[[resources]]
+id = "tile_0454_6374"
+origin = "ign_geoplateforme_download"
+url = "https://data.geopf.fr/telechargement/download/LiDARHD-NUALID/NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22/LHD_FXX_0454_6374_PTS_LAMB93_IGN69.copc.laz"
+type = "copc_laz_point_cloud"
+version = "NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22"
+access = "Direct public anonymous download; downloader validates size, Atom-feed MD5 and LAS/COPC header."
+size_bytes = 169417798
+md5 = "cfd5e940f923c7f137b7f3fd17da9612"
+sha256 = "57a89ee8b83deb41f876e839d6da314b290a2c2740eef756c2c7773344574789"
+local_path = "downloads/ign_lidarhd_terrainmapper_intensity_u16/tiles/LHD_FXX_0454_6374_PTS_LAMB93_IGN69.copc.laz"
+notes = "1 km tile NW corner 0454-6374 km (Lambert-93); LAS header point count 25913758; acquisition 2023-08-09..2023-08-17. SHA-256 pinned from the first download (download_inventory.tsv)."
+
+[[resources]]
+id = "tile_0466_6342"
+origin = "ign_geoplateforme_download"
+url = "https://data.geopf.fr/telechargement/download/LiDARHD-NUALID/NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22/LHD_FXX_0466_6342_PTS_LAMB93_IGN69.copc.laz"
+type = "copc_laz_point_cloud"
+version = "NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22"
+access = "Direct public anonymous download; downloader validates size, Atom-feed MD5 and LAS/COPC header."
+size_bytes = 188056093
+md5 = "ed5264830a71c6dd6cd01860323196bb"
+sha256 = "d9beb13facbcfe563f5136e042508ab4dbd2a79acc4da737533db9e0f1f690f1"
+local_path = "downloads/ign_lidarhd_terrainmapper_intensity_u16/tiles/LHD_FXX_0466_6342_PTS_LAMB93_IGN69.copc.laz"
+notes = "1 km tile NW corner 0466-6342 km (Lambert-93); LAS header point count 27525285; acquisition 2023-08-09..2023-08-17. SHA-256 pinned from the first download (download_inventory.tsv)."
+
+[[resources]]
+id = "tile_0466_6358"
+origin = "ign_geoplateforme_download"
+url = "https://data.geopf.fr/telechargement/download/LiDARHD-NUALID/NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22/LHD_FXX_0466_6358_PTS_LAMB93_IGN69.copc.laz"
+type = "copc_laz_point_cloud"
+version = "NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22"
+access = "Direct public anonymous download; downloader validates size, Atom-feed MD5 and LAS/COPC header."
+size_bytes = 173448558
+md5 = "ccea7db203a69a425417ea28749ee27f"
+sha256 = "cef3691b6ae29213ba0c3164f6b8d676ab90f8bc567742bcba3ab2c5d888a6d3"
+local_path = "downloads/ign_lidarhd_terrainmapper_intensity_u16/tiles/LHD_FXX_0466_6358_PTS_LAMB93_IGN69.copc.laz"
+notes = "1 km tile NW corner 0466-6358 km (Lambert-93); LAS header point count 25502365; acquisition 2023-08-17..2023-08-17. SHA-256 pinned from the first download (download_inventory.tsv)."
+
+[[resources]]
+id = "tile_0466_6374"
+origin = "ign_geoplateforme_download"
+url = "https://data.geopf.fr/telechargement/download/LiDARHD-NUALID/NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22/LHD_FXX_0466_6374_PTS_LAMB93_IGN69.copc.laz"
+type = "copc_laz_point_cloud"
+version = "NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22"
+access = "Direct public anonymous download; downloader validates size, Atom-feed MD5 and LAS/COPC header."
+size_bytes = 161831080
+md5 = "069600563f2c624ce5ae33dd223ba3ee"
+sha256 = "2c04bc2c092a745d869f4159acebe64babab608cacf9d91ee7794bb60334a418"
+local_path = "downloads/ign_lidarhd_terrainmapper_intensity_u16/tiles/LHD_FXX_0466_6374_PTS_LAMB93_IGN69.copc.laz"
+notes = "1 km tile NW corner 0466-6374 km (Lambert-93); LAS header point count 25670957; acquisition 2023-08-09..2023-08-17. SHA-256 pinned from the first download (download_inventory.tsv)."
+
+[[resources]]
+id = "tile_0478_6342"
+origin = "ign_geoplateforme_download"
+url = "https://data.geopf.fr/telechargement/download/LiDARHD-NUALID/NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22/LHD_FXX_0478_6342_PTS_LAMB93_IGN69.copc.laz"
+type = "copc_laz_point_cloud"
+version = "NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22"
+access = "Direct public anonymous download; downloader validates size, Atom-feed MD5 and LAS/COPC header."
+size_bytes = 198703729
+md5 = "6bf36e1941d0ec321f13081469c4bf52"
+sha256 = "8250da5e626d60cd7e645f583f8c0fc259183eb04da4e7e9179f721bd5360427"
+local_path = "downloads/ign_lidarhd_terrainmapper_intensity_u16/tiles/LHD_FXX_0478_6342_PTS_LAMB93_IGN69.copc.laz"
+notes = "1 km tile NW corner 0478-6342 km (Lambert-93); LAS header point count 29005724; acquisition 2023-08-09..2023-08-17. SHA-256 pinned from the first download (download_inventory.tsv)."
+
+[[resources]]
+id = "tile_0478_6358"
+origin = "ign_geoplateforme_download"
+url = "https://data.geopf.fr/telechargement/download/LiDARHD-NUALID/NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22/LHD_FXX_0478_6358_PTS_LAMB93_IGN69.copc.laz"
+type = "copc_laz_point_cloud"
+version = "NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22"
+access = "Direct public anonymous download; downloader validates size, Atom-feed MD5 and LAS/COPC header."
+size_bytes = 169167033
+md5 = "194e3e48251b29e0c5b0264f6ee6b20a"
+sha256 = "b38f404a445cb1fdc4b0e33565a8d57378cf6ad3f08f01f687b3c267c370cf5a"
+local_path = "downloads/ign_lidarhd_terrainmapper_intensity_u16/tiles/LHD_FXX_0478_6358_PTS_LAMB93_IGN69.copc.laz"
+notes = "1 km tile NW corner 0478-6358 km (Lambert-93); LAS header point count 27182146; acquisition 2023-08-17..2023-08-17. SHA-256 pinned from the first download (download_inventory.tsv)."
+
+[[resources]]
+id = "tile_0478_6374"
+origin = "ign_geoplateforme_download"
+url = "https://data.geopf.fr/telechargement/download/LiDARHD-NUALID/NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22/LHD_FXX_0478_6374_PTS_LAMB93_IGN69.copc.laz"
+type = "copc_laz_point_cloud"
+version = "NUALHD_1-0__LAZ_LAMB93_GO_2025-09-22"
+access = "Direct public anonymous download; downloader validates size, Atom-feed MD5 and LAS/COPC header."
+size_bytes = 152237583
+md5 = "526e600c9edb4a73f305e932bd141f35"
+sha256 = "dc081601d49b3eaddcd2488506a8393dbef762f8c9f43fec27e54e38ff3d537c"
+local_path = "downloads/ign_lidarhd_terrainmapper_intensity_u16/tiles/LHD_FXX_0478_6374_PTS_LAMB93_IGN69.copc.laz"
+notes = "1 km tile NW corner 0478-6374 km (Lambert-93); LAS header point count 24387500; acquisition 2023-08-09..2023-08-17. SHA-256 pinned from the first download (download_inventory.tsv)."
+
+[local_paths]
+downloads = "downloads/ign_lidarhd_terrainmapper_intensity_u16/"
+filtered = "filtered/ign_lidarhd_terrainmapper_intensity_u16/"
+index = "index/ign_lidarhd_terrainmapper_intensity_u16/"
+samples = "samples/ign_lidarhd_terrainmapper_intensity_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/ign_lidarhd_terrainmapper_intensity_u16/samples.jsonl"
+summary = "Download 12 pinned COPC tiles of IGN LiDAR HD mission 21LHD2GO, decode them with the repository LAZ decoder tools/laz/laszip.py, and emit each tile's native uint16 Intensity field as one raw little-endian sample."
+deterministic_notes = "sources.tsv (from discover.sh: WFS metadata + Atom feed + 375-byte header range requests) pins tile names, URLs, sizes, MD5s and LAS header point counts. Tile rule: 12 anchors on an interior grid (NW-corner km x 442/454/466/478, y 6342/6358/6374), >= 6 km from every block edge; nearest qualifying tile with 15M..32M catalogue points and <= 230 MB. download.sh checks size, MD5, LAS 1.4/PDRF 6/rl 30, LASzip compressor 3 with only POINT14 v3, COPC info VLR, Lambert-93 WKT VLR, COPC hierarchy EVLR and header point count. build.sh checks decoded point count, points-by-return against the header and decoded XYZ within header bounds, and applies regime guards (>= 1000 distinct intensities, max >= 1000, no value above 5% of a tile). verify.sh re-decodes every tile, re-extracts Intensity via struct.iter_unpack and byte-compares samples, checks index fields/sha256/min/max and manifest totals, and enforces floors and the 1 GB cap."
+
+[[series]]
+id = "ign_lidarhd_intensity_u16"
+description = "Per-point laser-return intensity of every point of one 1 km x 1 km IGN LiDAR HD COPC tile, in stored COPC order."
+semantic_meaning = "Return-pulse intensity recorded by the Leica TerrainMapper (serial 90560) airborne lidar for each classified point (all classes, all returns) of mission 21LHD2GO; a radiometric magnitude on the instrument's native uint16 scale. Realized: 0.1-99.9 percentiles about 290..4400, median about 900..1800 per tile, 4,331..5,962 distinct values per tile, order-0 entropy 11.06..11.69 bits; rare outliers reach 65535 (54 points in 6 tiles) and 0 (360 points in one tile)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "LAS 1.4 point data record format 6 stores Intensity as a little-endian uint16 at record offset 12; the values are copied unchanged (no rescaling, clipping or reordering)."
+source_resources = ["tile_0441_6373", "tile_0442_6342", "tile_0442_6358", "tile_0454_6342", "tile_0454_6358", "tile_0454_6374", "tile_0466_6342", "tile_0466_6358", "tile_0466_6374", "tile_0478_6342", "tile_0478_6358", "tile_0478_6374"]
+source_format = "COPC 1.0 (LAS 1.4 point data record format 6, LASzip layered-chunked compressor 3)"
+source_field = "Intensity"
+filtered_input_path = "filtered/ign_lidarhd_terrainmapper_intensity_u16/ingest_stats.json"
+filtering = "All point records of the 12 pinned tiles are kept: every classification code (ground, vegetation, building, water, virtual, etc.), every return number, withheld/overlap points included. Tiles come only from mission 21LHD2GO, whose 2,500 WFS records all carry capteur ['Leica TerrainMapper:90560']; regime guards reject any tile that looks like another sensor."
+missing_value_policy = "Intensity is a required field of point format 6; there is no sentinel. Zero and 65535 values are kept as recorded; realized zero fraction 1.15e-6 (360 points, all in tile 0442-6342) and 65535 fraction 1.73e-7 (54 points), reported per tile in ingest_stats.json and verify output. Truncated, desynchronised or header-inconsistent tiles fail the build."
+conversion = "tools/laz/laszip.py iter_chunks (unmodified) decodes each COPC chunk to 30-byte POINT14 records; bytes 12..13 of every record are copied into a raw little-endian uint16 array. Point order is the file's stored order: COPC octree-node chunks in the order PDAL 2.8.2 wrote them (points clustered per octree node, not acquisition-time order). One sample per tile, named after the tile."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 LAS intensity array"
+sample_geometry = "las_point_attribute_stream"
+sample_rank = 1
+sample_axes = ["point"]
+natural_record_kind = "lidar_hd_copc_tile_1km"
+sample_count = 12
+total_size_bytes = 624839800
+output_path = "samples/ign_lidarhd_terrainmapper_intensity_u16/ign_lidarhd_intensity_u16/"

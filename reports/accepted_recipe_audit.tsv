@@ -417,6 +417,7 @@ zenodo_astar_niti_sped_patterns_u8	ok	306498816	306498816	14781	20736	20736	0	0	
 sentinel2_l2a_reflectance_cogs_u16	ok	308098800	616197600	6	30140100	60280200	0	0	0	1	none	none
 librispeech_dev_clean_i16	ok	310337932	620675864	2703	94720	189440	0	0	0	1	none	none
 noaa_coastal_maine_topobathy_classification_u8	ok	312002256	312002256	50	6168542.5	6168542.5	0	0	0	1	none	none
+ign_lidarhd_terrainmapper_intensity_u16	ok	312419900	624839800	12	25792357.5	51584715	0	0	0	1	none	none
 met_open_access_paintings_u8	ok	329612454	329612454	30	10817869.5	10817869.5	0	0	0	1	none	none
 ambientcg_photogrammetry_normalgl_u16	ok	337643520	675287040	119	3145728	6291456	0	0	0	1	none	none
 nasa_pds_cassini_radar_bidr_sigma0_u8	ok	343474176	343474176	22	8781824	8781824	0	0	0	1	none	none

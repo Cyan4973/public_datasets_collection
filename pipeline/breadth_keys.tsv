@@ -457,3 +457,4 @@ noaa_ngs_potomac_topobathy_vq880g_intensity_u16	autocollect	16	laser_range	Riegl
 noaa_shoals1000t_bluehillbay_topobathy_gps_time_f64	autocollect	64	laser_range	Fugro SHOALS-1000T airborne bathymetric lidar (NOAA/MCP), 2.5 kHz, LAS 1.4 PDRF 6 COPC	NOAA NODD noaa-nos-coastal-lidar-pds (Digital Coast), laz/geoid18/8526	-	OK
 boreas_velodyne_alpha_prime_intensity_u8	autocollect	8	laser_range	velodyne_alpha_prime_vls128_automotive_lidar	boreas.s3.amazonaws.com	-	OK
 cloudnet_lindenberg_chm15k_beta_raw_f32	autocollect	32	atmospheric_lidar_backscatter	lufft_chm15k_ceilometer	cloudnet.fmi.fi	-	OK
+ascad_atmega8515_raw_power_traces_i8	autocollect	8	oscilloscope_trace	lecroy_oscilloscope_side_channel_em_probe_atmega8515	static.data.gouv.fr/resources/ascad	-	OK

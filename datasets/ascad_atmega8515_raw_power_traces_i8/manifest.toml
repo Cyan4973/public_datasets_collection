@@ -1,0 +1,89 @@
+manifest_version = 1
+dataset_id = "ascad_atmega8515_raw_power_traces_i8"
+name = "ANSSI ASCAD v1 Fixed-Key Raw ATMega8515 Side-Channel Traces (int8)"
+description = "The first 1,500 complete 100,000-sample int8 oscilloscope acquisitions of the electromagnetic side channel of an ATMega8515 running masked AES-128, decoded from the HDF5 dataset /traces of ANSSI's ATMega8515_raw_traces.h5 (ASCAD v1, fixed key)."
+homepage = "https://www.data.gouv.fr/datasets/ascad"
+
+[license]
+name = "Licence Ouverte / Open Licence (Etalab, data.gouv.fr license id fr-lo)"
+spdx = "LicenseRef-Etalab-Licence-Ouverte"
+url = "https://www.etalab.gouv.fr/wp-content/uploads/2014/05/Licence_Ouverte.pdf"
+citation = "Prouff, E., Strullu, R., Benadjila, R., Cagli, E., Dumas, C. Study of Deep Learning Techniques for Side-Channel Analysis and Introduction to ASCAD Database. IACR ePrint 2018/053. Data: ANSSI, ASCAD, https://www.data.gouv.fr/datasets/ascad"
+notes = "The data.gouv.fr API record for dataset 5aaa829dc751df2fbd43eacb (slug 'ascad', organization Agence Nationale de la Sécurité des Systèmes d'Information) declares license 'fr-lo' (Licence Ouverte / Open Licence, OKD-compliant, attribution required). download.sh re-checks this on every run. The companion repository github.com/ANSSI-FR/ASCAD is BSD-licensed code. Only this fixed-key 'ascad' dataset is used; the separate variable-key ASCAD dataset on data.gouv.fr declares 'notspecified' and is NOT used."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official ANSSI publication on the French government open-data portal data.gouv.fr (static.data.gouv.fr object storage). Laboratory side-channel measurements of a test microcontroller; no persons involved."
+usage_notes = "Only oscilloscope sample values are emitted. The HDF5 'metadata' compound dataset (plaintext, key, masks) is not emitted."
+
+[[origins]]
+id = "datagouv_ascad"
+name = "data.gouv.fr dataset 'ASCAD' (ANSSI)"
+url = "https://www.data.gouv.fr/api/1/datasets/5aaa829dc751df2fbd43eacb/"
+type = "data_portal"
+notes = "API record pins resource URL, filesize 4,435,199,469 B, sha1 fb8c8a71423c80795b4f8592c50891134902666a, and license fr-lo."
+
+[[resources]]
+id = "ascad_data_zip_tail"
+origin = "datagouv_ascad"
+url = "https://static.data.gouv.fr/resources/ascad/20180530-163000/ASCAD_data.zip"
+type = "other"
+version = "20180530-163000"
+access = "HTTP range GET of the last 4,096 bytes (4435195373-4435199468): zip64 EOCD, locator and 13-entry central directory."
+size_bytes = 4096
+sha256 = "bbc7bb44cf87abee4de79b7625dfe26d6325b769ec83ca529cdd5323418db0d3"
+local_path = "downloads/ascad_atmega8515_raw_power_traces_i8/ASCAD_data.zip.tail4096"
+notes = "Confirms member ASCAD_data/ASCAD_databases/ATMega8515_raw_traces.h5: method 8, flags 0, crc32 1cf4a0bf, compressed 2,966,104,128 B, uncompressed 6,003,842,144 B, local header offset 72,006,934."
+
+[[resources]]
+id = "atmega8515_raw_traces_member_prefix"
+origin = "datagouv_ascad"
+url = "https://static.data.gouv.fr/resources/ascad/20180530-163000/ASCAD_data.zip"
+type = "other"
+version = "20180530-163000"
+access = "HTTP range GET of archive bytes 72006934-163006933 (local file header plus the first ~91.99 MB of the raw DEFLATE stream of ATMega8515_raw_traces.h5), fetched resumably by appending sub-ranges."
+size_bytes = 92000000
+sha256 = "256f0a930c6521befbc7ab72352c6d7e6d1535f140a09c5b0a85466caf65cc41"
+local_path = "downloads/ascad_atmega8515_raw_power_traces_i8/ATMega8515_raw_traces.h5.deflate_prefix"
+notes = "A DEFLATE prefix decodes to an exact prefix of the uncompressed HDF5 file. Range sha256 pinned from the first driver download (2026-10-08); download.sh additionally validates the local header against the central directory, the HDF5 superblock and the 'traces' layout, and that the prefix inflates past trace 1,499."
+
+[local_paths]
+downloads = "downloads/ascad_atmega8515_raw_power_traces_i8/"
+filtered = "filtered/ascad_atmega8515_raw_power_traces_i8/"
+index = "index/ascad_atmega8515_raw_power_traces_i8/"
+samples = "samples/ascad_atmega8515_raw_power_traces_i8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/ascad_atmega8515_raw_power_traces_i8/samples.jsonl"
+summary = "Range-fetch the head of the deflated HDF5 member, stream-inflate it with zlib (raw DEFLATE), parse HDF5 superblock v0 -> root group -> /traces (dataspace, int8 datatype, v3 contiguous layout), and write the first 1,500 complete 100,000-value traces as raw int8 samples in acquisition order."
+deterministic_notes = "Pinned archive URL, size, sha1 (API), tail sha256, member offset/method/sizes/crc (central directory and local header), and range length. The parser derives dims (60000 x 100000), signed little-endian 8-bit datatype, absence of a filter pipeline, and contiguous address 3,842,144 / size 6,000,000,000 from the file and asserts they equal the expected values. Exactly traces 0..1499 are emitted; only complete traces. verify.sh re-inflates the prefix, re-parses the HDF5 header, byte-compares every sample, checks index fields and per-sample sha256, rejects exact duplicates and constant/degenerate traces (< 32 distinct values or one value > 50%)."
+
+[[series]]
+id = "ascad_atmega8515_raw_trace_i8"
+description = "Raw int8 side-channel oscilloscope acquisitions, one per AES-128 execution, ATMega8515, ASCAD v1 fixed-key campaign."
+semantic_meaning = "Signed 8-bit digitizer codes of the electromagnetic emanation of an ATMega8515 microcontroller during one masked AES-128 encryption, sampled over 100,000 consecutive points (ASCAD v1 raw acquisition)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "HDF5 /traces is stored as signed 8-bit little-endian fixed-point (H5T_STD_I8LE) with contiguous layout; bytes are copied verbatim, no rescaling."
+source_resources = ["ascad_data_zip_tail", "atmega8515_raw_traces_member_prefix"]
+source_format = "HDF5 v0 file (zip member, DEFLATE) with contiguous unfiltered int8 2-D dataset"
+source_field = "root dataset /traces, row i (one 100,000-sample acquisition per row)"
+filtered_input_path = "filtered/ascad_atmega8515_raw_power_traces_i8/ingest_stats.json"
+filtering = "Rows 0..1499 of /traces in acquisition order (the first 1,500 of 60,000). The /metadata compound dataset (plaintext, key, masks) is not emitted."
+missing_value_policy = "int8 digitizer codes have no missing-value sentinel; every value is kept. A truncated prefix, wrong layout/datatype, a constant trace, a trace with < 32 distinct values or one value > 50% of samples, or an exact duplicate trace is fatal."
+conversion = "Inflate the raw DEFLATE member prefix (zlib wbits -15), skip the 3,842,144-byte HDF5 header region (parsed contiguous address), and write each consecutive 100,000-byte row as a raw int8 sample file trace_NNNNN.bin."
+numeric_kind = "int"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous int8 array"
+sample_geometry = "oscilloscope_time_series"
+sample_rank = 1
+sample_axes = ["time_sample"]
+natural_record_kind = "single_aes_execution_oscilloscope_acquisition_trace"
+sample_count = 1500
+total_size_bytes = 150000000
+output_path = "samples/ascad_atmega8515_raw_power_traces_i8/ascad_atmega8515_raw_trace_i8/"

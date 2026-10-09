@@ -1,0 +1,224 @@
+manifest_version = 1
+dataset_id = "zenodo_nakhlite_ebsd_band_contrast_slope_u8"
+name = "Martian Nakhlite EBSD Band Contrast and Band Slope Maps UInt8 (Oxford HKL CHANNEL5, Zenodo 5545821)"
+description = "Per-scan-point EBSD pattern-quality rasters, Band Contrast (BC) and Band Slope (BS), native 0-255 integers, one raster per map from the 10 legacy Oxford HKL CHANNEL5 .ctf exports of nakhlite thin sections in Zenodo record 5545821."
+homepage = "https://doi.org/10.5281/zenodo.5545821"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Griffin, S., Daly, L., Piazolo, S., Forman, L. V., Keller, T., Lee, M. R., Baumgartner, R. J., Trimby, P. W., Benedix, G. K., Irving, A. J., Hoefnagels, B. Constraints on the emplacement of Martian nakhlite igneous rocks and their source volcano from advanced micro-petrofabric analysis. Zenodo, 2021. DOI 10.5281/zenodo.5545821."
+notes = "Zenodo record metadata declares license id cc-by-4.0 with access_right open for the whole deposit; the record description names the files as 'Martian nakhlite meteorite electron backscatter data and magma body unit thickness calculation code'. The .ctf files are the deposited data objects. download.sh re-checks the live record license, access and per-file size/md5 before fetching. Preserve the authors and DOI."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official author deposit on Zenodo (record 5545821, DOI 10.5281/zenodo.5545821, published 2021-09-29). SEM/EBSD instrument data of meteorite thin sections; no people involved."
+usage_notes = "Public CC BY 4.0 scientific instrument data; only the BC and BS pattern-quality columns are emitted."
+
+[[origins]]
+id = "zenodo_5545821"
+name = "Zenodo record 5545821 (Griffin et al., nakhlite micro-petrofabrics)"
+url = "https://zenodo.org/records/5545821"
+type = "repository"
+version = "published 2021-09-29"
+notes = "20 .ctf EBSD maps plus two MATLAB .mlx scripts. Only the 10 legacy CHANNEL5 exports (empty Author tag, 'Device 0', 4-decimal steps, 20 kV, 70 deg tilt) are used. Excluded: the 9 AZtec exports ('Author AZtec', 'Device 1'; different acquisition software and detector, so a different BC/BS scaling regime), NWA 817_N8-1_NR_crystal.ctf (AZtec-style header, 0.4 um step, TiltAngle stored in radians, 2.96 GB) and the terrestrial Caleta El Cobre map (AZtec, Device 1)."
+
+[[resources]]
+id = "record_metadata"
+origin = "zenodo_5545821"
+url = "https://zenodo.org/api/records/5545821"
+type = "api_query_result"
+version = "record 5545821"
+access = "Public Zenodo REST API; re-fetched on every run to re-check title, license (cc-by-4.0), access_right (open), and the size and md5 of each used file."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/zenodo_nakhlite_ebsd_band_contrast_slope_u8/record.json"
+notes = "Live JSON whose bytes change with Zenodo statistics; validated semantically rather than hashed."
+
+[[resources]]
+id = "ctf_nwa998_ug1"
+origin = "zenodo_5545821"
+url = "https://zenodo.org/api/records/5545821/files/NWA998_UG1.ctf/content"
+type = "file"
+version = "md5:c30583909c78b03e46952e0dc3d3fdc1"
+access = "Direct public download (whole file, resumable curl)."
+size_bytes = 111773804
+sha256 = ""
+local_path = "downloads/zenodo_nakhlite_ebsd_band_contrast_slope_u8/NWA998_UG1.ctf"
+notes = "Zenodo key 'NWA998_UG1.ctf'. CHANNEL5 header: Device 0, 20 kV, 70 deg tilt, XCells 1636, YCells 1091, step 4.5000 um (1,784,876 scan points). Zenodo publishes md5 only; size and md5 are pinned."
+
+[[resources]]
+id = "ctf_y749_72a"
+origin = "zenodo_5545821"
+url = "https://zenodo.org/api/records/5545821/files/Y749_72A.ctf/content"
+type = "file"
+version = "md5:3a90cd468b8235a50c4cd57c6a823133"
+access = "Direct public download (whole file, resumable curl)."
+size_bytes = 343735226
+sha256 = ""
+local_path = "downloads/zenodo_nakhlite_ebsd_band_contrast_slope_u8/Y749_72A.ctf"
+notes = "Zenodo key 'Y749_72A.ctf'. CHANNEL5 header: Device 0, 20 kV, 70 deg tilt, XCells 2294, YCells 2418, step 3.0000 um (5,546,892 scan points). Zenodo publishes md5 only; size and md5 are pinned."
+
+[[resources]]
+id = "ctf_nwa998_t1"
+origin = "zenodo_5545821"
+url = "https://zenodo.org/api/records/5545821/files/NWA998_T1.ctf/content"
+type = "file"
+version = "md5:727dd46df11dc18d71faaaed9224dd82"
+access = "Direct public download (whole file, resumable curl)."
+size_bytes = 98762664
+sha256 = ""
+local_path = "downloads/zenodo_nakhlite_ebsd_band_contrast_slope_u8/NWA998_T1.ctf"
+notes = "Zenodo key 'NWA998_T1.ctf'. CHANNEL5 header: Device 0, 20 kV, 70 deg tilt, XCells 1522, YCells 1037, step 2.5000 um (1,578,314 scan points). Zenodo publishes md5 only; size and md5 are pinned."
+
+[[resources]]
+id = "ctf_y802_36a"
+origin = "zenodo_5545821"
+url = "https://zenodo.org/api/records/5545821/files/Y802_36A.ctf/content"
+type = "file"
+version = "md5:6c1a12954c76e2b0aa034b20925492b7"
+access = "Direct public download (whole file, resumable curl)."
+size_bytes = 91115880
+sha256 = ""
+local_path = "downloads/zenodo_nakhlite_ebsd_band_contrast_slope_u8/Y802_36A.ctf"
+notes = "Zenodo key 'Y802_36A.ctf'. CHANNEL5 header: Device 0, 20 kV, 70 deg tilt, XCells 1154, YCells 1243, step 5.0000 um (1,434,422 scan points). Zenodo publishes md5 only; size and md5 are pinned."
+
+[[resources]]
+id = "ctf_y593_127a"
+origin = "zenodo_5545821"
+url = "https://zenodo.org/api/records/5545821/files/Y593_127A.ctf/content"
+type = "file"
+version = "md5:ed15483be3ad866724f4a27541d38944"
+access = "Direct public download (whole file, resumable curl)."
+size_bytes = 139963789
+sha256 = ""
+local_path = "downloads/zenodo_nakhlite_ebsd_band_contrast_slope_u8/Y593_127A.ctf"
+notes = "Zenodo key 'Y593_127A.ctf'. CHANNEL5 header: Device 0, 20 kV, 70 deg tilt, XCells 1736, YCells 1258, step 3.3000 um (2,183,888 scan points). Zenodo publishes md5 only; size and md5 are pinned."
+
+[[resources]]
+id = "ctf_gv_bm1975m16p19783"
+origin = "zenodo_5545821"
+url = "https://zenodo.org/api/records/5545821/files/GV_BM1975M16P19783.ctf/content"
+type = "file"
+version = "md5:0d6ed343e2181e2d53f493c8739a1198"
+access = "Direct public download (whole file, resumable curl)."
+size_bytes = 6138014
+sha256 = ""
+local_path = "downloads/zenodo_nakhlite_ebsd_band_contrast_slope_u8/GV_BM1975M16P19783.ctf"
+notes = "Zenodo key 'GV_BM1975M16P19783.ctf'. CHANNEL5 header: Device 0, 20 kV, 70 deg tilt, XCells 396, YCells 236, step 15.0000 um (93,456 scan points). Zenodo publishes md5 only; size and md5 are pinned."
+
+[[resources]]
+id = "ctf_mil_090136_50"
+origin = "zenodo_5545821"
+url = "https://zenodo.org/api/records/5545821/files/MIL%20090136_50.ctf/content"
+type = "file"
+version = "md5:cc6aabefc8a87a834204334cdf4a53c9"
+access = "Direct public download (whole file, resumable curl)."
+size_bytes = 222209866
+sha256 = ""
+local_path = "downloads/zenodo_nakhlite_ebsd_band_contrast_slope_u8/MIL_090136_50.ctf"
+notes = "Zenodo key 'MIL 090136_50.ctf'. CHANNEL5 header: Device 0, 20 kV, 70 deg tilt, XCells 2322, YCells 1553, step 3.4600 um (3,606,066 scan points). Zenodo publishes md5 only; size and md5 are pinned."
+
+[[resources]]
+id = "ctf_y593_106a"
+origin = "zenodo_5545821"
+url = "https://zenodo.org/api/records/5545821/files/Y593_106A.ctf/content"
+type = "file"
+version = "md5:e3a63e4e0c1daacf65a605755ccfb234"
+access = "Direct public download (whole file, resumable curl)."
+size_bytes = 255202129
+sha256 = ""
+local_path = "downloads/zenodo_nakhlite_ebsd_band_contrast_slope_u8/Y593_106A.ctf"
+notes = "Zenodo key 'Y593_106A.ctf'. CHANNEL5 header: Device 0, 20 kV, 70 deg tilt, XCells 2244, YCells 1787, step 3.0000 um (4,010,028 scan points). Zenodo publishes md5 only; size and md5 are pinned."
+
+[[resources]]
+id = "ctf_lafayette_usnm1505_5_lam"
+origin = "zenodo_5545821"
+url = "https://zenodo.org/api/records/5545821/files/Lafayette_USNM1505-5_LAM.ctf/content"
+type = "file"
+version = "md5:118098476923cf684b76f1afe6ac5969"
+access = "Direct public download (whole file, resumable curl)."
+size_bytes = 291951528
+sha256 = ""
+local_path = "downloads/zenodo_nakhlite_ebsd_band_contrast_slope_u8/Lafayette_USNM1505-5_LAM.ctf"
+notes = "Zenodo key 'Lafayette_USNM1505-5_LAM.ctf'. CHANNEL5 header: Device 0, 20 kV, 70 deg tilt, XCells 2481, YCells 1853, step 4.0000 um (4,597,293 scan points). Zenodo publishes md5 only; size and md5 are pinned."
+
+[[resources]]
+id = "ctf_y749_64a"
+origin = "zenodo_5545821"
+url = "https://zenodo.org/api/records/5545821/files/Y749_64A.ctf/content"
+type = "file"
+version = "md5:c036b4b0e87dcb2e8155f989f69fbbdd"
+access = "Direct public download (whole file, resumable curl)."
+size_bytes = 374271023
+sha256 = ""
+local_path = "downloads/zenodo_nakhlite_ebsd_band_contrast_slope_u8/Y749_64A.ctf"
+notes = "Zenodo key 'Y749_64A.ctf'. CHANNEL5 header: Device 0, 20 kV, 70 deg tilt, XCells 2983, YCells 2007, step 3.3000 um (5,986,881 scan points). Zenodo publishes md5 only; size and md5 are pinned."
+
+[local_paths]
+downloads = "downloads/zenodo_nakhlite_ebsd_band_contrast_slope_u8/"
+filtered = "filtered/zenodo_nakhlite_ebsd_band_contrast_slope_u8/"
+index = "index/zenodo_nakhlite_ebsd_band_contrast_slope_u8/"
+samples = "samples/zenodo_nakhlite_ebsd_band_contrast_slope_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/zenodo_nakhlite_ebsd_band_contrast_slope_u8/samples.jsonl"
+summary = "Download the 10 pinned CHANNEL5 .ctf EBSD maps whole, stream-parse each one, and write its BC and BS columns as two YCells x XCells uint8 rasters in raster order."
+deterministic_notes = "Fixed record, 10 files, sizes and md5s (maps.tsv), and grids/steps from each header. download.sh rejects files whose size, md5, first line ('Channel Text File'), Author tag (must be empty), Device (0), KV (20), TiltAngle (70), JobMode (Grid), XCells/YCells/XStep/YStep (pinned) or last-row grid position do not match, or that lack exactly one Phase/X/Y/BC/BS column. build.sh locates X, Y, BC, BS by name from the column line, places each data row at grid cell (round(Y/YStep), round(X/XStep)), and fails on off-lattice coordinates, duplicate or missing cells, row count != XCells*YCells, a wrong field count, or any BC/BS that is not a decimal integer in 0..255 (no clamping). verify.sh re-checks md5s, re-derives both rasters with an independent parser, byte-compares every sample, checks index fields and sha256s, rejects samples with fewer than 16 distinct values or a zero share above 0.8, prints the zero (unindexed) share per sample, and checks manifest totals."
+
+[[series]]
+id = "ebsd_band_contrast_u8"
+description = "EBSD Band Contrast (BC), 0-255 per scan point, one raster per CHANNEL5 nakhlite map."
+semantic_meaning = "Kikuchi pattern quality at each SEM beam position: the CHANNEL5 Band Contrast, an 8-bit measure of the average Hough-transform peak intensity of the detected Kikuchi bands relative to the overall pattern intensity. High over well-crystallised, well-polished grains, low at grain boundaries, cracks, fine-grained mesostasis and epoxy; 0 where no pattern was solved. 20 kV, 70 deg tilt, 2.5-15 um step."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The CHANNEL5 indexer stores Band Contrast as an integer 0..255 per scan point; the .ctf writes it as a decimal integer column. Values are emitted exactly as stored, reordered only from file row order to raster order (identical for these files, which are already written x-fastest)."
+source_resources = ["ctf_nwa998_ug1", "ctf_y749_72a", "ctf_nwa998_t1", "ctf_y802_36a", "ctf_y593_127a", "ctf_gv_bm1975m16p19783", "ctf_mil_090136_50", "ctf_y593_106a", "ctf_lafayette_usnm1505_5_lam", "ctf_y749_64a"]
+source_format = "Oxford HKL CHANNEL5 .ctf (Channel Text File): tab-separated header plus one row per grid scan point with columns Phase X Y Bands Error Euler1 Euler2 Euler3 MAD BC BS"
+source_field = "BC (Band Contrast, integer 0..255)"
+filtered_input_path = "filtered/zenodo_nakhlite_ebsd_band_contrast_slope_u8/ingest_stats.json"
+filtering = "All scan points of the 10 legacy CHANNEL5 maps (Device 0, empty Author): NWA 998 (UG1, T1), Y000749 (64A, 72A), Y000593 (106A, 127A), Y000802 (36A), Governador Valadares BM1975,M16,P19783, MIL 090136 (50) and Lafayette USNM 1505-5. No pixel is dropped; AZtec Device 1 maps, NWA 817 and Caleta El Cobre are excluded as different acquisition regimes."
+missing_value_policy = "No sentinel is substituted. Non-indexed or off-sample points carry BC=0 in the source and are kept as 0 (zero share per sample is reported by verify.sh; realized per-map zero share 1.3% (GV) to 19.7% (NWA998_T1), 10.5% for MIL 090136; the BC and BS zero masks are identical pixel for pixel; exact per-map shares are in the verify log). Malformed rows, values outside 0..255, non-integer values, duplicate or missing grid cells, or a row count different from XCells*YCells are fatal; nothing is clamped, imputed or dropped."
+conversion = "Stream each .ctf line by line; take XCells, YCells, XStep, YStep from the header and the BC column position by name from the column line; for each row write int(BC) into byte (round(Y/YStep)*XCells + round(X/XStep)) of a YCells*XCells uint8 buffer; emit the buffer as samples/<id>/ebsd_band_contrast_u8/<map_id>.bin (row-major, scan x fastest, single bytes so byte order is moot)."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 2-D EBSD map raster, row-major (YCells x XCells)"
+sample_geometry = "ebsd_scan_grid_raster_2d"
+sample_rank = 2
+sample_axes = ["scan_y", "scan_x"]
+natural_record_kind = "ebsd_map_scan_grid"
+sample_count = 10
+total_size_bytes = 30822116
+output_path = "samples/zenodo_nakhlite_ebsd_band_contrast_slope_u8/ebsd_band_contrast_u8/"
+
+[[series]]
+id = "ebsd_band_slope_u8"
+description = "EBSD Band Slope (BS), 0-255 per scan point, one raster per CHANNEL5 nakhlite map."
+semantic_meaning = "Kikuchi pattern quality at each SEM beam position: the CHANNEL5 Band Slope, an 8-bit measure of the maximum intensity gradient across the edges of the detected Kikuchi bands (band sharpness). Same scan points as BC; 0 where no pattern was solved."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The CHANNEL5 indexer stores Band Slope as an integer 0..255 per scan point; the .ctf writes it as a decimal integer column. Values are emitted exactly as stored, reordered only from file row order to raster order (identical for these files, which are already written x-fastest)."
+source_resources = ["ctf_nwa998_ug1", "ctf_y749_72a", "ctf_nwa998_t1", "ctf_y802_36a", "ctf_y593_127a", "ctf_gv_bm1975m16p19783", "ctf_mil_090136_50", "ctf_y593_106a", "ctf_lafayette_usnm1505_5_lam", "ctf_y749_64a"]
+source_format = "Oxford HKL CHANNEL5 .ctf (Channel Text File): tab-separated header plus one row per grid scan point with columns Phase X Y Bands Error Euler1 Euler2 Euler3 MAD BC BS"
+source_field = "BS (Band Slope, integer 0..255)"
+filtered_input_path = "filtered/zenodo_nakhlite_ebsd_band_contrast_slope_u8/ingest_stats.json"
+filtering = "All scan points of the 10 legacy CHANNEL5 maps (Device 0, empty Author): NWA 998 (UG1, T1), Y000749 (64A, 72A), Y000593 (106A, 127A), Y000802 (36A), Governador Valadares BM1975,M16,P19783, MIL 090136 (50) and Lafayette USNM 1505-5. No pixel is dropped; AZtec Device 1 maps, NWA 817 and Caleta El Cobre are excluded as different acquisition regimes."
+missing_value_policy = "No sentinel is substituted. Non-indexed or off-sample points carry BS=0 in the source and are kept as 0 (zero share per sample is reported by verify.sh; realized per-map zero share 1.3% (GV) to 19.7% (NWA998_T1), 10.5% for MIL 090136; the BC and BS zero masks are identical pixel for pixel; exact per-map shares are in the verify log). Malformed rows, values outside 0..255, non-integer values, duplicate or missing grid cells, or a row count different from XCells*YCells are fatal; nothing is clamped, imputed or dropped."
+conversion = "Stream each .ctf line by line; take XCells, YCells, XStep, YStep from the header and the BS column position by name from the column line; for each row write int(BS) into byte (round(Y/YStep)*XCells + round(X/XStep)) of a YCells*XCells uint8 buffer; emit the buffer as samples/<id>/ebsd_band_slope_u8/<map_id>.bin (row-major, scan x fastest, single bytes so byte order is moot)."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 2-D EBSD map raster, row-major (YCells x XCells)"
+sample_geometry = "ebsd_scan_grid_raster_2d"
+sample_rank = 2
+sample_axes = ["scan_y", "scan_x"]
+natural_record_kind = "ebsd_map_scan_grid"
+sample_count = 10
+total_size_bytes = 30822116
+output_path = "samples/zenodo_nakhlite_ebsd_band_contrast_slope_u8/ebsd_band_slope_u8/"

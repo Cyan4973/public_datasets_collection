@@ -504,3 +504,4 @@ hprc_revio_fiberseq_hifi_pulse_width_u8	autocollect	8	polymerase_kinetics	pacbio
 nrcs_snotel_hourly_snow_depth_u8	autocollect	8	met_station_obs	nrcs_snotel_ultrasonic_snow_depth	wcc.sc.egov.usda.gov	-	OK
 gwosc_o3b_h1_bulk_strain_f64	autocollect	64	gw_detector_strain	ligo_hanford_h1_o3b	gwosc.org/archive/O3b_4KHZ_R1	-	OK
 cfpb_hmda2023_lar_closing_costs_f64	autocollect	64	consumer_loan_cost_amounts	HMDA Loan/Application Register (Regulation C) public snapshot	ffiec_cfpb_hmda_snapshot	-	OK
+zenodo_nakhlite_ebsd_band_contrast_slope_u8	autocollect	8	ebsd_indexing_quality_map	oxford_hkl_channel5_ebsd	zenodo	-	OK

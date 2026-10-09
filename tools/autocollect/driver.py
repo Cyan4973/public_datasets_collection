@@ -45,7 +45,6 @@ import time
 import tomllib
 import uuid
 from pathlib import Path
-from urllib.parse import urlparse
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -63,16 +62,6 @@ BREADTH_COLUMNS = ["dataset_id", "origin", "widths", "measurement_type", "instru
 COUNTED_VERDICTS = {"STRONG", "OK"}
 ZLSIM = [sys.executable, "tools/autocollect/zlsim.py"]
 ZLSIM_ENV = {"ZLSIM_PARETO_TIMEOUT_S": "600"}
-# Hosts serving many unrelated collections are not one archive: these match
-# with their subdomains (ndownloader.figshare.com, raw.githubusercontent.com),
-# path-style object stores only exactly (per-bucket hosts stay one archive).
-MULTI_TENANT_SUFFIXES = {"zenodo.org", "figshare.com", "github.com", "githubusercontent.com", "huggingface.co", "hf.co",
-                         "osf.io", "dataverse.harvard.edu", "datadryad.org", "mendeley.com"}
-MULTI_TENANT_EXACT = {"s3.amazonaws.com", "storage.googleapis.com"}
-
-
-def is_multi_tenant(host: str) -> bool:
-    return host in MULTI_TENANT_EXACT or any(host == suffix or host.endswith("." + suffix) for suffix in MULTI_TENANT_SUFFIXES)
 STAGING_DIR = REPO_ROOT / "staging"
 DATASETS_DIR = REPO_ROOT / "datasets"
 RUNTIME_DIR = DATA_ROOT / "pipeline"
@@ -216,7 +205,6 @@ class Config:
     max_build_cycles: int = 4
     max_repair_cycles: int = 2
     max_agent_failures: int = 2
-    max_per_archive: int = 2
     budgets_usd: dict = dataclasses.field(default_factory=lambda: {"scout": 10.0, "screener": 8.0, "builder": 40.0, "judge": 15.0})
     timeouts_s: dict = dataclasses.field(default_factory=lambda: {"scout": 5400, "screener": 5400, "builder": 4 * 3600, "judge": 2 * 3600})
     max_cost_usd: float | None = None
@@ -458,22 +446,6 @@ def append_breadth(row: dict) -> None:
     rows.append(row)
     lines = ["\t".join(BREADTH_COLUMNS)] + ["\t".join(one_line(item.get(column, "") or "-", 300) for column in BREADTH_COLUMNS) for item in rows]
     write_atomic(BREADTH_KEYS_PATH, "\n".join(lines) + "\n")
-
-
-def url_archive(url: str) -> str:
-    host = urlparse(url.strip()).netloc.lower().split("@")[-1].split(":")[0]
-    return host[4:] if host.startswith("www.") else host
-
-
-def recipe_archives(recipe_dir: Path) -> set[str]:
-    """Archive hosts of a recipe's declared resources (facts, not agent labels).
-    Bare multi-tenant hosts (Zenodo, GitHub, ...) are not one archive."""
-    try:
-        manifest = tomllib.loads((recipe_dir / "manifest.toml").read_text(encoding="utf-8"))
-    except (OSError, tomllib.TOMLDecodeError):
-        return set()
-    hosts = {url_archive(item.get("url", "")) for item in manifest.get("resources", []) if isinstance(item, dict)}
-    return {host for host in hosts if host and not is_multi_tenant(host)}
 
 
 def progress(counted_only: bool = True) -> dict[int, list[str]]:
@@ -1212,32 +1184,6 @@ class Driver:
         save_ledger(self.ledger)
         log(f"scout {width}-bit proposed {added} candidates (cost ${agent['cost']:.2f})")
 
-    def archive_gate(self, cid: str, archives: set[str]) -> tuple[str, str]:
-        """A third acceptance from the same archive host in this effort needs the
-        user's sign-off. Hosts come from declared resource URLs, not agent labels."""
-        if load_state(cid).get("breadth_approved") or not archives:
-            return "ok", ""
-        accepted = [row["candidate_id"] for row in self.ledger if row["status"] == "accepted" and row["candidate_id"] != cid]
-        shared = {}
-        for other in accepted:
-            common = archives & recipe_archives(DATASETS_DIR / other)
-            for host in common:
-                shared.setdefault(host, []).append(other)
-        crowded = {host: ids for host, ids in shared.items() if len(ids) >= self.cfg.max_per_archive}
-        if crowded:
-            host, ids = next(iter(crowded.items()))
-            return "signoff", f"archive cap: {len(ids)} families already accepted from {host} ({', '.join(ids[:4])})"
-        return "ok", ""
-
-    def hold_for_signoff(self, cid: str, reason: str) -> None:
-        state = load_state(cid)
-        state["paused_from"] = self.row(cid)["status"]
-        state["breadth_signoff"] = reason
-        save_state(cid, state)
-        self.set_status(cid, PAUSED, reason)
-        notify(self.cfg, f"autocollect needs your sign-off for {cid}: {one_line(reason, 500)}. "
-                         f"Approve: driver.py approve-breadth {cid}; refuse: driver.py reject {cid} --reason ...")
-
     def apply_screen(self, cids: list[str], agent: dict) -> None:
         decisions = {item["candidate_id"]: item for item in agent["structured"].get("decisions", [])} if agent["ok"] else {}
         if not agent["ok"]:
@@ -1257,11 +1203,7 @@ class Driver:
                 state["preexisting_data"] = any((DATA_ROOT / sub / cid).exists() for sub in DATA_SUBDIRS_PRUNABLE)
                 state["breadth_keys"] = {key: decision.get(key, "") for key in ("measurement_type", "instrument_line", "archive_collection")}
                 save_state(cid, state)
-                archives = {host for host in (url_archive(url) for url in state.get("resource_urls", [])) if host and not is_multi_tenant(host)}
-                verdict, why = self.archive_gate(cid, archives)
                 self.set_status(cid, "queued", decision["reason"], priority=decision["priority"])
-                if verdict == "signoff":
-                    self.hold_for_signoff(cid, why)
             else:
                 save_state(cid, state)
                 self.set_status(cid, "screened_out", decision["reason"])
@@ -1373,11 +1315,6 @@ class Driver:
             decision = "rejected"
             out["registry_reason"] = out.get("registry_reason") or "Judge labeled the material not new."
         if decision == "accept":
-            verdict, why = self.archive_gate(cid, recipe_archives(STAGING_DIR / cid))
-            if verdict == "signoff":
-                log(f"judge {cid}: accept held for archive sign-off — {why}")
-                self.hold_for_signoff(cid, why)
-                return
             # Breadth is measured on bytes (zlsim), not judged from names.
             measured = (state.get("similarity") or {}).get("verdict")
             if measured in COUNTED_VERDICTS:
@@ -2026,7 +1963,7 @@ def main() -> int:
     set_breadth.add_argument("verdict", choices=["STRONG", "OK", "WEAK"])
     reopen = sub.add_parser("reopen", help="restore an archived rejected candidate for re-measurement")
     reopen.add_argument("candidate_id")
-    approve = sub.add_parser("approve-breadth", help="approve a pending breadth override or archive-cap sign-off")
+    approve = sub.add_parser("approve-breadth", help="approve a candidate paused for breadth sign-off")
     approve.add_argument("candidate_id")
     approve.add_argument("--note", default="", help="why the override is justified")
     reject = sub.add_parser("reject", help="record a candidate as rejected (e.g. a refused breadth sign-off)")

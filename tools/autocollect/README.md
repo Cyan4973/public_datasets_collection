@@ -119,8 +119,8 @@ counts toward the per-width goal; `status` shows counted and weak families.
 - `pipeline/breadth_keys.tsv` and `pipeline/breadth_vocabulary.tsv` describe
   every family (measurement type, instrument line, archive) for scouting.
   They are not a gate.
-- A third acceptance from one resource host pauses for your sign-off:
-  `driver.py approve-breadth <id> [--note ...]` or `driver.py reject <id> --reason ...`.
+- There is no per-host quota: several families from one archive are fine as
+  long as each passes the byte gate.
 - Library maintenance: `zlsim.py build-library` (resumable) trains missing
   families; the gate needs the zli binary and the Transformer feature library
   (paths overridable with `ZLSIM_ZLI` and `ZLSIM_FEATURE_LIB`).

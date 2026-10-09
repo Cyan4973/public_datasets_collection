@@ -68,8 +68,6 @@ and `reports/autocollect_similarity_calibration_20261008.md`.
   `archive_collection`) and `novelty.py --vocabulary` are descriptive aids
   for scouting, not a gate. Use them to avoid proposing obvious repeats: a
   redundant recipe costs a full build before the gate rejects it.
-- A third acceptance from the same resource host in this effort waits for the
-  user's sign-off.
 - A sample dominated by one value (fill or no-data) is flagged; the judge must
   justify it or ask for a repair.
 

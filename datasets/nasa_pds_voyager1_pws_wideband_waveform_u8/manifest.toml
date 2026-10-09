@@ -1,0 +1,89 @@
+manifest_version = 1
+dataset_id = "nasa_pds_voyager1_pws_wideband_waveform_u8"
+name = "Voyager 1 PWS Wideband Electric-Field Waveforms (4-bit codes 0-15 in uint8, 28.8 kHz, 1978-2023)"
+description = "Raw 4-bit automatic-gain-controlled electric-field waveform codes (0-15, one per byte) from the Voyager 1 Plasma Wave Subsystem wideband waveform receiver (40 Hz-12 kHz passband, 28,800 samples/s), one sample per archived 48-second frame, for 400 pinned frames stratified over eight mission phases from the 1978 Earth-Jupiter cruise through the Jupiter and Saturn encounters, the heliosheath and the interstellar medium (2023). NASA PDS volume VGPW_1001."
+homepage = "https://space.physics.uiowa.edu/plasma-wave/voyager/data/"
+
+[license]
+name = "NASA SMD Open Scientific Data Policy (public NASA PDS mission data)"
+spdx = "LicenseRef-NASA-SMD-Open-Data"
+url = "https://science.nasa.gov/researchers/science-data/science-information-policy/"
+citation = "Kurth, W.S., and L.J. Granroth, VG1 J/S/SS PLASMA WAVE SPECTROMETER RAW WAVEFORM 60MS V1.0, VG1-J/S/SS-PWS-1-EDR-WFRM-60MS-V1.0, NASA Planetary Data System (PPI Node), volume VGPW_1001 (2024-07-26 reissue). Acknowledge the PDS and the PWS principal investigators (University of Iowa)."
+notes = "Voyager is a NASA mission; VGPW_1001 is the NASA Planetary Data System archive (Planetary Plasma Interactions Node, University of Iowa) of data set VG1-J/S/SS-PWS-1-EDR-WFRM-60MS-V1.0, served anonymously over HTTPS. NASA SMD policy: 'It is Science Mission Directorate (SMD) policy, consistent with NASA and Federal policies, that information produced from SMD-funded scientific research activities be made publicly available.' The volume AAREADME.TXT imposes no use restriction; it only states 'Users of these data are encouraged to acknowledge both the PDS and the principal investigators of the instruments whose data is used in analysis in all publications.' download.sh fetches that AAREADME (size + upstream MD5 pinned) and fails unless the sentence is present. Same rights basis as the accepted nasa_pds_cassini_rpws_wbr_10khz_waveform_u8 (same UIowa host) and nasa_pds_voyager_iss_saturn_raw_u8. The policy is not an SPDX licence; the NASA policy page itself is not fetched."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NASA PDS archive objects from the PPI Node UIowa plasma-wave archive (space.physics.uiowa.edu/plasma-wave/voyager/data/VGPW_1001); robotic spacecraft plasma-wave receiver data."
+usage_notes = "Only waveform codes of kept lines are emitted; engineering headers, row prefixes, spare bytes, label text and the documented-invalid first 16 samples of each line are never written to samples."
+
+[[origins]]
+id = "pds_ppi_uiowa_voyager_pws"
+name = "NASA PDS Planetary Plasma Interactions Node, University of Iowa Voyager PWS archive"
+url = "https://space.physics.uiowa.edu/plasma-wave/voyager/data/"
+type = "website"
+notes = "Apache directory tree of volume VGPW_1001 (Voyager 1 PWS waveform, reissued 2024-07-26 as one unified volume, SCET 1978-08-21 to 2023-11-07, 11,415 frames). INDEX/INDEX.TAB lists every frame label; EXTRAS/MD5LF.TXT publishes the MD5 of every file. VGPW_2001 (Voyager 2) is deliberately not used."
+
+[[resources]]
+id = "vg1_pws_waveform_frames"
+origin = "pds_ppi_uiowa_voyager_pws"
+url = "https://space.physics.uiowa.edu/plasma-wave/voyager/data/VGPW_1001/DATA/"
+type = "file"
+version = "VGPW_1001 (2024-07-26 reissue); 400 frames resolved 2026-10-09 by discover.py"
+access = "Anonymous HTTPS GET. download.sh fetches exactly the 400 DATA/P<n>/V1P<n>_<nnn>/C<sclk>.DAT frames and their detached .LBL labels listed in sources.tsv, each pinned by exact byte size and the upstream MD5 from VGPW_1001/EXTRAS/MD5LF.TXT, checks each product/start-time against INDEX.TAB, validates every label and walks every record of every DAT before accepting it; download_plan.tsv records the SHA-256 of each DAT, which build.py and verify.py re-check."
+size_bytes = 325147972
+sha256 = ""
+local_path = "downloads/nasa_pds_voyager1_pws_wideband_waveform_u8/frames/"
+notes = "size_bytes = 322,394,112 DAT bytes + 2,753,860 label bytes. Per-frame path, START_TIME, stratum, size, FILE_RECORDS, MD5 and Last-Modified live in sources.tsv."
+
+[[resources]]
+id = "vg1_pws_evidence"
+origin = "pds_ppi_uiowa_voyager_pws"
+url = "https://space.physics.uiowa.edu/plasma-wave/voyager/data/VGPW_1001/"
+type = "file"
+version = "VGPW_1001 AAREADME.TXT, CATALOG/DATASET.CAT, DOCUMENT/DATATIPS.TXT, DATA/P2/V1P2_100/WFROWPFX.FMT, INDEX/INDEX.LBL, INDEX/INDEX.TAB"
+access = "Anonymous HTTPS GET; sizes 19,111 / 18,145 / 3,961 / 27,707 / 5,469 / 1,472,664 bytes and upstream MD5 be20a07ad7ec03735df7e5a3dda825eb / ab203dc944fe60bca4756e4edb113c46 / f48b029b6d1acdf56e28594a01c0d9d2 / e52a56c0097ab621b55c77a600a3598b / 1d7c7530814097897920580da16b8413 / ae66745eff2a0c88923e32e0de5de770 pinned."
+size_bytes = 1547057
+sha256 = ""
+local_path = "downloads/nasa_pds_voyager1_pws_wideband_waveform_u8/evidence/"
+notes = "Volume README (acknowledgement request), data-set description (4-bit AGC samples, first-16-samples invalid during Jupiter encounter, 5x line repetition after 1992-11-03), quick-start data tips (byte 221 start, line count at byte 23), row-prefix format, and the frame index used for selection. Not a sample source."
+
+[local_paths]
+downloads = "downloads/nasa_pds_voyager1_pws_wideband_waveform_u8/"
+filtered = "filtered/nasa_pds_voyager1_pws_wideband_waveform_u8/"
+index = "index/nasa_pds_voyager1_pws_wideband_waveform_u8/"
+samples = "samples/nasa_pds_voyager1_pws_wideband_waveform_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nasa_pds_voyager1_pws_wideband_waveform_u8/samples.jsonl"
+summary = "Fetch 400 pinned Voyager 1 PWS 48-second waveform frames plus labels (size + upstream MD5 pinned), validate labels and every record, and emit for each frame the 4-bit waveform codes of its kept lines (samples 17-1600 of each line, high nibble first) as one raw uint8 sample."
+deterministic_notes = "Selection (discover.py, resolved 2026-10-09 from INDEX.TAB): all 11,415 VGPW_1001 frames sorted by START_TIME, split into eight strata by the DATASET.CAT event table: A 1978-08-01..1979-02-28 pre-Jupiter (pool 562, 40 picks), B 1979-02-28..1979-03-23 Jupiter bow shock to bow shock (6,490, 100), C 1979-03-23..1980-11-11 Jupiter-Saturn cruise (121, 30), D 1980-11-11..1980-11-17 Saturn (41, 20), E 1980-11-17..1992-11-03 cruise with all lines (579, 70), F 1992-11-03..2004-12-16 cruise with 1-in-5 lines (1,005, 50), G 2004-12-16..2012-08-25 heliosheath (809, 40), H 2012-08-25..2023-11-07 interstellar (1,808, 50). Picks at ranks floor((i + 0.5) * n / k); a pick whose DAT has fewer than 512 records (HTTP Content-Length < 524,288) is replaced by the next unused rank (33 replacements). Label checks: DATA_SET_ID VG1-J/S/SS-PWS-1-EDR-WFRM-60MS-V1.0, INSTRUMENT_HOST_ID VG1, PRODUCT_ID and START_TIME equal the pin, RECORD_BYTES 1024, FILE_RECORDS * 1024 = DAT size, START_BYTE 221, START_BIT 1, ITEM_BITS 4, OFFSET -7.5, VALID 0-15, 0.00003472222 s sample interval. DAT header ASCII at byte 249 must start 'VOYAGER-1 PWS'. Line rule (build; re-implemented independently in verify): FDS_LINE_COUNT (MSB u16, bytes 23-24) outside 1..800 or not above the last in-order line count -> dropped; 800 waveform bytes all zero -> dropped (archive fill); waveform bytes identical to the last kept line -> dropped (archive 5x repetition after 1992-11-03); otherwise bytes 229-1020 unpacked high nibble first -> 1584 codes. Frame rule: emitted only if kept_lines >= 50, >= 6 distinct codes and the most common code <= 80% of the sample. verify.py re-derives each sample, byte-compares it, checks DAT SHA-256 against download_plan.tsv and MD5 against sources.tsv, label fields, index fields (size, sha256, min/max, distinct, line counts, stratum), value_count = 1584 * kept_lines, max code <= 15, no duplicates, all eight strata present, all 16 codes used overall, no code above 50% of all values, floors, 1 GB cap, and manifest sample_count/total_size_bytes."
+
+[[series]]
+id = "vg1_pws_wideband_4bit_code_u8"
+description = "Voyager 1 PWS wideband electric-field waveform 4-bit codes (0-15) stored one per byte, one sample per 48-second frame."
+semantic_meaning = "Raw 4-bit linear quantization codes of the electric field on the Voyager 1 dipole antenna after a 40 Hz-12 kHz bandpass and an automatic gain control, sampled at 28,800/s in 1600-sample (55.56 ms) lines every 60 ms: Jupiter and Saturn magnetospheric plasma waves (chorus, hiss, electron-cyclotron harmonics, upper-hybrid and plasma-frequency emissions, lightning whistlers), interplanetary shocks, heliosheath and interstellar plasma oscillations, dust impacts, plus receiver noise and spacecraft interference tones. Zero field is nominally code 7.5 (label OFFSET -7.5: code c maps to c - 7.5). The AGC gain is not telemetered, so the amplitude scale varies with time and there is no calibration to physical units; the code lattice and generation process are fixed."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "PDS label BIT_COLUMN WAVEFORM_SAMPLES: BIT_DATA_TYPE UNSIGNED_INTEGER, ITEMS 2, ITEM_BITS 4, START_BIT 1, OFFSET -7.5, VALID_MINIMUM 0, VALID_MAXIMUM 15, SAMPLING_PARAMETER_INTERVAL 0.00003472222 s. Each 4-bit code is stored unchanged in its own uint8 (values 0-15); uint8 is the narrowest repository width, as for other sub-byte native codes. No offset, calibration or remapping is applied."
+source_resources = ["vg1_pws_waveform_frames"]
+source_format = "PDS3 detached-label fixed-length binary frame (Cmmmmmnn.DAT): record 1 = engineering header; records 2..FILE_RECORDS = 220-byte big-endian WF_ROW_PREFIX + 800-byte TIME_SERIES WAVEFORM_BYTE column of packed 4-bit samples + 4 spare bytes"
+source_field = "TIME_SERIES WAVEFORM_BYTE / BIT_COLUMN WAVEFORM_SAMPLES (4-bit unsigned waveform codes, high nibble first), samples 17-1600 of each kept line"
+filtered_input_path = "filtered/nasa_pds_voyager1_pws_wideband_waveform_u8/ingest_stats.json"
+filtering = "Frames: 400 Voyager 1 frames from VGPW_1001 only (VGPW_2001 / Voyager 2 excluded), stratified over eight mission phases, DAT >= 512 records. Lines: records with out-of-range or out-of-order FDS_LINE_COUNT, all-zero (fill) waveform bytes, or waveform bytes identical to the last kept line (archive 5x repetition after 1992-11-03) are dropped. The first 16 samples (8 bytes) of every kept line are dropped on every frame, following DATASET.CAT ('for data acquired during the Voyager 1 Jupiter Encounter mission phase, it is usually the case that the first 16 samples (8 bytes) of waveform data per data line are invalid. Hence, it is strongly recommended that these bytes be skipped'); the volume's example C code also suggests skipping zero-filled or duplicate records and the first 16 samples. Frames with < 50 kept lines, < 6 distinct codes, or one code above 80% are not emitted (rule shared by build and verify)."
+missing_value_policy = "Missing lines are not represented (kept lines are concatenated in line order; gaps of 4.44 ms between lines, and 4 missing lines between returned lines after 1992-11-03, are implicit). All-zero fill lines, repeated lines, out-of-order line records and the invalid first 16 samples per line are never emitted. No code inside a kept line is masked, clipped, interpolated or rescaled; codes 0 and 15 (AGC saturation) are preserved. Any size/MD5/SHA-256 mismatch, label deviation, non-Voyager-1 header or record-count inconsistency fails the recipe."
+conversion = "For each pinned frame: check the detached label, walk the 1024-byte records 2..FILE_RECORDS, read FDS_LINE_COUNT as big-endian u16 at bytes 23-24 (1-based), apply the line rule, and for each kept line split bytes 229-1020 into two 4-bit codes, high nibble first (verified byte-exact against EXTRAS/SOFTWARE/C/TESTOUT.TXT produced by the volume's VGPWS_WF_LIST.C on TESTIN.DAT). Write the concatenated codes (1584 per kept line) as samples/nasa_pds_voyager1_pws_wideband_waveform_u8/vg1_pws_wideband_4bit_code_u8/<PRODUCT_ID>.u8. Byte order is irrelevant for 8-bit values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 4-bit waveform codes (0-15)"
+sample_geometry = "frame_sequence_of_agc_waveform_lines_1d"
+sample_rank = 1
+sample_axes = ["line_then_sample_time"]
+natural_record_kind = "voyager_pws_48s_waveform_frame"
+sample_count = 400
+total_size_bytes = 361186848
+output_path = "samples/nasa_pds_voyager1_pws_wideband_waveform_u8/vg1_pws_wideband_4bit_code_u8/"

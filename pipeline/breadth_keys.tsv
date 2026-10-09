@@ -474,3 +474,4 @@ gavo_hdap_walz_photographic_plate_scans_u16	autocollect	16	photographic_plate_sc
 earthscope_xa_apollo_pse_lunar_seismogram_i16	autocollect	16	inertial_vibration	Apollo ALSEP Passive Seismic Experiment long-period seismometer	EarthScope FDSN dataselect, network XA (1969)	-	OK
 openneuro_ds007738_wholehead_cw_fnirs_intensity_f64	autocollect	64	fnirs_optical_intensity	bu_highdensity_cw_fnirs_56x144	openneuro.org	-	OK
 physionet_mimic3wdb_abp_i8	autocollect	8	clinical_monitor_waveform	philips_intellivue_icu_monitor_abp	physionet.org/content/mimic3wdb	-	OK
+nasa_pds_voyager1_pws_wideband_waveform_u8	autocollect	8	plasma_wave_waveform	voyager1_pws_wideband_4bit_waveform	space.physics.uiowa.edu/plasma-wave/voyager (PDS PPI node)	-	OK

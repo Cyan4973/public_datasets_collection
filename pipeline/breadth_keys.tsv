@@ -484,3 +484,4 @@ nasa_heliocloud_trace_171_euv_frames_i16	autocollect	16	raw_space_frame	TRACE EU
 cellpainting_cdrp_cellprofiler_well_profiles_f64	autocollect	64	cell_morphology_profile	broad_cellpainting_cellprofiler_cytominer	aws_cellpainting_gallery	-	OK
 spdf_isis2_topside_ionogram_amplitude_u8	autocollect	8	topside_sounder_ionogram	isis2_sfs_topside_sounder	spdf_cdaweb	-	OK
 nasa_pds_juno_junocam_perijove_rgb_framelets_u8	autocollect	8	raw_space_frame	juno_junocam_pushframe	nasa_pds_imaging_node	-	OK
+megascenes_colmap_sfm_point_xyz_f64	autocollect	64	sfm_point_cloud	COLMAP incremental SfM on Wikimedia Commons photo collections (MegaScenes v1.0)	aws_opendata_megascenes	-	OK

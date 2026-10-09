@@ -1,0 +1,103 @@
+manifest_version = 1
+dataset_id = "megascenes_colmap_sfm_point_xyz_f64"
+name = "MegaScenes COLMAP SfM Bundle-Adjusted 3-D Points Float64"
+description = "Float64 bundle-adjusted 3-D point positions (XYZ interleaved) and per-point mean reprojection errors decoded from every COLMAP sparse reconstruction points3D.bin under MegaScenes v1.0 reconstruct/000/ (scene IDs 000000-000999), one sample per reconstruction model."
+homepage = "https://megascenes.github.io"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Tung, J., Chou, G., Cai, R., Yang, G., Zhang, K., Wetzstein, G., Hariharan, B., Snavely, N. MegaScenes: Scene-Level View Synthesis at Scale. ECCV 2024."
+notes = "MegaScenes datasheet (github.com/MegaScenes/datasheet README): 'This dataset is licensed under the Creative Commons Attribution 4.0 International License. The photos in the dataset have their own licenses.' The AWS Open Data Registry entry (awslabs/open-data-registry datasets/megascenes.yaml) states the same license. Only the authors' COLMAP reconstruction outputs are used; no photos are downloaded."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official public AWS Open Data bucket s3://megascenes (us-west-2), read anonymously over HTTPS. The reconstructions are of public landmarks built from Wikimedia Commons photos."
+usage_notes = "Only 3-D point positions and reprojection errors are emitted. Images, camera poses, keypoints, track arrays, point IDs and colors are not emitted."
+
+[[origins]]
+id = "megascenes_s3"
+name = "MegaScenes AWS Open Data bucket"
+url = "https://megascenes.s3.us-west-2.amazonaws.com/"
+type = "bucket"
+notes = "Documented in github.com/MegaScenes/dataset README ('Singular files can be downloaded over HTTP ... using the base URL https://megascenes.s3.us-west-2.amazonaws.com/')."
+
+[[resources]]
+id = "megascenes_reconstruct_000_points3d"
+origin = "megascenes_s3"
+url = "https://megascenes.s3.us-west-2.amazonaws.com/?list-type=2&prefix=reconstruct/000/"
+type = "file"
+version = "MegaScenes v1.0; objects last modified 2024-05-30; listing pinned 2026-10-09"
+access = "Anonymous HTTPS GET of the 391 points3D.bin keys pinned in sources.tsv; each checked for size, MD5 (single-part S3 ETag) and a full parse to EOF."
+size_bytes = 445121839
+sha256 = ""
+local_path = "downloads/megascenes_colmap_sfm_point_xyz_f64/points3d/"
+notes = "All reconstruct/000/<sss>/colmap/<k>/points3D.bin objects (scenes 000000-000999 that have a reconstruction, every model index k). cameras.bin, images.bin and project.ini are not fetched. discover.sh documents the listing."
+
+[local_paths]
+downloads = "downloads/megascenes_colmap_sfm_point_xyz_f64/"
+filtered = "filtered/megascenes_colmap_sfm_point_xyz_f64/"
+index = "index/megascenes_colmap_sfm_point_xyz_f64/"
+samples = "samples/megascenes_colmap_sfm_point_xyz_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/megascenes_colmap_sfm_point_xyz_f64/samples.jsonl"
+summary = "Parse each pinned COLMAP points3D.bin with the documented binary layout, check that the parse ends exactly at EOF, and emit per-model float64 XYZ (interleaved) and per-model float64 reprojection-error samples in file order."
+deterministic_notes = "sources.tsv pins 391 keys with size and MD5. Models with fewer than 334 points (fewer than 1,002 XYZ values) are dropped and listed in filtered/<id>/ingest_stats.json. Sample file names are <scene_hi>_<scene_lo>_model<k>.bin. verify.sh re-parses every source, re-derives every sample hash, the index and the stats, and checks the manifest counts. Constant or duplicate sample outputs are fatal."
+
+[[series]]
+id = "sfm_point_xyz_f64"
+description = "Bundle-adjusted 3-D point positions of one COLMAP sparse reconstruction."
+semantic_meaning = "X, Y, Z of each triangulated and bundle-adjusted 3-D point in the reconstruction's own similarity frame (arbitrary origin, rotation and scale per model), interleaved as x0,y0,z0,x1,... in points3D.bin record order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "COLMAP stores point positions as IEEE-754 float64; the values are copied bit-exactly."
+source_resources = ["megascenes_reconstruct_000_points3d"]
+source_format = "COLMAP binary sparse model points3D.bin"
+source_field = "Point3D xyz (three float64 per point)"
+filtered_input_path = "filtered/megascenes_colmap_sfm_point_xyz_f64/ingest_stats.json"
+filtering = "All points of every reconstruction model with at least 334 points. Point IDs, RGB, error and track arrays are not part of this series."
+missing_value_policy = "COLMAP has no missing points. A non-finite coordinate, truncated record, parse not ending at EOF, duplicate point ID, constant sample or duplicate sample fails the recipe; nothing is imputed or dropped within a model."
+conversion = "struct '<QdddBBBdQ' per point (51 bytes) after a uint64 count, skipping track_length*8 track bytes; x,y,z written as little-endian float64 in file order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 array, 3 values per point"
+sample_geometry = "point_cloud_xyz_interleaved"
+sample_rank = 2
+sample_axes = ["point3d_record_order", "xyz"]
+natural_record_kind = "colmap_sparse_reconstruction_model"
+sample_count = 348
+total_size_bytes = 104892336
+output_path = "samples/megascenes_colmap_sfm_point_xyz_f64/sfm_point_xyz_f64/"
+
+[[series]]
+id = "sfm_point_reproj_error_f64"
+description = "Per-point mean reprojection error of one COLMAP sparse reconstruction."
+semantic_meaning = "Mean reprojection error in pixels of each 3-D point over its track observations after bundle adjustment, in points3D.bin record order (aligned with sfm_point_xyz_f64)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "COLMAP stores the per-point error as IEEE-754 float64; the values are copied bit-exactly."
+source_resources = ["megascenes_reconstruct_000_points3d"]
+source_format = "COLMAP binary sparse model points3D.bin"
+source_field = "Point3D error (float64 mean reprojection error, pixels)"
+filtered_input_path = "filtered/megascenes_colmap_sfm_point_xyz_f64/ingest_stats.json"
+filtering = "Same models and points as sfm_point_xyz_f64."
+missing_value_policy = "A non-finite or negative error, a structural parse failure, a constant sample or a duplicate sample fails the recipe."
+conversion = "The float64 error field of each '<QdddBBBdQ' point record, written as little-endian float64 in file order."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 array, 1 value per point"
+sample_geometry = "point_cloud_scalar_attribute"
+sample_rank = 1
+sample_axes = ["point3d_record_order"]
+natural_record_kind = "colmap_sparse_reconstruction_model"
+sample_count = 348
+total_size_bytes = 34964112
+output_path = "samples/megascenes_colmap_sfm_point_xyz_f64/sfm_point_reproj_error_f64/"

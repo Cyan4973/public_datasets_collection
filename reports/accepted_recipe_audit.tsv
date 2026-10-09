@@ -240,6 +240,7 @@ igs_final_satellite_clock_bias_f64	ok	16369771	130958168	5688	2880	23040	0	0	0	1
 zenodo_starlink_irtt_rtt_i32	ok	16563890	66255560	1432	11655.5	46622	0	0	0	1	none	none
 gfz_gracefo_fgm_acal_bnec_f64	ok	16588788	132710304	64	259200	2073600	0	0	0	1	none	none
 modis_active_fire_mask_u8	ok	17280000	17280000	12	1440000	1440000	0	0	0	1	none	none
+megascenes_colmap_sfm_point_xyz_f64	ok	17482056	139856448	696	6950	55600	0	0	0	1	none	none
 tcia_lung_pet_ct_dx_u16	ok	18080000	36160000	3	5800000	11600000	0	0	0	1	none	none
 ncbi_taxdump	ok	18084993	57095412	5	2840433	11361732	0	0	0	1	none	none
 leap_climsim_lowres_e3sm_mmf_state_fields_f64	ok	19008000	152064000	825	23040	184320	0	0	0	1	none	none

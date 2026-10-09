@@ -37,6 +37,7 @@ import collections
 import concurrent.futures
 import csv
 import ctypes
+import hashlib
 import math
 import json
 import os
@@ -77,6 +78,17 @@ TRAIN_THREADS = int(os.environ.get("ZLSIM_TRAIN_THREADS", "2"))
 def sample_files(directory: Path) -> list[Path]:
     """Sample files of a family, including nested layouts (per-year folders etc.)."""
     return sorted(path for path in directory.rglob("*") if path.is_file())
+
+
+def content_digest(directory: Path) -> str:
+    """SHA-256 over a family's sample files (relative names and bytes)."""
+    digest = hashlib.sha256()
+    for path in sample_files(directory):
+        digest.update(str(path.relative_to(directory)).encode() + b"\0")
+        with path.open("rb") as fh:
+            for block in iter(lambda: fh.read(1 << 20), b""):
+                digest.update(block)
+    return digest.hexdigest()
 
 
 def element_bytes(width: int) -> int:
@@ -307,8 +319,14 @@ def train_family(family: dict, base_dir: Path | None = None) -> dict:
     """Train a Pareto set on the train half and keep the best member on the eval half."""
     out_dir = (base_dir or LIBRARY_DIR) / str(family["width"]) / safe_name(family["key"])
     meta_path = out_dir / "meta.json"
+    # Candidate caches are keyed on content: after a repair or reopen changes the
+    # samples, the series is re-measured instead of served its old compressor.
+    digest = content_digest(family["dir"]) if base_dir == CANDIDATE_DIR else None
     if meta_path.exists():
-        return json.loads(meta_path.read_text())
+        meta = json.loads(meta_path.read_text())
+        if digest is None or meta.get("digest") == digest:
+            return meta
+        shutil.rmtree(out_dir, ignore_errors=True)
     work = Path(tempfile.mkdtemp(prefix="zlsim_", dir=WORK_DIR))
     started = time.monotonic()
     try:
@@ -366,6 +384,8 @@ def train_family(family: dict, base_dir: Path | None = None) -> dict:
             "train_mode": mode, "pareto_size": len(candidates), "eval_bytes": sum(p.stat().st_size for p in evaluate.iterdir()),
             "seconds": round(time.monotonic() - started), "source_dir": str(family["dir"]),
         }
+        if digest:
+            meta["digest"] = digest
         meta_path.write_text(json.dumps(meta, indent=1))
         return meta
     except Exception as exc:  # noqa: BLE001

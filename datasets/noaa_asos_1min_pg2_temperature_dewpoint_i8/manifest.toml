@@ -1,0 +1,134 @@
+manifest_version = 1
+dataset_id = "noaa_asos_1min_pg2_temperature_dewpoint_i8"
+name = "NOAA ASOS One-Minute Page-2 (DSI 6406) Air Temperature and Dew Point Int8"
+description = "1-minute ASOS dry-bulb air temperature and dew-point temperature in whole degrees Fahrenheit, one int8 sample per station-month per series, for 44 climatically spread U.S. ASOS stations (desert Southwest to interior Alaska, Hawaii and Puerto Rico) over 2022, keeping station-months whose files are at least 80% complete and whose temperature and dew point are both valid for at least 80% of the month's minutes (500 station-months)."
+homepage = "https://www.ncei.noaa.gov/data/automated-surface-observing-system-one-minute-pg2/"
+
+[license]
+name = "U.S. Government Public Domain"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ncdc:C00387/xml"
+citation = "NOAA National Weather Service, U.S. Federal Aviation Administration, U.S. Department of Defense, NOAA National Centers for Environmental Information (2005): 1-Minute Page 2 Surface Weather Observations from the Automated Surface Observing Systems (ASOS) Network. 2022, 44 stations. NOAA National Centers for Environmental Information. NCEI DSI 6406_02."
+notes = "Federal work of NWS/FAA/DoD/NCEI (17 U.S.C. 105). The NCEI ISO record gov.noaa.ncdc:C00387 has MD_RestrictionCode 'otherRestrictions' whose only texts are a 'Cite as' request plus distribution- and use-liability disclaimers; no use or access restriction. Same public-domain basis as the accepted noaa_isd_lite recipe."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NOAA NCEI distribution (www.ncei.noaa.gov/data/...); no mirrors."
+usage_notes = "Automated airport weather-sensor observations; no personal data."
+
+[[origins]]
+id = "ncei_asos_1min_pg2"
+name = "NOAA NCEI ASOS One-Minute Page 2 (DSI 6406) access tree"
+url = "https://www.ncei.noaa.gov/data/automated-surface-observing-system-one-minute-pg2/access/2022/"
+type = "data_portal"
+notes = "Monthly directories 01..12 holding asos-1min-pg2-<ICAO>-YYYYMM.dat station-month files (about 885-893 stations per month in 2022)."
+
+[[origins]]
+id = "ncei_metadata"
+name = "NCEI ISO metadata record gov.noaa.ncdc:C00387"
+url = "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ncdc:C00387/xml"
+type = "website"
+notes = "Citation request and liability disclaimers; validated by content in download.sh."
+
+[[resources]]
+id = "asos_pg2_2022_station_months"
+origin = "ncei_asos_1min_pg2"
+url = "https://www.ncei.noaa.gov/data/automated-surface-observing-system-one-minute-pg2/access/2022/"
+type = "shard"
+version = "2022 files as listed on 2026-10-09 (per-file size and last-modified pinned in sources.tsv)"
+access = "Direct public HTTPS download of the 509 files enumerated in sources.tsv (44 stations; station-months with listed size >= 80% of a complete month); exact per-file Content-Length pinned, resumable curl."
+size_bytes = 2400428490
+sha256 = ""
+local_path = "downloads/noaa_asos_1min_pg2_temperature_dewpoint_i8/<YYYY-MM>/asos-1min-pg2-<ICAO>-<YYYYMM>.dat"
+notes = "NCEI publishes no checksums for these files; download.sh pins exact byte sizes and checks that each file ends with LF and that its first line and >=99% of its lines carry the expected WBAN+ICAO+year-month prefix. Invalid payloads are deleted."
+
+[[resources]]
+id = "dsi6406_documentation"
+origin = "ncei_asos_1min_pg2"
+url = "https://www.ncei.noaa.gov/data/automated-surface-observing-system-one-minute-pg2/doc/asos-1min-pg2_documentation.pdf"
+type = "file"
+version = "2022-11-08"
+access = "Direct public download."
+size_bytes = 178828
+sha256 = "e534851592b80bb157ad5c2350cbe8f5ac2f8778e01b69d93a66dba9f2764d46"
+local_path = "downloads/noaa_asos_1min_pg2_temperature_dewpoint_i8/docs/asos-1min-pg2_documentation.pdf"
+notes = "DSI 6406 field definitions (field order ending in average 1-minute dry-bulb temperature and dew-point temperature, deg F)."
+
+[[resources]]
+id = "c00387_iso_metadata"
+origin = "ncei_metadata"
+url = "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ncdc:C00387/xml"
+type = "file"
+version = "fetched at download time"
+access = "Direct public download."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/noaa_asos_1min_pg2_temperature_dewpoint_i8/docs/gov.noaa.ncdc_C00387.xml"
+notes = "License/citation evidence; content-checked (not hash-pinned) because the geoportal regenerates the XML (58,782 bytes when probed)."
+
+[local_paths]
+downloads = "downloads/noaa_asos_1min_pg2_temperature_dewpoint_i8/"
+filtered = "filtered/noaa_asos_1min_pg2_temperature_dewpoint_i8/"
+index = "index/noaa_asos_1min_pg2_temperature_dewpoint_i8/"
+samples = "samples/noaa_asos_1min_pg2_temperature_dewpoint_i8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_asos_1min_pg2_temperature_dewpoint_i8/samples.jsonl"
+summary = "Download 509 pinned DSI 6406 station-month text files, read the dry-bulb temperature and dew-point slots from fixed columns, drop missing, bracket-flagged, out-of-int8-range and malformed values, keep the first row of each LST minute, exclude station-months where either series is valid for <80% of the month's minutes, and emit one int8 sample per station-month per series in file (time) order."
+deterministic_notes = "Fixed station list (44 ICAO ids), year 2022, and a uniform 80%-of-complete-month size rule pinned in sources.tsv with exact byte sizes and listing timestamps (regenerable with discover.sh). Rows are processed in file order. A row is structural when it is printable ASCII, at least 103 characters, carries a digit WBAN + the expected ICAO + 16 timestamp digits with the file's LST year-month, column 92 is blank or ']', both 5-character slots (cols 93-97 temperature, 98-102 dew point) are ' vvv ' / '[vvv]' / missing with a right-justified optionally negative 1-3 digit value, and columns 103+ are blank; otherwise it is dropped for both series and counted. Repeated LST minutes (a second consecutive record for the same minute, ~0.25% of rows) are dropped after the first structural row. A station-month is excluded for both series if either series has valid values for fewer than 80% of the calendar month's minutes (9 of 509 in 2022: KDTW 03-05, KEYW 04 and 07, KINL 12, PATO 11-12, PHNL 11), listed in ingest_stats.json. verify.sh re-derives every sample with an independent full-line regex parser and compares bytes, sha256, index fields (including stored-int8 min/max), missing/flagged/out-of-range/duplicate-minute/bad-row counts, the excluded station-month set and manifest totals; it rejects samples with <1000 values, <3 distinct values, or a single value covering >=80% of the sample."
+
+[[series]]
+id = "air_temperature_degf_i8"
+description = "ASOS average 1-minute dry-bulb air temperature, whole degrees Fahrenheit, reported every minute."
+semantic_meaning = "Average dry-bulb air temperature (deg F) over each 1-minute period from the ASOS hygrothermometer at an airport station, one value per reported minute of the station-month (LST)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source field is a signed integer number of degrees Fahrenheit written as right-justified ASCII; stored unchanged as two's-complement int8."
+source_resources = ["asos_pg2_2022_station_months"]
+source_format = "NCEI DSI 6406 fixed-width ASCII station-month file (112-character records)"
+source_field = "Average 1-minute dry bulb temperature (Deg F): 5-character slot at 0-based columns 93-97, value in columns 94-96"
+filtered_input_path = "filtered/noaa_asos_1min_pg2_temperature_dewpoint_i8/ingest_stats.json"
+filtering = "500 of the 509 pinned station-month files (both series valid for >=80% of the month's minutes); the first structural row of each LST minute whose temperature slot holds an unbracketed integer in -128..127."
+missing_value_policy = "Missing slots ('[ M ]', 'M', blank) are dropped, not imputed. Repeated LST minutes keep only the first row; station-months with <80% valid minutes in either series are excluded. Values enclosed in square brackets (an undocumented source marker, also seen on pressure/lightning fields) are dropped as flagged and counted. Values outside -128..127 are dropped and counted (none expected; desert stations peak near 118 F). Non-structural rows are dropped for both series and counted; build fails if they exceed 5% of a file. Values are otherwise kept as recorded: NCEI applies no edits, so occasional sensor glitches inside the int8 range remain (one -78 F value at KMSP 2022-08). A sample is therefore the sequence of valid reported minutes in time order, not a gap-filled lattice."
+conversion = "ASCII signed decimal integer -> int8, written in source row order; one raw file samples/<id>/air_temperature_degf_i8/<ICAO>_<YYYY-MM>.i8.bin per station-month."
+numeric_kind = "int"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous int8 array"
+sample_geometry = "station_month_minute_series"
+sample_rank = 1
+sample_axes = ["minute"]
+natural_record_kind = "asos_station_month_file"
+sample_count = 500
+total_size_bytes = 20775709
+output_path = "samples/noaa_asos_1min_pg2_temperature_dewpoint_i8/air_temperature_degf_i8/"
+
+[[series]]
+id = "dew_point_temperature_degf_i8"
+description = "ASOS average 1-minute dew-point temperature, whole degrees Fahrenheit, reported every minute."
+semantic_meaning = "Average dew-point temperature (deg F) over each 1-minute period from the ASOS hygrothermometer at an airport station, one value per reported minute of the station-month (LST)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source field is a signed integer number of degrees Fahrenheit written as right-justified ASCII; stored unchanged as two's-complement int8."
+source_resources = ["asos_pg2_2022_station_months"]
+source_format = "NCEI DSI 6406 fixed-width ASCII station-month file (112-character records)"
+source_field = "Average 1-minute dew point temperature (Deg F): 5-character slot at 0-based columns 98-102, value in columns 99-101"
+filtered_input_path = "filtered/noaa_asos_1min_pg2_temperature_dewpoint_i8/ingest_stats.json"
+filtering = "500 of the 509 pinned station-month files (both series valid for >=80% of the month's minutes); the first structural row of each LST minute whose dew-point slot holds an unbracketed integer in -128..127."
+missing_value_policy = "Missing slots ('[ M ]', 'M', blank) are dropped independently of the temperature series, not imputed. Bracketed values are dropped as flagged and counted. Values outside -128..127 are dropped and counted (72 such values in scope); glitch values inside int8 are kept as recorded (704 values above 90 F, 0.003%, mostly PATO). Non-structural rows are dropped for both series and counted; build fails if they exceed 5% of a file. Repeated LST minutes keep only the first row. Station-months with <80% valid minutes in either series are excluded. Dropped minutes are not represented."
+conversion = "ASCII signed decimal integer -> int8, written in source row order; one raw file samples/<id>/dew_point_temperature_degf_i8/<ICAO>_<YYYY-MM>.i8.bin per station-month."
+numeric_kind = "int"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous int8 array"
+sample_geometry = "station_month_minute_series"
+sample_rank = 1
+sample_axes = ["minute"]
+natural_record_kind = "asos_station_month_file"
+sample_count = 500
+total_size_bytes = 20763794
+output_path = "samples/noaa_asos_1min_pg2_temperature_dewpoint_i8/dew_point_temperature_degf_i8/"

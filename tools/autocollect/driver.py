@@ -18,7 +18,7 @@ Commands:
   driver.py status
   driver.py activity [--minutes 120] [--lines 8]
   driver.py follow [--backlog 3]
-  driver.py run [--agents 3] [--downloads 2] [--widths 8,16] [--stop-after N] [--max-cost-usd X]
+  driver.py run [--agents 3] [--downloads 2] [--widths 8,16] [--stop-after N] [--max-cost-usd X] [--no-scout]
   driver.py requeue <candidate_id> [--status queued]
   driver.py approve-breadth <candidate_id> [--note ...]
   driver.py reject <candidate_id> --reason ...
@@ -1958,6 +1958,8 @@ def cmd_run(args) -> int:
         keep_rejected_data=args.keep_rejected_data,
         notify_cmd=args.notify_cmd,
     )
+    if args.no_scout:
+        cfg.scouts_per_width = 0
     for item in filter(None, (args.role_effort or "").split(",")):
         role, _, level = item.partition("=")
         cfg.role_effort[role.strip()] = level.strip()
@@ -1985,6 +1987,7 @@ def main() -> int:
     run.add_argument("--widths", default=",".join(str(width) for width in WIDTHS))
     run.add_argument("--max-cost-usd", type=float, default=None, help="stop launching agents after this much spend in this run")
     run.add_argument("--stop-after", type=int, default=None, help="stop launching new work after N terminal decisions (pilot runs)")
+    run.add_argument("--no-scout", action="store_true", help="launch no scouts: screen, build and judge the existing queue, then stop")
     run.add_argument("--model", default=None)
     run.add_argument("--effort", default=None, choices=["low", "medium", "high", "xhigh", "max"], help="one effort for every role (overrides --role-effort)")
     run.add_argument("--role-effort", default=None, help="per-role effort overrides, e.g. scout=low,builder=medium (defaults: scout/screener medium, builder high, judge xhigh)")

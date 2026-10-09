@@ -65,7 +65,7 @@ ledger; builder sessions resume with their context.
 
 Useful flags: `--agents` (concurrent agent sessions, default 3),
 `--downloads` (concurrent downloads/rebuilds, default 2), `--widths 8,16`,
-`--max-cost-usd`, `--stop-after`, `--model`, `--effort`, `--download-cap-gb`
+`--max-cost-usd`, `--stop-after`, `--no-scout` (flush the existing queue, then stop), `--model`, `--effort`, `--download-cap-gb`
 (default 5), `--disk-budget-gb` (default 500), `--keep-rejected-data`.
 At `--max-cost-usd` the driver launches nothing more and exits once in-flight
 work ends; agents already running finish, so spend can exceed the cap by

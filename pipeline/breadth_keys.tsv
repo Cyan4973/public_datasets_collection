@@ -492,3 +492,4 @@ gwtc3_imrphenomxphm_posterior_samples_f64	autocollect	64	bayesian_posterior_samp
 ooi_ce02shbp_vel3d_adv_amplitude_correlation_u8	autocollect	8	water_column_backscatter	nortek_vector_adv_ooi_vel3d_c	rawdata.oceanobservatories.org/files (OOI raw data archive, Cabled Endurance Array)	-	OK
 noaa_asos_1min_pg1_wind_speed_u8	autocollect	8	met_station_obs	asos_wind_sensor_1min	www.ncei.noaa.gov/data/automated-surface-observing-system-one-minute-pg1	-	OK
 noaa_asos_1min_pg2_temperature_dewpoint_i8	autocollect	8	met_station_obs	asos_hygrothermometer_1min	www.ncei.noaa.gov/data/automated-surface-observing-system-one-minute-pg2	-	OK
+rqcd_qcdml_quenched_su3_gauge_links_f64	autocollect	64	lattice_gauge_configuration	rqcd_qcdml_quenched_wilson_beta6_heatbath	zenodo	-	OK

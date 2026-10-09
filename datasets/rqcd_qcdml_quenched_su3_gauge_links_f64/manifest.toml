@@ -1,0 +1,90 @@
+manifest_version = 1
+dataset_id = "rqcd_qcdml_quenched_su3_gauge_links_f64"
+name = "RQCD qcdML Quenched SU(3) Gauge Configurations (ens_001) Float64"
+description = "Native complex128 SU(3) link matrices U_mu(x) of 100 widely spaced gauge configurations from one quenched lattice-QCD Markov chain (8^3x16, Wilson plaquette action, beta=6.0, SU(2)-subgroup heat bath), emitted as interleaved little-endian float64 (re, im)."
+homepage = "https://doi.org/10.5281/zenodo.15018324"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Knuettel, D. (University of Regensburg), ldg/rqcd/qcdML/ens_001, Zenodo, 2025, DOI 10.5281/zenodo.15018324."
+notes = "The Zenodo record metadata for record 15018324 declares license id cc-by-4.0; download.sh re-checks it on every run. Attribute the RQCD collaboration / qcdML project and the DOI."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "First-principles Monte Carlo simulation output deposited by the author on Zenodo; fetched from the official Zenodo file endpoint by byte range."
+usage_notes = "Physics simulation data only; no people, places, or personal information."
+
+[[origins]]
+id = "zenodo_qcdml_ens001"
+name = "ldg/rqcd/qcdML/ens_001 (Zenodo record 15018324)"
+url = "https://zenodo.org/records/15018324"
+type = "repository"
+version = "published 2025-03-13"
+notes = "Single-file record ens_001_pt.zip (22,571,455,882 bytes, md5 58d0a6911c07480ff914417d4498d8bc) holding config_0.pt..config_4999.pt and metadata.yml."
+
+[[resources]]
+id = "ens001_zip_tail"
+origin = "zenodo_qcdml_ens001"
+url = "https://zenodo.org/api/records/15018324/files/ens_001_pt.zip/content"
+type = "other"
+version = "bytes 22570407306-22571455881"
+access = "HTTP byte-range GET of the last 1,048,576 bytes (Zip64 EOCD locator, Zip64 EOCD, 522,652-byte central directory with 5,002 entries)."
+size_bytes = 1048576
+sha256 = ""
+local_path = "downloads/rqcd_qcdml_quenched_su3_gauge_links_f64/ens_001_pt.zip.tail"
+notes = "Parsed with struct to confirm central-directory geometry (offset 22,570,933,132, size 522,652, 5,002 entries) and every pinned member's local-header offset, compressed size, uncompressed size and CRC32."
+
+[[resources]]
+id = "ens001_config_members"
+origin = "zenodo_qcdml_ens001"
+url = "https://zenodo.org/api/records/15018324/files/ens_001_pt.zip/content"
+type = "shard"
+version = "config n = 300 + 47k, k = 0..99 (300..4953)"
+access = "One HTTP byte-range GET per pinned member (local header + DEFLATE data); offsets, sizes and CRC32 are pinned in scripts/selected_members.tsv."
+size_bytes = 451419446
+sha256 = ""
+local_path = "downloads/rqcd_qcdml_quenched_su3_gauge_links_f64/members/config_<n>.zipmember"
+notes = "Each zipmember holds the exact outer local header plus compressed data (size_bytes assumes the 28-byte local extra field seen in probes) (~4.51 MB); the inflated member is a ~4.72 MB torch .pt (stored zip) whose CRC32 must match the central directory. Total compressed member data 451,411,161 bytes; whole archive is never downloaded."
+
+[local_paths]
+downloads = "downloads/rqcd_qcdml_quenched_su3_gauge_links_f64/"
+filtered = "filtered/rqcd_qcdml_quenched_su3_gauge_links_f64/"
+index = "index/rqcd_qcdml_quenched_su3_gauge_links_f64/"
+samples = "samples/rqcd_qcdml_quenched_su3_gauge_links_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/rqcd_qcdml_quenched_su3_gauge_links_f64/samples.jsonl"
+summary = "Range-fetch 100 pinned gauge-configuration members from the 22.6 GB Zenodo zip, inflate each, decode the torch tensor header without unpickling, and emit each configuration's complex128 link tensor as one interleaved little-endian float64 sample."
+deterministic_notes = "Config schedule n = 300 + 47k (k = 0..99) is fixed: configs 0..~50 are a non-equilibrium start (probe mean plaquette 0.695 at config 0, 0.603 at 25, 0.593 at 1000, equilibrium ~0.594 for beta=6.0), so the first 300 are skipped, and 47-config spacing limits Markov-chain autocorrelation. download.sh re-validates record identity, license, archive size/md5, central-directory geometry, and per-member offset/csize/usize/CRC32. build.sh checks torch data.pkl opcodes via pickletools.genops (ComplexDoubleStorage, numel 294912, storage offset 0, shape (4,8,8,8,16,3,3), contiguous stride) and a pinned data.pkl SHA-256, byteorder 'little', data/0 = 4,718,592 bytes, and SU(3) structure. verify.sh re-derives each sample through stdlib zipfile, byte-compares, and checks |entries| <= 1, |U U^dagger - 1| <= 1e-12 and |det U - 1| <= 1e-12 for every link matrix."
+
+[[series]]
+id = "qcdml_ens001_su3_gauge_links_f64"
+description = "SU(3) gauge link matrices of one quenched lattice-QCD gauge configuration per sample."
+semantic_meaning = "Real and imaginary parts of the 3x3 special-unitary link matrices U_mu(x) on every link of an 8x8x8x16 periodic lattice (4 directions), one Markov-chain configuration of the Wilson plaquette action at beta=6.0; dimensionless, |entries| <= 1."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The source tensor is torch complex128 (ComplexDoubleStorage) in little-endian byte order; a complex128 element is two IEEE-754 float64 values (re, im), so the emitted bytes equal the source storage bit-for-bit."
+source_resources = ["ens001_zip_tail", "ens001_config_members"]
+source_format = "torch .pt archive (stored zip with data.pkl tensor header) inside a Zip64 DEFLATE archive"
+source_field = "complex128 tensor U[mu, x, y, z, t, row, col], shape (4, 8, 8, 8, 16, 3, 3), storage data/0"
+filtered_input_path = "filtered/rqcd_qcdml_quenched_su3_gauge_links_f64/ingest_stats.json"
+filtering = "Keep 100 of the 5,000 configurations: n = 300 + 47k for k = 0..99. All link values of each kept configuration are emitted; nothing inside a configuration is dropped."
+missing_value_policy = "No missing values exist. Any non-finite value, |entry| > 1 + 1e-9, unitarity residual > 1e-10 (build) or > 1e-12 (verify), det deviation > 1e-12 (verify), wrong dtype/shape/stride/offset, CRC mismatch, or constant tensor is fatal."
+conversion = "Inflate the outer DEFLATE member (CRC32 checked), locate <config>/data/0 through the inner stored-zip central directory, validate the tensor header with pickletools.genops, and write data/0 unchanged: row-major (mu, x, y, z, t, row, col) complex128 = interleaved little-endian float64 (re, im). One sample per configuration."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64, interleaved real/imaginary parts"
+sample_geometry = "lattice_gauge_field_links"
+sample_rank = 8
+sample_axes = ["mu", "x", "y", "z", "t", "row", "col", "re_im"]
+natural_record_kind = "lattice_qcd_gauge_configuration"
+sample_count = 100
+total_size_bytes = 471859200
+output_path = "samples/rqcd_qcdml_quenched_su3_gauge_links_f64/qcdml_ens001_su3_gauge_links_f64/"

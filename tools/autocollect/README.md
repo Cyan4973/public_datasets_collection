@@ -146,6 +146,9 @@ counts toward the per-width goal; `status` shows counted and weak families.
 - Network: the driver exports the `~/.curlrc` proxy to every child process so
   both curl and Python reach the internet. Recipes still use curl for network
   so they also run standalone.
+- `driver.py scout --width 32 --focus "..."` queues a scout restricted to one
+  topic (e.g. a user priority). It takes the next free agent slot after judges,
+  ahead of builders; a queued scout survives a driver restart.
 - To change prompts, criteria or code while a driver runs, write and commit in one
   step (e.g. write to a temp file, then `mv` and `git commit` in one command); the
   mutation check pauses on any uncommitted change to a tracked file.

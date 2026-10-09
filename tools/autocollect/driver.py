@@ -22,6 +22,7 @@ Commands:
   driver.py requeue <candidate_id> [--status queued]
   driver.py approve-breadth <candidate_id> [--note ...]
   driver.py reject <candidate_id> --reason ...
+  driver.py scout --width 32 [--width 16] --focus "..."
   driver.py unpause
 """
 from __future__ import annotations
@@ -751,13 +752,15 @@ def card_markdown(candidate: dict, scout_log: str) -> str:
 PRIORITIES_PATH = PIPELINE_DIR / "priorities.md"
 
 
-def scout_prompt(width: int, count: int, domains: list[str], have: int, target: int, avoid: list[str], lessons: list[str]) -> str:
+def scout_prompt(width: int, count: int, domains: list[str], have: int, target: int, avoid: list[str], lessons: list[str],
+                 focus: str = "") -> str:
     parts = []
     if PRIORITIES_PATH.exists():
         parts.append("User priorities (favor these whenever they fit your width; they come first):\n" + PRIORITIES_PATH.read_text(encoding="utf-8").strip())
     parts += [
         f"Target width: {width}-bit. Return up to {count} candidates; fewer is fine if quality is lacking.",
-        f"Focus domains this round: {'; '.join(domains)}. Other domains are welcome if clearly more promising.",
+        f"Focus this round, requested by the user: {focus}. Propose only candidates within this focus; fewer is fine."
+        if focus else f"Focus domains this round: {'; '.join(domains)}. Other domains are welcome if clearly more promising.",
         f"Progress: {have} of {target} new {width}-bit families accepted since the baseline.",
     ]
     if avoid:
@@ -903,6 +906,7 @@ class Driver:
         self.started_at = now_iso()
         self.terminal_this_run = 0
         self.startup_dirty = dirty_paths()
+        self.focus_scouts: list[tuple[int, str]] = []
 
     # ledger helpers
     def row(self, cid: str) -> dict:
@@ -1002,6 +1006,9 @@ class Driver:
             if self.agent_slots_free() <= 0:
                 break
             self.launch_judge(row)
+        while self.focus_scouts and self.agent_slots_free() > 0 and not self.winding_down():
+            width, focus = self.focus_scouts.pop(0)
+            self.launch_scout(width, deficits[width], focus)
         for status, phase in (("downloaded", "build"), ("needs_repair", "repair")):
             for row in by_status(status):
                 if self.agent_slots_free() <= 0:
@@ -1042,13 +1049,15 @@ class Driver:
             if waiting < self.cfg.queue_low_water and (running == 0 or self.agent_slots_free() > len(self.cfg.widths)):
                 self.launch_scout(width, deficits[width])
 
-    def launch_scout(self, width: int, deficit: int) -> None:
-        rotation = json.loads(ROTATION_PATH.read_text()) if ROTATION_PATH.exists() else {}
-        turn = int(rotation.get(str(width), 0))
-        offset = WIDTHS.index(width) * 7
-        domains = [FOCUS_DOMAINS[(offset + 2 * turn + i) % len(FOCUS_DOMAINS)] for i in range(2)]
-        rotation[str(width)] = turn + 1
-        write_atomic(ROTATION_PATH, json.dumps(rotation))
+    def launch_scout(self, width: int, deficit: int, focus: str = "") -> None:
+        domains = []
+        if not focus:
+            rotation = json.loads(ROTATION_PATH.read_text()) if ROTATION_PATH.exists() else {}
+            turn = int(rotation.get(str(width), 0))
+            offset = WIDTHS.index(width) * 7
+            domains = [FOCUS_DOMAINS[(offset + 2 * turn + i) % len(FOCUS_DOMAINS)] for i in range(2)]
+            rotation[str(width)] = turn + 1
+            write_atomic(ROTATION_PATH, json.dumps(rotation))
         target = int(load_baseline()["target_new_per_width"])
         rows = [row for row in self.ledger if row["width"] == str(width)]
         avoid = [f"{row['candidate_id']}: {row['title']} ({row['source_url']})" for row in rows[-60:]]
@@ -1057,7 +1066,9 @@ class Driver:
             for row in rows
             if row["status"] in {"screened_out", *REGISTRY_TERMINALS} and row["reason"]
         ][-15:]
-        prompt = scout_prompt(width, self.cfg.scout_batch, domains, target - deficit, target, avoid, lessons)
+        prompt = scout_prompt(width, self.cfg.scout_batch, domains, target - deficit, target, avoid, lessons, focus)
+        if focus:
+            log(f"focused {width}-bit scout: {one_line(focus, 200)}")
         self.submit({"kind": "scout", "width": width}, task_agent, self.cfg, "scout", "scout", f"scout_{width}bit", prompt, SCOUT_SCHEMA, {"width": width})
 
     def launch_builder(self, row: dict, phase: str) -> None:
@@ -1488,6 +1499,10 @@ class Driver:
             if not line.strip():
                 continue
             command = json.loads(line)
+            if command["action"] == "scout":
+                log(f"control: {command}")
+                self.focus_scouts.append((int(command["width"]), command["focus"]))
+                continue
             cid = command.get("candidate_id", "")
             if not any(row["candidate_id"] == cid for row in self.ledger) or self.busy(cid):
                 log(f"control: ignored {command}")
@@ -1564,6 +1579,8 @@ class Driver:
                 break
             time.sleep(self.cfg.poll_s)
         self.heartbeat()
+        for width, focus in self.focus_scouts:
+            queue_control({"action": "scout", "width": width, "focus": focus})
         pending = git("status", "--porcelain", "--", "pipeline").stdout.strip()
         if pending:
             commit(["pipeline"], "Update autocollect ledger")
@@ -1780,7 +1797,7 @@ def queue_control(command: dict) -> int:
     RUNTIME_DIR.mkdir(parents=True, exist_ok=True)
     with CONTROL_PATH.open("a", encoding="utf-8") as fh:
         fh.write(json.dumps(command) + "\n")
-    print(f"queued for the running driver: {command}")
+    print(f"queued for the driver: {command}")
     return 0
 
 
@@ -1843,6 +1860,14 @@ def cmd_set_breadth(args) -> int:
             row["breadth"] = args.verdict
     save_ledger(rows)
     print(f"{args.candidate_id}: breadth {args.verdict}")
+    return 0
+
+
+def cmd_scout(args) -> int:
+    """Queue a scout on one topic; the driver (now or at its next start) launches it
+    at the next free agent slot after judges."""
+    for width in args.width:
+        queue_control({"action": "scout", "width": width, "focus": args.focus})
     return 0
 
 
@@ -1969,6 +1994,9 @@ def main() -> int:
     requeue.add_argument("candidate_id")
     requeue.add_argument("--status", default="queued", choices=ACTIVE_STATUSES)
     sub.add_parser("unpause", help="clear a global pause after inspecting its cause")
+    scout = sub.add_parser("scout", help="queue a scout on one topic, ahead of builders")
+    scout.add_argument("--width", type=int, action="append", required=True, choices=WIDTHS)
+    scout.add_argument("--focus", required=True, help="topic the scout must stay within")
     set_breadth = sub.add_parser("set-breadth", help="correct a recorded breadth verdict")
     set_breadth.add_argument("candidate_id")
     set_breadth.add_argument("verdict", choices=["STRONG", "OK", "WEAK"])
@@ -1983,7 +2011,7 @@ def main() -> int:
     reject.add_argument("--retry", default="Retry only with the user's explicit approval.")
     args = parser.parse_args()
     return {"init": cmd_init, "status": cmd_status, "activity": cmd_activity, "follow": cmd_follow, "run": cmd_run, "requeue": cmd_requeue, "unpause": cmd_unpause,
-            "approve-breadth": cmd_approve_breadth, "reject": cmd_reject, "reopen": cmd_reopen, "set-breadth": cmd_set_breadth}[args.command](args)
+            "approve-breadth": cmd_approve_breadth, "reject": cmd_reject, "reopen": cmd_reopen, "set-breadth": cmd_set_breadth, "scout": cmd_scout}[args.command](args)
 
 
 if __name__ == "__main__":

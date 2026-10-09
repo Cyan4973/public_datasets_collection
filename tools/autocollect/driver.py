@@ -1566,6 +1566,9 @@ class Driver:
                 summary = reopen_candidate(cid)
                 self.set_status(cid, "ready_for_download", f"reopened for re-measurement ({summary})")
                 commit(["attempts/dataset_status.tsv", "pipeline"], f"Reopen {cid} for re-measurement")
+            elif command["action"] == "set-breadth":
+                self.row(cid)["breadth"] = command["verdict"]
+                save_ledger(self.ledger)
             elif command["action"] == "requeue":
                 state = load_state(cid)
                 state["agent_failures"] = 0
@@ -1882,6 +1885,19 @@ def cmd_reopen(args) -> int:
     return 0
 
 
+def cmd_set_breadth(args) -> int:
+    """Correct a recorded breadth verdict (e.g. after a re-measurement)."""
+    if driver_running():
+        return queue_control({"action": "set-breadth", "candidate_id": args.candidate_id, "verdict": args.verdict})
+    rows = load_ledger()
+    for row in rows:
+        if row["candidate_id"] == args.candidate_id:
+            row["breadth"] = args.verdict
+    save_ledger(rows)
+    print(f"{args.candidate_id}: breadth {args.verdict}")
+    return 0
+
+
 def cmd_requeue(args) -> int:
     if driver_running():
         return queue_control({"action": "requeue", "candidate_id": args.candidate_id, "status": args.status})
@@ -2005,6 +2021,9 @@ def main() -> int:
     requeue.add_argument("candidate_id")
     requeue.add_argument("--status", default="queued", choices=ACTIVE_STATUSES)
     sub.add_parser("unpause", help="clear a global pause after inspecting its cause")
+    set_breadth = sub.add_parser("set-breadth", help="correct a recorded breadth verdict")
+    set_breadth.add_argument("candidate_id")
+    set_breadth.add_argument("verdict", choices=["STRONG", "OK", "WEAK"])
     reopen = sub.add_parser("reopen", help="restore an archived rejected candidate for re-measurement")
     reopen.add_argument("candidate_id")
     approve = sub.add_parser("approve-breadth", help="approve a pending breadth override or archive-cap sign-off")
@@ -2016,7 +2035,7 @@ def main() -> int:
     reject.add_argument("--retry", default="Retry only with the user's explicit approval.")
     args = parser.parse_args()
     return {"init": cmd_init, "status": cmd_status, "activity": cmd_activity, "follow": cmd_follow, "run": cmd_run, "requeue": cmd_requeue, "unpause": cmd_unpause,
-            "approve-breadth": cmd_approve_breadth, "reject": cmd_reject, "reopen": cmd_reopen}[args.command](args)
+            "approve-breadth": cmd_approve_breadth, "reject": cmd_reject, "reopen": cmd_reopen, "set-breadth": cmd_set_breadth}[args.command](args)
 
 
 if __name__ == "__main__":

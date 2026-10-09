@@ -1,0 +1,26 @@
+# Livox MID-360 Driving SLAM Test (K. Koide, Zenodo 14841855): Native 8-bit Per-Point Laser Reflectivity of Non-Repetitive-Scan Frames, UInt8
+
+- Candidate id: `zenodo_livox_mid360_driving_reflectivity_u8`
+- Width: uint8
+- Quantity: Calibrated per-point laser return reflectivity (Livox scale 0-255: 0-150 diffuse, 151-255 retro-reflective) from a Livox MID-360 non-repetitive (rosette-pattern) solid-state lidar. livox_ros_driver2 stores it as the float32 PointCloud2 field 'intensity', which always holds an exact integer.
+- Source: https://zenodo.org/records/14841855
+- Resources: https://zenodo.org/records/14841855/files/rosbag2_2024_04_16-14_17_01.zip?download=1, https://zenodo.org/api/records/14841855
+- License: CC-BY-4.0
+- License evidence: https://zenodo.org/api/records/14841855
+- License quote: Zenodo record metadata: "license": {"id": "cc-by-4.0"}; resource_type dataset; creator Koide, Kenji; description: "Dataset for testing LiDAR-IMU SLAM algorithms in a basic driving situation with a Livox MID-360." (no added usage restrictions)
+- Natural record: One lidar frame: one /livox/lidar sensor_msgs/msg/PointCloud2 message, about 10 Hz, width 19,968 points, emitted as the uint8 reflectivity of every point in native scan order.
+- Estimated samples: 2,772
+- Estimated primary values: 55,350,000
+- Estimated download bytes: 517,088,133
+- Estimated primary bytes: 55,350,000
+- Decode path: curl the single zip (517 MB). Python zipfile (stdlib) extracts member rosbag2_2024_04_16-14_17_01/rosbag2_..._0.db3, a deflated 1.47 GB SQLite db. metadata.yaml says storage_identifier sqlite3, no bag compression. Use the stdlib sqlite3 module (3.36 available): SELECT data FROM messages JOIN topics ON topic_id WHERE name='/livox/lidar' ORDER BY timestamp. Parse the CDR PointCloud2 (4-byte encapsulation header, Header stamp + frame_id 'livox_frame', height, width, fields array, is_bigendian, point_step=26, row_step, data). Probed field layout: x f32@0, y f32@4, z f32@8, intensity f32@12, tag u8@16, line u8@17, timestamp f64@18. Take intensity at offset 12 + 26*i as float32 and assert each value is an integer in 0..255 before casting to uint8. tag and line are optional auxiliaries, not primary.
+- Novelty kind: new_source
+- Measurement type: laser_range
+- Instrument line: livox_mid360_solid_state_nonrepetitive_lidar (livox_ros_driver2 PointCloud2)
+- Archive collection: zenodo
+- Novelty evidence: novelty.py --url https://zenodo.org/records/14841855 --terms livox mid360 reflectivity: no URL or record match (Zenodo host only), and no livox/mid360 term in recipes, registry, ledger or downstream. At 8 bits, laser_range holds airborne LAS fields (Scotland scan angle, Maine classification, Payette return number) and boreas_velodyne_alpha_prime_intensity_u8, a spinning 128-beam Velodyne in interleaved firing order. Yamagata MMS intensity was rejected. This one is a different instrument line (Livox solid-state, non-repetitive rosette scanning). Points arrive in continuous time order along the rosette petals, so neighbouring values come from spatially adjacent returns. The order-1 and delta statistics should therefore differ from Velodyne firing order. Boreas itself was only OK at 0.069 from PacBio IPD, so this byte region is not crowded.
+- Homogeneity: One sensor (one Livox MID-360 unit), one driver (livox_ros_driver2 PointCloud2, point_step 26), one 277 s drive recorded 2024-04-16, a constant 19,968 points per frame, one quantity on one 0-255 lattice. Do not mix in Koide's Livox Avia bags (ROS1 CustomMsg, different sensor, records 7641866/6864654) or the MID-360 mcap tarball (record 21486938). Both are separate regimes or storage formats.
+- Risks: (1) zlsim: this is the second 8-bit lidar-intensity family after Boreas Velodyne (OK at 0.069) and could land near it or near THEMIS, which Yamagata hit. Rosette ordering is the main argument against that. (2) A single 4.6-minute recording of 2,772 frames is plenty of natural records, but a judge could still call it a single-session scope. The record's full documented scope is taken. (3) The 1.47 GB SQLite extract needs temporary disk. (4) intensity is float32 on the wire. The builder must verify every value is integral 0..255 and document the cast as lossless (the same pattern as Boreas). (5) Frames with fewer points or empty messages, if any, must be checked against the median floor (19,968 >> 1,000).
+- Probe evidence: Zenodo API: license cc-by-4.0, one file of 517,088,133 bytes. Range GET of the zip tail parsed the central directory: two members, metadata.yaml (deflate, 687 B) and the db3 (deflate, 517,086,992 compressed, 1,468,932,096 uncompressed). Range GET of the first 1.6 KB inflated metadata.yaml: sqlite3 storage, 2,772 /livox/lidar PointCloud2 messages, duration 277.17 s, no compression. A 3 MB range GET inflated to the start of the SQLite file ('SQLite format 3') and exposed a PointCloud2 CDR message: frame_id livox_frame, width 0x4E00=19968, fields x,y,z,intensity (float32 datatype 7), tag and line (uint8 datatype 2), timestamp (float64 datatype 8), point_step 0x1A=26. Sample intensity floats 26.0, 43.0, 40.0, 38.0 are integer-valued. No ID collision in datasets/, staging/, the registry or the ledger.
+
+Proposed by the autocollect scout on 2026-10-09 (transcript `.data/pipeline/logs/scout_8bit/scout.20261009_112458.jsonl`).

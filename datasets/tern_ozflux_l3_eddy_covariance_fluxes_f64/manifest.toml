@@ -1,0 +1,141 @@
+manifest_version = 1
+dataset_id = "tern_ozflux_l3_eddy_covariance_fluxes_f64"
+name = "TERN OzFlux L3 Half-Hourly Eddy-Covariance Fluxes (Fco2, Fe, Fh) Float64"
+description = "Quality-controlled 30-minute eddy-covariance turbulent fluxes (CO2 flux, latent heat flux, sensible heat flux) from the native Float64 NetCDF variables of 51 TERN OzFlux Level-3 PyFluxPro 'default' tower files, one sample per tower file per flux variable."
+homepage = "https://dap.tern.org.au/thredds/catalog/ecosystem_process/ozflux/catalog.html"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "TERN Ecosystem Processes / OzFlux L3 flux data (PyFluxPro), https://dap.tern.org.au/thredds/catalog/ecosystem_process/ozflux/catalog.html; Isaac et al. (2017) OzFlux data: network integration from collection to curation, Biogeosciences 14, 2903-2928."
+notes = "Every one of the 51 pinned L3 files carries the NetCDF global attributes license \"https://creativecommons.org/licenses/by/4.0/\" and license_name \"CC BY 4.0\"; download.sh re-checks both in each file's DAS and aborts otherwise. Required acknowledgement (global attribute 'acknowledgement'): \"This work used eddy covariance data collected by the TERN Ecosystem Processes facility. Ecosystem Processes would like to acknowledge the financial support of the Australian Federal Government via the National Collaborative Research Infrastructure Scheme and the Education Investment Fund.\" Per-site PIs are listed in each file's site_pi/contact attributes."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official TERN THREDDS/OPeNDAP server (dap.tern.org.au); server-side projection of the native NetCDF Float64 variables, no mirrors."
+usage_notes = "Environmental flux-tower measurements; no personal data. PI contact e-mail attributes in the DAS metadata are not emitted."
+
+[[origins]]
+id = "tern_ozflux_thredds"
+name = "TERN Ecosystem Processes OzFlux THREDDS catalog"
+url = "https://dap.tern.org.au/thredds/catalog/ecosystem_process/ozflux/catalog.html"
+type = "data_portal"
+notes = "47 site catalogs, each with versioned release folders (two releases per year, e.g. 2026_v2) and L3..L6 processing levels with default (PyFluxPro) and site_pi sub-folders. See https://dap.tern.org.au/thredds/fileServer/ecosystem_process/ozflux/Readme.txt."
+
+[[resources]]
+id = "ozflux_l3_default_metadata"
+origin = "tern_ozflux_thredds"
+url = "https://dap.tern.org.au/thredds/dodsC/<url_path>.dds and .das for every row of files.tsv"
+type = "api_query_result"
+version = "per-site latest release folder as crawled 2026-10-09 (2024_v2 .. 2026_v3), pinned in files.tsv"
+access = "Anonymous OPeNDAP DDS/DAS text responses."
+size_bytes = 1789385
+sha256 = ""
+local_path = "downloads/tern_ozflux_l3_eddy_covariance_fluxes_f64/<site>/<stem>.{dds,das}"
+notes = "Validated per file: time length equals files.tsv, Fco2/Fe/Fh are Float64[time][1][1], units umol/m^2/s and W/m^2, any declared _FillValue is -9999.0, global time_step 30, processing_level L3, license_name CC BY 4.0. Sizes measured during probing (51 files)."
+
+[[resources]]
+id = "ozflux_l3_default_flux_projections"
+origin = "tern_ozflux_thredds"
+url = "https://dap.tern.org.au/thredds/dodsC/<url_path>.dods?<V>.<V> for V in Fco2, Fe, Fh and every row of files.tsv"
+type = "api_query_result"
+version = "files.tsv (51 thirty-minute L3/default files; 6,432,235 half-hour steps per variable)"
+access = "Anonymous OPeNDAP DAP2 binary responses; server-side projection of one Grid array."
+size_bytes = 154412000
+sha256 = ""
+local_path = "downloads/tern_ozflux_l3_eddy_covariance_fluxes_f64/<site>/<stem>.<V>.dods"
+notes = "OPeNDAP responses are generated on the fly without ETag, so no upstream checksum exists; integrity is enforced structurally (DDS declaration, dataset path, equal XDR length words equal to the pinned time length, exact byte length). size_bytes is 24 x 6,432,235 values plus ~250 header bytes per response. Excluded: Otway_L3.nc and Tumbarumba1_20020107T1600_to_20221203T1800_L3.nc (time_step 60). Per-sample SHA-256 of emitted bytes is recorded in the index."
+
+[local_paths]
+downloads = "downloads/tern_ozflux_l3_eddy_covariance_fluxes_f64/"
+filtered = "filtered/tern_ozflux_l3_eddy_covariance_fluxes_f64/"
+index = "index/tern_ozflux_l3_eddy_covariance_fluxes_f64/"
+samples = "samples/tern_ozflux_l3_eddy_covariance_fluxes_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/tern_ozflux_l3_eddy_covariance_fluxes_f64/samples.jsonl"
+summary = "For each of 51 pinned OzFlux L3/default 30-minute tower files, fetch the OPeNDAP binary projections of Fco2, Fe and Fh, decode the DAP2/XDR big-endian float64 arrays, drop -9999.0 fill, and write each variable's remaining values in time order as one little-endian float64 sample."
+deterministic_notes = "files.tsv pins site, release folder, file name, url path and time length (re-derivable with scripts/discover.py). download.sh validates license/time_step/units/fill in each DAS and the DDS + XDR length words + byte length of every .dods payload. build.sh sorts nothing (files.tsv order, time order within a file). verify.sh re-decodes with an independent array/byteswap implementation, byte-compares samples, checks index counters/min/max/sha256, gap sidecars, manifest totals, median floor, and rejects constant or low-distinct samples. Pairs with < 1000 valid values would be skipped by both scripts and listed in filtered/ingest_stats.json."
+
+[[series]]
+id = "ozflux_l3_fco2_f64"
+description = "Half-hourly eddy-covariance CO2 flux (Fco2) per OzFlux tower file."
+semantic_meaning = "Surface upward mole flux of carbon dioxide (umol m-2 s-1), 30-minute block average of the covariance of vertical wind (sonic anemometer) and CO2 density (open-path IRGA), QA/QC-filtered at PyFluxPro Level 3 (not gap-filled)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Native NetCDF Float64 variable values; only the byte order changes (XDR big-endian to little-endian)."
+source_resources = ["ozflux_l3_default_flux_projections"]
+source_format = "NetCDF-4 L3 file served via OPeNDAP DAP2 binary (.dods) projection"
+source_field = "Fco2 (Grid array Fco2[time][latitude=1][longitude=1], units umol/m^2/s)"
+filtered_input_path = "filtered/tern_ozflux_l3_eddy_covariance_fluxes_f64/gaps/ozflux_l3_fco2_f64/"
+filtering = "All 51 thirty-minute L3/default files listed in files.tsv; the two 60-minute files are excluded. L4-L6 gap-filled/partitioned products and site_pi folders are not used."
+missing_value_policy = "Values equal to the -9999.0 fill (declared as _FillValue in 31 files and used identically in the other 20), NaN/Inf, and the NetCDF default fill 9.969209968386869e36 are dropped; the remaining values keep their time order. Fill run positions are kept in filtered/.../gaps/<series>/<stem>.json so the time alignment is reconstructible. Upstream valid_range is not enforced by L3 and is not applied; finite non-fill |x| > 1e5 is fatal. A (file, variable) pair with < 1000 valid values is skipped by build and verify alike."
+conversion = "Parse the DDS header, split at '\\nData:\\n', read two big-endian uint32 XDR length words (must be equal and equal to the pinned time length), decode N big-endian IEEE-754 float64 values, drop missing values, and write struct '<d' little-endian. One sample per tower file."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 time series"
+sample_geometry = "station_time_series_valid_steps"
+sample_rank = 1
+sample_axes = ["half_hour_step_valid_only"]
+natural_record_kind = "ozflux_l3_tower_file_variable_time_series"
+sample_count = 51
+total_size_bytes = 36053944
+output_path = "samples/tern_ozflux_l3_eddy_covariance_fluxes_f64/ozflux_l3_fco2_f64/"
+
+[[series]]
+id = "ozflux_l3_fe_f64"
+description = "Half-hourly eddy-covariance latent heat flux (Fe) per OzFlux tower file."
+semantic_meaning = "Surface upward latent heat flux (W m-2), 30-minute covariance of vertical wind and water-vapour density from sonic anemometer + open-path IRGA, QA/QC-filtered at PyFluxPro Level 3 (not gap-filled)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Native NetCDF Float64 variable values; only the byte order changes (XDR big-endian to little-endian)."
+source_resources = ["ozflux_l3_default_flux_projections"]
+source_format = "NetCDF-4 L3 file served via OPeNDAP DAP2 binary (.dods) projection"
+source_field = "Fe (Grid array Fe[time][latitude=1][longitude=1], units W/m^2)"
+filtered_input_path = "filtered/tern_ozflux_l3_eddy_covariance_fluxes_f64/gaps/ozflux_l3_fe_f64/"
+filtering = "All 51 thirty-minute L3/default files listed in files.tsv; the two 60-minute files are excluded. L4-L6 gap-filled/partitioned products and site_pi folders are not used."
+missing_value_policy = "Values equal to the -9999.0 fill, NaN/Inf, and the NetCDF default fill are dropped; the remaining values keep their time order. Fill runs are kept in filtered/.../gaps/<series>/<stem>.json. Upstream valid_range is not enforced by L3 and is not applied; finite non-fill |x| > 1e5 is fatal. Pairs with < 1000 valid values are skipped by build and verify alike."
+conversion = "Same DAP2/XDR decode as ozflux_l3_fco2_f64: DDS, '\\nData:\\n', two equal big-endian uint32 lengths, N big-endian float64, drop missing, write '<d'. One sample per tower file."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 time series"
+sample_geometry = "station_time_series_valid_steps"
+sample_rank = 1
+sample_axes = ["half_hour_step_valid_only"]
+natural_record_kind = "ozflux_l3_tower_file_variable_time_series"
+sample_count = 51
+total_size_bytes = 37750760
+output_path = "samples/tern_ozflux_l3_eddy_covariance_fluxes_f64/ozflux_l3_fe_f64/"
+
+[[series]]
+id = "ozflux_l3_fh_f64"
+description = "Half-hourly eddy-covariance sensible heat flux (Fh) per OzFlux tower file."
+semantic_meaning = "Surface upward sensible heat flux (W m-2), 30-minute covariance of vertical wind and sonic temperature, QA/QC-filtered at PyFluxPro Level 3 (not gap-filled)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Native NetCDF Float64 variable values; only the byte order changes (XDR big-endian to little-endian)."
+source_resources = ["ozflux_l3_default_flux_projections"]
+source_format = "NetCDF-4 L3 file served via OPeNDAP DAP2 binary (.dods) projection"
+source_field = "Fh (Grid array Fh[time][latitude=1][longitude=1], units W/m^2)"
+filtered_input_path = "filtered/tern_ozflux_l3_eddy_covariance_fluxes_f64/gaps/ozflux_l3_fh_f64/"
+filtering = "All 51 thirty-minute L3/default files listed in files.tsv; the two 60-minute files are excluded. L4-L6 gap-filled/partitioned products and site_pi folders are not used."
+missing_value_policy = "Values equal to the -9999.0 fill, NaN/Inf, and the NetCDF default fill are dropped; the remaining values keep their time order. Fill runs are kept in filtered/.../gaps/<series>/<stem>.json. Upstream valid_range is not enforced by L3 and is not applied; finite non-fill |x| > 1e5 is fatal. Pairs with < 1000 valid values are skipped by build and verify alike."
+conversion = "Same DAP2/XDR decode as ozflux_l3_fco2_f64: DDS, '\\nData:\\n', two equal big-endian uint32 lengths, N big-endian float64, drop missing, write '<d'. One sample per tower file."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 time series"
+sample_geometry = "station_time_series_valid_steps"
+sample_rank = 1
+sample_axes = ["half_hour_step_valid_only"]
+natural_record_kind = "ozflux_l3_tower_file_variable_time_series"
+sample_count = 51
+total_size_bytes = 38535984
+output_path = "samples/tern_ozflux_l3_eddy_covariance_fluxes_f64/ozflux_l3_fh_f64/"

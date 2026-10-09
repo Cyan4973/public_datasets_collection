@@ -1,0 +1,108 @@
+manifest_version = 1
+dataset_id = "usgs_3dep_nc_geiger_laz_x_i32"
+name = "USGS 3DEP NC Phase 4 Anson 2016 Geiger-Mode Lidar LAS Scaled Int32 X Record Coordinates"
+description = "Native little-endian int32 X record coordinates (0.01 US survey ft ticks, offset 0, NAD83(2011) North Carolina State Plane easting) of every point in 25 complete published LAZ tiles from the USGS 3DEP NC_Phase_4_CentralWestNC_GEIGER_A16 project (Anson County block, Harris IntelliEarth Geiger-mode APD sensor S/N003; tiles whose VPC datetime 2016-08-10 copies the LAS file-creation date 2016/223; points acquired 2016-03-16/17 by GPS time), one sample per tile in file order."
+homepage = "https://prd-tnm.s3.amazonaws.com/index.html?prefix=StagedProducts/Elevation/LPC/Projects/NC_Phase_4_CentralWestNC_GEIGER_A16/NC_Phase4_Anson_2016/"
+
+[license]
+name = "U.S. Government Public Domain"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits"
+citation = "U.S. Geological Survey, 2019, USGS Lidar Point Cloud NC_Phase_4_CentralWestNC_GEIGER_A16 (3D Elevation Program), accessed via https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/NC_Phase_4_CentralWestNC_GEIGER_A16/."
+notes = "Per-tile FGDC metadata (e.g. metadata/USGS_LPC_NC_Phase_4_CentralWestNC_GEIGER_A16_10743514.xml on the prd-tnm bucket): origin 'U.S. Geological Survey', pubdate 20190701, accconst 'None. Any downloading and use of these data signifies a user's agreement to comprehension and compliance of the USGS Standard Disclaimer...', useconst 'Acknowledgement of the originating agencies would be appreciated in products derived from these data. Any user who modifies the data is obligated to describe the types of modifications they perform...'. USGS policy: USGS-authored or produced data and information are considered to be in the U.S. public domain. Modification performed here: only the X field of each point record is kept, byte for byte."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official USGS 3DEP staged LPC delivery. LAZ tiles come only from rockyweb.usgs.gov (they are not mirrored on the prd-tnm S3 bucket, which returns 404); the project VPC and link list come from the prd-tnm S3 bucket. No mirrors."
+usage_notes = "Airborne lidar point coordinates (ground, vegetation, structures) of rural Anson County, North Carolina. Point coordinates carry no identity or imagery."
+
+[[origins]]
+id = "usgs_prd_tnm_s3"
+name = "USGS The National Map staged products (prd-tnm S3 bucket)"
+url = "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/NC_Phase_4_CentralWestNC_GEIGER_A16/NC_Phase4_Anson_2016/"
+type = "bucket"
+notes = "Public anonymous bucket with the project VPC (STAC FeatureCollection, pc:count per tile), 0_file_download_links.txt and per-tile FGDC metadata."
+
+[[origins]]
+id = "usgs_rockyweb"
+name = "USGS rockyweb staged elevation delivery"
+url = "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/NC_Phase_4_CentralWestNC_GEIGER_A16/NC_Phase4_Anson_2016/LAZ/"
+type = "website"
+notes = "Anonymous HTTPS host for the LAZ tiles (nginx, byte ranges supported). TLS handshakes and the egress proxy fail intermittently, so download.sh retries at two levels."
+
+[[resources]]
+id = "project_vpc"
+origin = "usgs_prd_tnm_s3"
+url = "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/NC_Phase_4_CentralWestNC_GEIGER_A16/NC_Phase4_Anson_2016/NC_Phase4_Anson_2016.vpc"
+type = "file"
+version = "Last-Modified 2026-09-13T02:21:47Z, ETag 398b85034a720bed0c0515b13988cb8a"
+access = "Direct public download."
+size_bytes = 9137832
+sha256 = "ee9caf0246394c3a4b802b1f97829f6aab189af0d989b199de55ea307d42cb3a"
+local_path = "downloads/usgs_3dep_nc_geiger_laz_x_i32/meta/NC_Phase4_Anson_2016.vpc"
+notes = "STAC FeatureCollection, 2,533 tile features with properties.datetime, pc:count, proj:bbox and proj:wkt2. Used to re-derive the selection. A changed digest is reported as a warning (USGS regenerates VPCs); a changed selection is fatal."
+
+[[resources]]
+id = "download_links"
+origin = "usgs_prd_tnm_s3"
+url = "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/NC_Phase_4_CentralWestNC_GEIGER_A16/NC_Phase4_Anson_2016/0_file_download_links.txt"
+type = "file"
+version = "Last-Modified 2023-06-16T22:10:18Z, ETag c4d3c9d011ee1d17fc499978c6bec0d7"
+access = "Direct public download."
+size_bytes = 491402
+sha256 = "df88e0221d3e679b4d71f8330e80e22fdf6ea865dd002e61dd692523b5e5c9fe"
+local_path = "downloads/usgs_3dep_nc_geiger_laz_x_i32/meta/0_file_download_links.txt"
+notes = "2,533 official rockyweb LAZ URLs; every selected tile URL must appear in it."
+
+[[resources]]
+id = "laz_tiles"
+origin = "usgs_rockyweb"
+url = "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/NC_Phase_4_CentralWestNC_GEIGER_A16/NC_Phase4_Anson_2016/LAZ/"
+type = "file"
+version = "25 LAZ files USGS_LPC_NC_Phase_4_CentralWestNC_GEIGER_A16_<tile>.laz, Last-Modified 2023-06-16, pinned in sources.tsv"
+access = "Direct public download, one file per tile."
+size_bytes = 1225170780
+sha256 = ""
+local_path = "downloads/usgs_3dep_nc_geiger_laz_x_i32/laz/"
+notes = "sources.tsv pins tile id, VPC pc:count and datetime, URL, size, ETag, Last-Modified, header X bounds and per-file sha256 (pinned from the first full download on 2026-10-08 and enforced on every re-run; the manifest sha256 field is empty because the resource is 25 separate files). Every tile is validated before it is kept: LAS 1.4, system identifier IntelliEarthGmAPDSensorS/N003, generating software ESP ANALYST, creation 2016 day 223, compressed point format 6 with 30-byte records, scale 0.01, offset 0, header point count equal to pc:count, LASzip layered compressor (POINT14 v3, chunk size 50000), and an OGC WKT EVLR for NAD83(2011) / North Carolina (ftUS) + NAVD88."
+
+[local_paths]
+downloads = "downloads/usgs_3dep_nc_geiger_laz_x_i32/"
+filtered = "filtered/usgs_3dep_nc_geiger_laz_x_i32/"
+index = "index/usgs_3dep_nc_geiger_laz_x_i32/"
+samples = "samples/usgs_3dep_nc_geiger_laz_x_i32/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/usgs_3dep_nc_geiger_laz_x_i32/samples.jsonl"
+summary = "Fetch 25 pinned Geiger-mode LAZ tiles, decode them with the repository's pure-stdlib LASzip decoder (tools/laz/laszip.py), keep the X field (first int32 of every 30-byte LAS 1.4 point format 6 record) byte for byte, and emit one little-endian int32 sample per tile."
+deterministic_notes = "Selection rule (scripts/geiger_tiles.py select, documented by discover.sh): every feature of the project VPC whose datetime is 2016-08-10 (the VPC datetime copies the LAS header file-creation date, 2016 day 223; it is not a flight date) and whose pc:count is below 9,000,000, sorted by tile id: 25 of the 1,785 tiles in that group. The selection key is the single LAS creation batch 2016/223 (VPC datetime 2016-08-10). Every selected tile is checked (download.sh, build.sh, verify.sh) to carry the system identifier 'IntelliEarthGmAPDSensorS/N003'. Other creation-date groups carry a mix of identifiers ('IntelliEarthGmAPDSensorS/N003', 'IntelliEarth GmAPD Sensor #003', 'IntelliEarth GmAPD Sensors #2&3') and are excluded to keep one processing batch, one identifier string and one acquisition window (2016-03-16/17 by GPS time). The count cap keeps the primary output under 1 GB because full interior tiles hold 17-31 million points; it favours partial tiles at project edges and over water. download.sh re-derives the selection from the live VPC and link list and refuses to proceed if it differs from sources.tsv. Point order is preserved. Index rows carry tile id, source file and URL, sample_shape, min/max computed from the stored int32 values, unit and sample sha256. verify.sh re-decodes every tile, extracts X by a different path (struct.iter_unpack) and compares value by value, re-checks the missing-value policy, checks that the decoded X extent matches the header bounds within 2 ticks (decoder integrity), rejects samples with fewer than 1,000 distinct values or a value above 50% share, and checks index fields and manifest totals. Realized (2026-10-08 build): 25 samples, 167,277,065 values, 669,108,260 bytes; median 7,614,983 values per sample (673,724 to 8,950,333); 118,373 to 250,001 distinct X values per tile, largest single-value share 0.007%; every tile uses scanner channel 0; decoded X extents within 1 tick of the header bounds; acquisition window: every point's GPS time lies between 2016-03-16 00:28:47 and 2016-03-17 00:57:20 GPS calendar time (UTC is 17 s earlier: 00:28:30 to 00:57:03; local EDT evening of 15 March to evening of 16 March), computed by build.sh from the point GPS time field (float64 at bytes 22-29 of every record; header global_encoding = 17, so bit 0 marks adjusted standard GPS time, asserted per tile), calendar time = GPS epoch 1980-01-06T00:00:00 + gps_time + 1e9 s; raw window 142,123,327.99994 to 142,211,440.00092 adjusted-standard seconds, per-tile gps_time_min/max in filtered/usgs_3dep_nc_geiger_laz_x_i32/build_stats.json; per-tile spans run from 43 minutes to about 18 hours. SHA-256 of all samples concatenated in index order 498960f71a39178d6a7174d0125d9b213f2dc4804e8960d28a11da3e559b0ad1."
+
+[[series]]
+id = "nc_geiger_anson_2016_x_i32"
+description = "X record coordinate of every lidar point in one published USGS 3DEP Geiger-mode LAZ tile, as the native scaled int32 stored in the LAS record."
+semantic_meaning = "Easting of each lidar return in NAD83(2011) North Carolina State Plane coordinates, in ticks of 0.01 US survey foot with offset 0 (stored value 163,000,000 = 1,630,000.00 ftUS), for every point of a 2,500 x 2,500 ft tile collected by the Harris IntelliEarth Geiger-mode avalanche-photodiode array sensor S/N003 over Anson County, NC; every point's GPS time lies between 2016-03-16 00:28:47 and 2016-03-17 00:57:20 GPS calendar time (UTC is 17 s earlier: 00:28:30 to 00:57:03; local EDT evening of 15 March to evening of 16 March), computed by build.sh from the point GPS time field (float64 at bytes 22-29 of every record; header global_encoding = 17, so bit 0 marks adjusted standard GPS time, asserted per tile), calendar time = GPS epoch 1980-01-06T00:00:00 + gps_time + 1e9 s; raw window 142,123,327.99994 to 142,211,440.00092 adjusted-standard seconds, per-tile gps_time_min/max in filtered/usgs_3dep_nc_geiger_laz_x_i32/build_stats.json; per-tile spans run from 43 minutes to about 18 hours. The LAS files were created on 2016 day 223 (2016-08-10), the date the VPC datetime copies; they were processed with ESP ANALYST and compressed with LAStools laszip. Values in a tile span at most about 250,000 ticks above a tile-dependent base of 160-174 million, in the file's point order (the headers of all 25 tiles count every point as a first return; points_by_return[1..] = 0)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "LAS 1.4 point format 6 stores X as a little-endian int32 that is scaled by the header scale (0.01) and offset (0). The sample keeps that stored int32 unchanged; no scaling, rounding or float conversion is applied. Y and Z are not emitted."
+source_resources = ["laz_tiles"]
+source_format = "LAZ (LASzip 3.1 layered-chunked compressor, POINT14 v3 item) encoding LAS 1.4 point data record format 6, 30-byte records"
+source_field = "X (int32 at byte 0 of each LAS point data record)"
+filtered_input_path = "filtered/usgs_3dep_nc_geiger_laz_x_i32/build_stats.json"
+filtering = "25 tiles chosen by the selection rule (VPC datetime 2016-08-10, pc:count < 9,000,000). All points of each selected tile are kept regardless of classification, withheld, overlap or synthetic flags. Y, Z, intensity, GPS time and all other fields are dropped."
+missing_value_policy = "LAS point records have no missing X value and there is no sentinel. Every record is kept. The decoded record count must equal the header point count (equal to the VPC pc:count), and every stored X must lie within the header X bounds converted to ticks (+-1 tick); any violation is fatal in build.sh and verify.sh. Nothing is dropped, reordered, clipped or imputed."
+conversion = "Decode each tile chunk by chunk with tools/laz/laszip.py iter_chunks; copy bytes 0-3 of every 30-byte record into a contiguous little-endian int32 array (byte-lane copy, no arithmetic); one sample file <tile file stem>.x_i32le.bin per tile, value i = point i in file order."
+numeric_kind = "int"
+bit_width = 32
+endianness = "little"
+sample_format = "raw little-endian int32 1-D array"
+sample_geometry = "lidar_point_record_coordinate"
+sample_rank = 1
+sample_axes = ["point"]
+natural_record_kind = "complete_published_usgs_3dep_laz_tile"
+sample_count = 25
+total_size_bytes = 669108260
+output_path = "samples/usgs_3dep_nc_geiger_laz_x_i32/nc_geiger_anson_2016_x_i32/"

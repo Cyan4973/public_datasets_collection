@@ -500,3 +500,4 @@ huawei_cloud2025_serverless_request_latency_f64	autocollect	64	request_latency_t
 mpc_usda_cdl_confidence_u8	autocollect	8	geo_product_raster	usda_nass_cdl_classifier	landcoverdata.blob.core.windows.net/usda-cdl	-	OK
 zenodo_janus_solar_system_integer_phase_space_i64	autocollect	64	nbody_integration_state	rebound_janus_bitwise_reversible_integrator	zenodo	-	OK
 mast_jwst_nirspec_g395h_tso_x1dints_flux_f64	autocollect	64	spectrum_1d	jwst_nirspec_bots_g395h	mast.stsci.edu/jwst	-	OK
+hprc_revio_fiberseq_hifi_pulse_width_u8	autocollect	8	polymerase_kinetics	pacbio_revio_hifi_fiberseq	aws_human_pangenomics_hprc	-	OK

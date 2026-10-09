@@ -414,6 +414,7 @@ physionet_mimic3wdb_abp_i8	ok	195628953	195628953	51	2068767	2068767	0	0	0	1	non
 usgs_3dep_id_northforkpayette_laz_return_number_u8	ok	196763633	196763633	20	9834908	9834908	0	0	0	1	none	none
 cmip6_cesm2_historical_daily_precip_f32	ok	201830400	807321600	3650	55296	221184	0	0	0	1	none	none
 mpc_aster_l1t_tir_u16	ok	202936125	405872250	51	3902080	7804160	0	0	0	1	none	none
+hprc_revio_fiberseq_hifi_pulse_width_u8	ok	203067020	203067020	8708	22341.5	22341.5	0	0	0	1	none	none
 physionet_charis_icp_i16	ok	204043652	408087304	9	17095224	34190448	0	0	0	1	none	none
 zenodo_mimii_valve_mic_array_i16	ok	204800000	409600000	160	1280000	2560000	0	0	0	1	none	none
 physionet_grabmyo_semg_i16	ok	209592320	419184640	731	286720	573440	0	0	0	1	none	none

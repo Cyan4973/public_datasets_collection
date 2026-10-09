@@ -1,0 +1,115 @@
+manifest_version = 1
+dataset_id = "hprc_revio_fiberseq_hifi_pulse_width_u8"
+name = "HPRC PacBio Revio Fiber-seq HiFi Read Pulse Width (fp/rp kinetics, CodecV1 uint8)"
+description = "Per-base pass-averaged polymerase pulse width of PacBio Revio HiFi reads, stored on-instrument by ccs as 8-bit CodecV1 codes in the BAM 'fp' (forward strand) and 'rp' (reverse strand) B:C arrays; one sample per read strand from fixed 12 MiB prefixes of all 30 hifi_reads BAMs (25 individuals) of the WUSTL HPRC Fiber-seq submission on the CC0 AWS Open Data bucket s3://human-pangenomics."
+homepage = "https://registry.opendata.aws/hpgp-data/"
+
+[license]
+name = "Creative Commons Zero v1.0 Universal"
+spdx = "CC0-1.0"
+url = "https://creativecommons.org/publicdomain/zero/1.0/"
+citation = "Human Pangenome Reference Consortium, Human PanGenomics Project (AWS Open Data: s3://human-pangenomics), submission 4f00ec2d-4533-40e3-b0ca-624ab5a559d9--WUSTL_HPRC_PacBio_FiberSeq."
+notes = "The AWS Open Data registry entry for the bucket (awslabs/open-data-registry datasets/hpgp-data.yaml, resource arn:aws:s3:::human-pangenomics) states: License: \"[Creative Commons CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/deed.en)\". download.sh re-fetches that entry and requires the CC0 line and the bucket ARN on every run."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Human lymphoblastoid cell-line DNA (1000 Genomes / HPRC consented, openly released samples HG01123 ... HG06805). Only the per-base pulse-width kinetics arrays are emitted. Bases, quality values, IPD (fi/ri), MM/ML methylation calls, read names and ZMW numbers are never written to samples or the index; the index records only the public sample ID, movie name, file ordinal and record ordinal."
+usage_notes = "One submission, one instrument model (Revio), one chemistry (CM R/P2-C2/5.0-25M), ICS 13.3.0.253824, ccs 8.2.0, jasmine 2.3.0 --6ma, lima 2.11.0, one codec. IPD is deliberately excluded (too close to the accepted Sequel IPD family)."
+
+[[origins]]
+id = "aws_hpgp"
+name = "Human PanGenomics Project on AWS Open Data (s3://human-pangenomics, us-west-2)"
+url = "https://registry.opendata.aws/hpgp-data/"
+type = "bucket"
+notes = "Anonymous HTTPS access via https://human-pangenomics.s3.us-west-2.amazonaws.com/. The 30 BAMs were resolved with an anonymous S3 ListObjectsV2 request on the submission prefix (240 keys; 30 *.hifi_reads.*.bam plus fail_reads BAMs, .pbi and .md5 sidecars); the resolved keys, sizes and ETags are pinned in scripts/bams.tsv."
+
+[[resources]]
+id = "hifi_reads_bam_prefixes"
+origin = "aws_hpgp"
+url = "https://human-pangenomics.s3.us-west-2.amazonaws.com/submissions/4f00ec2d-4533-40e3-b0ca-624ab5a559d9--WUSTL_HPRC_PacBio_FiberSeq/<sample>/PacBio_HiFi/<movie>.hifi_reads.<barcode>.bam"
+type = "bounded_byte_range_selection"
+version = "30 objects pinned by full size and S3 ETag in scripts/bams.tsv (LastModified 2025-06-04 and 2025-08-07/08); full objects 340.8-515.3 GB each, 13.35 TB total"
+access = "Anonymous HTTPS range requests for bytes 0-12582911 (first 12 MiB) of each BGZF-compressed BAM, resumed by offset ranges; HEAD request checks size and ETag first."
+size_bytes = 377487360
+sha256 = ""
+local_path = "downloads/hprc_revio_fiberseq_hifi_pulse_width_u8/<ordinal>_<sample>_<movie>.hifi_reads.prefix_12582912.bam"
+notes = "The .md5 sidecars and S3 ETags describe whole objects, not prefixes. Each prefix's SHA-256 is recorded in downloads/<id>/prefix_inventory.tsv and checked by build.sh and verify.sh. The truncated final BGZF block and the truncated final BAM record of each prefix are dropped."
+
+[[resources]]
+id = "aws_registry_entry"
+origin = "aws_hpgp"
+url = "https://raw.githubusercontent.com/awslabs/open-data-registry/main/datasets/hpgp-data.yaml"
+type = "file"
+version = "fetched at download time"
+access = "Anonymous HTTPS."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/hprc_revio_fiberseq_hifi_pulse_width_u8/hpgp-data.yaml"
+notes = "License evidence only (CC0 1.0 for arn:aws:s3:::human-pangenomics); not a sample source."
+
+[local_paths]
+downloads = "downloads/hprc_revio_fiberseq_hifi_pulse_width_u8/"
+filtered = "filtered/hprc_revio_fiberseq_hifi_pulse_width_u8/"
+index = "index/hprc_revio_fiberseq_hifi_pulse_width_u8/"
+samples = "samples/hprc_revio_fiberseq_hifi_pulse_width_u8/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/hprc_revio_fiberseq_hifi_pulse_width_u8/samples.jsonl"
+summary = "For each of the 30 pinned hifi_reads BAMs (file order of the S3 listing), fetch a fixed 12 MiB prefix, inflate complete BGZF blocks (CRC/ISIZE checked), require the @RG/@PG header contract (READTYPE=CCS, PulseWidth:CodecV1=pw, PM:REVIO, CM R/P2-C2/5.0-25M, kits, ICS 13.3.0.253824, 100 Hz, ccs 8.2.0, pbtrim 1.1.0, jasmine 2.3.0 --6ma, lima 2.11.0), walk complete records and emit every non-empty 'fp' and 'rp' B:C array unchanged as one uint8 sample each."
+deterministic_notes = "Objects pinned by key, size and ETag; fixed prefix length; prefix SHA-256 recorded at download and re-checked. Pure-stdlib BGZF/BAM parser adapted from the accepted Sequel IPD recipe and self-tested on synthetic BAMs (all aux types, empty and constant arrays, truncated prefixes). Every complete record of every prefix is used in physical order, so the realized count is fixed by the prefixes. A BAM whose header breaks the contract would be skipped by build.sh and reported, and verify.sh then fails the claimed 30-file scope. verify.sh re-derives every sample with an independent gzip-member inflater and aux walker and compares bytes, order, index fields, scope (30 files, 25 individuals per series) and manifest totals."
+
+[[series]]
+id = "hifi_forward_pulse_width_codecv1_u8"
+description = "Per-base pass-averaged pulse width of the forward strand of one PacBio Revio HiFi read, as 8-bit CodecV1 codes (BAM tag fp)."
+semantic_meaning = "For each base of the HiFi consensus read, the duration (in 100 Hz camera frames) of the fluorescent incorporation pulse, averaged by ccs over the forward-strand subread passes, companded by PacBio CodecV1: codes 0-63 = 0-63 frames, 64-127 = 64-190 frames in steps of 2, 128-191 = 192-444 in steps of 4, 192-255 = 448-952 in steps of 8 (255 = capped at 952 frames). Array order follows SEQ (first to last base)."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "CodecV1 is the instrument's own pinned, monotone, per-value companding code (PacBio BAM spec; the @RG DS declares PulseWidth:CodecV1=pw). The codes are emitted exactly as written by the Revio on-instrument ccs; they are not decoded to frames and not widened. Same treatment as the accepted zenodo_pacbio_sequel_subread_ipd_codecv1_u8 family."
+source_resources = ["hifi_reads_bam_prefixes"]
+source_format = "PacBio unaligned HiFi reads BAM (BGZF), PacBio BAM spec pb:5.0.0, Revio ICS 13.3, ccs 8.2.0"
+source_field = "BAM aux tag 'fp' (B:C uint8 array, Forward PulseWidth codec V1, one code per base of SEQ)"
+filtered_input_path = "filtered/hprc_revio_fiberseq_hifi_pulse_width_u8/ingest_stats.json"
+filtering = "Every complete BAM record of the 30 pinned 12 MiB prefixes, in file order then record order. Only 'fp' is kept for this series. Records whose fp array is empty (no forward-strand passes, fn=0) and constant arrays are dropped and counted in ingest_stats.json. Short reads are kept."
+missing_value_policy = "No values are filled, removed or recoded inside an array. Flanking zero codes, which the PacBio spec says mark bases with no usable kinetics on that strand, are preserved as stored and counted per sample in the index (leading_zero_codes, trailing_zero_codes). Code 255 (capped) is preserved. A missing fp tag, a non-B:C fp, an fp length other than 0 or l_seq, a duplicate ZMW, a non-'/ccs' read name or a header outside the contract fail the recipe or skip the file."
+conversion = "Copy the fp array payload bytes (after the B, C subtype and int32 count) of each record unchanged into one raw uint8 file. Endianness is irrelevant for 8-bit values."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 CodecV1 pulse-width code array"
+sample_geometry = "per_base_hifi_read_sequence_1d"
+sample_rank = 1
+sample_axes = ["called_base"]
+natural_record_kind = "pacbio_hifi_read_bam_record_strand_kinetics"
+sample_count = 4380
+total_size_bytes = 102223623
+output_path = "samples/hprc_revio_fiberseq_hifi_pulse_width_u8/hifi_forward_pulse_width_codecv1_u8/"
+
+[[series]]
+id = "hifi_reverse_pulse_width_codecv1_u8"
+description = "Per-base pass-averaged pulse width of the reverse strand of one PacBio Revio HiFi read, as 8-bit CodecV1 codes (BAM tag rp), in the stored order."
+semantic_meaning = "Same quantity and codec as the forward series, averaged by ccs over the reverse-strand subread passes. Per the PacBio BAM spec, reverse tags are stored in the opposite direction to SEQ (element 0 belongs to the last base of SEQ), which is the order in which the polymerase traversed that strand. The array is kept in that stored order and is not reversed."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "CodecV1 pulse-width codes exactly as written by ccs (PulseWidth:CodecV1=pw); not decoded, not widened, not re-oriented."
+source_resources = ["hifi_reads_bam_prefixes"]
+source_format = "PacBio unaligned HiFi reads BAM (BGZF), PacBio BAM spec pb:5.0.0, Revio ICS 13.3, ccs 8.2.0"
+source_field = "BAM aux tag 'rp' (B:C uint8 array, Reverse PulseWidth codec V1, stored last-to-first relative to SEQ)"
+filtered_input_path = "filtered/hprc_revio_fiberseq_hifi_pulse_width_u8/ingest_stats.json"
+filtering = "Every complete BAM record of the 30 pinned 12 MiB prefixes, in file order then record order. Only 'rp' is kept for this series. Records whose rp array is empty (no reverse-strand passes, rn=0) and constant arrays are dropped and counted. Short reads are kept."
+missing_value_policy = "Same as the forward series: flanking zero codes and the capped code 255 are preserved as stored; empty arrays are dropped and counted; structural violations fail the recipe."
+conversion = "Copy the rp array payload bytes of each record unchanged (stored order) into one raw uint8 file."
+numeric_kind = "uint"
+bit_width = 8
+endianness = "little"
+sample_format = "raw homogeneous uint8 CodecV1 pulse-width code array"
+sample_geometry = "per_base_hifi_read_sequence_1d"
+sample_rank = 1
+sample_axes = ["called_base"]
+natural_record_kind = "pacbio_hifi_read_bam_record_strand_kinetics"
+sample_count = 4328
+total_size_bytes = 100843397
+output_path = "samples/hprc_revio_fiberseq_hifi_pulse_width_u8/hifi_reverse_pulse_width_codecv1_u8/"

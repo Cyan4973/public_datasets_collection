@@ -325,14 +325,14 @@ zenodo_venere_nir_hsi_u16	baseline	16	hyperspectral_cube	pushbroom_hyperspectral
 zenodo_xsens_cymbal_landmarks_i16	baseline	16	mocap_marker_positions	xsens_inertial_mocap	zenodo.org	-	-
 zenodo_zeroswarm_modbus_registers_u16	baseline	16	packet_capture_fields	modbus_tcp_capture	zenodo.org	-	-
 zenodo_zeroswarm_tcp_sequence_u32	baseline	32	packet_capture_fields	modbus_tcp_capture	zenodo.org	-	-
-mpc_goes18_abi_cmi_c13_fulldisk_u16	autocollect	16	sat_radiance_raster	goes_r_abi	planetarycomputer.microsoft.com/goes-cmi	-	STRONG
+mpc_goes18_abi_cmi_c13_fulldisk_u16	autocollect	16	sat_radiance_raster	goes_r_abi	planetarycomputer.microsoft.com/goes-cmi	-	OK
 mpc_modis_mod13a1_ndvi_i16	autocollect	16	geo_product_raster	modis_terra_land_products	planetarycomputer.microsoft.com/modis	-	OK
 mpc_aster_l1t_tir_u16	autocollect	16	sat_radiance_raster	terra_aster	planetarycomputer.microsoft.com/aster-l1t	-	OK
 csiro_parkes_uwl_search_mode_u8	autocollect	8	radio_dynamic_spectrum	parkes_uwl_receiver	data.csiro.au/dap	-	OK
 mast_iue_swp_raw_image_u8	autocollect	8	raw_space_frame	vidicon_space_camera	archive.stsci.edu/missions/iue	-	OK
 earthbigdata_s1_global_coherence_vv_coh12_u8	autocollect	8	insar_coherence	sentinel1_csar	sentinel-1-global-coherence-earthbigdata.s3.amazonaws.com	-	OK
 nasa_pds_magellan_fmidr_sar_u8	autocollect	8	sar_backscatter	magellan_sar	asc-pds-magellan.s3.amazonaws.com	-	WEAK
-nasa_pds_cassini_radar_bidr_sigma0_u8	autocollect	8	sar_backscatter	cassini_radar	asc-pds-cassini.s3.amazonaws.com	-	WEAK
+nasa_pds_cassini_radar_bidr_sigma0_u8	autocollect	8	sar_backscatter	cassini_radar	asc-pds-cassini.s3.amazonaws.com	-	OK
 nasa_pds_voyager_iss_saturn_raw_u8	autocollect	8	raw_space_frame	vidicon_space_camera	asc-pds-voyager.s3.amazonaws.com	-	OK
 nasa_heasarc_batse_cont_counts_i16	autocollect	16	gamma_binned_counts	cgro_batse	nasa-heasarc.s3.amazonaws.com/compton	-	OK
 mast_jwst_nircam_sw_uncal_ramps_u16	autocollect	16	raw_space_ramp_cube	jwst_nircam	stpubdata.s3.amazonaws.com/jwst	-	OK
@@ -390,7 +390,7 @@ tartanair_optical_flow_f32	autocollect	32	dense_vector_field	tartanair_simulator
 luh_lumo_tower_acceleration_f32	autocollect	32	inertial_vibration	shm_accelerometer_array	data.uni-hannover.de/dataset	-	OK
 cartographer_backpack2d_hokuyo_ranges_f32	autocollect	32	laser_range	hokuyo_planar_lidar	storage.googleapis.com/cartographer-public-data	-	OK
 diode_val_laser_depth_f32	autocollect	32	laser_range	faro_terrestrial_laser_scanner	diode-dataset.s3.amazonaws.com	-	OK
-zenodo_nordif_ebsd_kikuchi_patterns_u8	autocollect	8	ebsd_pattern	ebsd_detector	zenodo.org	-	WEAK
+zenodo_nordif_ebsd_kikuchi_patterns_u8	autocollect	8	ebsd_pattern	ebsd_detector	zenodo.org	-	OK
 zenodo_hc18_fetal_head_ultrasound_u8	autocollect	8	ultrasound_image	clinical_bmode_ultrasound	zenodo.org	-	OK
 azure_vm2019_cpu_utilization_readings_f64	autocollect	64	vm_telemetry	azure_vm_telemetry	github.com/azure	-	OK
 wiod2016_world_input_output_tables_f64	autocollect	64	io_table	wiod_release	dataverse.nl	-	OK
@@ -407,7 +407,7 @@ zenodo_astar_niti_sped_patterns_u8	autocollect	8	spot_diffraction	astar_sped_cam
 noaa_rstn_sagamore_hill_srs_spectra_u8	autocollect	8	radio_dynamic_spectrum	rstn_solar_radio_spectrograph	www.ngdc.noaa.gov/stp/space-weather	-	OK
 empiar_10511_k2_counting_movie_frames_u8	autocollect	8	em_counting_frame	cryo_em_detector	ftp.ebi.ac.uk/empiar	-	WEAK
 fermi_gbm_tte_nai_photon_arrival_times_f64	autocollect	64	photon_event_times	fermi_gbm	nasa-heasarc.s3.amazonaws.com/fermi	-	STRONG
-orex_ola_l2_lidar_point_xyz_f64	autocollect	64	laser_range	osiris_rex_ola	sbnarchive.psi.edu/pds4/orex	-	OK
+orex_ola_l2_lidar_point_xyz_f64	autocollect	64	laser_range	osiris_rex_ola	sbnarchive.psi.edu/pds4/orex	-	WEAK
 pdebench_2d_cfd_turb_m1_density_f32	autocollect	32	sim_fluid_field	pdebench_solver	darus.uni-stuttgart.de	-	OK
 the_well_post_neutron_star_merger_density_f32	autocollect	32	sim_fluid_field	nubhlight_grmhd	huggingface.co/polymathic-ai	-	OK
 umich_nclt_velodyne_hdl32e_xyz_u16	autocollect	16	laser_range	velodyne_lidar	s3.us-east-2.amazonaws.com/nclt.perl.engin.umich.edu	-	OK
@@ -416,7 +416,7 @@ zenodo_mimii_valve_mic_array_i16	autocollect	16	pcm_audio	tamago03_circular_mic_
 bosch_cnc_milling_ciss_vibration_i16	autocollect	16	inertial_vibration	bosch_ciss_triaxial_mems_accelerometer_cnc_mill	github.com/boschresearch	-	OK
 zenodo_m3d_iwr6843_radar_adc_i16	autocollect	16	fmcw_radar_adc	ti_iwr6843aop_dca1000	zenodo	-	OK
 icon_ivm_a_l27_ion_drift_velocity_f64	autocollect	64	space_plasma_drift	icon_ivm	nasa_heliocloud_spdf	-	OK
-zenodo_epfl_loraiq_sf10_iq_frames_f32	autocollect	32	rf_iq_baseband	ettus_usrp2920_sdr_rrh	zenodo	-	OK
+zenodo_epfl_loraiq_sf10_iq_frames_f32	autocollect	32	rf_iq_baseband	ettus_usrp2920_sdr_rrh	zenodo	-	WEAK
 zenodo_newcastle_geneactiv_wrist_accel_i16	autocollect	16	inertial_vibration	geneactiv_wrist_accelerometer	zenodo	-	STRONG
 tumvi_euroc_1024_cam_frames_u16	autocollect	16	terrestrial_camera_frame	ids_ueye_global_shutter_vio_camera	tum_cvg_visual_inertial	-	OK
 mbari_mars_hydrophone_hmd_psd_f32	autocollect	32	underwater_sound_spectral_density	oceansonics_iclisten_hydrophone	aws_open_data_pacific_sound	-	OK
@@ -425,4 +425,4 @@ tumvie_prophesee_gen4_events_xy_u16	autocollect	16	event_camera_addresses	prophe
 zenodo_starlink_irtt_rtt_i32	autocollect	32	network_packet_latency	irtt_udp_probe_starlink_dish	zenodo.org/records/10020034	-	OK
 gracefo_l1b_ach1b_transplant_accelerometer_f64	autocollect	64	inertial_vibration	gracefo_superstar_accelerometer_hybrid_transplant	isdc-data.gfz.de/grace-fo/Level-1B	-	OK
 sxs_bbh_extrapolated_strain_modes_f64	autocollect	64	sim_gravitational_waveform	spec_numerical_relativity_bbh	zenodo.org/communities/sxs	-	OK
-ambientcg_photogrammetry_normalgl_u16	autocollect	16	pbr_texture_map	ambientcg_heightfield_photogrammetry	ambientcg.com	-	OK
+ambientcg_photogrammetry_normalgl_u16	autocollect	16	pbr_texture_map	ambientcg_heightfield_photogrammetry	ambientcg.com	-	WEAK

@@ -164,3 +164,27 @@ Redundant by measurement, with the matching existing family:
 - Byte-level comparison is per width. The same material at another width is a different byte stream, and source-file reuse is caught by `novelty.py`.
 - Whole-value entropies saturate for wide, high-cardinality data on feasible sample sizes. The byte-lane entropies carry the signal there.
 - Single-value dominance (fill or no-data) is reported as a warning. `nasa_pds_cassini_radar_bidr_sigma0_u8` matched a one-hot covertype column at distance 0.000, which suggests its samples are mostly fill.
+
+## Addendum (2026-10-08 evening): sampling fix
+
+Fingerprints and the single-value share were computed on the first 256K
+values of each sample, and compression splits took file prefixes. For images
+or volumes with uniform borders (no-data around a swath, background around an
+ultrasound cone, radiograph margins), the prefix is fill, so the fingerprint
+described the border. `nasa_pds_cassini_radar_bidr_sigma0_u8` and the TCIA
+ultrasound candidate both "matched" a one-hot column at distance 0.000.
+
+Fix: fingerprints and mode share now use four windows centred at 1/8, 3/8,
+5/8 and 7/8 of each sample. Compression splits take central chunks. All
+library fingerprints were recomputed (`zlsim.py refeature`).
+
+Re-derived anchor: same-material mirror pairs p50 0.000, p75 0.016, p90
+0.047, p95 0.079; unrelated pairs p0.5 0.057, p01 0.068, p05 0.121. T = 0.05
+catches 91% of mirror pairs and flags 0.37% of unrelated pairs, so the
+thresholds stand.
+
+Re-grade of the 101 accepted families: 2 STRONG, 90 OK, 9 WEAK. Six verdicts
+changed: Cassini WEAK->OK (but genuinely fill-dominated, mode share 0.917),
+NORDIF EBSD WEAK->OK, GOES-18 STRONG->OK, OLA lidar xyz OK->WEAK, LoRaIQ I/Q
+OK->WEAK, ambientCG normal maps OK->WEAK. Byte-gate rejections made before the
+fix were measured with the flawed sampling and need re-measurement.

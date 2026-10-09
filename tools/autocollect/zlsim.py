@@ -165,15 +165,38 @@ def sample_features(raw: bytes, width: int) -> dict[str, float]:
     }
 
 
+FEATURE_WINDOWS = 4
+
+
+def read_windows(path: Path, width: int, elements: int) -> bytes:
+    """Up to `elements` values from a sample, as FEATURE_WINDOWS contiguous
+    windows centred at 1/8, 3/8, 5/8, 7/8 of the file. File prefixes are often
+    borders or fill (image margins, no-data around a swath) and would make
+    the fingerprint describe the border instead of the content."""
+    element = width // 8
+    size = path.stat().st_size // element * element
+    if size <= elements * element:
+        with path.open("rb") as fh:
+            return fh.read(size)
+    window = (elements // FEATURE_WINDOWS) * element
+    parts = []
+    with path.open("rb") as fh:
+        for k in range(FEATURE_WINDOWS):
+            centre = size * (2 * k + 1) // (2 * FEATURE_WINDOWS)
+            start = max(0, min(size - window, centre - window // 2)) // element * element
+            fh.seek(start)
+            parts.append(fh.read(window))
+    return b"".join(parts)
+
+
 def family_features(sample_dir: Path, width: int) -> dict[str, float]:
-    """Median fingerprint over up to FEATURE_SAMPLES samples (bounded prefix each)."""
+    """Median fingerprint over up to FEATURE_SAMPLES samples (spread windows each)."""
     element = width // 8
     files = [path for path in sample_files(sample_dir) if path.stat().st_size >= element * 64]
     step = max(1, len(files) // FEATURE_SAMPLES)
     rows = []
     for path in files[::step][:FEATURE_SAMPLES]:
-        with path.open("rb") as fh:
-            rows.append(sample_features(fh.read(FEATURE_ELEMENTS * element), width))
+        rows.append(sample_features(read_windows(path, width, FEATURE_ELEMENTS), width))
     if not rows:
         return {}
     return {key: sorted(row[key] for row in rows)[len(rows) // 2] for key in rows[0]}
@@ -236,10 +259,13 @@ def split_family(family: dict, work: Path) -> tuple[Path, Path]:
     if not files:
         raise ValueError("no usable sample files")
 
-    def place(source: Path, target_dir: Path, start: int, length: int) -> int:
+    def place(source: Path, target_dir: Path, region_start: int, region_length: int, length: int) -> int:
+        """Copy `length` bytes from the centre of a region (not its prefix)."""
+        length = min(length, region_length)
         length -= length % element
         if length <= 0:
             return 0
+        start = (region_start + (region_length - length) // 2) // element * element
         target = target_dir / f"{len(list(target_dir.iterdir())):05d}.bin"
         with source.open("rb") as src, target.open("wb") as dst:
             src.seek(start)
@@ -249,8 +275,8 @@ def split_family(family: dict, work: Path) -> tuple[Path, Path]:
     if len(files) == 1:
         size = files[0].stat().st_size
         half = (size // 2) // element * element
-        place(files[0], train, 0, min(half, SIDE_BYTES))
-        place(files[0], evaluate, half, min(size - half, SIDE_BYTES))
+        place(files[0], train, 0, half, SIDE_BYTES)
+        place(files[0], evaluate, half, size - half, SIDE_BYTES)
         return train, evaluate
     sides = {train: files[0::2], evaluate: files[1::2]}
     for target_dir, side_files in sides.items():
@@ -259,7 +285,7 @@ def split_family(family: dict, work: Path) -> tuple[Path, Path]:
         for path in side_files[::step][:SIDE_FILES]:
             if budget <= 0:
                 break
-            budget -= place(path, target_dir, 0, min(path.stat().st_size, max(budget, element * 1024)))
+            budget -= place(path, target_dir, 0, path.stat().st_size, max(budget, element * 1024))
     return train, evaluate
 
 
@@ -336,7 +362,7 @@ def train_family(family: dict, base_dir: Path | None = None) -> dict:
         shutil.copy(best, out_dir / "winner.zc")
         meta = {
             "key": family["key"], "dataset_id": family["dataset_id"], "width": family["width"], "own_ratio": best_ratio,
-            "features": family_features(evaluate, family["width"]),
+            "features": family_features(family["dir"], family["width"]),
             "train_mode": mode, "pareto_size": len(candidates), "eval_bytes": sum(p.stat().st_size for p in evaluate.iterdir()),
             "seconds": round(time.monotonic() - started), "source_dir": str(family["dir"]),
         }
@@ -431,8 +457,7 @@ def mode_share(sample_dir: Path, width: int) -> float:
     shares = []
     for path in files[:: max(1, len(files) // 6)][:6]:
         values = array.array({1: "B", 2: "H", 4: "I", 8: "Q"}[element])
-        with path.open("rb") as fh:
-            raw = fh.read(FEATURE_ELEMENTS * element)
+        raw = read_windows(path, width, FEATURE_ELEMENTS)
         values.frombytes(raw[: len(raw) // element * element])
         if values:
             shares.append(collections.Counter(values).most_common(1)[0][1] / len(values))
@@ -508,6 +533,31 @@ def adopt(dataset_id: str) -> int:
         shutil.move(str(meta_path.parent), str(target))
         moved += 1
     return moved
+
+
+def _refeature(meta_path: str) -> str:
+    path = Path(meta_path)
+    meta = json.loads(path.read_text())
+    source = Path(meta.get("source_dir", ""))
+    if not source.is_dir():
+        return f"missing source {source}"
+    meta["features"] = family_features(source, meta["width"])
+    meta["feature_sampling"] = "spread_windows_v2"
+    path.write_text(json.dumps(meta, indent=1))
+    return ""
+
+
+def cmd_refeature(args) -> int:
+    """Recompute fingerprints of every library and candidate entry (no retraining)."""
+    paths = [str(p) for base in (LIBRARY_DIR, CANDIDATE_DIR) for p in base.glob("*/*/meta.json")]
+    errors = 0
+    with concurrent.futures.ProcessPoolExecutor(args.jobs) as pool:
+        for path, error in zip(paths, pool.map(_refeature, paths)):
+            if error:
+                errors += 1
+                print(f"ERROR {path}: {error}", flush=True)
+    print(f"refeatured {len(paths)} entries, {errors} errors", flush=True)
+    return 0
 
 
 def cmd_gate(args) -> int:
@@ -603,6 +653,8 @@ def main() -> int:
     gate.add_argument("recipe_dir")
     gate.add_argument("--jobs", type=int, default=16)
     gate.add_argument("--output", default="", help="also write the JSON report to this file")
+    refeature = sub.add_parser("refeature")
+    refeature.add_argument("--jobs", type=int, default=64)
     adopt_parser = sub.add_parser("adopt")
     adopt_parser.add_argument("dataset_id")
     args = parser.parse_args()
@@ -610,7 +662,7 @@ def main() -> int:
         print(f"zli not found at {ZLI}; set ZLSIM_ZLI")
         return 1
     return {"build-library": cmd_build_library, "measure": cmd_measure, "calibrate": cmd_calibrate,
-            "gate": cmd_gate, "adopt": cmd_adopt}[args.command](args)
+            "gate": cmd_gate, "adopt": cmd_adopt, "refeature": cmd_refeature}[args.command](args)
 
 
 if __name__ == "__main__":

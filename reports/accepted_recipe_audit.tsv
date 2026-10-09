@@ -330,6 +330,7 @@ nims_mdr_phonondb_displacement_forces_f64	ok	60053511	480428088	5078	7776	62208	
 sentinel2_l2a_scene_classification_u8	ok	60280200	60280200	2	30140100	30140100	0	0	0	1	none	none
 earthscope_xa_apollo_pse_lunar_seismogram_i16	ok	60666177	121332354	106	572400	1144800	0	0	0	1	none	none
 mitbih_arrhythmia_physionet	ok	62400000	124800000	96	650000	1300000	0	0	0	1	none	none
+mast_jwst_nirspec_g395h_tso_x1dints_flux_f64	ok	62455583	499644664	66	884040	7072320	0	0	0	1	none	none
 dandi_001076_zebrafish_calcium_fluorescence_f32	ok	62819025	251276100	48	1227534	4910136	0	0	0	1	none	none
 zenodo_gia_stress_fields_f64	ok	64915200	519321600	7	9273600	74188800	0	0	0	1	none	none
 zenodo_lodopab_ct_sinograms_f32	ok	65664000	262656000	128	513000	2052000	0	0	0	1	none	none

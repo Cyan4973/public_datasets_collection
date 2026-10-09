@@ -1,0 +1,89 @@
+manifest_version = 1
+dataset_id = "mast_jwst_nirspec_g395h_tso_x1dints_flux_f64"
+name = "JWST NIRSpec BOTS G395H/NRS1 Per-Integration Extracted 1-D Spectra: x1dints FLUX (Jy), Native Float64"
+description = "66 whole FLUX matrices (integrations x ~1272 wavelength bins, native big-endian float64 Jy converted to little-endian) from the EXTRACT1D table of the first-segment NRS1 x1dints product of 66 public JWST NIRSpec bright-object time-series observations (fixed slit S1600A1, F290LP/G395H, SUB2048, NRSRAPID), one product per target across 45 programs, fetched from MAST with HTTP multi-range requests that read only the FLUX column."
+homepage = "https://archive.stsci.edu/missions-and-data/jwst"
+
+[license]
+name = "Public domain (NASA mission data hosted at MAST)"
+spdx = "LicenseRef-MAST-Public-Domain"
+url = "https://archive.stsci.edu/publishing/data-use"
+citation = "James Webb Space Telescope (NASA/ESA/CSA), NIRSpec bright-object time series, programs listed in sources.tsv; Mikulski Archive for Space Telescopes (MAST), Space Telescope Science Institute."
+notes = "The MAST Data Use Policy (fetched 2026-10-09, 81,786 bytes) states: 'Most data hosted at MAST are in the public domain (see: open data), and therefore do not have restrictions on use.' Its restricted subsets are exclusive-access data (after expiry 'science data become available for public use without restriction'), community HLSPs (CC BY 4.0) and the copyrighted DSS / Guide Star Catalogs. These are JWST mission pipeline Level-2 products (not HLSPs, not DSS/GSC); MAST Caom.Filtered and Caom.Products report dataRights = PUBLIC for every selected observation and file, and the 15 EXCLUSIVE_ACCESS observations of the same mode were excluded. download.sh re-fetches the page (best effort) and fails if the public-domain sentence disappears or JWST enters the copyrighted list. Same rights basis as the accepted mast_jwst_nircam_sw_uncal_ramps_u16. Acknowledge JWST, NIRSpec, MAST and STScI and the observing programs."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official MAST download endpoint (anonymous HTTPS, no credentials); stellar / substellar flux spectra."
+usage_notes = "Only FLUX values are emitted. Header text (including PI-name cards) is kept only in the local header pieces under downloads/ and never written to samples; index rows carry file name, program, observation, target name, dates, pipeline versions and value statistics."
+
+[[origins]]
+id = "mast"
+name = "Mikulski Archive for Space Telescopes (STScI)"
+url = "https://mast.stsci.edu/"
+type = "api"
+notes = "Mast.Caom.Filtered / Mast.Caom.Products (https://mast.stsci.edu/api/v0/invoke) for discovery; https://mast.stsci.edu/api/v0.1/Download/file?uri=mast:JWST/product/<file> for byte-range reads (HTTP/2 206 multipart/byteranges verified 2026-10-09)."
+
+[[resources]]
+id = "x1dints_flux_ranges"
+origin = "mast"
+url = "https://mast.stsci.edu/api/v0.1/Download/file?uri=mast:JWST/product/"
+type = "file"
+version = "66 products resolved 2026-10-09 by discover.sh; CAL_VER 3.0.0 / jwst_1584.pmap / SDP 2026_2a (42) and CAL_VER 2.0.1 / jwst_1535.pmap / SDP 2026_1b (24); ETag, served size and EXTRACT1D layout pinned per file in sources.tsv"
+access = "Anonymous HTTPS Range GETs: header pieces up to the EXTRACT1D header, then one multi-range request per <= 150 table rows reading only the FLUX bytes of each row. --max-filesize forbids any whole-file fallback."
+size_bytes = 8760312000
+sha256 = ""
+local_path = "downloads/mast_jwst_nirspec_g395h_tso_x1dints_flux_f64/flux/"
+notes = "size_bytes is the sum of the 66 full upstream files; only ~500 MB of FLUX bytes plus ~10 MB of header pieces are transferred. MAST is reprocessing JWST products in place (68 of the 128 candidates were already at CAL_VER 3.0.0 on 2026-10-09). If a pinned product changed (ETag/size), download.sh re-discovers it by name: the new header must pass the same regime, the product is marked 'reprocessed' in download_plan.tsv and the index, and the realized totals may differ slightly from the manifest until it is refreshed. The SHA-256 of each downloaded FLUX payload is recorded in download_plan.tsv and enforced by build and verify."
+
+[[resources]]
+id = "mast_data_use_policy"
+origin = "mast"
+url = "https://archive.stsci.edu/publishing/data-use"
+type = "file"
+version = "fetched at download time (best effort)"
+access = "Anonymous HTTPS; semantically checked for the public-domain sentence and the copyrighted-collections list when reachable."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/mast_jwst_nirspec_g395h_tso_x1dints_flux_f64/evidence/mast_data_use.html"
+notes = "Rights evidence only; not a sample source."
+
+[local_paths]
+downloads = "downloads/mast_jwst_nirspec_g395h_tso_x1dints_flux_f64/"
+filtered = "filtered/mast_jwst_nirspec_g395h_tso_x1dints_flux_f64/"
+index = "index/mast_jwst_nirspec_g395h_tso_x1dints_flux_f64/"
+samples = "samples/mast_jwst_nirspec_g395h_tso_x1dints_flux_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/mast_jwst_nirspec_g395h_tso_x1dints_flux_f64/samples.jsonl"
+summary = "Range-read the FLUX column of the EXTRACT1D table of 66 pinned public NIRSpec BOTS G395H NRS1 seg001 x1dints products and emit each product's full FLUX matrix (integrations x wavelength bins) as one little-endian float64 sample."
+deterministic_notes = "discover.sh: Caom.Filtered (JWST, timeseries, NIRSPEC/SLIT, F290LP;G395H, calib_level 3) -> 140 observations, 125 PUBLIC (122 SUB2048, 3 SUB1024B excluded); Caom.Products -> 128 PUBLIC *-seg001_nrs1_x1dints.fits; sparse header walk of all 128 -> all pass the regime; one product per normalized target (70 targets; newest CAL_VER first, then lowest file name), then the largest products are dropped until FLUX bytes <= 500,000,000 (4 dropped) -> 66 products, 45 programs, 49,094 integrations. Regime (checked by discover, download, build and verify from the FITS cards): TELESCOP JWST, INSTRUME NIRSPEC, DATAMODL TSOMultiSpecModel, DETECTOR NRS1, FILTER F290LP, GRATING G395H, FXD_SLIT S1600A1, EXP_TYPE NRS_BRIGHTOBJ, SUBARRAY SUB2048, TSOVISIT T, EXSEGNUM 1, INTSTART 1, NAXIS2 = INTEND - INTSTART + 1, FLUX column TFORM nD with TUNIT 'Jy', WAVELENGTH nD 'um' of the same length, 1000 <= n <= 2048. The FLUX byte offset inside each row is computed from the TFORMn of the preceding columns (never hard-coded); observed 4 + 8n (after INT_NUM J and WAVELENGTH nD). Multipart parts are matched to the plan by exact Content-Range; ETag and total size must equal the values seen during the header walk. verify.sh re-walks the header pieces with a separate parser, re-decodes FLUX with struct (build uses array.byteswap), byte-compares every sample, re-applies the NaN policy, rejects constant or duplicate rows and duplicate samples, recomputes finite min/max/NaN counts against the index and checks manifest totals, one-product-per-target and >= 40 programs. scripts/selftest.py exercises both header walkers, the multipart and single-range parsers and all rejection paths on a synthetic FITS file."
+
+[[series]]
+id = "nirspec_g395h_nrs1_x1dints_flux_jy_f64"
+description = "Per-integration extracted 1-D spectra of bright stars (and a few brown dwarfs / planetary-mass companions) observed with JWST NIRSpec bright-object time series in G395H on detector NRS1: the whole FLUX matrix of one x1dints segment-1 product per sample."
+semantic_meaning = "Spectral flux density (Jy) of the target in each wavelength bin (~2.87-3.72 um, ~1271-1274 bins on NRS1) for each integration of the first exposure segment of a transit, eclipse, phase-curve or variability time series, as produced by the STScI calwebb_spec2 extract_1d step (CAL_VER 2.0.1 or 3.0.0). Consecutive rows differ by photon and detector noise plus the astrophysical signal (transit depth, systematics); brightness spans roughly 1e-4 to 1 Jy across targets."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "FITS binary-table column FLUX, TFORM nD (IEEE-754 big-endian float64) with TUNIT 'Jy'; values are byte-swapped to little-endian and otherwise untouched (no rounding, no rescaling, no masking). Values are genuine float64 (none of the sampled finite values is float32-representable)."
+source_resources = ["x1dints_flux_ranges"]
+source_format = "FITS (JWST TSOMultiSpecModel *_x1dints.fits): PRIMARY header, INT_TIMES binary table, EXTRACT1D binary table with one row per integration and vector columns"
+source_field = "EXTRACT1D binary-table column FLUX (TFORM nD, TUNIT Jy), all NAXIS2 rows"
+filtered_input_path = "filtered/mast_jwst_nirspec_g395h_tso_x1dints_flux_f64/ingest_stats.json"
+filtering = "Only PUBLIC observations; only NRS1, segment 1, SUB2048, G395H/F290LP; one product per target (spread over 45 programs). NRS2, later segments, other gratings/prisms, SOSS and MIRI are excluded. Only the FLUX column is read; WAVELENGTH, FLUX_ERROR, variance, SURF_BRIGHT, background, DQ and NPIXELS columns are never downloaded."
+missing_value_policy = "NaN is the native fill of the pipeline for wavelength bins without valid extraction (mostly the first ~27-30 and last ~4-5 bins of each row, ~2.6% of values) and is preserved bit-for-bit as quiet NaN. Each row must be at least 90% finite with at least two distinct finite values and no infinities; any all-NaN, mostly-NaN or constant integration fails the recipe (download, build and verify apply the same rule). Every product has one extreme bin per row (bin 230-233, i.e. column 231 of a 1272-bin grid, a bad detector column; |flux| > 1000x median, typically ~-6e3 Jy, up to +/-2.6e6 Jy) totalling 0.08% of values; it is native pipeline output and is kept unmasked, so index finite_min/finite_max reflect that column rather than the target brightness. Index finite_min/finite_max are computed over finite stored values only."
+conversion = "Parse the FITS header cards from range-fetched pieces to locate EXTRACT1D (data offset, NAXIS1, NAXIS2) and the FLUX column (offset = sum of preceding TFORM widths, n = repeat count); fetch bytes [data_offset + r*NAXIS1 + flux_offset, +8n) for every row r with HTTP multi-range requests; concatenate rows in table order; byte-swap big-endian float64 to little-endian; write one file per product to samples/mast_jwst_nirspec_g395h_tso_x1dints_flux_f64/nirspec_g395h_nrs1_x1dints_flux_jy_f64/<product stem>.f64, row-major [integration][wavelength_bin]."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 matrix"
+sample_geometry = "variable_integrations_x_nrs1_g395h_wavelength_bins"
+sample_rank = 2
+sample_axes = ["integration", "wavelength_bin"]
+natural_record_kind = "jwst_x1dints_segment_product_flux_matrix"
+sample_count = 66
+total_size_bytes = 499644664
+output_path = "samples/mast_jwst_nirspec_g395h_tso_x1dints_flux_f64/nirspec_g395h_nrs1_x1dints_flux_jy_f64/"

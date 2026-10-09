@@ -312,6 +312,9 @@ def child_env() -> dict[str, str]:
 
 
 LIVE_GROUPS: set[int] = set()
+# Set by a second interrupt: no new agents, no retries; in-flight subprocesses
+# are killed and every half-done step unwinds through its normal failure path.
+SHUTTING_DOWN = threading.Event()
 
 
 def run_proc(cmd: list[str], *, log_path: Path, timeout_s: int, input_text: str | None = None, monitor=None, poll_s: int = 15) -> tuple[int, str]:
@@ -678,6 +681,9 @@ JUDGE_SCHEMA = {
 
 def run_agent(cfg: Config, role: str, subject: str, prompt: str, schema: dict, session_id: str | None = None, resume: bool = False) -> dict:
     session_id = session_id or str(uuid.uuid4())
+    if SHUTTING_DOWN.is_set():
+        return {"role": role, "subject": subject, "ok": False, "error": "driver shutting down", "structured": {},
+                "session_id": session_id, "cost": 0.0, "seconds": 0.0, "log": ""}
     cmd = [
         "claude", "-p",
         "--agent", ROLE_AGENT[role],
@@ -890,7 +896,7 @@ def task_rebuild(cfg: Config, cid: str) -> dict:
 
 def task_agent(cfg: Config, kind: str, role: str, subject: str, prompt: str, schema: dict, payload: dict, session_id: str | None = None, resume: bool = False) -> dict:
     result = run_agent(cfg, role, subject, prompt, schema, session_id=session_id, resume=resume)
-    if not result["ok"] and resume and result["seconds"] < 120 and result["cost"] < 0.5:
+    if not result["ok"] and resume and not SHUTTING_DOWN.is_set() and result["seconds"] < 120 and result["cost"] < 0.5:
         log(f"{role} resume failed for {subject} ({result['error']}); retrying in a fresh session")
         prompt = (
             f"You are taking over an interrupted session for this candidate. Inspect the current state of staging/{subject}/ "
@@ -1562,12 +1568,13 @@ class Driver:
         def on_signal(signum, frame):  # noqa: ARG001
             if self.stopping:
                 log("second interrupt: killing in-flight work")
+                SHUTTING_DOWN.set()
                 for pgid in list(LIVE_GROUPS):
                     try:
                         os.killpg(pgid, signal.SIGTERM)
                     except ProcessLookupError:
                         pass
-                raise SystemExit(130)
+                return
             self.stopping = True
             log("interrupt: finishing in-flight work, launching nothing new (interrupt again to kill)")
 
@@ -1585,6 +1592,8 @@ class Driver:
                     log(f"task {meta} crashed: {exc!r}")
                     continue
                 self.apply(meta, result)
+            if SHUTTING_DOWN.is_set() and not self.futures:
+                break
             self.schedule()
             self.heartbeat()
             if not self.futures:

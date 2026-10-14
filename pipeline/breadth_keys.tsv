@@ -506,3 +506,4 @@ gwosc_o3b_h1_bulk_strain_f64	autocollect	64	gw_detector_strain	ligo_hanford_h1_o
 cfpb_hmda2023_lar_closing_costs_f64	autocollect	64	consumer_loan_cost_amounts	HMDA Loan/Application Register (Regulation C) public snapshot	ffiec_cfpb_hmda_snapshot	-	OK
 zenodo_nakhlite_ebsd_band_contrast_slope_u8	autocollect	8	ebsd_indexing_quality_map	oxford_hkl_channel5_ebsd	zenodo	-	OK
 hf_vbvr_wan22_vae_latents_bf16	manual	16	video_vae_latent	wan22_ti2v_5b_vae	huggingface.co/central-cat	-	STRONG
+hf_uq_gemma4_31b_mmlupro_residual_f16	autocollect	16	llm_hidden_state	gemma4_31b_it_resid_l45	huggingface.co/loose-bits	-	OK

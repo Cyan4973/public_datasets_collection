@@ -1,0 +1,151 @@
+manifest_version = 1
+dataset_id = "hf_uq_gemma4_31b_mmlupro_residual_f16"
+name = "uq-hiddenstates: Gemma-4-31B-it Layer-45 Residual-Stream States over MMLU-Pro Reasoning Traces, Float16"
+description = "Raw (unnormalized) residual-stream hidden states of google/gemma-4-31B-it at hidden-state index 45 of 60 (relative depth 0.75), one 5376-wide float16 vector per token position, for 28 complete MMLU-Pro reasoning traces (prompt, chain of thought and answer) from the Apache-2.0 uq-hiddenstates cache."
+homepage = "https://huggingface.co/datasets/loose-bits/uq-hiddenstates"
+
+[license]
+name = "Apache License 2.0"
+spdx = "Apache-2.0"
+url = "https://www.apache.org/licenses/LICENSE-2.0"
+citation = "loose-bits/uq-hiddenstates (revision 853e3392729d5ecc5663e4a635898085acc92109); google/gemma-4-31B-it; TIGER-Lab/MMLU-Pro (Wang et al., 2024)."
+notes = "The pinned cache card declares license: apache-2.0. The model card google/gemma-4-31B-it at revision 842da3794eaa0b77d5f08bae87a17459d91ff475 declares license: apache-2.0 (license_link https://ai.google.dev/gemma/docs/gemma_4_license, titled 'Apache License 2.0 | Gemma'). The prompt source TIGER-Lab/MMLU-Pro at revision b189ec765aa7ed75c8acfea42df31fdae71f97be declares license: mit. download.sh re-checks all three frontmatter declarations. Preserve attribution to all three."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Model activations recorded by the cache publisher while Gemma-4-31B-it answered public MMLU-Pro exam questions; no people, recordings or user records. Only numeric hidden states are fetched; token ids, text and logits are not downloaded."
+usage_notes = "Generated reasoning tokens are the model's own output; the content chain is only Gemma 4 (Apache-2.0) and MMLU-Pro (MIT)."
+
+[[origins]]
+id = "hf_uq_hiddenstates"
+name = "loose-bits/uq-hiddenstates"
+url = "https://huggingface.co/datasets/loose-bits/uq-hiddenstates"
+type = "repository"
+notes = "Hugging Face dataset repository, ungated, pinned to revision 853e3392729d5ecc5663e4a635898085acc92109 (lastModified 2026-09-21)."
+
+[[origins]]
+id = "hf_gemma4_31b_it"
+name = "google/gemma-4-31B-it"
+url = "https://huggingface.co/google/gemma-4-31B-it"
+type = "repository"
+notes = "Model card used as license evidence, revision 842da3794eaa0b77d5f08bae87a17459d91ff475, ungated."
+
+[[origins]]
+id = "hf_mmlu_pro"
+name = "TIGER-Lab/MMLU-Pro"
+url = "https://huggingface.co/datasets/TIGER-Lab/MMLU-Pro"
+type = "repository"
+notes = "Prompt source dataset card used as license evidence, revision b189ec765aa7ed75c8acfea42df31fdae71f97be."
+
+[[resources]]
+id = "cache_card"
+origin = "hf_uq_hiddenstates"
+url = "https://huggingface.co/datasets/loose-bits/uq-hiddenstates/raw/853e3392729d5ecc5663e4a635898085acc92109/README.md"
+type = "file"
+version = "853e3392729d5ecc5663e4a635898085acc92109"
+access = "Direct public download."
+size_bytes = 2446
+sha256 = "950b37c3db3dfb23a2693371b3ccd77eaf7455a932b62b6019cae2685fa8e62e"
+local_path = "downloads/hf_uq_gemma4_31b_mmlupro_residual_f16/uq_hiddenstates_card.md"
+notes = "Dataset card: license, layout (fp16 [rows, hidden], raw states, item-boundary shards) and index field semantics."
+
+[[resources]]
+id = "gemma_card"
+origin = "hf_gemma4_31b_it"
+url = "https://huggingface.co/google/gemma-4-31B-it/raw/842da3794eaa0b77d5f08bae87a17459d91ff475/README.md"
+type = "file"
+version = "842da3794eaa0b77d5f08bae87a17459d91ff475"
+access = "Direct public download."
+size_bytes = 27963
+sha256 = "e209f5c435b1e66055bd6d7c29185103ae8d2027a03a96b359335154f206b82b"
+local_path = "downloads/hf_uq_gemma4_31b_mmlupro_residual_f16/gemma4_31b_it_card.md"
+notes = "Model license evidence."
+
+[[resources]]
+id = "mmlu_pro_card"
+origin = "hf_mmlu_pro"
+url = "https://huggingface.co/datasets/TIGER-Lab/MMLU-Pro/raw/b189ec765aa7ed75c8acfea42df31fdae71f97be/README.md"
+type = "file"
+version = "b189ec765aa7ed75c8acfea42df31fdae71f97be"
+access = "Direct public download."
+size_bytes = 11723
+sha256 = "4bd710f67da3fa359a33edce1b4b5816b3de416c823c2624ba5e89c2557d2a47"
+local_path = "downloads/hf_uq_gemma4_31b_mmlupro_residual_f16/mmlu_pro_card.md"
+notes = "Prompt source license evidence."
+
+[[resources]]
+id = "trace_index"
+origin = "hf_uq_hiddenstates"
+url = "https://huggingface.co/datasets/loose-bits/uq-hiddenstates/resolve/853e3392729d5ecc5663e4a635898085acc92109/gemma_mmlupro_L45.idx.json"
+type = "file"
+version = "853e3392729d5ecc5663e4a635898085acc92109"
+access = "Direct public download."
+size_bytes = 138017
+sha256 = "76307021af08a649f0cb578f11887528e156780d2c5463a218bf5048623eba55"
+local_path = "downloads/hf_uq_gemma4_31b_mmlupro_residual_f16/gemma_mmlupro_L45.idx.json"
+notes = "Index: model gemma, li 45, L 60, hidden 5376, 1000 items (id, shard, off, n, prompt_len, pre_tok, eot_tok, y), 3,367,369 tokens, 2 shards."
+
+[[resources]]
+id = "shard_part00"
+origin = "hf_uq_hiddenstates"
+url = "https://huggingface.co/datasets/loose-bits/uq-hiddenstates/resolve/853e3392729d5ecc5663e4a635898085acc92109/gemma_mmlupro_L45.part00.npy"
+type = "shard"
+version = "853e3392729d5ecc5663e4a635898085acc92109"
+access = "HTTP Range GETs only: the first 1024 bytes (NPY header) and the row ranges of the 15 selected traces in this shard. The full 21.5 GB file is never fetched."
+size_bytes = 21459572864
+sha256 = "4c186df9151b0e00134fc032e89306f13f8abc19d36425d670f05bfd81338bda"
+local_path = "downloads/hf_uq_gemma4_31b_mmlupro_residual_f16/traces/"
+notes = "NPY v1, descr '<f2', C order, shape (1995868, 5376), 128-byte header. sha256 is the Git LFS oid; download.sh checks it and the size via the resolve endpoint's x-linked-etag/x-linked-size headers. Realized per-trace digests are written to downloads/.../trace_sha256.tsv and re-checked by build.sh."
+
+[[resources]]
+id = "shard_part01"
+origin = "hf_uq_hiddenstates"
+url = "https://huggingface.co/datasets/loose-bits/uq-hiddenstates/resolve/853e3392729d5ecc5663e4a635898085acc92109/gemma_mmlupro_L45.part01.npy"
+type = "shard"
+version = "853e3392729d5ecc5663e4a635898085acc92109"
+access = "HTTP Range GETs only: the first 1024 bytes (NPY header) and the row ranges of the 13 selected traces in this shard."
+size_bytes = 14746378880
+sha256 = "cff24898792133a9f252e8d92d67f708f3a76fe5bd677b7524cb1390f580b560"
+local_path = "downloads/hf_uq_gemma4_31b_mmlupro_residual_f16/traces/"
+notes = "NPY v1, descr '<f2', C order, shape (1371501, 5376), 128-byte header. sha256 is the Git LFS oid, checked as for part00."
+
+[local_paths]
+downloads = "downloads/hf_uq_gemma4_31b_mmlupro_residual_f16/"
+filtered = "filtered/hf_uq_gemma4_31b_mmlupro_residual_f16/"
+index = "index/hf_uq_gemma4_31b_mmlupro_residual_f16/"
+samples = "samples/hf_uq_gemma4_31b_mmlupro_residual_f16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/hf_uq_gemma4_31b_mmlupro_residual_f16/samples.jsonl"
+summary = "Parse the pinned trace index and NPY headers, range-fetch the raw-data rows [off, off+n) of every 37th index item from its '<f2' C-order shard, validate them, and emit each trace's [n, 5376] float16 matrix verbatim as one sample."
+deterministic_notes = "Revision, card and index sizes/SHA-256, card license lines, shard LFS size/oid, NPY descr/order/shape/header length, index contiguity (items tile each shard exactly, no trace spans shards), and the stride-37 selection (re-derived from the index and compared with scripts/selected_items.tsv) are enforced. Every range response must be HTTP 206 of the exact length. Traces with any non-finite value, fewer than 4,096 distinct codes, a token row with fewer than 256 distinct codes, duplicated adjacent rows, a mode or zero fraction above 5%, or (verify) a constant hidden channel fail the recipe. verify.sh re-derives byte ranges, compares sample bytes with the downloaded ranges, recomputes min/max/distinct codes by a different method, and checks manifest totals."
+
+[[series]]
+id = "gemma4_31b_it_resid_l45_mmlupro_f16"
+description = "Per-token residual-stream hidden states of Gemma-4-31B-it at hidden-state index 45 (output of decoder block 44 of 60) for one complete MMLU-Pro reasoning trace."
+semantic_meaning = "Raw, unnormalized residual-stream activation vector (5376 hidden dimensions) at every token position of the trace: prompt tokens, generated chain of thought and final answer. Heavy-tailed: a few hidden channels carry magnitudes around 100 while the median magnitude is about 0.5 to 1.5."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Model activations as published by the cache: the model computes in bfloat16 and the publisher stored the states as float16. The bf16-to-fp16 cast is exact in this range, so the low 3 mantissa bits are almost always zero (2 of 5,376 values per row in probes; nonzero only for fp16-subnormal magnitudes): effectively 13 significant bits MSB-aligned in each 16-bit word. This is the source representation; the recipe performs no inference, rescaling or cast."
+source_resources = ["trace_index", "shard_part00", "shard_part01", "cache_card", "gemma_card", "mmlu_pro_card"]
+source_format = "NumPy .npy v1 ('<f2', C order, [rows, 5376]) with a JSON trace index"
+source_field = "float16 hidden-state matrix rows [off, off+n) of the shard named by idx.json item (one trace)"
+filtered_input_path = "filtered/hf_uq_gemma4_31b_mmlupro_residual_f16/ingest_stats.json"
+filtering = "gemma_mmlupro_L45 only (no other source datasets, models, layers or *_k64 projections). Every 37th of the 1000 index items in index order (positions 0, 37, ..., 999; 28 traces, 15 in part00 and 13 in part01), chosen for spread across both shards and to stay under ~800 MB. The selection ignores trace length and the correctness label (27 correct, 1 incorrect)."
+missing_value_policy = "No missing values are expected. Any non-finite float16 value (inf or NaN), a size mismatch, or a degenerate trace fails the recipe; nothing is dropped, masked or imputed."
+conversion = "The NPY raw-data region is C-order little-endian float16, so the trace's rows are the contiguous byte range header_len + off*10752 .. header_len + (off+n)*10752 - 1 (header_len parsed from the header, 128 here). The bytes are written verbatim; row-major [token_position, hidden_dim]."
+numeric_kind = "float"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous float16 matrix"
+sample_geometry = "token_by_hidden_matrix"
+sample_rank = 2
+sample_axes = ["token_position", "hidden_dim"]
+natural_record_kind = "complete_reasoning_trace_hidden_states"
+sample_count = 28
+total_size_bytes = 767671296
+output_path = "samples/hf_uq_gemma4_31b_mmlupro_residual_f16/gemma4_31b_it_resid_l45_mmlupro_f16/"

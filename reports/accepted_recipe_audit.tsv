@@ -470,6 +470,7 @@ bosch_cnc_milling_ciss_vibration_i16	ok	367566345	735132690	1163	264192	528384	0
 zenodo_m3d_iwr6843_radar_adc_i16	ok	368640000	737280000	16	24576000	49152000	0	0	0	1	none	none
 ncbi_geo_gpl5423_scanarray_cdna_scan_u16	ok	372134400	744268800	24	15492400	30984800	0	0	0	1	none	none
 tcia_covid19_ny_sbu_chest_cr_u16	ok	373174272	746348544	48	7774464	15548928	0	0	0	1	none	none
+hf_uq_gemma4_31b_mmlupro_residual_f16	ok	383835648	767671296	28	10300416	20600832	0	0	0	1	none	none
 usgs_grandbay_klein3900_sidescan_xtf_u16	ok	392249344	784498688	24	17600512	35201024	0	0	0	1	none	none
 bbbc021_microscopy_tiff_u16	ok	393216000	786432000	300	1310720	2621440	0	0	0	1	none	none
 google_alphaearth_satellite_embeddings_i8	ok	402653184	402653184	384	1048576	1048576	0	0	0	1	none	none

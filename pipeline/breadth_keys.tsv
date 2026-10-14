@@ -512,3 +512,4 @@ hf_tdig_evo2_7b_hg38_final_norm_hidden_f16	autocollect	16	llm_hidden_state	evo2_
 hf_qwenmath_qwen25_7b_lastlayer_hidden_bf16	autocollect	16	llm_hidden_state	qwen25_7b_instruct_lastlayer	huggingface.co/lzhang472	-	OK
 noaa_dcdb_rainier_em2040_seabed_image_i16	autocollect	16	multibeam_seabed_backscatter	Kongsberg EM2040 multibeam echosounder (NOAA Ship Rainier launch 2802)	noaa_dcdb_bathymetry_pds	-	OK
 ooi_ce04osps_optaa_acs_spectral_counts_u16	autocollect	16	insitu_optical_spectrometer_counts	WET Labs (Sea-Bird) AC-S hyperspectral absorption/attenuation meter on OOI shallow profiler	ooi_rawdata	-	OK
+slf_envidat_wfj_snowmicropen_force_i16	autocollect	16	snow_penetration_force	slf_snowmicropen_s36m	envidat	-	OK

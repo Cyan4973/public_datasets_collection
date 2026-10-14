@@ -1,0 +1,113 @@
+manifest_version = 1
+dataset_id = "slf_envidat_wfj_snowmicropen_force_i16"
+name = "SLF WFJ_DailySMP SnowMicroPen S36M Penetration-Force Profiles (int16 ADC counts)"
+description = "Native int16 piezo force ADC counts from 291 complete daily SnowMicroPen penetration profiles at the Weissfluhjoch (Davos) study plot, device S36M, winters 2015/16-2020/21, best-of-day Quality=1 profiles recorded at amplifier range 5000 pC."
+homepage = "https://www.envidat.ch/#/metadata/wfj_dailysmp"
+
+[license]
+name = "Creative Commons Attribution Share-Alike 4.0 International"
+spdx = "CC-BY-SA-4.0"
+url = "https://creativecommons.org/licenses/by-sa/4.0/"
+citation = "Löwe, H., Proksch, M., et al. (2025). WFJ_DailySMP - High-Resolution Snow Stratigraphy at Weissfluhjoch -- Davos 2015-ongoing. EnviDat. doi:10.16904/envidat.641"
+notes = "EnviDat package_show for wfj_dailysmp reports license_id 'cc-by-sa', license_title 'Creative Commons Attribution Share-Alike (CC-BY-SA)', license_url https://creativecommons.org/licenses/by-sa/4.0/. The data folder also carries an MIT LICENSE file (md5 e240a6501986482bf61ce32ab34d95fd, 'Copyright (c) 2025 WSL Institute for Snow and Avalanche Research SLF'), which download.sh fetches and checks. Both are permissive; attribute SLF/EnviDat and share derivatives under CC BY-SA."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official EnviDat (WSL) object store for DOI 10.16904/envidat.641; individual zip members are range-fetched from the published raw_data.zip and checked against its central directory and CRC32."
+usage_notes = "Physical snow-penetrometer measurements at a research plot; no personal data."
+
+[[origins]]
+id = "envidat"
+name = "EnviDat (WSL) data portal and SWITCH S3 object store"
+url = "https://www.envidat.ch/#/metadata/wfj_dailysmp"
+type = "data_portal"
+notes = "Files under https://zhc-c.s3.cloud.switch.ch/envidat-doi/10.16904_envidat.641/data/ (listed 2026-10-14, objects last modified 2026-10-02)."
+
+[[resources]]
+id = "raw_data_zip_selected_members"
+origin = "envidat"
+url = "https://zhc-c.s3.cloud.switch.ch/envidat-doi/10.16904_envidat.641/data/raw_data.zip"
+type = "archive"
+version = "raw_data.zip size 3134603173, ETag dee701a233d33d5bb2eb55f713240b99-598, 16535 entries, central directory at offset 3132965021 size 1638130"
+access = "HTTP range requests only: the central directory (1,638,152 B incl. EOCD) plus the local header and deflate data of the 291 members pinned in members.tsv; the full 3.13 GB archive is never downloaded."
+size_bytes = 239853056
+sha256 = ""
+local_path = "downloads/slf_envidat_wfj_snowmicropen_force_i16/raw_data_members/"
+notes = "size_bytes is the inflated total of the 291 .PNT members (149,338,897 compressed bytes on the wire). Each member is pinned by local-header offset, compressed/uncompressed size and CRC32 in members.tsv; mixed '.PNT'/'.pnt' names are matched exactly."
+
+[[resources]]
+id = "raw_data_csv"
+origin = "envidat"
+url = "https://zhc-c.s3.cloud.switch.ch/envidat-doi/10.16904_envidat.641/data/raw_data.csv"
+type = "file"
+version = "2026-10-02 object"
+access = "Direct public download."
+size_bytes = 444663
+sha256 = ""
+local_path = "downloads/slf_envidat_wfj_snowmicropen_force_i16/raw_data.csv"
+notes = "md5 40f11a5f364afd964e7e6e3ef65df1e5. Columns Date, File, Path, BestOfDay, Quality; drives the profile selection."
+
+[[resources]]
+id = "license_file"
+origin = "envidat"
+url = "https://zhc-c.s3.cloud.switch.ch/envidat-doi/10.16904_envidat.641/data/LICENSE"
+type = "file"
+version = "2026-10-02 object"
+access = "Direct public download."
+size_bytes = 1106
+sha256 = ""
+local_path = "downloads/slf_envidat_wfj_snowmicropen_force_i16/LICENSE"
+notes = "md5 e240a6501986482bf61ce32ab34d95fd; MIT License text."
+
+[[resources]]
+id = "readme_pdf"
+origin = "envidat"
+url = "https://zhc-c.s3.cloud.switch.ch/envidat-doi/10.16904_envidat.641/data/Readme.pdf"
+type = "file"
+version = "2026-10-02 object"
+access = "Direct public download."
+size_bytes = 1006460
+sha256 = ""
+local_path = "downloads/slf_envidat_wfj_snowmicropen_force_i16/Readme.pdf"
+notes = "md5 cf7599b841ab2f5c0c5bad810b1eb6e4. Documents BestOfTheDay and the Quality flag (0 not classified, 1 good, 2 moderate; Quality 1 recommended)."
+
+[local_paths]
+downloads = "downloads/slf_envidat_wfj_snowmicropen_force_i16/"
+filtered = "filtered/slf_envidat_wfj_snowmicropen_force_i16/"
+index = "index/slf_envidat_wfj_snowmicropen_force_i16/"
+samples = "samples/slf_envidat_wfj_snowmicropen_force_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/slf_envidat_wfj_snowmicropen_force_i16/samples.jsonl"
+summary = "Range-fetch 291 pinned S36M .PNT members from raw_data.zip (central-directory match + CRC32), parse each SMP v4 header, and emit the samples.force.count big-endian int16 force counts after the 512-byte header as one little-endian int16 sample per profile."
+deterministic_notes = "Selection: raw_data.csv rows with File starting 'S36M', BestOfDay=1 and Quality=1 (438 of 478), then PNT header sensor and amplifier range 5000 pC (291 kept; the 147 range-10000 profiles from 2019-03..2020-12 are pinned in excluded_gain10000.tsv because their counts sit on a 2x coarser N/count scale). build.sh asserts firmware 406/408, SMP serial 36, header filename = member stem, spatial resolution 0.00413223 mm, speed 20 mm/s, tip 5000 um, force conversion factor in [0.00129, 0.00132] N/count and equal to the pinned value, and samples.force.count equal to the pinned count. Samples are emitted in members.tsv (zip path) order. verify.sh re-decodes with struct, requires byte equality, sha256, min/max/distinct, no value above 50% of a profile, and manifest totals."
+
+[[series]]
+id = "smp_s36m_force_counts_i16"
+description = "SnowMicroPen S36M raw penetration-force ADC counts, one complete vertical profile per sample."
+semantic_meaning = "Signed 16-bit ADC count of the SMP piezo force sensor sampled every 0.00413 mm of tip travel while the 5 mm tip is driven at 20 mm/s from ~10 cm above the snow surface down through the snowpack; force in newtons = count x samples.conv.force (0.001293-0.001316 N/count across the five sensors used)."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Values are the instrument's own int16 force counts, only byte-swapped from big-endian to little-endian."
+source_resources = ["raw_data_zip_selected_members", "raw_data_csv"]
+source_format = "SnowMicroPen v4 .PNT binary profile (512-byte big-endian header + big-endian int16 force samples)"
+source_field = "force samples (samples.force.count big-endian int16 values starting at byte 512)"
+filtered_input_path = "filtered/slf_envidat_wfj_snowmicropen_force_i16/build_summary.json"
+filtering = "Keep every force sample of each selected profile, including the native air segment above the snow surface and any sensor-overload saturation (32767) at the bottom; bytes after the last counted sample (padding such as 0x7fff, 0xffff or ASCII fill) are ignored. The first word at byte 512 is kept as snowmicropyn's Pnt.load does, although in ~60% of these files it is an outlier (e.g. 8202, 7061) rather than an air-level count."
+missing_value_policy = "No values are dropped, imputed or masked. A missing member, size/CRC mismatch, header field outside the asserted values, count exceeding the file, or a degenerate profile (<50 distinct values, range <100 counts, one value >50% of samples) fails the recipe."
+conversion = "Inflate the deflated zip member, read samples.force.count as '>l' at offset 358, read that many '>h' values from byte 512, and write them as little-endian int16 in source order to samples/<id>/smp_s36m_force_counts_i16/<YYYYMMDD>_<S36Mnnnn>.bin. The per-profile conversion factor and spatial resolution are recorded in the index, not applied."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian int16 force-count array"
+sample_geometry = "depth_profile_1d"
+sample_rank = 1
+sample_axes = ["penetration_depth_step"]
+natural_record_kind = "snowmicropen_penetration_profile"
+sample_count = 291
+total_size_bytes = 239416112
+output_path = "samples/slf_envidat_wfj_snowmicropen_force_i16/smp_s36m_force_counts_i16/"

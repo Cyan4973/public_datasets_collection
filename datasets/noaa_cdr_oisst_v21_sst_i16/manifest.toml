@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "noaa_cdr_oisst_v21_sst_i16"
+name = "NOAA CDR Daily OISST v2.1 (AVHRR-only, 0.25 deg) Sea-Surface Temperature Grids Int16"
+description = "120 final daily global sea-surface temperature analyses of the NOAA 1/4-degree Daily Optimum Interpolation SST v2.1 climate data record (AVHRR-only), dated the 1st and 15th of every month 2020-2024. Each is decoded from NetCDF4 with a pure-stdlib HDF5 reader to one native int16 720x1440 grid (0.01 degC, -999 land fill)."
+homepage = "https://www.ncei.noaa.gov/products/optimum-interpolation-sst"
+
+[license]
+name = "NOAA open data (U.S. Government work, no restrictions on use)"
+spdx = "LicenseRef-NOAA-NODD-Open-Data"
+url = "https://registry.opendata.aws/noaa-cdr-oceanic/"
+citation = "Huang, B., C. Liu, V. Banzon, E. Freeman, G. Graham, B. Hankins, T. Smith, and H.-M. Zhang, 2020: NOAA 0.25-degree Daily Optimum Interpolation Sea Surface Temperature (OISST), Version 2.1. NOAA National Centers for Environmental Information. https://doi.org/10.25921/RE9P-PT57"
+notes = "AWS Registry of Open Data entry noaa-cdr-oceanic (which lists the bucket noaa-cdr-sea-surface-temp-optimum-interpolation-pds): 'NOAA data disseminated through NODD are open to the public and can be used as desired ... NOAA requests attribution for the use or dissemination of unaltered NOAA data.' The bucket's documentation/UseAgreement_01B-09.pdf (21,679 bytes, MD5 51951d39e24c650ceb99027cc533023b) says: 'the CDR data sets are non-proprietary, publicly available, and no restrictions are placed upon their use'. It also asks for acknowledgement and citation (Reynolds et al. 2007; dataset DOI). Keep NOAA/NCEI attribution and the DOI. Do not imply NOAA endorsement."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NOAA NCEI Climate Data Record files from the NOAA Open Data Dissemination (NODD) S3 bucket. Gridded global ocean analysis with no personal content."
+usage_notes = "Public U.S. Government environmental data suitable for model training with NOAA/NCEI attribution retained."
+
+[[origins]]
+id = "noaa_nodd_oisst_s3"
+name = "NOAA NODD bucket noaa-cdr-sea-surface-temp-optimum-interpolation-pds"
+url = "https://noaa-cdr-sea-surface-temp-optimum-interpolation-pds.s3.amazonaws.com/"
+type = "bucket"
+notes = "Anonymous HTTPS access to the public us-east-1 bucket listed on the AWS Registry of Open Data (noaa-cdr-oceanic). No credentials or requester-pays."
+
+[[resources]]
+id = "oisst_v21_daily_1st_15th_2020_2024"
+origin = "noaa_nodd_oisst_s3"
+url = "https://noaa-cdr-sea-surface-temp-optimum-interpolation-pds.s3.amazonaws.com/data/v2.1/avhrr/{YYYYMM}/oisst-avhrr-v02r01.{YYYYMMDD}.nc"
+type = "file"
+version = "OISST v2.1 AVHRR-only final files (product_version 'Version v02r01'), DD in {01, 15}, 2020-01-01..2024-12-15; inventory resolved 2026-10-14"
+access = "120 anonymous HTTPS GETs (about 1.55-1.70 MB each), resumable, validated by size and MD5 against the pinned inventory."
+size_bytes = 188685403
+sha256 = ""
+local_path = "downloads/noaa_cdr_oisst_v21_sst_i16/nc/"
+notes = "scripts/inventory.tsv pins date, key, size and single-part MD5 ETag of every file. The SHA-256 of the inventory (6ffd557f3076b29686bd176f3e9b1233c60b8e83af780db72241dfb23e984c75) is pinned in scripts/oisst_sst.py. discover.sh rebuilt it from the 60 monthly ListObjectsV2 pages and required every month to be complete (all calendar days present) and final (no '_preliminary' objects). Excluded: '_preliminary' files, all other dates, data/v2.1 outside 2020-2024, and the anom, err, ice, lat, lon, time and zlev variables."
+
+[local_paths]
+downloads = "downloads/noaa_cdr_oisst_v21_sst_i16/"
+filtered = "filtered/noaa_cdr_oisst_v21_sst_i16/"
+index = "index/noaa_cdr_oisst_v21_sst_i16/"
+samples = "samples/noaa_cdr_oisst_v21_sst_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_cdr_oisst_v21_sst_i16/samples.jsonl"
+summary = "Download the 120 pinned final OISST v2.1 daily files (the 1st and 15th of each month, 2020-2024). Decode each file's sst variable with a pure-stdlib HDF5 reader (inflate, then undo the 2-byte shuffle) and emit one raw little-endian int16 720x1440 grid per day."
+deterministic_notes = "Inventory pinned by SHA-256 over sorted (date, key, size, MD5) rows; every file must match its size and MD5. The HDF5 reader verifies the lookup3 checksum of every metadata block it touches. The variable is selected by link name. Build resolves it through the name-index v2 B-tree and undoes the shuffle by strided slice assignment. Verify resolves it independently through the creation-order v2 B-tree, undoes the shuffle by pairwise interleave and byte-compares every sample. Per-file checks: dataspace (1,1,720,1440), datatype LE signed 2-byte, filters exactly shuffle(2)+deflate, single chunk (1,1,720,1440) with offsets 0 and filter mask 0, inflated length exactly 2,073,600 bytes. Variable attributes: scale_factor float32 0.01, add_offset 0, _FillValue -999, valid_min -300, valid_max 4500, units Celsius. Global attributes: title ending 'Version 2.1 - Final', product_version, processing level, DOI, geospatial bounds and resolution, id equal to the file name, time coverage equal to the file date, history starting 'Final file'. Axis attributes: lat/lon 'grids' (south-to-north, 0.125E eastward). A synthetic HDF5 self-test (scripts/selftest_oisst.py) runs before build and verify. Samples are sorted by date. Floors: 120 samples of 1,036,800 values each (median 1,036,800); total 124,416,000 values."
+
+[[series]]
+id = "oisst_v21_sst_daily_i16"
+description = "Daily global NOAA OISST v2.1 (AVHRR-only, final) sea-surface temperature analysis grids on the regular 0.25-degree grid."
+semantic_meaning = "Per-cell daily mean sea-surface temperature from the optimum-interpolation analysis, in hundredths of a degree Celsius (stored int16; multiply by scale_factor 0.01 for degC). Ocean values span about -180 (-1.80 degC, sea-ice-covered water) to about 3,300. Land cells hold the variable's own _FillValue -999."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The NetCDF4 variable sst is stored as signed 16-bit integers (HDF5 fixed-point class, size 2, signed, little-endian), with scale_factor 0.01 and add_offset 0. The recipe inflates the single deflate-compressed chunk, undoes the HDF5 byte shuffle over 2-byte elements (a lossless storage permutation) and writes the stored integers unchanged. No scaling, masking or remapping is applied."
+source_resources = ["oisst_v21_daily_1st_15th_2020_2024"]
+source_format = "NetCDF4/HDF5 daily file. The variable is stored as a single shuffle(2)+deflate chunk indexed by a version-1 B-tree."
+source_field = "sst (int16, dims time=1 x zlev=1 x lat=720 x lon=1440, scale_factor 0.01, units Celsius)"
+filtered_input_path = "filtered/noaa_cdr_oisst_v21_sst_i16/ingest_stats.json"
+filtering = "Keep the 120 final files dated the 1st and 15th of every month from 2020 through 2024, and only their sst variable. No dates within that set are dropped."
+missing_value_policy = "Land cells keep the native _FillValue -999 (a static land mask of 345,650 of 1,036,800 cells, 33.3%, identical in every file). It is part of the stored variable, not a recipe sentinel. Fatal in both build and verify: any ocean value outside valid_min..valid_max (-300..4500); a fill count other than 345,650; a land mask that differs between files; fewer than 1,000 distinct ocean values; an all-fill grid; wrong shape, datatype, filters, attributes or date; an MD5 or HDF5 checksum mismatch; a chunk that does not inflate to exactly 2,073,600 bytes."
+conversion = "Resolve root link 'sst' (dense link storage: Link Info -> fractal heap -> v2 B-tree). Read Dataspace (1,1,720,1440), Datatype int16 LE, Filter Pipeline shuffle(2)+deflate and Layout v3 chunked (1,1,720,1440,2). Take the single chunk from the version-1 B-tree leaf and zlib-inflate it to exactly 2,073,600 bytes. Undo the shuffle: byte j of element i sits at j*1,036,800 + i. Write the 1,036,800 int16 values little-endian in stored row-major (lat south-to-north from -89.875, lon eastward from 0.125E) order, one raw file per day."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous int16 sea-surface temperature grid"
+sample_geometry = "720x1440_regular_0.25_degree_global_latlon_grid"
+sample_rank = 2
+sample_axes = ["lat", "lon"]
+natural_record_kind = "oisst_v21_daily_global_quarter_degree_sst_analysis_grid"
+sample_count = 120
+total_size_bytes = 248832000
+output_path = "samples/noaa_cdr_oisst_v21_sst_i16/oisst_v21_sst_daily_i16/"

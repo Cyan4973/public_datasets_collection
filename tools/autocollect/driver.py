@@ -678,7 +678,9 @@ def run_agent(cfg: Config, role: str, subject: str, prompt: str, schema: dict, s
         cmd += ["--effort", effort]
     if cfg.role_autocompact.get(role):
         cmd += ["--autocompact", cfg.role_autocompact[role]]
-    stamp = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
+    # Microseconds keep agents launched in the same second on one subject (two scouts of a
+    # width) from sharing, and corrupting, one transcript.
+    stamp = dt.datetime.now().strftime("%Y%m%d_%H%M%S_%f")
     log_path = LOGS_DIR / subject / f"{role}.{stamp}.jsonl"
     started = time.monotonic()
     rc, kill_reason = run_proc(cmd, log_path=log_path, timeout_s=cfg.timeouts_s[role], input_text=prompt)

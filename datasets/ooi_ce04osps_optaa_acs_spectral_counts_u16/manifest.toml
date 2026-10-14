@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "ooi_ce04osps_optaa_acs_spectral_counts_u16"
+name = "OOI Oregon Offshore Shallow Profiler WET Labs AC-S Hyperspectral Absorption/Attenuation Meter Raw Spectral Counts UInt16"
+description = "Native uint16 per-wavelength detector counts (c-reference, a-reference, c-signal, a-signal at 84 wavelengths, ~400-750 nm) from the WET Labs (Sea-Bird) AC-S in-situ spectrophotometer (OPTAAD105, serial 128) on the OOI Cabled Endurance Array Oregon Offshore shallow profiler (CE04OSPS-SF01B, 0-200 m), one sample per daily raw port-agent file across one instrument deployment window (2019-01-01 .. 2019-06-13)."
+homepage = "https://rawdata.oceanobservatories.org/files/CE04OSPS/SF01B/OPTAAD105/"
+
+[license]
+name = "OOI Data Use Policy 1102-00010 v2-00 with User Terms and Conditions 1102-00020"
+spdx = "LicenseRef-OOI-Data-Use-Policy"
+url = "https://oceanobservatories.org/wp-content/uploads/2024/01/1102-00010_Data_Use_Policy_OOI.pdf"
+citation = "Ocean Observatories Initiative (OOI), funded by the U.S. National Science Foundation. Cabled Endurance Array, Oregon Offshore Shallow Profiler (CE04OSPS-SF01B) Spectrophotometer OPTAA-D (OPTAAD105) raw data, https://rawdata.oceanobservatories.org/files/CE04OSPS/SF01B/OPTAAD105/, accessed 2026-10-14."
+notes = "Data Use Policy section 4.1: 'all OOI data will be made publicly available, free of charge ... The User is granted the right to use OOI data and web sites for any legal and non-prohibited purpose whatsoever ... -- to access, link to and use, create derivative works, publish, distribute, disseminate, transfer, or copy.' The User Terms and Conditions (1102-00020) add the NSF/OOI acknowledgement requirement. Not an SPDX license; a broad written grant plus mandatory attribution, the same terms as the accepted ooi_ce02shbp_vel3d_adv_amplitude_correlation_u8 recipe. Policy PDF sha256 52dc5db1709f3a264eec678fa8e71a107d3209b83f5ee7999ea1bf11d8b990d2 (re-fetched 2026-10-14, unchanged since 2026-10-09)."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official OOI raw-data archive (Oregon State University / OOI Cabled Array), anonymous HTTPS. Oceanographic instrument telemetry from a water-column profiler; no human subjects."
+usage_notes = "Only the N x 4 spectral-count block of accepted AC-S packets is emitted; port-agent framing, power-up text banners, packet headers (dark counts, temperatures, pressure, elapsed time), checksums and truncated packets are not emitted."
+
+[[origins]]
+id = "ooi_rawdata"
+name = "OOI Raw Data Archive"
+url = "https://rawdata.oceanobservatories.org/files/"
+type = "data_portal"
+notes = "Apache-style directory listings of raw instrument port-agent streams, one file per UTC day per instrument port."
+
+[[resources]]
+id = "optaad105_day_files"
+origin = "ooi_rawdata"
+url = "https://rawdata.oceanobservatories.org/files/CE04OSPS/SF01B/OPTAAD105/"
+type = "file"
+version = "33 daily port-agent files, 2019-01-01 + 5k days through 2019-06-10 (target 2019-01-31, a 43 MB merged file, and 2019-02-01, a partial 20:41 UTC restart, are ineligible, so 2019-02-02 is used), listed and HEAD-pinned 2026-10-14 by discover.sh"
+access = "Direct anonymous HTTPS; exact URLs, byte sizes, ETags and Last-Modified in sources.tsv."
+size_bytes = 811779335
+sha256 = ""
+local_path = "downloads/ooi_ce04osps_optaa_acs_spectral_counts_u16/"
+notes = "OOI publishes no checksums. Each file is pinned by size and nginx ETag (hex mtime-size) checked by HEAD before fetching; download.sh validates each file semantically and self-hashes it (SHA-256) into download_plan.tsv, and build/verify re-check those hashes."
+
+[local_paths]
+downloads = "downloads/ooi_ce04osps_optaa_acs_spectral_counts_u16/"
+filtered = "filtered/ooi_ce04osps_optaa_acs_spectral_counts_u16/"
+index = "index/ooi_ce04osps_optaa_acs_spectral_counts_u16/"
+samples = "samples/ooi_ce04osps_optaa_acs_spectral_counts_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/ooi_ce04osps_optaa_acs_spectral_counts_u16/samples.jsonl"
+summary = "Strip OOI port-agent framing (type-1 frames, XOR-checksummed), reassemble the AC-S serial byte stream, keep accepted 707-byte AC-S packets (registration ff00ff00, record length 704, sum checksum, zero pad, deployment header identity), and emit each packet's 84 x 4 big-endian uint16 spectral counts as little-endian uint16 in packet order."
+deterministic_notes = "Deployment window: AC-S serial 128 with 84 wavelengths, 2019-01-01 .. 2019-06-13 (after the 2019-06-14 .. 06-25 outage the archive carries serial 221 with 88 wavelengths and 736-byte records). Day selection (scripts/select_days.py, run by discover.sh): files named ..._2019MMDDT07(20|21)_UTC.dat whose listing date equals the file date, listing time 21:4x and listed size 23-25M (complete 07:20-21:44 UTC files; 154 of them in the window), targets 2019-01-01 + 5k days, an ineligible target replaced by the next eligible unused day; result 33 files in sources.tsv order. Per file: every port-agent frame XOR-valid and contiguous to EOF; first data frame 07:10-07:45 UTC and last 21:30-22:00 UTC of the file date; >= 15,000 accepted packets; every accepted packet has packet type 5, reserved 1, meter type 0x53, serial 128 and N = 84 (any deviation fails the day); accepted / (accepted + rejected length-704 candidates) >= 0.5 as a parser-sanity floor; each of the 4 channels has >= 64 distinct values and no value above 50% share. Packet acceptance: record length 704, sum(bytes[0:704]) & 0xffff equals the stored BE checksum, pad byte 0, and no ff00ff00 inside bytes [4, 704); after an accepted packet the scan resumes at +707. Rejected candidates are packets whose tail (~215-230 bytes) was lost upstream: each starts at an unusually large 272-byte port-agent frame, is followed by a ~215-byte frame and a ~208 ms gap, and the next frame opens with a fresh registration 478-499 bytes after the truncated one (0-20% of packets per probed hour)."
+
+[[series]]
+id = "acs_spectral_counts_u16"
+description = "WET Labs AC-S raw per-wavelength reference and signal detector counts for the attenuation (c) and absorption (a) channels, packet-major with the native per-wavelength channel interleave."
+semantic_meaning = "For every ~4 Hz AC-S scan during shallow-profiler operation: at each of 84 wavelengths (~400-750 nm, filter-wheel order), the c-channel reference counts, a-channel reference counts, c-channel signal counts and a-channel signal counts of the 25 cm path in-situ spectrophotometer; ratios of signal to reference give beam attenuation and absorption of seawater."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "AC-S binary packet bytes 32..703 are 336 big-endian unsigned 16-bit detector counts in native order (wavelength-major, channel order c_ref, a_ref, c_sig, a_sig, as in the OOI mi-instrument AC-S driver); copied unchanged apart from the byte swap to little-endian."
+source_resources = ["optaad105_day_files"]
+source_format = "OOI port-agent framed WET Labs AC-S binary serial stream"
+source_field = "AC-S data packet spectral block: c_reference_counts, a_reference_counts, c_signal_counts, a_signal_counts (N = 84 wavelengths, uint16 BE)"
+filtered_input_path = "filtered/ooi_ce04osps_optaa_acs_spectral_counts_u16/ingest_stats.json"
+filtering = "All accepted AC-S packets of each selected daily file; packet headers, power-up text banners, non-instrument frames and rejected (truncated or corrupt) packets are dropped."
+missing_value_policy = "No values are imputed or substituted. Truncated or checksum-failed packets are skipped whole (counted in ingest_stats.json); framing errors, out-of-window timestamps, packet-yield shortfalls, header-identity deviations or degenerate channels fail the recipe."
+conversion = "Deframe port-agent type-1 payloads in file order, scan the reassembled stream for accepted 707-byte AC-S packets, and write the 336 spectral uint16 values of each packet (84 wavelengths x [c_ref, a_ref, c_sig, a_sig]) as little-endian uint16, packets in stream order; shape [packets, 84, 4]."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous uint16 packet x wavelength x channel count array"
+sample_geometry = "packet_by_wavelength_by_channel_3d"
+sample_rank = 3
+sample_axes = ["packet", "wavelength", "channel"]
+natural_record_kind = "daily_optaa_port_agent_file"
+sample_count = 33
+total_size_bytes = 614829600
+output_path = "samples/ooi_ce04osps_optaa_acs_spectral_counts_u16/acs_spectral_counts_u16/"

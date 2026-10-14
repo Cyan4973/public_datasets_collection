@@ -297,6 +297,7 @@ gazebase_eyelink1000_gaze_position_f64	ok	41945522	335564176	670	60087	480696	0	
 cdip_waverider_m3_z_displacement_f32	ok	42467328	169869312	128	331776	1327104	0	0	0	1	none	none
 physionet_wearable_exam_stress_e4_acc_i8	ok	42555834	42555834	30	1205433	1205433	0	0	0	1	none	none
 zenodo_adcp_pd0_backscatter_quality_u8	ok	43130088	43130088	9	4311744	4311744	0	0	0	1	none	none
+earthscope_dw_dwwssn_lp_seismogram_i16	ok	44236869	88473738	512	86400	172800	0	0	0	1	none	none
 hsl_gtfs_static_schedule_numeric	ok	44453630	226392932	8	5809272	25274372	0	0	0	1	none	none
 encode_methylation_pct_u8	ok	44773596	44773596	24	1804995	1804995	0	0	0	1	none	none
 hyburn_argon_decompression_near_vent_pressure_f64	ok	45000000	360000000	180	250000	2000000	0	0	0	1	none	none

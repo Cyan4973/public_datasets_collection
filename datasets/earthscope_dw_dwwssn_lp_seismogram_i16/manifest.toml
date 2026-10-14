@@ -1,0 +1,139 @@
+manifest_version = 1
+dataset_id = "earthscope_dw_dwwssn_lp_seismogram_i16"
+name = "Digital World-Wide Standardized Seismograph Network (FDSN DW, USGS ASL 1980-1994) Sprengnether S-5007-V Long-Period Vertical (LHZ, 1 sps) Seismograms, Native DWWSSN 16-bit Counts"
+description = "Complete UTC station-days of the long-period vertical channel (LHZ, 1 sample/s) of the USGS Albuquerque Seismological Laboratory DWWSSN stations, restricted to the epochs recorded with the Sprengnether Series 201 S-5007-V seismometer at nominal scale 5.0E8 (14 stations, 1980-1993), fetched from the EarthScope FDSN dataselect service as miniSEED with data encoding 32 (DWWSSN signed 16-bit integers) and written unchanged as little-endian int16 digitizer counts, one sample per station-day."
+homepage = "https://www.fdsn.org/networks/detail/DW/"
+
+[license]
+name = "U.S. Government work (USGS), public domain in the U.S.; USGS releases federal data under CC0"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://www.usgs.gov/data-management/data-licensing"
+citation = "Albuquerque Seismological Laboratory/USGS (1980): Digital World-Wide Standardized Seismograph Network (DWWSSN), International Federation of Digital Seismograph Networks, network DW, https://doi.org/10.7914/SN/DW; data retrieved from the EarthScope FDSN web services, https://service.earthscope.org/fdsnws/."
+notes = "The FDSN network page (re-fetched and validated by download.sh) states network DW is 'Operated by Albuquerque Seismological Laboratory/USGS (ASL), United States of America', DOI 10.7914/SN/DW; the EarthScope station service lists <Network code=\"DW\" ... restrictedStatus=\"open\"> (also validated). USGS data-licensing page (validated): works of the U.S. Government are 'in the U.S. public domain, which means that anyone may use, copy, distribute, adapt, display and perform that work in the U.S. without permission', and data 'wholly produced by USGS employees and will be managed and released by USGS' use CC Zero. Caveat: DWWSSN stations were installed at host institutions abroad (e.g. TOL Spain, KEV Finland, GDH Greenland), but the network, instruments, digitizers and data distribution were ASL/USGS; no separate host-institution data terms are attached to the DW network or its DataCite DOI. Same U.S. public-domain basis as the accepted NOAA/USGS recipes (LicenseRef-US-Government-Public-Domain)."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official EarthScope (formerly IRIS DMC) FDSN dataselect and station web-service responses only; the FDSN network page and the USGS data-licensing page are fetched as license evidence."
+usage_notes = "Historical seismometer digitizer counts; no people or personal information. Access caveat: EarthScope announced that user authentication will be required for all data downloads from 2026-12-15; this recipe uses anonymous access only."
+
+[[origins]]
+id = "earthscope_fdsnws"
+name = "EarthScope FDSN web services (formerly IRIS DMC)"
+url = "https://service.earthscope.org/fdsnws/"
+type = "api"
+notes = "fdsnws-dataselect 1 (miniSEED; whole 4096-byte records intersecting the window) and fdsnws-station 1 (text channel inventory, network-level StationXML). The FDSN availability service is retired (HTTP 404 'This service has been retired'), so station-day presence was probed with short dataselect windows (discover.sh)."
+
+[[origins]]
+id = "fdsn_network_page"
+name = "FDSN network page DW: Digital World-Wide Standardized Seismograph Network (DWWSSN)"
+url = "https://www.fdsn.org/networks/detail/DW/"
+type = "website"
+notes = "Network description, operator (ASL/USGS), years 1980-1994 and DOI 10.7914/SN/DW."
+
+[[origins]]
+id = "usgs_data_licensing"
+name = "USGS Data Management: Data Licensing"
+url = "https://www.usgs.gov/data-management/data-licensing"
+type = "website"
+notes = "Public-domain status of USGS works and the CC0 policy for USGS-produced data."
+
+[[resources]]
+id = "dw_lhz_station_days"
+origin = "earthscope_fdsnws"
+url = "https://service.earthscope.org/fdsnws/dataselect/1/query?net=DW&sta={station}&loc=--&cha=LHZ&start={day}T00:00:00&end={day+1}T00:00:00&nodata=404"
+type = "api_query_result"
+version = "plan.tsv pinned 2026-10-14 (651 station-days over 14 stations: AFI, ALQ, COL, GDH, HON, KBS, KEV, LON, SCP, SLR, TAU, TOL 48 each, BDF 41, LEM 34; 1980-1993)"
+access = "Anonymous HTTPS GET, one request per plan row; HTTP 404 = no data."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/earthscope_dw_dwwssn_lp_seismogram_i16/mseed/DW.{station}..LHZ.{day}.mseed"
+notes = "Dynamic service responses, so no upstream checksum exists; download.sh rejects non-miniSEED or wrong-stream payloads on arrival, runs the decoder self-test, decodes every record (encoding 32, 1 sps, stream identity, inventory epoch), writes mseed.sha256 and download_outcome.tsv, and fails if fewer than 300 station-days pass the policy or fewer than 12 stations remain. Probed days were 176-184 KB each (43-46 4096-byte records); expected ~117 MB total."
+
+[[resources]]
+id = "dw_channel_inventory"
+origin = "earthscope_fdsnws"
+url = "https://service.earthscope.org/fdsnws/station/1/query?net=DW&level=channel&format=text"
+type = "api_query_result"
+version = "fetched at download time (178 lines on 2026-10-14)"
+access = "Anonymous HTTPS GET."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/earthscope_dw_dwwssn_lp_seismogram_i16/dw_channels.txt"
+notes = "Build/verify require every plan station-day to lie strictly inside a DW.<sta>..LHZ epoch at 1 sps with SensorDescription 'Sprengnether Series 201 S-5007-V Seismometer' and Scale 5.0E8."
+
+[[resources]]
+id = "dw_network_stationxml"
+origin = "earthscope_fdsnws"
+url = "https://service.earthscope.org/fdsnws/station/1/query?net=DW&level=network&format=xml"
+type = "api_query_result"
+version = "fetched at download time"
+access = "Anonymous HTTPS GET."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/earthscope_dw_dwwssn_lp_seismogram_i16/dw_network.xml"
+notes = "download.sh fails unless network DW is listed with restrictedStatus=\"open\"."
+
+[[resources]]
+id = "fdsn_dw_page"
+origin = "fdsn_network_page"
+url = "https://www.fdsn.org/networks/detail/DW/"
+type = "file"
+version = "fetched at download time"
+access = "Anonymous HTTPS GET."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/earthscope_dw_dwwssn_lp_seismogram_i16/fdsn_dw.html"
+notes = "download.sh fails unless the page names the DWWSSN, operator 'Albuquerque Seismological Laboratory/USGS' and DOI 10.7914/SN/DW."
+
+[[resources]]
+id = "usgs_data_licensing_page"
+origin = "usgs_data_licensing"
+url = "https://www.usgs.gov/data-management/data-licensing"
+type = "file"
+version = "fetched at download time"
+access = "Anonymous HTTPS GET with a browser-compatible user agent (CloudFront answers 403 to curl's default agent)."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/earthscope_dw_dwwssn_lp_seismogram_i16/usgs_data_licensing.html"
+notes = "download.sh fails unless the page contains the public-domain sentence and the 'wholly produced by USGS employees' CC0 clause."
+
+[local_paths]
+downloads = "downloads/earthscope_dw_dwwssn_lp_seismogram_i16/"
+filtered = "filtered/earthscope_dw_dwwssn_lp_seismogram_i16/"
+index = "index/earthscope_dw_dwwssn_lp_seismogram_i16/"
+samples = "samples/earthscope_dw_dwwssn_lp_seismogram_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/earthscope_dw_dwwssn_lp_seismogram_i16/samples.jsonl"
+summary = "Fetch 651 pinned DW LHZ station-days of DWWSSN-encoded miniSEED from EarthScope dataselect, decode with a self-tested pure-Python reader, and emit one little-endian int16 sample (nominally 86,400 values) per station-day that is contiguous, complete and not dominated by fill, clipping, a constant value or step noise. Realized: 512 of 651 plan station-days, 14 stations, 1980-1993, 88,473,738 bytes."
+deterministic_notes = "plan.tsv (station, UTC day) was resolved once by discover.sh / scripts/discover.py on 2026-10-14: from the DW channel inventory keep the LHZ epochs with SensorDescription 'Sprengnether Series 201 S-5007-V Seismometer', Scale 5.0E8, 1 sps (14 stations); split each station's full-day epoch span into 96 strata and pick one crc32(station:k)-offset day per stratum; probe three 10-minute windows per candidate (03:00, 12:00, 21:00 UTC) with fdsnws-dataselect POSTs (48 windows per POST); a candidate is present if record spans cover >= 570 of 600 s in every window; take 48 present days per station evenly spaced in time (BDF had 41 and LEM 34 present). 948 of 1,344 candidates were present; plan = 651 rows. Build and verify use only local files, process plan rows in order, and name samples DW.<sta>..LHZ.<YYYYMMDD>.i16. Every record must be DW.<sta>..LHZ, 1 sps, blockette-1000 encoding 32 and overlap the requested day (records starting before 00:00 or at/after the next 00:00 are dropped); records are sorted by start, exact duplicates dropped, and must chain within 1 sample. scripts/selftest_mseed.py (independent synthetic DWWSSN record encoder: both word orders and header byte orders, int16 extremes, blockette 1001, dedup, gap/overlap/conflict, out-of-day and wrong-rate records, wrong encoding, missing blockette 1000, truncated payload) runs before every download validation, build and verify. verify.sh also re-decodes each day with an independent minimal fixed-layout record decoder that does not use scripts/mseed.py. Index rows carry min/max, distinct values, mode value and fraction, clip_count (|v| >= 32767), flat_run_samples, std, max and median |step|, source record count, max chain timing deviation and sha256; filtered/<id>/ingest_stats.json lists every skipped station-day with its reason and an aggregate hash."
+
+[[series]]
+id = "dwwssn_lhz_sprengnether_counts_i16"
+description = "Raw long-period vertical (LHZ, 1 sps) output of the DWWSSN Sprengnether S-5007-V seismometers at 14 USGS ASL stations, one complete UTC day per sample, native 16-bit digitizer counts."
+semantic_meaning = "Each value is one signed 16-bit DWWSSN digitizer count of the long-period vertical ground-motion channel, sampled once per second (nominal sensitivity 5.0E8 counts per metre at 0.04 Hz per the station inventory). The signal is microseism background and teleseismic/regional earthquakes, plus brief large excursions that most probed days share (day extremes of roughly +-15,000-17,500 counts against a standard deviation of a few hundred, consistent with routine calibration pulses; not individually verified) and occasional full-scale clipping at +-32,767 on large events."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "miniSEED data encoding 32 (DWWSSN) stores each sample as a big-endian two's-complement int16; values are decoded losslessly and written unchanged as little-endian int16. No scaling, filtering or instrument correction."
+source_resources = ["dw_lhz_station_days", "dw_channel_inventory"]
+source_format = "miniSEED 2 data records (DWWSSN 16-bit integers, encoding 32, 4096-byte, big-endian) from fdsnws-dataselect"
+source_field = "decoded integer samples of channel DW.<station>..LHZ (Sprengnether S-5007-V long-period vertical)"
+filtered_input_path = "filtered/earthscope_dw_dwwssn_lp_seismogram_i16/ingest_stats.json"
+filtering = "Keep only network DW, blank location, channel LHZ at 1 sps, for plan days strictly inside a Sprengnether Series 201 S-5007-V epoch at Scale 5.0E8 (stations AFI, ALQ, BDF, COL, GDH, HON, KBS, KEV, LEM, LON, SCP, SLR, TAU, TOL; 1980-10..1993-10). Excluded: the Geotech SL-210 stations (BER, CMB, JAS, JAS1), the Streckeisen STS-1 epochs that replaced the Sprengnether at AFI/COL/KEV/TOL in 1987 (different transfer function and much smaller counts, about +-60 on a quiet day), CMB's Guralp CMG3, the SCP 1990-12-07..1991-02-20 epoch logged at double gain (1.0E9), the horizontals LHE/LHN and all short-period/other channels. A station-day is emitted only if its records form one contiguous chain (each record starts within 1 sample of the previous record's nominal end; exact duplicates dropped; conflicting duplicates, gaps or overlaps reject the day), it holds 85,536..86,410 samples, runs of >= 60 identical consecutive samples (digitizer fill, typically the value 128) cover at most 1% of it, at most 5% of its samples sit at |v| >= 32767, its most frequent value covers at most 50% of it, it takes at least 64 distinct values, and its median absolute first difference is at most 128 counts (accepted days 0..53, median 5; three HON 1984-05..07 days with a broadband oscillation, median |step| 220..324 and std ~7,000, are skipped as a malfunction regime); otherwise the whole day is skipped and logged (never split, spliced, filled or concatenated across days)."
+missing_value_policy = "DWWSSN miniSEED has no inline missing-value sentinel; missing data appear either as time gaps between records or as long runs of a constant fill value (128 in all probed cases). Days with a gap, overlap, conflicting duplicate, short coverage or more than 1% of samples in >= 60-sample constant runs are skipped whole and logged in ingest_stats.json; shorter constant runs are kept verbatim and counted in the index (flat_run_samples). Full-scale clipping (+-32767) and calibration pulses are genuine recorder output and are kept (clip_count recorded; days with more than 5% clipped samples are skipped as mostly clipped). Structurally invalid miniSEED (bad header, missing blockette 1000, non-32 encoding, truncated payload, wrong stream identity, wrong sample rate, record not overlapping the requested day) is fatal."
+conversion = "Decode each miniSEED record (header byte order from BTIME plausibility, record length/encoding/word order from blockette 1000, BTIME + time correction + blockette 1001), unpack nsamples big-endian int16 values after the data offset, sort the day's records by start time, drop exact duplicates, require a contiguous chain, concatenate the samples in time order and write them as little-endian int16 (2 bytes per value, 172,800 bytes per full day)."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian int16 array"
+sample_geometry = "1hz_station_day_time_series"
+sample_rank = 1
+sample_axes = ["second_within_utc_day"]
+natural_record_kind = "seismometer_channel_utc_day"
+sample_count = 512
+total_size_bytes = 88473738
+output_path = "samples/earthscope_dw_dwwssn_lp_seismogram_i16/dwwssn_lhz_sprengnether_counts_i16/"

@@ -14,7 +14,7 @@ Runtime state (.data/pipeline/): per-candidate state, agent transcripts,
 download/build logs, costs, archived drafts.
 
 Commands:
-  driver.py init [--target 50]
+  driver.py init [--target N]
   driver.py status
   driver.py activity [--minutes 120] [--lines 8]
   driver.py follow [--backlog 3]
@@ -62,6 +62,8 @@ REGISTRY_PATH = REPO_ROOT / "attempts" / "dataset_status.tsv"
 BREADTH_KEYS_PATH = PIPELINE_DIR / "breadth_keys.tsv"
 BREADTH_COLUMNS = ["dataset_id", "origin", "widths", "measurement_type", "instrument_line", "archive_collection", "other_types", "verdict"]
 COUNTED_VERDICTS = {"STRONG", "OK"}
+# Stand-in goal when the baseline sets none, so deficits stay positive and still rank widths.
+OPEN_GOAL = 1_000_000
 ZLSIM = [sys.executable, "tools/autocollect/zlsim.py"]
 ZLSIM_ENV = {"ZLSIM_PARETO_TIMEOUT_S": "600"}
 STAGING_DIR = REPO_ROOT / "staging"
@@ -436,6 +438,13 @@ def load_baseline() -> dict:
     return json.loads(BASELINE_PATH.read_text(encoding="utf-8"))
 
 
+def per_width_goal() -> int | None:
+    """New families wanted per width, or None when campaigns are bounded only by
+    the budget, --stop-after, or an empty queue."""
+    target = load_baseline().get("target_new_per_width")
+    return int(target) if target else None
+
+
 def load_breadth() -> list[dict]:
     if not BREADTH_KEYS_PATH.exists():
         return []
@@ -755,7 +764,7 @@ def card_markdown(candidate: dict, scout_log: str) -> str:
 PRIORITIES_PATH = PIPELINE_DIR / "priorities.md"
 
 
-def scout_prompt(width: int, count: int, domains: list[str], have: int, target: int, avoid: list[str], lessons: list[str],
+def scout_prompt(width: int, count: int, domains: list[str], have: int, target: int | None, avoid: list[str], lessons: list[str],
                  focus: str = "") -> str:
     parts = []
     if PRIORITIES_PATH.exists():
@@ -764,7 +773,7 @@ def scout_prompt(width: int, count: int, domains: list[str], have: int, target: 
         f"Target width: {width}-bit. Return up to {count} candidates; fewer is fine if quality is lacking.",
         f"Focus this round, requested by the user: {focus}. Propose only candidates within this focus; fewer is fine."
         if focus else f"Focus domains this round: {'; '.join(domains)}. Other domains are welcome if clearly more promising.",
-        f"Progress: {have} of {target} new {width}-bit families accepted since the baseline.",
+        f"Progress: {have}{f' of {target}' if target else ''} new {width}-bit families accepted since the baseline.",
     ]
     if avoid:
         parts.append("Already proposed in the pipeline (do not repeat these or their sources):\n" + "\n".join(f"- {item}" for item in avoid))
@@ -996,7 +1005,9 @@ class Driver:
         )
 
     def deficits(self) -> dict[int, int]:
-        target = int(load_baseline()["target_new_per_width"])
+        """Families still wanted per width. Without a goal every width stays open, and
+        the width with the fewest new families still comes first."""
+        target = per_width_goal() or OPEN_GOAL
         new = progress()
         return {width: target - len(new[width]) for width in self.cfg.widths}
 
@@ -1024,7 +1035,7 @@ class Driver:
             self.launch_judge(row)
         while self.focus_scouts and self.agent_slots_free() > 0 and not self.winding_down():
             width, focus = self.focus_scouts.pop(0)
-            self.launch_scout(width, deficits[width], focus)
+            self.launch_scout(width, focus)
         for status, phase in (("downloaded", "build"), ("needs_repair", "repair")):
             for row in by_status(status):
                 if self.agent_slots_free() <= 0:
@@ -1063,9 +1074,9 @@ class Driver:
                 continue
             waiting = sum(1 for row in self.ledger if row["width"] == str(width) and row["status"] in {"proposed", "queued"})
             if waiting < self.cfg.queue_low_water and (running == 0 or self.agent_slots_free() > len(self.cfg.widths)):
-                self.launch_scout(width, deficits[width])
+                self.launch_scout(width)
 
-    def launch_scout(self, width: int, deficit: int, focus: str = "") -> None:
+    def launch_scout(self, width: int, focus: str = "") -> None:
         domains = []
         if not focus:
             rotation = json.loads(ROTATION_PATH.read_text()) if ROTATION_PATH.exists() else {}
@@ -1074,7 +1085,6 @@ class Driver:
             domains = [FOCUS_DOMAINS[(offset + 2 * turn + i) % len(FOCUS_DOMAINS)] for i in range(2)]
             rotation[str(width)] = turn + 1
             write_atomic(ROTATION_PATH, json.dumps(rotation))
-        target = int(load_baseline()["target_new_per_width"])
         rows = [row for row in self.ledger if row["width"] == str(width)]
         avoid = [f"{row['candidate_id']}: {row['title']} ({row['source_url']})" for row in rows[-60:]]
         lessons = [
@@ -1082,7 +1092,7 @@ class Driver:
             for row in rows
             if row["status"] in {"screened_out", *REGISTRY_TERMINALS} and row["reason"]
         ][-15:]
-        prompt = scout_prompt(width, self.cfg.scout_batch, domains, target - deficit, target, avoid, lessons, focus)
+        prompt = scout_prompt(width, self.cfg.scout_batch, domains, len(progress()[width]), per_width_goal(), avoid, lessons, focus)
         if focus:
             log(f"focused {width}-bit scout: {one_line(focus, 200)}")
         self.submit({"kind": "scout", "width": width}, task_agent, self.cfg, "scout", "scout", f"scout_{width}bit", prompt, SCOUT_SCHEMA, {"width": width})
@@ -1438,9 +1448,9 @@ class Driver:
             self.terminal_this_run += 1
             sha = git("rev-parse", "--short", "HEAD").stdout.strip()
             subprocess.run([*ZLSIM, "adopt", cid], cwd=REPO_ROOT, text=True, capture_output=True, check=False)
-            have = len(progress()[int(width)])
+            have, target = len(progress()[int(width)]), per_width_goal()
             notify(self.cfg, f"autocollect accepted {cid} ({width}-bit, {row['novelty_kind']}, breadth {verdict}): {name}. "
-                             f"{width}-bit progress {have}/{load_baseline()['target_new_per_width']}. Commit {sha}.")
+                             f"{width}-bit progress {have}{f'/{target}' if target else ''}. Commit {sha}.")
         else:
             self.pause_globally(f"could not commit accepted dataset {cid}; files are promoted but uncommitted")
 
@@ -1559,7 +1569,7 @@ class Driver:
         claimed.unlink()
 
     def goal_reached(self) -> bool:
-        return all(deficit <= 0 for deficit in self.deficits().values())
+        return per_width_goal() is not None and all(deficit <= 0 for deficit in self.deficits().values())
 
     def run(self) -> int:
         def on_signal(signum, frame):  # noqa: ARG001
@@ -1652,7 +1662,7 @@ def cmd_init(args) -> int:
 
 def cmd_status(args) -> int:  # noqa: ARG001
     baseline = load_baseline()
-    target = int(baseline["target_new_per_width"])
+    target = per_width_goal()
     new = progress()
     ledger = load_ledger()
     beat = json.loads(HEARTBEAT_PATH.read_text()) if HEARTBEAT_PATH.exists() else {"inflight": []}
@@ -1668,15 +1678,15 @@ def cmd_status(args) -> int:  # noqa: ARG001
         "screened_out": "screened_out", PAUSED: "paused", **{status: "not_accepted" for status in REGISTRY_TERMINALS},
     }
     groups = ["proposed", "waiting", "authoring", "building", "judging", "accepted", "screened_out", "not_accepted", "paused"]
-    print(f"baseline {baseline['created']}, target +{target} accepted families per width\n")
+    print(f"baseline {baseline['created']}, " + (f"target +{target} accepted families per width\n" if target else "no per-width goal\n"))
     weak = {width: sum(1 for row in ledger if row["width"] == str(width) and row["status"] == "accepted"
                        and (row.get("breadth") or "").upper() not in COUNTED_VERDICTS) for width in WIDTHS}
     print(f"{'width':>5} {'base':>5} {'counted':>8} {'weak':>5}  " + " ".join(f"{name:>12}" for name in groups))
     for width in WIDTHS:
         rows = [row for row in ledger if row["width"] == str(width)]
         stage = [live.get(row["candidate_id"]) or resting.get(row["status"], row["status"]) for row in rows]
-        print(f"{width:>5} {baseline['accepted_per_width'][str(width)]:>5} {len(new[width]):>4}/{target:<3} {weak[width]:>5}  " + " ".join(f"{stage.count(name):>12}" for name in groups))
-    print("\ncounted = new families with a STRONG or OK breadth verdict (the goal); weak = accepted but same measurement type")
+        print(f"{width:>5} {baseline['accepted_per_width'][str(width)]:>5} {f"{len(new[width])}/{target}" if target else len(new[width]):>8} {weak[width]:>5}  " + " ".join(f"{stage.count(name):>12}" for name in groups))
+    print("\ncounted = new families since the baseline with a STRONG or OK breadth verdict; weak = accepted but same measurement type")
     print("waiting = screened and queued for a free builder slot; authoring = builder writing the recipe now;")
     print("building = download, build/verify, driver rebuild check, or repair; judging = with the judge or next in line")
     print(f"\ntotal agent cost: ${total_cost():.2f}")
@@ -2004,7 +2014,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="command", required=True)
     init = sub.add_parser("init", help="snapshot the baseline and create the ledger")
-    init.add_argument("--target", type=int, default=50)
+    init.add_argument("--target", type=int, default=None, help="new families wanted per width (default: no goal)")
     init.add_argument("--force", action="store_true")
     sub.add_parser("status", help="progress per width and pipeline state")
     activity = sub.add_parser("activity", help="latest steps of recent agent sessions")

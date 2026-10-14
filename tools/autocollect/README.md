@@ -1,9 +1,10 @@
 # Autocollect
 
-Autonomous collection loop for new numeric families. It runs until each
-target width (8, 16, 32, 64 bits) has gained the target number of new
-accepted recipes since the baseline (50 by default), or until a stop
-condition.
+Autonomous collection loop for new numeric families. A campaign ends at its
+cost cap, after `--stop-after` decisions, or when a `--no-scout` run has
+emptied the queue. An optional per-width goal (`init --target N`) also ends it
+once each target width (8, 16, 32, 64 bits) has gained N new accepted recipes
+since the baseline.
 
 ```text
 scout ──► screener ──► builder (author) ──► driver: download.sh
@@ -117,7 +118,7 @@ percentile feature distance (calibrated on same-material mirror pairs,
 `reports/autocollect_similarity_calibration_20261008.md`). A recipe whose
 series are all redundant is rejected before the judge; accepted recipes join
 the library (`zlsim.py adopt`). The measured verdict (`STRONG`, `OK`) is what
-counts toward the per-width goal; `status` shows counted and weak families.
+counts as a new family; `status` shows counted and weak families.
 
 - `pipeline/breadth_keys.tsv` and `pipeline/breadth_vocabulary.tsv` describe
   every family (measurement type, instrument line, archive) for scouting.
@@ -162,7 +163,7 @@ counts toward the per-width goal; `status` shows counted and weak families.
 
 | Path | Committed | Content |
 |---|---|---|
-| `pipeline/baseline.json` | yes | accepted recipe ids at `init`, target per width |
+| `pipeline/baseline.json` | yes | accepted recipe ids at `init`, optional target per width |
 | `pipeline/candidates.tsv` | yes | every candidate with its resting status and last reason |
 | `pipeline/cards/<id>.md` | yes | scout card: source, license evidence, estimates, novelty |
 | `.data/pipeline/state/<id>.json` | no | sessions, counters, event history |

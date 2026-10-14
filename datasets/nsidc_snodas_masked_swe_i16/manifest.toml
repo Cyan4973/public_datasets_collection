@@ -1,0 +1,77 @@
+manifest_version = 1
+dataset_id = "nsidc_snodas_masked_swe_i16"
+name = "NOAA NOHRSC SNODAS Masked CONUS Daily Snow Water Equivalent Int16"
+description = "Twenty complete daily 1 km (30 arc-second) masked-CONUS SNODAS snow water equivalent grids (product 1034, millimetres), 15 January and 15 February of 2017-2026, decoded from native big-endian int16 to little-endian int16."
+homepage = "https://nsidc.org/data/g02158/versions/1"
+
+[license]
+name = "U.S. Government Public Domain"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://www.noaa.gov/information-technology/open-data-dissemination"
+citation = "National Operational Hydrologic Remote Sensing Center. (2004). Snow Data Assimilation System (SNODAS) Data Products at NSIDC (G02158, Version 1). [Data Set]. Boulder, Colorado USA. National Snow and Ice Data Center. https://doi.org/10.7265/N5TB14TC"
+notes = "SNODAS is produced by the NOAA National Weather Service NOHRSC (a U.S. Government work, 17 U.S.C. 105); NSIDC states 'NOHRSC provides/creates the data, we just archive it'. The NSIDC page names no license but requires citation: 'As a condition of using these data, you must cite the use of this data set.' Same host and licence basis as the accepted noaa_ims_snow_ice_cover_u8. Keep the citation, DOI and dates."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NOAA@NSIDC anonymous HTTPS archive; only the SWE members of the daily SNODAS tars are range-fetched."
+usage_notes = "Gridded geophysical model output; no personal or sensitive content."
+
+[[origins]]
+id = "nsidc_noaa"
+name = "NOAA@NSIDC SNODAS archive (G02158)"
+url = "https://noaadata.apps.nsidc.org/NOAA/G02158/masked/"
+type = "data_portal"
+notes = "Daily tars at masked/YYYY/MM_Mon/SNODAS_YYYYMMDD.tar; anonymous HTTPS supporting byte ranges."
+
+[[resources]]
+id = "snodas_masked_swe_members"
+origin = "nsidc_noaa"
+url = "https://noaadata.apps.nsidc.org/NOAA/G02158/masked/"
+type = "file"
+version = "G02158 Version 1, masked CONUS grid; daily SWE product 1034 (file hour code 05, 06Z snapshot) for 20 dates (YYYY0115, YYYY0215, YYYY=2017..2026)"
+access = "HTTP range GETs of the pinned ustar member offsets inside each daily tar (plan.tsv); the 512-byte ustar header of every member is fetched and checked before the member."
+size_bytes = 96725811
+sha256 = ""
+local_path = "downloads/nsidc_snodas_masked_swe_i16/members/"
+notes = "plan.tsv pins per date the tar URL, member names, tar offsets, member byte sizes, and the .dat.gz gzip trailer CRC32 and ISIZE (46,478,370 = 6935*3351*2), resolved with scripts/discover.py using 512-byte header reads and 8-byte trailer reads. NSIDC publishes no per-file checksums; download.sh records md5/sha256 of every fetched member in member_checksums.tsv. size_bytes is the sum of member bytes (96,705,030 .dat.gz + 20,781 .txt.gz)."
+
+[local_paths]
+downloads = "downloads/nsidc_snodas_masked_swe_i16/"
+filtered = "filtered/nsidc_snodas_masked_swe_i16/"
+index = "index/nsidc_snodas_masked_swe_i16/"
+samples = "samples/nsidc_snodas_masked_swe_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/nsidc_snodas_masked_swe_i16/samples.jsonl"
+summary = "Range-fetch the SWE .dat.gz/.txt.gz members of 20 pinned daily SNODAS tars, validate the NOHRSC header, gunzip the raster, byte-swap big-endian int16 to little-endian, and emit one complete 3351x6935 grid per date."
+deterministic_notes = "Dates fixed in plan.tsv (15 Jan and 15 Feb, 2017-2026, near peak CONUS snow-cover extent; all after the October 2013 masked-grid change, all with the identical NOHRSC v1.1 header geometry). Values, grid order (north-to-south rows, west-to-east columns) and the -9999 no-data mask are preserved unchanged; no cropping, resampling or concatenation. Index rows carry per-sample nodata/zero/positive counts, the count of 32767 values, and a SHA-256 of the no-data mask."
+
+[[series]]
+id = "snodas_swe_mm_i16"
+description = "SNODAS modelled snow water equivalent, total of snow layers, millimetres, masked CONUS 30 arc-second grid, 06Z valid time."
+semantic_meaning = "Per-cell snow water equivalent (depth of water if the snowpack melted) in mm from the NOHRSC snow data assimilation model."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Source is a raw big-endian 2-byte signed integer raster (header: Data type integer, 2 bytes per pixel, slope 1, intercept 0, units Meters / 1000). Only byte order changes."
+source_resources = ["snodas_masked_swe_members"]
+source_format = "nohrsc_gisrs_raster_v1_1_gzip_big_endian_int16"
+source_field = "SNODAS product 1034 snow water equivalent (total of snow layers), meters/1000, us_ssmv11034tS__T0001TTNATS<date>05HP001.dat"
+filtered_input_path = "filtered/nsidc_snodas_masked_swe_i16/ingest_stats.json"
+filtering = "All 23,239,185 cells of each pinned daily grid are kept. Other SNODAS products in the same tar (snow depth, melt, sublimation, precipitation, temperatures) are not fetched."
+missing_value_policy = "The native no-data value -9999 (cells outside the CONUS land mask) is preserved as-is; it covers about 48% of every grid. Zero means no snow. Any other negative value, a wrong header, wrong length, CRC mismatch, or a grid with under 1% positive cells or 50%+ no-data is fatal."
+conversion = "gunzip the .dat member, read 6935*3351 big-endian int16 values in source row-major order, write them as little-endian int16 unchanged."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous int16 raster"
+sample_geometry = "3351x6935_masked_conus_30arcsec_grid"
+sample_rank = 2
+sample_axes = ["latitude_row_north_to_south", "longitude_col_west_to_east"]
+natural_record_kind = "snodas_daily_masked_conus_swe_grid"
+sample_count = 20
+total_size_bytes = 929567400
+output_path = "samples/nsidc_snodas_masked_swe_i16/snodas_swe_mm_i16/"

@@ -510,3 +510,4 @@ hf_uq_gemma4_31b_mmlupro_residual_f16	autocollect	16	llm_hidden_state	gemma4_31b
 noaa_nefsc_sbnms_maru_hydrophone_i16	autocollect	16	underwater_acoustic_pressure	Cornell MARU bottom-mounted hydrophone recorder array (NEFSC SBNMS, 2 kHz, 12-bit)	noaa_passive_bioacoustic	-	OK
 hf_tdig_evo2_7b_hg38_final_norm_hidden_f16	autocollect	16	llm_hidden_state	evo2_7b_base_final_norm	huggingface.co/darejinn	-	OK
 hf_qwenmath_qwen25_7b_lastlayer_hidden_bf16	autocollect	16	llm_hidden_state	qwen25_7b_instruct_lastlayer	huggingface.co/lzhang472	-	OK
+noaa_dcdb_rainier_em2040_seabed_image_i16	autocollect	16	multibeam_seabed_backscatter	Kongsberg EM2040 multibeam echosounder (NOAA Ship Rainier launch 2802)	noaa_dcdb_bathymetry_pds	-	OK

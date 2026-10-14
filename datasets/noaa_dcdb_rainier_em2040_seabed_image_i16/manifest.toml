@@ -1,0 +1,113 @@
+manifest_version = 1
+dataset_id = "noaa_dcdb_rainier_em2040_seabed_image_i16"
+name = "NOAA Ship Rainier RICHARD2023L4 Kongsberg EM2040 Raw .all Seabed-Image Backscatter Snippets (Datagram 'Y', 0.1 dB) Int16"
+description = "Native signed-int16 multibeam seabed-image (beam snippet) backscatter samples in 0.1 dB steps from Kongsberg EM2040 'Y' datagrams: one sample per whole raw .all survey-line file, all Y samples in ping order, from 20 of the 36 raw EM2040 files logged by a NOAA Ship Rainier survey launch (hull 2802, EM2040 serial 40129) on 2023-04-30 during project RICHARD2023L4."
+homepage = "https://registry.opendata.aws/noaa-dcdb-bathymetry-pds/"
+
+[license]
+name = "NOAA Open Data Dissemination (NODD) open data terms (U.S. Government data; free use, attribution requested)"
+spdx = "LicenseRef-NOAA-NODD-open-data"
+url = "https://github.com/awslabs/open-data-registry/blob/main/datasets/noaa-dcdb-bathymetry-pds.yaml"
+citation = "NOAA National Centers for Environmental Information / IHO Data Centre for Digital Bathymetry: NOAA Ship Rainier multibeam survey RICHARD2023L4 (Kongsberg EM2040, launch 2802), raw .all files, s3://noaa-dcdb-bathymetry-pds/mb/ships/rainier/RICHARD2023L4/."
+notes = "The AWS Open Data registry entry for bucket noaa-dcdb-bathymetry-pds states: 'NOAA data disseminated through NODD are open to the public and can be used as desired. ... NOAA requests attribution for the use or dissemination of unaltered NOAA data. However, it is not permissible to state or imply endorsement by or affiliation with NOAA. If you modify NOAA data, you may not state or imply that it is original, unaltered NOAA data.' The statement is bucket-wide (the registry entry describes the CSB CSV product, but the same NODD bucket hosts the mb/ multibeam tree). The survey was run by NOAA Ship Rainier, a U.S. Government vessel. Keep the attribution and do not imply NOAA endorsement."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NOAA NCEI / IHO DCDB bucket in the NOAA Open Data Dissemination (NODD) program on AWS, read anonymously over HTTPS (not requester-pays); no mirrors."
+usage_notes = "Only seabed-image sample amplitudes and per-beam sample counts are emitted. Position, attitude, depth, runtime, installation, clock and sound-velocity datagrams are framing-checked and not emitted. Hydrographic survey data of open-ocean seafloor (central Pacific, about 2.8 S 171.7 W); no personal data."
+
+[[origins]]
+id = "noaa_dcdb_bathymetry_pds"
+name = "NOAA NCEI / IHO DCDB bathymetry bucket (s3://noaa-dcdb-bathymetry-pds)"
+url = "https://noaa-dcdb-bathymetry-pds.s3.amazonaws.com/index.html"
+type = "bucket"
+notes = "Anonymous public S3 bucket (us-east-1). Folder mb/ships/rainier/RICHARD2023L4/multibeam/data/version1/MB/em2040/ holds 36 raw EM2040 .all files from launch 2802 (named *_2802.all.mb58, 8,172,258,772 bytes in total; MB-System format 58 MBF_EM710RAW is the unmodified Kongsberg .all vendor format), 10 S221 .kmall files (a different system and format, excluded) and MB-System derivatives under generated/ (excluded). Objects last modified 2026-05-22; no checksum manifest, so objects are pinned by size and S3 ETag (5 MiB multipart parts, confirmed with HEAD ?partNumber=1)."
+
+[[resources]]
+id = "richard2023l4_em2040_listing"
+origin = "noaa_dcdb_bathymetry_pds"
+url = "https://noaa-dcdb-bathymetry-pds.s3.amazonaws.com/?list-type=2&max-keys=1000&prefix=mb/ships/rainier/RICHARD2023L4/multibeam/data/version1/MB/em2040/"
+type = "api_query_result"
+version = "live S3 ListObjectsV2 page"
+access = "Anonymous S3 ListObjectsV2 (218 objects, not truncated, on 2026-10-14)."
+size_bytes = 87204
+local_path = "downloads/noaa_dcdb_rainier_em2040_seabed_image_i16/listing_RICHARD2023L4_em2040.xml"
+notes = "Not hash-pinned (S3 may add response fields); download.sh requires all 20 pinned objects to be listed with the pinned size and ETag before any payload is fetched. Size is the 2026-10-14 observation."
+
+[[resources]]
+id = "richard2023l4_em2040_all_files"
+origin = "noaa_dcdb_bathymetry_pds"
+url = "https://noaa-dcdb-bathymetry-pds.s3.amazonaws.com/mb/ships/rainier/RICHARD2023L4/multibeam/data/version1/MB/em2040/"
+type = "file"
+version = "S3 objects last modified 2026-05-22"
+access = "Direct public download of 20 whole objects (resumable curl into .part, then rename)."
+size_bytes = 2442068200
+local_path = "downloads/noaa_dcdb_rainier_em2040_seabed_image_i16/"
+notes = "The 20 smallest of the 36 raw .all files. The 16 larger files (252-830 MB each) are left out to keep the download near 2.4 GB and the primary output under 1 GB. Pinned objects (name, bytes, S3 ETag; '-N' ETags are MD5-of-part-MD5s over 5 MiB parts, recomputed locally), in processing (chronological) order: 0004_20230430_200930_2802.all.mb58 60743932 25bcb37cb92b3fcc04b8204ea634cd3d-12; 0005_20230430_201027_2802.all.mb58 89106478 50ce67a504ebf2949ae7630e473115c2-17; 0011_20230430_210357_2802.all.mb58 206406912 8351dde7fc8bb0e7c3d18bde215f2e04-40; 0012_20230430_210806_2802.all.mb58 214731102 b4ea2bbe86c8d4e828b4b9755cd3263b-41; 0014_20230430_211906_2802.all.mb58 238779622 e9e1f4c72222af9445743c2aff91c2c3-46; 0016_20230430_212900_2802.all.mb58 213934446 c8a49bd50c57fffd494a8149a2ca161a-41; 0018_20230430_213824_2802.all.mb58 246675772 c6780f4ba94cfa329d495f778fca67dd-48; 0019_20230430_214303_2802.all.mb58 238052504 2b4138313666d6ef65ed1d242a21a50c-46; 0020_20230430_214727_2802.all.mb58 49513740 186c0e0f65fb14b66d362516d3679790-10; 0022_20230430_215405_2802.all.mb58 248501136 57fca71e444d3a7c84e12ef40ee8527b-48; 0024_20230430_220250_2802.all.mb58 109469244 1d79133536dbd9457c8c91b04a93a8f1-21; 0026_20230430_220931_2802.all.mb58 231506710 1d51eed3822d27ee36a93bd2e9468f09-45; 0028_20230430_224132_2802.all.mb58 68305784 7897c78234a59f756d727d43168b2494-14; 0030_20230430_225138_2802.all.mb58 2828052 c649658fbfc0ba37903be24c59d26485; 0031_20230430_225153_2802.all.mb58 21814280 6efb39dca049942a6d70b376f7bc21df-5; 0032_20230430_225357_2802.all.mb58 17605666 8d4abb361cf5026d917ef00dd0de2f9c-4; 0033_20230430_225613_2802.all.mb58 45515860 b23199d10017751879965b99682f5e38-9; 0034_20230430_225805_2802.all.mb58 67538438 f0d6cc2a368fed268ff8b6ca7e004d09-13; 0035_20230430_230039_2802.all.mb58 20342534 918298f54371a138254350086a2142f8-4; 0036_20230430_230503_2802.all.mb58 50695988 cd73b079d0613868b283811d2055be5a-10. The same table is the FILES constant in scripts/em2040_all.py."
+
+[local_paths]
+downloads = "downloads/noaa_dcdb_rainier_em2040_seabed_image_i16/"
+filtered = "filtered/noaa_dcdb_rainier_em2040_seabed_image_i16/"
+index = "index/noaa_dcdb_rainier_em2040_seabed_image_i16/"
+samples = "samples/noaa_dcdb_rainier_em2040_seabed_image_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_dcdb_rainier_em2040_seabed_image_i16/samples.jsonl"
+summary = "Walk every Kongsberg .all datagram (u32 length, STX, type, model, ETX, 16-bit byte-sum checksum) of each pinned EM2040 file, parse every seabed-image 'Y' (0x59) datagram, and emit per file the concatenation of all Y beam-snippet int16 samples in ping (file) order, with the per-beam sample counts as an auxiliary layout series."
+deterministic_notes = "Pinned object list with sizes and locally recomputed S3 ETags; full-file datagram scan in download, build and verify. Framing errors are resynchronised by scanning to the next correctly framed datagram; a file may lose at most 16 such spans and max(0.1 %, 64 KiB) of its bytes, and every span is recorded in ingest_stats.json. Fatal: any framed datagram with model != 2040, a Y datagram with system serial != 40129, beam count != 400, implausible sampling frequency, or a length that does not equal header + 6*Nbeams + 2*sum(Nsamples) + optional zero pad + ETX/checksum; also decreasing Y timestamps, duplicate pings, duplicate file payloads, or primary output > 1e9 bytes. Files are processed in chronological order and Y datagrams in file order. verify.sh re-decodes with an independent reader (it does not import the build module) and compares sample bytes, index fields, stored-int16 min/max/distinct/zero counts, hashes, unframed-span accounting and manifest totals, and rejects constant or degenerate payloads (< 64 distinct values or range < 100)."
+
+[[series]]
+id = "em2040_seabed_image_backscatter_i16"
+description = "Kongsberg EM2040 seabed-image (beam snippet) backscatter samples, one whole raw .all survey-line file per sample."
+semantic_meaning = "Seabed backscatter strength in 0.1 dB steps, as logged by the EM2040 in its seabed-image datagram. For every ping, each of the 400 beams contributes Ns consecutive range samples around the bottom detection (the beam snippet), with the sonar's real-time TVG and backscatter normalisation (BSN/BSO, recorded per datagram) applied. Most values lie between -10 and -50 dB (-100..-500 stored); the build saw -123.5 to +106.6 dB overall; per-file maxima are +5.3..+36.4 dB except file 0035 (the only all-9.08 kHz-mode file) runs clearly hotter (median -7.9 dB, 3.8 % of values above +20 dB). A sample is every Y datagram of one survey-line file in ping order, with beams in datagram order and samples in range order."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The int16 little-endian sample words are copied unchanged from the Y datagram sample block. The 36-byte datagram header, the 6-byte beam entries, the optional zero pad byte, ETX and the checksum are removed. Snippets are ragged: Ns varies per beam and ping with depth, pulse and sampling mode, and em2040_beam_sample_count_u16 gives the boundaries. No rescaling."
+source_resources = ["richard2023l4_em2040_all_files"]
+source_format = "Kongsberg EM-series .all datagram stream (MB-System format 58, MBF_EM710RAW), seabed image datagram 89 'Y' (0x59), EM2040"
+source_field = "Seabed image data 89 sample amplitudes (int16, 0.1 dB)"
+filtered_input_path = "filtered/noaa_dcdb_rainier_em2040_seabed_image_i16/ingest_stats.json"
+filtering = "All Y datagrams of the 20 pinned raw EM2040 files of launch 2802. Other datagram types (P, n, N, O, X, A, C, R, G, I, U, i, 0, 1 and any others) are framing-checked and skipped. Excluded: the S221 .kmall files, all MB-System derivatives in the same folder, and the 16 largest raw files."
+missing_value_policy = "No sample is dropped, clipped, rescaled or imputed. The probed files contain no fill code (no -32768 values); 0 values are genuine 0 dB readings and rare. Beams flagged invalid in the detection-info byte keep their logged snippet samples. A Y datagram is lost only if its framing or checksum is broken (resync policy above); every such span is reported and bounded."
+conversion = "Process files in chronological order and parse each Y datagram. Header at +6: model u16, date u32, time u32, ping counter u16, serial u16. Then sampling frequency f32, R0 u16, BSN i16, BSO i16, Tx beamwidth u16, TVG crossover u16, Nbeams u16. Then Nbeams x (sorting direction i8, detection info u8, Ns u16, centre sample u16), then sum(Ns) x int16 LE. Concatenate the int16 sample blocks of all Y datagrams in file order and write the result unchanged as one raw little-endian int16 file. Index min/max come from the stored int16 values."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw signed-int16 seabed-image backscatter vector (ragged beam snippets of all pings concatenated)"
+sample_geometry = "em2040_file_ping_beam_snippets_ragged"
+sample_rank = 1
+sample_axes = ["ping_beam_sample"]
+natural_record_kind = "raw_all_file_seabed_image_samples"
+sample_count = 20
+total_size_bytes = 346774682
+output_path = "samples/noaa_dcdb_rainier_em2040_seabed_image_i16/em2040_seabed_image_backscatter_i16/"
+
+[[series]]
+id = "em2040_beam_sample_count_u16"
+description = "Per-beam snippet sample counts (Ns) for every ping of each emitted file."
+semantic_meaning = "Number of seabed-image samples logged for each of the 400 beams of every Y datagram, ping-major in the same order as the primary sample; the boundaries of the ragged primary vector."
+role = "auxiliary"
+representation_class = "native_numeric"
+representation_notes = "Native u16 'number of samples' field of each Y beam entry, written as little-endian uint16. Layout metadata only; does not count toward acceptance."
+source_resources = ["richard2023l4_em2040_all_files"]
+source_format = "Kongsberg EM-series .all datagram stream (MB-System format 58, MBF_EM710RAW), seabed image datagram 89 'Y' (0x59), EM2040"
+source_field = "Seabed image data 89 beam entry: number of samples per beam (u16)"
+filtered_input_path = "filtered/noaa_dcdb_rainier_em2040_seabed_image_i16/ingest_stats.json"
+filtering = "Same Y datagrams as the primary series, one file per source file."
+missing_value_policy = "Same datagram selection as the primary series; no values dropped."
+conversion = "400 Ns values per Y datagram, ping-major, packed as uint16 little-endian."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw uint16 vector"
+sample_geometry = "em2040_file_ping_beam_layout"
+sample_rank = 1
+sample_axes = ["ping_beam"]
+natural_record_kind = "raw_all_file_seabed_image_beam_layout"
+sample_count = 20
+total_size_bytes = 87736800
+output_path = "samples/noaa_dcdb_rainier_em2040_seabed_image_i16/em2040_beam_sample_count_u16/"

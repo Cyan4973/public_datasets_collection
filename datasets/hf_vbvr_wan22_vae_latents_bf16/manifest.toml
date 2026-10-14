@@ -1,0 +1,136 @@
+manifest_version = 1
+dataset_id = "hf_vbvr_wan22_vae_latents_bf16"
+name = "VBVR Wan2.2-TI2V-5B Video VAE Latents BFloat16"
+description = "Native bfloat16 video VAE latent tensors (48 channels, 16x spatial, 4x temporal) of Apache-2.0 synthetic 2-D geometry and graph reasoning videos (VBVR G-series generators), published as a pinned Apache-2.0 diffusion training cache."
+homepage = "https://huggingface.co/datasets/Central-Cat/vbvr-latent-cache-832x832x33f-t2v-only"
+
+[license]
+name = "Apache License 2.0"
+spdx = "Apache-2.0"
+url = "https://www.apache.org/licenses/LICENSE-2.0"
+citation = "Central-Cat/vbvr-latent-cache-832x832x33f-t2v-only dataset card; Video-Reason/VBVR-Dataset (Very Big Video Reasoning suite); Wan-AI/Wan2.2-TI2V-5B VAE."
+notes = "The pinned latent-cache card declares apache-2.0. Its source videos come from Video-Reason/VBVR-Dataset, whose pinned card also declares apache-2.0, and the encoder is the Diffusers-format Wan2.2-TI2V-5B VAE (Wan-AI/Wan2.2-TI2V-5B-Diffusers, the repository the cache card names), whose pinned model card (revision b8fff7315c768468a5333511427288870b2e9635) also declares apache-2.0, as does the original-format Wan-AI/Wan2.2-TI2V-5B card (revision 921dbaf3f1674a56f47e83fb80a34bac8a8f203e). Preserve attribution to all three."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Latents of programmatically generated 2-D geometry and graph reasoning videos from the 36 VBVR G-series task generators present at the pinned cache revision; no people, recordings, or user records."
+usage_notes = "Only the x0 video latent tensor is emitted. Prompt text and UMT5 text-encoder embeddings stored in the same cache files are discarded."
+
+[[origins]]
+id = "hf_vbvr_latent_cache"
+name = "Central-Cat/vbvr-latent-cache-832x832x33f-t2v-only"
+url = "https://huggingface.co/datasets/Central-Cat/vbvr-latent-cache-832x832x33f-t2v-only"
+type = "huggingface_dataset_repository"
+version = "951c2880a946f0a947bc32c9f48df30767102175"
+
+[[origins]]
+id = "hf_vbvr_dataset"
+name = "Video-Reason/VBVR-Dataset"
+url = "https://huggingface.co/datasets/Video-Reason/VBVR-Dataset"
+type = "huggingface_dataset_repository"
+version = "7ef37ad3706c1a146143f9ab7611730487bd8c70"
+
+[[origins]]
+id = "hf_wan22_ti2v_5b"
+name = "Wan-AI/Wan2.2-TI2V-5B"
+url = "https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B"
+type = "huggingface_model_repository"
+version = "921dbaf3f1674a56f47e83fb80a34bac8a8f203e"
+
+[[origins]]
+id = "hf_wan22_ti2v_5b_diffusers"
+name = "Wan-AI/Wan2.2-TI2V-5B-Diffusers"
+url = "https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B-Diffusers"
+type = "huggingface_model_repository"
+version = "b8fff7315c768468a5333511427288870b2e9635"
+
+[[resources]]
+id = "pinned_cache_card"
+origin = "hf_vbvr_latent_cache"
+url = "https://huggingface.co/datasets/Central-Cat/vbvr-latent-cache-832x832x33f-t2v-only/raw/951c2880a946f0a947bc32c9f48df30767102175/README.md"
+type = "markdown_dataset_card_and_license_evidence"
+version = "951c2880a946f0a947bc32c9f48df30767102175"
+size_bytes = 9841
+sha256 = "0faf46312369baefe326a66988b1ca786629dae2814e49ded433364dc7aa264c"
+local_path = "downloads/hf_vbvr_wan22_vae_latents_bf16/cache_card.md"
+
+[[resources]]
+id = "pinned_upstream_card"
+origin = "hf_vbvr_dataset"
+url = "https://huggingface.co/datasets/Video-Reason/VBVR-Dataset/raw/7ef37ad3706c1a146143f9ab7611730487bd8c70/README.md"
+type = "markdown_dataset_card_and_license_evidence"
+version = "7ef37ad3706c1a146143f9ab7611730487bd8c70"
+size_bytes = 9344
+sha256 = "36d9c18a64b47b80389e520cb4b14f09840995c8fb29dab729716f97438baec2"
+local_path = "downloads/hf_vbvr_wan22_vae_latents_bf16/upstream_card.md"
+
+[[resources]]
+id = "pinned_encoder_card"
+origin = "hf_wan22_ti2v_5b"
+url = "https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B/raw/921dbaf3f1674a56f47e83fb80a34bac8a8f203e/README.md"
+type = "markdown_model_card_and_license_evidence"
+version = "921dbaf3f1674a56f47e83fb80a34bac8a8f203e"
+size_bytes = 15935
+sha256 = "e357cb3ac077f8739755b0fb38fe8424c76534b19b4a84f6138856abb00abf69"
+local_path = "downloads/hf_vbvr_wan22_vae_latents_bf16/encoder_card.md"
+
+[[resources]]
+id = "pinned_encoder_diffusers_card"
+origin = "hf_wan22_ti2v_5b_diffusers"
+url = "https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B-Diffusers/raw/b8fff7315c768468a5333511427288870b2e9635/README.md"
+type = "markdown_model_card_and_license_evidence"
+version = "b8fff7315c768468a5333511427288870b2e9635"
+size_bytes = 17633
+sha256 = "b7120bb210ab14defe6cabd7ac4bf568d0f5fde42f88ea4ac3cfec9516dc2c0c"
+local_path = "downloads/hf_vbvr_wan22_vae_latents_bf16/encoder_diffusers_card.md"
+
+[[resources]]
+id = "latent_cache_files"
+origin = "hf_vbvr_latent_cache"
+url = "https://huggingface.co/datasets/Central-Cat/vbvr-latent-cache-832x832x33f-t2v-only/resolve/951c2880a946f0a947bc32c9f48df30767102175/"
+type = "torch_save_zip_archives"
+version = "951c2880a946f0a947bc32c9f48df30767102175"
+size_bytes = 1411161368
+selection = "scripts/selected_files.tsv lists the first six files, in lexicographic order, of each of the 36 generator directories at the pinned revision, with LFS sizes and SHA-256 digests."
+local_path = "downloads/hf_vbvr_wan22_vae_latents_bf16/cache/"
+
+[local_paths]
+downloads = "downloads/hf_vbvr_wan22_vae_latents_bf16/"
+filtered = "filtered/hf_vbvr_wan22_vae_latents_bf16/"
+index = "index/hf_vbvr_wan22_vae_latents_bf16/"
+samples = "samples/hf_vbvr_wan22_vae_latents_bf16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/hf_vbvr_wan22_vae_latents_bf16/samples.jsonl"
+summary = "Decode each pinned torch.save archive with a restricted unpickler and emit its contiguous bfloat16 x0 latent tensor verbatim as one little-endian sample."
+deterministic_notes = "Repository revisions, card licenses, per-file sizes and SHA-256 digests, archive byte order, x0 dtype/shape/stride/offset, latent and source shape metadata, finiteness, distribution sanity, per-channel non-constancy, output hashes, uniqueness, and aggregate totals are enforced."
+
+[[series]]
+id = "wan22_ti2v_vae_latent_bf16"
+description = "Complete Wan2.2-TI2V-5B VAE latent of one 33-frame 832x832 synthetic reasoning video clip."
+semantic_meaning = "Per-channel normalized video VAE latent: 48 learned feature channels over 9 latent frames (4x temporal compression after the first frame) and a 52x52 grid (16x spatial compression)."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "Latents are the deterministic posterior mode of a pinned public VAE, normalized per channel and stored as bfloat16 by the upstream cache for diffusion training; they are the machine-facing artifact video diffusion pipelines cache and transport. The recipe performs no local inference and emits the published tensor bytes verbatim."
+source_resources = ["latent_cache_files", "pinned_cache_card", "pinned_upstream_card", "pinned_encoder_diffusers_card", "pinned_encoder_card"]
+source_format = "torch.save zip archive (pickled dict)"
+source_field = "x0: bfloat16 tensor of shape (48, 9, 52, 52)"
+filtered_input_path = "filtered/hf_vbvr_wan22_vae_latents_bf16/ingest_stats.json"
+filtering = "Retain x0 from 216 cache files, six per generator for all 36 generators present at the pinned revision; all 36 are VBVR G-series (geometry and graph) generators, and none of the 37 O-series (object and physics) generators is present. Discard text_embeds, prompt, and shape metadata."
+missing_value_policy = "Missing or changed resources, forbidden pickle globals, non-bfloat16 or non-contiguous x0, wrong shapes, non-finite values, fewer than 1,000 distinct values, constant channels, implausible distributions, duplicate outputs, or aggregate drift fail the recipe; no values are dropped or imputed."
+conversion = "Emit the x0 storage bytes verbatim; torch.save stores them little-endian in C,T,H,W order."
+numeric_kind = "float"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous bfloat16 video VAE latent tensor"
+sample_geometry = "video_latent_4d"
+sample_rank = 4
+sample_axes = ["latent_channel", "latent_frame", "latent_y", "latent_x"]
+natural_record_kind = "complete_video_clip_vae_latent_tensor"
+sample_count = 216
+total_size_bytes = 504631296
+output_path = "samples/hf_vbvr_wan22_vae_latents_bf16/wan22_ti2v_vae_latent_bf16/"

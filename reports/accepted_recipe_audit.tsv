@@ -440,6 +440,7 @@ tcia_nsclc_radiomics_ct_i16	ok	244580352	489160704	933	262144	524288	0	0	0	1	non
 zenodo_nordif_ebsd_kikuchi_patterns_u8	ok	244684800	244684800	4248	57600	57600	0	0	0	1	none	none
 usgs_3dep_cameronpeak_vq1560ii_scan_angle_i16	ok	245581947	491163894	24	10693543.5	21387087	0	0	0	1	none	none
 medmnist_pathmnist_images_u8	ok	252087360	252087360	107180	2352	2352	0	0	0	1	none	none
+hf_vbvr_wan22_vae_latents_bf16	ok	252315648	504631296	216	1168128	2336256	0	0	0	1	none	none
 empiar_10994_sbfsem_bsed_slices_u16	ok	252375600	504751200	132	1960000	3920000	0	0	0	1	none	none
 openneuro_ds000030_fmri_bold_i16	ok	257499136	514998272	10	27295744	54591488	0	0	0	1	none	none
 nsynth_test_notes_i16	ok	262144000	524288000	4096	64000	128000	0	0	0	1	none	none

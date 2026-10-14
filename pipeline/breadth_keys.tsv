@@ -508,3 +508,4 @@ zenodo_nakhlite_ebsd_band_contrast_slope_u8	autocollect	8	ebsd_indexing_quality_
 hf_vbvr_wan22_vae_latents_bf16	manual	16	video_vae_latent	wan22_ti2v_5b_vae	huggingface.co/central-cat	-	STRONG
 hf_uq_gemma4_31b_mmlupro_residual_f16	autocollect	16	llm_hidden_state	gemma4_31b_it_resid_l45	huggingface.co/loose-bits	-	OK
 noaa_nefsc_sbnms_maru_hydrophone_i16	autocollect	16	underwater_acoustic_pressure	Cornell MARU bottom-mounted hydrophone recorder array (NEFSC SBNMS, 2 kHz, 12-bit)	noaa_passive_bioacoustic	-	OK
+hf_tdig_evo2_7b_hg38_final_norm_hidden_f16	autocollect	16	llm_hidden_state	evo2_7b_base_final_norm	huggingface.co/darejinn	-	OK

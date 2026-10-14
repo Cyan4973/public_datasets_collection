@@ -1,0 +1,134 @@
+manifest_version = 1
+dataset_id = "hf_tdig_evo2_7b_hg38_final_norm_hidden_f16"
+name = "TDiG Evo 2 7B Final-Norm Hidden States over hg38 chr22 Windows, Float16"
+description = "Native float16 final-RMSNorm hidden states (4096 channels) of the Evo 2 7B DNA language model at 600 token positions (every 10th base) of 100 human reference hg38 chr22 genomic windows, as published in the MIT-licensed TDiG hidden-state cache."
+homepage = "https://huggingface.co/datasets/darejinn/TDiG-evo2-hidden-states"
+
+[license]
+name = "MIT License"
+spdx = "MIT"
+url = "https://huggingface.co/datasets/darejinn/TDiG-evo2-hidden-states/blob/9f0d2a6a31ddd08ca4e3defab714dc7665634501/README.md"
+citation = "TDiG: Multi-axis Residual-Stream Settling Analysis for Genomic Foundation Models (YAICON 8th Team, Think Deep in Genome, 2026), https://github.com/YAICON-8th-Think-Deep-in-Genome/TDiG; Evo 2 (Arc Institute), https://huggingface.co/arcinstitute/evo2_7b_base."
+notes = "The pinned dataset card declares 'license: mit' and states 'MIT (matches GitHub repo)'; the GitHub repository is MIT. The generating model arcinstitute/evo2_7b_base at the revision named on the card (074097e9dc788e8bfe045d6495b9f6153a7c6bfc) declares apache-2.0. The input sequence is the UCSC hg38 human reference assembly (GenBank-derived; NCBI places no restrictions on use or distribution). Preserve attribution to TDiG and Arc Institute."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Model activations over the public human reference genome (a mosaic reference assembly, not an individual's genotype); no personal, clinical or variant data. The ClinVar variant files in the same repository are not downloaded."
+usage_notes = "Only raw_h_norm of chr22_tier3_raw.h5 is emitted; raw_h_ell (fp32), raw_h_ell_rmsnormed, the chr17 file, tier-2 scalars and variant files are excluded."
+
+[[origins]]
+id = "hf_tdig"
+name = "darejinn/TDiG-evo2-hidden-states"
+url = "https://huggingface.co/datasets/darejinn/TDiG-evo2-hidden-states"
+type = "repository"
+version = "9f0d2a6a31ddd08ca4e3defab714dc7665634501"
+notes = "Hugging Face dataset repository, anonymous access, not gated."
+
+[[origins]]
+id = "hf_evo2_7b_base"
+name = "arcinstitute/evo2_7b_base"
+url = "https://huggingface.co/arcinstitute/evo2_7b_base"
+type = "repository"
+version = "074097e9dc788e8bfe045d6495b9f6153a7c6bfc"
+notes = "Model card pinned for license evidence only; no weights are downloaded."
+
+[[resources]]
+id = "dataset_card"
+origin = "hf_tdig"
+url = "https://huggingface.co/datasets/darejinn/TDiG-evo2-hidden-states/raw/9f0d2a6a31ddd08ca4e3defab714dc7665634501/README.md"
+type = "file"
+version = "9f0d2a6a31ddd08ca4e3defab714dc7665634501"
+access = "Direct public download."
+size_bytes = 6180
+sha256 = "4ea25df8dfbef6d823404091a9747ee31b0eecc20abebbb32239c5805900385a"
+local_path = "downloads/hf_tdig_evo2_7b_hg38_final_norm_hidden_f16/dataset_card.md"
+notes = "License (MIT), file layout and provenance (model revision, hg38)."
+
+[[resources]]
+id = "model_card"
+origin = "hf_evo2_7b_base"
+url = "https://huggingface.co/arcinstitute/evo2_7b_base/raw/074097e9dc788e8bfe045d6495b9f6153a7c6bfc/README.md"
+type = "file"
+version = "074097e9dc788e8bfe045d6495b9f6153a7c6bfc"
+access = "Direct public download."
+size_bytes = 1217
+sha256 = "b39cc7f28cca98b868aa2e9a8bcb93b11c13937e45f330f616070d8a2545e180"
+local_path = "downloads/hf_tdig_evo2_7b_hg38_final_norm_hidden_f16/model_card.md"
+notes = "Model license evidence (apache-2.0)."
+
+[[resources]]
+id = "chr22_tier3_head"
+origin = "hf_tdig"
+url = "https://huggingface.co/datasets/darejinn/TDiG-evo2-hidden-states/resolve/9f0d2a6a31ddd08ca4e3defab714dc7665634501/chr22_tier3_raw.h5"
+type = "other"
+version = "9f0d2a6a31ddd08ca4e3defab714dc7665634501"
+access = "HTTP Range GET bytes 0-65535 of the 47,677,466,172-byte HDF5 file (LFS sha256 26ae4008d4698bbb483427e55006e912746b5e845b27c58b081ad9e2d8a98dc1)."
+size_bytes = 65536
+sha256 = "2c6772344c10254fc7f6dda71dd1621e165b4769f0d3762b9ac42782ffce6599"
+local_path = "downloads/hf_tdig_evo2_7b_hg38_final_norm_hidden_f16/chr22_tier3_raw.head.bin"
+notes = "HDF5 superblock v0, root symbol table, all object headers and the window_idx int64[100] array (address 2936)."
+
+[[resources]]
+id = "chr22_tier3_meta"
+origin = "hf_tdig"
+url = "https://huggingface.co/datasets/darejinn/TDiG-evo2-hidden-states/resolve/9f0d2a6a31ddd08ca4e3defab714dc7665634501/chr22_tier3_raw.h5"
+type = "other"
+version = "9f0d2a6a31ddd08ca4e3defab714dc7665634501"
+access = "HTTP Range GET of token_stride int32[100] followed by done_mask uint8[100]; addresses re-derived from the object headers (963,390,248, 500 bytes)."
+size_bytes = 500
+sha256 = "dc8b78cc5c174fb7c26a4747c5876725a6cd53b289a8ae427ce0915ee2c65f88"
+local_path = "downloads/hf_tdig_evo2_7b_hg38_final_norm_hidden_f16/chr22_token_stride_done_mask.bin"
+notes = "All token_stride = 10 and done_mask = 1 at the pinned revision."
+
+[[resources]]
+id = "chr22_raw_h_norm_windows"
+origin = "hf_tdig"
+url = "https://huggingface.co/datasets/darejinn/TDiG-evo2-hidden-states/resolve/9f0d2a6a31ddd08ca4e3defab714dc7665634501/chr22_tier3_raw.h5"
+type = "other"
+version = "9f0d2a6a31ddd08ca4e3defab714dc7665634501"
+access = "100 HTTP Range GETs of 4,915,200 bytes each: raw_h_norm[w] at address 471,870,248 + w * 4,915,200 (address re-derived from the layout message and cross-checked)."
+size_bytes = 491520000
+sha256 = ""
+local_path = "downloads/hf_tdig_evo2_7b_hg38_final_norm_hidden_f16/chr22_raw_h_norm/"
+notes = "Per-window digests are recorded in the sample index; the whole-file LFS digest cannot be checked from byte ranges."
+
+[local_paths]
+downloads = "downloads/hf_tdig_evo2_7b_hg38_final_norm_hidden_f16/"
+filtered = "filtered/hf_tdig_evo2_7b_hg38_final_norm_hidden_f16/"
+index = "index/hf_tdig_evo2_7b_hg38_final_norm_hidden_f16/"
+samples = "samples/hf_tdig_evo2_7b_hg38_final_norm_hidden_f16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/hf_tdig_evo2_7b_hg38_final_norm_hidden_f16/samples.jsonl"
+summary = "Range-read the HDF5 metadata head, parse the raw_h_norm object header with a pure-stdlib HDF5 reader, range-read each of the 100 contiguous (600, 4096) float16 windows and emit each verbatim as one little-endian sample."
+deterministic_notes = "Pinned revision, card digests and licenses, HDF5 head digest, superblock EOF = pinned file size, raw_h_norm dtype (IEEE binary16 LE), shape (100, 600, 4096), contiguous unfiltered layout at the pinned address, done_mask = 1 and token_stride = 10 for every window, exact range lengths (HTTP 206), finiteness, at least 1,000 distinct codes per window, token-row spread >= 0.005, no near-constant token rows, at most 6 duplicated consecutive rows, unique window digests, and manifest totals are enforced by download.sh check, build.sh and verify.sh."
+
+[[series]]
+id = "evo2_7b_final_norm_hidden_f16"
+description = "Final-RMSNorm hidden state of Evo 2 7B (8K-context base model) for one hg38 chr22 genomic window: 600 token positions (every 10th base of a ~6 kb window) by 4096 channels."
+semantic_meaning = "Output of the final RMSNorm of the StripedHyena 2 DNA language model, i.e. the representation fed to the unembedding, at single-nucleotide token positions of the human reference sequence. Dimensionless learned activations; one persistent outlier channel (index 3756) sits near +30 while the remaining channels have rms about 0.5."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "Model activations are a deterministic machine-facing artifact of a pinned public model over a public reference sequence; the publisher computed them on GPU and stored them as float16 in HDF5 for interpretability analyses. The recipe performs no inference and emits the published tensor bytes verbatim. The model computes in bfloat16, so the low 3 fp16 mantissa bits are almost always zero (publisher's bf16 -> fp16 storage, not a local widening)."
+source_resources = ["chr22_raw_h_norm_windows", "chr22_tier3_head", "chr22_tier3_meta", "dataset_card", "model_card"]
+source_format = "HDF5 (superblock v0) contiguous dataset"
+source_field = "raw_h_norm: float16 dataset of shape (100, 600, 4096) in chr22_tier3_raw.h5; one sample per first-axis index (genomic window)"
+filtered_input_path = "filtered/hf_tdig_evo2_7b_hg38_final_norm_hidden_f16/ingest_stats.json"
+filtering = "All 100 windows of chr22_tier3_raw.h5 (the publisher's context-stratified chr22 subset, window_idx 0 to 12883 of 12,978 non-N chr22 windows). chr17_tier3_raw.h5 is excluded so the primary output stays well under 1 GB; raw_h_ell, raw_h_ell_rmsnormed, tier-2 scalars and variant files are excluded as different quantities."
+missing_value_policy = "No values are dropped or imputed. Any NaN/Inf, wrong range length, done_mask != 1, token_stride != 10, fewer than 1,000 distinct codes, token-row spread below 0.005, a token row with std below 0.05, more than 6 duplicated consecutive rows, implausible rms, or duplicate windows fail the recipe."
+conversion = "Bytes [address + w*4,915,200, +4,915,200) of the contiguous raw_h_norm storage are written verbatim; HDF5 declares IEEE binary16 little-endian, row-major (token_position, hidden_channel). Sample files are named by the upstream window_idx."
+numeric_kind = "float"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous float16 activation matrix"
+sample_geometry = "token_by_channel_matrix"
+sample_rank = 2
+sample_axes = ["token_position", "hidden_channel"]
+natural_record_kind = "genomic_window_final_norm_hidden_state_matrix"
+sample_count = 100
+total_size_bytes = 491520000
+output_path = "samples/hf_tdig_evo2_7b_hg38_final_norm_hidden_f16/evo2_7b_final_norm_hidden_f16/"

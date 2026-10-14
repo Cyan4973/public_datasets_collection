@@ -1,0 +1,108 @@
+manifest_version = 1
+dataset_id = "noaa_nefsc_sbnms_maru_hydrophone_i16"
+name = "NOAA NEFSC/ONMS Stellwagen Bank National Marine Sanctuary MARU Array Hydrophone Recordings (2 kHz, 12-bit-in-16 Int16 ADC Counts, 2007-2010)"
+description = "Raw low-frequency underwater sound-pressure waveforms from the 10-unit Cornell MARU bottom-mounted recorder arrays that NOAA NEFSC and the Office of National Marine Sanctuaries deployed in the Stellwagen Bank National Marine Sanctuary (Gulf of Maine) in 2007-2010. Seven 10-channel 2 kHz AIFF deployments, two 15-minute files each (file-name times 00:00:00 and 12:00:00 on the deployment's middle day), one little-endian int16 sample per publisher-'Good', live channel (one MARU site): 1,800,000 ADC codes (12-bit values MSB-aligned in 16 bits) per sample."
+homepage = "https://doi.org/10.25921/g3vk-v972"
+
+[license]
+name = "U.S. Government work (NOAA NEFSC / NOAA ONMS), distributed by NOAA NCEI through the NOAA Open Data Dissemination (NODD) Google Cloud bucket; no use constraints beyond liability disclaimers and a citation request"
+spdx = "LicenseRef-US-Government-Public-Domain"
+url = "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ncei.pad%3ANEFSC_SBNMS_Raw_Data/xml"
+citation = "NOAA Northeast Fisheries Science Center and NOAA Office of National Marine Sanctuaries. 2020. An Ocean Observing System for Large-Scale Monitoring and Mapping of Noise Throughout the Stellwagen Bank National Marine Sanctuary. NOAA National Centers for Environmental Information. https://doi.org/10.25921/g3vk-v972 [access date]"
+notes = "The NCEI ISO 19115 record gov.noaa.ncei.pad:NEFSC_SBNMS_Raw_Data (DOI 10.25921/g3vk-v972) links the exact bucket path console.cloud.google.com/storage/browser/noaa-passive-bioacoustic/nefsc/audio/sbnms and lists as its only constraints: 'Distribution liability: NOAA and NCEI make no warranty, expressed or implied, regarding these data ...', 'Use liability: NOAA and NCEI cannot provide any warranty as to the accuracy, reliability, or completeness of furnished data ...' and 'Cite as: NOAA Northeast Fisheries Science Center and NOAA Office of National Marine Sanctuaries. 2020. ...'. download.sh re-fetches the record and fails if the DOI, the bucket link or the 'Cite as' text is missing or if any other constraint text appears. The bucket's nefsc/README.pdf names the provider as 'NOAA Northeast Fisheries Science Center (NEFSC)' and gives the same citation. NOAA/NEFSC/ONMS products are works of the U.S. Government (17 U.S.C. 105); same basis as the accepted noaa_goes16_xrs_1s_flux_f32 recipe (NCEI ISO record with only a citation request and liability disclaimers). Caveat: the recording instruments are Cornell University MARUs and the deployment metadata list Cornell scientists, but the archive's authorship, citation and distribution are NOAA's and no separate rights statement exists. Keep the citation and the no-warranty disclaimer."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official NOAA NCEI passive acoustic archive objects in the NODD Google Cloud bucket noaa-passive-bioacoustic, fetched anonymously over HTTPS from storage.googleapis.com; every file pinned by object name, size and GCS md5. Recordings of ocean ambient sound (shipping, whales, fish, weather) from seafloor recorders; no human subjects."
+usage_notes = "Public U.S. Government ocean-acoustics data; cite the DOI. Only the PCM codes of publisher-'Good', live channels are emitted; site, deployment and channel numbers go to the sample index as bookkeeping."
+
+[[origins]]
+id = "nodd_gcs_bucket"
+name = "NOAA NODD Google Cloud bucket noaa-passive-bioacoustic (NCEI Passive Acoustic Data archive)"
+url = "https://storage.googleapis.com/noaa-passive-bioacoustic/nefsc/audio/sbnms/"
+type = "bucket"
+notes = "Anonymous GCS JSON listing API (storage/v1/b/noaa-passive-bioacoustic/o?prefix=...) and object URLs. nefsc/audio/sbnms/ holds 17 deployment folders (sbnms_200712 .. sbnms_201004); 8 are 10-channel 2 kHz AIFF (36,000,054-byte files), 2 are 10 kHz AIFF, 1 is 7-channel AIFF, 6 are FLAC. Object generations date from 2023-02-17."
+
+[[origins]]
+id = "ncei_iso"
+name = "NOAA NCEI geoportal ISO 19115 record NEFSC_SBNMS_Raw_Data"
+url = "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ncei.pad%3ANEFSC_SBNMS_Raw_Data/xml"
+type = "data_portal"
+notes = "Collection-level metadata, DOI 10.25921/g3vk-v972, use constraints and citation."
+
+[[resources]]
+id = "iso_record"
+origin = "ncei_iso"
+url = "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ncei.pad%3ANEFSC_SBNMS_Raw_Data/xml"
+type = "api_query_result"
+version = "fetched at download time"
+access = "Anonymous GET."
+size_bytes = 61455
+sha256 = ""
+local_path = "downloads/noaa_nefsc_sbnms_maru_hydrophone_i16/NEFSC_SBNMS_Raw_Data.iso.xml"
+notes = "About 61 KB (61,455 bytes on 2026-10-14). Not byte-pinned (geoportal serialisation may change); validated by content (DOI, bucket link, 'Cite as' text, no constraint other than the two liability disclaimers and the citation)."
+
+[[resources]]
+id = "deployment_metadata"
+origin = "nodd_gcs_bucket"
+url = "https://storage.googleapis.com/noaa-passive-bioacoustic/nefsc/audio/sbnms/<deployment>/metadata/NEFSC_SBNMS_<deployment>.json"
+type = "file"
+version = "GCS objects listed in meta.tsv (published 2020-09-01, uploaded 2023-02-17)"
+access = "Anonymous HTTPS GET."
+size_bytes = 92593
+sha256 = ""
+local_path = "downloads/noaa_nefsc_sbnms_maru_hydrophone_i16/metadata/"
+notes = "7 deployment JSONs (sbnms_200712, 200809, 200812, 200903_2, 200910_1, 200912, 201004), pinned by size and GCS md5 in meta.tsv. Checked: 10 channels, every SAMPLING entry SAMPLE_RATE '2' (kHz) and SAMPLE_BITS '12', INSTRUMENT_TYPE MARU, SITE SBNMS; QUALITY_DETAILS gives the publisher's per-channel quality (Good / Compromised / Unusable), from which the kept channel set is derived and compared with files.tsv."
+
+[[resources]]
+id = "maru_aiff"
+origin = "nodd_gcs_bucket"
+url = "https://storage.googleapis.com/noaa-passive-bioacoustic/nefsc/audio/sbnms/<deployment>/audio/<file>.aif"
+type = "file"
+version = "GCS objects pinned in files.tsv (name, size, md5, crc32c, generation)"
+access = "Anonymous HTTPS GET, resumable (curl -C -)."
+size_bytes = 504000756
+sha256 = ""
+local_path = "downloads/noaa_nefsc_sbnms_maru_hydrophone_i16/audio/"
+notes = "14 files x 36,000,054 bytes. Each must match its pinned size and GCS md5 and parse as FORM/AIFF with exactly COMM (18 bytes: 10 channels, 1,800,000 frames, 16 bits, 80-bit extended rate 2000.0) and SSND (offset 0, block size 0, 36,000,000 data bytes)."
+
+[local_paths]
+downloads = "downloads/noaa_nefsc_sbnms_maru_hydrophone_i16/"
+filtered = "filtered/noaa_nefsc_sbnms_maru_hydrophone_i16/"
+index = "index/noaa_nefsc_sbnms_maru_hydrophone_i16/"
+samples = "samples/noaa_nefsc_sbnms_maru_hydrophone_i16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/noaa_nefsc_sbnms_maru_hydrophone_i16/samples.jsonl"
+summary = "Fetch 14 pinned 10-channel MARU AIFF files (7 deployments x 2) plus deployment metadata and the NCEI ISO record; de-interleave the big-endian 16-bit SSND frames and emit one little-endian int16 sample per publisher-'Good', live channel."
+deterministic_notes = "Selection (discover.sh / scripts/maru.py discover, pinned in files.tsv and meta.tsv): among the 17 nefsc/audio/sbnms deployment folders keep those whose audio objects are all 36,000,054-byte .aif files (10 ch x 1,800,000 frames x 16 bit at 2000 Hz): 200712, 200803, 200809, 200812, 200903_2, 200910_1, 200912, 201004. Dropped: 200803 (NOPP2), whose QUALITY_DETAILS flags every channel 'Unusable'; the FLAC deployments (200806_2, 200903_1, 200905, 200907_3, 200910_2, 200911: single MARU channel per file, different recorders/gain); the 10 kHz AIFF deployments 200806_1 and 200907_1 (180,000,054-byte files, another sampling regime); and 200907_2 (7-channel realigned 2 kHz, 25,200,054 bytes). For each kept deployment the middle .aif in name order fixes a date D and the files *_D_000000.aif and *_D_120000.aif are taken (file-name clock as published; several deployments tag it EST). Channel exclusions, in order, identical in build and verify: (1) channel not listed under quality 'Good' in the deployment JSON (1-based channel numbers, which line up with AIFF channel order: the JSON's blank channels 200712 ch2 and 201004 ch2-3 are the all-zero AIFF channels); (2) all zero; (3) count(min)+count(max) > 1% of frames (railed or stuck unit); (4) one value > 50% of frames; (5) population std < 16 counts (one 12-bit step); (6) byte-identical to an earlier kept channel of the same file. Fatal: any kept value off the 16-count lattice, any size/md5/header mismatch, fewer than 100 kept samples. build.sh and verify.sh run a synthetic self-test (80-bit rate encoding, de-interleave against known channels, every exclusion rule, 9-channel/10 kHz/12-bit-declared/truncated rejection). verify.sh re-checks download md5s, compares the 54 header bytes with the fixed expected layout, de-interleaves by byte lanes instead of the build's array byteswap, re-derives the Good channel set, recomputes exclusions and statistics, and compares every sample byte, index field, exclusion list, the aggregate checksum, floors and these manifest totals. Expected realized output (from 40 KB range probes of every pinned file; to be confirmed by the build): 120 samples (200712 9+9, 200809 7+7, 200812 9+9, 200903_2 9+9 after its all-zero ch4, 200910_1 10+10, 200912 8+8, 201004 8+8), 216,000,000 values, 432,000,000 bytes."
+
+[[series]]
+id = "sbnms_maru_2khz_pressure_counts_i16"
+description = "15-minute single-site underwater sound-pressure waveforms (2 kHz) from Stellwagen Bank MARU array channels, one sample per kept channel of each pinned 10-channel AIFF file."
+semantic_meaning = "Successive raw ADC codes of the hydrophone (acoustic pressure) signal of one bottom-mounted Cornell MARU recorder (one array site), sampled at 2000 Hz with a 12-bit converter and stored MSB-aligned in signed 16-bit (every value is a multiple of 16). Values sit around a recorder-specific DC offset (roughly -500 to -1000 counts) with ambient-noise standard deviations of tens to hundreds of counts and occasional loud events (ships, whale calls). Codes are uncalibrated: no hydrophone sensitivity or gain is applied."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "Stored AIFF PCM codes, unchanged apart from big-endian to little-endian byte order and de-interleaving the 10 time-aligned channels; the 12-bit lattice (low 4 bits zero) is kept as stored, not shifted. No filtering, DC removal, resampling or calibration."
+source_resources = ["maru_aiff", "deployment_metadata", "iso_record"]
+source_format = "AIFF (FORM/AIFF, COMM + SSND), 10 channels, 16-bit big-endian signed PCM, 2000 Hz, 1,800,000 frames per 15-minute file"
+source_field = "SSND sound data: one channel (MARU site) of the interleaved 10-channel 16-bit PCM frames"
+filtered_input_path = "filtered/noaa_nefsc_sbnms_maru_hydrophone_i16/ingest_stats.json"
+filtering = "The 14 files pinned in files.tsv (selection in processing.deterministic_notes). Per file, channels not flagged 'Good' by the publisher's QUALITY_DETAILS, all-zero, railed (min+max share > 1%), single-value-dominated (> 50%), near-constant (std < 16) or duplicate channels are excluded and listed with their statistics in ingest_stats.json."
+missing_value_policy = "PCM has no missing-value sentinel. Blank (all-zero) placeholder channels for lost or failed recorders are excluded whole, never emitted; every value of every kept channel is emitted, including any full-scale codes (-32768 / 32752), counted per sample in the index (full_scale_count). Header, size or md5 mismatches are fatal; verify applies the same exclusion rules."
+conversion = "Walk the IFF chunks (COMM, SSND, nothing else; FORM size + 8 = file size), require 10 channels, 1,800,000 frames, 16 bits, 80-bit extended sample rate exactly 2000.0, SSND offset 0, block size 0 and 36,000,000 data bytes at byte 54. Read the frames as big-endian int16, byte-swap to native, take channel c as every 10th value starting at c, and write it little-endian as one .bin of 1,800,000 int16 (3,600,000 bytes) named <deployment>__<file stem>__ch<NN>.bin (NN = 1-based channel)."
+numeric_kind = "int"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian signed int16 PCM, one channel"
+sample_geometry = "single_channel_hydrophone_waveform"
+sample_rank = 1
+sample_axes = ["time_sample_2000hz"]
+natural_record_kind = "one_maru_site_channel_of_a_15min_array_aiff_file"
+sample_count = 120
+total_size_bytes = 432000000
+output_path = "samples/noaa_nefsc_sbnms_maru_hydrophone_i16/sbnms_maru_2khz_pressure_counts_i16/"

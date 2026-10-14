@@ -1,0 +1,131 @@
+manifest_version = 1
+dataset_id = "hf_qwenmath_qwen25_7b_lastlayer_hidden_bf16"
+name = "Qwen2.5-7B-Instruct GSM8K Reasoning-Trace Last-Layer Hidden States BFloat16"
+description = "Native bfloat16 final-layer hidden states (3584-d, one row per generated token) of Qwen2.5-7B-Instruct while sampling GSM8K solutions, from a pinned Apache-2.0 Hugging Face hidden-state cache: samples k0-k2 of all 100 cached GSM8K problems."
+homepage = "https://huggingface.co/datasets/lzhang472/qwen-math-hidden-states"
+
+[license]
+name = "Apache License 2.0"
+spdx = "Apache-2.0"
+url = "https://www.apache.org/licenses/LICENSE-2.0"
+citation = "lzhang472/qwen-math-hidden-states (Hugging Face dataset); Qwen2.5-7B-Instruct (Qwen Team); GSM8K (Cobbe et al. 2021, openai/gsm8k)."
+notes = "The pinned cache card frontmatter declares 'license: apache-2.0'. The model whose activations these are, Qwen/Qwen2.5-7B-Instruct at revision a09a35458c702b33eeacc393d103063234e8bc28, declares 'license: apache-2.0' and is ungated. The prompts come from openai/gsm8k at revision 740312add88f781978c0658806c59bc2815b9866, whose card declares MIT. The tensors are model activations, not prompt text; preserve attribution to all three. MATH-500 and AIME traces from the same cache are not used."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Activations of a public open-weight LLM solving public grade-school math word problems; no people, user records, or personal content."
+usage_notes = "Only the bytoken_lastlayer tensor is emitted. The per-layer means (bylayer_mean_gen) are read only to check that the emitted tensor is the final layer; the random projection (bytoken_proj) and the generated answer text in manifest.jsonl are discarded."
+
+[[origins]]
+id = "hf_qwenmath_hidden_states"
+name = "lzhang472/qwen-math-hidden-states"
+url = "https://huggingface.co/datasets/lzhang472/qwen-math-hidden-states"
+type = "huggingface_dataset_repository"
+version = "1b8d08c6c6bca2c3ebad597f3ea0802c9d420910"
+
+[[origins]]
+id = "hf_qwen25_7b_instruct"
+name = "Qwen/Qwen2.5-7B-Instruct"
+url = "https://huggingface.co/Qwen/Qwen2.5-7B-Instruct"
+type = "huggingface_model_repository"
+version = "a09a35458c702b33eeacc393d103063234e8bc28"
+
+[[origins]]
+id = "hf_gsm8k"
+name = "openai/gsm8k"
+url = "https://huggingface.co/datasets/openai/gsm8k"
+type = "huggingface_dataset_repository"
+version = "740312add88f781978c0658806c59bc2815b9866"
+
+[[resources]]
+id = "pinned_cache_card"
+origin = "hf_qwenmath_hidden_states"
+url = "https://huggingface.co/datasets/lzhang472/qwen-math-hidden-states/raw/1b8d08c6c6bca2c3ebad597f3ea0802c9d420910/README.md"
+type = "markdown_dataset_card_and_license_evidence"
+version = "1b8d08c6c6bca2c3ebad597f3ea0802c9d420910"
+size_bytes = 1377
+sha256 = "dffacb6b78de90f74ff097eb6e21453c462cdd3549f1eb8fd55d073a73446061"
+local_path = "downloads/hf_qwenmath_qwen25_7b_lastlayer_hidden_bf16/dataset_card.md"
+
+[[resources]]
+id = "pinned_trace_manifest"
+origin = "hf_qwenmath_hidden_states"
+url = "https://huggingface.co/datasets/lzhang472/qwen-math-hidden-states/resolve/1b8d08c6c6bca2c3ebad597f3ea0802c9d420910/manifest.jsonl"
+type = "jsonl_trace_metadata"
+version = "1b8d08c6c6bca2c3ebad597f3ea0802c9d420910"
+size_bytes = 10649660
+sha256 = "17b44c8f5c8915fe2612e404b3c82241923cad9b351b6a97387cbf9eab308631"
+local_path = "downloads/hf_qwenmath_qwen25_7b_lastlayer_hidden_bf16/manifest.jsonl"
+notes = "One row per trace (model, dataset, problem_id, sample_idx, T_gen, shapes, sampling config, x_path). Used for discovery and to cross-check every selected file."
+
+[[resources]]
+id = "pinned_model_card"
+origin = "hf_qwen25_7b_instruct"
+url = "https://huggingface.co/Qwen/Qwen2.5-7B-Instruct/raw/a09a35458c702b33eeacc393d103063234e8bc28/README.md"
+type = "markdown_model_card_and_license_evidence"
+version = "a09a35458c702b33eeacc393d103063234e8bc28"
+size_bytes = 6240
+sha256 = "f366f33bbf6bcadbb7d87f0a21a7b65584a56b8d58b0743c77c88bee625b93a6"
+local_path = "downloads/hf_qwenmath_qwen25_7b_lastlayer_hidden_bf16/model_card.md"
+
+[[resources]]
+id = "pinned_gsm8k_card"
+origin = "hf_gsm8k"
+url = "https://huggingface.co/datasets/openai/gsm8k/raw/740312add88f781978c0658806c59bc2815b9866/README.md"
+type = "markdown_dataset_card_and_license_evidence"
+version = "740312add88f781978c0658806c59bc2815b9866"
+size_bytes = 7935
+sha256 = "a17e882503578c9e324560630e31017617714ee025c87cf4fea6fd916895f3c1"
+local_path = "downloads/hf_qwenmath_qwen25_7b_lastlayer_hidden_bf16/gsm8k_card.md"
+
+[[resources]]
+id = "trace_safetensors_files"
+origin = "hf_qwenmath_hidden_states"
+url = "https://huggingface.co/datasets/lzhang472/qwen-math-hidden-states/resolve/1b8d08c6c6bca2c3ebad597f3ea0802c9d420910/"
+type = "safetensors_files"
+version = "1b8d08c6c6bca2c3ebad597f3ea0802c9d420910"
+size_bytes = 797284800
+selection = "scripts/selected_files.tsv lists the 300 files mdl-qwen25_inst__ds-gsm8k__pid-<problem>__k{0,1,2}.safetensors for all 100 GSM8K problems at the pinned revision, with LFS sizes and SHA-256 digests from the Hub paths-info API."
+local_path = "downloads/hf_qwenmath_qwen25_7b_lastlayer_hidden_bf16/traces/"
+
+[local_paths]
+downloads = "downloads/hf_qwenmath_qwen25_7b_lastlayer_hidden_bf16/"
+filtered = "filtered/hf_qwenmath_qwen25_7b_lastlayer_hidden_bf16/"
+index = "index/hf_qwenmath_qwen25_7b_lastlayer_hidden_bf16/"
+samples = "samples/hf_qwenmath_qwen25_7b_lastlayer_hidden_bf16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/hf_qwenmath_qwen25_7b_lastlayer_hidden_bf16/samples.jsonl"
+summary = "Parse each pinned safetensors file with a pure-stdlib header reader and emit its BF16 bytoken_lastlayer tensor [T_gen, 3584] verbatim as one little-endian sample."
+deterministic_notes = "Repository revisions, card licenses, manifest.jsonl hash, per-file sizes and SHA-256 digests, manifest-row model/dataset/sampling-config/T_gen agreement, safetensors header layout (three tensors, contiguous offsets ending at file size, metadata T_gen and trace_id), BF16 dtype, shape [T_gen, 3584] and byte length, finiteness, distinct-code count, non-constant token rows, distribution sanity, agreement of the per-dimension token mean with the stored final-layer mean (cosine >= 0.9999), output hashes, uniqueness, and aggregate totals are enforced."
+
+[[series]]
+id = "qwen25_7b_gsm8k_lastlayer_hidden_bf16"
+description = "Final-layer hidden state of Qwen2.5-7B-Instruct for every generated token of one sampled GSM8K solution."
+semantic_meaning = "Matrix of T_gen x 3584 activations: row t is the model's last-layer hidden state (hidden_states[-1], index 28 of 29, after the final RMSNorm under the Hugging Face Qwen2 convention) at generated token t of a temperature-0.7 sampled solution to one GSM8K word problem."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The cache stores the activations as native bfloat16 safetensors, the dtype the model runs in; the recipe performs no inference or conversion and copies the tensor bytes verbatim."
+source_resources = ["trace_safetensors_files", "pinned_trace_manifest", "pinned_cache_card", "pinned_model_card", "pinned_gsm8k_card"]
+source_format = "safetensors"
+source_field = "bytoken_lastlayer: BF16 tensor of shape [T_gen, 3584]"
+filtered_input_path = "filtered/hf_qwenmath_qwen25_7b_lastlayer_hidden_bf16/ingest_stats.json"
+filtering = "Model qwen25_inst only (Qwen3 traces are other models), dataset gsm8k only (MATH-500 traces are LaTeX-heavy and partly truncated at 1024 tokens; AIME excluded), sample indices k0, k1, k2 of each of the 100 cached problems (8 are cached per problem). Only bytoken_lastlayer is kept."
+missing_value_policy = "A trace with any non-finite BF16 value is dropped and listed in ingest_stats.json; none is expected. Missing or changed resources, header or shape mismatches, fewer than 1,000 distinct codes, constant token rows, implausible distributions, a token mean that disagrees with the stored final-layer mean, duplicate outputs, or aggregate drift fail the recipe. Nothing is imputed."
+conversion = "Emit the bytoken_lastlayer data bytes verbatim; safetensors stores them little-endian in row-major [token, hidden_dim] order. Values are bfloat16 (1 sign, 8 exponent, 7 mantissa bits), not IEEE binary16."
+numeric_kind = "float"
+bit_width = 16
+endianness = "little"
+value_encoding = "bfloat16"
+sample_format = "raw homogeneous bfloat16 LLM hidden-state matrix"
+sample_geometry = "token_by_hidden_dim_matrix"
+sample_rank = 2
+sample_axes = ["generated_token", "hidden_dim"]
+natural_record_kind = "sampled_solution_trace_last_layer_hidden_states"
+sample_count = 300
+total_size_bytes = 642969600
+output_path = "samples/hf_qwenmath_qwen25_7b_lastlayer_hidden_bf16/qwen25_7b_gsm8k_lastlayer_hidden_bf16/"

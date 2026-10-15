@@ -1,0 +1,89 @@
+manifest_version = 1
+dataset_id = "ecmwf_opendata_ifs_vo500_grib_u16"
+name = "ECMWF IFS HRES Open Data 0p4-beta 500 hPa Relative Vorticity 24 h Forecast GRIB2 Packed Codes UInt16"
+description = "The stored GRIB2 simple-packing 16-bit integer codes of the global 500 hPa relative vorticity field (0.4 deg, 900x451) from the 24 h forecast of every 00z ECMWF IFS HRES run published in the open-data 0p4-beta stream between 2023-01-18 and 2023-06-27 (IFS cycle 47r3), one complete field per run."
+homepage = "https://registry.opendata.aws/ecmwf-forecasts/"
+
+[license]
+name = "Creative Commons Attribution 4.0 International (plus ECMWF Terms of Use)"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "ECMWF (2023). ECMWF real-time forecasts (open data). https://doi.org/10.21957/open-data"
+notes = "AWS Open Data Registry entry datasets/ecmwf-forecasts.yaml: 'This ECMWF data is published under a Creative Commons Attribution 4.0 International license (CC-BY-4.0) and the ECMWF Terms of Use' (https://apps.ecmwf.int/datasets/licences/general/). Attribute ECMWF as the source; the ECMWF terms ask users not to imply ECMWF endorsement of derived products."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official ECMWF open-data replica in the public AWS Open Data bucket s3://ecmwf-forecasts (eu-central-1), anonymous HTTPS; numerical weather prediction model output, no personal data."
+usage_notes = "Only the 500 hPa relative vorticity 24 h forecast message is taken from each run file; other parameters, levels, steps and run times are not fetched."
+
+[[origins]]
+id = "ecmwf_forecasts_aws"
+name = "ECMWF real-time forecasts on AWS Open Data"
+url = "https://ecmwf-forecasts.s3.eu-central-1.amazonaws.com/"
+type = "bucket"
+notes = "Public bucket listing allowed (list-type=2). Layout <yyyymmdd>/<hh>z/0p4-beta/oper/<yyyymmdd><hh>0000-<step>h-oper-fc.{grib2,index}; the .index is ECMWF JSON-lines with per-message _offset/_length."
+
+[[resources]]
+id = "vo500_24h_messages"
+origin = "ecmwf_forecasts_aws"
+url = "https://ecmwf-forecasts.s3.eu-central-1.amazonaws.com/<yyyymmdd>/00z/0p4-beta/oper/<yyyymmdd>000000-24h-oper-fc.grib2"
+type = "file"
+version = "00z runs 2023-01-18..2023-06-27 (161 calendar days), IFS cycle 47r3, GRIB2 template 5.0 simple packing"
+access = "Anonymous HTTPS range GET of exactly the bytes [_offset, _offset+_length) given by the matching .index line (param=vo, levelist=500, step=24, _length must equal 811996). S3 SlowDown 503s are retried with back-off; days with HTTP 404 are skipped and logged in downloads/<id>/missing_days.tsv."
+size_bytes = 125859380
+sha256 = ""
+local_path = "downloads/ecmwf_opendata_ifs_vo500_grib_u16/grib/"
+notes = "811,996 bytes per message. Per-message SHA-256 is recorded in downloads/<id>/messages.tsv at download time and re-checked by build and verify. 155 of 161 days present (20230427..20230502 have no published 00z 0p4-beta 24 h file: HTTP 404 on the .index, logged in missing_days.tsv)."
+
+[[resources]]
+id = "run_index_files"
+origin = "ecmwf_forecasts_aws"
+url = "https://ecmwf-forecasts.s3.eu-central-1.amazonaws.com/<yyyymmdd>/00z/0p4-beta/oper/<yyyymmdd>000000-24h-oper-fc.index"
+type = "file"
+version = "same runs (155 present)"
+access = "Anonymous HTTPS GET (~18 KB each); parsed as JSON lines and validated (exactly one vo/500 line with date, time 0000, stream oper, type fc, step 24, levtype pl)."
+size_bytes = 2800000
+sha256 = ""
+local_path = "downloads/ecmwf_opendata_ifs_vo500_grib_u16/index/"
+notes = "Approximate total; used only to locate the message byte range."
+
+[local_paths]
+downloads = "downloads/ecmwf_opendata_ifs_vo500_grib_u16/"
+filtered = "filtered/ecmwf_opendata_ifs_vo500_grib_u16/"
+index = "index/ecmwf_opendata_ifs_vo500_grib_u16/"
+samples = "samples/ecmwf_opendata_ifs_vo500_grib_u16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/ecmwf_opendata_ifs_vo500_grib_u16/samples.jsonl"
+summary = "Range-fetch the vo/500 hPa/24 h GRIB2 message of each 00z 0p4-beta run, parse GRIB2 sections 0-8 with a pure-stdlib reader, and emit section 7 (405,900 big-endian 16-bit simple-packing codes) byte-swapped to little-endian uint16, one sample per run."
+deterministic_notes = "Window fixed to 2023-01-18 (first day in the bucket) .. 2023-06-27 00z (last 00z run before IFS 48r1 took over at 06 UTC 2023-06-27 and open data switched to CCSDS template 5.42, observed as ~545 KB messages from 2023-06-27 12z). Every message must be exactly 811,996 bytes, edition 2, centre 98, discipline 0, grid template 3.0 900x451 0.4 deg (La1 90, Lo1 180, La2 -90, Lo2 179.6, scan mode 0), product template 4.0 cat 2 num 12, 24 h, isobaric 50000 Pa, data template 5.0 with 16 bits, 405,900 points, D=0 observed, bitmap indicator 255. Per-message R, E, D, code min/max, physical min/max and hashes go into the index as auxiliary metadata and into filtered/<id>/packing_params.tsv. verify.sh re-derives every sample by byte-lane swapping section 7 with an independent section walker, checks every calendar day is present or logged missing, and rejects constant fields, fewer than 1,000 distinct codes, a single code covering >50% of a field, code_max < 256, duplicates, and manifest/realized mismatches."
+
+[[series]]
+id = "vo500_packed_codes_u16"
+description = "GRIB2 simple-packing 16-bit codes of the global 500 hPa relative vorticity 24 h forecast field, one field per 00z IFS HRES run."
+semantic_meaning = "Unsigned integer code X per grid point of ECMWF IFS HRES 500 hPa relative vorticity (s-1) at forecast step 24 h on the 0.4 deg regular lat/lon grid, as stored in the disseminated GRIB2 message. Physical value = (R + X * 2^E) / 10^D with the per-message R (float32 reference value), E (binary scale; realized -26 in 3, -25 in 129, -24 in 23 messages) and D (decimal scale, 0) recorded in the sample index. Every field has code_min 0 and code_max 33,159..65,256, so the upper byte is in use."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The codes are the exact stored machine-facing representation of the field in the ECMWF GRIB2 product (data representation template 5.0, 16 bits per value, no bitmap), analogous to a scale/offset-packed integer NetCDF variable; only the byte order is changed. They are not a local requantization. Because E and R vary per message, codes from different runs share a lattice spacing only when E matches; the index keeps R/E/D for exact physical reconstruction."
+source_resources = ["vo500_24h_messages", "run_index_files"]
+source_format = "WMO GRIB edition 2 message (ECMWF open data 0p4-beta)"
+source_field = "Section 7 packed data values (template 5.0 simple packing, 16 bits) of param vo (discipline 0, category 2, number 12), level 500 hPa, step 24 h"
+filtered_input_path = "filtered/ecmwf_opendata_ifs_vo500_grib_u16/packing_params.tsv"
+filtering = "Only the 00z run, 24 h step, vo at 500 hPa message of each day 2023-01-18..2023-06-27; other params, levels, steps and runs are never fetched. Days with no published 00z 0p4-beta 24 h file (HTTP 404) are skipped and listed in missing_days.tsv."
+missing_value_policy = "The source fields have no bitmap (indicator 255), so every one of the 405,900 grid points carries a code; nothing is dropped, filled or imputed. A missing day is logged and skipped; any structural deviation (wrong template, bit width, grid, parameter, level, step, date, length, bitmap) is fatal in download, build and verify."
+conversion = "Walk GRIB2 sections 0-8, assert the pinned layout, take section 7 octets 6..811,805 (405,900 big-endian uint16 in scan order: rows north to south from 90 to -90, columns eastward from 180 deg), byte-swap to little-endian, write one raw file per run named <yyyymmdd>.bin."
+numeric_kind = "uint"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous little-endian uint16 array, row-major 451 x 900"
+sample_geometry = "global_regular_latlon_grid_2d"
+sample_rank = 2
+sample_axes = ["latitude_north_to_south", "longitude_eastward_from_180"]
+natural_record_kind = "grib2_message_global_field_one_forecast_run"
+sample_count = 155
+total_size_bytes = 125829000
+output_path = "samples/ecmwf_opendata_ifs_vo500_grib_u16/vo500_packed_codes_u16/"

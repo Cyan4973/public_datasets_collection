@@ -517,3 +517,4 @@ earthscope_dw_dwwssn_lp_seismogram_i16	autocollect	16	inertial_vibration	DWWSSN 
 noaa_cdr_oisst_v21_sst_i16	autocollect	16	geo_product_raster	noaa_oisst_v21_avhrr	noaa-cdr-sea-surface-temp-optimum-interpolation-pds.s3.amazonaws.com	-	OK
 nsidc_snodas_masked_swe_i16	autocollect	16	snow_water_equivalent_grid	noaa_nohrsc_snodas	noaadata.apps.nsidc.org/noaa	-	OK
 ecmwf_opendata_ifs_vo500_grib_u16	autocollect	16	sim_atmos_field	ecmwf_ifs_hres_opendata_simple_packed	ecmwf_open_data	-	OK
+hf_anycam_mcv_wan21_vae_latents_bf16	autocollect	16	video_vae_latent	wan21_vae_16ch	huggingface.co/wlyu	-	OK

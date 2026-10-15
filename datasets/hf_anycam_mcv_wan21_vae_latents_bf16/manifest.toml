@@ -1,0 +1,151 @@
+manifest_version = 1
+dataset_id = "hf_anycam_mcv_wan21_vae_latents_bf16"
+name = "AnyCam MCV 480p Wan2.1 Video VAE Latents BFloat16"
+description = "Native bfloat16 Wan2.1 video VAE latent tensors (16 channels, 8x spatial, 4x temporal) of 832x480, 81-frame Unreal Engine 5 MultiCamVideo camera clips, published as a pinned Apache-2.0 diffusion training cache. One target-camera latent per scene, 120 scenes spread over the four focal-length groups."
+homepage = "https://huggingface.co/datasets/wlyu/AnyCam_MCV_480p_wan21_latent"
+
+[license]
+name = "Apache License 2.0"
+spdx = "Apache-2.0"
+url = "https://www.apache.org/licenses/LICENSE-2.0"
+citation = "wlyu/AnyCam_MCV_480p_wan21_latent and wlyu/AnyCam_MCV_480p dataset cards; MultiCamVideo dataset of ReCamMaster (KlingTeam/MultiCamVideo-Dataset, formerly KwaiVGI); alibaba-pai/Wan2.1-Fun-1.3B-InP (Wan2.1 VAE)."
+notes = "Every link in the chain declares apache-2.0 in its pinned card frontmatter: the latent cache (revision acb9cc2a3851b1e987a9dbf02895a311d263d5a8), the intermediate source/target pair set wlyu/AnyCam_MCV_480p (revision 3e7bacb2f216c305abc1b80a6c7453eaec14ca7a), the source videos KlingTeam/MultiCamVideo-Dataset (revision 4e7d995480cfa915f7c3721e616ed14789d87ff7) and the encoder repository alibaba-pai/Wan2.1-Fun-1.3B-InP (revision 9bcbbcf673c0e6a996df6f3f25bee596ffa36d47). MultiCamVideo was rendered from Fab and Mixamo 3D environment, character and animation assets; the dataset authors release the renders under Apache-2.0, and the asset licenses are not separately verified. Preserve attribution to all four."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Latents of synthetic Unreal Engine 5 renders: 3D environments with an animated 3D character model (Fab/Mixamo assets), filmed by virtual cameras. No real people, recordings or user records."
+usage_notes = "Only latents['target'] is emitted. The source-camera latent, the two object-only control latents (source_cond, target_cond), the umT5 text embedding, the prompt and the metadata row stored in the same archive are not downloaded or are discarded."
+
+[[origins]]
+id = "hf_anycam_latent_cache"
+name = "wlyu/AnyCam_MCV_480p_wan21_latent"
+url = "https://huggingface.co/datasets/wlyu/AnyCam_MCV_480p_wan21_latent"
+type = "repository"
+version = "acb9cc2a3851b1e987a9dbf02895a311d263d5a8"
+notes = "Hugging Face dataset repository; 7,814 per-scene torch.save archives (142,866,910,336 bytes) plus metadata.jsonl."
+
+[[origins]]
+id = "hf_anycam_pairs"
+name = "wlyu/AnyCam_MCV_480p"
+url = "https://huggingface.co/datasets/wlyu/AnyCam_MCV_480p"
+type = "repository"
+version = "3e7bacb2f216c305abc1b80a6c7453eaec14ca7a"
+notes = "Source/target camera pair videos from which the cache was encoded; card documents pair selection and cropping."
+
+[[origins]]
+id = "hf_multicamvideo"
+name = "KlingTeam/MultiCamVideo-Dataset"
+url = "https://huggingface.co/datasets/KlingTeam/MultiCamVideo-Dataset"
+type = "repository"
+version = "4e7d995480cfa915f7c3721e616ed14789d87ff7"
+notes = "ReCamMaster MultiCamVideo renders (formerly KwaiVGI/MultiCamVideo-Dataset)."
+
+[[origins]]
+id = "hf_wan21_fun_inp"
+name = "alibaba-pai/Wan2.1-Fun-1.3B-InP"
+url = "https://huggingface.co/alibaba-pai/Wan2.1-Fun-1.3B-InP"
+type = "repository"
+version = "9bcbbcf673c0e6a996df6f3f25bee596ffa36d47"
+notes = "Ships Wan2.1_VAE.pth, the encoder named by the cache card."
+
+[[resources]]
+id = "latent_cache_card"
+origin = "hf_anycam_latent_cache"
+url = "https://huggingface.co/datasets/wlyu/AnyCam_MCV_480p_wan21_latent/raw/acb9cc2a3851b1e987a9dbf02895a311d263d5a8/README.md"
+type = "file"
+version = "acb9cc2a3851b1e987a9dbf02895a311d263d5a8"
+access = "Direct public download."
+size_bytes = 1259
+sha256 = "3d8a0eb6a8ee3f4686400d03711f659d2f5cc8ab9ef30e42ca921ea30d755af1"
+local_path = "downloads/hf_anycam_mcv_wan21_vae_latents_bf16/cards/latent_cache_card.md"
+notes = "License evidence and archive format description."
+
+[[resources]]
+id = "anycam_pairs_card"
+origin = "hf_anycam_pairs"
+url = "https://huggingface.co/datasets/wlyu/AnyCam_MCV_480p/raw/3e7bacb2f216c305abc1b80a6c7453eaec14ca7a/README.md"
+type = "file"
+version = "3e7bacb2f216c305abc1b80a6c7453eaec14ca7a"
+access = "Direct public download."
+size_bytes = 4144
+sha256 = "1ea2b98afab68aeccf473592b23763c132843fcc95afce6d3ff991ea59800fcf"
+local_path = "downloads/hf_anycam_mcv_wan21_vae_latents_bf16/cards/anycam_pairs_card.md"
+notes = "License evidence and pair-construction description."
+
+[[resources]]
+id = "multicamvideo_card"
+origin = "hf_multicamvideo"
+url = "https://huggingface.co/datasets/KlingTeam/MultiCamVideo-Dataset/raw/4e7d995480cfa915f7c3721e616ed14789d87ff7/README.md"
+type = "file"
+version = "4e7d995480cfa915f7c3721e616ed14789d87ff7"
+access = "Direct public download."
+size_bytes = 9009
+sha256 = "97bc2df4c3fc8fe5fbb48e3350810778a3bf432ba5700497bcd5def79a54456d"
+local_path = "downloads/hf_anycam_mcv_wan21_vae_latents_bf16/cards/multicamvideo_card.md"
+notes = "License evidence for the source renders."
+
+[[resources]]
+id = "encoder_card"
+origin = "hf_wan21_fun_inp"
+url = "https://huggingface.co/alibaba-pai/Wan2.1-Fun-1.3B-InP/raw/9bcbbcf673c0e6a996df6f3f25bee596ffa36d47/README.md"
+type = "file"
+version = "9bcbbcf673c0e6a996df6f3f25bee596ffa36d47"
+access = "Direct public download."
+size_bytes = 13018
+sha256 = "c3441cf796d4aa326a2887978ec81c66177a4e9d38842a38d3e472dbdc7158ed"
+local_path = "downloads/hf_anycam_mcv_wan21_vae_latents_bf16/cards/encoder_card.md"
+notes = "License evidence for the encoder."
+
+[[resources]]
+id = "latent_archive_fragments"
+origin = "hf_anycam_latent_cache"
+url = "https://huggingface.co/datasets/wlyu/AnyCam_MCV_480p_wan21_latent/resolve/acb9cc2a3851b1e987a9dbf02895a311d263d5a8/"
+type = "other"
+version = "acb9cc2a3851b1e987a9dbf02895a311d263d5a8"
+access = "HTTP Range requests against the pinned-revision resolve URLs (public, anonymous)."
+size_bytes = 503749072
+sha256 = ""
+selection = "scripts/selected_files.tsv: 30 scenes per focal group (f18, f24, f35, f50), evenly spaced through each group's lexicographically sorted file list at index floor((i + 0.5) * n / 30). For each archive it pins the LFS size and SHA-256 (provenance only; the full file is never fetched), the central-directory offset, the head range, the target storage member range, and the CRC-32 of data.pkl and of the target storage."
+local_path = "downloads/hf_anycam_mcv_wan21_vae_latents_bf16/fragments/"
+notes = "Three byte ranges per archive: head.bin [0, first storage) with data.pkl and byteorder, target.bin (local header + 4,193,280 stored bytes + data descriptor of the target storage, data/2 in every selected archive), tail.bin [central directory, EOF). Integrity is enforced by the zip CRC-32s, which are checked against the pinned values; the whole-file LFS SHA-256 cannot be checked without downloading discarded members. size_bytes is the total of the pinned ranges."
+
+[local_paths]
+downloads = "downloads/hf_anycam_mcv_wan21_vae_latents_bf16/"
+filtered = "filtered/hf_anycam_mcv_wan21_vae_latents_bf16/"
+index = "index/hf_anycam_mcv_wan21_vae_latents_bf16/"
+samples = "samples/hf_anycam_mcv_wan21_vae_latents_bf16/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/hf_anycam_mcv_wan21_vae_latents_bf16/samples.jsonl"
+summary = "Range-fetch the head, target storage member and central directory of 120 pinned torch.save archives, decode the zip structure and data.pkl with a restricted unpickler (no torch, no code execution), and emit the contiguous bfloat16 latents['target'] tensor verbatim as one little-endian sample per scene."
+deterministic_notes = "Repository revisions, card sizes/SHA-256/licenses, per-archive byte ranges, central-directory offsets, member CRC-32s, stored (uncompressed) members, archive byte order, encoder metadata (vae == 'Wan2.1_VAE', tiled == False), all four latent tensors' dtype/shape/stride/offset/numel, the target storage key, finiteness, at least 1,000 distinct values, per-channel non-constancy, distribution sanity, output hashes, uniqueness, 30 scenes per focal group and aggregate totals are enforced. verify.sh reassembles each archive sparsely and decodes it with the stdlib zipfile module, independent of build's hand-written zip reader."
+
+[[series]]
+id = "wan21_vae_target_latent_bf16"
+description = "Complete Wan2.1 VAE latent of the target-camera clip (81 frames, 832x480) of one MultiCamVideo scene."
+semantic_meaning = "Normalized video VAE latent: 16 learned feature channels over 21 latent frames (4x temporal compression after the first frame) and a 60x104 grid (8x spatial compression) of a photoreal Unreal Engine 5 render with an animated character and a moving camera."
+role = "primary"
+representation_class = "derived_operational_numeric"
+representation_notes = "Latents are the output of a pinned public VAE (Wan2.1 VAE from alibaba-pai/Wan2.1-Fun-1.3B-InP, DiffSynth, tiled=False), already normalized and stored as bfloat16 by the upstream cache for diffusion training; they are the machine-facing artifact that video diffusion pipelines cache and transport. The recipe performs no local inference and emits the published tensor bytes verbatim."
+source_resources = ["latent_archive_fragments", "latent_cache_card", "anycam_pairs_card", "multicamvideo_card", "encoder_card"]
+source_format = "torch.save zip archive (pickled dict)"
+source_field = "latents['target']: bfloat16 tensor of shape (16, 21, 60, 104)"
+filtered_input_path = "filtered/hf_anycam_mcv_wan21_vae_latents_bf16/ingest_stats.json"
+filtering = "Keep latents['target'] from 120 of 7,814 archives (30 per focal group, evenly spaced). Not kept: latents['source'] (a second camera of the same scene, so a correlated view), source_cond and target_cond (object-only renders on a white background, a different regime), text_embedding, prompt and meta."
+missing_value_policy = "Missing or changed resources, CRC or offset drift, forbidden pickle globals, non-bfloat16, non-contiguous or misshapen latents, big-endian archives, non-finite values, fewer than 1,000 distinct values, constant channels, implausible distributions, duplicate outputs, or aggregate drift fail the recipe; no values are dropped or imputed."
+conversion = "Emit the stored target storage bytes verbatim; torch.save stores them little-endian (byteorder member checked) in C,T,H,W order."
+numeric_kind = "float"
+bit_width = 16
+endianness = "little"
+sample_format = "raw homogeneous bfloat16 video VAE latent tensor"
+sample_geometry = "video_latent_4d"
+sample_rank = 4
+sample_axes = ["latent_channel", "latent_frame", "latent_y", "latent_x"]
+natural_record_kind = "complete_video_clip_vae_latent_tensor"
+sample_count = 120
+total_size_bytes = 503193600
+output_path = "samples/hf_anycam_mcv_wan21_vae_latents_bf16/wan21_vae_target_latent_bf16/"

@@ -518,3 +518,4 @@ noaa_cdr_oisst_v21_sst_i16	autocollect	16	geo_product_raster	noaa_oisst_v21_avhr
 nsidc_snodas_masked_swe_i16	autocollect	16	snow_water_equivalent_grid	noaa_nohrsc_snodas	noaadata.apps.nsidc.org/noaa	-	OK
 ecmwf_opendata_ifs_vo500_grib_u16	autocollect	16	sim_atmos_field	ecmwf_ifs_hres_opendata_simple_packed	ecmwf_open_data	-	OK
 hf_anycam_mcv_wan21_vae_latents_bf16	autocollect	16	video_vae_latent	wan21_vae_16ch	huggingface.co/wlyu	-	OK
+mdpl2_nbody_dm_particle_xyz_f64	manual	64	nbody_particle_positions	mdpl2_multidark_planck2	zenodo.org/5259075	-	OK

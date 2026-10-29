@@ -1,0 +1,97 @@
+manifest_version = 1
+dataset_id = "mdpl2_nbody_dm_particle_xyz_f64"
+name = "MultiDark-Planck 2 (MDPL2) N-Body Dark-Matter Particle Positions, a = 0.7333 Snapshot, Float64"
+description = "Native float64 comoving x, y, z positions (Mpc/h) of dark-matter particles in the periodic 1 Gpc/h MDPL2 N-body simulation at scale factor a = 0.7333 (z = 0.36), from the authors' published 72-million-particle downsample on Zenodo; the first 16,000,000 particles in catalog order."
+homepage = "https://doi.org/10.5281/zenodo.5259075"
+
+[license]
+name = "Creative Commons Attribution 4.0 International"
+spdx = "CC-BY-4.0"
+url = "https://creativecommons.org/licenses/by/4.0/"
+citation = "Huang, S., Leauthaud, A., Bradshaw, C., Hearin, A., Behroozi, P., Lange, J., Greene, J., DeRose, J., Speagle, J., Xhakaj, E. (2021). The Outer Stellar Mass of Massive Galaxies: A Simple Tracer of Halo Mass with Scatter Comparable to Richness and Reduced Projection Effects (1.0) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.5259075. Simulation: Klypin, A., Yepes, G., Gottlöber, S., Prada, F., Heß, S. (2016), MultiDark simulations: the story of dark matter halo concentrations and density profiles, MNRAS 457, 4340; MultiDark Database: Riebe, K., et al. (2013), AN 334, 691."
+notes = "Zenodo API metadata.license.id = 'cc-by-4.0' for record 5259075; download.sh re-checks it, and the file's listed size and MD5, on every run. The record description adds no restriction. Upstream, the MultiDark Database credits page (https://www.cosmosim.org/cms/credits/) welcomes use of its simulation data 'for your own scientific purposes without further consultation with the scientists who generated them' and asks for its acknowledgement paragraph and the simulation papers to be cited; that is a statement of intent and a credit request, not a license restriction. The CosmoSim terms of use (https://www.cosmosim.org/accounts/terms_of_use/) govern registered accounts and query storage, not the data (storage is 'provided for scientific uses' and AIP may remove storage used for commercial purposes); this recipe uses no CosmoSim account or service. The MultiDark Database publishes no formal data license, so the grant rests on the Zenodo record's CC BY 4.0. Attribute the Zenodo authors, the MDPL2 simulation and the MultiDark Database."
+
+[safety]
+contains_sensitive_data = false
+contains_personal_data = false
+provenance_notes = "Official author deposit on Zenodo (record 5259075, version 1.0, the latest of two versions), fetched by one HTTP byte range from the Zenodo files API; no mirrors. The particles come from the MDPL2 simulation of the MultiDark project, distributed by the CosmoSim / MultiDark Database at AIP."
+usage_notes = "Simulated cosmological particle positions only; no personal or sensitive content."
+
+[[origins]]
+id = "zenodo_5259075"
+name = "Zenodo record 5259075 (data for Huang et al., outer stellar mass as a halo-mass tracer)"
+url = "https://zenodo.org/records/5259075"
+type = "repository"
+version = "1.0"
+notes = "Published 2021-09-01. Holds 12 files; only mdpl2_particles_0.7333_72m.npy is used."
+
+[[origins]]
+id = "multidark_mdpl2"
+name = "MultiDark-Planck 2 (MDPL2) simulation, CosmoSim / MultiDark Database"
+url = "https://www.cosmosim.org/"
+type = "data_portal"
+notes = "Upstream simulation: 3840^3 particles in a 1000 Mpc/h box with Planck cosmology. Cited for provenance and credit; nothing is downloaded from it."
+
+[[resources]]
+id = "zenodo_record_metadata"
+origin = "zenodo_5259075"
+url = "https://zenodo.org/api/records/5259075"
+type = "api_query_result"
+version = "1.0"
+access = "Public anonymous Zenodo REST API."
+size_bytes = 0
+sha256 = ""
+local_path = "downloads/mdpl2_nbody_dm_particle_xyz_f64/zenodo_record_5259075.json"
+notes = "License and file-listing evidence. Not hash-pinned because the record JSON carries changing view and download counters; scripts/mdpl2_particles.py requires license id cc-by-4.0 and the listed size 1,723,358,504 and MD5 fdebca8efbac362f57de94c342537b8d of the particle file."
+
+[[resources]]
+id = "particle_catalog_prefix"
+origin = "zenodo_5259075"
+url = "https://zenodo.org/api/records/5259075/files/mdpl2_particles_0.7333_72m.npy/content"
+type = "file"
+version = "1.0"
+access = "Public anonymous HTTP range request for bytes 0-384000127: the 128-byte NPY v1 header and the first 16,000,000 of 71,806,599 records."
+size_bytes = 384000128
+sha256 = "fa5904abedb4020bfc14276a7ee191db98478a253aa27a10d80c99b6ad50c89a"
+local_path = "downloads/mdpl2_nbody_dm_particle_xyz_f64/mdpl2_particles_0.7333_72m.prefix.npy"
+notes = "The full file is 1,723,358,504 bytes (Zenodo MD5 fdebca8efbac362f57de94c342537b8d) and is never downloaded. Zenodo publishes no checksum for a byte range, so the prefix SHA-256 above was recorded at the first fetch (2026-10-28) and is enforced by scripts/mdpl2_particles.py, together with the exact NPY header."
+
+[local_paths]
+downloads = "downloads/mdpl2_nbody_dm_particle_xyz_f64/"
+filtered = "filtered/mdpl2_nbody_dm_particle_xyz_f64/"
+index = "index/mdpl2_nbody_dm_particle_xyz_f64/"
+samples = "samples/mdpl2_nbody_dm_particle_xyz_f64/"
+
+[processing]
+download_script = "download.sh"
+build_script = "build.sh"
+verify_script = "verify.sh"
+sample_index_path = "index/mdpl2_nbody_dm_particle_xyz_f64/samples.jsonl"
+summary = "Range-fetch the NPY header and the first 16,000,000 particle records of the published MDPL2 particle catalog, check the header, hash and every value, and write the records verbatim as one little-endian float64 sample."
+deterministic_notes = "Record id, license, listed file size and MD5, the exact 128-byte NPY header, the prefix size and SHA-256 are enforced. Every value must be finite, inside [0, 1000] Mpc/h, exactly a number with at most six decimal places, and equal to the six-decimal print of its nearest float32. The stats record per-axis min, max, mean and standard deviation, the decimal-place histogram, the float32-print and float32-exact counts, the cells and file-order runs of 250, 62.5 and 1.95 Mpc/h grids, the face-connected regions of the touched 62.5 Mpc/h cells with the number of region switches in file order, and repeated consecutive positions; verify.sh recomputes them and compares the sample, index and stats."
+
+[[series]]
+id = "mdpl2_dm_particle_xyz_f64"
+description = "Comoving positions of the first 16,000,000 particles, in catalog order, of the published 72-million-particle downsample of the MDPL2 a = 0.7333 snapshot."
+semantic_meaning = "Comoving Cartesian position in Mpc/h of each dark-matter particle in the periodic 1000 Mpc/h MDPL2 box at scale factor a = 0.7333 (z = 0.36), interleaved as x0, y0, z0, x1, ... in catalog record order. In that order every touched 62.5 Mpc/h and 1.95 Mpc/h cell is one contiguous run of records, so most consecutive particles are close (median 3-D step 1.38 Mpc/h), but the prefix covers two disjoint regions of the box and the order moves between them 77 times."
+role = "primary"
+representation_class = "native_numeric"
+representation_notes = "The publisher stores the positions as IEEE-754 float64 fields of a structured NPY array, but they are single-precision positions published as float64 through six-decimal text: every value equals the six-decimal print of its nearest float32 (enforced on all values). Their effective lattice is therefore the float32 step (3.05e-5 Mpc/h in [256, 512), 6.1e-5 Mpc/h in [512, 1000]); only below about 16 Mpc/h is the 1e-6 decimal grid the coarser one. Just 0.317% of the values are exactly representable in float32. float64 is kept because it is the publisher's stored dtype; narrowing to float32 would rewrite 99.68% of the stored bit patterns. The bytes are copied verbatim: no rescaling, casting or reordering."
+source_resources = ["particle_catalog_prefix", "zenodo_record_metadata"]
+source_format = "NumPy NPY v1 structured array"
+source_field = "x, y and z fields ('<f8', Mpc/h) of each record of mdpl2_particles_0.7333_72m.npy"
+filtered_input_path = "filtered/mdpl2_nbody_dm_particle_xyz_f64/ingest_stats.json"
+filtering = "The first 16,000,000 of the catalog's 71,806,599 records in file order (22.3%). The touched 62.5 Mpc/h cells form two disjoint face-connected regions (periodic wrap does not join them): 815 cells with 14,298,713 particles (x 500-1000, y 0-1000, z 500-1000 Mpc/h) and 98 cells with 1,701,287 particles (x 0-500, y 0-500, z 0-250 Mpc/h). The halo catalog and the other files of the record are not used."
+missing_value_policy = "No missing values exist upstream. A non-finite value, a value outside [0, 1000] Mpc/h, a value that is not exactly a number with at most six decimal places, a value that is not the six-decimal print of its nearest float32, a changed NPY header or a prefix whose size or SHA-256 differs fails download.sh, build.sh and verify.sh. Nothing is dropped or imputed."
+conversion = "Skip the 128-byte NPY header and write the next 384,000,000 bytes (16,000,000 records of 24 bytes) verbatim; each record is already three little-endian float64 values."
+numeric_kind = "float"
+bit_width = 64
+endianness = "little"
+sample_format = "raw homogeneous little-endian float64 array, 3 values per particle"
+sample_geometry = "point_cloud_xyz_interleaved"
+sample_rank = 2
+sample_axes = ["catalog_record_order", "xyz"]
+natural_record_kind = "nbody_snapshot_downsampled_particle_catalog"
+sample_count = 1
+total_size_bytes = 384000000
+output_path = "samples/mdpl2_nbody_dm_particle_xyz_f64/mdpl2_dm_particle_xyz_f64/"
